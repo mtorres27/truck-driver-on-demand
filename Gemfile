@@ -51,6 +51,8 @@ group :development do
   gem 'capistrano-rails', group: :development
 
   gem "rubocop", require: false
+
+  gem "foreman", "~> 0"
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
