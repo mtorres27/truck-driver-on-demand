@@ -143,6 +143,13 @@ ALTER TABLE ONLY users
 
 
 --
+-- Name: index_on_users_location; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_on_users_location ON users USING gist (st_geographyfromtext((((('SRID=4326;POINT('::text || longitude) || ' '::text) || latitude) || ')'::text)));
+
+
+--
 -- PostgreSQL database dump complete
 --
 
@@ -150,6 +157,7 @@ SET search_path TO "$user", public;
 
 INSERT INTO "schema_migrations" (version) VALUES
 ('20170414003540'),
-('20170414003544');
+('20170414003544'),
+('20170418195431');
 
 

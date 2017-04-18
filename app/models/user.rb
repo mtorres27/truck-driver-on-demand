@@ -28,6 +28,9 @@
 
 class User < ApplicationRecord
 
+  # This SQL needs to stay exactly in sync with it's related index (index_on_users_location)
+  # otherwise the index won't be used. (don't even add whitespace!)
+  # https://github.com/pairshaped/postgis-on-rails-example
   scope :near, -> (latitude, longitude, distance_in_meters = 2000) {
     where(%{
       ST_DWithin(

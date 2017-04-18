@@ -29,6 +29,8 @@
 require 'test_helper'
 
 class UserTest < ActiveSupport::TestCase
+
+  # https://github.com/pairshaped/postgis-on-rails-example
   test "near users" do
     far_user = create(
       :user,
@@ -47,4 +49,5 @@ class UserTest < ActiveSupport::TestCase
     assert_equal 1, near_users.size
     assert_equal near_user, near_users.first
   end
+
 end
