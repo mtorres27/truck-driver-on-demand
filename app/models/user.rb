@@ -27,6 +27,7 @@
 #
 
 class User < ApplicationRecord
+  include Geocodable
 
   # This SQL needs to stay exactly in sync with it's related index (index_on_users_location)
   # otherwise the index won't be used. (don't even add whitespace!)
