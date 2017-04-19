@@ -53,16 +53,12 @@ class UserTest < ActiveSupport::TestCase
   test "do geocode" do
     user = create(
       :user,
-      street1: "301 Front St W",
-      city: "Toronto",
-      state: "ON",
-      country: "Canada",
-      zip: "M5V 2T6"
+      address: "301 Front St W, Toronto, ON M5V 2T6, Canada"
     )
 
     user.do_geocode
-    assert_equal 43.642605, user.latitude
-    assert_equal -79.387123, user.longitude
+    assert_equal 43.642505, user.latitude.to_f
+    assert_equal -79.387362, user.longitude.to_f
   end
 
 end

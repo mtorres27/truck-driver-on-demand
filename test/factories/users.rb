@@ -30,11 +30,13 @@ FactoryGirl.define do
   factory :user do
     email Faker::Internet.unique.email
     name Faker::Name.unique.name
-    street1 Faker::Address.street_address
-    city Faker::Address.city
-    state Faker::Address.state
-    country Faker::Address.country
-    zip Faker::Address.zip
+    address [
+      Faker::Address.street_address,
+      Faker::Address.secondary_address,
+      Faker::Address.city,
+      Faker::Address.state_abbr + " " + Faker::Address.zip,
+      Faker::Address.country
+    ].join(", ")
     tagline Faker::Company.catch_phrase
   end
 end

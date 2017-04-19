@@ -3,12 +3,9 @@ class CreateUsers < ActiveRecord::Migration[5.1]
     create_table :users do |t|
       t.string :email, null: false
       t.string :name, null: false
-      t.string :street1, null: false
-      t.string :street2
-      t.string :city, null: false
-      t.string :state, null: false
-      t.string :country, null: false
-      t.string :zip, null: false
+      t.string :address, null: false
+      t.string :formatted_address
+      t.string :area
       t.decimal :latitude, precision: 9, scale: 6
       t.decimal :longitude, precision: 9, scale: 6
       t.string :pay_unit_time_preference
