@@ -1,14 +1,14 @@
 module Geocodable
   extend ActiveSupport::Concern
-   include ERB::Util
+  include ERB::Util
 
   def queue_geocode
     if address.blank?
       # We have no address, but if we used to have one, then make sure we empty
       # out the existing coords.
-      if latitude && longitude
-        self.latitude = nil
-        self.longitude = nil
+      if lat && lng
+        self.lat = nil
+        self.lng = nil
         save
       end
 
@@ -28,9 +28,9 @@ module Geocodable
         # puts "Formatted address: #{res[:results][0][:formatted_address]}"
         # puts "Point: #{res[:results][0][:geometry][:location]}"
         self.formatted_address = res[:results][0][:formatted_address]
-        self.latitude = res[:results][0][:geometry][:location][:lat]
-        self.longitude = res[:results][0][:geometry][:location][:lng]
-        # puts "Stored: #{latitude}, #{longitude}"
+        self.lat = res[:results][0][:geometry][:location][:lat]
+        self.lng = res[:results][0][:geometry][:location][:lng]
+        # puts "Stored: #{lat}, #{lng}"
         return true
       end
     rescue Exception => e
@@ -40,14 +40,10 @@ module Geocodable
     end
   end
 
-  # Called by the background worker
-  def do_geocode!
-    if do_geocode
-      save
-    end
-  end
-
-  included do
-    after_save :queue_geocode
-  end
+  # Using a callback makes testing a pita and adds implicitness to our code,
+  # making it harder to debug down the road. Figure out a better way to make sure
+  # geocoding happens.
+  # included do
+  #   after_save :queue_geocode
+  # end
 end

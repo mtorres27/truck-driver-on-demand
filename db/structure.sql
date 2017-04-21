@@ -54,30 +54,21 @@ CREATE TABLE ar_internal_metadata (
 
 
 --
--- Name: schema_migrations; Type: TABLE; Schema: public; Owner: -
+-- Name: freelancers; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE schema_migrations (
-    version character varying NOT NULL
-);
-
-
---
--- Name: users; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE users (
+CREATE TABLE freelancers (
     id bigint NOT NULL,
     email character varying NOT NULL,
-    name character varying NOT NULL,
-    address character varying NOT NULL,
+    name character varying,
+    address character varying,
     formatted_address character varying,
     area character varying,
-    latitude numeric(9,6),
-    longitude numeric(9,6),
+    lat numeric(9,6),
+    lng numeric(9,6),
     pay_unit_time_preference character varying,
     pay_per_unit_time integer,
-    tagline character varying NOT NULL,
+    tagline character varying,
     bio text,
     markets character varying,
     skills character varying,
@@ -90,10 +81,10 @@ CREATE TABLE users (
 
 
 --
--- Name: users_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+-- Name: freelancers_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE users_id_seq
+CREATE SEQUENCE freelancers_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -102,17 +93,67 @@ CREATE SEQUENCE users_id_seq
 
 
 --
--- Name: users_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+-- Name: freelancers_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
-ALTER SEQUENCE users_id_seq OWNED BY users.id;
+ALTER SEQUENCE freelancers_id_seq OWNED BY freelancers.id;
 
 
 --
--- Name: users id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: identities; Type: TABLE; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY users ALTER COLUMN id SET DEFAULT nextval('users_id_seq'::regclass);
+CREATE TABLE identities (
+    id bigint NOT NULL,
+    loginable_type character varying,
+    loginable_id bigint,
+    provider character varying NOT NULL,
+    uid character varying NOT NULL,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: identities_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE identities_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: identities_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE identities_id_seq OWNED BY identities.id;
+
+
+--
+-- Name: schema_migrations; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE schema_migrations (
+    version character varying NOT NULL
+);
+
+
+--
+-- Name: freelancers id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY freelancers ALTER COLUMN id SET DEFAULT nextval('freelancers_id_seq'::regclass);
+
+
+--
+-- Name: identities id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY identities ALTER COLUMN id SET DEFAULT nextval('identities_id_seq'::regclass);
 
 
 --
@@ -124,6 +165,22 @@ ALTER TABLE ONLY ar_internal_metadata
 
 
 --
+-- Name: freelancers freelancers_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY freelancers
+    ADD CONSTRAINT freelancers_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: identities identities_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY identities
+    ADD CONSTRAINT identities_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: schema_migrations schema_migrations_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -132,18 +189,24 @@ ALTER TABLE ONLY schema_migrations
 
 
 --
--- Name: users users_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: index_identities_on_loginable_type_and_loginable_id; Type: INDEX; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY users
-    ADD CONSTRAINT users_pkey PRIMARY KEY (id);
+CREATE INDEX index_identities_on_loginable_type_and_loginable_id ON identities USING btree (loginable_type, loginable_id);
 
 
 --
--- Name: index_on_users_location; Type: INDEX; Schema: public; Owner: -
+-- Name: index_identities_on_loginable_type_and_provider_and_uid; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_on_users_location ON users USING gist (st_geographyfromtext((((('SRID=4326;POINT('::text || longitude) || ' '::text) || latitude) || ')'::text)));
+CREATE INDEX index_identities_on_loginable_type_and_provider_and_uid ON identities USING btree (loginable_type, provider, uid);
+
+
+--
+-- Name: index_on_freelancers_loc; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_on_freelancers_loc ON freelancers USING gist (st_geographyfromtext((((('SRID=4326;POINT('::text || lng) || ' '::text) || lat) || ')'::text)));
 
 
 --
@@ -154,7 +217,8 @@ SET search_path TO "$user", public;
 
 INSERT INTO "schema_migrations" (version) VALUES
 ('20170414003540'),
-('20170414003544'),
-('20170418195431');
+('20170420140235'),
+('20170420191758'),
+('20170420191768');
 
 

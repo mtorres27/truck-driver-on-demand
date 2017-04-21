@@ -16,5 +16,26 @@ module Avjunction
     # -- all .rb files in that directory are automatically loaded.
 
     config.active_record.schema_format = :sql
+
+    # Authication providers
+    config.middleware.use OmniAuth::Builder do
+      provider(
+        :google_oauth2,
+        Rails.application.secrets.google_oauth_client_id,
+        Rails.application.secrets.google_oauth_secret
+      )
+
+      provider(
+        :facebook,
+        Rails.application.secrets.facebook_oauth_client_id,
+        Rails.application.secrets.facebook_oauth_secret
+      )
+
+      provider(
+        :linkedin,
+        Rails.application.secrets.linkedin_oauth_client_id,
+        Rails.application.secrets.linkedin_oauth_secret
+      )
+    end
   end
 end

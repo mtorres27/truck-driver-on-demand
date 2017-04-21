@@ -28,6 +28,8 @@ gem "omniauth-facebook", ">= 4.0.0"
 gem "omniauth-google-oauth2", ">= 0.4.1"
 gem "omniauth-linkedin-oauth2", ">= 0.1.5"
 
+gem "activejob-perform_later", ">= 1.0.2"
+
 # Use ActiveModel has_secure_password
 # gem "bcrypt", "~> 3.1.7"
 
@@ -46,6 +48,7 @@ group :development, :test do
 
   gem "factory_girl_rails", ">= 4.8.0"
   gem "faker", ">= 1.7.3"
+  gem "mocha", ">= 1.2.1"
 end
 
 group :development do
