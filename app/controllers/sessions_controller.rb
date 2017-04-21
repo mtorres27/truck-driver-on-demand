@@ -5,6 +5,7 @@ class SessionsController < ApplicationController
   end
 
   def create
+    params_hash = request.env["omniauth.params"]
     auth_hash = request.env["omniauth.auth"]
 
     unless auth_hash
@@ -12,10 +13,18 @@ class SessionsController < ApplicationController
       return
     end
 
-    if request.env["omniauth.params"]&.dig(:section) == "company"
-      render text: "TODO: Company Login"
+    if params_hash
+      params_hash.deep_symbolize_keys!
+    end
 
-    else
+    logger.debug("Omniauth params: " + params_hash.dig(:section))
+    if params_hash&.dig(:section) == "company"
+      company = Company.find_or_create_from_auth_hash(auth_hash: auth_hash)
+      # reset_session
+      session[:company_id] = company.id
+      redirect_to company_root_path, notice: "Signed in"
+
+    else # Default is freelancer
       freelancer = Freelancer.find_or_create_from_auth_hash(auth_hash: auth_hash)
       # reset_session
       session[:freelancer_id] = freelancer.id

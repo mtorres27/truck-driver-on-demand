@@ -7,7 +7,13 @@ Rails.application.routes.draw do
   namespace :freelancer do
     root "freelancers#show"
 
-    resources :freelancer, only: [:show, :edit, :update]
+    resource :freelancer, only: [:show, :edit, :update]
+  end
+
+  namespace :company do
+    root "companies#show"
+
+    resource :company, only: [:show, :edit, :update]
   end
 
   namespace :admin do

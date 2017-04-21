@@ -22,7 +22,7 @@ module Loginable
         find_by(email: email) ||
         create!(name: auth_hash.dig(:info, :name), email: email)
 
-      identity.save if identity.changed?
+      identity.save
 
       identity.loginable
     end

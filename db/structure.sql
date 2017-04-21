@@ -63,7 +63,7 @@ CREATE TABLE companies (
     name character varying NOT NULL,
     tagline character varying,
     address character varying,
-    logo character varying,
+    logo_data text,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL
 );

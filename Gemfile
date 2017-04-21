@@ -31,9 +31,6 @@ gem "omniauth-linkedin-oauth2", ">= 0.2.5", git: "https://github.com/decioferrei
 
 gem "activejob-perform_later", ">= 1.0.2"
 
-gem "carrierwave", ">= 1.0.0"
-gem "mini_magick", ">= 4.7.0"
-
 # Use ActiveModel has_secure_password
 # gem "bcrypt", "~> 3.1.7"
 
