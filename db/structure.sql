@@ -54,6 +54,41 @@ CREATE TABLE ar_internal_metadata (
 
 
 --
+-- Name: companies; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE companies (
+    id bigint NOT NULL,
+    email character varying NOT NULL,
+    name character varying NOT NULL,
+    tagline character varying,
+    address character varying,
+    logo character varying,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: companies_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE companies_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: companies_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE companies_id_seq OWNED BY companies.id;
+
+
+--
 -- Name: freelancers; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -143,6 +178,13 @@ CREATE TABLE schema_migrations (
 
 
 --
+-- Name: companies id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY companies ALTER COLUMN id SET DEFAULT nextval('companies_id_seq'::regclass);
+
+
+--
 -- Name: freelancers id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -162,6 +204,14 @@ ALTER TABLE ONLY identities ALTER COLUMN id SET DEFAULT nextval('identities_id_s
 
 ALTER TABLE ONLY ar_internal_metadata
     ADD CONSTRAINT ar_internal_metadata_pkey PRIMARY KEY (key);
+
+
+--
+-- Name: companies companies_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY companies
+    ADD CONSTRAINT companies_pkey PRIMARY KEY (id);
 
 
 --
@@ -219,6 +269,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20170414003540'),
 ('20170420140235'),
 ('20170420191758'),
-('20170420191768');
+('20170420191768'),
+('20170421204647');
 
 

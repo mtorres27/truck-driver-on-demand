@@ -26,9 +26,13 @@ gem "jbuilder", "~> 2.5"
 gem "omniauth", ">= 1.6.1"
 gem "omniauth-facebook", ">= 4.0.0"
 gem "omniauth-google-oauth2", ">= 0.4.1"
-gem "omniauth-linkedin-oauth2", ">= 0.2.5", git: "https://github.com/pairshaped/omniauth-linkedin-oauth2.git"
+# gem "omniauth-linkedin-oauth2", ">= 0.2.5", git: "https://github.com/pairshaped/omniauth-linkedin-oauth2.git"
+gem "omniauth-linkedin-oauth2", ">= 0.2.5", git: "https://github.com/decioferreira/omniauth-linkedin-oauth2.git"
 
 gem "activejob-perform_later", ">= 1.0.2"
+
+gem "carrierwave", ">= 1.0.0"
+gem "mini_magick", ">= 4.7.0"
 
 # Use ActiveModel has_secure_password
 # gem "bcrypt", "~> 3.1.7"
