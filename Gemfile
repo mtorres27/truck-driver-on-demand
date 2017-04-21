@@ -26,7 +26,7 @@ gem "jbuilder", "~> 2.5"
 gem "omniauth", ">= 1.6.1"
 gem "omniauth-facebook", ">= 4.0.0"
 gem "omniauth-google-oauth2", ">= 0.4.1"
-gem "omniauth-linkedin-oauth2", ">= 0.1.5"
+gem "omniauth-linkedin-oauth2", ">= 0.2.5", git: "https://github.com/pairshaped/omniauth-linkedin-oauth2.git"
 
 gem "activejob-perform_later", ">= 1.0.2"
 
