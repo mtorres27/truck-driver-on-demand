@@ -1,10 +1,19 @@
 require 'factory_girl_rails'
 
-10.times { FactoryGirl.create :freelancer }
+Admin.create(email: "dave@rapin.com", name: "Dave Rapin")
+Admin.create(email: "pweather24@gmail.com", name: "Paul Weatherhead")
 
 10.times do
-  FactoryGirl.create(
-    :company,
+  Freelancer.create(
+    email: Faker::Internet.unique.email,
+    name: Faker::Name.unique.name
+  )
+end
+
+10.times do
+  Company.create(
+    email: Faker::Internet.unique.email,
+    name: Faker::Company.unique.name,
     tagline: Faker::Company.catch_phrase
   )
 end

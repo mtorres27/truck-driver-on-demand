@@ -2,13 +2,14 @@
 #
 # Table name: identities
 #
-#  id             :integer          not null, primary key
-#  loginable_type :string
-#  loginable_id   :integer
-#  provider       :string           not null
-#  uid            :string           not null
-#  created_at     :datetime         not null
-#  updated_at     :datetime         not null
+#  id              :integer          not null, primary key
+#  loginable_type  :string
+#  loginable_id    :integer
+#  provider        :string           not null
+#  uid             :string           not null
+#  last_sign_in_at :datetime
+#  created_at      :datetime         not null
+#  updated_at      :datetime         not null
 #
 
 require 'test_helper'

@@ -1,1 +1,9 @@
 h1 Admin Freelancers
+
+h2 Admin Details
+pre= current_admin.pretty_inspect
+
+h2 Social Logins
+pre= current_admin.identities.pretty_inspect
+
+p= link_to "Logout", session_path, method: :delete

@@ -4,6 +4,7 @@ class CreateIdentities < ActiveRecord::Migration[5.1]
       t.references :loginable, polymorphic: true, index: true
       t.string :provider, null: false
       t.string :uid, null: false
+      t.datetime :last_sign_in_at
 
       t.timestamps
     end

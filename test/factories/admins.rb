@@ -1,20 +1,17 @@
 # == Schema Information
 #
-# Table name: companies
+# Table name: admins
 #
 #  id         :integer          not null, primary key
 #  email      :string           not null
 #  name       :string           not null
-#  tagline    :string
-#  address    :string
-#  logo_data  :text
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
 #
 
 FactoryGirl.define do
-  factory :company do
+  factory :admin do
     email Faker::Internet.unique.email
-    name Faker::Company.unique.name
+    name Faker::Name.unique.name
   end
 end

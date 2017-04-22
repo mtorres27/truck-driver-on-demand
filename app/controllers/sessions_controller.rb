@@ -17,18 +17,17 @@ class SessionsController < ApplicationController
       params_hash.deep_symbolize_keys!
     end
 
-    logger.debug("Omniauth params: " + params_hash.dig(:section))
-    if params_hash&.dig(:section) == "company"
-      company = Company.find_or_create_from_auth_hash(auth_hash: auth_hash)
-      # reset_session
-      session[:company_id] = company.id
-      redirect_to company_root_path, notice: "Signed in"
-
-    else # Default is freelancer
-      freelancer = Freelancer.find_or_create_from_auth_hash(auth_hash: auth_hash)
-      # reset_session
-      session[:freelancer_id] = freelancer.id
-      redirect_to freelancer_root_path, notice: "Signed in"
+    section = params_hash&.dig(:section)
+    if %w(admin company freelancer).include?(section)
+      user = section.camelize.constantize.find_or_create_from_auth_hash(auth_hash)
+      if user
+        session["#{section}_id"] = user.id
+        redirect_to "/#{section}", notice: "Signed in"
+      else
+        throw ActionController::InvalidAuthenticityToken
+      end
+    else
+      throw ActionController::BadRequest
     end
   end
 

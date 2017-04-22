@@ -29,6 +29,9 @@ class Freelancer < ApplicationRecord
 
   has_many :identities, as: :loginable
 
+  validates :email, presence: true, uniqueness: { case_sensitive: false }
+  validates :name, presence: true
+
   # This SQL needs to stay exactly in sync with it's related index (index_on_freelancers_location)
   # otherwise the index won't be used. (don't even add whitespace!)
   # https://github.com/pairshaped/postgis-on-rails-example

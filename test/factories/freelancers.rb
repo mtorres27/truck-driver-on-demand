@@ -26,6 +26,6 @@
 FactoryGirl.define do
   factory :freelancer do
     email Faker::Internet.unique.email
-    name Faker::Company.unique.name
+    name Faker::Name.unique.name
   end
 end

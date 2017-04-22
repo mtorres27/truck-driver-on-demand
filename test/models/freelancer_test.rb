@@ -72,7 +72,7 @@ class FreelancerTest < ActiveSupport::TestCase
 
   test "sign up with google" do
     auth_hash = Faker::Omniauth.unique.google.deep_symbolize_keys
-    freelancer = Freelancer.find_or_create_from_auth_hash(auth_hash: auth_hash)
+    freelancer = Freelancer.find_or_create_from_auth_hash(auth_hash)
 
     assert_equal auth_hash.dig(:info, :email)&.downcase, freelancer.email
     assert_equal auth_hash.dig(:info, :name), freelancer.name
@@ -82,14 +82,14 @@ class FreelancerTest < ActiveSupport::TestCase
     auth_hash = Faker::Omniauth.unique.google.deep_symbolize_keys
 
     existing = create(:freelancer, email: auth_hash.dig(:info, :email)&.downcase)
-    signed_in = Freelancer.find_or_create_from_auth_hash(auth_hash: auth_hash)
+    signed_in = Freelancer.find_or_create_from_auth_hash(auth_hash)
 
     assert_equal existing.email, signed_in.email
   end
 
   test "sign up with facebook" do
     auth_hash = Faker::Omniauth.unique.facebook.deep_symbolize_keys
-    freelancer = Freelancer.find_or_create_from_auth_hash(auth_hash: auth_hash)
+    freelancer = Freelancer.find_or_create_from_auth_hash(auth_hash)
 
     assert_equal auth_hash.dig(:info, :email)&.downcase, freelancer.email
     assert_equal auth_hash.dig(:info, :name), freelancer.name
@@ -99,14 +99,14 @@ class FreelancerTest < ActiveSupport::TestCase
     auth_hash = Faker::Omniauth.unique.facebook.deep_symbolize_keys
 
     existing = create(:freelancer, email: auth_hash.dig(:info, :email)&.downcase)
-    signed_in = Freelancer.find_or_create_from_auth_hash(auth_hash: auth_hash)
+    signed_in = Freelancer.find_or_create_from_auth_hash(auth_hash)
 
     assert_equal existing.email, signed_in.email
   end
 
   test "sign up with linkedin" do
     auth_hash = Faker::Omniauth.unique.linkedin.deep_symbolize_keys
-    freelancer = Freelancer.find_or_create_from_auth_hash(auth_hash: auth_hash)
+    freelancer = Freelancer.find_or_create_from_auth_hash(auth_hash)
 
     assert_equal auth_hash.dig(:info, :email)&.downcase, freelancer.email
     assert_equal auth_hash.dig(:info, :name), freelancer.name
@@ -116,7 +116,7 @@ class FreelancerTest < ActiveSupport::TestCase
     auth_hash = Faker::Omniauth.unique.linkedin.deep_symbolize_keys
 
     existing = create(:freelancer, email: auth_hash.dig(:info, :email)&.downcase)
-    signed_in = Freelancer.find_or_create_from_auth_hash(auth_hash: auth_hash)
+    signed_in = Freelancer.find_or_create_from_auth_hash(auth_hash)
 
     assert_equal existing.email, signed_in.email
   end
