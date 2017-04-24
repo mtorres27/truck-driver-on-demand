@@ -17,9 +17,12 @@ Rails.application.routes.draw do
   end
 
   namespace :admin do
-    root "freelancers#index"
+    root "main#index"
 
     resources :freelancers, except: [:new, :create] do
+      get :sign_in_as, on: :member
+    end
+    resources :companies, except: [:new, :create] do
       get :sign_in_as, on: :member
     end
   end

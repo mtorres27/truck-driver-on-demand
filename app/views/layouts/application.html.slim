@@ -1,10 +1,8 @@
-doctype html
-html
-  head
-    title AV Junction
-    = csrf_meta_tags
-    = stylesheet_link_tag "application", media: "all", "data-turbolinks-track": "reload"
-    = javascript_include_tag "application", "data-turbolinks-track": "reload"
+.container
+  = yield
 
-  body
-    = yield
+footer.footer
+  .container
+    p.text-muted &copy; 2017 AV Junction Inc.
+
+- parent_layout "base"

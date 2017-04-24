@@ -17,6 +17,12 @@ gem "slim-rails", ">= 3.1.2"
 gem "sass-rails", github: "rails/sass-rails"
 gem "uglifier", ">= 1.3.0"
 gem "turbolinks", "~> 5"
+# gem "bootstrap-sass", ">= 3.3.7"
+
+source "https://rails-assets.org" do
+  gem "rails-assets-bootstrap", ">= 3.3.7"
+  gem "rails-assets-bootstrap.native", ">= 2.0.10"
+end
 
 # See https://github.com/rails/execjs#readme for more supported runtimes
 # gem "therubyracer", platforms: :ruby
@@ -30,6 +36,8 @@ gem "omniauth-google-oauth2", ">= 0.4.1"
 gem "omniauth-linkedin-oauth2", ">= 0.2.5", git: "https://github.com/decioferreira/omniauth-linkedin-oauth2.git"
 
 gem "activejob-perform_later", ">= 1.0.2"
+
+gem "simple_form", ">= 3.4.0"
 
 # Use ActiveModel has_secure_password
 # gem "bcrypt", "~> 3.1.7"

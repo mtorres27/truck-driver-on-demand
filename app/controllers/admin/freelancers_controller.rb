@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 class Admin::FreelancersController < Admin::BaseController
   before_action :load_freelancer, only: [:show, :edit, :update, :destroy, :sign_in_as]
 

@@ -1,10 +1,36 @@
-doctype html
-html
-  head
-    title Av Junction - Freelancer
-    = csrf_meta_tags
-    = stylesheet_link_tag "application", media: "all", "data-turbolinks-track": "reload"
-    = javascript_include_tag "application", "data-turbolinks-track": "reload"
+nav.navbar.navbar-inverse.navbar-fixed-top
+  .container
+    .navbar-header
+      button.navbar-toggle.collapsed type="button" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar"
+        span.sr-only Toggle navigation
+        span.icon-bar
+        span.icon-bar
+        span.icon-bar
+      = link_to "AV Junction", root_path, class: "navbar-brand"
+    #navbar.collapse.navbar-collapse
+      ul.nav.navbar-nav
+        li( class=("active" if request.path == freelancer_root_path) )
+          = link_to "Dashboard", freelancer_root_path
+      ul.nav.navbar-nav.navbar-right
+        li.dropdown
+          a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"
+            ' Freelancer
+            span.caret
+          ul class="dropdown-menu"
+            li
+              a href="#" Action
+            li
+              a href="#" Another action
+            li.divider role="separator"
+            li.dropdown-header Nav header
+            li
+              = link_to "Logout", session_path, method: :delete
 
-  body
-    = yield
+.container
+  = yield
+
+footer.footer
+  .container
+    p.text-muted &copy; 2017 AV Junction Inc.
+
+- parent_layout "base"
