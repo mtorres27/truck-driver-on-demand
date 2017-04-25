@@ -1,27 +1,28 @@
 h2 Freelancers
 
-table.table
-  thead
-    tr
-      th Name
-      th Email
-      th Actions
-
-  tbody
-    - @freelancers.each do |freelancer|
+.table-responsive
+  table.table.table-striped
+    thead
       tr
-        td= freelancer.name
-        td= mail_to freelancer.email
-        td
-          = link_to 'Login As', login_as_admin_freelancer_path(freelancer)
-          '  |
-          = link_to 'Edit', edit_admin_freelancer_path(freelancer)
-          '  |
-          - if freelancer.disabled?
-            = link_to 'Enable', enable_admin_freelancer_path(freelancer)
+        th Name
+        th Email
+        th Actions
+
+    tbody
+      - @freelancers.each do |freelancer|
+        tr
+          td= link_to freelancer.name, admin_freelancer_path(freelancer)
+          td= mail_to freelancer.email
+          td
+            = link_to 'Login As', login_as_admin_freelancer_path(freelancer)
             '  |
-            = link_to 'Delete', admin_freelancer_path(freelancer), data: { confirm: 'Are you sure?' }, method: :delete
-          - else
-            = link_to 'Disable', disable_admin_freelancer_path(freelancer)
+            = link_to 'Edit', edit_admin_freelancer_path(freelancer)
+            '  |
+            - if freelancer.disabled?
+              = link_to 'Enable', enable_admin_freelancer_path(freelancer)
+              '  |
+              = link_to 'Delete', admin_freelancer_path(freelancer), data: { confirm: 'Are you sure?' }, method: :delete
+            - else
+              = link_to 'Disable', disable_admin_freelancer_path(freelancer)
 
 = paginate @freelancers

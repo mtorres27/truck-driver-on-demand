@@ -22,54 +22,34 @@ class Admin::CompaniesController < Admin::BaseController
   # def create
   #   @company = Company.new(company_params)
   #
-  #   respond_to do |format|
-  #     if @company.save
-  #       format.html { redirect_to @company, notice: "Company created." }
-  #       format.json { render :show, status: :created, location: @company }
-  #     else
-  #       format.html { render :new }
-  #       format.json { render json: @company.errors, status: :unprocessable_entity }
-  #     end
+  #   if @company.save
+  #     redirect_to @company, notice: "Company created."
+  #   else
+  #     render :new
   #   end
   # end
 
   def update
-    respond_to do |format|
-      if @company.update(company_params)
-        format.html { redirect_to admin_company_path(@company), notice: "Company updated." }
-        format.json { render :show, status: :ok, location: @company }
-      else
-        format.html { render :edit }
-        format.json { render json: @company.errors, status: :unprocessable_entity }
-      end
+    if @company.update(company_params)
+      redirect_to admin_company_path(@company), notice: "Company updated."
+    else
+      render :edit
     end
   end
 
   def destroy
     @company.destroy
-
-    respond_to do |format|
-      format.html { redirect_to admin_companies_path, notice: "Company removed." }
-      format.json { head :no_content }
-    end
+    redirect_to admin_companies_path, notice: "Company removed."
   end
 
   def enable
     @company.enable!
-
-    respond_to do |format|
-      format.html { redirect_to admin_companies_path, notice: "Company enabled." }
-      format.json { head :no_content }
-    end
+    redirect_to admin_companies_path, notice: "Company enabled."
   end
 
   def disable
     @company.disable!
-
-    respond_to do |format|
-      format.html { redirect_to admin_companies_path, notice: "Company disabled." }
-      format.json { head :no_content }
-    end
+    redirect_to admin_companies_path, notice: "Company disabled."
   end
 
   def login_as
@@ -85,6 +65,7 @@ class Admin::CompaniesController < Admin::BaseController
     end
 
     def company_params
-      params.fetch(:company, {})
+      # params.fetch(:company, {:name, :email})
+      params.require(:company).permit(:name, :email)
     end
 end

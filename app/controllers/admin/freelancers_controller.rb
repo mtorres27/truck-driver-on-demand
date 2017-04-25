@@ -20,42 +20,26 @@ class Admin::FreelancersController < Admin::BaseController
   end
 
   def update
-    respond_to do |format|
-      if @freelancer.update(company_params)
-        format.html { redirect_to admin_freelancer_path(@freelancer), notice: "Freelancer updated." }
-        format.json { render :show, status: :ok, location: @freelancer }
-      else
-        format.html { render :edit }
-        format.json { render json: @freelancer.errors, status: :unprocessable_entity }
-      end
+    if @freelancer.update(company_params)
+      redirect_to admin_freelancer_path(@freelancer), notice: "Freelancer updated."
+    else
+      render :edit
     end
   end
 
   def destroy
     @freelancer.destroy
-
-    respond_to do |format|
-      format.html { redirect_to admin_freelancers_path, notice: "Freelancer removed." }
-      format.json { head :no_content }
-    end
+    redirect_to admin_freelancers_path, notice: "Freelancer removed."
   end
 
   def enable
     @freelancer.enable!
-
-    respond_to do |format|
-      format.html { redirect_to admin_freelancers_path, notice: "Freelancer enabled." }
-      format.json { head :no_content }
-    end
+    redirect_to admin_freelancers_path, notice: "Freelancer enabled."
   end
 
   def disable
     @freelancer.disable!
-
-    respond_to do |format|
-      format.html { redirect_to admin_freelancers_path, notice: "Freelancer disabled." }
-      format.json { head :no_content }
-    end
+    redirect_to admin_freelancers_path, notice: "Freelancer disabled."
   end
 
   def login_as
@@ -71,7 +55,8 @@ class Admin::FreelancersController < Admin::BaseController
     end
 
     def freelancer_params
-      params.fetch(:freelancer, {})
+      # params.fetch(:freelancer, {})
+      params.require(:freelancer).permit(:name, :email)
     end
 
 end

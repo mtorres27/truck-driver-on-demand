@@ -10,5 +10,11 @@ html
 
     title= yield(:title) + " – " if content_for?(:title)
   body
+    - flash.each do |type, message|
+      div class="alert #{alert_class_for(type)} alert-dismissible fade in"
+        button type="button" class="close" data-dismiss="alert"
+          span aria-hidden="true" &times;
+          span.sr-only Close
+        = message
     = yield
     = javascript_include_tag "bootstrap-native", "data-turbolinks-track": "reload"

@@ -1,0 +1,17 @@
+h1 Editing Freelancer
+
+= simple_form_for([:admin, @freelancer]) do |f|
+  = f.error_notification
+
+  .form-inputs
+    = f.input :name
+    = f.input :email
+
+  .form-actions
+    = f.button :submit, class: "btn btn-primary"
+
+hr
+= link_to 'Show', admin_freelancer_path(@freelancer)
+'  |
+= link_to 'Back', admin_freelancers_path
+
