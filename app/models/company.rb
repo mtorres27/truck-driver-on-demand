@@ -8,12 +8,14 @@
 #  tagline    :string
 #  address    :string
 #  logo_data  :text
+#  disabled   :boolean          default("false"), not null
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
 #
 
 class Company < ApplicationRecord
   include Loginable
+  include Disableable
 
   has_many :identities, as: :loginable
 

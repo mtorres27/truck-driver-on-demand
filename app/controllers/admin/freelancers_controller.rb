@@ -1,8 +1,8 @@
 class Admin::FreelancersController < Admin::BaseController
-  before_action :load_freelancer, only: [:show, :edit, :update, :destroy, :sign_in_as]
+  before_action :set_freelancer, only: [:show, :edit, :update, :destroy, :enable, :disable, :login_as]
 
   def index
-    @freelancers = Freelancer.order(:name)
+    @freelancers = Freelancer.order(:name).page params[:page]
 
     # TODO - search
     # search = params[:search]
@@ -20,30 +20,58 @@ class Admin::FreelancersController < Admin::BaseController
   end
 
   def update
-    if @freelancer.update_attributes(freelancer_params)
-      redirect_to admin_freelancers_path, notice: "#{@freelancer.name} was successfully updated."
-    else
-      render :edit
+    respond_to do |format|
+      if @freelancer.update(company_params)
+        format.html { redirect_to admin_freelancer_path(@freelancer), notice: "Freelancer updated." }
+        format.json { render :show, status: :ok, location: @freelancer }
+      else
+        format.html { render :edit }
+        format.json { render json: @freelancer.errors, status: :unprocessable_entity }
+      end
     end
   end
 
   def destroy
     @freelancer.destroy
-    redirect_to admin_freelancers_path, notice: "#{@freelancer.name} was successfully removed."
+
+    respond_to do |format|
+      format.html { redirect_to admin_freelancers_path, notice: "Freelancer removed." }
+      format.json { head :no_content }
+    end
   end
 
-  # TODO - sign in as
-  def sign_in_as
-    # authorize @freelancer, :sign_in_as?
-    # sign_in(:freelancer, @freelancer)
-    # redirect_to members_path, notice: "You have been signed in as #{@freelancer.email}"
+  def enable
+    @freelancer.enable!
+
+    respond_to do |format|
+      format.html { redirect_to admin_freelancers_path, notice: "Freelancer enabled." }
+      format.json { head :no_content }
+    end
+  end
+
+  def disable
+    @freelancer.disable!
+
+    respond_to do |format|
+      format.html { redirect_to admin_freelancers_path, notice: "Freelancer disabled." }
+      format.json { head :no_content }
+    end
+  end
+
+  def login_as
+    session[:freelancer_id] = @freelancer.id
+    redirect_to freelancer_root_path, notice: "You have been logged in as #{@freelancer.name}"
   end
 
 
   private
 
-  def load_freelancer
-    @freelancer = Freelancer.find(params[:id])
-  end
+    def set_freelancer
+      @freelancer = Freelancer.find(params[:id])
+    end
+
+    def freelancer_params
+      params.fetch(:freelancer, {})
+    end
 
 end

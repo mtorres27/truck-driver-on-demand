@@ -20,10 +20,15 @@ Rails.application.routes.draw do
     root "main#index"
 
     resources :freelancers, except: [:new, :create] do
-      get :sign_in_as, on: :member
+      get :login_as, on: :member
+      get :disable, on: :member
+      get :enable, on: :member
     end
+
     resources :companies, except: [:new, :create] do
-      get :sign_in_as, on: :member
+      get :login_as, on: :member
+      get :disable, on: :member
+      get :enable, on: :member
     end
   end
 end

@@ -6,6 +6,7 @@ class CreateCompanies < ActiveRecord::Migration[5.1]
       t.string :tagline
       t.string :address
       t.text :logo_data
+      t.boolean :disabled, null: false, default: false
 
       t.timestamps
     end

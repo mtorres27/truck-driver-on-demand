@@ -8,9 +8,9 @@ end
 # Bundle edge Rails instead: gem "rails", github: "rails/rails"
 gem "rails", "~> 5.1.0.rc1"
 
-gem "pg", "~> 0.18"
-
 gem "puma", "~> 3.7"
+
+gem "pg", "~> 0.18"
 
 gem "slim-rails", ">= 3.1.2"
 
@@ -32,12 +32,12 @@ gem "jbuilder", "~> 2.5"
 gem "omniauth", ">= 1.6.1"
 gem "omniauth-facebook", ">= 4.0.0"
 gem "omniauth-google-oauth2", ">= 0.4.1"
-# gem "omniauth-linkedin-oauth2", ">= 0.2.5", git: "https://github.com/pairshaped/omniauth-linkedin-oauth2.git"
 gem "omniauth-linkedin-oauth2", ">= 0.2.5", git: "https://github.com/decioferreira/omniauth-linkedin-oauth2.git"
 
 gem "activejob-perform_later", ">= 1.0.2"
 
 gem "simple_form", ">= 3.4.0"
+gem "kaminari", ">= 1.0.1"
 
 # Use ActiveModel has_secure_password
 # gem "bcrypt", "~> 3.1.7"
@@ -65,10 +65,6 @@ group :development do
   gem "web-console", ">= 3.3.0"
 
   gem "listen", ">= 3.0.5", "< 3.2"
-
-  # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
-  gem "spring"
-  gem "spring-watcher-listen", "~> 2.0.0"
 
   gem "capistrano-rails", "~> 1.2", group: :development
 

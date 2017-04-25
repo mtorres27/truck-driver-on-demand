@@ -8,6 +8,7 @@
 #  tagline    :string
 #  address    :string
 #  logo_data  :text
+#  disabled   :boolean          default("false"), not null
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
 #

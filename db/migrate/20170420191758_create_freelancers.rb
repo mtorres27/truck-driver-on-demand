@@ -17,6 +17,7 @@ class CreateFreelancers < ActiveRecord::Migration[5.1]
       t.integer :years_of_experience, null: false, default: 0
       t.integer :profile_views, null: false, default: 0
       t.integer :projects_completed, null: false, default: 0
+      t.boolean :disabled, null: false, default: false
 
       t.timestamps
     end

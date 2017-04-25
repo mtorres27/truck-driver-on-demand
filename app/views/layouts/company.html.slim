@@ -22,7 +22,7 @@ nav.navbar.navbar-inverse.navbar-fixed-top
             li
               a href="#" Another action
             li.divider role="separator"
-            li.dropdown-header Nav header
+            li.dropdown-header= current_company.name
             li
               = link_to "Logout", session_path, method: :delete
 

@@ -1,1 +1,27 @@
-h1 Companies
+h2 Companies
+
+table.table
+  thead
+    tr
+      th Name
+      th Email
+      th Actions
+
+  tbody
+    - @companies.each do |company|
+      tr
+        td= company.name
+        td= mail_to company.email
+        td
+          = link_to 'Login As', login_as_admin_company_path(company)
+          '  |
+          = link_to 'Edit', edit_admin_company_path(company)
+          '  |
+          - if company.disabled?
+            = link_to 'Enable', enable_admin_company_path(company)
+            '  |
+            = link_to 'Delete', admin_company_path(company), data: { confirm: 'Are you sure?' }, method: :delete
+          - else
+            = link_to 'Disable', disable_admin_company_path(company)
+
+= paginate @companies

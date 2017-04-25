@@ -1,8 +1,8 @@
 class Admin::CompaniesController < Admin::BaseController
-  before_action :load_company, only: [:show, :edit, :update, :destroy, :sign_in_as]
+  before_action :set_company, only: [:show, :edit, :update, :destroy, :enable, :disable, :login_as]
 
   def index
-    @companies = Company.order(:name)
+    @companies = Company.order(:name).page params[:page]
 
     # TODO - search
     # search = params[:search]
@@ -19,31 +19,72 @@ class Admin::CompaniesController < Admin::BaseController
   def edit
   end
 
+  # def create
+  #   @company = Company.new(company_params)
+  #
+  #   respond_to do |format|
+  #     if @company.save
+  #       format.html { redirect_to @company, notice: "Company created." }
+  #       format.json { render :show, status: :created, location: @company }
+  #     else
+  #       format.html { render :new }
+  #       format.json { render json: @company.errors, status: :unprocessable_entity }
+  #     end
+  #   end
+  # end
+
   def update
-    if @company.update_attributes(company_params)
-      redirect_to admin_companies_path, notice: "#{@company.name} was successfully updated."
-    else
-      render :edit
+    respond_to do |format|
+      if @company.update(company_params)
+        format.html { redirect_to admin_company_path(@company), notice: "Company updated." }
+        format.json { render :show, status: :ok, location: @company }
+      else
+        format.html { render :edit }
+        format.json { render json: @company.errors, status: :unprocessable_entity }
+      end
     end
   end
 
   def destroy
     @company.destroy
-    redirect_to admin_companies_path, notice: "#{@company.name} was successfully removed."
+
+    respond_to do |format|
+      format.html { redirect_to admin_companies_path, notice: "Company removed." }
+      format.json { head :no_content }
+    end
   end
 
-  # TODO - sign in as
-  def sign_in_as
-    # authorize @company, :sign_in_as?
-    # sign_in(:company, @company)
-    # redirect_to members_path, notice: "You have been signed in as #{@company.email}"
+  def enable
+    @company.enable!
+
+    respond_to do |format|
+      format.html { redirect_to admin_companies_path, notice: "Company enabled." }
+      format.json { head :no_content }
+    end
+  end
+
+  def disable
+    @company.disable!
+
+    respond_to do |format|
+      format.html { redirect_to admin_companies_path, notice: "Company disabled." }
+      format.json { head :no_content }
+    end
+  end
+
+  def login_as
+    session[:company_id] = @company.id
+    redirect_to company_root_path, notice: "You have been logged in as #{@company.name}"
   end
 
 
   private
 
-  def load_company
-    @company = Company.find(params[:id])
-  end
+    def set_company
+      @company = Company.find(params[:id])
+    end
 
+    def company_params
+      params.fetch(:company, {})
+    end
 end

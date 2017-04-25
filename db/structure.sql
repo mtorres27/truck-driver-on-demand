@@ -42,6 +42,36 @@ SET default_tablespace = '';
 SET default_with_oids = false;
 
 --
+-- Name: admin_companies; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE admin_companies (
+    id bigint NOT NULL,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: admin_companies_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE admin_companies_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: admin_companies_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE admin_companies_id_seq OWNED BY admin_companies.id;
+
+
+--
 -- Name: admins; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -96,6 +126,7 @@ CREATE TABLE companies (
     tagline character varying,
     address character varying,
     logo_data text,
+    disabled boolean DEFAULT false NOT NULL,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL
 );
@@ -142,6 +173,7 @@ CREATE TABLE freelancers (
     years_of_experience integer DEFAULT 0 NOT NULL,
     profile_views integer DEFAULT 0 NOT NULL,
     projects_completed integer DEFAULT 0 NOT NULL,
+    disabled boolean DEFAULT false NOT NULL,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL
 );
@@ -211,6 +243,13 @@ CREATE TABLE schema_migrations (
 
 
 --
+-- Name: admin_companies id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY admin_companies ALTER COLUMN id SET DEFAULT nextval('admin_companies_id_seq'::regclass);
+
+
+--
 -- Name: admins id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -236,6 +275,14 @@ ALTER TABLE ONLY freelancers ALTER COLUMN id SET DEFAULT nextval('freelancers_id
 --
 
 ALTER TABLE ONLY identities ALTER COLUMN id SET DEFAULT nextval('identities_id_seq'::regclass);
+
+
+--
+-- Name: admin_companies admin_companies_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY admin_companies
+    ADD CONSTRAINT admin_companies_pkey PRIMARY KEY (id);
 
 
 --
@@ -319,6 +366,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20170420191758'),
 ('20170420191768'),
 ('20170421204647'),
-('20170422123135');
+('20170422123135'),
+('20170425142456');
 
 
