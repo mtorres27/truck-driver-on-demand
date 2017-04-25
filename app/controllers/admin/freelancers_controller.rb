@@ -20,7 +20,7 @@ class Admin::FreelancersController < Admin::BaseController
   end
 
   def update
-    if @freelancer.update(company_params)
+    if @freelancer.update(freelancer_params)
       redirect_to admin_freelancer_path(@freelancer), notice: "Freelancer updated."
     else
       render :edit

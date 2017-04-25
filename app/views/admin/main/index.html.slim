@@ -1,7 +1,23 @@
-h1 Dashboard
+h2 Dashboard
 
-h2 Admin Details
-pre= current_admin.pretty_inspect
+.row
 
-h2 Social Logins
-pre= current_admin.identities.pretty_inspect
+  .col-xs-12.col-sm-6.col-md-4
+    .bs-callout.bs-callout-primary
+      h4 #{number_to_human(Company.count)}
+      p Companies Registered
+
+  .col-xs-12.col-sm-6.col-md-4
+    .bs-callout.bs-callout-success
+      h4 #{number_to_human(Freelancer.count)}
+      p Freelancers Registered
+
+  .col-xs-12.col-sm-6.col-md-4
+    .bs-callout.bs-callout-warning
+      h4 #{number_to_human(2390)}
+      p Projects Created
+
+  .col-xs-12.col-sm-6.col-md-4
+    .bs-callout.bs-callout-danger
+      h4 #{number_to_human(5142)}
+      p Jobs Created
