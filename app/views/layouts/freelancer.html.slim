@@ -24,7 +24,7 @@ nav.navbar.navbar-inverse.navbar-fixed-top
             li.divider role="separator"
             li.dropdown-header= current_freelancer.name
             li
-              = link_to "Logout", session_path, method: :delete
+              = link_to "Logout", session_path(section: "freelancer"), method: :delete
 
 .container
   = yield

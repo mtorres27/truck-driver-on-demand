@@ -1,5 +1,8 @@
-h2 #{@section.titleize} Login
+h2 Login
 
-p= link_to "Google", "/auth/google_oauth2?section=#{@section}"
-p= link_to "Facebook", "/auth/facebook?section=#{@section}"
-p= link_to "LinkedIn", "/auth/linkedin?section=#{@section}"
+p
+  = link_to "Facebook", "/auth/facebook?section=#{@section}", class: "btn btn-primary", role: "button"
+  '
+  = link_to "Google", "/auth/google_oauth2?section=#{@section}", class: "btn btn-danger", role: "button"
+  '
+  = link_to "LinkedIn", "/auth/linkedin?section=#{@section}", class: "btn btn-info", role: "button"

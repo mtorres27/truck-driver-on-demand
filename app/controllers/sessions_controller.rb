@@ -32,7 +32,15 @@ class SessionsController < ApplicationController
   end
 
   def destroy
-    reset_session
+    if params[:section] == "freelancer"
+      session[:freelancer_id] = nil
+    elsif params[:section] == "company"
+      session[:company_id] = nil
+    elsif params[:section] == "admin"
+      session[:admin_id] = nil
+    else
+      reset_session
+    end
     redirect_to root_path, notice: "Signed out"
   end
 
