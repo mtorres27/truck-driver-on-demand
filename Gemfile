@@ -7,13 +7,10 @@ end
 
 # Bundle edge Rails instead: gem "rails", github: "rails/rails"
 gem "rails", "~> 5.1.0.rc1"
-
 gem "puma", "~> 3.7"
-
 gem "pg", "~> 0.18"
 
 gem "slim-rails", ">= 3.1.2"
-
 gem "sass-rails", github: "rails/sass-rails"
 gem "uglifier", ">= 1.3.0"
 gem "turbolinks", "~> 5"
@@ -37,6 +34,11 @@ gem "activejob-perform_later", ">= 1.0.2"
 
 gem "simple_form", ">= 3.4.0"
 gem "kaminari", ">= 1.0.1"
+
+gem "shrine", ">= 2.6.1"
+gem "fastimage", ">= 2.1.0"
+gem "image_processing", ">= 0.4.1"
+gem "mini_magick", ">= 4.7.0"
 
 # Use ActiveModel has_secure_password
 # gem "bcrypt", "~> 3.1.7"

@@ -1,11 +1,15 @@
 h1 Editing Company
 
-= simple_form_for([:admin, @company]) do |f|
+= simple_form_for([:admin, @company], html: { multipart: true }) do |f|
   = f.error_notification
 
   .form-inputs
     = f.input :name
     = f.input :email
+    - if @company.logo&.exists?
+      img src=@company.logo_url
+    = f.hidden_field :logo, value: @company.cached_logo_data
+    = f.input :logo, as: :file
 
   .form-actions
     = f.button :submit, class: "btn btn-primary"

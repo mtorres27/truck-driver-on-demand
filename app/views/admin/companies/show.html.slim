@@ -1,4 +1,8 @@
 h2= @company.name
+p= mail_to @company.email
+- if @company.logo&.exists?
+  p
+    img src=@company.logo_url
 
 hr
 = link_to 'Edit', edit_admin_company_path(@company)

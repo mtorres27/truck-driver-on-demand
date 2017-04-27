@@ -42,36 +42,6 @@ SET default_tablespace = '';
 SET default_with_oids = false;
 
 --
--- Name: admin_companies; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE admin_companies (
-    id bigint NOT NULL,
-    created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
-);
-
-
---
--- Name: admin_companies_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE admin_companies_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: admin_companies_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE admin_companies_id_seq OWNED BY admin_companies.id;
-
-
---
 -- Name: admins; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -123,8 +93,15 @@ CREATE TABLE companies (
     id bigint NOT NULL,
     email character varying NOT NULL,
     name character varying NOT NULL,
-    tagline character varying,
+    contact_name character varying NOT NULL,
+    currency character varying DEFAULT 'CAD'::character varying NOT NULL,
     address character varying,
+    formatted_address character varying,
+    area character varying,
+    lat numeric(9,6),
+    lng numeric(9,6),
+    hq_country character varying,
+    description character varying,
     logo_data text,
     disabled boolean DEFAULT false NOT NULL,
     created_at timestamp without time zone NOT NULL,
@@ -243,13 +220,6 @@ CREATE TABLE schema_migrations (
 
 
 --
--- Name: admin_companies id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY admin_companies ALTER COLUMN id SET DEFAULT nextval('admin_companies_id_seq'::regclass);
-
-
---
 -- Name: admins id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -275,14 +245,6 @@ ALTER TABLE ONLY freelancers ALTER COLUMN id SET DEFAULT nextval('freelancers_id
 --
 
 ALTER TABLE ONLY identities ALTER COLUMN id SET DEFAULT nextval('identities_id_seq'::regclass);
-
-
---
--- Name: admin_companies admin_companies_pkey; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY admin_companies
-    ADD CONSTRAINT admin_companies_pkey PRIMARY KEY (id);
 
 
 --
@@ -348,6 +310,13 @@ CREATE INDEX index_identities_on_loginable_type_and_provider_and_uid ON identiti
 
 
 --
+-- Name: index_on_companies_loc; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_on_companies_loc ON companies USING gist (st_geographyfromtext((((('SRID=4326;POINT('::text || lng) || ' '::text) || lat) || ')'::text)));
+
+
+--
 -- Name: index_on_freelancers_loc; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -366,7 +335,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20170420191758'),
 ('20170420191768'),
 ('20170421204647'),
-('20170422123135'),
-('20170425142456');
+('20170421205768'),
+('20170422123135');
 
 

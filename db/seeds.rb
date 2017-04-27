@@ -13,7 +13,6 @@ end
 240.times do
   Company.create(
     email: Faker::Internet.unique.email,
-    name: Faker::Company.unique.name,
-    tagline: Faker::Company.catch_phrase
+    name: Faker::Company.unique.name
   )
 end
