@@ -4,7 +4,7 @@
 #
 #  id                       :integer          not null, primary key
 #  email                    :string           not null
-#  name                     :string
+#  name                     :string           not null
 #  address                  :string
 #  formatted_address        :string
 #  area                     :string
@@ -14,8 +14,7 @@
 #  pay_per_unit_time        :integer
 #  tagline                  :string
 #  bio                      :text
-#  markets                  :string
-#  skills                   :string
+#  keywords                 :string
 #  years_of_experience      :integer          default("0"), not null
 #  profile_views            :integer          default("0"), not null
 #  projects_completed       :integer          default("0"), not null
@@ -33,6 +32,8 @@ class Freelancer < ApplicationRecord
 
   validates :email, presence: true, uniqueness: { case_sensitive: false }
   validates :name, presence: true
+  validates :pay_per_unit_time, numericality: true, allow_blank: true
+  validates :years_of_experience, numericality: { only_integer: true }
 
   # This SQL needs to stay exactly in sync with it's related index (index_on_freelancers_location)
   # otherwise the index won't be used. (don't even add whitespace!)

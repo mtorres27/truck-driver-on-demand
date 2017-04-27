@@ -4,7 +4,7 @@
 #
 #  id                       :integer          not null, primary key
 #  email                    :string           not null
-#  name                     :string
+#  name                     :string           not null
 #  address                  :string
 #  formatted_address        :string
 #  area                     :string
@@ -14,8 +14,7 @@
 #  pay_per_unit_time        :integer
 #  tagline                  :string
 #  bio                      :text
-#  markets                  :string
-#  skills                   :string
+#  keywords                 :string
 #  years_of_experience      :integer          default("0"), not null
 #  profile_views            :integer          default("0"), not null
 #  projects_completed       :integer          default("0"), not null

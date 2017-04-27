@@ -135,7 +135,7 @@ ALTER SEQUENCE companies_id_seq OWNED BY companies.id;
 CREATE TABLE freelancers (
     id bigint NOT NULL,
     email character varying NOT NULL,
-    name character varying,
+    name character varying NOT NULL,
     address character varying,
     formatted_address character varying,
     area character varying,
@@ -145,8 +145,7 @@ CREATE TABLE freelancers (
     pay_per_unit_time integer,
     tagline character varying,
     bio text,
-    markets character varying,
-    skills character varying,
+    keywords character varying,
     years_of_experience integer DEFAULT 0 NOT NULL,
     profile_views integer DEFAULT 0 NOT NULL,
     projects_completed integer DEFAULT 0 NOT NULL,
@@ -211,6 +210,41 @@ ALTER SEQUENCE identities_id_seq OWNED BY identities.id;
 
 
 --
+-- Name: projects; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE projects (
+    id bigint NOT NULL,
+    external_project_id character varying,
+    name character varying NOT NULL,
+    budget numeric(10,2) NOT NULL,
+    starts_on timestamp without time zone,
+    duration integer,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: projects_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE projects_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: projects_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE projects_id_seq OWNED BY projects.id;
+
+
+--
 -- Name: schema_migrations; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -245,6 +279,13 @@ ALTER TABLE ONLY freelancers ALTER COLUMN id SET DEFAULT nextval('freelancers_id
 --
 
 ALTER TABLE ONLY identities ALTER COLUMN id SET DEFAULT nextval('identities_id_seq'::regclass);
+
+
+--
+-- Name: projects id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY projects ALTER COLUMN id SET DEFAULT nextval('projects_id_seq'::regclass);
 
 
 --
@@ -288,11 +329,82 @@ ALTER TABLE ONLY identities
 
 
 --
+-- Name: projects projects_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY projects
+    ADD CONSTRAINT projects_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: schema_migrations schema_migrations_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY schema_migrations
     ADD CONSTRAINT schema_migrations_pkey PRIMARY KEY (version);
+
+
+--
+-- Name: index_admins_on_email; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_admins_on_email ON admins USING btree (email);
+
+
+--
+-- Name: index_companies_on_disabled; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_companies_on_disabled ON companies USING btree (disabled);
+
+
+--
+-- Name: index_companies_on_email; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_companies_on_email ON companies USING btree (email);
+
+
+--
+-- Name: index_companies_on_name; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_companies_on_name ON companies USING btree (name);
+
+
+--
+-- Name: index_freelancers_on_area; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_freelancers_on_area ON freelancers USING btree (area);
+
+
+--
+-- Name: index_freelancers_on_disabled; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_freelancers_on_disabled ON freelancers USING btree (disabled);
+
+
+--
+-- Name: index_freelancers_on_email; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_freelancers_on_email ON freelancers USING btree (email);
+
+
+--
+-- Name: index_freelancers_on_keywords; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_freelancers_on_keywords ON freelancers USING btree (keywords);
+
+
+--
+-- Name: index_freelancers_on_name; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_freelancers_on_name ON freelancers USING btree (name);
 
 
 --
@@ -324,6 +436,34 @@ CREATE INDEX index_on_freelancers_loc ON freelancers USING gist (st_geographyfro
 
 
 --
+-- Name: index_projects_on_budget; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_projects_on_budget ON projects USING btree (budget);
+
+
+--
+-- Name: index_projects_on_external_project_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_projects_on_external_project_id ON projects USING btree (external_project_id);
+
+
+--
+-- Name: index_projects_on_name; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_projects_on_name ON projects USING btree (name);
+
+
+--
+-- Name: index_projects_on_starts_on; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_projects_on_starts_on ON projects USING btree (starts_on);
+
+
+--
 -- PostgreSQL database dump complete
 --
 
@@ -336,6 +476,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20170420191768'),
 ('20170421204647'),
 ('20170421205768'),
-('20170422123135');
+('20170422123135'),
+('20170427143209');
 
 
