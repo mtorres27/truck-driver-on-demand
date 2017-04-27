@@ -215,6 +215,7 @@ ALTER SEQUENCE identities_id_seq OWNED BY identities.id;
 
 CREATE TABLE projects (
     id bigint NOT NULL,
+    company_id bigint,
     external_project_id character varying,
     name character varying NOT NULL,
     budget numeric(10,2) NOT NULL,
@@ -443,6 +444,13 @@ CREATE INDEX index_projects_on_budget ON projects USING btree (budget);
 
 
 --
+-- Name: index_projects_on_company_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_projects_on_company_id ON projects USING btree (company_id);
+
+
+--
 -- Name: index_projects_on_external_project_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -461,6 +469,14 @@ CREATE INDEX index_projects_on_name ON projects USING btree (name);
 --
 
 CREATE INDEX index_projects_on_starts_on ON projects USING btree (starts_on);
+
+
+--
+-- Name: projects fk_rails_44a549d7b3; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY projects
+    ADD CONSTRAINT fk_rails_44a549d7b3 FOREIGN KEY (company_id) REFERENCES companies(id);
 
 
 --

@@ -11,6 +11,8 @@ nav.navbar.navbar-inverse.navbar-fixed-top
       ul.nav.navbar-nav
         li( class=("active" if request.path == company_root_path) )
           = link_to "Dashboard", company_root_path
+        li( class=("active" if request.path.include?(company_projects_path)) )
+          = link_to "Projects", company_projects_path
       ul.nav.navbar-nav.navbar-right
         li.dropdown
           a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"

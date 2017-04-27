@@ -3,6 +3,7 @@
 # Table name: projects
 #
 #  id                  :integer          not null, primary key
+#  company_id          :integer
 #  external_project_id :string
 #  name                :string           not null
 #  budget              :decimal(10, 2)   not null
@@ -13,6 +14,8 @@
 #
 
 class Project < ApplicationRecord
+
+  belongs_to :company
 
   validates :name, presence: true
   validates :budget, presence: true, numericality: true

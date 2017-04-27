@@ -1,0 +1,21 @@
+h2 Projects
+
+.table-responsive
+  table.table.table-striped
+    thead
+      tr
+        th Project Number
+        th Name
+        th Actions
+
+    tbody
+      - @projects.each do |project|
+        tr
+          td= link_to (project.external_project_id || project.id), company_project_path(project)
+          td= project.name
+          td
+            = link_to 'Edit', edit_company_project_path(project)
+            '  |
+            = link_to 'Delete', company_project_path(project), data: { confirm: 'Are you sure?' }, method: :delete
+
+= paginate @projects

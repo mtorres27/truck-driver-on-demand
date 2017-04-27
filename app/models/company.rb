@@ -27,6 +27,7 @@ class Company < ApplicationRecord
   include LogoUploader[:logo]
 
   has_many :identities, as: :loginable
+  has_many :projects
 
   validates :email, presence: true, uniqueness: { case_sensitive: false }
   validates :name, presence: true

@@ -19,16 +19,6 @@ class Admin::CompaniesController < Admin::BaseController
   def edit
   end
 
-  # def create
-  #   @company = Company.new(company_params)
-  #
-  #   if @company.save
-  #     redirect_to @company, notice: "Company created."
-  #   else
-  #     render :new
-  #   end
-  # end
-
   def update
     if @company.update(company_params)
       redirect_to admin_company_path(@company), notice: "Company updated."

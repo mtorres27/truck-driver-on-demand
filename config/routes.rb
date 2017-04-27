@@ -14,6 +14,9 @@ Rails.application.routes.draw do
     root "companies#show"
 
     resource :company, only: [:show, :edit, :update]
+    resources :projects do
+      resources :jobs
+    end
   end
 
   namespace :admin do

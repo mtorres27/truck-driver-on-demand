@@ -3,6 +3,7 @@
 # Table name: projects
 #
 #  id                  :integer          not null, primary key
+#  company_id          :integer
 #  external_project_id :string
 #  name                :string           not null
 #  budget              :decimal(10, 2)   not null
@@ -14,10 +15,8 @@
 
 FactoryGirl.define do
   factory :project do
-    external_project_id "MyString"
-    name "MyString"
-    budget "9.99"
-    starts_on "2017-04-27 10:32:09"
-    duration 1
+    external_project_id { Faker::Code.unique.isbn }
+    name { Faker::Company.unique.name }
+    budget { Faker::Commerce.price }
   end
 end
