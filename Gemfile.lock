@@ -98,6 +98,8 @@ GEM
       ffi (~> 1.0, >= 1.0.11)
     concurrent-ruby (1.0.5)
     down (2.4.3)
+    enumerize (2.1.0)
+      activesupport (>= 3.2)
     erubi (1.6.0)
     execjs (2.7.0)
     factory_girl (4.8.0)
@@ -286,6 +288,7 @@ DEPENDENCIES
   byebug
   capistrano-rails (~> 1.2)
   capybara (~> 2.13.0)
+  enumerize (>= 2.1.0)
   factory_girl_rails (>= 4.8.0)
   faker (>= 1.7.3)
   fastimage (>= 2.1.0)

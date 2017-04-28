@@ -17,13 +17,32 @@ end
   )
 end
 
-30.times do
-  Project.create(
-    company: Company.order(:name).first,
-    external_project_id: Faker::Code.unique.isbn,
-    name: Faker::Company.unique.name,
-    budget: Faker::Commerce.price,
+# Create some projects and attach them to a company
+company = Company.order(:name).first
+schools = ActiveSupport::JSON.decode(File.read('db/seeds/schools.json')).shuffle
+schools.each do |school|
+  project = company.projects.create(
+    external_project_id: Faker::Number.number(6),
+    budget: Faker::Number.number(5),
     starts_on: Faker::Date.unique.between(Date.today, 3.months.from_now),
-    duration: Faker::Number.number(2)
+    duration: Faker::Number.number(2),
+    name: school["name"],
+    address: school["address"],
+    area: "Toronto"
   )
+
+  3.times do
+    budget = Faker::Number.number(4)
+    project.jobs.create(
+      title: Faker::Educator.campus,
+      summary: Faker::Lorem.paragraphs(2).join("\n\n"),
+      budget: budget,
+      job_function: Job.job_function.values.sample,
+      starts_on: Faker::Date.unique.between(Date.today, 3.months.from_now),
+      duration: Faker::Number.number(2),
+      freelancer_type: Job.freelancer_type.values.sample,
+      contract_price: (budget.to_f - Faker::Number.number(2).to_f),
+      contract_paid: Faker::Number.number(3)
+    )
+  end
 end

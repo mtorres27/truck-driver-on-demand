@@ -7,8 +7,13 @@
 #  external_project_id :string
 #  name                :string           not null
 #  budget              :decimal(10, 2)   not null
-#  starts_on           :datetime
+#  starts_on           :date
 #  duration            :integer
+#  address             :string           not null
+#  formatted_address   :string
+#  area                :string
+#  lat                 :decimal(9, 6)
+#  lng                 :decimal(9, 6)
 #  created_at          :datetime         not null
 #  updated_at          :datetime         not null
 #

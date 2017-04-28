@@ -2,7 +2,13 @@ class Company::ProjectsController < Company::BaseController
   before_action :set_project, only: [:show, :edit, :update, :destroy]
 
   def index
-    @projects = current_company.projects.order({ external_project_id: :desc, id: :desc }).page params[:page]
+    @projects =
+      current_company.
+      projects.
+      includes(:jobs).
+      order({ external_project_id: :desc, id: :desc }).
+      page(params[:page]).
+      per(5)
   end
 
   def new

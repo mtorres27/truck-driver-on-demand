@@ -1,21 +1,35 @@
 h2 Projects
 
-.table-responsive
-  table.table.table-striped
-    thead
-      tr
-        th Project Number
-        th Name
-        th Actions
-
-    tbody
-      - @projects.each do |project|
-        tr
-          td= link_to (project.external_project_id || project.id), company_project_path(project)
-          td= project.name
-          td
-            = link_to 'Edit', edit_company_project_path(project)
-            '  |
-            = link_to 'Delete', company_project_path(project), data: { confirm: 'Are you sure?' }, method: :delete
+ol.list
+  - @projects.each do |project|
+    li.item
+      .row.header
+        .col-xs-8.col-md-9.col-lg-10
+          h3 #{project.name} - #{project.external_project_id || project.id}
+        .col-xs-4.col-md-3.col-lg-2.text-right
+          button.btn.btn-default Show #{project.jobs.size} Jobs
+      .row.subheader
+        .col-lg-2.col-md-4.col-sm-6
+          .key Project Budget
+          .value #{number_to_currency(project.budget)}
+        .col-lg-2.col-md-4.col-sm-6
+          .key Contract Value
+          .value= number_to_currency(project.contract_value || 0)
+        .col-lg-2.col-md-4.col-sm-6
+          .key Contract Paid
+          .value= number_to_currency(project.contract_paid || 0)
+        .col-lg-2.col-md-4.col-sm-6
+          .key Location
+          .value= project.area || "Unspecified"
+        .col-lg-2.col-md-4.col-sm-6
+          .key Est Start
+          .value= project.starts_on ? l(project.starts_on) : "Unspecified"
+        .col-lg-2.col-md-4.col-sm-6
+          .key Duration
+          .value= project.duration
+      .row.jobs
+        - project.jobs.each do |job|
+          .col-lg-4
+            = job.title
 
 = paginate @projects

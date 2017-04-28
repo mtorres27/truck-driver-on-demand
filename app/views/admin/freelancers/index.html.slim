@@ -6,14 +6,14 @@ h2 Freelancers
       tr
         th Name
         th Email
-        th Actions
+        th.text-right Actions
 
     tbody
       - @freelancers.each do |freelancer|
         tr
           td= link_to freelancer.name, admin_freelancer_path(freelancer)
           td= mail_to freelancer.email
-          td
+          td.text-right
             = link_to 'Login As', login_as_admin_freelancer_path(freelancer)
             '  |
             = link_to 'Edit', edit_admin_freelancer_path(freelancer)

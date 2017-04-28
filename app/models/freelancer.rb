@@ -38,15 +38,15 @@ class Freelancer < ApplicationRecord
   # This SQL needs to stay exactly in sync with it's related index (index_on_freelancers_location)
   # otherwise the index won't be used. (don't even add whitespace!)
   # https://github.com/pairshaped/postgis-on-rails-example
-  scope :near, -> (lat, lng, distance_in_meters = 2000) {
-    where(%{
-      ST_DWithin(
-        ST_GeographyFromText(
-          'SRID=4326;POINT(' || freelancers.lng || ' ' || freelancers.lat || ')'
-        ),
-        ST_GeographyFromText('SRID=4326;POINT(%f %f)'),
-        %d
-      )
-    } % [lng, lat, distance_in_meters])
-  }
+  # scope :near, -> (lat, lng, distance_in_meters = 2000) {
+  #   where(%{
+  #     ST_DWithin(
+  #       ST_GeographyFromText(
+  #         'SRID=4326;POINT(' || freelancers.lng || ' ' || freelancers.lat || ')'
+  #       ),
+  #       ST_GeographyFromText('SRID=4326;POINT(%f %f)'),
+  #       %d
+  #     )
+  #   } % [lng, lat, distance_in_meters])
+  # }
 end

@@ -40,10 +40,27 @@ module Geocodable
     end
   end
 
-  # Using a callback makes testing a pita and adds implicitness to our code,
-  # making it harder to debug down the road. Figure out a better way to make sure
-  # geocoding happens.
-  # included do
-  #   after_save :queue_geocode
-  # end
+  included do
+    # This SQL needs to stay exactly in sync with it's related index (index_on_???_loc)
+    # otherwise the index won't be used. (don't even add whitespace!)
+    # https://github.com/pairshaped/postgis-on-rails-example
+    scope :near, -> (lat, lng, distance_in_meters = 2000) {
+      where(
+        <<-SQL.squish
+          ST_DWithin(
+            ST_GeographyFromText(
+              'SRID=4326;POINT(' || #{table_name}.lng || ' ' || #{table_name}.lat || ')'
+            ),
+            ST_GeographyFromText('SRID=4326;POINT(#{lng} #{lat})'),
+            #{distance_in_meters}
+          )
+        SQL
+      )
+    }
+
+    # Using a callback makes testing a pita and adds implicitness to our code,
+    # making it harder to debug down the road. Figure out a better way to make sure
+    # geocoding happens.
+    # after_save :queue_geocode
+  end
 end

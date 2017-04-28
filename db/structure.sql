@@ -210,6 +210,61 @@ ALTER SEQUENCE identities_id_seq OWNED BY identities.id;
 
 
 --
+-- Name: jobs; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE jobs (
+    id bigint NOT NULL,
+    project_id bigint,
+    title character varying NOT NULL,
+    summary text NOT NULL,
+    scope_of_work text,
+    budget numeric(10,2) NOT NULL,
+    job_function character varying NOT NULL,
+    starts_on date NOT NULL,
+    ends_on date,
+    duration integer NOT NULL,
+    pay_type character varying,
+    freelancer_type character varying NOT NULL,
+    keywords text,
+    invite_only boolean DEFAULT false NOT NULL,
+    scope_is_public boolean DEFAULT true NOT NULL,
+    budget_is_public boolean DEFAULT true NOT NULL,
+    working_days text,
+    working_times character varying,
+    contract_price numeric(10,2),
+    contract_paid numeric(10,2),
+    payment_schedule text,
+    reporting_frequency character varying,
+    require_photos_on_updates boolean DEFAULT false NOT NULL,
+    require_checkin boolean DEFAULT false NOT NULL,
+    require_uniform boolean DEFAULT false NOT NULL,
+    addendums text,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: jobs_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE jobs_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: jobs_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE jobs_id_seq OWNED BY jobs.id;
+
+
+--
 -- Name: projects; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -219,8 +274,13 @@ CREATE TABLE projects (
     external_project_id character varying,
     name character varying NOT NULL,
     budget numeric(10,2) NOT NULL,
-    starts_on timestamp without time zone,
+    starts_on date,
     duration integer,
+    address character varying NOT NULL,
+    formatted_address character varying,
+    area character varying,
+    lat numeric(9,6),
+    lng numeric(9,6),
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL
 );
@@ -283,6 +343,13 @@ ALTER TABLE ONLY identities ALTER COLUMN id SET DEFAULT nextval('identities_id_s
 
 
 --
+-- Name: jobs id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY jobs ALTER COLUMN id SET DEFAULT nextval('jobs_id_seq'::regclass);
+
+
+--
 -- Name: projects id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -327,6 +394,14 @@ ALTER TABLE ONLY freelancers
 
 ALTER TABLE ONLY identities
     ADD CONSTRAINT identities_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: jobs jobs_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY jobs
+    ADD CONSTRAINT jobs_pkey PRIMARY KEY (id);
 
 
 --
@@ -423,6 +498,13 @@ CREATE INDEX index_identities_on_loginable_type_and_provider_and_uid ON identiti
 
 
 --
+-- Name: index_jobs_on_project_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_jobs_on_project_id ON jobs USING btree (project_id);
+
+
+--
 -- Name: index_on_companies_loc; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -434,6 +516,20 @@ CREATE INDEX index_on_companies_loc ON companies USING gist (st_geographyfromtex
 --
 
 CREATE INDEX index_on_freelancers_loc ON freelancers USING gist (st_geographyfromtext((((('SRID=4326;POINT('::text || lng) || ' '::text) || lat) || ')'::text)));
+
+
+--
+-- Name: index_on_projects_loc; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_on_projects_loc ON projects USING gist (st_geographyfromtext((((('SRID=4326;POINT('::text || lng) || ' '::text) || lat) || ')'::text)));
+
+
+--
+-- Name: index_projects_on_area; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_projects_on_area ON projects USING btree (area);
 
 
 --
@@ -472,6 +568,14 @@ CREATE INDEX index_projects_on_starts_on ON projects USING btree (starts_on);
 
 
 --
+-- Name: jobs fk_rails_1977e8b5a6; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY jobs
+    ADD CONSTRAINT fk_rails_1977e8b5a6 FOREIGN KEY (project_id) REFERENCES projects(id);
+
+
+--
 -- Name: projects fk_rails_44a549d7b3; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -493,6 +597,8 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20170421204647'),
 ('20170421205768'),
 ('20170422123135'),
-('20170427143209');
+('20170427143209'),
+('20170427182445'),
+('20170428154417');
 
 
