@@ -1,5 +1,8 @@
 h2 Projects
 
+button.btn.btn-default type="button" onClick="toggleJobs(this)" data-action="show"
+  | Show All
+
 ol.list
   - @projects.each do |project|
     li.item
@@ -7,7 +10,8 @@ ol.list
         .col-xs-8.col-md-9.col-lg-10
           h3 #{project.name} - #{project.external_project_id || project.id}
         .col-xs-4.col-md-3.col-lg-2.text-right
-          button.btn.btn-default Show #{project.jobs.size} Jobs
+          button.btn.btn-default data-toggle="collapse" data-target="#jobsFor#{project.id}" type="button" aria-expanded="false" aria-controls="jobsFor#{project.id}"
+            | Show #{project.jobs.size} Jobs
       .row.subheader
         .col-lg-2.col-md-4.col-sm-6
           .key Project Budget
@@ -27,9 +31,30 @@ ol.list
         .col-lg-2.col-md-4.col-sm-6
           .key Duration
           .value= project.duration
-      .row.jobs
-        - project.jobs.each do |job|
-          .col-lg-4
-            = job.title
+    .collapse.jobs( id="jobsFor#{project.id}" )
+      .row
+          - project.jobs.each do |job|
+            .col-lg-4
+              = job.title
 
 = paginate @projects
+
+javascript:
+  var jobs = document.getElementsByClassName("jobs")
+
+  var toggleJobs = function(caller) {
+    show = caller.dataset.action == "show"
+    caller.dataset.action = (show ? "hide" : "show")
+
+    filteredJobs = Array.prototype.filter.call(jobs, function(job) {
+      return (show && !job.classList.contains("in")) || (!show && job.classList.contains("in"))
+    })
+
+    filteredJobs.forEach(function(ele) {
+      if (show) {
+        ele.classList.add("in")
+      } else {
+        ele.classList.remove("in")
+      }
+    })
+  }
