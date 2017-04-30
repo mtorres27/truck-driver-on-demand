@@ -7,16 +7,6 @@ class Admin::BaseController < ApplicationController
   helper_method :current_admin
   helper_method :admin_signed_in?
 
-  private
-
-  def current_admin
-    begin
-      @current_admin ||= Admin.find(session[:admin_id]) if session[:admin_id]
-    rescue Exception => e
-      nil
-    end
-  end
-
   def admin_signed_in?
     return true if current_admin
   end
