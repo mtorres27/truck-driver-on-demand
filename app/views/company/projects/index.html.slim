@@ -5,7 +5,7 @@
     = link_to "Post a New Job", new_company_job_path, class: "btn btn-default", role: "button"
 
 .tabs
-  ul.nav.nav-tabs role="tablist"
+  ul
     li class=("active" unless params[:closed]) role="presentation"
       = link_to "Open", company_projects_path, "aria-controlers" => "open", role: "tab"
     li class=("active" if params[:closed]) role="presentation"
@@ -30,13 +30,13 @@ ol.list
       .row.subheader
         .col-lg-2.col-md-4.col-sm-6
           .key Project Budget
-          .value #{number_to_currency(project.budget)}
+          .value #{number_to_currency(project.budget, precision: 0)}
         .col-lg-2.col-md-4.col-sm-6
           .key Contract Value
-          .value= number_to_currency(project.contract_value || 0)
+          .value= number_to_currency(project.contract_value || 0, precision: 0)
         .col-lg-2.col-md-4.col-sm-6
           .key Contract Paid
-          .value= number_to_currency(project.contract_paid || 0)
+          .value= number_to_currency(project.contract_paid || 0, precision: 0)
         .col-lg-2.col-md-4.col-sm-6
           .key Location
           .value= project.area || "Unspecified"
@@ -46,11 +46,15 @@ ol.list
         .col-lg-2.col-md-4.col-sm-6
           .key Duration
           .value= project.duration
-    .collapse.jobs( id="jobsFor#{project.id}" )
+    .collapse.in.jobs( id="jobsFor#{project.id}" )
       .row
-          - project.jobs.each do |job|
-            .col-lg-4
-              = job.title
+        - project.jobs.each do |job|
+          = render partial: "job", locals: { job: job }
+        .col-xs-12.col-sm-6.col-md-4.col-lg-3
+          a.card.job.new-job href=new_company_job_path(project_id: project.id)
+            .plus +
+            | Post a new job to this project
+
 
 = paginate @projects
 

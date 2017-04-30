@@ -1,0 +1,15 @@
+.col-xs-12.col-sm-6.col-md-4.col-lg-3
+  .card.job
+    .job-title= job.title
+    .job-cell.job-cell-top-left
+      .job-value= number_to_currency(job.budget || 0, precision: 0)
+      .job-key Budget
+    .job-cell.job-cell-top-right
+      .job-value= number_to_currency(job.contract_price || 0, precision: 0)
+      .job-key Contract
+    .job-cell.job-cell-bot-left
+      .job-value= number_to_currency(job.contract_paid || 0, precision: 0)
+      .job-key Paid
+    .job-cell.job-cell-bot-right
+      .job-value TODO
+      .job-key Messages

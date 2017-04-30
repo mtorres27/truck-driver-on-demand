@@ -20,3 +20,46 @@
         text-transform: uppercase
         color: $gray-light
 
+  .job
+    display: flex
+    flex-wrap: wrap
+    height: 250px
+    &-title
+      width: 100%
+      margin: 5px 0 15px 0
+      font-size: 16px
+    &-cell
+      width: 50%
+      padding: 15px 5px
+      text-align: center
+      &-top-left
+        border-right: 1px solid $gray-lighter
+        border-bottom: 1px solid $gray-lighter
+      &-top-right
+        border-bottom: 1px solid $gray-lighter
+      &-bot-left
+        border-right: 1px solid $gray-lighter
+    &-value
+      color: $gray-light
+      font-size: 20px
+      padding-bottom: 5px
+    &-key
+      font-weight: bold
+      text-transform: uppercase
+
+  .new-job
+    border-color: $link-color
+    text-align: center
+    display: block
+    color: $gray-dark
+    font-size: 18px
+    text-transform: uppercase
+    padding: 0 50px
+    .plus
+      color: $link-color
+      font-size: 120px
+      font-weight: 100
+      margin-bottom: -35px
+    &:hover
+      text-decoration: none
+      background-color: lighten($brand-primary, 50%)
