@@ -17,6 +17,7 @@ Rails.application.routes.draw do
     resources :projects do
       resources :jobs
     end
+    resources :jobs
   end
 
   namespace :admin do

@@ -281,6 +281,7 @@ CREATE TABLE projects (
     area character varying,
     lat numeric(9,6),
     lng numeric(9,6),
+    closed boolean DEFAULT false NOT NULL,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL
 );
@@ -537,6 +538,13 @@ CREATE INDEX index_projects_on_area ON projects USING btree (area);
 --
 
 CREATE INDEX index_projects_on_budget ON projects USING btree (budget);
+
+
+--
+-- Name: index_projects_on_closed; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_projects_on_closed ON projects USING btree (closed);
 
 
 --

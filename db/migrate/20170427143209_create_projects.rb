@@ -12,6 +12,7 @@ class CreateProjects < ActiveRecord::Migration[5.1]
       t.string :area, index: true
       t.decimal :lat, precision: 9, scale: 6
       t.decimal :lng, precision: 9, scale: 6
+      t.boolean :closed, null: false, default: false, index: true
 
       t.timestamps
     end

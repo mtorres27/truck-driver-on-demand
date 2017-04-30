@@ -28,7 +28,8 @@ schools.each do |school|
     duration: Faker::Number.number(2),
     name: school["name"],
     address: school["address"],
-    area: "Toronto"
+    area: "Toronto",
+    closed: [true, false].sample
   )
 
   3.times do

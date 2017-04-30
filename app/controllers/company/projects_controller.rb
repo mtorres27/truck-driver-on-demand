@@ -6,9 +6,16 @@ class Company::ProjectsController < Company::BaseController
       current_company.
       projects.
       includes(:jobs).
+      where(closed: params[:closed].present?).
       order({ external_project_id: :desc, id: :desc }).
       page(params[:page]).
       per(5)
+
+    @job_count = Job.joins(:project).where(
+      projects: {
+        company_id: current_company.id,
+        closed: params[:closed].present?
+      }).count
   end
 
   def new

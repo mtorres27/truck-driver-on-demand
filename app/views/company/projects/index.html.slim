@@ -1,7 +1,22 @@
-h2 Projects
+.row
+  .col-md-10.col-sm-12
+    h1 Job Postings
+  .col-md-2.col-sm-12.text-right.post-new-job
+    = link_to "Post a New Job", new_company_job_path, class: "btn btn-default", role: "button"
 
-button.btn.btn-default type="button" onClick="toggleJobs(this)" data-action="show"
-  | Show All
+.tabs
+  ul.nav.nav-tabs role="tablist"
+    li class=("active" unless params[:closed]) role="presentation"
+      = link_to "Open", company_projects_path, "aria-controlers" => "open", role: "tab"
+    li class=("active" if params[:closed]) role="presentation"
+      = link_to "Closed", company_projects_path(closed: true), "aria-controlers" => "closed", role: "tab"
+
+.row
+  .col-md-10.col-sm-12
+    h2 #{@projects.total_count} #{params[:closed] ? 'Closed' : 'Open'} Projects with a total of #{@job_count} jobs.
+  .col-md-2.col-sm-12.text-right.expand-all
+    button.btn.btn-default type="button" onClick="toggleJobs(this)" data-action="show"
+      | Expand All
 
 ol.list
   - @projects.each do |project|
