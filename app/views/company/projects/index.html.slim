@@ -1,62 +1,70 @@
-.row
-  .col-md-10.col-sm-12
-    h1 Job Postings
-  .col-md-2.col-sm-12.text-right.post-new-job
-    = link_to "Post a New Job", new_company_job_path, class: "btn btn-default", role: "button"
+- content_for :header do
+  .content
+    .row
+      .col-md-10.col-sm-12
+        h1 Job Postings
+      .col-md-2.col-sm-12.text-right.post-new-job
+        = link_to "Post a New Job", new_company_job_path, class: "btn btn-default", role: "button"
 
-.tabs
-  ul
-    li class=("active" unless params[:closed]) role="presentation"
-      = link_to "Open", company_projects_path, "aria-controlers" => "open", role: "tab"
-    li class=("active" if params[:closed]) role="presentation"
-      = link_to "Closed", company_projects_path(closed: true), "aria-controlers" => "closed", role: "tab"
+    .row
+      .col-xs-12
+        ul.list-inline.state-filters
+          li class=("active" unless params[:closed]) role="presentation"
+            = link_to "Open Projects", company_projects_path, "aria-controlers" => "open", role: "tab"
+          li class=("active" if params[:closed]) role="presentation"
+            = link_to "Closed Projects", company_projects_path(closed: true), "aria-controlers" => "closed", role: "tab"
 
-.row
-  .col-md-10.col-sm-12
-    h2 #{@projects.total_count} #{params[:closed] ? 'Closed' : 'Open'} Projects with a total of #{@job_count} jobs.
-  .col-md-2.col-sm-12.text-right.expand-all
-    button.btn.btn-default type="button" onClick="toggleJobs(this)" data-action="show"
-      | Expand All
+.content-card
+  .row
+    .col-md-10.col-sm-12
+      h2 #{@projects.total_count} #{params[:closed] ? 'Closed' : 'Open'} Projects with a total of #{@job_count} jobs.
+    .col-md-2.col-sm-12.text-right.expand-all
+      button.btn.btn-default type="button" onClick="toggleJobs(this)" data-action="show"
+        | Expand All
 
-ol.list
-  - @projects.each do |project|
-    li.item
-      .row.header
-        .col-xs-8.col-md-9.col-lg-10
-          h3 #{project.name} - #{project.external_project_id || project.id}
-        .col-xs-4.col-md-3.col-lg-2.text-right
-          button.btn.btn-default data-toggle="collapse" data-target="#jobsFor#{project.id}" type="button" aria-expanded="false" aria-controls="jobsFor#{project.id}"
-            | Show #{project.jobs.size} Jobs
-      .row.subheader
-        .col-lg-2.col-md-4.col-sm-6
-          .key Project Budget
-          .value #{number_to_currency(project.budget, precision: 0)}
-        .col-lg-2.col-md-4.col-sm-6
-          .key Contract Value
-          .value= number_to_currency(project.contract_value || 0, precision: 0)
-        .col-lg-2.col-md-4.col-sm-6
-          .key Contract Paid
-          .value= number_to_currency(project.contract_paid || 0, precision: 0)
-        .col-lg-2.col-md-4.col-sm-6
-          .key Location
-          .value= project.area || "Unspecified"
-        .col-lg-2.col-md-4.col-sm-6
-          .key Est Start
-          .value= project.starts_on ? l(project.starts_on) : "Unspecified"
-        .col-lg-2.col-md-4.col-sm-6
-          .key Duration
-          .value= project.duration
-    .collapse.in.jobs( id="jobsFor#{project.id}" )
-      .row
-        - project.jobs.each do |job|
-          = render partial: "job", locals: { job: job }
-        .col-xs-12.col-sm-6.col-md-4.col-lg-3
-          a.card.job.new-job href=new_company_job_path(project_id: project.id)
-            .plus +
-            | Post a new job to this project
+  .row
+    .col-xs-12
+      ol.list
+        - @projects.each do |project|
+          li.item
+            .row.header
+              .col-xs-8.col-md-9.col-lg-10
+                h3
+                  a data-toggle="collapse" href="#jobsFor#{project.id}" type="button" aria-expanded="false" aria-controls="jobsFor#{project.id}"
+                    = "#{project.name} - #{project.external_project_id || project.id}"
+              .col-xs-4.col-md-3.col-lg-2.text-right
+                button.btn.btn-default data-toggle="collapse" data-target="#jobsFor#{project.id}" type="button" aria-expanded="false" aria-controls="jobsFor#{project.id}"
+                  | Show #{project.jobs.size} Jobs
+            .row.subheader
+              .col-lg-2.col-md-4.col-sm-6
+                .key Project Budget
+                .value #{number_to_currency(project.budget, precision: 0)}
+              .col-lg-2.col-md-4.col-sm-6
+                .key Contract Value
+                .value= number_to_currency(project.contract_value || 0, precision: 0)
+              .col-lg-2.col-md-4.col-sm-6
+                .key Contract Paid
+                .value= number_to_currency(project.contract_paid || 0, precision: 0)
+              .col-lg-2.col-md-4.col-sm-6
+                .key Location
+                .value= project.area || "Unspecified"
+              .col-lg-2.col-md-4.col-sm-6
+                .key Est Start
+                .value= project.starts_on ? l(project.starts_on) : "Unspecified"
+              .col-lg-2.col-md-4.col-sm-6
+                .key Duration
+                .value= project.duration
+          .collapse.jobs( id="jobsFor#{project.id}" )
+            .row
+              - project.jobs.each do |job|
+                = render partial: "job", locals: { project: project, job: job }
+              .col-xs-12.col-sm-6.col-md-4.col-lg-3
+                a.card.job.new-job href=new_company_project_job_path(project)
+                  .plus +
+                  | Post a new job to this project
 
 
-= paginate @projects
+      = paginate @projects
 
 javascript:
   var jobs = document.getElementsByClassName("jobs")
