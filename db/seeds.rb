@@ -20,7 +20,7 @@ end
 # Create some projects and attach them to a company
 company = Company.order(:name).first
 schools = ActiveSupport::JSON.decode(File.read('db/seeds/schools.json')).shuffle
-schools.each do |school|
+schools.sample(20).each do |school|
   project = company.projects.create(
     external_project_id: Faker::Number.number(6),
     budget: Faker::Number.number(5),

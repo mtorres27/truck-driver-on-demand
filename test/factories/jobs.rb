@@ -13,7 +13,7 @@
 #  ends_on                   :date
 #  duration                  :integer          not null
 #  pay_type                  :string
-#  freelance_type            :string           not null
+#  freelancer_type           :string           not null
 #  keywords                  :text
 #  invite_only               :boolean          default("false"), not null
 #  scope_is_public           :boolean          default("true"), not null

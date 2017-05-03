@@ -36,3 +36,11 @@ en:
   time:
     formats:
       default: ! '%b %-d, %Y %-l:%M %p'
+  enumerize:
+    job:
+      job_function:
+        av_installation_technician: "AV Installation Technician"
+        av_rental_and_staging_technician: "AV Rental & Staging Technician"
+        av_programmer: "AV Programmer"
+      freelancer_type:
+        av_labor_company: "AV Labor Company"

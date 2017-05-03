@@ -1,14 +1,14 @@
 - content_for :header do
   .content
     .row
-      .col-md-10.col-sm-12
+      .col-sm-8.col-xs-12
         h1 Job Postings
-      .col-md-2.col-sm-12.text-right.post-new-job
-        = link_to "Post a New Job", new_company_job_path, class: "btn btn-default", role: "button"
+      .col-sm-4.col-xs-12.text-right.post-new-job
+        = link_to "Post a New Job", new_company_job_path, class: "btn btn-primary", role: "button"
 
     .row
       .col-xs-12
-        ul.list-inline.state-filters
+        ul.list-inline.page-nav
           li class=("active" unless params[:closed]) role="presentation"
             = link_to "Open Projects", company_projects_path, "aria-controlers" => "open", role: "tab"
           li class=("active" if params[:closed]) role="presentation"

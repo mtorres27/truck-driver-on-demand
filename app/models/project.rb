@@ -14,6 +14,7 @@
 #  area                :string
 #  lat                 :decimal(9, 6)
 #  lng                 :decimal(9, 6)
+#  closed              :boolean          default("false"), not null
 #  created_at          :datetime         not null
 #  updated_at          :datetime         not null
 #
@@ -25,7 +26,7 @@ class Project < ApplicationRecord
   has_many :jobs, dependent: :destroy
 
   validates :name, presence: true
-  validates :budget, presence: true, numericality: true
+  validates :budget, presence: true, numericality: true, sane_price: true
   validates :duration, numericality: { only_integer: true }, allow_blank: true
 
   def contract_value
@@ -35,4 +36,7 @@ class Project < ApplicationRecord
   def contract_paid
     jobs.sum { |job| job.contract_paid || 0 }
   end
+
+  scope :open, -> { where(closed: false) }
+  scope :closed, -> { where(closed: true) }
 end

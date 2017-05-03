@@ -13,7 +13,7 @@
 #  ends_on                   :date
 #  duration                  :integer          not null
 #  pay_type                  :string
-#  freelance_type            :string           not null
+#  freelancer_type           :string           not null
 #  keywords                  :text
 #  invite_only               :boolean          default("false"), not null
 #  scope_is_public           :boolean          default("true"), not null
@@ -38,12 +38,22 @@ class Job < ApplicationRecord
   belongs_to :project
 
   enumerize :job_function, in: [
-    "AV Installation Technician",
-    "AV Rental & Staging Technician",
-    "AV Programmer"
+    :av_installation_technician,
+    :av_rental_and_staging_technician,
+    :av_programmer
   ]
 
-  enumerize :pay_type, in: [ "Fixed", "Hourly" ]
+  enumerize :pay_type, in: [ :fixed, :hourly ]
 
-  enumerize :freelancer_type, in: [ "Independent", "AV Labor Company" ]
+  enumerize :freelancer_type, in: [ :independent, :av_labor_company ]
+
+  validates :project, presence: true
+  validates :title, presence: true
+  validates :summary, presence: true
+  validates :budget, presence: true, numericality: true, sane_price: true
+  validates :job_function, presence: true, inclusion: { in: job_function.values }
+  validates :starts_on, presence: true
+  validates :duration, presence: true, numericality: { only_integer: true }
+  validates :pay_type, inclusion: { in: pay_type.values }, allow_blank: true
+  validates :freelancer_type, presence: true, inclusion: { in: freelancer_type.values }
 end

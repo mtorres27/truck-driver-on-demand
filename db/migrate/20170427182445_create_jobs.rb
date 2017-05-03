@@ -26,6 +26,7 @@ class CreateJobs < ActiveRecord::Migration[5.1]
       t.boolean :require_checkin, null: false, default: false
       t.boolean :require_uniform, null: false, default: false
       t.text :addendums
+      t.boolean :published, null: false, default: false
 
       t.timestamps
     end

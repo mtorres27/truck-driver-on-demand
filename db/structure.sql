@@ -240,6 +240,7 @@ CREATE TABLE jobs (
     require_checkin boolean DEFAULT false NOT NULL,
     require_uniform boolean DEFAULT false NOT NULL,
     addendums text,
+    published boolean DEFAULT false NOT NULL,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL
 );

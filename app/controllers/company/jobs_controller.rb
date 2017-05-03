@@ -7,11 +7,22 @@ class Company::JobsController < Company::BaseController
   end
 
   def create
-    @project = current_company.projects.find(job_params[:project_id])
-    @job = @project.jobs.new
+    @job = Job.new(job_params)
+
+    # Don't let the user assign a project that doesn't belong to them.
+    unless @job.project&.company&.id == current_company.id
+      @job.errors[:project_id] << "Invalid project selected"
+      render :new
+      return
+    end
+
+    if job_params[:published]
+      logger.debug("Published button: #{job_params[:published]}")
+      @job.published = true
+    end
 
     if @job.save
-      redirect_to company_project_job_path(@project, @job), notice: "Job created."
+      redirect_to company_project_job_path(@job.project, @job), notice: "Job created."
     else
       render :new
     end
@@ -48,6 +59,22 @@ class Company::JobsController < Company::BaseController
     end
 
     def job_params
-      params.require(:job).permit(:project_id, :name)
+      params.require(:job).permit(
+        :project_id,
+        :title,
+        :summary,
+        :scope_of_work,
+        :budget,
+        :job_function,
+        :starts_on,
+        :duration,
+        :pay_type,
+        :freelancer_type,
+        :keywords,
+        :invite_only,
+        :scope_is_public,
+        :budget_is_public,
+        :publish
+      )
     end
 end

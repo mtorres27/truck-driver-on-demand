@@ -30,6 +30,25 @@ a:hover, a:focus, a:active
   background-color: $gray-lighter
   padding: 30px 0
 
+.page-nav
+  margin: 20px 0 0 0
+  li
+    width: 145px
+    text-align: center
+    padding: 15px 0
+    font-size: 14px
+    text-transform: uppercase
+    a
+      color: $gray-light
+      &:hover
+        text-decoration: none
+        color: $link-color
+  .active
+    border-bottom: 3px solid $link-color
+    color: $link-color
+    a
+      color: $link-color
+
 .content-card
   padding: 25px
   background-color: white
