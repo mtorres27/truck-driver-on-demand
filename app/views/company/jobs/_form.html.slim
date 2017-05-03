@@ -44,4 +44,4 @@
             = f.button :button, "Publish", name: "job[published]", value: true, class: "btn btn-default"
         - unless @job.new_record?
           .col-xs-12.col-sm-6.col-md-8.text-right
-            = link_to "Delete Job", company_job_path(@job), methos: :delete
+            = link_to "Delete Job", company_job_path(@job), data: { confirm: "Are you sure?" }, method: :delete
