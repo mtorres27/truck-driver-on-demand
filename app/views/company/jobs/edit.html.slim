@@ -1,1 +1,10 @@
-h2 TODO
+- content_for :header do
+  .content
+    h1
+      = link_to "&#8592;".html_safe, company_job_path(@job), class: "back-arrow"
+      ' Update Job
+
+    ul.list-inline.page-nav
+      li.active Job Details
+
+= render "form"

@@ -14,9 +14,7 @@ Rails.application.routes.draw do
     root "companies#show"
 
     resource :company, only: [:show, :edit, :update]
-    resources :projects do
-      resources :jobs, except: [:index]
-    end
+    resources :projects
     resources :jobs, except: [:index]
   end
 

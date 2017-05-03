@@ -1,0 +1,47 @@
+.content-card
+  = simple_form_for([:company, @job]) do |f|
+    .form-inputs
+      .row
+        .col-sm-12.col-md-6.col-lg-7
+          .row
+            .col-xs-8
+              = f.association :project, collection: current_company.projects.open, label: "Project reference", prompt: "Select"
+            .col-xs-4
+              .form-group
+                label.control-label &nbsp;
+                .form-button= link_to "New Project", new_company_project_path, class: "btn btn-default"
+          = f.input :title, label: "Job title", placeholder: "Enter the job title"
+          = f.input :summary, label: "Job summary", placeholder: "Enter the job summary"
+          = f.input :scope_of_work, placeholder: "Please enter in more details about the job to receive a better quote. If you already have these documents please attach them below."
+
+        .col-sm-12.col-md-6.col-lg-5
+          = f.input :budget, placeholder: "Enter a budget"
+          = f.input :job_function, prompt: "Select"
+          .row
+            .col-xs-12.col-md-6
+              = f.input :starts_on, html5: true
+            .col-xs-12.col-md-6
+              = f.input :duration, placeholder: "Number of days"
+          .row
+            .col-xs-12.col-md-6
+              = f.input :pay_type, prompt: "Select"
+            .col-xs-12.col-md-6
+              = f.input :freelancer_type, prompt: "Select"
+          = f.input :keywords, placeholder: "E.g. crestron, broadcast, education, wall"
+          = f.input :invite_only, label: "This posting is invite only and will not display in search results"
+          = f.input :scope_is_public, label: "The scope of work for this posting is available to everyone"
+          = f.input :budget_is_public, label: "The budget for this job will display in search results"
+    hr
+    .form-actions
+      .row
+        - if @job.published?
+          .col-xs-6.col-sm-6.col-md-4
+            = f.button :submit, "Save", class: "btn btn-primary"
+        - else
+          .col-xs-6.col-sm-3.col-md-2
+            = f.button :submit, "Save as Draft", class: "btn btn-primary"
+          .col-xs-6.col-sm-3.col-md-2
+            = f.button :button, "Publish", name: "job[published]", value: true, class: "btn btn-default"
+        - unless @job.new_record?
+          .col-xs-12.col-sm-6.col-md-8.text-right
+            = link_to "Delete Job", company_job_path(@job), methos: :delete

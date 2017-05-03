@@ -1,28 +1,24 @@
 class Company::JobsController < Company::BaseController
-  before_action :set_project, only: [:new, :show, :edit, :update, :destroy]
   before_action :set_job, only: [:show, :edit, :update, :destroy]
+  before_action :is_owner?, only: [:show, :edit, :update, :destroy]
 
   def new
-    @job = @project ? @project.jobs.new : Job.new
+    @job = Job.new(project_id: params[:project_id])
   end
 
   def create
     @job = Job.new(job_params)
 
-    # Don't let the user assign a project that doesn't belong to them.
-    unless @job.project&.company&.id == current_company.id
-      @job.errors[:project_id] << "Invalid project selected"
+    validate_ownership
+    if @job.errors.size > 0
       render :new
       return
     end
 
-    if job_params[:published]
-      logger.debug("Published button: #{job_params[:published]}")
-      @job.published = true
-    end
+    @job.published = true if job_params[:published]
 
     if @job.save
-      redirect_to company_project_job_path(@job.project, @job), notice: "Job created."
+      redirect_to company_job_path(@job), notice: "Job created."
     else
       render :new
     end
@@ -35,8 +31,14 @@ class Company::JobsController < Company::BaseController
   end
 
   def update
+    validate_ownership
+    if @job.errors.size > 0
+      render :edit
+      return
+    end
+
     if @job.update(job_params)
-      redirect_to company_project_job_path(@project, @job), notice: "Job updated."
+      redirect_to company_job_path(@job), notice: "Job updated."
     else
       render :edit
     end
@@ -44,18 +46,26 @@ class Company::JobsController < Company::BaseController
 
   def destroy
     @job.destroy
-    redirect_to company_project_path(@project), notice: "Job removed."
+    redirect_to company_projects_path, notice: "Job removed."
   end
 
 
   private
 
-    def set_project
-      @project = current_company.projects.find(params[:project_id]) if params[:project_id]
+    def set_job
+      @job = Job.find(params[:id])
     end
 
-    def set_job
-      @job = @project.jobs.find(params[:id])
+    def is_owner?
+      unless @job.project.company_id == current_company.id
+        redirect_to company_projects_path, error: "Invalid project selected."
+      end
+    end
+
+    def validate_ownership
+      unless job_params[:project_id].present? && current_company.projects.find(job_params[:project_id])
+        @job.errors[:project_id] << "Invalid project selected"
+      end
     end
 
     def job_params
@@ -74,7 +84,7 @@ class Company::JobsController < Company::BaseController
         :invite_only,
         :scope_is_public,
         :budget_is_public,
-        :publish
+        :published
       )
     end
 end

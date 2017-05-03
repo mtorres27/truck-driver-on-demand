@@ -1,1 +1,13 @@
-h2 TODO
+- content_for :header do
+  .content
+    h1
+      = link_to "&#8592;".html_safe, company_projects_path, class: "back-arrow"
+      = @job.title
+
+    ul.list-inline.page-nav
+      li.active Job Details
+
+.content-card
+  hr
+  .form-actions
+    = link_to "Edit", edit_company_job_path(@job), class: "btn btn-primary"

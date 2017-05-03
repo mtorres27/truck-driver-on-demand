@@ -59,7 +59,7 @@
               - project.jobs.each do |job|
                 = render partial: "job", locals: { project: project, job: job }
               .col-xs-12.col-sm-6.col-md-4.col-lg-3
-                a.card.job.new-job href=new_company_project_job_path(project)
+                a.card.job.new-job href=new_company_job_path(project_id: project.id)
                   .plus +
                   | Post a new job to this project
 
