@@ -5,6 +5,7 @@
 #  id                        :integer          not null, primary key
 #  project_id                :integer
 #  title                     :string           not null
+#  state                     :string           default("created"), not null
 #  summary                   :text             not null
 #  scope_of_work             :text
 #  budget                    :decimal(10, 2)   not null
@@ -46,6 +47,15 @@ class Job < ApplicationRecord
   enumerize :pay_type, in: [ :fixed, :hourly ]
 
   enumerize :freelancer_type, in: [ :independent, :av_labor_company ]
+
+  enumerize :state, in: [
+    :created,
+    :published,
+    :quoted,
+    :negotiated,
+    :contracted,
+    :completed
+  ], predicates: true
 
   validates :project, presence: true
   validates :title, presence: true

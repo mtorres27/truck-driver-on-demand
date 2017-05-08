@@ -5,6 +5,7 @@
 #  id                        :integer          not null, primary key
 #  project_id                :integer
 #  title                     :string           not null
+#  state                     :string           default("created"), not null
 #  summary                   :text             not null
 #  scope_of_work             :text
 #  budget                    :decimal(10, 2)   not null

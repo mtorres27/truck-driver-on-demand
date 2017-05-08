@@ -74,6 +74,40 @@ ALTER SEQUENCE admins_id_seq OWNED BY admins.id;
 
 
 --
+-- Name: applicants; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE applicants (
+    id bigint NOT NULL,
+    job_id bigint,
+    freelancer_id bigint,
+    quote numeric(10,2) NOT NULL,
+    accepted boolean DEFAULT false NOT NULL,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: applicants_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE applicants_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: applicants_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE applicants_id_seq OWNED BY applicants.id;
+
+
+--
 -- Name: ar_internal_metadata; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -210,6 +244,41 @@ ALTER SEQUENCE identities_id_seq OWNED BY identities.id;
 
 
 --
+-- Name: job_messages; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE job_messages (
+    id bigint NOT NULL,
+    job_id bigint,
+    authorable_type character varying,
+    authorable_id bigint,
+    message text,
+    attachment_data text,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: job_messages_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE job_messages_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: job_messages_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE job_messages_id_seq OWNED BY job_messages.id;
+
+
+--
 -- Name: jobs; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -217,6 +286,7 @@ CREATE TABLE jobs (
     id bigint NOT NULL,
     project_id bigint,
     title character varying NOT NULL,
+    state character varying DEFAULT 'created'::character varying NOT NULL,
     summary text NOT NULL,
     scope_of_work text,
     budget numeric(10,2) NOT NULL,
@@ -240,7 +310,6 @@ CREATE TABLE jobs (
     require_checkin boolean DEFAULT false NOT NULL,
     require_uniform boolean DEFAULT false NOT NULL,
     addendums text,
-    published boolean DEFAULT false NOT NULL,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL
 );
@@ -324,6 +393,13 @@ ALTER TABLE ONLY admins ALTER COLUMN id SET DEFAULT nextval('admins_id_seq'::reg
 
 
 --
+-- Name: applicants id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY applicants ALTER COLUMN id SET DEFAULT nextval('applicants_id_seq'::regclass);
+
+
+--
 -- Name: companies id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -342,6 +418,13 @@ ALTER TABLE ONLY freelancers ALTER COLUMN id SET DEFAULT nextval('freelancers_id
 --
 
 ALTER TABLE ONLY identities ALTER COLUMN id SET DEFAULT nextval('identities_id_seq'::regclass);
+
+
+--
+-- Name: job_messages id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY job_messages ALTER COLUMN id SET DEFAULT nextval('job_messages_id_seq'::regclass);
 
 
 --
@@ -364,6 +447,14 @@ ALTER TABLE ONLY projects ALTER COLUMN id SET DEFAULT nextval('projects_id_seq':
 
 ALTER TABLE ONLY admins
     ADD CONSTRAINT admins_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: applicants applicants_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY applicants
+    ADD CONSTRAINT applicants_pkey PRIMARY KEY (id);
 
 
 --
@@ -399,6 +490,14 @@ ALTER TABLE ONLY identities
 
 
 --
+-- Name: job_messages job_messages_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY job_messages
+    ADD CONSTRAINT job_messages_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: jobs jobs_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -427,6 +526,20 @@ ALTER TABLE ONLY schema_migrations
 --
 
 CREATE INDEX index_admins_on_email ON admins USING btree (email);
+
+
+--
+-- Name: index_applicants_on_freelancer_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_applicants_on_freelancer_id ON applicants USING btree (freelancer_id);
+
+
+--
+-- Name: index_applicants_on_job_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_applicants_on_job_id ON applicants USING btree (job_id);
 
 
 --
@@ -497,6 +610,20 @@ CREATE INDEX index_identities_on_loginable_type_and_loginable_id ON identities U
 --
 
 CREATE INDEX index_identities_on_loginable_type_and_provider_and_uid ON identities USING btree (loginable_type, provider, uid);
+
+
+--
+-- Name: index_job_messages_on_authorable_type_and_authorable_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_job_messages_on_authorable_type_and_authorable_id ON job_messages USING btree (authorable_type, authorable_id);
+
+
+--
+-- Name: index_job_messages_on_job_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_job_messages_on_job_id ON job_messages USING btree (job_id);
 
 
 --
@@ -585,11 +712,35 @@ ALTER TABLE ONLY jobs
 
 
 --
+-- Name: applicants fk_rails_32d387f70d; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY applicants
+    ADD CONSTRAINT fk_rails_32d387f70d FOREIGN KEY (job_id) REFERENCES jobs(id);
+
+
+--
 -- Name: projects fk_rails_44a549d7b3; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY projects
     ADD CONSTRAINT fk_rails_44a549d7b3 FOREIGN KEY (company_id) REFERENCES companies(id);
+
+
+--
+-- Name: applicants fk_rails_4b7bc91392; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY applicants
+    ADD CONSTRAINT fk_rails_4b7bc91392 FOREIGN KEY (freelancer_id) REFERENCES freelancers(id);
+
+
+--
+-- Name: job_messages fk_rails_f2bbd11ff2; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY job_messages
+    ADD CONSTRAINT fk_rails_f2bbd11ff2 FOREIGN KEY (job_id) REFERENCES jobs(id);
 
 
 --
@@ -608,6 +759,8 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20170422123135'),
 ('20170427143209'),
 ('20170427182445'),
-('20170428154417');
+('20170428154417'),
+('20170505140409'),
+('20170505140847');
 
 

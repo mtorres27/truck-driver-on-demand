@@ -84,7 +84,7 @@ class Company::JobsController < Company::BaseController
         :invite_only,
         :scope_is_public,
         :budget_is_public,
-        :published
+        :state
       )
     end
 end

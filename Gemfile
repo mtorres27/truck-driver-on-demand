@@ -42,7 +42,6 @@ gem "mini_magick", ">= 4.7.0"
 
 gem "enumerize", ">= 2.1.0"
 
-
 gem "rack-mini-profiler", ">= 0.10.2"
 gem "flamegraph", ">= 0.9.5"
 gem "fast_stack", ">= 0.2.0"

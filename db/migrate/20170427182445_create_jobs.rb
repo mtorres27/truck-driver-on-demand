@@ -3,6 +3,7 @@ class CreateJobs < ActiveRecord::Migration[5.1]
     create_table :jobs do |t|
       t.references :project, foreign_key: true
       t.string :title, null: false
+      t.string :state, null: false, default: "created"
       t.text :summary, null: false
       t.text :scope_of_work
       t.decimal :budget, precision: 10, scale: 2, null: false
@@ -26,7 +27,6 @@ class CreateJobs < ActiveRecord::Migration[5.1]
       t.boolean :require_checkin, null: false, default: false
       t.boolean :require_uniform, null: false, default: false
       t.text :addendums
-      t.boolean :published, null: false, default: false
 
       t.timestamps
     end

@@ -34,14 +34,14 @@
     hr
     .form-actions
       .row
-        - if @job.published?
-          .col-xs-6.col-sm-6.col-md-4
-            = f.button :submit, "Save", class: "btn btn-primary"
-        - else
+        - if @job.created?
           .col-xs-6.col-sm-3.col-md-2
             = f.button :submit, "Save as Draft", class: "btn btn-primary"
           .col-xs-6.col-sm-3.col-md-2
-            = f.button :button, "Publish", name: "job[published]", value: true, class: "btn btn-default"
+            = f.button :button, "Publish", name: "job[state]", value: "published", class: "btn btn-default"
+        - else
+          .col-xs-6.col-sm-6.col-md-4
+            = f.button :submit, "Save", class: "btn btn-primary"
         - unless @job.new_record?
           .col-xs-12.col-sm-6.col-md-8.text-right
             = link_to "Delete Job", company_job_path(@job), data: { confirm: "Are you sure?" }, method: :delete
