@@ -16,6 +16,7 @@ Rails.application.routes.draw do
     resource :company, only: [:show, :edit, :update]
     resources :projects
     resources :jobs, except: [:index]
+    resources :contracts, only: [:show, :edit, :update]
   end
 
   namespace :admin do

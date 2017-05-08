@@ -1,6 +1,5 @@
 class Company::JobsController < Company::BaseController
-  before_action :set_job, only: [:show, :edit, :update, :destroy]
-  before_action :is_owner?, only: [:show, :edit, :update, :destroy]
+  before_action :set_job, only: [:show, :edit, :update, :destroy, :contract, :edit_contract, :update_contract]
 
   def new
     @job = Job.new(project_id: params[:project_id])
@@ -27,7 +26,13 @@ class Company::JobsController < Company::BaseController
   def show
   end
 
+  def contract
+  end
+
   def edit
+  end
+
+  def edit_contract
   end
 
   def update
@@ -44,6 +49,20 @@ class Company::JobsController < Company::BaseController
     end
   end
 
+  def update_contract
+    validate_ownership
+    if @job.errors.size > 0
+      render :edit_contract
+      return
+    end
+
+    if @job.update(job_params)
+      redirect_to contract_company_job_path(@job), notice: "Contract updated."
+    else
+      render :edit_contract
+    end
+  end
+
   def destroy
     @job.destroy
     redirect_to company_projects_path, notice: "Job removed."
@@ -54,9 +73,6 @@ class Company::JobsController < Company::BaseController
 
     def set_job
       @job = Job.find(params[:id])
-    end
-
-    def is_owner?
       unless @job.project.company_id == current_company.id
         redirect_to company_projects_path, error: "Invalid project selected."
       end

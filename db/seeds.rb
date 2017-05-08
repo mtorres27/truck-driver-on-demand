@@ -43,7 +43,8 @@ schools.sample(20).each do |school|
       duration: Faker::Number.number(2),
       freelancer_type: Job.freelancer_type.values.sample,
       contract_price: (budget.to_f - Faker::Number.number(2).to_f),
-      contract_paid: Faker::Number.number(3)
+      contract_paid: Faker::Number.number(3),
+      state: Job.state.values.sample
     )
   end
 end

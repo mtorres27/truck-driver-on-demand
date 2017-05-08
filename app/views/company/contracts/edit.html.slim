@@ -1,0 +1,35 @@
+- content_for :header do
+  .content
+    h1
+      = link_to "&#8592;".html_safe, company_contract_path(@job), class: "back-arrow"
+      ' Update Contract
+
+    ul.list-inline.page-nav
+      li.active Job Details
+
+.content-card
+  = simple_form_for(@job, url: company_contract_path(@job)) do |f|
+    .form-inputs
+      .row
+        .col-sm-12.col-md-6.col-lg-7
+          .form-group
+            label.control-label Job Summary
+            p= @job.summary
+          = f.input :scope_of_work, required: true, placeholder: "Please enter in more details about the job to receive a better quote. If you already have these documents please attach them below."
+
+        .col-sm-12.col-md-6.col-lg-5
+          .row
+            .col-xs-12.col-md-6
+              = f.input :pay_type, required: true, prompt: "Select"
+            .col-xs-12.col-md-6
+              = f.input :contract_price, required: true
+          = f.input :budget, placeholder: "Enter a budget"
+          = f.input :job_function, prompt: "Select"
+          .row
+            .col-xs-12.col-md-6
+              = f.input :starts_on, html5: true, label: "Start Date (Estimated)"
+            .col-xs-12.col-md-6
+              = f.input :ends_on, required: true, html5: true, label: "End Date (Estimated)"
+    hr
+    .form-actions
+      = f.button :submit, "Save", class: "btn btn-primary"
