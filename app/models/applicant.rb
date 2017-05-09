@@ -13,11 +13,11 @@
 class Applicant < ApplicationRecord
   belongs_to :job
   belongs_to :freelancer
-  has_many :quotes
+  has_many :quotes, dependent: :destroy
 
   validates :job, presence: true
   validates :freelancer, presence: true
-  validates :acceptance, uniqueness: { scope: :job_id }
+  validates :accepted, uniqueness: { scope: :job_id }, if: :accepted?
 
   scope :with_pending_quotes, -> {
     joins(:quotes).where(quotes: { rejected: false })

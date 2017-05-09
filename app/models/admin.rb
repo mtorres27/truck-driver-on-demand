@@ -12,7 +12,7 @@
 class Admin < ApplicationRecord
   include Loginable
 
-  has_many :identities, as: :loginable
+  has_many :identities, as: :loginable, dependent: :destroy
 
   validates :email, presence: true, uniqueness: { case_sensitive: false }
   validates :name, presence: true

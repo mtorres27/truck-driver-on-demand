@@ -28,25 +28,13 @@ class Freelancer < ApplicationRecord
   include Geocodable
   include Disableable
 
-  has_many :identities, as: :loginable
+  has_many :identities, as: :loginable, dependent: :destroy
+  has_many :applicants, dependent: :destroy
+  # has_many :jobs, through: :applicants
+  has_many :job_messages, as: :authorable, dependent: :destroy
 
   validates :email, presence: true, uniqueness: { case_sensitive: false }
   validates :name, presence: true
   validates :pay_per_unit_time, numericality: true, allow_blank: true
   validates :years_of_experience, numericality: { only_integer: true }
-
-  # This SQL needs to stay exactly in sync with it's related index (index_on_freelancers_location)
-  # otherwise the index won't be used. (don't even add whitespace!)
-  # https://github.com/pairshaped/postgis-on-rails-example
-  # scope :near, -> (lat, lng, distance_in_meters = 2000) {
-  #   where(%{
-  #     ST_DWithin(
-  #       ST_GeographyFromText(
-  #         'SRID=4326;POINT(' || freelancers.lng || ' ' || freelancers.lat || ')'
-  #       ),
-  #       ST_GeographyFromText('SRID=4326;POINT(%f %f)'),
-  #       %d
-  #     )
-  #   } % [lng, lat, distance_in_meters])
-  # }
 end

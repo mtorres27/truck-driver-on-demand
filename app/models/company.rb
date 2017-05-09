@@ -26,8 +26,9 @@ class Company < ApplicationRecord
   include Disableable
   include LogoUploader[:logo]
 
-  has_many :identities, as: :loginable
-  has_many :projects
+  has_many :identities, as: :loginable, dependent: :destroy
+  has_many :projects, dependent: :destroy
+  has_many :job_messages, as: :authorable
 
   validates :email, presence: true, uniqueness: { case_sensitive: false }
   validates :name, presence: true

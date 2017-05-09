@@ -384,6 +384,8 @@ CREATE TABLE quotes (
     applicant_id bigint,
     amount numeric(10,2) NOT NULL,
     rejected boolean DEFAULT false NOT NULL,
+    message text,
+    attachment_data text,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL
 );

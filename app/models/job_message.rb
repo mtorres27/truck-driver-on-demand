@@ -21,7 +21,7 @@ class JobMessage < ApplicationRecord
   validate :must_have_message_or_attachment
 
   def must_have_message_or_attachment
-    if message.blank && attachment_data.blank?
+    if message.blank? && attachment_data.blank?
       errors.add(:base, "A message or an attachment is required")
     end
   end

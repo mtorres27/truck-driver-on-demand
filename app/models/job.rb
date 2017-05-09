@@ -37,6 +37,9 @@ class Job < ApplicationRecord
   extend Enumerize
 
   belongs_to :project
+  has_many :applicants, dependent: :destroy
+  has_many :quotes, through: :applicants
+  has_many :job_messages, dependent: :destroy
 
   enumerize :job_function, in: [
     :av_installation_technician,

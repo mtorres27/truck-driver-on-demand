@@ -11,6 +11,8 @@
 #
 
 class Quote < ApplicationRecord
+  include AttachmentUploader[:attachment]
+
   belongs_to :applicant
 
   validates :applicant, presence: true

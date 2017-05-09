@@ -1,17 +1,17 @@
 require 'factory_girl_rails'
 
-Admin.create(email: "dave@rapin.com", name: "Dave Rapin")
-Admin.create(email: "pweather24@gmail.com", name: "Paul Weatherhead")
+Admin.create!(email: "dave@rapin.com", name: "Dave Rapin")
+Admin.create!(email: "pweather24@gmail.com", name: "Paul Weatherhead")
 
 420.times do
-  Freelancer.create(
+  Freelancer.create!(
     email: Faker::Internet.unique.email,
     name: Faker::Name.unique.name
   )
 end
 
 240.times do
-  Company.create(
+  Company.create!(
     email: Faker::Internet.unique.email,
     name: Faker::Company.unique.name
   )
@@ -21,7 +21,7 @@ end
 company = Company.order(:name).first
 schools = ActiveSupport::JSON.decode(File.read('db/seeds/schools.json')).shuffle
 schools.sample(20).each do |school|
-  project = company.projects.create(
+  project = company.projects.create!(
     external_project_id: Faker::Number.number(6),
     budget: Faker::Number.number(5),
     starts_on: Faker::Date.unique.between(Date.today, 3.months.from_now),
@@ -34,7 +34,7 @@ schools.sample(20).each do |school|
 
   3.times do
     budget = Faker::Number.number(4)
-    project.jobs.create(
+    job = project.jobs.create!(
       title: Faker::Educator.campus,
       summary: Faker::Lorem.paragraphs(2).join("\n\n"),
       budget: budget,
@@ -46,5 +46,23 @@ schools.sample(20).each do |school|
       contract_paid: Faker::Number.number(3),
       state: Job.state.values.sample
     )
+
+    3.times do
+      begin
+        applicant = job.applicants.create!(freelancer: Freelancer.order("RANDOM()").first)
+        applicant.quotes.create!(
+          amount: (budget.to_f - Faker::Number.number(2).to_f),
+          rejected: [true, false].sample
+        )
+      rescue Exception => e
+        puts e
+        # do nothing, this is just in case we get the exact same freelancer more than once
+      end
+    end
+
+    freelancer = job.applicants.order("RANDOM()").first.freelancer
+    4.times do
+      job.job_messages.create!(authorable: freelancer, message: Faker::ChuckNorris.fact)
+    end
   end
 end
