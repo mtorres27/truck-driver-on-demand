@@ -1,14 +1,8 @@
 - content_for :header do
-  .content
-    h1
-      = link_to "&#8592;".html_safe, company_contract_path(@job), class: "back-arrow"
-      ' Update Contract
-
-    ul.list-inline.page-nav
-      li.active Job Details
+  = render partial: "company/shared/job_nav", locals: { job: @job }
 
 .content-card
-  = simple_form_for(@job, url: company_contract_path(@job)) do |f|
+  = simple_form_for(@job, url: company_job_contract_path(@job)) do |f|
     .form-inputs
       .row
         .col-sm-12.col-md-6.col-lg-7

@@ -1,0 +1,18 @@
+.content.job-nav
+  h1
+    = link_to "&#8592;".html_safe, company_projects_path, class: "back-arrow"
+    = job.title || "New Job"
+  ul.list-inline.page-nav
+    - if job.new_record?
+      li.active Job Details
+    - else
+      li class=('active' if controller.controller_name == "jobs")
+        = link_to "Job Details", company_job_path(job)
+      li class=('active' if controller.controller_name == "applicants")
+        = link_to "Applicants", company_job_applicants_path(job)
+      li class=('active' if controller.controller_name == "contracts")
+        = link_to "Contract", company_job_contract_path(job)
+      li class=('active' if controller.controller_name == "progresses")
+        = link_to "Progress", company_job_progress_path(job)
+      li class=('active' if controller.controller_name == "payments")
+        = link_to "Payments", company_job_payments_path(job)

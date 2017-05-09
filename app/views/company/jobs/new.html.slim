@@ -1,10 +1,4 @@
 - content_for :header do
-  .content
-    h1
-      = link_to "&#8592;".html_safe, company_projects_path, class: "back-arrow"
-      ' Post a New Job
-
-    ul.list-inline.page-nav
-      li.active Job Details
+  = render partial: "company/shared/job_nav", locals: { job: @job }
 
 = render "form"

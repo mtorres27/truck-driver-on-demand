@@ -9,7 +9,7 @@ class Company::ContractsController < Company::BaseController
 
   def update
     if @job.update(job_params)
-      redirect_to company_contract_path(@job), notice: "Contract updated."
+      redirect_to company_job_contract_path(@job), notice: "Contract updated."
     else
       render :edit
     end
@@ -17,13 +17,6 @@ class Company::ContractsController < Company::BaseController
 
 
   private
-
-    def set_job
-      @job = Job.find(params[:id])
-      unless @job.project.company_id == current_company.id
-        redirect_to company_projects_path, error: "Invalid project selected."
-      end
-    end
 
     def job_params
       params.require(:job).permit(
