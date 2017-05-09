@@ -81,7 +81,6 @@ CREATE TABLE applicants (
     id bigint NOT NULL,
     job_id bigint,
     freelancer_id bigint,
-    quote numeric(10,2) NOT NULL,
     accepted boolean DEFAULT false NOT NULL,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL
@@ -377,6 +376,39 @@ ALTER SEQUENCE projects_id_seq OWNED BY projects.id;
 
 
 --
+-- Name: quotes; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE quotes (
+    id bigint NOT NULL,
+    applicant_id bigint,
+    amount numeric(10,2) NOT NULL,
+    rejected boolean DEFAULT false NOT NULL,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: quotes_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE quotes_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: quotes_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE quotes_id_seq OWNED BY quotes.id;
+
+
+--
 -- Name: schema_migrations; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -439,6 +471,13 @@ ALTER TABLE ONLY jobs ALTER COLUMN id SET DEFAULT nextval('jobs_id_seq'::regclas
 --
 
 ALTER TABLE ONLY projects ALTER COLUMN id SET DEFAULT nextval('projects_id_seq'::regclass);
+
+
+--
+-- Name: quotes id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY quotes ALTER COLUMN id SET DEFAULT nextval('quotes_id_seq'::regclass);
 
 
 --
@@ -511,6 +550,14 @@ ALTER TABLE ONLY jobs
 
 ALTER TABLE ONLY projects
     ADD CONSTRAINT projects_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: quotes quotes_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY quotes
+    ADD CONSTRAINT quotes_pkey PRIMARY KEY (id);
 
 
 --
@@ -704,6 +751,13 @@ CREATE INDEX index_projects_on_starts_on ON projects USING btree (starts_on);
 
 
 --
+-- Name: index_quotes_on_applicant_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_quotes_on_applicant_id ON quotes USING btree (applicant_id);
+
+
+--
 -- Name: jobs fk_rails_1977e8b5a6; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -736,6 +790,14 @@ ALTER TABLE ONLY applicants
 
 
 --
+-- Name: quotes fk_rails_b73354eeb5; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY quotes
+    ADD CONSTRAINT fk_rails_b73354eeb5 FOREIGN KEY (applicant_id) REFERENCES applicants(id);
+
+
+--
 -- Name: job_messages fk_rails_f2bbd11ff2; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -761,6 +823,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20170427182445'),
 ('20170428154417'),
 ('20170505140409'),
-('20170505140847');
+('20170505140847'),
+('20170509175102');
 
 
