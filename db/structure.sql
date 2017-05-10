@@ -243,41 +243,6 @@ ALTER SEQUENCE identities_id_seq OWNED BY identities.id;
 
 
 --
--- Name: job_messages; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE job_messages (
-    id bigint NOT NULL,
-    job_id bigint,
-    authorable_type character varying,
-    authorable_id bigint,
-    message text,
-    attachment_data text,
-    created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
-);
-
-
---
--- Name: job_messages_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE job_messages_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: job_messages_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE job_messages_id_seq OWNED BY job_messages.id;
-
-
---
 -- Name: jobs; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -334,6 +299,73 @@ ALTER SEQUENCE jobs_id_seq OWNED BY jobs.id;
 
 
 --
+-- Name: messages; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE messages (
+    id bigint NOT NULL,
+    job_id bigint,
+    authorable_type character varying,
+    authorable_id bigint,
+    body text,
+    attachment_data text,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: messages_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE messages_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: messages_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE messages_id_seq OWNED BY messages.id;
+
+
+--
+-- Name: payments; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE payments (
+    id bigint NOT NULL,
+    job_id bigint,
+    amount numeric(10,2) NOT NULL,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: payments_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE payments_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: payments_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE payments_id_seq OWNED BY payments.id;
+
+
+--
 -- Name: projects; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -384,7 +416,7 @@ CREATE TABLE quotes (
     applicant_id bigint,
     amount numeric(10,2) NOT NULL,
     rejected boolean DEFAULT false NOT NULL,
-    message text,
+    body text,
     attachment_data text,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL
@@ -455,17 +487,24 @@ ALTER TABLE ONLY identities ALTER COLUMN id SET DEFAULT nextval('identities_id_s
 
 
 --
--- Name: job_messages id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY job_messages ALTER COLUMN id SET DEFAULT nextval('job_messages_id_seq'::regclass);
-
-
---
 -- Name: jobs id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY jobs ALTER COLUMN id SET DEFAULT nextval('jobs_id_seq'::regclass);
+
+
+--
+-- Name: messages id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY messages ALTER COLUMN id SET DEFAULT nextval('messages_id_seq'::regclass);
+
+
+--
+-- Name: payments id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY payments ALTER COLUMN id SET DEFAULT nextval('payments_id_seq'::regclass);
 
 
 --
@@ -531,19 +570,27 @@ ALTER TABLE ONLY identities
 
 
 --
--- Name: job_messages job_messages_pkey; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY job_messages
-    ADD CONSTRAINT job_messages_pkey PRIMARY KEY (id);
-
-
---
 -- Name: jobs jobs_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY jobs
     ADD CONSTRAINT jobs_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: messages messages_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY messages
+    ADD CONSTRAINT messages_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: payments payments_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY payments
+    ADD CONSTRAINT payments_pkey PRIMARY KEY (id);
 
 
 --
@@ -662,24 +709,24 @@ CREATE INDEX index_identities_on_loginable_type_and_provider_and_uid ON identiti
 
 
 --
--- Name: index_job_messages_on_authorable_type_and_authorable_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_job_messages_on_authorable_type_and_authorable_id ON job_messages USING btree (authorable_type, authorable_id);
-
-
---
--- Name: index_job_messages_on_job_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_job_messages_on_job_id ON job_messages USING btree (job_id);
-
-
---
 -- Name: index_jobs_on_project_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_jobs_on_project_id ON jobs USING btree (project_id);
+
+
+--
+-- Name: index_messages_on_authorable_type_and_authorable_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_messages_on_authorable_type_and_authorable_id ON messages USING btree (authorable_type, authorable_id);
+
+
+--
+-- Name: index_messages_on_job_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_messages_on_job_id ON messages USING btree (job_id);
 
 
 --
@@ -701,6 +748,13 @@ CREATE INDEX index_on_freelancers_loc ON freelancers USING gist (st_geographyfro
 --
 
 CREATE INDEX index_on_projects_loc ON projects USING gist (st_geographyfromtext((((('SRID=4326;POINT('::text || lng) || ' '::text) || lat) || ')'::text)));
+
+
+--
+-- Name: index_payments_on_job_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_payments_on_job_id ON payments USING btree (job_id);
 
 
 --
@@ -792,6 +846,14 @@ ALTER TABLE ONLY applicants
 
 
 --
+-- Name: payments fk_rails_b35f361f8d; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY payments
+    ADD CONSTRAINT fk_rails_b35f361f8d FOREIGN KEY (job_id) REFERENCES jobs(id);
+
+
+--
 -- Name: quotes fk_rails_b73354eeb5; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -800,11 +862,11 @@ ALTER TABLE ONLY quotes
 
 
 --
--- Name: job_messages fk_rails_f2bbd11ff2; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: messages fk_rails_d7e012c0bb; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY job_messages
-    ADD CONSTRAINT fk_rails_f2bbd11ff2 FOREIGN KEY (job_id) REFERENCES jobs(id);
+ALTER TABLE ONLY messages
+    ADD CONSTRAINT fk_rails_d7e012c0bb FOREIGN KEY (job_id) REFERENCES jobs(id);
 
 
 --
@@ -826,6 +888,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20170428154417'),
 ('20170505140409'),
 ('20170505140847'),
-('20170509175102');
+('20170509175102'),
+('20170510154135');
 
 

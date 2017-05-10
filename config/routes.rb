@@ -18,7 +18,7 @@ Rails.application.routes.draw do
     resources :jobs, except: [:index] do
       resources :applicants
       resource :contract, only: [:show, :edit, :update]
-      resource :progress, only: [:show]
+      resources :messages, only: [:index]
       resources :payments, only: [:index]
     end
   end

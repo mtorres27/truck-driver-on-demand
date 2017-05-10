@@ -39,7 +39,8 @@ class Job < ApplicationRecord
   belongs_to :project
   has_many :applicants, dependent: :destroy
   has_many :quotes, through: :applicants
-  has_many :job_messages, dependent: :destroy
+  has_many :messages, dependent: :destroy
+  has_many :payments, dependent: :destroy
 
   enumerize :job_function, in: [
     :av_installation_technician,

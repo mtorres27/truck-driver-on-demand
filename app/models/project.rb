@@ -25,6 +25,7 @@ class Project < ApplicationRecord
   belongs_to :company
   has_many :jobs, dependent: :destroy
 
+  validates :company, presence: true
   validates :name, presence: true
   validates :budget, presence: true, numericality: true, sane_price: true
   validates :duration, numericality: { only_integer: true }, allow_blank: true

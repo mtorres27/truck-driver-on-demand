@@ -1,6 +1,6 @@
 # == Schema Information
 #
-# Table name: job_messages
+# Table name: messages
 #
 #  id              :integer          not null, primary key
 #  job_id          :integer
@@ -12,17 +12,19 @@
 #  updated_at      :datetime         not null
 #
 
-class JobMessage < ApplicationRecord
+class Message < ApplicationRecord
   include AttachmentUploader[:attachment]
 
   belongs_to :job
   belongs_to :authorable, polymorphic: true
 
-  validate :must_have_message_or_attachment
+  validates :job, presence: true
+  validates :authorable, presence: true
+  validate :must_have_body_or_attachment
 
-  def must_have_message_or_attachment
-    if message.blank? && attachment_data.blank?
-      errors.add(:base, "A message or an attachment is required")
+  def must_have_body_or_attachment
+    if body.blank? && attachment_data.blank?
+      errors.add(:base, "A body or an attachment is required")
     end
   end
 end

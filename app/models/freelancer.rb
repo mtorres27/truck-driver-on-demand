@@ -31,7 +31,7 @@ class Freelancer < ApplicationRecord
   has_many :identities, as: :loginable, dependent: :destroy
   has_many :applicants, dependent: :destroy
   # has_many :jobs, through: :applicants
-  has_many :job_messages, as: :authorable, dependent: :destroy
+  has_many :messages, as: :authorable, dependent: :destroy
 
   validates :email, presence: true, uniqueness: { case_sensitive: false }
   validates :name, presence: true

@@ -1,6 +1,6 @@
 # == Schema Information
 #
-# Table name: job_messages
+# Table name: messages
 #
 #  id              :integer          not null, primary key
 #  job_id          :integer
@@ -12,10 +12,11 @@
 #  updated_at      :datetime         not null
 #
 
-require 'test_helper'
-
-class JobMessageTest < ActiveSupport::TestCase
-  # test "the truth" do
-  #   assert true
-  # end
+FactoryGirl.define do
+  factory :message do
+    job nil
+    authorable nil
+    body "MyText"
+    attachment_data "MyText"
+  end
 end

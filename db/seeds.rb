@@ -62,7 +62,7 @@ schools.sample(20).each do |school|
 
     freelancer = job.applicants.order("RANDOM()").first.freelancer
     4.times do
-      job.job_messages.create!(authorable: freelancer, message: Faker::ChuckNorris.fact)
+      job.messages.create!(authorable: freelancer, body: Faker::ChuckNorris.fact)
     end
   end
 end

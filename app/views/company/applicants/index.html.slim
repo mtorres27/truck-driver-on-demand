@@ -2,3 +2,23 @@
   = render partial: "company/shared/job_nav", locals: { job: @job }
 
 .content-card
+  table.table.table-bordered
+    tr
+      th Applicant
+      th Accepted
+      th Quotes
+    - @applicants.each do |applicant|
+      tr
+        td= applicant.freelancer.name
+        td= applicant.accepted
+        td
+          ul
+            - applicant.quotes.order(created_at: :desc).each do |quote|
+              li
+                h4
+                  = number_to_currency quote.amount
+                  - if quote.rejected?
+                    '
+                    span.label.label-danger rejected
+                p= quote.body
+

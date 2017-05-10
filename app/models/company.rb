@@ -28,7 +28,7 @@ class Company < ApplicationRecord
 
   has_many :identities, as: :loginable, dependent: :destroy
   has_many :projects, dependent: :destroy
-  has_many :job_messages, as: :authorable
+  has_many :messages, as: :authorable
 
   validates :email, presence: true, uniqueness: { case_sensitive: false }
   validates :name, presence: true
