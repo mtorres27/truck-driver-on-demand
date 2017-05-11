@@ -1,5 +1,5 @@
 en:
-  simple_form:
+  form:
     "yes": 'Yes'
     "no": 'No'
     required:
@@ -10,6 +10,16 @@ en:
       # html: '<abbr title="required">*</abbr>'
     error_notification:
       default_message: "Please review the problems below:"
+    labels:
+      job:
+        project: "Project Reference"
+        title: "Job Title"
+        summary: "Job Summary"
+        starts_on: "Est. Start"
+        freelancer_type: "Freelancer Type"
+        invite_only: "This posting is invite only and will not display in search results."
+        scope_is_public: "The scope of work for this posting is available to everyone."
+        budget_is_public: "The budget for this job will display in search results."
     # Examples
     # labels:
     #   defaults:

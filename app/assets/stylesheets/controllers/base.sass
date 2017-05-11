@@ -7,6 +7,9 @@ body
   margin-bottom: 60px
   font-family: 'Roboto', sans-serif
 
+label
+  text-transform: uppercase
+
 a:hover, a:focus, a:active
   text-decoration: none
 
@@ -14,9 +17,12 @@ a:hover, a:focus, a:active
   text-transform: uppercase
 
 .navbar
-  height: 70px
+  height: 50px
   font-size: 16px
   text-transform: uppercase
+  background-color: white
+  border-bottom: 1px solid $gray-lighter
+  box-shadow: 1px 1px 1px 1px lighten($gray-light, 40%)
 
   &-brand
     padding-left: 30px
@@ -57,3 +63,10 @@ a:hover, a:focus, a:active
   background-color: white
   box-shadow: 1px 1px 3px 1px lighten($gray-light, 20%)
   border-radius: 2px
+
+.show-field
+  margin-bottom: 20px
+
+.show-value-em
+  font-size: 18px
+

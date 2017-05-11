@@ -2,6 +2,64 @@
   = render partial: "company/shared/job_nav", locals: { job: @job }
 
 .content-card
+  .row
+    .col-xs-12.col-md-6
+      .show-field
+        label= t(:project, scope: [:form, :labels, :job])
+        .show-value-em= project_reference(@job.project)
+
+      .show-field
+        label= t(:title, scope: [:form, :labels, :job])
+        .show-value-em= @job.title
+
+      .show-field
+        label= t(:summary, scope: [:form, :labels, :job])
+        .show-value= @job.summary
+
+      .show-field
+        label= t(:scope_of_work, scope: [:form, :labels, :job])
+        .show-value= @job.scope_of_work || "Not Specified"
+
+    .col-xs-12.col-md-6
+      .show-field
+        label= t(:budget, scope: [:form, :labels, :job])
+        .show-budget= number_to_currency(@job.project.budget, precision: 0)
+
+      .show-field
+        label= t(:job_function, scope: [:form, :labels, :job])
+        .show-value-em= @job.job_function&.text
+
+      .show-field
+        .row
+          .col-xs-12.col-lg-6
+            label= t(:starts_on, scope: [:form, :labels, :job])
+            .show-value-em= l @job.starts_on
+          .col-xs-12.col-lg-6
+            label= t(:duration, scope: [:form, :labels, :job])
+            .show-value-em= @job.duration
+
+      .show-field
+        .row
+          .col-xs-12.col-lg-6
+            label= t(:pay_type, scope: [:form, :labels, :job])
+            .show-value-em= @job.pay_type&.text || "Not Specified"
+          .col-xs-12.col-lg-6
+            label= t(:freelancer_type, scope: [:form, :labels, :job])
+            .show-value-em= @job.freelancer_type&.text
+
+      .show-field
+        label= t(:keywords, scope: [:form, :labels, :job])
+        .show-value= @job.keywords || "Not Specified"
+
+      .show-field
+        ul
+          - if @job.invite_only?
+            li.show-value= t(:invite_only, scope: [:form, :labels, :job])
+          - if @job.scope_is_public?
+            li.show-value= t(:scope_is_public, scope: [:form, :labels, :job])
+          - if @job.budget_is_public?
+            li.show-value= t(:budget_is_public, scope: [:form, :labels, :job])
+
   hr
   .form-actions
     = link_to "Edit", edit_company_job_path(@job), class: "btn btn-primary"
