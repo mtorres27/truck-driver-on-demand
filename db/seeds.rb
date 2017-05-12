@@ -52,7 +52,7 @@ schools.sample(20).each do |school|
         applicant = job.applicants.create!(freelancer: Freelancer.order("RANDOM()").first)
         applicant.quotes.create!(
           amount: (budget.to_f - Faker::Number.number(2).to_f),
-          rejected: [true, false].sample
+          rejected: true
         )
       rescue Exception => e
         puts e
@@ -60,9 +60,12 @@ schools.sample(20).each do |school|
       end
     end
 
-    freelancer = job.applicants.order("RANDOM()").first.freelancer
+    applicant = job.applicants.order(created_at: :desc).first
+    applicant.update_column(:accepted, true)
+    quote = applicant.quotes.order(created_at: :desc).first
+    quote.update_column(:rejected, false)
     4.times do
-      job.messages.create!(authorable: freelancer, body: Faker::ChuckNorris.fact)
+      job.messages.create!(authorable: applicant.freelancer, body: Faker::ChuckNorris.fact)
     end
   end
 end
