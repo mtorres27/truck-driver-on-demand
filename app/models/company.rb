@@ -27,8 +27,8 @@ class Company < ApplicationRecord
   include LogoUploader[:logo]
 
   has_many :identities, as: :loginable, dependent: :destroy
-  has_many :projects, dependent: :destroy
-  has_many :messages, as: :authorable
+  has_many :projects, -> { order(updated_at: :desc) }, dependent: :destroy
+  has_many :messages, -> { order(created_at: :desc) }, as: :authorable
 
   validates :email, presence: true, uniqueness: { case_sensitive: false }
   validates :name, presence: true

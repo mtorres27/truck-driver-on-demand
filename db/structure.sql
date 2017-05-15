@@ -119,6 +119,40 @@ CREATE TABLE ar_internal_metadata (
 
 
 --
+-- Name: change_orders; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE change_orders (
+    id bigint NOT NULL,
+    job_id bigint,
+    amount numeric(10,2) NOT NULL,
+    body text NOT NULL,
+    attachment_data text,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: change_orders_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE change_orders_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: change_orders_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE change_orders_id_seq OWNED BY change_orders.id;
+
+
+--
 -- Name: companies; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -466,6 +500,13 @@ ALTER TABLE ONLY applicants ALTER COLUMN id SET DEFAULT nextval('applicants_id_s
 
 
 --
+-- Name: change_orders id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY change_orders ALTER COLUMN id SET DEFAULT nextval('change_orders_id_seq'::regclass);
+
+
+--
 -- Name: companies id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -543,6 +584,14 @@ ALTER TABLE ONLY applicants
 
 ALTER TABLE ONLY ar_internal_metadata
     ADD CONSTRAINT ar_internal_metadata_pkey PRIMARY KEY (key);
+
+
+--
+-- Name: change_orders change_orders_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY change_orders
+    ADD CONSTRAINT change_orders_pkey PRIMARY KEY (id);
 
 
 --
@@ -636,6 +685,13 @@ CREATE INDEX index_applicants_on_freelancer_id ON applicants USING btree (freela
 --
 
 CREATE INDEX index_applicants_on_job_id ON applicants USING btree (job_id);
+
+
+--
+-- Name: index_change_orders_on_job_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_change_orders_on_job_id ON change_orders USING btree (job_id);
 
 
 --
@@ -862,6 +918,14 @@ ALTER TABLE ONLY quotes
 
 
 --
+-- Name: change_orders fk_rails_cab1ecc845; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY change_orders
+    ADD CONSTRAINT fk_rails_cab1ecc845 FOREIGN KEY (job_id) REFERENCES jobs(id);
+
+
+--
 -- Name: messages fk_rails_d7e012c0bb; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -889,6 +953,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20170505140409'),
 ('20170505140847'),
 ('20170509175102'),
-('20170510154135');
+('20170510154135'),
+('20170515191347');
 
 

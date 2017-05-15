@@ -13,7 +13,7 @@
 class Applicant < ApplicationRecord
   belongs_to :job
   belongs_to :freelancer
-  has_many :quotes, dependent: :destroy
+  has_many :quotes, -> { order(created_at: :desc) }, dependent: :destroy
 
   validates :job, presence: true
   validates :freelancer, presence: true
@@ -26,8 +26,4 @@ class Applicant < ApplicationRecord
   scope :without_quotes, -> {
     where.not(id: Quote.select(:applicant_id))
   }
-
-  def last_quote
-    quots.order(created_at: :desc).first
-  end
 end

@@ -6,7 +6,7 @@
 #  job_id          :integer
 #  authorable_type :string
 #  authorable_id   :integer
-#  message         :text
+#  body            :text
 #  attachment_data :text
 #  created_at      :datetime         not null
 #  updated_at      :datetime         not null

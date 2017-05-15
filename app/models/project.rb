@@ -23,7 +23,7 @@ class Project < ApplicationRecord
   include Geocodable
 
   belongs_to :company
-  has_many :jobs, dependent: :destroy
+  has_many :jobs, -> { order(updated_at: :desc) }, dependent: :destroy
 
   validates :company, presence: true
   validates :name, presence: true

@@ -1,12 +1,11 @@
 # == Schema Information
 #
-# Table name: messages
+# Table name: change_orders
 #
 #  id              :integer          not null, primary key
 #  job_id          :integer
-#  authorable_type :string
-#  authorable_id   :integer
-#  body            :text
+#  amount          :decimal(10, 2)   not null
+#  body            :text             not null
 #  attachment_data :text
 #  created_at      :datetime         not null
 #  updated_at      :datetime         not null
@@ -14,7 +13,7 @@
 
 require 'test_helper'
 
-class MessageTest < ActiveSupport::TestCase
+class ChangeOrderTest < ActiveSupport::TestCase
   # test "the truth" do
   #   assert true
   # end

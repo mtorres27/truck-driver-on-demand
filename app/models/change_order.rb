@@ -1,22 +1,22 @@
 # == Schema Information
 #
-# Table name: quotes
+# Table name: change_orders
 #
 #  id              :integer          not null, primary key
-#  applicant_id    :integer
+#  job_id          :integer
 #  amount          :decimal(10, 2)   not null
-#  rejected        :boolean          default("false"), not null
-#  body            :text
+#  body            :text             not null
 #  attachment_data :text
 #  created_at      :datetime         not null
 #  updated_at      :datetime         not null
 #
 
-class Quote < ApplicationRecord
+class ChangeOrder < ApplicationRecord
   include AttachmentUploader[:attachment]
 
-  belongs_to :applicant
+  belongs_to :job
 
-  validates :applicant, presence: true
+  validates :job, presence: true
   validates :amount, presence: true, numericality: true, sane_price: true
+  validates :body, presence: true
 end
