@@ -15,10 +15,7 @@ gem "sass-rails", github: "rails/sass-rails"
 gem "uglifier", ">= 1.3.0"
 gem "turbolinks", "~> 5"
 gem "bootstrap-sass", ">= 3.3.7"
-
-source "https://rails-assets.org" do
-  gem "rails-assets-bootstrap.native", ">= 2.0.10"
-end
+gem "jquery-rails", ">= 4.3.1"
 
 # See https://github.com/rails/execjs#readme for more supported runtimes
 # gem "therubyracer", platforms: :ruby

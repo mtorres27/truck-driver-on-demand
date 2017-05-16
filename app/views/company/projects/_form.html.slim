@@ -1,0 +1,17 @@
+= simple_form_for([:company, project], remote: true) do |f|
+  .form-inputs
+    = f.input :name, placeholder: "Enter the project name"
+    = f.input :external_project_id, placeholder: "Enter the project number"
+    = f.input :budget, placeholder: "Enter a budget"
+    = f.input :address, placeholder: "Enter the address"
+    .row
+      .col-xs-12.col-md-6
+        = f.input :starts_on, html5: true
+      .col-xs-12.col-md-6
+        = f.input :duration, placeholder: "Number of days"
+  hr
+  .form-actions
+    = f.button :submit, class: "btn-primary"
+    '
+    a.btn.btn-default data-dismiss="modal" href="#"
+      | Cancel

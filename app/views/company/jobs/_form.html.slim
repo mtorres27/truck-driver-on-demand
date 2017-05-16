@@ -9,7 +9,9 @@
             .col-xs-4
               .form-group
                 label.control-label &nbsp;
-                .form-button= link_to "New Project", new_company_project_path, class: "btn btn-default"
+                .form-button
+                  button.btn.btn-default type="button" data-toggle="modal" data-target="#new_project"
+                    | New Project
           = f.input :title, placeholder: "Enter the job title"
           = f.input :summary, placeholder: "Enter the job summary"
           = f.input :scope_of_work, placeholder: "Please enter in more details about the job to receive a better quote. If you already have these documents please attach them below."
@@ -45,3 +47,27 @@
         - unless @job.new_record?
           .col-xs-12.col-sm-6.col-md-8.text-right
             = link_to "Delete Job", company_job_path(@job), data: { confirm: "Are you sure?" }, method: :delete
+
+.modal#new_project role="dialog" tabindex="-1"
+  .modal-dialog role="document"
+    .modal-content
+      = simple_form_for([:company, current_company.projects.new], remote: true) do |f|
+        .modal-header
+          h2 Create a New Project
+        .modal-body
+          .form-inputs
+            = f.input :name, placeholder: "Enter the project name"
+            = f.input :external_project_id, placeholder: "Enter the project number"
+            = f.input :budget, placeholder: "Enter a budget"
+            = f.input :address, placeholder: "Enter the address"
+            .row
+              .col-xs-12.col-md-6
+                = f.input :starts_on, html5: true
+              .col-xs-12.col-md-6
+                = f.input :duration, placeholder: "Number of days"
+        .modal-footer
+          .form-actions
+            = f.button :submit, class: "btn-primary"
+            '
+            a.btn.btn-default data-dismiss="modal" href="#"
+              | Cancel

@@ -11,11 +11,14 @@ en:
     error_notification:
       default_message: "Please review the problems below:"
     labels:
+      defaults:
+        starts_on: "Est. Start"
+      project:
+        external_project_id: "Project Number"
       job:
         project: "Project Reference"
         title: "Job Title"
         summary: "Job Summary"
-        starts_on: "Est. Start"
         freelancer_type: "Freelancer Type"
         invite_only: "This posting is invite only and will not display in search results."
         scope_is_public: "The scope of work for this posting is available to everyone."

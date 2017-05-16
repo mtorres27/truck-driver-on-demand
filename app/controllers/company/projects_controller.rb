@@ -26,9 +26,17 @@ class Company::ProjectsController < Company::BaseController
     @project = current_company.projects.new(project_params)
 
     if @project.save
-      redirect_to company_project_path(@project), notice: "Project created."
+      respond_to do |format|
+        format.html { redirect_to company_project_path(@project), notice: "Project created." }
+        format.js
+        format.json { render json: @project, status: :created }
+      end
     else
-      render :new
+      respond_to do |format|
+        format.html { render :new }
+        format.js
+        format.json { render json: @project, status: :unprocessable_entity }
+      end
     end
   end
 
@@ -59,6 +67,6 @@ class Company::ProjectsController < Company::BaseController
     end
 
     def project_params
-      params.require(:project).permit(:name)
+      params.require(:project).permit(:name, :external_project_id, :budget, :address, :starts_on, :duration)
     end
 end

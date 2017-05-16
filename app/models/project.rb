@@ -28,7 +28,7 @@ class Project < ApplicationRecord
   validates :company, presence: true
   validates :name, presence: true
   validates :budget, presence: true, numericality: true, sane_price: true
-  validates :duration, numericality: { only_integer: true }, allow_blank: true
+  validates :duration, numericality: { only_integer: true, greater_than: 0, less_than: 365 }, allow_blank: true
 
   def contract_value
     jobs.sum { |job| job.contract_price || 0 }
