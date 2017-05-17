@@ -37,7 +37,7 @@ class Job < ApplicationRecord
   extend Enumerize
 
   belongs_to :project
-  has_many :applicants, -> { order(updated_at: :desc) }, dependent: :destroy
+  has_many :applicants, -> { includes(:freelancer, :quotes).order(updated_at: :desc) }, dependent: :destroy
   has_many :quotes, -> { order(created_at: :desc) }, through: :applicants
   has_many :messages, -> { order(created_at: :desc) }, dependent: :destroy
   has_many :payments, -> { order(created_at: :desc) }, dependent: :destroy
@@ -71,4 +71,8 @@ class Job < ApplicationRecord
   validates :duration, presence: true, numericality: { only_integer: true }
   validates :pay_type, inclusion: { in: pay_type.values }, allow_blank: true
   validates :freelancer_type, presence: true, inclusion: { in: freelancer_type.values }
+
+  def freelancer
+    applicants.find_by(accepted: true)&.freelancer
+  end
 end
