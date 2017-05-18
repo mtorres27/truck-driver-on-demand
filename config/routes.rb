@@ -11,9 +11,10 @@ Rails.application.routes.draw do
   end
 
   namespace :company do
-    root "companies#show"
+    root "main#index"
 
     resource :company, only: [:show, :edit, :update]
+    resources :freelancers, only: [:index, :show]
     resources :projects
     resources :jobs, except: [:index] do
       resources :applicants

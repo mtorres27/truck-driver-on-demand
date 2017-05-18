@@ -1,20 +1,19 @@
 - content_for :header do
-  .content
-    .row
-      .col-sm-8.col-xs-12
-        h1 Job Postings
-      .col-sm-4.col-xs-12.text-right.post-new-job
-        = link_to "Post a New Job", new_company_job_path, class: "btn btn-primary", role: "button"
+  .row
+    .col-sm-8.col-xs-12
+      h1 Job Postings
+    .col-sm-4.col-xs-12.text-right.post-new-job
+      = link_to "Post a New Job", new_company_job_path, class: "btn btn-primary", role: "button"
 
-    .row
-      .col-xs-12
-        ul.list-inline.page-nav
-          li class=("active" unless params[:closed]) role="presentation"
-            = link_to "Open Projects", company_projects_path, "aria-controlers" => "open", role: "tab"
-          li class=("active" if params[:closed]) role="presentation"
-            = link_to "Closed Projects", company_projects_path(closed: true), "aria-controlers" => "closed", role: "tab"
+  .row
+    .col-xs-12
+      ul.list-inline.page-nav
+        li class=("active" unless params[:closed]) role="presentation"
+          = link_to "Open Projects", company_projects_path, "aria-controlers" => "open", role: "tab"
+        li class=("active" if params[:closed]) role="presentation"
+          = link_to "Closed Projects", company_projects_path(closed: true), "aria-controlers" => "closed", role: "tab"
 
-.content-card
+- content_for :body do
   .row
     .col-md-10.col-sm-12
       h2 #{@projects.total_count} #{params[:closed] ? 'Closed' : 'Open'} Projects with a total of #{@job_count} jobs.

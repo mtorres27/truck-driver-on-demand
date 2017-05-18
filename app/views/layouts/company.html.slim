@@ -28,10 +28,15 @@ nav.navbar.navbar-fixed-top
               = link_to "Logout", session_path(section: "company"), method: :delete
 
 .container
-  = yield :header
-  .striped-bg
+  - if content_for(:header)
     .content
-      = yield
+      = yield :header
+  - if content_for(:body)
+    .striped-bg
+      .content
+        .content-card
+          = yield :body
+  = yield
   .content
     footer.footer
       p.text-muted &copy; 2017 AV Junction Inc.

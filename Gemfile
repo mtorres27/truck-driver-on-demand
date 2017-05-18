@@ -9,6 +9,7 @@ end
 gem "rails", "~> 5.1.0.rc1"
 gem "puma", "~> 3.7"
 gem "pg", "~> 0.18"
+gem "pg_search", ">= 2.0.1"
 
 gem "slim-rails", ">= 3.1.2"
 gem "sass-rails", github: "rails/sass-rails"

@@ -203,6 +203,7 @@ CREATE TABLE freelancers (
     id bigint NOT NULL,
     email character varying NOT NULL,
     name character varying NOT NULL,
+    avatar_data text,
     address character varying,
     formatted_address character varying,
     area character varying,
@@ -216,6 +217,7 @@ CREATE TABLE freelancers (
     years_of_experience integer DEFAULT 0 NOT NULL,
     profile_views integer DEFAULT 0 NOT NULL,
     projects_completed integer DEFAULT 0 NOT NULL,
+    available boolean DEFAULT true NOT NULL,
     disabled boolean DEFAULT false NOT NULL,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL
@@ -720,6 +722,13 @@ CREATE INDEX index_companies_on_name ON companies USING btree (name);
 --
 
 CREATE INDEX index_freelancers_on_area ON freelancers USING btree (area);
+
+
+--
+-- Name: index_freelancers_on_available; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_freelancers_on_available ON freelancers USING btree (available);
 
 
 --

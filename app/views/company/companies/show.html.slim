@@ -1,5 +1,7 @@
-h2 Company Details
-pre= current_company.pretty_inspect
+- content_for :header do
+  h2 Company Details
+  pre= current_company.pretty_inspect
 
-h2 Social Logins
-pre= current_company.identities.pretty_inspect
+- content_for :body do
+  h2 Social Logins
+  pre= current_company.identities.pretty_inspect

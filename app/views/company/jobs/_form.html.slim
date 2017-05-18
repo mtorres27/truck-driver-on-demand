@@ -1,52 +1,51 @@
-.content-card
-  = simple_form_for([:company, @job]) do |f|
-    .form-inputs
-      .row
-        .col-sm-12.col-md-6.col-lg-7
-          .row
-            .col-xs-8
-              = f.association :project, collection: current_company.projects.open, prompt: "Select"
-            .col-xs-4
-              .form-group
-                label.control-label &nbsp;
-                .form-button
-                  button.btn.btn-default type="button" data-toggle="modal" data-target="#new_project"
-                    | New Project
-          = f.input :title, placeholder: "Enter the job title"
-          = f.input :summary, placeholder: "Enter the job summary"
-          = f.input :scope_of_work, placeholder: "Please enter in more details about the job to receive a better quote. If you already have these documents please attach them below."
+= simple_form_for([:company, @job]) do |f|
+  .form-inputs
+    .row
+      .col-sm-12.col-md-6.col-lg-7
+        .row
+          .col-xs-8
+            = f.association :project, collection: current_company.projects.open, prompt: "Select"
+          .col-xs-4
+            .form-group
+              label.control-label &nbsp;
+              .form-button
+                button.btn.btn-default type="button" data-toggle="modal" data-target="#new_project"
+                  | New Project
+        = f.input :title, placeholder: "Enter the job title"
+        = f.input :summary, placeholder: "Enter the job summary"
+        = f.input :scope_of_work, placeholder: "Please enter in more details about the job to receive a better quote. If you already have these documents please attach them below."
 
-        .col-sm-12.col-md-6.col-lg-5
-          = f.input :budget, placeholder: "Enter a budget"
-          = f.input :job_function, prompt: "Select"
-          .row
-            .col-xs-12.col-md-6
-              = f.input :starts_on, html5: true
-            .col-xs-12.col-md-6
-              = f.input :duration, placeholder: "Number of days"
-          .row
-            .col-xs-12.col-md-6
-              = f.input :pay_type, prompt: "Select"
-            .col-xs-12.col-md-6
-              = f.input :freelancer_type, prompt: "Select"
-          = f.input :keywords, placeholder: "E.g. crestron, broadcast, education, wall"
-          = f.input :invite_only
-          = f.input :scope_is_public
-          = f.input :budget_is_public
-    hr
-    .form-actions
-      .row
-        - if @job.created?
-          .col-xs-6.col-sm-3.col-md-2
-            = f.button :submit, "Save as Draft", class: "btn btn-primary"
-          .col-xs-6.col-sm-3.col-md-2
-            = f.button :button, "Publish", name: "job[state]", value: "published", class: "btn btn-default"
-        - else
-          .col-xs-6.col-sm-6.col-md-4
-            = f.button :submit, "Save", class: "btn btn-primary"
-        - unless @job.new_record?
-          .col-xs-12.col-sm-6.col-md-8.text-right
-            = link_to "Delete Job", company_job_path(@job), data: { confirm: "Are you sure?" }, method: :delete
+      .col-sm-12.col-md-6.col-lg-5
+        = f.input :budget, placeholder: "Enter a budget"
+        = f.input :job_function, prompt: "Select"
+        .row
+          .col-xs-12.col-md-6
+            = f.input :starts_on, html5: true
+          .col-xs-12.col-md-6
+            = f.input :duration, placeholder: "Number of days"
+        .row
+          .col-xs-12.col-md-6
+            = f.input :pay_type, prompt: "Select"
+          .col-xs-12.col-md-6
+            = f.input :freelancer_type, prompt: "Select"
+        = f.input :keywords, placeholder: "E.g. crestron, broadcast, education, wall"
+        = f.input :invite_only
+        = f.input :scope_is_public
+        = f.input :budget_is_public
+  hr
+  .form-actions
+    .row
+      - if @job.created?
+        .col-xs-6.col-sm-3.col-md-2
+          = f.button :submit, "Save as Draft", class: "btn btn-primary"
+        .col-xs-6.col-sm-3.col-md-2
+          = f.button :button, "Publish", name: "job[state]", value: "published", class: "btn btn-default"
+      - else
+        .col-xs-6.col-sm-6.col-md-4
+          = f.button :submit, "Save", class: "btn btn-primary"
+      - unless @job.new_record?
+        .col-xs-12.col-sm-6.col-md-8.text-right
+          = link_to "Delete Job", company_job_path(@job), data: { confirm: "Are you sure?" }, method: :delete
 
 .modal#new_project role="dialog" tabindex="-1"
   .modal-dialog role="document"

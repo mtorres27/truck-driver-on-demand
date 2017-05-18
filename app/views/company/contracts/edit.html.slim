@@ -1,7 +1,7 @@
 - content_for :header do
   = render partial: "company/shared/job_nav", locals: { job: @job }
 
-.content-card
+- content_for :body do
   = simple_form_for(@job, url: company_job_contract_path(@job)) do |f|
     .form-inputs
       .row

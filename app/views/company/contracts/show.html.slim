@@ -1,7 +1,7 @@
 - content_for :header do
   = render partial: "company/shared/job_nav", locals: { job: @job }
 
-.content-card
+- content_for :body do
   hr
   .form-actions
     = link_to "Edit", edit_company_job_contract_path(@job), class: "btn btn-primary"

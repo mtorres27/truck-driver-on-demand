@@ -1,2 +1,5 @@
-h2 Edit Project
-= render partial: "form", locals: { project: @project }
+- content_for :header do
+  h2 Edit Project
+
+- content_for :body do
+  = render partial: "form", locals: { project: @project }
