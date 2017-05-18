@@ -1,5 +1,6 @@
 .col-xs-12.col-sm-6.col-md-4.col-lg-3
   a.card.job href=stateful_company_job_path(job)
+    = job_state_label(job)
     .job-title= job.title
     .job-cell.job-cell-top-left
       .job-value= number_to_currency(job.budget || 0, precision: 0)

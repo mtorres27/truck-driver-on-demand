@@ -12,4 +12,19 @@ module JobHelper
       company_job_payments_path(job)
     end
   end
+
+  def job_state_label(job)
+    mappings = {
+      created: :default,
+      published: :primary,
+      quoted: :success,
+      negotiated: :info,
+      contracted: :warning,
+      completed: :danger
+    }
+
+    content_tag(:span, class: "job-state label label-#{mappings[job.state.to_sym]}") do
+      job.state.text
+    end
+  end
 end
