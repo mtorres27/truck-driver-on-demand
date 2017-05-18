@@ -11,7 +11,7 @@
 #
 
 class Applicant < ApplicationRecord
-  belongs_to :job
+  belongs_to :job, counter_cache: true
   belongs_to :freelancer
   has_many :quotes, -> { order(created_at: :desc) }, dependent: :destroy
 

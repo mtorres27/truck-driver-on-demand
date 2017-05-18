@@ -28,6 +28,9 @@ class CreateJobs < ActiveRecord::Migration[5.1]
       t.boolean :require_uniform, null: false, default: false
       t.text :addendums
 
+      t.integer :applicants_count, null: false, default: 0
+      t.integer :messages_count, null: false, default: 0
+
       t.timestamps
     end
   end

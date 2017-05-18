@@ -71,9 +71,11 @@ group :development do
 
   gem "listen", ">= 3.0.5", "< 3.2"
 
-  gem "capistrano-rails", "~> 1.2", group: :development
+  gem "capistrano-rails", "~> 1.2"
 
   gem "rubocop", ">= 0.48", require: false
+
+  gem "bullet", ">= 5.5.1"
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem

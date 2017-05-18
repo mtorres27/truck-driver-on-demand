@@ -310,6 +310,8 @@ CREATE TABLE jobs (
     require_checkin boolean DEFAULT false NOT NULL,
     require_uniform boolean DEFAULT false NOT NULL,
     addendums text,
+    applicants_count integer DEFAULT 0 NOT NULL,
+    messages_count integer DEFAULT 0 NOT NULL,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL
 );

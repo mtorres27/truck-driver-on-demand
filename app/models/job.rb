@@ -37,7 +37,7 @@ class Job < ApplicationRecord
   extend Enumerize
 
   belongs_to :project
-  has_many :applicants, -> { includes(:freelancer, :quotes).order(updated_at: :desc) }, dependent: :destroy
+  has_many :applicants, -> { includes(:freelancer).order(updated_at: :desc) }, dependent: :destroy
   has_many :quotes, -> { order(created_at: :desc) }, through: :applicants
   has_many :messages, -> { order(created_at: :desc) }, dependent: :destroy
   has_many :payments, -> { order(created_at: :desc) }, dependent: :destroy
