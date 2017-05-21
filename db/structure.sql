@@ -681,13 +681,6 @@ CREATE INDEX index_admins_on_email ON admins USING btree (email);
 
 
 --
--- Name: index_admins_on_token; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_admins_on_token ON admins USING btree (token);
-
-
---
 -- Name: index_applicants_on_freelancer_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -730,13 +723,6 @@ CREATE INDEX index_companies_on_name ON companies USING btree (name);
 
 
 --
--- Name: index_companies_on_token; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_companies_on_token ON companies USING btree (token);
-
-
---
 -- Name: index_freelancers_on_area; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -776,13 +762,6 @@ CREATE INDEX index_freelancers_on_keywords ON freelancers USING btree (keywords)
 --
 
 CREATE INDEX index_freelancers_on_name ON freelancers USING btree (name);
-
-
---
--- Name: index_freelancers_on_token; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_freelancers_on_token ON freelancers USING btree (token);
 
 
 --

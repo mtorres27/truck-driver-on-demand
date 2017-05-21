@@ -43,6 +43,7 @@ class Admin::FreelancersController < Admin::BaseController
   end
 
   def login_as
+    session[:freelancer_id] = @freelancer.id
     session[:freelancer_token] = @freelancer.token
     redirect_to freelancer_root_path, notice: "You have been logged in as #{@freelancer.name}"
   end

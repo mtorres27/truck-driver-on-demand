@@ -43,6 +43,7 @@ class Admin::CompaniesController < Admin::BaseController
   end
 
   def login_as
+    session[:company_id] = @company.id
     session[:company_token] = @company.token
     redirect_to company_root_path, notice: "You have been logged in as #{@company.name}"
   end

@@ -21,6 +21,7 @@ class SessionsController < ApplicationController
     if %w(admin company freelancer).include?(section)
       user = section.camelize.constantize.find_or_create_from_auth_hash(auth_hash)
       if user
+        session["#{section}_id"] = user.id
         session["#{section}_token"] = user.token
         redirect_to "/#{section}", notice: "Signed in"
       else
@@ -32,12 +33,10 @@ class SessionsController < ApplicationController
   end
 
   def destroy
-    if params[:section] == "freelancer"
-      session[:freelancer_token] = nil
-    elsif params[:section] == "company"
-      session[:company_token] = nil
-    elsif params[:section] == "admin"
-      session[:admin_token] = nil
+    section = params[:section]
+    if section.present?
+      session["#{section}_id".to_sym] = nil
+      session["#{section}_token".to_sym] = nil
     else
       reset_session
     end

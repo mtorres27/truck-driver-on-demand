@@ -6,8 +6,11 @@ module Authentication
       define_method "current_#{user_type}" do
         begin
           unless instance_variable_get("@current_#{user_type}")
-            if session["#{user_type}_token"]
-              instance_variable_set("@current_#{user_type}", user_type.classify.constantize.find_by(token: session["#{user_type}_token"]))
+            if session["#{user_type}_id"] && session["#{user_type}_token"]
+              user = user_type.classify.constantize.find(session["#{user_type}_id"])
+              if user.token == session["#{user_type}_token"]
+                instance_variable_set("@current_#{user_type}", user)
+              end
             end
           end
           instance_variable_get("@current_#{user_type}")
