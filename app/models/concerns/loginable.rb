@@ -38,4 +38,8 @@ module Loginable
     # Delegated to identities
     identities.order(last_sign_in_at: :desc).limit(1).first.last_sign_in_at
   end
+
+  included do
+    has_secure_token
+  end
 end

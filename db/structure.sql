@@ -47,6 +47,7 @@ SET default_with_oids = false;
 
 CREATE TABLE admins (
     id bigint NOT NULL,
+    token character varying NOT NULL,
     email character varying NOT NULL,
     name character varying NOT NULL,
     created_at timestamp without time zone NOT NULL,
@@ -158,6 +159,7 @@ ALTER SEQUENCE change_orders_id_seq OWNED BY change_orders.id;
 
 CREATE TABLE companies (
     id bigint NOT NULL,
+    token character varying NOT NULL,
     email character varying NOT NULL,
     name character varying NOT NULL,
     contact_name character varying NOT NULL,
@@ -201,6 +203,7 @@ ALTER SEQUENCE companies_id_seq OWNED BY companies.id;
 
 CREATE TABLE freelancers (
     id bigint NOT NULL,
+    token character varying NOT NULL,
     email character varying NOT NULL,
     name character varying NOT NULL,
     avatar_data text,
@@ -678,6 +681,13 @@ CREATE INDEX index_admins_on_email ON admins USING btree (email);
 
 
 --
+-- Name: index_admins_on_token; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_admins_on_token ON admins USING btree (token);
+
+
+--
 -- Name: index_applicants_on_freelancer_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -720,6 +730,13 @@ CREATE INDEX index_companies_on_name ON companies USING btree (name);
 
 
 --
+-- Name: index_companies_on_token; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_companies_on_token ON companies USING btree (token);
+
+
+--
 -- Name: index_freelancers_on_area; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -759,6 +776,13 @@ CREATE INDEX index_freelancers_on_keywords ON freelancers USING btree (keywords)
 --
 
 CREATE INDEX index_freelancers_on_name ON freelancers USING btree (name);
+
+
+--
+-- Name: index_freelancers_on_token; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_freelancers_on_token ON freelancers USING btree (token);
 
 
 --

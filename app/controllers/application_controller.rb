@@ -1,4 +1,6 @@
 class ApplicationController < ActionController::Base
+  include Authentication
+
   protect_from_forgery with: :exception
 
   before_action do
@@ -6,15 +8,4 @@ class ApplicationController < ActionController::Base
       Rack::MiniProfiler.authorize_request
     end
   end
-
-  protected
-
-  def current_admin
-    begin
-      @current_admin ||= Admin.find(session[:admin_id]) if session[:admin_id]
-    rescue Exception => e
-      nil
-    end
-  end
-
 end
