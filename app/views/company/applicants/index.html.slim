@@ -2,6 +2,8 @@
   = render partial: "company/shared/job_nav", locals: { job: @job }
 
 - content_for :body do
+  .content-card-title
+    | Applicants
   ul.media-list
     - @applicants.each do |applicant|
       li.media.applicant

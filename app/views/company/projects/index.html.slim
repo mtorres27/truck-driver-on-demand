@@ -14,12 +14,13 @@
           = link_to "Closed Projects", company_projects_path(closed: true), "aria-controlers" => "closed", role: "tab"
 
 - content_for :body do
-  .row
-    .col-md-10.col-sm-12
-      h2 #{@projects.total_count} #{params[:closed] ? 'Closed' : 'Open'} Projects with a total of #{@job_count} jobs.
-    .col-md-2.col-sm-12.text-right.expand-all
-      button.btn.btn-default type="button" onClick="toggleJobs(this)" data-action="show"
-        | Expand All
+  .content-card-title
+    .row
+      .col-md-10.col-sm-12
+        h2 #{@projects.total_count} #{params[:closed] ? 'Closed' : 'Open'} Projects with a total of #{@job_count} jobs.
+      .col-md-2.col-sm-12.text-right.expand-all
+        button.btn.btn-default type="button" onClick="toggleJobs(this)" data-action="show"
+          | Expand All
 
   .row
     .col-xs-12

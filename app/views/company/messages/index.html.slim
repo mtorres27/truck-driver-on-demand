@@ -2,6 +2,8 @@
   = render partial: "company/shared/job_nav", locals: { job: @job }
 
 - content_for :body do
+  .content-card-title
+    | Job Progress Report
   table.table.table-bordered
     - @messages.each do |message|
       tr
