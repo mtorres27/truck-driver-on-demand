@@ -1,4 +1,5 @@
 class SessionsController < ApplicationController
+  include LoginAs
 
   def new
     @section = request.params[:section] || 'freelancer'
@@ -47,6 +48,11 @@ class SessionsController < ApplicationController
     redirect_to root_path, alert: "Authentication error: #{failure_message}"
   end
 
+  # For development only
+  def login_as
+    throw ActionController::BadRequest unless Rails.env.development?
+    super
+  end
 
   protected
 

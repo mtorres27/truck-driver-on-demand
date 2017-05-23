@@ -23,7 +23,7 @@
     .col-xs-12.col-md-6
       .show-field
         label= t(:budget, scope: [:form, :labels, :job])
-        .show-budget= number_to_currency(@job.project.budget, precision: 0)
+        .show-budget= number_to_currency(@job.budget, precision: 0)
 
       .show-field
         label= t(:job_function, scope: [:form, :labels, :job])

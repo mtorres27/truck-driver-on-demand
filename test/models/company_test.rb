@@ -3,6 +3,7 @@
 # Table name: companies
 #
 #  id                :integer          not null, primary key
+#  token             :string           not null
 #  email             :string           not null
 #  name              :string           not null
 #  contact_name      :string           not null

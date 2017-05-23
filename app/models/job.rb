@@ -29,6 +29,8 @@
 #  require_checkin           :boolean          default("false"), not null
 #  require_uniform           :boolean          default("false"), not null
 #  addendums                 :text
+#  applicants_count          :integer          default("0"), not null
+#  messages_count            :integer          default("0"), not null
 #  created_at                :datetime         not null
 #  updated_at                :datetime         not null
 #
@@ -60,7 +62,7 @@ class Job < ApplicationRecord
     :negotiated,
     :contracted,
     :completed
-  ], predicates: true
+  ], predicates: true, scope: true
 
   validates :project, presence: true
   validates :title, presence: true
@@ -73,6 +75,6 @@ class Job < ApplicationRecord
   validates :freelancer_type, presence: true, inclusion: { in: freelancer_type.values }
 
   def freelancer
-    applicants.find_by(accepted: true)&.freelancer
+    applicants.with_state(:accepted).first&.freelancer
   end
 end

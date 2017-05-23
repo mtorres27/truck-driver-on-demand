@@ -1,4 +1,6 @@
 class Admin::CompaniesController < Admin::BaseController
+  include LoginAs
+
   before_action :set_company, only: [:show, :edit, :update, :destroy, :enable, :disable, :login_as]
 
   def index
@@ -41,13 +43,6 @@ class Admin::CompaniesController < Admin::BaseController
     @company.disable!
     redirect_to admin_companies_path, notice: "Company disabled."
   end
-
-  def login_as
-    session[:company_id] = @company.id
-    session[:company_token] = @company.token
-    redirect_to company_root_path, notice: "You have been logged in as #{@company.name}"
-  end
-
 
   private
 

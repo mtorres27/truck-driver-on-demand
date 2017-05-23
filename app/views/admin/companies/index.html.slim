@@ -14,7 +14,7 @@ h2 Companies
           td= link_to company.name, admin_company_path(company)
           td= mail_to company.email
           td.text-right
-            = link_to 'Login As', login_as_admin_company_path(company)
+            = link_to 'Login As', login_as_admin_company_path(company, section: "company")
             '  |
             = link_to 'Edit', edit_admin_company_path(company)
             '  |

@@ -14,7 +14,7 @@ h2 Freelancers
           td= link_to freelancer.name, admin_freelancer_path(freelancer)
           td= mail_to freelancer.email
           td.text-right
-            = link_to 'Login As', login_as_admin_freelancer_path(freelancer)
+            = link_to 'Login As', login_as_admin_freelancer_path(freelancer, section: "freelancer")
             '  |
             = link_to 'Edit', edit_admin_freelancer_path(freelancer)
             '  |

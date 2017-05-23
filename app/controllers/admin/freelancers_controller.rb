@@ -1,4 +1,6 @@
 class Admin::FreelancersController < Admin::BaseController
+  include LoginAs
+
   before_action :set_freelancer, only: [:show, :edit, :update, :destroy, :enable, :disable, :login_as]
 
   def index
@@ -41,13 +43,6 @@ class Admin::FreelancersController < Admin::BaseController
     @freelancer.disable!
     redirect_to admin_freelancers_path, notice: "Freelancer disabled."
   end
-
-  def login_as
-    session[:freelancer_id] = @freelancer.id
-    session[:freelancer_token] = @freelancer.token
-    redirect_to freelancer_root_path, notice: "You have been logged in as #{@freelancer.name}"
-  end
-
 
   private
 

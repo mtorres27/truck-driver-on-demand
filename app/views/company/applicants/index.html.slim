@@ -2,23 +2,21 @@
   = render partial: "company/shared/job_nav", locals: { job: @job }
 
 - content_for :body do
-  table.table.table-bordered
-    tr
-      th Applicant
-      th Accepted
-      th Quotes
+  ul.media-list
     - @applicants.each do |applicant|
-      tr
-        td= applicant.freelancer.name
-        td= applicant.accepted
-        td
-          ul
-            - applicant.quotes.order(created_at: :desc).each do |quote|
-              li
-                h4
-                  = number_to_currency quote.amount
-                  - if quote.rejected?
-                    '
-                    span.label.label-danger rejected
-                p= quote.body
-
+      li.media.applicant
+        .media-left
+          .media-object= image_tag(applicant.freelancer.avatar_url, size: "70x70", class: "freelancer_avatar")
+        .media-body
+          .col-xs-12.col-sm-10
+            = applicant_state_label(applicant)
+            - applicant.freelancer.tap do |freelancer|
+              .freelancer_name= freelancer.name
+              .freelancer_area= freelancer.area
+              .freelancer_tagline= freelancer.tagline
+          .col-xs-12.col-sm-2
+            - unless applicant.interested?
+              - applicant.quotes.order(created_at: :desc).first&.tap do |quote|
+                - if quote.amount > @job.budget
+                  .quote_over_budget= "Over Budget"
+                .quote_amount= number_to_currency(quote.amount, precision: 0)

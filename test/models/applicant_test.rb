@@ -5,7 +5,8 @@
 #  id            :integer          not null, primary key
 #  job_id        :integer
 #  freelancer_id :integer
-#  accepted      :boolean          default("false"), not null
+#  state         :string           default("interested"), not null
+#  quotes_count  :integer          default("0"), not null
 #  created_at    :datetime         not null
 #  updated_at    :datetime         not null
 #

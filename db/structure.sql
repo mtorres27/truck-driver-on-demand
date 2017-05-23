@@ -82,7 +82,8 @@ CREATE TABLE applicants (
     id bigint NOT NULL,
     job_id bigint,
     freelancer_id bigint,
-    accepted boolean DEFAULT false NOT NULL,
+    state character varying DEFAULT 'interested'::character varying NOT NULL,
+    quotes_count integer DEFAULT 0 NOT NULL,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL
 );

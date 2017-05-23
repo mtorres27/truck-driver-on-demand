@@ -2,7 +2,9 @@ Rails.application.routes.draw do
   root "main#index"
 
   get "auth/:provider/callback", to: "sessions#create"
-  resource :session, only: [:new, :create, :destroy]
+  resource :session, only: [:new, :create, :destroy] do
+    get :login_as, on: :collection
+  end
 
   namespace :freelancer do
     root "freelancers#show"

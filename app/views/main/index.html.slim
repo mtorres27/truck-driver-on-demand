@@ -3,5 +3,7 @@ h1 AV Junction Home
 p= link_to "Freelancer", freelancer_root_path
 p= link_to "Company", company_root_path
 p= link_to "Admin", admin_root_path
-- unless Rails.env.production?
-  p= link_to 'Login As First Company', login_as_admin_company_path(Company.order(:name).first)
+- if Rails.env.development?
+  p= link_to "Login As Company", login_as_session_path(section: "company", id: Company.order(:name).first)
+  p= link_to "Login As Freelancer", login_as_session_path(section: "freelancer", id: Freelancer.order(:name).first)
+  p= link_to "Login As Admin", login_as_session_path(section: "admin", id: Admin.order(:name).first)

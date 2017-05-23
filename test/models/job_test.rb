@@ -29,6 +29,8 @@
 #  require_checkin           :boolean          default("false"), not null
 #  require_uniform           :boolean          default("false"), not null
 #  addendums                 :text
+#  applicants_count          :integer          default("0"), not null
+#  messages_count            :integer          default("0"), not null
 #  created_at                :datetime         not null
 #  updated_at                :datetime         not null
 #

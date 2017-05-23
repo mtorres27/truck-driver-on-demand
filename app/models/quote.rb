@@ -15,7 +15,7 @@
 class Quote < ApplicationRecord
   include AttachmentUploader[:attachment]
 
-  belongs_to :applicant
+  belongs_to :applicant, counter_cache: true
 
   validates :applicant, presence: true
   validates :amount, presence: true, numericality: true, sane_price: true

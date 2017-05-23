@@ -6,7 +6,9 @@ Admin.create!(email: "pweather24@gmail.com", name: "Paul Weatherhead")
 420.times do
   Freelancer.create!(
     email: Faker::Internet.unique.email,
-    name: Faker::Name.unique.name
+    name: Faker::Name.unique.name,
+    area: Faker::Address.city,
+    tagline: Faker::Company.catch_phrase
   )
 end
 
@@ -47,11 +49,14 @@ schools.sample(20).each do |school|
       state: Job.state.values.sample
     )
 
-    3.times do
+    5.times do
       begin
-        applicant = job.applicants.create!(freelancer: Freelancer.order("RANDOM()").first)
+        applicant = job.applicants.create!(
+          freelancer: Freelancer.order("RANDOM()").first,
+          state: Applicant.state.values.select{ |v| v != :accepted }.sample
+        )
         applicant.quotes.create!(
-          amount: (budget.to_f - Faker::Number.number(2).to_f),
+          amount: [(budget.to_f - Faker::Number.number(2).to_f), (budget.to_f + Faker::Number.number(2).to_f)].sample,
           rejected: true
         )
       rescue Exception => e
@@ -61,7 +66,7 @@ schools.sample(20).each do |school|
     end
 
     applicant = job.applicants.order(created_at: :desc).first
-    applicant.update_column(:accepted, true)
+    applicant.update_column(:state, "accepted")
     quote = applicant.quotes.order(created_at: :desc).first
     quote.update_column(:rejected, false)
     4.times do

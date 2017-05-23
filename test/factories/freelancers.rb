@@ -3,8 +3,10 @@
 # Table name: freelancers
 #
 #  id                       :integer          not null, primary key
+#  token                    :string           not null
 #  email                    :string           not null
 #  name                     :string           not null
+#  avatar_data              :text
 #  address                  :string
 #  formatted_address        :string
 #  area                     :string
