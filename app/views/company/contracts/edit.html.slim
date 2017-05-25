@@ -10,20 +10,31 @@
             label.control-label Job Summary
             p= @job.summary
           = f.input :scope_of_work, required: true, placeholder: "Please enter in more details about the job to receive a better quote. If you already have these documents please attach them below."
+          = f.input :addendums, placeholder: "Enter any supplemental information as part of the contract."
 
         .col-sm-12.col-md-6.col-lg-5
           .row
             .col-xs-12.col-md-6
+              = f.input :contract_price, required: true, input_html: { value: number_with_precision(f.object.contract_price, precision: 0) }
+            .col-xs-12.col-md-6
               = f.input :pay_type, required: true, prompt: "Select"
             .col-xs-12.col-md-6
-              = f.input :contract_price, required: true
-          = f.input :budget, placeholder: "Enter a budget"
-          = f.input :job_function, prompt: "Select"
-          .row
+              = f.input :starts_on, html5: true
             .col-xs-12.col-md-6
-              = f.input :starts_on, html5: true, label: "Start Date (Estimated)"
-            .col-xs-12.col-md-6
-              = f.input :ends_on, required: true, html5: true, label: "End Date (Estimated)"
+              = f.input :ends_on, html5: true, required: true
+          .row.payment-schedule
+            .col-xs-12
+              label Payment Schedule
+            = f.simple_fields_for :payments do |ff|
+              .col-xs-8
+                = ff.input :description, label: false, placeholder: "Description"
+              .col-xs-4
+                = ff.input :amount, label: false, placeholder: "Amount", input_html: { value: number_with_precision(ff.object.amount, precision: 0) }
+          label Reporting Requirements
+          = f.input :reporting_frequency, as: :radio_buttons, item_wrapper_class: "inline", label: false
+          = f.input :require_photos_on_updates
+          = f.input :require_checkin
+          = f.input :require_uniform
     hr
     .form-actions
       = f.button :submit, "Save", class: "btn btn-primary"

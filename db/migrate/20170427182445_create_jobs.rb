@@ -17,11 +17,10 @@ class CreateJobs < ActiveRecord::Migration[5.1]
       t.boolean :invite_only, null: false, default: false
       t.boolean :scope_is_public, null: false, default: true
       t.boolean :budget_is_public, null: false, default: true
-      t.text :working_days
-      t.string :working_times
+      t.text :working_days, array: true, null: false, default: []
+      t.string :working_time
       t.decimal :contract_price, precision: 10, scale: 2
-      t.decimal :contract_paid, precision: 10, scale: 2
-      t.text :payment_schedule
+      t.jsonb :payment_schedule, null: false, default: '{}'
       t.string :reporting_frequency
       t.boolean :require_photos_on_updates, null: false, default: false
       t.boolean :require_checkin, null: false, default: false

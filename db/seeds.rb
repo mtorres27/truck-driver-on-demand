@@ -44,8 +44,6 @@ schools.sample(20).each do |school|
       starts_on: Faker::Date.unique.between(Date.today, 3.months.from_now),
       duration: Faker::Number.number(2),
       freelancer_type: Job.freelancer_type.values.sample,
-      contract_price: (budget.to_f - Faker::Number.number(2).to_f),
-      contract_paid: Faker::Number.number(3),
       state: Job.state.values.sample
     )
 
@@ -69,6 +67,7 @@ schools.sample(20).each do |school|
     applicant.update_column(:state, "accepted")
     quote = applicant.quotes.order(created_at: :desc).first
     quote.update_column(:rejected, false)
+    job.update_column(:contract_price, quote.amount)
     4.times do
       job.messages.create!(authorable: applicant.freelancer, body: Faker::ChuckNorris.fact)
     end

@@ -19,11 +19,10 @@
 #  invite_only               :boolean          default("false"), not null
 #  scope_is_public           :boolean          default("true"), not null
 #  budget_is_public          :boolean          default("true"), not null
-#  working_days              :text
-#  working_times             :string
+#  working_days              :text             default("{}"), not null, is an Array
+#  working_time              :string
 #  contract_price            :decimal(10, 2)
-#  contract_paid             :decimal(10, 2)
-#  payment_schedule          :text
+#  payment_schedule          :jsonb            default("\"{}\""), not null
 #  reporting_frequency       :string
 #  require_photos_on_updates :boolean          default("false"), not null
 #  require_checkin           :boolean          default("false"), not null
@@ -42,8 +41,9 @@ class Job < ApplicationRecord
   has_many :applicants, -> { includes(:freelancer).order(updated_at: :desc) }, dependent: :destroy
   has_many :quotes, -> { order(created_at: :desc) }, through: :applicants
   has_many :messages, -> { order(created_at: :desc) }, dependent: :destroy
-  has_many :payments, -> { order(created_at: :desc) }, dependent: :destroy
   has_many :change_orders, -> { order(updated_at: :desc) }, dependent: :destroy
+  has_many :payments, dependent: :destroy
+  accepts_nested_attributes_for :payments, allow_destroy: true, reject_if: :reject_payments
 
   enumerize :job_function, in: [
     :av_installation_technician,
@@ -64,6 +64,12 @@ class Job < ApplicationRecord
     :completed
   ], predicates: true, scope: true
 
+  enumerize :reporting_frequency, in: [
+    :daily,
+    :every_other_day,
+    :weekly
+  ]
+
   validates :project, presence: true
   validates :title, presence: true
   validates :summary, presence: true
@@ -77,4 +83,20 @@ class Job < ApplicationRecord
   def freelancer
     applicants.with_state(:accepted).first&.freelancer
   end
+
+  def contract_paid
+    payments.
+      select { |p| p.paid_on.present? }.
+      sum { |p| payment.amount || 0 }
+  end
+
+  private
+
+    def reject_payments(attrs)
+      exists = attrs["id"].present?
+      empty = attrs["description"].blank? && attrs["amount"].blank?
+      attrs.merge!({ _destroy: 1 }) if exists && empty
+      !exists and empty
+    end
+
 end

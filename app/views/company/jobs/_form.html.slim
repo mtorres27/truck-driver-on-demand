@@ -16,7 +16,7 @@
         = f.input :scope_of_work, placeholder: "Please enter in more details about the job to receive a better quote. If you already have these documents please attach them below."
 
       .col-sm-12.col-md-6.col-lg-5
-        = f.input :budget, placeholder: "Enter a budget"
+        = f.input :budget, placeholder: "Enter a budget", input_html: { value: number_with_precision(f.object.budget, precision: 0) }
         = f.input :job_function, prompt: "Select"
         .row
           .col-xs-12.col-md-6

@@ -23,6 +23,9 @@ en:
         invite_only: "This posting is invite only and will not display in search results."
         scope_is_public: "The scope of work for this posting is available to everyone."
         budget_is_public: "The budget for this job will display in search results."
+        contract_price: "Job Contract Price"
+        require_checkin: "Require checkin upon arrival at job site"
+        require_uniform: "Wear uniform to job location"
     # Examples
     # labels:
     #   defaults:

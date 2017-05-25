@@ -5,12 +5,14 @@ class Company::ContractsController < Company::BaseController
   end
 
   def edit
+    build_payments
   end
 
   def update
     if @job.update(job_params)
       redirect_to company_job_contract_path(@job), notice: "Contract updated."
     else
+      build_payments
       render :edit
     end
   end
@@ -20,15 +22,26 @@ class Company::ContractsController < Company::BaseController
 
     def job_params
       params.require(:job).permit(
-        :summary,
         :scope_of_work,
-        :budget,
-        :job_function,
+        :addendums,
+        :contract_price,
         :starts_on,
-        :duration,
+        :ends_on,
         :pay_type,
         :freelancer_type,
-        :state
+        :state,
+        :reporting_frequency,
+        :require_photos_on_updates,
+        :require_checkin,
+        :require_uniform,
+        payments_attributes: [:id, :description, :amount, :due_on, :paid_on]
       )
+    end
+
+    def build_payments
+      payments_to_build = [(3 - @job.payments.size), 1].max
+      payments_to_build.times do
+        @job.payments.build
+      end
     end
 end

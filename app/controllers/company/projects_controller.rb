@@ -5,7 +5,7 @@ class Company::ProjectsController < Company::BaseController
     @projects =
       current_company.
       projects.
-      includes(:jobs).
+      includes(jobs: :payments).
       where(closed: params[:closed].present?).
       order({ external_project_id: :desc, id: :desc }).
       page(params[:page]).

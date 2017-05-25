@@ -304,11 +304,10 @@ CREATE TABLE jobs (
     invite_only boolean DEFAULT false NOT NULL,
     scope_is_public boolean DEFAULT true NOT NULL,
     budget_is_public boolean DEFAULT true NOT NULL,
-    working_days text,
-    working_times character varying,
+    working_days text[] DEFAULT '{}'::text[] NOT NULL,
+    working_time character varying,
     contract_price numeric(10,2),
-    contract_paid numeric(10,2),
-    payment_schedule text,
+    payment_schedule jsonb DEFAULT '"{}"'::jsonb NOT NULL,
     reporting_frequency character varying,
     require_photos_on_updates boolean DEFAULT false NOT NULL,
     require_checkin boolean DEFAULT false NOT NULL,
@@ -382,7 +381,10 @@ ALTER SEQUENCE messages_id_seq OWNED BY messages.id;
 CREATE TABLE payments (
     id bigint NOT NULL,
     job_id bigint,
+    description character varying NOT NULL,
     amount numeric(10,2) NOT NULL,
+    due_on timestamp without time zone,
+    paid_on timestamp without time zone,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL
 );

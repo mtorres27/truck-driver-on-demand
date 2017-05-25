@@ -4,6 +4,69 @@
 - content_for :body do
   .content-card-title
     | Contract
+  .row
+    .col-xs-12.col-md-6
+      .show-field
+        label= t(:summary, scope: [:form, :labels, :job])
+        .show-value= @job.summary
+
+      .show-field
+        label= t(:scope_of_work, scope: [:form, :labels, :job])
+        .show-value= @job.scope_of_work || "Not Specified"
+
+      .show-field
+        label= t(:addendums, scope: [:form, :labels, :job])
+        .show-value= @job.addendums || "Not Specified"
+
+    .col-xs-12.col-md-6
+      .show-field
+        .row
+          .col-xs-12.col-lg-6
+            label= t(:contract_price, scope: [:form, :labels, :job])
+            .show-budget
+              - if @job.contract_price
+                = number_to_currency(@job.contract_price, precision: 0)
+              - else
+                | Not Specified
+          .col-xs-12.col-lg-6
+            label= t(:pay_type, scope: [:form, :labels, :job])
+            .show-value-em= @job.pay_type&.text || "Not Specified"
+
+      .show-field
+        .row
+          .col-xs-12.col-lg-6
+            label= t(:starts_on, scope: [:form, :labels, :job])
+            .show-value-em= l @job.starts_on
+          .col-xs-12.col-lg-6
+            label= t(:ends_on, scope: [:form, :labels, :job])
+            .show-value-em= @job.ends_on ? l(@job.ends_on) : "Not Specified"
+
+      .show-field
+        label Payment Schedule
+        .show-value
+          - if @job.payments.any?
+            table.table
+              - @job.payments.each do |payment|
+                tr
+                  td= payment.description
+                  td= number_to_currency(payment.amount, precision: 0)
+          - else
+            | None Specified
+
+      .show-field
+        label= t(:reporting_frequency, scope: [:form, :labels, :job])
+        .show-value= @job.reporting_frequency&.text || "None Specified"
+
+      .show-field
+        label Reporting Requirements
+        ul
+          - if @job.require_photos_on_updates?
+            li.show-value= t(:require_photos_on_updates, scope: [:form, :labels, :job])
+          - if @job.require_checkin?
+            li.show-value= t(:require_checkin, scope: [:form, :labels, :job])
+          - if @job.require_uniform?
+            li.show-value= t(:require_uniform, scope: [:form, :labels, :job])
+
   hr
   .form-actions
     = link_to "Edit", edit_company_job_contract_path(@job), class: "btn btn-primary"
