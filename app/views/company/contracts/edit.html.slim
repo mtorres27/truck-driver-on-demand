@@ -22,14 +22,12 @@
               = f.input :starts_on, html5: true
             .col-xs-12.col-md-6
               = f.input :ends_on, html5: true, required: true
-          .row.payment-schedule
-            .col-xs-12
-              label Payment Schedule
-            = f.simple_fields_for :payments do |ff|
-              .col-xs-8
-                = ff.input :description, label: false, placeholder: "Description"
-              .col-xs-4
-                = ff.input :amount, label: false, placeholder: "Amount", input_html: { value: number_with_precision(ff.object.amount, precision: 0) }
+          #payments
+            label Payment Schedule
+            = f.simple_fields_for :payments do |payment_form|
+              = render "payment_fields", f: payment_form
+            .links
+              = link_to_add_association 'Add', f, :payments
           label Reporting Requirements
           = f.input :reporting_frequency, as: :radio_buttons, item_wrapper_class: "inline", label: false
           = f.input :require_photos_on_updates

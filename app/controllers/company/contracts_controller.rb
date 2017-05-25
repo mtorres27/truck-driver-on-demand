@@ -34,7 +34,7 @@ class Company::ContractsController < Company::BaseController
         :require_photos_on_updates,
         :require_checkin,
         :require_uniform,
-        payments_attributes: [:id, :description, :amount, :due_on, :paid_on]
+        payments_attributes: [:id, :description, :amount, :due_on, :paid_on, :_destroy]
       )
     end
 

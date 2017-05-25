@@ -32,6 +32,7 @@ gem "activejob-perform_later", ">= 1.0.2"
 
 gem "simple_form", ">= 3.4.0"
 gem "kaminari", ">= 1.0.1"
+gem "cocoon", ">= 1.2.10"
 
 gem "shrine", ">= 2.6.1"
 gem "fastimage", ">= 2.1.0"
