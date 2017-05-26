@@ -45,7 +45,7 @@
           = f.button :submit, "Save", class: "btn btn-primary"
       - unless @job.new_record?
         .col-xs-12.col-sm-6.col-md-8.text-right
-          = link_to "Delete Job", company_job_path(@job), data: { confirm: "Are you sure?" }, method: :delete
+          = link_to "Delete Job", company_postings_job_path(@job), data: { confirm: "Are you sure?" }, method: :delete
 
 .modal#new_project role="dialog" tabindex="-1"
   .modal-dialog role="document"

@@ -1,8 +1,7 @@
 class Company::PaymentsController < Company::BaseController
-  before_action :set_job
 
   def index
-    @payments = @job.payments.order(:created_at)
+    @payments = current_company.payments.order(:created_at)
   end
 
   def request_quote

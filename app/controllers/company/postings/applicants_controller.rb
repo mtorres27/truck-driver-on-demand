@@ -1,4 +1,4 @@
-class Company::ApplicantsController < Company::BaseController
+class Company::Postings::ApplicantsController < Company::BaseController
   before_action :set_job
   before_action :set_applicant, only: [:request_quote, :accept]
 

@@ -84,10 +84,21 @@ class Job < ApplicationRecord
     applicants.with_state(:accepted).first&.freelancer
   end
 
-  def contract_paid
+  def payments_sum_paid
     payments.
       select { |p| p.paid_on.present? }.
-      sum { |p| payment.amount || 0 }
+      sum { |p| p.amount || 0 }
+  end
+
+  def payments_sum_outstanding
+    payments.
+      select { |p| p.paid_on.blank? }.
+      sum { |p| p.amount || 0 }
+  end
+
+  def payments_sum_total
+    payments.
+      sum { |p| p.amount || 0 }
   end
 
   private

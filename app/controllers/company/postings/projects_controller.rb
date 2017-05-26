@@ -1,4 +1,4 @@
-class Company::ProjectsController < Company::BaseController
+class Company::Postings::ProjectsController < Company::BaseController
   before_action :set_project, only: [:show, :edit, :update, :destroy]
 
   def index
@@ -27,7 +27,7 @@ class Company::ProjectsController < Company::BaseController
 
     if @project.save
       respond_to do |format|
-        format.html { redirect_to company_project_path(@project), notice: "Project created." }
+        format.html { redirect_to company_postings_project_path(@project), notice: "Project created." }
         format.js
         format.json { render json: @project, status: :created }
       end
@@ -48,7 +48,7 @@ class Company::ProjectsController < Company::BaseController
 
   def update
     if @project.update(project_params)
-      redirect_to company_project_path(@project), notice: "Project updated."
+      redirect_to company_postings_project_path(@project), notice: "Project updated."
     else
       render :edit
     end
@@ -56,7 +56,7 @@ class Company::ProjectsController < Company::BaseController
 
   def destroy
     @project.destroy
-    redirect_to company_projects_path, notice: "Project removed."
+    redirect_to company_postings_projects_path, notice: "Project removed."
   end
 
 

@@ -1,4 +1,4 @@
-class Company::ContractsController < Company::BaseController
+class Company::Postings::ContractsController < Company::BaseController
   before_action :set_job
 
   def show
@@ -10,7 +10,7 @@ class Company::ContractsController < Company::BaseController
 
   def update
     if @job.update(job_params)
-      redirect_to company_job_contract_path(@job), notice: "Contract updated."
+      redirect_to company_postings_job_contract_path(@job), notice: "Contract updated."
     else
       build_payments
       render :edit
@@ -34,7 +34,7 @@ class Company::ContractsController < Company::BaseController
         :require_photos_on_updates,
         :require_checkin,
         :require_uniform,
-        payments_attributes: [:id, :description, :amount, :due_on, :paid_on, :_destroy]
+        payments_attributes: [:id, :description, :amount, :_destroy]
       )
     end
 

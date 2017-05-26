@@ -34,8 +34,16 @@ class Project < ApplicationRecord
     jobs.sum { |job| job.contract_price || 0 }
   end
 
-  def contract_paid
-    jobs.sum { |job| job.contract_paid || 0 }
+  def payments_sum_paid
+    jobs.sum { |job| job.payments_sum_paid || 0 }
+  end
+
+  def payments_sum_oustanding
+    jobs.sum { |job| job.payments_sum_outstanding || 0 }
+  end
+
+  def payments_sum_total
+    jobs.sum { |job| job.payments_sum_total || 0 }
   end
 
   scope :open, -> { where(closed: false) }

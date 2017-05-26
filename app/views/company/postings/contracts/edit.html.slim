@@ -2,7 +2,7 @@
   = render partial: "company/shared/job_nav", locals: { job: @job }
 
 - content_for :body do
-  = simple_form_for(@job, url: company_job_contract_path(@job)) do |f|
+  = simple_form_for(@job, url: company_postings_job_contract_path(@job)) do |f|
     .form-inputs
       .row
         .col-sm-12.col-md-6.col-lg-7

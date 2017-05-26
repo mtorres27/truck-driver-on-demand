@@ -1,4 +1,4 @@
-class Company::JobsController < Company::BaseController
+class Company::Postings::JobsController < Company::BaseController
   before_action :set_job, only: [:show, :edit, :update, :destroy, :contract, :edit_contract, :update_contract]
 
   def new
@@ -17,7 +17,7 @@ class Company::JobsController < Company::BaseController
     @job.published = true if job_params[:published]
 
     if @job.save
-      redirect_to company_job_path(@job), notice: "Job created."
+      redirect_to company_postings_job_path(@job), notice: "Job created."
     else
       render :new
     end
@@ -37,7 +37,7 @@ class Company::JobsController < Company::BaseController
     end
 
     if @job.update(job_params)
-      redirect_to company_job_path(@job), notice: "Job updated."
+      redirect_to company_postings_job_path(@job), notice: "Job updated."
     else
       render :edit
     end
@@ -45,7 +45,7 @@ class Company::JobsController < Company::BaseController
 
   def destroy
     @job.destroy
-    redirect_to company_projects_path, notice: "Job removed."
+    redirect_to company_postings_projects_path, notice: "Job removed."
   end
 
 
@@ -54,7 +54,7 @@ class Company::JobsController < Company::BaseController
     def set_job
       @job = Job.find(params[:id])
       unless @job.project.company_id == current_company.id
-        redirect_to company_projects_path, error: "Invalid project selected."
+        redirect_to company_postings_projects_path, error: "Invalid project selected."
       end
     end
 

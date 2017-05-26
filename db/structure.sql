@@ -383,8 +383,9 @@ CREATE TABLE payments (
     job_id bigint,
     description character varying NOT NULL,
     amount numeric(10,2) NOT NULL,
-    due_on timestamp without time zone,
+    issued_on timestamp without time zone,
     paid_on timestamp without time zone,
+    attachment_data text,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL
 );

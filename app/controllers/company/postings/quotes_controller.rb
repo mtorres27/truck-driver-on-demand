@@ -1,4 +1,4 @@
-class Company::QuotesController < Company::BaseController
+class Company::Postings::QuotesController < Company::BaseController
   before_action :set_applicant
 
   def index
@@ -20,7 +20,7 @@ class Company::QuotesController < Company::BaseController
     def set_applicant
       @applicant = Applicant.includes(job: :project).find(params[:applicant_id])
       unless @applicant.job.project.company_id == current_company.id
-        redirect_back fallback_location: company_projects_path, error: "Invalid applicant selected."
+        redirect_back fallback_location: company_postings_projects_path, error: "Invalid applicant selected."
       end
     end
 
