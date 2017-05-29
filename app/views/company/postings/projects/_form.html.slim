@@ -1,4 +1,4 @@
-= simple_form_for([:company, project], remote: true) do |f|
+= simple_form_for([:company, :postings, project], remote: true) do |f|
   .form-inputs
     = f.input :name, placeholder: "Enter the project name"
     = f.input :external_project_id, placeholder: "Enter the project number"

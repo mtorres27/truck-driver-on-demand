@@ -1,4 +1,4 @@
-= simple_form_for([:company, @job]) do |f|
+= simple_form_for([:company, :postings, @job]) do |f|
   .form-inputs
     .row
       .col-sm-12.col-md-6.col-lg-7
@@ -50,7 +50,7 @@
 .modal#new_project role="dialog" tabindex="-1"
   .modal-dialog role="document"
     .modal-content
-      = simple_form_for([:company, current_company.projects.new], remote: true) do |f|
+      = simple_form_for([:company, :postings, current_company.projects.new], remote: true) do |f|
         .modal-header
           h2 Create a New Project
         .modal-body

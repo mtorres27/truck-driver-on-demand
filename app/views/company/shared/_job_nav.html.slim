@@ -1,6 +1,8 @@
 .job-nav
   h1
-    = link_to "&#8592;".html_safe, company_postings_projects_path, class: "back-arrow"
+    .job-header-top
+      = job_state_label(job)
+      = link_to "&#8592; #{job.project.name}".html_safe, company_postings_projects_path, class: "project-name"
     = job.title || "New Job"
   ul.list-inline.page-nav
     - if job.new_record?
