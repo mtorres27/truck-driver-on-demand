@@ -67,6 +67,7 @@
           - if @job.require_uniform?
             li.show-value= t(:require_uniform, scope: [:form, :labels, :job])
 
-  hr
-  .form-actions
-    = link_to "Edit", edit_company_postings_job_contract_path(@job), class: "btn btn-primary"
+  - if @job.pre_contracted?
+    hr
+    .form-actions
+      = link_to "Edit", edit_company_postings_job_contract_path(@job), class: "btn btn-primary"

@@ -13,8 +13,17 @@
       li class=("active" if controller.controller_name == "applicants")
         = link_to "Applicants", company_postings_job_applicants_path(job)
       li class=("active" if controller.controller_name == "contracts")
-        = link_to "Contract", company_postings_job_contract_path(job)
+        - if job.pre_negotiated?
+          | Contract
+        - else
+          = link_to "Contract", company_postings_job_contract_path(job)
       li class=("active" if controller.controller_name == "messages")
-        = link_to "Progress", company_postings_job_messages_path(job)
+        - if job.pre_contracted?
+          | Progress
+        - else
+          = link_to "Progress", company_postings_job_messages_path(job)
       li class=("active" if controller.controller_name == "payments")
-        = link_to "Payments", company_postings_job_payments_path(job)
+        - if job.pre_contracted?
+          | Payments
+        - else
+          = link_to "Payments", company_postings_job_payments_path(job)

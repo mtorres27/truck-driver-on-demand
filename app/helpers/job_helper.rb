@@ -4,6 +4,8 @@ module JobHelper
       company_postings_job_path(job)
     elsif job.published?
       company_postings_job_applicants_path(job) \
+    elsif job.quoted?
+      company_postings_job_applicants_path(job) \
     elsif job.negotiated?
       company_postings_job_contract_path(job) \
     elsif job.contracted?

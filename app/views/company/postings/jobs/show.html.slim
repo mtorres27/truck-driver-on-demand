@@ -60,6 +60,7 @@
           - if @job.budget_is_public?
             li.show-value= t(:budget_is_public, scope: [:form, :labels, :job])
 
-  hr
-  .form-actions
-    = link_to "Edit", edit_company_postings_job_path(@job), class: "btn btn-primary"
+  - if @job.pre_contracted?
+    hr
+    .form-actions
+      = link_to "Edit", edit_company_postings_job_path(@job), class: "btn btn-primary"

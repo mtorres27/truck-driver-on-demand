@@ -65,6 +65,14 @@ class Job < ApplicationRecord
     :completed
   ], predicates: true, scope: true
 
+  def pre_negotiated?
+    %w(created published quoted).include?(state)
+  end
+
+  def pre_contracted?
+    pre_negotiated? || negotiated?
+  end
+
   enumerize :reporting_frequency, in: [
     :daily,
     :every_other_day,
