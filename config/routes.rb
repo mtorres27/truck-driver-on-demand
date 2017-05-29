@@ -25,8 +25,8 @@ Rails.application.routes.draw do
       resources :jobs, except: [:index] do
         resources :applicants
         resource :contract, only: [:show, :edit, :update]
-        resources :messages, only: [:index]
-        resources :payments, only: [:index]
+        resources :messages, only: [:index, :create]
+        resources :payments, only: [:index, :update]
       end
     end
   end

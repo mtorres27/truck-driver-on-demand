@@ -172,7 +172,7 @@ CREATE TABLE companies (
     lng numeric(9,6),
     hq_country character varying,
     description character varying,
-    logo_data text,
+    avatar_data text,
     disabled boolean DEFAULT false NOT NULL,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL

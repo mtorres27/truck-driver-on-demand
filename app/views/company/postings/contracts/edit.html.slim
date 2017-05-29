@@ -27,7 +27,7 @@
             = f.simple_fields_for :payments do |payment_form|
               = render "payment_fields", f: payment_form
             .links
-              = link_to_add_association 'Add', f, :payments
+              = link_to_add_association 'Add Payment', f, :payments, class: "btn btn-default"
           label Reporting Requirements
           = f.input :reporting_frequency, as: :radio_buttons, item_wrapper_class: "inline", label: false
           = f.input :require_photos_on_updates

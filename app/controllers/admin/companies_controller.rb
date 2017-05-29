@@ -52,6 +52,6 @@ class Admin::CompaniesController < Admin::BaseController
 
     def company_params
       # params.fetch(:company, {:name, :email})
-      params.require(:company).permit(:name, :email, :logo)
+      params.require(:company).permit(:name, :email, :avatar)
     end
 end

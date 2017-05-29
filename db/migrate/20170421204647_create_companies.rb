@@ -13,7 +13,7 @@ class CreateCompanies < ActiveRecord::Migration[5.1]
       t.decimal :lng, precision: 9, scale: 6
       t.string :hq_country
       t.string :description
-      t.text :logo_data
+      t.text :avatar_data
       t.boolean :disabled, null: false, default: false, index: true
 
       t.timestamps

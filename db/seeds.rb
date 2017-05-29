@@ -71,5 +71,21 @@ schools.sample(20).each do |school|
     4.times do
       job.messages.create!(authorable: applicant.freelancer, body: Faker::ChuckNorris.fact)
     end
+    job.payments.create(
+      description: "Deposit",
+      amount: 200,
+      issued_on: 7.days.ago,
+      paid_on: 6.days.ago
+    )
+    job.payments.create(
+      description: "First Installment",
+      amount: 1620,
+      issued_on: 3.days.ago
+    )
+    job.payments.create(
+      description: "Final Payment",
+      amount: 2200,
+      issued_on: 7.days.from_now
+    )
   end
 end

@@ -15,6 +15,8 @@ en:
         starts_on: "Est. Start"
       project:
         external_project_id: "Project Number"
+      company:
+        avatar: "Logo"
       job:
         project: "Project Reference"
         title: "Job Title"
@@ -26,6 +28,8 @@ en:
         contract_price: "Job Contract Price"
         require_checkin: "Require checkin upon arrival at job site"
         require_uniform: "Wear uniform to job location"
+      message:
+        body: "Post a new message"
     # Examples
     # labels:
     #   defaults:

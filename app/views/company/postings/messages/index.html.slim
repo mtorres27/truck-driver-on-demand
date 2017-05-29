@@ -4,7 +4,22 @@
 - content_for :body do
   .content-card-title
     | Job Progress Report
-  table.table.table-bordered
+  .post
+    = simple_form_for(@message, url: company_postings_job_messages_path(@job)) do |f|
+      .row
+        .col-xs-12
+          = f.input :body, as: :text
+        .col-xs-6
+          = f.input :attachment, as: :file, label: false
+        .col-xs-6.text-right
+          = f.submit "Post Message", class: "btn btn-primary"
+
+  label Messages and Activity
+  ol.media-list
     - @messages.each do |message|
-      tr
-        td= message.body
+      li.media
+        .media-left
+          = image_tag message.authorable.avatar_url, size: "65x65", class: "author-avatar"
+        .media-body
+          = message.body
+          = message.attachment_url

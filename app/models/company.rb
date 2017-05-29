@@ -25,7 +25,7 @@ class Company < ApplicationRecord
   include Loginable
   include Geocodable
   include Disableable
-  include LogoUploader[:logo]
+  include AvatarUploader[:avatar]
 
   has_many :identities, as: :loginable, dependent: :destroy
   has_many :projects, -> { order(updated_at: :desc) }, dependent: :destroy
