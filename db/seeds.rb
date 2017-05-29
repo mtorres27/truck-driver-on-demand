@@ -68,8 +68,16 @@ schools.sample(20).each do |school|
     quote = applicant.quotes.order(created_at: :desc).first
     quote.update_column(:rejected, false)
     job.update_column(:contract_price, quote.amount)
-    4.times do
-      job.messages.create!(authorable: applicant.freelancer, body: Faker::ChuckNorris.fact)
+    4.times do |idx|
+      job.messages.create!(
+        authorable: applicant.freelancer,
+        body: Faker::ChuckNorris.fact,
+        attachment: File.new(Rails.root.join("creative", "messages", "#{idx + 1}.png"))
+      )
+      job.messages.create!(
+        authorable: job.company,
+        body: Faker::Company.catch_phrase
+      )
     end
     job.payments.create(
       description: "Deposit",
