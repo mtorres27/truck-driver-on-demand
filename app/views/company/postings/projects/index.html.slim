@@ -32,6 +32,7 @@
                 h3
                   a data-toggle="collapse" href="#jobsFor#{project.id}" type="button" aria-expanded="false" aria-controls="jobsFor#{project.id}"
                     = "#{project.name} - #{project.external_project_id || project.id}"
+                  = link_to "Edit", edit_company_postings_project_path(project), class: "project-edit-link"
               .col-xs-4.col-md-3.col-lg-2.text-right
                 button.btn.btn-default data-toggle="collapse" data-target="#jobsFor#{project.id}" type="button" aria-expanded="false" aria-controls="jobsFor#{project.id}"
                   | Show #{project.jobs.size} Jobs

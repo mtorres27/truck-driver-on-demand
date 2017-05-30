@@ -27,7 +27,7 @@ class Company::Postings::ProjectsController < Company::BaseController
 
     if @project.save
       respond_to do |format|
-        format.html { redirect_to company_postings_project_path(@project), notice: "Project created." }
+        format.html { redirect_to company_postings_projects_path, notice: "Project created." }
         format.js
         format.json { render json: @project, status: :created }
       end
@@ -48,7 +48,7 @@ class Company::Postings::ProjectsController < Company::BaseController
 
   def update
     if @project.update(project_params)
-      redirect_to company_postings_project_path(@project), notice: "Project updated."
+      redirect_to company_postings_projects_path, notice: "Project updated."
     else
       render :edit
     end

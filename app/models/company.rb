@@ -15,7 +15,7 @@
 #  lng               :decimal(9, 6)
 #  hq_country        :string
 #  description       :string
-#  logo_data         :text
+#  avatar_data       :text
 #  disabled          :boolean          default("false"), not null
 #  created_at        :datetime         not null
 #  updated_at        :datetime         not null

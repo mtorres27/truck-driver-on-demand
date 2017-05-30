@@ -4,8 +4,8 @@ class CreatePayments < ActiveRecord::Migration[5.1]
       t.references :job, foreign_key: true
       t.string :description, null: false
       t.decimal :amount, precision: 10, scale: 2, null: false
-      t.datetime :issued_on
-      t.datetime :paid_on
+      t.date :issued_on
+      t.date :paid_on
       t.text :attachment_data
 
       t.timestamps

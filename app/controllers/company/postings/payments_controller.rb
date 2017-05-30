@@ -15,7 +15,7 @@ class Company::Postings::PaymentsController < Company::BaseController
 
   def mark_as_paid
     @payment.mark_as_paid!
-    redirect_to company_postings_job_payments_path(@job), notice: "Payment has been marked as paid."
+    redirect_to company_postings_job_payment_path(@job, @payment), notice: "Payment has been marked as paid."
   end
 
   private

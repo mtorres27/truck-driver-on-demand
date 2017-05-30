@@ -1,8 +1,11 @@
 = simple_form_for([:company, :postings, project], remote: true) do |f|
   .form-inputs
     = f.input :name, placeholder: "Enter the project name"
-    = f.input :external_project_id, placeholder: "Enter the project number"
-    = f.input :budget, placeholder: "Enter a budget"
+    .row
+      .col-xs-12.col-sm-6
+        = f.input :external_project_id, placeholder: "Enter the project number"
+      .col-xs-12.col-sm-6
+        = f.input :budget, placeholder: "Enter a budget", input_html: { value: number_with_precision(f.object.budget, precision: 0) }
     = f.input :address, placeholder: "Enter the address"
     .row
       .col-xs-12.col-md-6
@@ -13,5 +16,5 @@
   .form-actions
     = f.button :submit, class: "btn-primary"
     '
-    a.btn.btn-default data-dismiss="modal" href="#"
+    a.btn.btn-default data-dismiss="modal" href=company_postings_projects_path
       | Cancel

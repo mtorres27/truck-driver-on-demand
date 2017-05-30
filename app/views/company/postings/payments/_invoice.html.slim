@@ -1,17 +1,24 @@
 .content-card-title
   .row
     .col-xs-12.col-md-8
-      | Invoice
+      - if action_name == "print"
+        | Invoice
+      - else
+        - if @payment.paid_on.present?
+          | Paid on #{@payment.paid_on}
+        - elsif @payment.issued_on.present? && @payment.issued_on < Time.zone.now
+          | Unpaid, #{pluralize((Time.zone.now.to_date - @payment.issued_on).to_i, "day")} aging
+        - else
+          | Invoice
     .col-xs-12.col-md-4.text-right
-      - unless action_name == "print"
-        a href=print_company_postings_job_payment_path(@job, @payment) target="_blank" title="Print"
-          span.glyphicon.glyphicon-print aria-hidden=true
-        '
-        a href=print_company_postings_job_payment_path(@job, @payment, format: :pdf) title="Download"
-          span.glyphicon.glyphicon-download aria-hidden=true
-        - if @payment.paid_on.blank?
-          '
-          = link_to "Mark as Paid", mark_as_paid_company_postings_job_payment_path(@job, @payment), data: { confirm: "Mark this payment as being paid?" }, class: "btn btn-primary"
+      .invoice-actions
+        - unless action_name == "print"
+          a.icon href=print_company_postings_job_payment_path(@job, @payment) target="_blank" title="Print"
+            span.glyphicon.glyphicon-print aria-hidden=true
+          a.icon href=print_company_postings_job_payment_path(@job, @payment, format: :pdf) title="Download"
+            span.glyphicon.glyphicon-download aria-hidden=true
+          - if @payment.paid_on.blank?
+            = link_to "Mark as Paid", mark_as_paid_company_postings_job_payment_path(@job, @payment), data: { confirm: "Mark this payment as being paid?" }, class: "btn btn-primary"
 
 
 .row
@@ -34,9 +41,16 @@ br
     br
     | Date:
   .invoice-col-4
-    | 101
+    = @payment.id
     br
-    = @payment.issued_on.to_date
+    = @payment.issued_on
+
+br
+.row
+  .invoice-col-1
+    | Job:
+  .invoice-col-2
+    = @job.title
 
 .invoice-table-wrapper
   table.table
