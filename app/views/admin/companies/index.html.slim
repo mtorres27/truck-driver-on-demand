@@ -21,7 +21,7 @@ h2 Companies
             - if company.disabled?
               = link_to 'Enable', enable_admin_company_path(company)
               '  |
-              = link_to 'Delete', admin_company_path(company), data: { confirm: 'Are you sure?' }, method: :delete
+              = link_to 'Delete', admin_company_path(company), data: { confirm: "Are you sure?" }, method: :delete
             - else
               = link_to 'Disable', disable_admin_company_path(company)
 

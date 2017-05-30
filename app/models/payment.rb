@@ -17,4 +17,9 @@ class Payment < ApplicationRecord
 
   validates :job, presence: true
   validates :amount, presence: true, numericality: true, sane_price: true
+
+  def mark_as_paid!
+    self.paid_on = Time.zone.now.to_date
+    save
+  end
 end

@@ -35,4 +35,8 @@
             = pluralize((Time.zone.now.to_date - payment.issued_on.to_date).to_i, "day")
         td= payment.issued_on&.to_date
         td= payment.paid_on&.to_date
-        td Action
+        td
+          - if payment.paid_on
+            = link_to "View Invoice", company_postings_job_payment_path(@job, payment)
+          - else
+            = link_to "Mark as Paid", mark_as_paid_company_postings_job_payment_path(@job, payment), data: { confirm: "Mark this payment as being paid?" }

@@ -26,7 +26,10 @@ Rails.application.routes.draw do
         resources :applicants
         resource :contract, only: [:show, :edit, :update]
         resources :messages, only: [:index, :create]
-        resources :payments, only: [:index, :update]
+        resources :payments, only: [:index, :show] do
+          get :print, on: :member
+          get :mark_as_paid, on: :member
+        end
       end
     end
   end

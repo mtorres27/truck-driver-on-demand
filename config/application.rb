@@ -17,6 +17,8 @@ module Avjunction
 
     config.active_record.schema_format = :sql
 
+    config.middleware.use WickedPdf::Middleware, {}, only: %r[/payments\/.*\/print]
+
     # Authication providers
     config.middleware.use OmniAuth::Builder do
       provider(

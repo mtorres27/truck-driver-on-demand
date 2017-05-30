@@ -1,6 +1,41 @@
 .company-postings-payments
+
   .job-title, .job-paid
     font-size: 20px
     margin-bottom: 15px
+
   .job-paid
     text-align: right
+
+  .media-heading
+    h4
+      margin-top: 0
+
+  .invoice-col-1
+    +make-xs-column(2)
+    +make-lg-column(1)
+    text-align: right
+  .invoice-col-2
+    +make-xs-column(5)
+    +make-lg-column(7)
+  .invoice-col-3
+    +make-xs-column(2)
+    text-align: right
+  .invoice-col-4
+    +make-xs-column(3)
+    +make-lg-column(2)
+
+  .invoice-table-wrapper
+    margin: 20px 0
+    padding: 15px 30px
+    background-color: $gray-lighter
+
+    table
+      margin-bottom: 0
+    th
+      border-top: none
+      text-transform: uppercase
+    tr.total
+      font-weight: bold
+      td
+        border-top: 1px solid black
