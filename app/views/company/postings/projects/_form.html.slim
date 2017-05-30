@@ -18,3 +18,6 @@
     '
     a.btn.btn-default data-dismiss="modal" href=company_postings_projects_path
       | Cancel
+    - unless project.new_record?
+      '
+      = link_to "Delete", company_postings_project_path(project), class: "btn btn-danger", data: { confirm: "Are you sure?" }, method: :delete
