@@ -3,8 +3,9 @@
 # Table name: quotes
 #
 #  id              :integer          not null, primary key
-#  applicant_id    :integer
+#  applicant_id    :integer          not null
 #  amount          :decimal(10, 2)   not null
+#  pay_type        :string           default("fixed"), not null
 #  rejected        :boolean          default("false"), not null
 #  body            :text
 #  attachment_data :text
@@ -13,10 +14,12 @@
 #
 
 class Quote < ApplicationRecord
+  extend Enumerize
   include AttachmentUploader[:attachment]
 
   belongs_to :applicant, counter_cache: true
 
-  validates :applicant, presence: true
-  validates :amount, presence: true, numericality: true, sane_price: true
+  validates :amount, numericality: true, sane_price: true
+
+  enumerize :pay_type, in: [ :fixed, :hourly ], predicates: true
 end

@@ -1,7 +1,7 @@
 class CreateCompanies < ActiveRecord::Migration[5.1]
   def change
     create_table :companies do |t|
-      t.string :token, null: false
+      t.string :token
       t.string :email, null: false, index: true
       t.string :name, null: false, index: true
       t.string :contact_name, null: false

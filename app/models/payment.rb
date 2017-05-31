@@ -3,7 +3,7 @@
 # Table name: payments
 #
 #  id              :integer          not null, primary key
-#  job_id          :integer
+#  job_id          :integer          not null
 #  description     :string           not null
 #  amount          :decimal(10, 2)   not null
 #  issued_on       :date
@@ -16,8 +16,7 @@
 class Payment < ApplicationRecord
   belongs_to :job
 
-  validates :job, presence: true
-  validates :amount, presence: true, numericality: true, sane_price: true
+  validates :amount, numericality: true, sane_price: true
 
   def mark_as_paid!
     self.paid_on = Time.zone.now.to_date

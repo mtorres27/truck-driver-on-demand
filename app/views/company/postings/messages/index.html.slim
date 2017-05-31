@@ -2,7 +2,7 @@
   = render partial: "company/shared/job_nav", locals: { job: @job }
 
 - content_for :body do
-  .content-card-title
+  .content_card_title
     | Job Progress Report
   .post
     = simple_form_for(@message, url: company_postings_job_messages_path(@job)) do |f|

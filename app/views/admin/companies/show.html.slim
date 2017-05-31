@@ -1,8 +1,8 @@
 h2= @company.name
 p= mail_to @company.email
-- if @company.logo&.exists?
+- if @company.avatar&.exists?
   p
-    img src=@company.logo_url
+    img src=@company.avatar_url
 
 hr
 = link_to 'Edit', edit_admin_company_path(@company)

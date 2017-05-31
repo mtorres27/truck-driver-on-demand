@@ -3,7 +3,7 @@
 # Table name: projects
 #
 #  id                  :integer          not null, primary key
-#  company_id          :integer
+#  company_id          :integer          not null
 #  external_project_id :string
 #  name                :string           not null
 #  budget              :decimal(10, 2)   not null

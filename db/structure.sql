@@ -47,7 +47,7 @@ SET default_with_oids = false;
 
 CREATE TABLE admins (
     id bigint NOT NULL,
-    token character varying NOT NULL,
+    token character varying,
     email character varying NOT NULL,
     name character varying NOT NULL,
     created_at timestamp without time zone NOT NULL,
@@ -80,8 +80,8 @@ ALTER SEQUENCE admins_id_seq OWNED BY admins.id;
 
 CREATE TABLE applicants (
     id bigint NOT NULL,
-    job_id bigint,
-    freelancer_id bigint,
+    job_id bigint NOT NULL,
+    freelancer_id bigint NOT NULL,
     state character varying DEFAULT 'interested'::character varying NOT NULL,
     quotes_count integer DEFAULT 0 NOT NULL,
     created_at timestamp without time zone NOT NULL,
@@ -126,7 +126,7 @@ CREATE TABLE ar_internal_metadata (
 
 CREATE TABLE change_orders (
     id bigint NOT NULL,
-    job_id bigint,
+    job_id bigint NOT NULL,
     amount numeric(10,2) NOT NULL,
     body text NOT NULL,
     attachment_data text,
@@ -160,7 +160,7 @@ ALTER SEQUENCE change_orders_id_seq OWNED BY change_orders.id;
 
 CREATE TABLE companies (
     id bigint NOT NULL,
-    token character varying NOT NULL,
+    token character varying,
     email character varying NOT NULL,
     name character varying NOT NULL,
     contact_name character varying NOT NULL,
@@ -204,7 +204,7 @@ ALTER SEQUENCE companies_id_seq OWNED BY companies.id;
 
 CREATE TABLE freelancers (
     id bigint NOT NULL,
-    token character varying NOT NULL,
+    token character varying,
     email character varying NOT NULL,
     name character varying NOT NULL,
     avatar_data text,
@@ -254,7 +254,7 @@ ALTER SEQUENCE freelancers_id_seq OWNED BY freelancers.id;
 CREATE TABLE identities (
     id bigint NOT NULL,
     loginable_type character varying,
-    loginable_id bigint,
+    loginable_id bigint NOT NULL,
     provider character varying NOT NULL,
     uid character varying NOT NULL,
     last_sign_in_at timestamp without time zone,
@@ -288,7 +288,7 @@ ALTER SEQUENCE identities_id_seq OWNED BY identities.id;
 
 CREATE TABLE jobs (
     id bigint NOT NULL,
-    project_id bigint,
+    project_id bigint NOT NULL,
     title character varying NOT NULL,
     state character varying DEFAULT 'created'::character varying NOT NULL,
     summary text NOT NULL,
@@ -345,9 +345,9 @@ ALTER SEQUENCE jobs_id_seq OWNED BY jobs.id;
 
 CREATE TABLE messages (
     id bigint NOT NULL,
-    job_id bigint,
+    job_id bigint NOT NULL,
     authorable_type character varying,
-    authorable_id bigint,
+    authorable_id bigint NOT NULL,
     body text,
     attachment_data text,
     created_at timestamp without time zone NOT NULL,
@@ -380,7 +380,7 @@ ALTER SEQUENCE messages_id_seq OWNED BY messages.id;
 
 CREATE TABLE payments (
     id bigint NOT NULL,
-    job_id bigint,
+    job_id bigint NOT NULL,
     description character varying NOT NULL,
     amount numeric(10,2) NOT NULL,
     issued_on date,
@@ -416,7 +416,7 @@ ALTER SEQUENCE payments_id_seq OWNED BY payments.id;
 
 CREATE TABLE projects (
     id bigint NOT NULL,
-    company_id bigint,
+    company_id bigint NOT NULL,
     external_project_id character varying,
     name character varying NOT NULL,
     budget numeric(10,2) NOT NULL,
@@ -458,8 +458,9 @@ ALTER SEQUENCE projects_id_seq OWNED BY projects.id;
 
 CREATE TABLE quotes (
     id bigint NOT NULL,
-    applicant_id bigint,
+    applicant_id bigint NOT NULL,
     amount numeric(10,2) NOT NULL,
+    pay_type character varying DEFAULT 'fixed'::character varying NOT NULL,
     rejected boolean DEFAULT false NOT NULL,
     body text,
     attachment_data text,

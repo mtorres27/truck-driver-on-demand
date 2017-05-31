@@ -2,7 +2,7 @@
   = render partial: "company/shared/job_nav", locals: { job: @job }
 
 - content_for :body do
-  .content-card-title
+  .content_card_title
     | Applicants
   ul.media-list
     - @applicants.each do |applicant|
@@ -10,15 +10,32 @@
         .media-left
           .media-object= image_tag(applicant.freelancer.avatar_url, size: "70x70", class: "freelancer_avatar")
         .media-body
-          .col-xs-12.col-sm-10
+          .col-xs-12.col-md-5
             = applicant_state_label(applicant)
             - applicant.freelancer.tap do |freelancer|
               .freelancer_name= freelancer.name
               .freelancer_area= freelancer.area
               .freelancer_tagline= freelancer.tagline
-          .col-xs-12.col-sm-2
+          .col-xs-12.col-md-5.text-right
+            .btn-group role="group" aria-label="..."
+              - if applicant.interested?
+                a.btn.btn-default type="button"
+                  | Request Quote
+              - elsif applicant.quotes.any?
+                a.btn.btn-default type="button"
+                  | View Quote
+              a.btn.btn-default type="button"
+                | Message
+              - if applicant.quotes.any? && !applicant.quotes.last.rejected?
+                a.btn.btn-default type="button"
+                  | Decline
+              - if applicant.interested?
+                a.btn.btn-default type="button"
+                  | Ignore
+          .col-xs-12.col-md-2
             - unless applicant.interested?
               - applicant.quotes.order(created_at: :desc).first&.tap do |quote|
-                - if quote.amount > @job.budget
-                  .quote_over_budget= "Over Budget"
+                - if quote.fixed? && quote.amount > @job.budget
+                  .quote_over-budget= "Over Budget"
                 .quote_amount= number_to_currency(quote.amount, precision: 0)
+                .quote_pay_type= quote.pay_type.text

@@ -1,29 +1,35 @@
-.job-nav
+.job_nav
   h1
-    .job-header-top
+    .job_header_top
       = job_state_label(job)
-      = link_to "&#8592; #{job.project.name}".html_safe, company_postings_projects_path, class: "project-name"
+      a.project_name href=company_postings_projects_path
+        | &#8592; #{job.project.name}
     = job.title || "New Job"
-  ul.list-inline.page-nav
+  ul.list-inline.page_nav
     - if job.new_record?
       li.active Job Details
     - else
       li class=("active" if controller.controller_name == "jobs")
-        = link_to "Job Details", company_postings_job_path(job)
+        a href=company_postings_job_path(job)
+          | Job Details
       li class=("active" if controller.controller_name == "applicants")
-        = link_to "Applicants", company_postings_job_applicants_path(job)
+        a href=company_postings_job_applicants_path(job)
+          | Applicants
       li class=("active" if controller.controller_name == "contracts")
         - if job.pre_negotiated?
           | Contract
         - else
-          = link_to "Contract", company_postings_job_contract_path(job)
+          a href=company_postings_job_contract_path(job)
+            | Contract
       li class=("active" if controller.controller_name == "messages")
         - if job.pre_contracted?
           | Progress
         - else
-          = link_to "Progress", company_postings_job_messages_path(job)
+          a href=company_postings_job_messages_path(job)
+            | Progress
       li class=("active" if controller.controller_name == "payments")
         - if job.pre_contracted?
           | Payments
         - else
-          = link_to "Payments", company_postings_job_payments_path(job)
+          a href=company_postings_job_payments_path(job)
+            | Payments

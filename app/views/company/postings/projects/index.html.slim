@@ -2,23 +2,23 @@
   .row
     .col-sm-8.col-xs-12
       h1 Job Postings
-    .col-sm-4.col-xs-12.text-right.post-new-job
+    .col-sm-4.col-xs-12.text-right.post_new_job
       = link_to "Post a New Job", new_company_postings_job_path, class: "btn btn-primary", role: "button"
 
   .row
     .col-xs-12
-      ul.list-inline.page-nav
+      ul.list-inline.page_nav
         li class=("active" unless params[:closed]) role="presentation"
           = link_to "Open Projects", company_postings_projects_path, "aria-controlers" => "open", role: "tab"
         li class=("active" if params[:closed]) role="presentation"
           = link_to "Closed Projects", company_postings_projects_path(closed: true), "aria-controlers" => "closed", role: "tab"
 
 - content_for :body do
-  .content-card-title
+  .content_card_title
     .row
       .col-md-10.col-sm-12
         h2 #{@projects.total_count} #{params[:closed] ? 'Closed' : 'Open'} Projects with a total of #{@job_count} jobs.
-      .col-md-2.col-sm-12.text-right.expand-all
+      .col-md-2.col-sm-12.text-right.expand_all
         button.btn.btn-default type="button" onClick="toggleJobs(this)" data-action="show"
           | Expand All
 
@@ -32,7 +32,7 @@
                 h3
                   a data-toggle="collapse" href="#jobsFor#{project.id}" type="button" aria-expanded="false" aria-controls="jobsFor#{project.id}"
                     = "#{project.name} - #{project.external_project_id || project.id}"
-                  = link_to "Edit", edit_company_postings_project_path(project), class: "project-edit-link"
+                  = link_to "Edit", edit_company_postings_project_path(project), class: "project_edit_link"
               .col-xs-4.col-md-3.col-lg-2.text-right
                 button.btn.btn-default data-toggle="collapse" data-target="#jobsFor#{project.id}" type="button" aria-expanded="false" aria-controls="jobsFor#{project.id}"
                   | Show #{project.jobs.size} Jobs

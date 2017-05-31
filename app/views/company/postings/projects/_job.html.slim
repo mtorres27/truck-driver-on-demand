@@ -1,34 +1,34 @@
 .col-xs-12.col-sm-6.col-md-4.col-lg-3
   a.card.job href=stateful_company_postings_job_path(job)
     = job_state_label(job)
-    .job-title= job.title
-    .job-cell.job-cell-top-left
-      .job-value= number_to_currency(job.budget || 0, precision: 0)
-      .job-key Budget
-    .job-cell.job-cell-top-right
+    .job_title= job.title
+    .job_cell.job_cell_top_left
+      .job_value= number_to_currency(job.budget || 0, precision: 0)
+      .job_key Budget
+    .job_cell.job_cell_top_right
       - if job.created?
-        .job-value -
-        .job-key &nbsp;
+        .job_value -
+        .job_key &nbsp;
       - elsif job.published? || job.quoted?
-        .job-value= job.applicants.size
-        .job-key Applicants
+        .job_value= job.applicants.size
+        .job_key Applicants
       - else
-        .job-value= number_to_currency(job.contract_price || 0, precision: 0)
-        .job-key Contract
-    .job-cell.job-cell-bot-left
+        .job_value= number_to_currency(job.contract_price || 0, precision: 0)
+        .job_key Contract
+    .job_cell.job_cell_bot_left
       - if job.created?
-        .job-value -
-        .job-key &nbsp;
+        .job_value -
+        .job_key &nbsp;
       - elsif job.published? || job.quoted?
-        .job-value= job.quotes.size
-        .job-key Quotes
+        .job_value= job.quotes.size
+        .job_key Quotes
       - else
-        .job-value= number_to_currency(job.payments_sum_paid || 0, precision: 0)
-        .job-key Paid
-    .job-cell.job-cell-bot-right
+        .job_value= number_to_currency(job.payments_sum_paid || 0, precision: 0)
+        .job_key Paid
+    .job_cell.job_cell_bot_right
       - if job.created?
-        .job-value -
-        .job-key &nbsp;
+        .job_value -
+        .job_key &nbsp;
       - else
-        .job-value= job.messages.size
-        .job-key Messages
+        .job_value= job.messages.size
+        .job_key Messages

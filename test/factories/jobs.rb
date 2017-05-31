@@ -3,7 +3,7 @@
 # Table name: jobs
 #
 #  id                        :integer          not null, primary key
-#  project_id                :integer
+#  project_id                :integer          not null
 #  title                     :string           not null
 #  state                     :string           default("created"), not null
 #  summary                   :text             not null

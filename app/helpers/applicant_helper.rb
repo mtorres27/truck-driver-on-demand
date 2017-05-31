@@ -8,7 +8,7 @@ module ApplicantHelper
       accepted: :success
     }
 
-    content_tag(:span, class: "applicant-state label label-#{mappings[applicant.state.to_sym]}") do
+    content_tag(:span, class: "applicant_state label label-#{mappings[applicant.state.to_sym]}") do
       applicant.state.text
     end
   end

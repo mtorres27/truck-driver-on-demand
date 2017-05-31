@@ -2,24 +2,24 @@
   = render partial: "company/shared/job_nav", locals: { job: @job }
 
 - content_for :body do
-  .content-card-title
+  .content_card_title
     | Contract
   .row
     .col-xs-12.col-md-6
-      .show-field
+      .show_field
         label= t(:summary, scope: [:form, :labels, :job])
-        .show-value= @job.summary
+        .show_value= @job.summary
 
-      .show-field
+      .show_field
         label= t(:scope_of_work, scope: [:form, :labels, :job])
-        .show-value= @job.scope_of_work || "Not Specified"
+        .show_value= @job.scope_of_work || "Not Specified"
 
-      .show-field
+      .show_field
         label= t(:addendums, scope: [:form, :labels, :job])
-        .show-value= @job.addendums || "Not Specified"
+        .show_value= @job.addendums || "Not Specified"
 
     .col-xs-12.col-md-6
-      .show-field
+      .show_field
         .row
           .col-xs-12.col-lg-6
             label= t(:contract_price, scope: [:form, :labels, :job])
@@ -30,20 +30,20 @@
                 | Not Specified
           .col-xs-12.col-lg-6
             label= t(:pay_type, scope: [:form, :labels, :job])
-            .show-value-em= @job.pay_type&.text || "Not Specified"
+            .show_value_em= @job.pay_type&.text || "Not Specified"
 
-      .show-field
+      .show_field
         .row
           .col-xs-12.col-lg-6
             label= t(:starts_on, scope: [:form, :labels, :job])
-            .show-value-em= l @job.starts_on
+            .show_value_em= l @job.starts_on
           .col-xs-12.col-lg-6
             label= t(:ends_on, scope: [:form, :labels, :job])
-            .show-value-em= @job.ends_on ? l(@job.ends_on) : "Not Specified"
+            .show_value_em= @job.ends_on ? l(@job.ends_on) : "Not Specified"
 
-      .show-field
+      .show_field
         label Payment Schedule
-        .show-value
+        .show_value
           - if @job.payments.any?
             table.table
               - @job.payments.each do |payment|
@@ -53,19 +53,19 @@
           - else
             | None Specified
 
-      .show-field
+      .show_field
         label= t(:reporting_frequency, scope: [:form, :labels, :job])
-        .show-value= @job.reporting_frequency&.text || "None Specified"
+        .show_value= @job.reporting_frequency&.text || "None Specified"
 
-      .show-field
+      .show_field
         label Reporting Requirements
         ul
           - if @job.require_photos_on_updates?
-            li.show-value= t(:require_photos_on_updates, scope: [:form, :labels, :job])
+            li.show_value= t(:require_photos_on_updates, scope: [:form, :labels, :job])
           - if @job.require_checkin?
-            li.show-value= t(:require_checkin, scope: [:form, :labels, :job])
+            li.show_value= t(:require_checkin, scope: [:form, :labels, :job])
           - if @job.require_uniform?
-            li.show-value= t(:require_uniform, scope: [:form, :labels, :job])
+            li.show_value= t(:require_uniform, scope: [:form, :labels, :job])
 
   - if @job.pre_contracted?
     hr

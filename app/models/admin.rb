@@ -3,7 +3,7 @@
 # Table name: admins
 #
 #  id         :integer          not null, primary key
-#  token      :string           not null
+#  token      :string
 #  email      :string           not null
 #  name       :string           not null
 #  created_at :datetime         not null
@@ -15,6 +15,5 @@ class Admin < ApplicationRecord
 
   has_many :identities, as: :loginable, dependent: :destroy
 
-  validates :email, presence: true, uniqueness: { case_sensitive: false }
-  validates :name, presence: true
+  validates :email, uniqueness: { case_sensitive: false }
 end

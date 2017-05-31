@@ -3,7 +3,7 @@
 # Table name: projects
 #
 #  id                  :integer          not null, primary key
-#  company_id          :integer
+#  company_id          :integer          not null
 #  external_project_id :string
 #  name                :string           not null
 #  budget              :decimal(10, 2)   not null
@@ -25,9 +25,7 @@ class Project < ApplicationRecord
   belongs_to :company
   has_many :jobs, -> { order(updated_at: :desc) }, dependent: :destroy
 
-  validates :company, presence: true
-  validates :name, presence: true
-  validates :budget, presence: true, numericality: true, sane_price: true
+  validates :budget, numericality: true, sane_price: true
   validates :duration, numericality: { only_integer: true, greater_than: 0, less_than: 365 }, allow_blank: true
 
   def contract_value

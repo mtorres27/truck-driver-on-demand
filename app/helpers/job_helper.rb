@@ -25,7 +25,7 @@ module JobHelper
       completed: :danger
     }
 
-    content_tag(:span, class: "job-state label label-#{mappings[job.state.to_sym]}") do
+    content_tag(:span, class: "job_state label label-#{mappings[job.state.to_sym]}") do
       job.state.text
     end
   end

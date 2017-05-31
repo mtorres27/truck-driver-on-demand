@@ -53,47 +53,56 @@ schools.sample(20).each do |school|
           freelancer: Freelancer.order("RANDOM()").first,
           state: Applicant.state.values.select{ |v| v != :accepted }.sample
         )
-        applicant.quotes.create!(
-          amount: [(budget.to_f - Faker::Number.number(2).to_f), (budget.to_f + Faker::Number.number(2).to_f)].sample,
+        quote = applicant.quotes.new(
+          pay_type: Quote.pay_type.values.sample,
           rejected: true
         )
+        quote.amount =
+          if quote.fixed?
+            [(budget.to_f - Faker::Number.number(2).to_f), (budget.to_f + Faker::Number.number(2).to_f)].sample
+          else
+            Faker::Number.number(2).to_f
+          end
+        quote.save
       rescue Exception => e
         puts e
         # do nothing, this is just in case we get the exact same freelancer more than once
       end
     end
 
-    applicant = job.applicants.order(created_at: :desc).first
-    applicant.update_column(:state, "accepted")
-    quote = applicant.quotes.order(created_at: :desc).first
-    quote.update_column(:rejected, false)
-    job.update_column(:contract_price, quote.amount)
-    4.times do |idx|
-      job.messages.create!(
-        authorable: applicant.freelancer,
-        body: Faker::ChuckNorris.fact,
-        attachment: File.new(Rails.root.join("creative", "messages", "#{idx + 1}.png"))
+    unless job.pre_negotiated?
+      applicant = job.applicants.order(created_at: :desc).first
+      quote = applicant.quotes.order(created_at: :desc).first
+      applicant.update_columns(state: "accepted")
+      quote.update_columns(rejected: false)
+      job.update_columns(contract_price: quote.amount, pay_type: quote.pay_type)
+      4.times do |idx|
+        job.messages.create!(
+          authorable: applicant.freelancer,
+          body: Faker::ChuckNorris.fact,
+          attachment: File.new(Rails.root.join("creative", "messages", "#{idx + 1}.png"))
+        )
+        job.messages.create!(
+          authorable: job.company,
+          body: Faker::Company.catch_phrase
+        )
+      end
+      job.payments.create(
+        description: "Deposit",
+        amount: 200,
+        issued_on: 7.days.ago,
+        paid_on: 6.days.ago
       )
-      job.messages.create!(
-        authorable: job.company,
-        body: Faker::Company.catch_phrase
+      job.payments.create(
+        description: "First Installment",
+        amount: 1620,
+        issued_on: 3.days.ago
+      )
+      job.payments.create(
+        description: "Final Payment",
+        amount: 2200,
+        issued_on: 7.days.from_now
       )
     end
-    job.payments.create(
-      description: "Deposit",
-      amount: 200,
-      issued_on: 7.days.ago,
-      paid_on: 6.days.ago
-    )
-    job.payments.create(
-      description: "First Installment",
-      amount: 1620,
-      issued_on: 3.days.ago
-    )
-    job.payments.create(
-      description: "Final Payment",
-      amount: 2200,
-      issued_on: 7.days.from_now
-    )
   end
 end

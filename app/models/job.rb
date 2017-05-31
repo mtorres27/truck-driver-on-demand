@@ -3,7 +3,7 @@
 # Table name: jobs
 #
 #  id                        :integer          not null, primary key
-#  project_id                :integer
+#  project_id                :integer          not null
 #  title                     :string           not null
 #  state                     :string           default("created"), not null
 #  summary                   :text             not null
@@ -36,6 +36,8 @@
 
 class Job < ApplicationRecord
   extend Enumerize
+
+  schema_validations except: :working_days
 
   belongs_to :project
   has_one :company, through: :project
@@ -79,15 +81,11 @@ class Job < ApplicationRecord
     :weekly
   ]
 
-  validates :project, presence: true
-  validates :title, presence: true
-  validates :summary, presence: true
-  validates :budget, presence: true, numericality: true, sane_price: true
-  validates :job_function, presence: true, inclusion: { in: job_function.values }
-  validates :starts_on, presence: true
-  validates :duration, presence: true, numericality: { only_integer: true }
+  validates :budget, numericality: true, sane_price: true
+  validates :job_function, inclusion: { in: job_function.values }
+  validates :duration, numericality: { only_integer: true }
   validates :pay_type, inclusion: { in: pay_type.values }, allow_blank: true
-  validates :freelancer_type, presence: true, inclusion: { in: freelancer_type.values }
+  validates :freelancer_type, inclusion: { in: freelancer_type.values }
 
   def freelancer
     applicants.with_state(:accepted).first&.freelancer

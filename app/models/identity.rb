@@ -4,7 +4,7 @@
 #
 #  id              :integer          not null, primary key
 #  loginable_type  :string
-#  loginable_id    :integer
+#  loginable_id    :integer          not null
 #  provider        :string           not null
 #  uid             :string           not null
 #  last_sign_in_at :datetime
@@ -15,7 +15,5 @@
 class Identity < ApplicationRecord
   belongs_to :loginable, polymorphic: true
 
-  validates :loginable, presence: true
-  validates :provider, presence: true
-  validates :uid, presence: true, uniqueness: { scope: [:provider, :loginable_type] }
+  validates :uid, uniqueness: { scope: [:provider, :loginable_type] }
 end

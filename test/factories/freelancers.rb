@@ -3,7 +3,7 @@
 # Table name: freelancers
 #
 #  id                       :integer          not null, primary key
-#  token                    :string           not null
+#  token                    :string
 #  email                    :string           not null
 #  name                     :string           not null
 #  avatar_data              :text

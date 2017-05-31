@@ -3,8 +3,8 @@
 # Table name: applicants
 #
 #  id            :integer          not null, primary key
-#  job_id        :integer
-#  freelancer_id :integer
+#  job_id        :integer          not null
+#  freelancer_id :integer          not null
 #  state         :string           default("interested"), not null
 #  quotes_count  :integer          default("0"), not null
 #  created_at    :datetime         not null

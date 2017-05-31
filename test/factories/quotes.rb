@@ -3,8 +3,9 @@
 # Table name: quotes
 #
 #  id              :integer          not null, primary key
-#  applicant_id    :integer
+#  applicant_id    :integer          not null
 #  amount          :decimal(10, 2)   not null
+#  pay_type        :string           default("fixed"), not null
 #  rejected        :boolean          default("false"), not null
 #  body            :text
 #  attachment_data :text

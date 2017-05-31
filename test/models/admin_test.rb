@@ -3,7 +3,7 @@
 # Table name: admins
 #
 #  id         :integer          not null, primary key
-#  token      :string           not null
+#  token      :string
 #  email      :string           not null
 #  name       :string           not null
 #  created_at :datetime         not null

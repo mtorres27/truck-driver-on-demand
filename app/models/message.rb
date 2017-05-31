@@ -3,9 +3,9 @@
 # Table name: messages
 #
 #  id              :integer          not null, primary key
-#  job_id          :integer
+#  job_id          :integer          not null
 #  authorable_type :string
-#  authorable_id   :integer
+#  authorable_id   :integer          not null
 #  body            :text
 #  attachment_data :text
 #  created_at      :datetime         not null
@@ -18,8 +18,6 @@ class Message < ApplicationRecord
   belongs_to :job, counter_cache: true
   belongs_to :authorable, polymorphic: true
 
-  validates :job, presence: true
-  validates :authorable, presence: true
   validate :must_have_body_or_attachment
 
   def must_have_body_or_attachment

@@ -3,7 +3,7 @@
 # Table name: freelancers
 #
 #  id                       :integer          not null, primary key
-#  token                    :string           not null
+#  token                    :string
 #  email                    :string           not null
 #  name                     :string           not null
 #  avatar_data              :text
@@ -38,8 +38,7 @@ class Freelancer < ApplicationRecord
   # has_many :jobs, through: :applicants
   has_many :messages, -> { order(created_at: :desc) }, as: :authorable, dependent: :destroy
 
-  validates :email, presence: true, uniqueness: { case_sensitive: false }
-  validates :name, presence: true
+  validates :email, uniqueness: { case_sensitive: false }
   validates :pay_per_unit_time, numericality: true, allow_blank: true
   validates :years_of_experience, numericality: { only_integer: true }
 
