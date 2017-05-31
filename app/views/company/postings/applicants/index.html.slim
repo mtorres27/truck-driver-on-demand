@@ -18,16 +18,16 @@
               .freelancer_tagline= freelancer.tagline
           .col-xs-12.col-md-5.text-right
             .btn-group role="group" aria-label="..."
-              - if applicant.interested?
-                a.btn.btn-default type="button"
+              - if applicant.interested? && @job.pre_negotiated?
+                a.btn.btn-default type="button" href=request_quote_company_postings_job_applicant_path(@job, applicant)
                   | Request Quote
               - elsif applicant.quotes.any?
                 a.btn.btn-default type="button"
                   | View Quote
               a.btn.btn-default type="button"
                 | Message
-              - if applicant.quotes.any? && !applicant.quotes.last.rejected?
-                a.btn.btn-default type="button"
+              - if applicant.quotes&.first&.pending?
+                a.btn.btn-default type="button" href=company_postings_job_application_quote_path(@job, applicant, applicant.quotes.first)
                   | Decline
               - if applicant.interested?
                 a.btn.btn-default type="button"

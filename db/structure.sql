@@ -475,7 +475,7 @@ CREATE TABLE quotes (
     applicant_id bigint NOT NULL,
     amount numeric(10,2) NOT NULL,
     pay_type character varying DEFAULT 'fixed'::character varying NOT NULL,
-    rejected boolean DEFAULT false NOT NULL,
+    declined boolean DEFAULT false NOT NULL,
     body text,
     attachment_data text,
     created_at timestamp without time zone NOT NULL,

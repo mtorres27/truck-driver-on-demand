@@ -16,7 +16,4 @@ en:
       state:
         created: "Not Published"
         published: "Accepting Applicants"
-        quoted: "Quoting"
         negotiated: "Quote Accepted"
-        contracted: "Contracted"
-        completed: "Completed"

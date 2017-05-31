@@ -28,7 +28,7 @@ class Applicant < ApplicationRecord
   ], predicates: true, scope: true
 
   scope :with_pending_quotes, -> {
-    joins(:quotes).where(quotes: { rejected: false })
+    joins(:quotes).where(quotes: { declined: false })
   }
 
   scope :without_quotes, -> {
@@ -38,6 +38,19 @@ class Applicant < ApplicationRecord
   def only_one_can_be_accepted
     if accepted? && job.applicants.with_state(:accepted).where.not(id: id).any?
       errors.add(:base, "Only one applicant may be accepted for a job.")
+    end
+  end
+
+  def request_quote!
+    self.state = :quoting
+    save
+  end
+
+  def accept!
+    self.state = :accepted
+    if save
+      quote = quotes.first
+      job.update(contract_price: quote.amount, pay_type: quote.pay_type)
     end
   end
 end

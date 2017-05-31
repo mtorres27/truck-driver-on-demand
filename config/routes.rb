@@ -23,7 +23,12 @@ Rails.application.routes.draw do
       root "projects#index"
       resources :projects
       resources :jobs, except: [:index] do
-        resources :applicants
+        resources :applicants do
+          get :request_quote, on: :member
+          resources :quotes do
+            get :decline, on: :member
+          end
+        end
         resource :contract, only: [:show, :edit, :update]
         resources :messages, only: [:index, :create]
         resources :payments, only: [:index, :show] do

@@ -15,6 +15,11 @@ class Company::Postings::QuotesController < Company::BaseController
     end
   end
 
+  def decline
+    @quote.decline!
+    redirect_to company_postings_job_applicants_path(@applicant.job), notice: "Quote declined."
+  end
+
   private
 
     def set_applicant
@@ -24,10 +29,10 @@ class Company::Postings::QuotesController < Company::BaseController
       end
     end
 
-    def job_params
+    def quote_params
       params.require(:quote).permit(
         :amount,
-        :rejected,
+        :declined,
         :body,
         :attachment_data
       )
