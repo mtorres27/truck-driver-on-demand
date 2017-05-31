@@ -17,7 +17,7 @@
               .freelancer_area= freelancer.area
               .freelancer_tagline= freelancer.tagline
           .col-xs-12.col-md-5.text-right
-            .btn-group role="group" aria-label="..."
+            .btn-group role="group" aria-label="..." style="display: none"
               - if applicant.interested? && @job.pre_negotiated?
                 a.btn.btn-default type="button" href=request_quote_company_postings_job_applicant_path(@job, applicant)
                   | Request Quote

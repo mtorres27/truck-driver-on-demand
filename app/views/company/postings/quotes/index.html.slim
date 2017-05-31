@@ -1,0 +1,7 @@
+- content_for :header do
+  = render partial: "company/shared/job_nav", locals: { job: @job }
+
+- content_for :body do
+  .content_card_title
+    | #{@applicant.freelancer&.name} Quote
+  h4 What Would You Like To Do?

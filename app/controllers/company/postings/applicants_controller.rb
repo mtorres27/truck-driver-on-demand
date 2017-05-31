@@ -3,7 +3,7 @@ class Company::Postings::ApplicantsController < Company::BaseController
   before_action :set_applicant, except: [:index]
 
   def index
-    @applicants = @job.applicants.without_state(:ignored).includes(:freelancer).order(created_at: :desc)
+    @applicants = @job.applicants.includes(:quotes).without_state(:ignored).includes(:freelancer).order(created_at: :desc)
   end
 
   def request_quote
