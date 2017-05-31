@@ -14,6 +14,4 @@
 
 class Identity < ApplicationRecord
   belongs_to :loginable, polymorphic: true
-
-  validates :uid, uniqueness: { scope: [:provider, :loginable_type] }
 end

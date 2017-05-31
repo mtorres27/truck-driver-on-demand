@@ -4,7 +4,7 @@
 #
 #  id                :integer          not null, primary key
 #  token             :string
-#  email             :string           not null
+#  email             :citext           not null
 #  name              :string           not null
 #  contact_name      :string           not null
 #  currency          :string           default("CAD"), not null
@@ -30,8 +30,6 @@ class Company < ApplicationRecord
   has_many :identities, as: :loginable, dependent: :destroy
   has_many :projects, -> { order(updated_at: :desc) }, dependent: :destroy
   has_many :messages, -> { order(created_at: :desc) }, as: :authorable
-
-  validates :email, uniqueness: { case_sensitive: false }
 
   # We want to populate both name and contact_name on sign up
   before_validation :set_contact_name, on: :create

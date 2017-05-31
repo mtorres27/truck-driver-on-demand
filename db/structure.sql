@@ -22,6 +22,20 @@ COMMENT ON EXTENSION plpgsql IS 'PL/pgSQL procedural language';
 
 
 --
+-- Name: citext; Type: EXTENSION; Schema: -; Owner: -
+--
+
+CREATE EXTENSION IF NOT EXISTS citext WITH SCHEMA public;
+
+
+--
+-- Name: EXTENSION citext; Type: COMMENT; Schema: -; Owner: -
+--
+
+COMMENT ON EXTENSION citext IS 'data type for case-insensitive character strings';
+
+
+--
 -- Name: postgis; Type: EXTENSION; Schema: -; Owner: -
 --
 
@@ -48,7 +62,7 @@ SET default_with_oids = false;
 CREATE TABLE admins (
     id bigint NOT NULL,
     token character varying,
-    email character varying NOT NULL,
+    email citext NOT NULL,
     name character varying NOT NULL,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL
@@ -161,7 +175,7 @@ ALTER SEQUENCE change_orders_id_seq OWNED BY change_orders.id;
 CREATE TABLE companies (
     id bigint NOT NULL,
     token character varying,
-    email character varying NOT NULL,
+    email citext NOT NULL,
     name character varying NOT NULL,
     contact_name character varying NOT NULL,
     currency character varying DEFAULT 'CAD'::character varying NOT NULL,
@@ -205,7 +219,7 @@ ALTER SEQUENCE companies_id_seq OWNED BY companies.id;
 CREATE TABLE freelancers (
     id bigint NOT NULL,
     token character varying,
-    email character varying NOT NULL,
+    email citext NOT NULL,
     name character varying NOT NULL,
     avatar_data text,
     address character varying,
@@ -217,7 +231,7 @@ CREATE TABLE freelancers (
     pay_per_unit_time integer,
     tagline character varying,
     bio text,
-    keywords character varying,
+    keywords citext,
     years_of_experience integer DEFAULT 0 NOT NULL,
     profile_views integer DEFAULT 0 NOT NULL,
     projects_completed integer DEFAULT 0 NOT NULL,
@@ -682,7 +696,7 @@ ALTER TABLE ONLY schema_migrations
 -- Name: index_admins_on_email; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_admins_on_email ON admins USING btree (email);
+CREATE UNIQUE INDEX index_admins_on_email ON admins USING btree (email);
 
 
 --
@@ -717,7 +731,7 @@ CREATE INDEX index_companies_on_disabled ON companies USING btree (disabled);
 -- Name: index_companies_on_email; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_companies_on_email ON companies USING btree (email);
+CREATE UNIQUE INDEX index_companies_on_email ON companies USING btree (email);
 
 
 --
@@ -752,7 +766,7 @@ CREATE INDEX index_freelancers_on_disabled ON freelancers USING btree (disabled)
 -- Name: index_freelancers_on_email; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_freelancers_on_email ON freelancers USING btree (email);
+CREATE UNIQUE INDEX index_freelancers_on_email ON freelancers USING btree (email);
 
 
 --
@@ -780,7 +794,7 @@ CREATE INDEX index_identities_on_loginable_type_and_loginable_id ON identities U
 -- Name: index_identities_on_loginable_type_and_provider_and_uid; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_identities_on_loginable_type_and_provider_and_uid ON identities USING btree (loginable_type, provider, uid);
+CREATE UNIQUE INDEX index_identities_on_loginable_type_and_provider_and_uid ON identities USING btree (loginable_type, provider, uid);
 
 
 --
@@ -960,6 +974,7 @@ SET search_path TO "$user", public;
 
 INSERT INTO "schema_migrations" (version) VALUES
 ('20170414003540'),
+('20170414003541'),
 ('20170420140235'),
 ('20170420191758'),
 ('20170420191768'),

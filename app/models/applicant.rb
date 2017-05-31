@@ -18,8 +18,6 @@ class Applicant < ApplicationRecord
   belongs_to :freelancer
   has_many :quotes, -> { order(created_at: :desc) }, dependent: :destroy
 
-  validates :job, presence: true
-  validates :freelancer, presence: true
   validate :only_one_can_be_accepted
 
   enumerize :state, in: [

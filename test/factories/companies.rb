@@ -4,7 +4,7 @@
 #
 #  id                :integer          not null, primary key
 #  token             :string
-#  email             :string           not null
+#  email             :citext           not null
 #  name              :string           not null
 #  contact_name      :string           not null
 #  currency          :string           default("CAD"), not null

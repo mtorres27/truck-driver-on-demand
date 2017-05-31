@@ -2,7 +2,7 @@ class CreateCompanies < ActiveRecord::Migration[5.1]
   def change
     create_table :companies do |t|
       t.string :token
-      t.string :email, null: false, index: true
+      t.citext :email, null: false
       t.string :name, null: false, index: true
       t.string :contact_name, null: false
       t.string :currency, null: false, default: "CAD"
@@ -18,5 +18,6 @@ class CreateCompanies < ActiveRecord::Migration[5.1]
 
       t.timestamps
     end
+    add_index :companies, :email, unique: true
   end
 end

@@ -4,7 +4,7 @@
 #
 #  id                       :integer          not null, primary key
 #  token                    :string
-#  email                    :string           not null
+#  email                    :citext           not null
 #  name                     :string           not null
 #  avatar_data              :text
 #  address                  :string
@@ -16,7 +16,7 @@
 #  pay_per_unit_time        :integer
 #  tagline                  :string
 #  bio                      :text
-#  keywords                 :string
+#  keywords                 :citext
 #  years_of_experience      :integer          default("0"), not null
 #  profile_views            :integer          default("0"), not null
 #  projects_completed       :integer          default("0"), not null
@@ -38,8 +38,6 @@ class Freelancer < ApplicationRecord
   # has_many :jobs, through: :applicants
   has_many :messages, -> { order(created_at: :desc) }, as: :authorable, dependent: :destroy
 
-  validates :email, uniqueness: { case_sensitive: false }
-  validates :pay_per_unit_time, numericality: true, allow_blank: true
   validates :years_of_experience, numericality: { only_integer: true }
 
   pg_search_scope :search, against: {
