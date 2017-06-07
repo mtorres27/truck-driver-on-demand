@@ -14,7 +14,7 @@ gem "schema_validations", "~> 2.2.1"
 
 gem "slim-rails", "~> 3.1.2"
 gem "sass-rails", github: "rails/sass-rails"
-gem "uglifier", "~> 1.3.0"
+gem "uglifier", "~> 3.2.0"
 gem "turbolinks", "~> 5"
 gem "bootstrap-sass", "~> 3.3.7"
 gem "jquery-rails", "~> 4.3.1"
