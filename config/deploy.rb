@@ -6,6 +6,8 @@ set :repo_url, "git@github.com:pairshaped/avjunction.git"
 
 set :ssh_options, paranoid: false
 
+set :passenger_restart_with_touch, true
+
 # Default branch is :master
 # ask :branch, `git rev-parse --abbrev-ref HEAD`.chomp
 
@@ -33,3 +35,5 @@ append :linked_dirs, "log", "tmp/pids", "tmp/cache", "tmp/sockets", "public/syst
 
 # Default value for keep_releases is 5
 # set :keep_releases, 5
+
+set :keep_assets, 5

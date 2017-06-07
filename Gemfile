@@ -78,6 +78,7 @@ group :development do
 
   gem "capistrano", "~> 3.8.1"
   gem "capistrano-rails", "~> 1.2.3"
+  gem "capistrano-passenger"
 
   gem "rubocop", "~> 0.49", require: false
 
