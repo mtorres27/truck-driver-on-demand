@@ -13,10 +13,6 @@ test:
   <<: *default
   database: avjunction_test
 
-staging:
-  <<: *default
-  database: avjunction
-
 production:
   <<: *default
   database: avjunction
