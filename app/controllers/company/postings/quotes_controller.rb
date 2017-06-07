@@ -1,8 +1,10 @@
 class Company::Postings::QuotesController < Company::BaseController
+  before_action :set_job
   before_action :set_applicant
 
   def index
-    @quote = @applicant.quotes.new
+    @quotes = @applicant.quotes
+    @quote = @quotes.new
   end
 
   def create
@@ -23,16 +25,13 @@ class Company::Postings::QuotesController < Company::BaseController
   private
 
     def set_applicant
-      @applicant = Applicant.includes(job: :project).find(params[:applicant_id])
-      unless @applicant.job.project.company_id == current_company.id
-        redirect_back fallback_location: company_postings_projects_path, error: "Invalid applicant selected."
-      end
+      @applicant = @job.applicants.includes(:quotes).find(params[:applicant_id])
     end
 
     def quote_params
       params.require(:quote).permit(
         :amount,
-        :declined,
+        :state,
         :body,
         :attachment_data
       )

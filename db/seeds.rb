@@ -56,7 +56,7 @@ schools.sample(20).each do |school|
         unless applicant.state == "interested"
           quote = applicant.quotes.new(
             pay_type: Quote.pay_type.values.sample,
-            declined: true
+            state: "declined"
           )
           quote.amount =
             if quote.fixed?
@@ -77,7 +77,7 @@ schools.sample(20).each do |school|
       if applicant
         quote = applicant.quotes.order(created_at: :desc).first
         applicant.update_columns(state: "accepted")
-        quote.update_columns(declined: false)
+        quote.update_columns(state: "accepted")
         job.update_columns(contract_price: quote.amount, pay_type: quote.pay_type)
         4.times do |idx|
           job.messages.create!(

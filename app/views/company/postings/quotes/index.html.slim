@@ -5,3 +5,14 @@
   .content_card_title
     | #{@applicant.freelancer&.name} Quote
   h4 What Would You Like To Do?
+  = simple_form_for(@quote, url: company_postings_job_applicant_quotes_path(@job, @applicant)) do |f|
+    .form-inputs
+      = f.input :state, required: true
+      = f.input :body
+  ol
+    - @quotes.each do |quote|
+      li.media
+        .media-left
+        .media-body
+          h4.media-heading= number_to_currency(quote.amount, presicion: 0)
+          = quote.body

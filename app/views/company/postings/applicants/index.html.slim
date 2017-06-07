@@ -22,7 +22,7 @@
                 a.btn.btn-default type="button" href=request_quote_company_postings_job_applicant_path(@job, applicant)
                   | Request Quote
               - elsif applicant.quotes.any?
-                a.btn.btn-default type="button"
+                a.btn.btn-default type="button" href=company_postings_job_applicant_quotes_path(@job, applicant)
                   | View Quote
               a.btn.btn-default type="button"
                 | Message

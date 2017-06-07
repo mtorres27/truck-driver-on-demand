@@ -28,7 +28,7 @@ class Applicant < ApplicationRecord
   ], predicates: true, scope: true
 
   scope :with_pending_quotes, -> {
-    joins(:quotes).where(quotes: { declined: false })
+    joins(:quotes).where(quotes: { state: "pending" })
   }
 
   scope :without_quotes, -> {
