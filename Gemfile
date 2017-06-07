@@ -57,6 +57,8 @@ gem "stackprof", "~> 0.2.10"
 
 gem "faker", "~> 1.7.3"
 
+gem "listen", "~> 3.0.5", "< 3.2"
+
 group :development, :test do
   # Call "byebug" anywhere in the code to stop execution and get a debugger console
   gem "byebug", platforms: [:mri, :mingw, :x64_mingw]
@@ -73,8 +75,6 @@ end
 group :development do
   # Access an IRB console on exception pages or by using <%= console %> anywhere in the code.
   gem "web-console", "~> 3.3.0"
-
-  gem "listen", "~> 3.0.5", "< 3.2"
 
   gem "capistrano", "~> 3.8.1"
   gem "capistrano-rails", "~> 1.2.3"
