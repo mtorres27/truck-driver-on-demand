@@ -59,6 +59,8 @@ gem "faker", "~> 1.7.3"
 
 gem "listen", "~> 3.0.5", "< 3.2"
 
+gem "factory_girl_rails", "~> 4.8.0"
+
 group :development, :test do
   # Call "byebug" anywhere in the code to stop execution and get a debugger console
   gem "byebug", platforms: [:mri, :mingw, :x64_mingw]
@@ -68,7 +70,6 @@ group :development, :test do
 
   gem "annotate", "~> 2.7.2"
 
-  gem "factory_girl_rails", "~> 4.8.0"
   gem "mocha", "~> 1.2.1"
 end
 
