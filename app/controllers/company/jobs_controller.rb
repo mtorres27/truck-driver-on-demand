@@ -52,10 +52,7 @@ class Company::JobsController < Company::BaseController
   private
 
     def set_job
-      @job = Job.find(params[:id])
-      unless @job.project.company_id == current_company.id
-        redirect_to company_projects_path, error: "Invalid project selected."
-      end
+      @job = current_company.jobs.find(params[:id])
     end
 
     def validate_ownership

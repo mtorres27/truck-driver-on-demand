@@ -14,7 +14,7 @@
 #  area                :string
 #  lat                 :decimal(9, 6)
 #  lng                 :decimal(9, 6)
-#  closed              :boolean          default("false"), not null
+#  closed              :boolean          default(FALSE), not null
 #  created_at          :datetime         not null
 #  updated_at          :datetime         not null
 #
@@ -27,6 +27,8 @@ class Project < ApplicationRecord
 
   validates :budget, numericality: true, sane_price: true
   validates :duration, numericality: { only_integer: true, greater_than: 0, less_than: 365 }, allow_blank: true
+
+  audited associated_with: :company
 
   def contract_value
     jobs.sum { |job| job.contract_price || 0 }

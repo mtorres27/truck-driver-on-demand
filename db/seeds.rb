@@ -37,6 +37,7 @@ schools.sample(20).each do |school|
   3.times do
     budget = Faker::Number.number(4)
     job = project.jobs.create!(
+      company: company,
       title: Faker::Educator.campus,
       summary: Faker::Lorem.paragraphs(2).join("\n\n"),
       budget: budget,
@@ -50,11 +51,13 @@ schools.sample(20).each do |school|
     5.times do
       begin
         applicant = job.applicants.create!(
+          company: company,
           freelancer: Freelancer.order("RANDOM()").first,
           state: Applicant.state.values.select{ |v| v != :accepted }.sample
         )
         unless applicant.state == "interested"
           quote = applicant.quotes.new(
+            company: company,
             pay_type: Quote.pay_type.values.sample,
             state: "declined"
           )
@@ -91,17 +94,20 @@ schools.sample(20).each do |school|
           )
         end
         job.payments.create(
+          company: company,
           description: "Deposit",
           amount: 200,
           issued_on: 7.days.ago,
           paid_on: 6.days.ago
         )
         job.payments.create(
+          company: company,
           description: "First Installment",
           amount: 1620,
           issued_on: 3.days.ago
         )
         job.payments.create(
+          company: company,
           description: "Final Payment",
           amount: 2200,
           issued_on: 7.days.from_now

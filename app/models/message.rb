@@ -3,9 +3,10 @@
 # Table name: messages
 #
 #  id              :integer          not null, primary key
-#  job_id          :integer          not null
 #  authorable_type :string
 #  authorable_id   :integer          not null
+#  receivable_type :string
+#  receivable_id   :integer          not null
 #  body            :text
 #  attachment_data :text
 #  created_at      :datetime         not null
@@ -19,6 +20,8 @@ class Message < ApplicationRecord
   belongs_to :receivable, polymorphic: true
 
   validate :must_have_body_or_attachment
+
+  audited
 
   def must_have_body_or_attachment
     if body.blank? && attachment_data.blank?

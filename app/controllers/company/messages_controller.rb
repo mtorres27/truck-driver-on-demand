@@ -2,7 +2,6 @@ class Company::MessagesController < Company::BaseController
   before_action :set_job
 
   def index
-    @message = @job.messages.new
     set_collection
   end
 
@@ -20,8 +19,12 @@ class Company::MessagesController < Company::BaseController
 
   private
 
+    def set_job
+      @job = current_company.jobs.includes(messages: :authorable).find(params[:job_id])
+    end
+
     def set_collection
-      @messages = @job.messages.includes(:authorable).order(created_at: :desc)
+      @messages = @job.messages
     end
 
     def message_params

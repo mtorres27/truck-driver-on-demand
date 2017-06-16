@@ -48,6 +48,8 @@ gem "rack-mini-profiler", "~> 0.10.2"
 gem "flamegraph", "~> 0.9.5"
 gem "stackprof", "~> 0.2.10"
 
+gem "audited", "~> 4.5.0"
+
 # Use ActiveModel has_secure_password
 # gem "bcrypt", "~> 3.1.7"
 

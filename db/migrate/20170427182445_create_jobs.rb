@@ -1,7 +1,8 @@
 class CreateJobs < ActiveRecord::Migration[5.1]
   def change
     create_table :jobs do |t|
-      t.references :project, foreign_key: true, null: false
+      t.references :company, foreign_key: true, null: false, index: true
+      t.references :project, foreign_key: true, null: false, index: true
       t.string :title, null: false
       t.string :state, null: false, default: "created"
       t.text :summary, null: false

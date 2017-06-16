@@ -14,7 +14,7 @@
 #  area                :string
 #  lat                 :decimal(9, 6)
 #  lng                 :decimal(9, 6)
-#  closed              :boolean          default("false"), not null
+#  closed              :boolean          default(FALSE), not null
 #  created_at          :datetime         not null
 #  updated_at          :datetime         not null
 #

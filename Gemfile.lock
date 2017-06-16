@@ -67,6 +67,8 @@ GEM
       rake (>= 10.4, < 13.0)
     arel (8.0.0)
     ast (2.3.0)
+    audited (4.5.0)
+      activerecord (>= 4.0, < 5.2)
     autoprefixer-rails (7.1.1)
       execjs
     bootstrap-sass (3.3.7)
@@ -329,6 +331,7 @@ PLATFORMS
 DEPENDENCIES
   activejob-perform_later (~> 1.0.2)
   annotate (~> 2.7.2)
+  audited (~> 4.5.0)
   bootstrap-sass (~> 3.3.7)
   bullet (~> 5.5.1)
   byebug

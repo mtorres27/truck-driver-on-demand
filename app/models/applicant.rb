@@ -3,10 +3,11 @@
 # Table name: applicants
 #
 #  id            :integer          not null, primary key
+#  company_id    :integer          not null
 #  job_id        :integer          not null
 #  freelancer_id :integer          not null
 #  state         :string           default("interested"), not null
-#  quotes_count  :integer          default("0"), not null
+#  quotes_count  :integer          default(0), not null
 #  created_at    :datetime         not null
 #  updated_at    :datetime         not null
 #
@@ -14,6 +15,7 @@
 class Applicant < ApplicationRecord
   extend Enumerize
 
+  belongs_to :company
   belongs_to :job, counter_cache: true
   belongs_to :freelancer
   has_many :quotes, -> { order(created_at: :desc) }, dependent: :destroy
@@ -21,6 +23,8 @@ class Applicant < ApplicationRecord
   accepts_nested_attributes_for :messages
 
   validate :only_one_can_be_accepted
+
+  audited associated_with: :company
 
   enumerize :state, in: [
     :interested,

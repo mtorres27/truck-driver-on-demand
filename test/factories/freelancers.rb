@@ -17,11 +17,11 @@
 #  tagline                  :string
 #  bio                      :text
 #  keywords                 :citext
-#  years_of_experience      :integer          default("0"), not null
-#  profile_views            :integer          default("0"), not null
-#  projects_completed       :integer          default("0"), not null
-#  available                :boolean          default("true"), not null
-#  disabled                 :boolean          default("false"), not null
+#  years_of_experience      :integer          default(0), not null
+#  profile_views            :integer          default(0), not null
+#  projects_completed       :integer          default(0), not null
+#  available                :boolean          default(TRUE), not null
+#  disabled                 :boolean          default(FALSE), not null
 #  created_at               :datetime         not null
 #  updated_at               :datetime         not null
 #

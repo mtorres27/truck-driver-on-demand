@@ -16,7 +16,7 @@
 #  hq_country        :string
 #  description       :string
 #  avatar_data       :text
-#  disabled          :boolean          default("false"), not null
+#  disabled          :boolean          default(FALSE), not null
 #  created_at        :datetime         not null
 #  updated_at        :datetime         not null
 #

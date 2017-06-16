@@ -13,5 +13,7 @@
 class Admin < ApplicationRecord
   include Loginable
 
+  audited
+
   has_many :identities, as: :loginable, dependent: :destroy
 end

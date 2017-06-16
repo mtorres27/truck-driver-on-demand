@@ -20,6 +20,10 @@ class Company::PaymentsController < Company::BaseController
 
   private
 
+    def set_job
+      @job = current_company.jobs.includes(:payments).find(params[:job_id])
+    end
+
     def set_payment
       @payment = @job.payments.find(params[:id])
     end

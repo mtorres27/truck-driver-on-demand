@@ -20,6 +20,10 @@ class Company::ContractsController < Company::BaseController
 
   private
 
+    def set_job
+      @job = current_company.jobs.find(params[:job_id])
+    end
+
     def job_params
       params.require(:job).permit(
         :scope_of_work,

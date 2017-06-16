@@ -3,6 +3,7 @@
 # Table name: payments
 #
 #  id              :integer          not null, primary key
+#  company_id      :integer          not null
 #  job_id          :integer          not null
 #  description     :string           not null
 #  amount          :decimal(10, 2)   not null

@@ -11,7 +11,7 @@ class Company::QuotesController < Company::BaseController
     @message.authorable = current_company
 
     if @message.save
-      redirect_to company_job_applicant_quotes_path(@job, @applicant), notice: "Message sent."
+      redirect_to company_job_applicant_quotes_path(@job, @applicant), notice: "Message sent"
     else
       set_collections
       render :index
@@ -20,13 +20,19 @@ class Company::QuotesController < Company::BaseController
 
   def accept
     @quote.accept!
+    redirect_to company_job_applicant_quotes_path(@job, @applicant), notice: "Quote accepted"
   end
 
   def decline
     @quote.decline!
+    redirect_to company_job_applicant_quotes_path(@job, @applicant), notice: "Quote declined"
   end
 
   private
+
+    def set_job
+      @job = current_company.jobs.includes(applicants: [:quotes, :messages]).find(params[:job_id])
+    end
 
     def set_applicant
       set_job
@@ -39,7 +45,7 @@ class Company::QuotesController < Company::BaseController
 
     def set_collections
       @messages = @applicant.messages
-      @quotes = @applicant.quotes.order(created_at: :desc)
+      @quotes = @applicant.quotes
     end
 
     def message_params

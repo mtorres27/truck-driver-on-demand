@@ -94,6 +94,7 @@ ALTER SEQUENCE admins_id_seq OWNED BY admins.id;
 
 CREATE TABLE applicants (
     id bigint NOT NULL,
+    company_id bigint NOT NULL,
     job_id bigint NOT NULL,
     freelancer_id bigint NOT NULL,
     state character varying DEFAULT 'interested'::character varying NOT NULL,
@@ -135,11 +136,54 @@ CREATE TABLE ar_internal_metadata (
 
 
 --
+-- Name: audits; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE audits (
+    id bigint NOT NULL,
+    auditable_id integer,
+    auditable_type character varying,
+    associated_id integer,
+    associated_type character varying,
+    user_id integer,
+    user_type character varying,
+    username character varying,
+    action character varying,
+    audited_changes jsonb,
+    version integer DEFAULT 0,
+    comment character varying,
+    remote_address character varying,
+    request_uuid character varying,
+    created_at timestamp without time zone
+);
+
+
+--
+-- Name: audits_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE audits_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: audits_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE audits_id_seq OWNED BY audits.id;
+
+
+--
 -- Name: change_orders; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE change_orders (
     id bigint NOT NULL,
+    company_id bigint NOT NULL,
     job_id bigint NOT NULL,
     amount numeric(10,2) NOT NULL,
     body text NOT NULL,
@@ -302,6 +346,7 @@ ALTER SEQUENCE identities_id_seq OWNED BY identities.id;
 
 CREATE TABLE jobs (
     id bigint NOT NULL,
+    company_id bigint NOT NULL,
     project_id bigint NOT NULL,
     title character varying NOT NULL,
     state character varying DEFAULT 'created'::character varying NOT NULL,
@@ -395,6 +440,7 @@ ALTER SEQUENCE messages_id_seq OWNED BY messages.id;
 
 CREATE TABLE payments (
     id bigint NOT NULL,
+    company_id bigint NOT NULL,
     job_id bigint NOT NULL,
     description character varying NOT NULL,
     amount numeric(10,2) NOT NULL,
@@ -473,6 +519,7 @@ ALTER SEQUENCE projects_id_seq OWNED BY projects.id;
 
 CREATE TABLE quotes (
     id bigint NOT NULL,
+    company_id bigint NOT NULL,
     applicant_id bigint NOT NULL,
     state character varying DEFAULT 'pending'::character varying NOT NULL,
     amount numeric(10,2) NOT NULL,
@@ -523,6 +570,13 @@ ALTER TABLE ONLY admins ALTER COLUMN id SET DEFAULT nextval('admins_id_seq'::reg
 --
 
 ALTER TABLE ONLY applicants ALTER COLUMN id SET DEFAULT nextval('applicants_id_seq'::regclass);
+
+
+--
+-- Name: audits id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY audits ALTER COLUMN id SET DEFAULT nextval('audits_id_seq'::regclass);
 
 
 --
@@ -613,6 +667,14 @@ ALTER TABLE ONLY ar_internal_metadata
 
 
 --
+-- Name: audits audits_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY audits
+    ADD CONSTRAINT audits_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: change_orders change_orders_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -693,10 +755,31 @@ ALTER TABLE ONLY schema_migrations
 
 
 --
+-- Name: associated_index; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX associated_index ON audits USING btree (associated_id, associated_type);
+
+
+--
+-- Name: auditable_index; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX auditable_index ON audits USING btree (auditable_id, auditable_type);
+
+
+--
 -- Name: index_admins_on_email; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE UNIQUE INDEX index_admins_on_email ON admins USING btree (email);
+
+
+--
+-- Name: index_applicants_on_company_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_applicants_on_company_id ON applicants USING btree (company_id);
 
 
 --
@@ -711,6 +794,27 @@ CREATE INDEX index_applicants_on_freelancer_id ON applicants USING btree (freela
 --
 
 CREATE INDEX index_applicants_on_job_id ON applicants USING btree (job_id);
+
+
+--
+-- Name: index_audits_on_created_at; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_audits_on_created_at ON audits USING btree (created_at);
+
+
+--
+-- Name: index_audits_on_request_uuid; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_audits_on_request_uuid ON audits USING btree (request_uuid);
+
+
+--
+-- Name: index_change_orders_on_company_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_change_orders_on_company_id ON change_orders USING btree (company_id);
 
 
 --
@@ -798,6 +902,13 @@ CREATE UNIQUE INDEX index_identities_on_loginable_type_and_provider_and_uid ON i
 
 
 --
+-- Name: index_jobs_on_company_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_jobs_on_company_id ON jobs USING btree (company_id);
+
+
+--
 -- Name: index_jobs_on_project_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -837,6 +948,13 @@ CREATE INDEX index_on_freelancers_loc ON freelancers USING gist (st_geographyfro
 --
 
 CREATE INDEX index_on_projects_loc ON projects USING gist (st_geographyfromtext((((('SRID=4326;POINT('::text || lng) || ' '::text) || lat) || ')'::text)));
+
+
+--
+-- Name: index_payments_on_company_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_payments_on_company_id ON payments USING btree (company_id);
 
 
 --
@@ -903,6 +1021,28 @@ CREATE INDEX index_quotes_on_applicant_id ON quotes USING btree (applicant_id);
 
 
 --
+-- Name: index_quotes_on_company_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_quotes_on_company_id ON quotes USING btree (company_id);
+
+
+--
+-- Name: user_index; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX user_index ON audits USING btree (user_id, user_type);
+
+
+--
+-- Name: payments fk_rails_0fc68a9316; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY payments
+    ADD CONSTRAINT fk_rails_0fc68a9316 FOREIGN KEY (company_id) REFERENCES companies(id);
+
+
+--
 -- Name: jobs fk_rails_1977e8b5a6; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -935,11 +1075,43 @@ ALTER TABLE ONLY applicants
 
 
 --
+-- Name: applicants fk_rails_7283c3d901; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY applicants
+    ADD CONSTRAINT fk_rails_7283c3d901 FOREIGN KEY (company_id) REFERENCES companies(id);
+
+
+--
+-- Name: quotes fk_rails_9b32fbc45b; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY quotes
+    ADD CONSTRAINT fk_rails_9b32fbc45b FOREIGN KEY (company_id) REFERENCES companies(id);
+
+
+--
+-- Name: jobs fk_rails_b34da78090; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY jobs
+    ADD CONSTRAINT fk_rails_b34da78090 FOREIGN KEY (company_id) REFERENCES companies(id);
+
+
+--
 -- Name: payments fk_rails_b35f361f8d; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY payments
     ADD CONSTRAINT fk_rails_b35f361f8d FOREIGN KEY (job_id) REFERENCES jobs(id);
+
+
+--
+-- Name: change_orders fk_rails_b3bebfe084; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY change_orders
+    ADD CONSTRAINT fk_rails_b3bebfe084 FOREIGN KEY (company_id) REFERENCES companies(id);
 
 
 --
@@ -980,6 +1152,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20170505140847'),
 ('20170509175102'),
 ('20170510154135'),
-('20170515191347');
+('20170515191347'),
+('20170616143054');
 
 

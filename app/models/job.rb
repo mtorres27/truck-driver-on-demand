@@ -3,6 +3,7 @@
 # Table name: jobs
 #
 #  id                        :integer          not null, primary key
+#  company_id                :integer          not null
 #  project_id                :integer          not null
 #  title                     :string           not null
 #  state                     :string           default("created"), not null
@@ -16,20 +17,20 @@
 #  pay_type                  :string
 #  freelancer_type           :string           not null
 #  keywords                  :text
-#  invite_only               :boolean          default("false"), not null
-#  scope_is_public           :boolean          default("true"), not null
-#  budget_is_public          :boolean          default("true"), not null
-#  working_days              :text             default("{}"), not null, is an Array
+#  invite_only               :boolean          default(FALSE), not null
+#  scope_is_public           :boolean          default(TRUE), not null
+#  budget_is_public          :boolean          default(TRUE), not null
+#  working_days              :text             default([]), not null, is an Array
 #  working_time              :string
 #  contract_price            :decimal(10, 2)
-#  payment_schedule          :jsonb            default("\"{}\""), not null
+#  payment_schedule          :jsonb            not null
 #  reporting_frequency       :string
-#  require_photos_on_updates :boolean          default("false"), not null
-#  require_checkin           :boolean          default("false"), not null
-#  require_uniform           :boolean          default("false"), not null
+#  require_photos_on_updates :boolean          default(FALSE), not null
+#  require_checkin           :boolean          default(FALSE), not null
+#  require_uniform           :boolean          default(FALSE), not null
 #  addendums                 :text
-#  applicants_count          :integer          default("0"), not null
-#  messages_count            :integer          default("0"), not null
+#  applicants_count          :integer          default(0), not null
+#  messages_count            :integer          default(0), not null
 #  created_at                :datetime         not null
 #  updated_at                :datetime         not null
 #
@@ -37,16 +38,19 @@
 class Job < ApplicationRecord
   extend Enumerize
 
-  schema_validations except: :working_days
-
+  belongs_to :company
   belongs_to :project
-  has_one :company, through: :project
   has_many :applicants, -> { includes(:freelancer).order(updated_at: :desc) }, dependent: :destroy
   has_many :quotes, -> { order(created_at: :desc) }, through: :applicants
   has_many :messages, -> { order(created_at: :desc) }, as: :receivable
   has_many :change_orders, -> { order(updated_at: :desc) }, dependent: :destroy
   has_many :payments, dependent: :destroy
+
   accepts_nested_attributes_for :payments, allow_destroy: true, reject_if: :reject_payments
+
+  schema_validations except: :working_days
+
+  audited associated_with: :company
 
   enumerize :job_function, in: [
     :av_installation_technician,

@@ -16,7 +16,7 @@
 #  hq_country        :string
 #  description       :string
 #  avatar_data       :text
-#  disabled          :boolean          default("false"), not null
+#  disabled          :boolean          default(FALSE), not null
 #  created_at        :datetime         not null
 #  updated_at        :datetime         not null
 #
@@ -29,7 +29,14 @@ class Company < ApplicationRecord
 
   has_many :identities, as: :loginable, dependent: :destroy
   has_many :projects, -> { order(updated_at: :desc) }, dependent: :destroy
+  has_many :jobs, dependent: :destroy
+  has_many :applicants, dependent: :destroy
+  has_many :quotes, dependent: :destroy
+  has_many :payments, dependent: :destroy
   has_many :messages, -> { order(created_at: :desc) }, as: :authorable
+
+  audited
+  has_associated_audits
 
   # We want to populate both name and contact_name on sign up
   before_validation :set_contact_name, on: :create

@@ -3,6 +3,7 @@
 # Table name: change_orders
 #
 #  id              :integer          not null, primary key
+#  company_id      :integer          not null
 #  job_id          :integer          not null
 #  amount          :decimal(10, 2)   not null
 #  body            :text             not null
@@ -14,7 +15,10 @@
 class ChangeOrder < ApplicationRecord
   include AttachmentUploader[:attachment]
 
+  belongs_to :company
   belongs_to :job
+
+  audited associated_with: :company
 
   validates :amount, numericality: true, sane_price: true
 end

@@ -18,6 +18,10 @@ class Company::ApplicantsController < Company::BaseController
 
   private
 
+    def set_job
+      @job = current_company.jobs.includes(:applicants).find(params[:job_id])
+    end
+
     def set_applicant
       @applicant = @job.applicants.find(params[:id])
     end
