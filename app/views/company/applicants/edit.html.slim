@@ -1,0 +1,42 @@
+- content_for :header do
+  = render partial: "company/shared/job_nav", locals: { job: @job }
+
+- content_for :body do
+  .content_card_title
+    | #{@applicant.freelancer&.name} Messages & Quotes
+  .row
+    .col-xs-12.col-md-6
+      h4 Send a Message
+      = simple_form_for(@applicant, url: company_job_applicant_path(@job, @applicant)) do |f|
+        = f.error_notification
+        = f.simple_fields_for :messages, @applicant.messages.build(authorable: current_company) do |ff|
+          .form-inputs
+            = ff.input :authorable_type, as: :hidden
+            = ff.input :authorable_id, as: :hidden
+            = ff.input :body, as: :text, label: false, placeholder: "Send a message"
+        .form-actions
+          = f.submit "Send Message", class: "btn btn-primary"
+      ol
+        - @applicant.messages.each do |message|
+          li.media
+            .media-left
+              = image_tag(message.authorable.avatar_url, size: "65x65")
+            .media-body
+              = message.body
+    .col-xs-12.col-md-6
+      - if @applicant.quotes.empty?
+        p Waiting for Quote
+      - else
+        ol
+          - @applicant.quotes.each do |quote|
+            li.media
+              .media-left
+              .media-body
+                h4.media-heading= number_to_currency(quote.amount, presicion: 0)
+                - if quote.pending?
+                  = link_to "Accept", accept_company_job_applicant_quote_path(quote), class: "btn btn-success"
+                  = link_to "Decline", decline_company_job_applicant_quote_path(quote), class: "btn btn-danger"
+                - elsif quote.accepted?
+                  .text-success Accepted
+                - elsif quote.declined?
+                  .text-danger Declined

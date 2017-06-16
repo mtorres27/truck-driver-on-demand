@@ -8,7 +8,7 @@ class Company::BaseController < ApplicationController
     def set_job
       @job = Job.find(params[:job_id])
       unless @job.project.company_id == current_company.id
-        redirect_to company_postings_projects_path, error: "Invalid project selected."
+        redirect_to company_projects_path, error: "Invalid project selected."
       end
     end
 

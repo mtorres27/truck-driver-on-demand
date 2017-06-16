@@ -3,15 +3,15 @@
     .col-sm-8.col-xs-12
       h1 Job Postings
     .col-sm-4.col-xs-12.text-right.post_new_job
-      = link_to "Post a New Job", new_company_postings_job_path, class: "btn btn-primary", role: "button"
+      = link_to "Post a New Job", new_company_job_path, class: "btn btn-primary", role: "button"
 
   .row
     .col-xs-12
       ul.list-inline.page_nav
         li class=("active" unless params[:closed]) role="presentation"
-          = link_to "Open Projects", company_postings_projects_path, "aria-controlers" => "open", role: "tab"
+          = link_to "Open Projects", company_projects_path, "aria-controlers" => "open", role: "tab"
         li class=("active" if params[:closed]) role="presentation"
-          = link_to "Closed Projects", company_postings_projects_path(closed: true), "aria-controlers" => "closed", role: "tab"
+          = link_to "Closed Projects", company_projects_path(closed: true), "aria-controlers" => "closed", role: "tab"
 
 - content_for :body do
   .content_card_title
@@ -32,7 +32,7 @@
                 h3
                   a data-toggle="collapse" href="#jobsFor#{project.id}" type="button" aria-expanded="false" aria-controls="jobsFor#{project.id}"
                     = "#{project.name} - #{project.external_project_id || project.id}"
-                  = link_to "Edit", edit_company_postings_project_path(project), class: "project_edit_link"
+                  = link_to "Edit", edit_company_project_path(project), class: "project_edit_link"
               .col-xs-4.col-md-3.col-lg-2.text-right
                 button.btn.btn-default data-toggle="collapse" data-target="#jobsFor#{project.id}" type="button" aria-expanded="false" aria-controls="jobsFor#{project.id}"
                   | Show #{project.jobs.size} Jobs
@@ -60,7 +60,7 @@
               - project.jobs.each do |job|
                 = render partial: "job", locals: { project: project, job: job }
               .col-xs-12.col-sm-6.col-md-4.col-lg-3
-                a.card.job.new-job href=new_company_postings_job_path(project_id: project.id)
+                a.card.job.new-job href=new_company_job_path(project_id: project.id)
                   .plus +
                   | Post a new job to this project
 

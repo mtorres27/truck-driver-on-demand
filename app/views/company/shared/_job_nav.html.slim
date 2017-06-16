@@ -2,7 +2,7 @@
   h1
     .job_header_top
       = job_state_label(job)
-      a.project_name href=company_postings_projects_path
+      a.project_name href=company_projects_path
         | &#8592; #{job.project.name}
     = job.title || "New Job"
   ul.list-inline.page_nav
@@ -10,26 +10,26 @@
       li.active Job Details
     - else
       li class=("active" if controller.controller_name == "jobs")
-        a href=company_postings_job_path(job)
+        a href=company_job_path(job)
           | Job Details
       li class=("active" if controller.controller_name == "applicants")
-        a href=company_postings_job_applicants_path(job)
+        a href=company_job_applicants_path(job)
           | Applicants
       li class=("active" if controller.controller_name == "contracts")
         - if job.pre_negotiated?
           | Contract
         - else
-          a href=company_postings_job_contract_path(job)
+          a href=company_job_contract_path(job)
             | Contract
       li class=("active" if controller.controller_name == "messages")
         - if job.pre_contracted?
           | Progress
         - else
-          a href=company_postings_job_messages_path(job)
+          a href=company_job_messages_path(job)
             | Progress
       li class=("active" if controller.controller_name == "payments")
         - if job.pre_contracted?
           | Payments
         - else
-          a href=company_postings_job_payments_path(job)
+          a href=company_job_payments_path(job)
             | Payments

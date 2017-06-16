@@ -1,4 +1,4 @@
-class Company::Postings::ContractsController < Company::BaseController
+class Company::ContractsController < Company::BaseController
   before_action :set_job
 
   def show
@@ -10,7 +10,7 @@ class Company::Postings::ContractsController < Company::BaseController
 
   def update
     if @job.update(job_params)
-      redirect_to company_postings_job_contract_path(@job), notice: "Contract updated."
+      redirect_to company_job_contract_path(@job), notice: "Contract updated."
     else
       build_payments
       render :edit

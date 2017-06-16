@@ -1,4 +1,4 @@
-= simple_form_for([:company, :postings, project], remote: true) do |f|
+= simple_form_for([:company, project], remote: true) do |f|
   .form-inputs
     = f.input :name, placeholder: "Enter the project name"
     .row
@@ -16,8 +16,8 @@
   .form-actions
     = f.button :submit, class: "btn-primary"
     '
-    a.btn.btn-default data-dismiss="modal" href=company_postings_projects_path
+    a.btn.btn-default data-dismiss="modal" href=company_projects_path
       | Cancel
     - unless project.new_record?
       '
-      = link_to "Delete", company_postings_project_path(project), class: "btn btn-danger", data: { confirm: "Are you sure?" }, method: :delete
+      = link_to "Delete", company_project_path(project), class: "btn btn-danger", data: { confirm: "Are you sure?" }, method: :delete

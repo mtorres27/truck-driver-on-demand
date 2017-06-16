@@ -359,9 +359,10 @@ ALTER SEQUENCE jobs_id_seq OWNED BY jobs.id;
 
 CREATE TABLE messages (
     id bigint NOT NULL,
-    job_id bigint NOT NULL,
     authorable_type character varying,
     authorable_id bigint NOT NULL,
+    receivable_type character varying,
+    receivable_id bigint NOT NULL,
     body text,
     attachment_data text,
     created_at timestamp without time zone NOT NULL,
@@ -476,7 +477,6 @@ CREATE TABLE quotes (
     state character varying DEFAULT 'pending'::character varying NOT NULL,
     amount numeric(10,2) NOT NULL,
     pay_type character varying DEFAULT 'fixed'::character varying NOT NULL,
-    body text,
     attachment_data text,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL
@@ -812,10 +812,10 @@ CREATE INDEX index_messages_on_authorable_type_and_authorable_id ON messages USI
 
 
 --
--- Name: index_messages_on_job_id; Type: INDEX; Schema: public; Owner: -
+-- Name: index_messages_on_receivable_type_and_receivable_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_messages_on_job_id ON messages USING btree (job_id);
+CREATE INDEX index_messages_on_receivable_type_and_receivable_id ON messages USING btree (receivable_type, receivable_id);
 
 
 --
@@ -956,14 +956,6 @@ ALTER TABLE ONLY quotes
 
 ALTER TABLE ONLY change_orders
     ADD CONSTRAINT fk_rails_cab1ecc845 FOREIGN KEY (job_id) REFERENCES jobs(id);
-
-
---
--- Name: messages fk_rails_d7e012c0bb; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY messages
-    ADD CONSTRAINT fk_rails_d7e012c0bb FOREIGN KEY (job_id) REFERENCES jobs(id);
 
 
 --

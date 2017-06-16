@@ -15,8 +15,8 @@
 class Message < ApplicationRecord
   include AttachmentUploader[:attachment]
 
-  belongs_to :job, counter_cache: true
   belongs_to :authorable, polymorphic: true
+  belongs_to :receivable, polymorphic: true
 
   validate :must_have_body_or_attachment
 

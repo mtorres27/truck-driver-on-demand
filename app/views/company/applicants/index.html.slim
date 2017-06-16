@@ -1,0 +1,37 @@
+- content_for :header do
+  = render partial: "company/shared/job_nav", locals: { job: @job }
+
+- content_for :body do
+  .content_card_title
+    | Applicants
+  ul.media-list
+    - @applicants.each do |applicant|
+      li.media.applicant
+        .media-left
+          .media-object= image_tag(applicant.freelancer.avatar_url, size: "70x70", class: "freelancer_avatar")
+        .media-body
+          .col-xs-12.col-md-5
+            = applicant_state_label(applicant)
+            - applicant.freelancer.tap do |freelancer|
+              .freelancer_name= freelancer.name
+              .freelancer_area= freelancer.area
+              .freelancer_tagline= freelancer.tagline
+          .col-xs-12.col-md-5.text-right
+            .btn-group role="group" aria-label="..." style="display: none"
+              - if applicant.quotes&.first&.pending?
+                a.btn.btn-default type="button" href=edit_company_job_applicant_path(@job, applicant)
+                  | View #{pluralize(application.quotes.size, "Quote")}
+              - elsif applicant.interested? && @job.pre_negotiated?
+                a.btn.btn-default type="button" href=request_quote_company_job_applicant_path(@job, applicant)
+                  | Request Quote
+              a.btn.btn-default type="button" href=edit_company_job_applicant_path(@job, applicant)
+                | #{pluralize(applicant.messages.size, "Message")}
+              - if applicant.interested?
+                a.btn.btn-default type="button" href=ignore_company_job_applicant_path(@job, applicant)
+                  | Ignore
+          .col-xs-12.col-md-2
+            - applicant.quotes.first&.tap do |quote|
+              - if quote.fixed? && quote.amount > @job.budget
+                .quote_over-budget= "Over Budget"
+              .quote_amount= number_to_currency(quote.amount, precision: 0)
+              .quote_pay_type= quote.pay_type.text

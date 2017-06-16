@@ -43,7 +43,7 @@ class Job < ApplicationRecord
   has_one :company, through: :project
   has_many :applicants, -> { includes(:freelancer).order(updated_at: :desc) }, dependent: :destroy
   has_many :quotes, -> { order(created_at: :desc) }, through: :applicants
-  has_many :messages, -> { order(created_at: :desc) }, dependent: :destroy
+  has_many :messages, -> { order(created_at: :desc) }, as: :receivable
   has_many :change_orders, -> { order(updated_at: :desc) }, dependent: :destroy
   has_many :payments, dependent: :destroy
   accepts_nested_attributes_for :payments, allow_destroy: true, reject_if: :reject_payments

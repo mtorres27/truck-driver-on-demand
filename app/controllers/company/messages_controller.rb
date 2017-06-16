@@ -1,4 +1,4 @@
-class Company::Postings::MessagesController < Company::BaseController
+class Company::MessagesController < Company::BaseController
   before_action :set_job
 
   def index
@@ -11,7 +11,7 @@ class Company::Postings::MessagesController < Company::BaseController
     @message.authorable = current_company
 
     if @message.save
-      redirect_to company_postings_job_messages_path(@job), notice: "Message sent."
+      redirect_to company_job_messages_path(@job), notice: "Message sent."
     else
       set_collection
       render :index

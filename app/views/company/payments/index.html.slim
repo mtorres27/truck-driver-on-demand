@@ -36,4 +36,4 @@
         td= payment.issued_on
         td= payment.paid_on
         td
-          = link_to (payment.paid_on.blank? ? "Make Payment" : "View Invoice"), company_postings_job_payment_path(@job, payment)
+          = link_to (payment.paid_on.blank? ? "Make Payment" : "View Invoice"), company_job_payment_path(@job, payment)

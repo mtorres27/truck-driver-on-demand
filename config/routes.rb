@@ -19,22 +19,22 @@ Rails.application.routes.draw do
     resources :freelancers, only: [:index, :show]
     resources :applicants
 
-    namespace :postings do
-      root "projects#index"
-      resources :projects
-      resources :jobs, except: [:index] do
-        resources :applicants do
-          get :request_quote, on: :member
-          resources :quotes do
-            get :decline, on: :member
-          end
+    root "projects#index"
+    resources :projects
+    resources :jobs, except: [:index] do
+      resources :applicants do
+        get :request_quote, on: :member
+        get :ignore, on: :member
+        resources :quotes, only: [] do
+          get :accept, on: :member
+          get :decline, on: :member
         end
-        resource :contract, only: [:show, :edit, :update]
-        resources :messages, only: [:index, :create]
-        resources :payments, only: [:index, :show] do
-          get :print, on: :member
-          get :mark_as_paid, on: :member
-        end
+      end
+      resource :contract, only: [:show, :edit, :update]
+      resources :messages, only: [:index, :create]
+      resources :payments, only: [:index, :show] do
+        get :print, on: :member
+        get :mark_as_paid, on: :member
       end
     end
   end
