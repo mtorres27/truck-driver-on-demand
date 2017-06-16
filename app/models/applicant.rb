@@ -17,7 +17,7 @@ class Applicant < ApplicationRecord
   belongs_to :job, counter_cache: true
   belongs_to :freelancer
   has_many :quotes, -> { order(created_at: :desc) }, dependent: :destroy
-  has_many :messages, -> { order(created_at: :desc) }, as: :receivable
+  has_many :messages, -> { includes(:authorable).order(created_at: :desc) }, as: :receivable
   accepts_nested_attributes_for :messages
 
   validate :only_one_can_be_accepted

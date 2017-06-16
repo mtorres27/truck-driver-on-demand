@@ -14,7 +14,7 @@ class Company::MessagesController < Company::BaseController
       redirect_to company_job_messages_path(@job), notice: "Message sent."
     else
       set_collection
-      render :index
+      render :show
     end
   end
 

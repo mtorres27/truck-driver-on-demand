@@ -19,13 +19,13 @@
           .col-xs-12.col-md-5.text-right
             .btn-group role="group" aria-label="..." style="display: none"
               - if applicant.quotes&.first&.pending?
-                a.btn.btn-default type="button" href=edit_company_job_applicant_path(@job, applicant)
-                  | View #{pluralize(application.quotes.size, "Quote")}
+                a.btn.btn-default type="button" href=company_job_applicant_quotes_path(@job, applicant)
+                  | View Quote
               - elsif applicant.interested? && @job.pre_negotiated?
                 a.btn.btn-default type="button" href=request_quote_company_job_applicant_path(@job, applicant)
                   | Request Quote
-              a.btn.btn-default type="button" href=edit_company_job_applicant_path(@job, applicant)
-                | #{pluralize(applicant.messages.size, "Message")}
+              a.btn.btn-default type="button" href=company_job_applicant_quotes_path(@job, applicant)
+                | Message
               - if applicant.interested?
                 a.btn.btn-default type="button" href=ignore_company_job_applicant_path(@job, applicant)
                   | Ignore

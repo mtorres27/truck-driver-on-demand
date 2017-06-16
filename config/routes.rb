@@ -25,7 +25,7 @@ Rails.application.routes.draw do
       resources :applicants do
         get :request_quote, on: :member
         get :ignore, on: :member
-        resources :quotes, only: [] do
+        resources :quotes, only: [:index, :create] do
           get :accept, on: :member
           get :decline, on: :member
         end
