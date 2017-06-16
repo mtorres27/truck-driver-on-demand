@@ -50,7 +50,7 @@ class SessionsController < ApplicationController
 
   # For development only
   def login_as
-    throw ActionController::BadRequest unless Rails.env.development?
+    # throw ActionController::BadRequest unless Rails.env.development?
     super
   end
 
