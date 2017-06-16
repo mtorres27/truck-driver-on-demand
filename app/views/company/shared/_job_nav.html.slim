@@ -2,8 +2,9 @@
   h1
     .job_header_top
       = job_state_label(job)
-      a.project_name href=company_projects_path
-        | &#8592; #{job.project.name}
+      - if @job.project
+        a.project_name href=company_projects_path
+          | &#8592; #{job.project&.name}
     = job.title || "New Job"
   ul.list-inline.page_nav
     - if job.new_record?
