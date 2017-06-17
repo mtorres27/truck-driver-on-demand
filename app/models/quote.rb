@@ -22,7 +22,7 @@ class Quote < ApplicationRecord
 
   validates :amount, numericality: true, sane_price: true
 
-  audited associated_with: :company
+  audited
 
   enumerize :pay_type, in: [ :fixed, :hourly ], predicates: true
   enumerize :state, in: [ :pending, :declined, :accepted ], predicates: true

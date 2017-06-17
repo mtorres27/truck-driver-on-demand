@@ -24,7 +24,7 @@ class Applicant < ApplicationRecord
 
   validate :only_one_can_be_accepted
 
-  audited associated_with: :company
+  audited
 
   enumerize :state, in: [
     :interested,

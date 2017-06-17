@@ -50,7 +50,7 @@ class Job < ApplicationRecord
 
   schema_validations except: :working_days
 
-  audited associated_with: :company
+  audited
 
   enumerize :job_function, in: [
     :av_installation_technician,

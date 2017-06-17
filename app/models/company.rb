@@ -36,7 +36,6 @@ class Company < ApplicationRecord
   has_many :messages, -> { order(created_at: :desc) }, as: :authorable
 
   audited
-  has_associated_audits
 
   # We want to populate both name and contact_name on sign up
   before_validation :set_contact_name, on: :create

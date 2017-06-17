@@ -1,5 +1,9 @@
 require 'factory_girl_rails'
 
+ApplicationRecord.descendants.each do |klass|
+  klass.auditing_enabled = false
+end
+
 Admin.create!(email: "dave@rapin.com", name: "Dave Rapin")
 Admin.create!(email: "pweather24@gmail.com", name: "Paul Weatherhead")
 

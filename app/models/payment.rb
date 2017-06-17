@@ -20,7 +20,7 @@ class Payment < ApplicationRecord
 
   validates :amount, numericality: true, sane_price: true
 
-  audited associated_with: :company
+  audited
 
   def mark_as_paid!
     self.paid_on = Time.zone.now.to_date

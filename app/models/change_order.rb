@@ -18,7 +18,7 @@ class ChangeOrder < ApplicationRecord
   belongs_to :company
   belongs_to :job
 
-  audited associated_with: :company
+  audited
 
   validates :amount, numericality: true, sane_price: true
 end
