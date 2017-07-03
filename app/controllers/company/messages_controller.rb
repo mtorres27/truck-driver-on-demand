@@ -10,7 +10,7 @@ class Company::MessagesController < Company::BaseController
     @message.authorable = current_company
 
     if @message.save
-      redirect_to company_job_messages_path(@job), notice: "Message sent."
+      redirect_to company_job_messages_path(@job)
     else
       set_collection
       render :show
