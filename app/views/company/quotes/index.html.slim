@@ -12,6 +12,8 @@
           = f.input :body, as: :text, label: false
         .form-actions
           = f.submit "Post", class: "btn btn-primary"
+          '
+          = link_to "Cancel", company_job_applicants_path(@job), class: "btn btn-default"
       - @messages.each do |message|
         hr
         .media
