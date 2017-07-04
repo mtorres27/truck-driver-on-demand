@@ -13,4 +13,16 @@ module ApplicantHelper
     end
   end
 
+  def quote_state_label(quote)
+    mappings = {
+      declined: :danger,
+      pending: :info,
+      accepted: :success
+    }
+
+    content_tag(:span, class: "applicant_state label label-#{mappings[quote.state.to_sym]}") do
+      quote.state.text
+    end
+  end
+
 end

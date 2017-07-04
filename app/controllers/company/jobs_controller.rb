@@ -17,7 +17,7 @@ class Company::JobsController < Company::BaseController
     @job.published = true if job_params[:published]
 
     if @job.save
-      redirect_to company_job_path(@job), notice: "Job created."
+      redirect_to company_job_path(@job)
     else
       render :new
     end
@@ -37,7 +37,7 @@ class Company::JobsController < Company::BaseController
     end
 
     if @job.update(job_params)
-      redirect_to company_job_path(@job), notice: "Job updated."
+      redirect_to company_job_path(@job)
     else
       render :edit
     end

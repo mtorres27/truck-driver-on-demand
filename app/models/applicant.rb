@@ -59,4 +59,9 @@ class Applicant < ApplicationRecord
       job.update(contract_price: quote.amount, pay_type: quote.pay_type)
     end
   end
+
+  def ignore!
+    self.state = :ignored
+    save
+  end
 end

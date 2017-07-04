@@ -1,4 +1,10 @@
-h2 Freelancers
+.row
+  .col-xs-12.col-sm-6
+    h2 Freelancers
+  .col-xs-12.col-sm-6
+    .search-form
+      = simple_form_for :search, url: admin_freelancers_path, method: :get do |f|
+        = f.input :keywords, label: false, placeholder: "Search", input_html: { value: @keywords }
 
 .table-responsive
   table.table.table-striped

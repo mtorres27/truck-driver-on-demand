@@ -13,22 +13,22 @@
       li class=("active" if controller.controller_name == "jobs")
         a href=company_job_path(job)
           | Job Details
-      li class=("active" if controller.controller_name == "applicants")
+      li class=("active" if request.path.index(/applicant/))
         a href=company_job_applicants_path(job)
           | Applicants
-      li class=("active" if controller.controller_name == "contracts")
+      li class=("active" if request.path.index(/contract/))
         - if job.pre_negotiated?
           | Contract
         - else
           a href=company_job_contract_path(job)
             | Contract
-      li class=("active" if controller.controller_name == "messages")
+      li class=("active" if request.path.index(/message/))
         - if job.pre_contracted?
           | Progress
         - else
           a href=company_job_messages_path(job)
             | Progress
-      li class=("active" if controller.controller_name == "payments")
+      li class=("active" if request.path.index(/payment/))
         - if job.pre_contracted?
           | Payments
         - else

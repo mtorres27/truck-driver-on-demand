@@ -1,4 +1,10 @@
-h2 Companies
+.row
+  .col-xs-12.col-sm-6
+    h2 Companies
+  .col-xs-12.col-sm-6
+    .search-form
+      = simple_form_for :search, url: admin_companies_path, method: :get do |f|
+        = f.input :keywords, label: false, placeholder: "Search", input_html: { value: @keywords }
 
 .table-responsive
   table.table.table-striped

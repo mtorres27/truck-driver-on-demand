@@ -5,7 +5,7 @@
   .content_card_title
     | #{@applicant.freelancer&.name}: Messages and Quotes
   .row
-    .col-xs-12.col-md-6
+    .col-xs-12.col-md-8.col-sm-7
       h4 Post a Message
       = simple_form_for(:message, url: company_job_applicant_quotes_path(@job, @applicant)) do |f|
         .form-inputs
@@ -20,22 +20,23 @@
           .media-left
             = image_tag(message.authorable.avatar_url, size: "65x65")
           .media-body
-            = message.body
-    .col-xs-12.col-md-6
+            .authorable_name #{message.authorable.name} #{time_ago_in_words(message.created_at)} ago
+            .authorable_body= message.body
+    .col-xs-12.col-md-3.col-sm-4.col-sm-offset-1
       - if @quotes.empty?
         h4 No Quotes Yet
       - else
-        h4= pluralize(@quotes.size, "Quote")
-        ol
-          - @quotes.each do |quote|
-            li.media
-              .media-left
-              .media-body
-                h4.media-heading= number_to_currency(quote.amount, presicion: 0)
-                - if quote.pending?
-                  = link_to "Accept", accept_company_job_applicant_quote_path(quote), class: "btn btn-success"
-                  = link_to "Decline", decline_company_job_applicant_quote_path(quote), class: "btn btn-danger"
-                - elsif quote.accepted?
-                  .text-success Accepted
-                - elsif quote.declined?
-                  .text-danger Declined
+        - @quotes.each do |quote|
+          .media
+            .media-body
+              .quote_state= quote_state_label(quote)
+              .quote_amount= number_to_currency(quote.amount, precision: 0)
+              .quote_pay_type= quote.pay_type.text
+              - if quote.fixed? && quote.amount > @job.budget
+                .quote_over-budget= "Over Budget"
+              - if quote.pending?
+                - if quote.fixed? && quote.amount > @job.budget
+                  .quote_over-budget= "Over Budget"
+                = link_to "Accept", accept_company_job_applicant_quote_path(quote), class: "btn btn-success"
+                = link_to "Decline", decline_company_job_applicant_quote_path(quote), class: "btn btn-danger"
+              hr

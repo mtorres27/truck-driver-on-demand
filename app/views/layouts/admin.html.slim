@@ -21,9 +21,7 @@ nav.navbar.navbar-fixed-top
             span.caret
           ul class="dropdown-menu"
             li
-              a href="#" Action
-            li
-              a href="#" Another action
+              = link_to "Audit Trail", admin_audits_path
             li.divider role="separator"
             li.dropdown-header= current_admin.name
             li

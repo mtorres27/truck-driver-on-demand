@@ -11,7 +11,7 @@ class Company::QuotesController < Company::BaseController
     @message.authorable = current_company
 
     if @message.save
-      redirect_to company_job_applicant_quotes_path(@job, @applicant), notice: "Message sent"
+      redirect_to company_job_applicant_quotes_path(@job, @applicant)
     else
       set_collections
       render :index
@@ -20,12 +20,12 @@ class Company::QuotesController < Company::BaseController
 
   def accept
     @quote.accept!
-    redirect_to company_job_applicant_quotes_path(@job, @applicant), notice: "Quote accepted"
+    redirect_to company_job_applicant_quotes_path(@job, @applicant)
   end
 
   def decline
     @quote.decline!
-    redirect_to company_job_applicant_quotes_path(@job, @applicant), notice: "Quote declined"
+    redirect_to company_job_applicant_quotes_path(@job, @applicant)
   end
 
   private

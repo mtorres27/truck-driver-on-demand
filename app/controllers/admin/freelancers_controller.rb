@@ -4,15 +4,13 @@ class Admin::FreelancersController < Admin::BaseController
   before_action :set_freelancer, only: [:show, :edit, :update, :destroy, :enable, :disable, :login_as]
 
   def index
-    @freelancers = Freelancer.order(:name).page params[:page]
+    @keywords = params.dig(:search, :keywords).presence
 
-    # TODO - search
-    # search = params[:search]
-    #
-    # @freelancers = apply_search(
-    #   Freelancer.order(:disabled, :name),
-    #   search ? search[:q] : nil
-    # ).page(params[:page] || 1).per(20)
+    @freelancers = Freelancer.order(:name)
+    if @keywords
+      @freelancers = @freelancers.search(@keywords)
+    end
+    @freelancers = @freelancers.page(params[:page])
   end
 
   def show

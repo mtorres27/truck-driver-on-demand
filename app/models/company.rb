@@ -22,6 +22,7 @@
 #
 
 class Company < ApplicationRecord
+  include PgSearch
   include Loginable
   include Geocodable
   include Disableable
@@ -36,6 +37,17 @@ class Company < ApplicationRecord
   has_many :messages, -> { order(created_at: :desc) }, as: :authorable
 
   audited
+
+  pg_search_scope :search, against: {
+    name: "A",
+    email: "A",
+    contact_name: "B",
+    area: "B",
+    formatted_address: "C",
+    description: "C"
+  }, using: {
+    tsearch: { prefix: true }
+  }
 
   # We want to populate both name and contact_name on sign up
   before_validation :set_contact_name, on: :create

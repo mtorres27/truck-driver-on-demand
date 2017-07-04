@@ -48,7 +48,7 @@ class Company::ProjectsController < Company::BaseController
 
   def update
     if @project.update(project_params)
-      redirect_to company_projects_path, notice: "Project updated."
+      redirect_to company_projects_path
     else
       render :edit
     end

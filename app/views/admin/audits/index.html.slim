@@ -1,0 +1,27 @@
+.row
+  .col-xs-12.col-sm-6
+    h2 Audit Trail
+  .col-xs-12.col-sm-6
+    .search-form
+      = simple_form_for :search, url: admin_audits_path, method: :get do |f|
+        = f.input :keywords, label: false, placeholder: "Search", input_html: { value: @keywords }
+
+.table-responsive
+  table.table.table-striped
+    thead
+      tr
+        th.author Author
+        th.audited Audited
+        th Changes
+
+    tbody
+      - @audits.each do |audit|
+        tr
+          td
+            - if audit.user_type.present?
+              - user = audit.user_type.constantize.find(audit.user_id)
+              = user&.name
+          td= audit.auditable_type
+          td= CodeRay.scan(audit.audited_changes.pretty_inspect, :ruby).div.html_safe
+
+= paginate @audits

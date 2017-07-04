@@ -8,6 +8,6 @@ module LoginAs
     session["#{section}_id".to_sym] = obj.id
     session["#{section}_token".to_sym] = obj.token
 
-    redirect_to send("#{section}_root_path"), notice: "You have been logged in as #{obj.name}"
+    redirect_to send("#{section}_root_path")
   end
 end

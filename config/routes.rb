@@ -53,5 +53,7 @@ Rails.application.routes.draw do
       get :disable, on: :member
       get :enable, on: :member
     end
+
+    resources :audits, only: [:index]
   end
 end

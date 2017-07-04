@@ -10,7 +10,7 @@ class Company::ContractsController < Company::BaseController
 
   def update
     if @job.update(job_params)
-      redirect_to company_job_contract_path(@job), notice: "Contract updated."
+      redirect_to company_job_contract_path(@job)
     else
       build_payments
       render :edit
