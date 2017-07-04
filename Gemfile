@@ -18,6 +18,7 @@ gem "uglifier", "~> 3.2.0"
 gem "turbolinks", "~> 5"
 gem "bootstrap-sass", "~> 3.3.7"
 gem "jquery-rails", "~> 4.3.1"
+gem "coderay"
 
 # See https://github.com/rails/execjs#readme for more supported runtimes
 # gem "therubyracer", platforms: :ruby

@@ -4,15 +4,13 @@ class Admin::CompaniesController < Admin::BaseController
   before_action :set_company, only: [:show, :edit, :update, :destroy, :enable, :disable, :login_as]
 
   def index
-    @companies = Company.order(:name).page params[:page]
+    @keywords = params.dig(:search, :keywords).presence
 
-    # TODO - search
-    # search = params[:search]
-    #
-    # @companies = apply_search(
-    #   Company.order(:disabled, :name),
-    #   search ? search[:q] : nil
-    # ).page(params[:page] || 1).per(20)
+    @companies = Company.order(:name)
+    if @keywords
+      @companies = @companies.search(@keywords)
+    end
+    @companies = @companies.page(params[:page])
   end
 
   def show

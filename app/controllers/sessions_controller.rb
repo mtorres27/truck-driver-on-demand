@@ -24,7 +24,7 @@ class SessionsController < ApplicationController
       if user
         session["#{section}_id"] = user.id
         session["#{section}_token"] = user.token
-        redirect_to "/#{section}", notice: "Signed in"
+        redirect_to "/#{section}"
       else
         throw ActionController::InvalidAuthenticityToken
       end
@@ -41,7 +41,7 @@ class SessionsController < ApplicationController
     else
       reset_session
     end
-    redirect_to root_path, notice: "Signed out"
+    redirect_to root_path
   end
 
   def failure
