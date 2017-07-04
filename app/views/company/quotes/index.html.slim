@@ -6,14 +6,8 @@
     | #{@applicant.freelancer&.name}: Messages and Quotes
   .row
     .col-xs-12.col-md-8.col-sm-7
-      h4 Post a Message
       = simple_form_for(:message, url: company_job_applicant_quotes_path(@job, @applicant)) do |f|
-        .form-inputs
-          = f.input :body, as: :text, label: false
-        .form-actions
-          = f.submit "Post", class: "btn btn-primary"
-          '
-          = link_to "Cancel", company_job_applicants_path(@job), class: "btn btn-default"
+        = render partial: "company/shared/new_message", locals: { f: f }
       - @messages.each do |message|
         hr
         .media

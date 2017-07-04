@@ -6,13 +6,7 @@
     | Job Progress Report
   .post
     = simple_form_for(:message, url: company_job_messages_path(@job)) do |f|
-      .row
-        .col-xs-12
-          = f.input :body, as: :text
-        .col-xs-6
-          = f.input :attachment, as: :file, label: false
-        .col-xs-6.text-right
-          = f.submit "Post Message", class: "btn btn-primary"
+      = render partial: "company/shared/new_message", locals: { f: f }
 
   h4.messages-and-activity Messages and Activity
   ol.media-list
