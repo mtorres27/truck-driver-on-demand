@@ -31,6 +31,7 @@
               - if quote.pending?
                 - if quote.fixed? && quote.amount > @job.budget
                   .quote_over-budget= "Over Budget"
-                = link_to "Accept", accept_company_job_applicant_quote_path(quote), class: "btn btn-success"
-                = link_to "Decline", decline_company_job_applicant_quote_path(quote), class: "btn btn-danger"
+                = link_to "Accept", accept_company_job_applicant_quote_path(@job, @applicant, quote), class: "btn btn-success"
+                '
+                = link_to "Decline", decline_company_job_applicant_quote_path(@job, @applicant, quote), class: "btn btn-danger"
               hr
