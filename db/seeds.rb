@@ -108,15 +108,19 @@ schools.sample(20).each do |school|
           company: company,
           description: "First Installment",
           amount: 1620,
-          issued_on: 3.days.ago
+          issued_on: 5.days.ago
         )
         job.payments.create(
           company: company,
           description: "Final Payment",
           amount: 2200,
-          issued_on: 7.days.from_now
+          issued_on: 3.days.ago
         )
       end
     end
+  end
+
+  Job.includes(:payments).where(state: :completed).each do |job|
+    job.payments.where(paid_on: nil).update_all(paid_on: 2.days.ago)
   end
 end
