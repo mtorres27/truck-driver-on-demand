@@ -45,6 +45,8 @@ class Job < ApplicationRecord
   has_many :messages, -> { order(created_at: :desc) }, as: :receivable
   has_many :change_orders, -> { order(updated_at: :desc) }, dependent: :destroy
   has_many :payments, dependent: :destroy
+  has_one :freelancer_review, dependent: :nullify
+  has_one :company_review, dependent: :nullify
 
   accepts_nested_attributes_for :payments, allow_destroy: true, reject_if: :reject_payments
 

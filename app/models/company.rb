@@ -35,6 +35,8 @@ class Company < ApplicationRecord
   has_many :quotes, dependent: :destroy
   has_many :payments, dependent: :destroy
   has_many :messages, -> { order(created_at: :desc) }, as: :authorable
+  has_many :freelancer_reviews, dependent: :nullify
+  has_many :company_reviews, dependent: :destroy
 
   audited
 

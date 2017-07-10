@@ -257,6 +257,84 @@ ALTER SEQUENCE companies_id_seq OWNED BY companies.id;
 
 
 --
+-- Name: company_reviews; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE company_reviews (
+    id bigint NOT NULL,
+    company_id bigint,
+    freelancer_id bigint,
+    job_id bigint,
+    quality_of_information_provided integer NOT NULL,
+    communication integer NOT NULL,
+    materials_available_onsite integer NOT NULL,
+    promptness_of_payment integer NOT NULL,
+    overall_experience integer NOT NULL,
+    comments text,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: company_reviews_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE company_reviews_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: company_reviews_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE company_reviews_id_seq OWNED BY company_reviews.id;
+
+
+--
+-- Name: freelancer_reviews; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE freelancer_reviews (
+    id bigint NOT NULL,
+    freelancer_id bigint,
+    company_id bigint,
+    job_id bigint,
+    availability integer NOT NULL,
+    communication integer NOT NULL,
+    adherence_to_schedule integer NOT NULL,
+    skill_and_quality_of_work integer NOT NULL,
+    overall_experience integer NOT NULL,
+    comments text,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: freelancer_reviews_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE freelancer_reviews_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: freelancer_reviews_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE freelancer_reviews_id_seq OWNED BY freelancer_reviews.id;
+
+
+--
 -- Name: freelancers; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -594,6 +672,20 @@ ALTER TABLE ONLY companies ALTER COLUMN id SET DEFAULT nextval('companies_id_seq
 
 
 --
+-- Name: company_reviews id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY company_reviews ALTER COLUMN id SET DEFAULT nextval('company_reviews_id_seq'::regclass);
+
+
+--
+-- Name: freelancer_reviews id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY freelancer_reviews ALTER COLUMN id SET DEFAULT nextval('freelancer_reviews_id_seq'::regclass);
+
+
+--
 -- Name: freelancers id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -688,6 +780,22 @@ ALTER TABLE ONLY change_orders
 
 ALTER TABLE ONLY companies
     ADD CONSTRAINT companies_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: company_reviews company_reviews_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY company_reviews
+    ADD CONSTRAINT company_reviews_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: freelancer_reviews freelancer_reviews_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY freelancer_reviews
+    ADD CONSTRAINT freelancer_reviews_pkey PRIMARY KEY (id);
 
 
 --
@@ -843,6 +951,48 @@ CREATE UNIQUE INDEX index_companies_on_email ON companies USING btree (email);
 --
 
 CREATE INDEX index_companies_on_name ON companies USING btree (name);
+
+
+--
+-- Name: index_company_reviews_on_company_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_company_reviews_on_company_id ON company_reviews USING btree (company_id);
+
+
+--
+-- Name: index_company_reviews_on_freelancer_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_company_reviews_on_freelancer_id ON company_reviews USING btree (freelancer_id);
+
+
+--
+-- Name: index_company_reviews_on_job_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_company_reviews_on_job_id ON company_reviews USING btree (job_id);
+
+
+--
+-- Name: index_freelancer_reviews_on_company_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_freelancer_reviews_on_company_id ON freelancer_reviews USING btree (company_id);
+
+
+--
+-- Name: index_freelancer_reviews_on_freelancer_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_freelancer_reviews_on_freelancer_id ON freelancer_reviews USING btree (freelancer_id);
+
+
+--
+-- Name: index_freelancer_reviews_on_job_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_freelancer_reviews_on_job_id ON freelancer_reviews USING btree (job_id);
 
 
 --
@@ -1035,6 +1185,14 @@ CREATE INDEX user_index ON audits USING btree (user_id, user_type);
 
 
 --
+-- Name: company_reviews fk_rails_05756653f5; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY company_reviews
+    ADD CONSTRAINT fk_rails_05756653f5 FOREIGN KEY (job_id) REFERENCES jobs(id);
+
+
+--
 -- Name: payments fk_rails_0fc68a9316; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -1048,6 +1206,14 @@ ALTER TABLE ONLY payments
 
 ALTER TABLE ONLY jobs
     ADD CONSTRAINT fk_rails_1977e8b5a6 FOREIGN KEY (project_id) REFERENCES projects(id);
+
+
+--
+-- Name: freelancer_reviews fk_rails_2d750cb05f; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY freelancer_reviews
+    ADD CONSTRAINT fk_rails_2d750cb05f FOREIGN KEY (freelancer_id) REFERENCES freelancers(id);
 
 
 --
@@ -1075,6 +1241,14 @@ ALTER TABLE ONLY applicants
 
 
 --
+-- Name: company_reviews fk_rails_54727610ca; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY company_reviews
+    ADD CONSTRAINT fk_rails_54727610ca FOREIGN KEY (company_id) REFERENCES companies(id);
+
+
+--
 -- Name: applicants fk_rails_7283c3d901; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -1088,6 +1262,14 @@ ALTER TABLE ONLY applicants
 
 ALTER TABLE ONLY quotes
     ADD CONSTRAINT fk_rails_9b32fbc45b FOREIGN KEY (company_id) REFERENCES companies(id);
+
+
+--
+-- Name: freelancer_reviews fk_rails_ab5db9ea44; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY freelancer_reviews
+    ADD CONSTRAINT fk_rails_ab5db9ea44 FOREIGN KEY (company_id) REFERENCES companies(id);
 
 
 --
@@ -1131,6 +1313,22 @@ ALTER TABLE ONLY change_orders
 
 
 --
+-- Name: company_reviews fk_rails_dfd5a40d4e; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY company_reviews
+    ADD CONSTRAINT fk_rails_dfd5a40d4e FOREIGN KEY (freelancer_id) REFERENCES freelancers(id);
+
+
+--
+-- Name: freelancer_reviews fk_rails_f184aba2e9; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY freelancer_reviews
+    ADD CONSTRAINT fk_rails_f184aba2e9 FOREIGN KEY (job_id) REFERENCES jobs(id);
+
+
+--
 -- PostgreSQL database dump complete
 --
 
@@ -1153,6 +1351,8 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20170509175102'),
 ('20170510154135'),
 ('20170515191347'),
-('20170616143054');
+('20170616143054'),
+('20170710124433'),
+('20170710124506');
 
 

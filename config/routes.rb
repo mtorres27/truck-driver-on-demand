@@ -36,6 +36,7 @@ Rails.application.routes.draw do
         get :print, on: :member
         get :mark_as_paid, on: :member
       end
+      resource :review
     end
   end
 
