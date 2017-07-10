@@ -17,18 +17,17 @@
 #
 
 class FreelancerReview < ApplicationRecord
-  belongs_to :company
-  belongs_to :freelancer
-  belongs_to :job
-
-  [
+  RATING_ATTRS = [
     :availability,
     :communication,
     :adherence_to_schedule,
     :skill_and_quality_of_work,
     :overall_experience
-  ].each do |attr|
-    validates attr, inclusion: { in: 1..5 }
-  end
+  ]
 
+  include Reviewable
+
+  belongs_to :company
+  belongs_to :freelancer
+  belongs_to :job
 end

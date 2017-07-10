@@ -53,7 +53,7 @@ class Freelancer < ApplicationRecord
     tsearch: { prefix: true }
   }
 
-  def stars
-    4.5 # TODO
+  def rating
+    freelancer_reviews.average("(#{FreelancerReview::RATING_ATTRS.map(&:to_s).join('+')}) / #{FreelancerReview::RATING_ATTRS.length}").round
   end
 end

@@ -3,13 +3,13 @@ class Company::ReviewsController < Company::BaseController
   before_action :set_review, only: [:show, :edit, :update]
 
   def new
-    @review = @job.review.new
+    @freelancer_review = @job.build_freelancer_review
   end
 
   def create
-    @review = @job.review.new(review_params)
+    @freelancer_review = @job.build_freelancer_review(review_params)
 
-    if @review.save
+    if @freelancer_review.save
       redirect_to company_job_review_path(@job)
     else
       render :new
@@ -23,7 +23,7 @@ class Company::ReviewsController < Company::BaseController
   end
 
   def update
-    if @review.update(review_params)
+    if @freelancer_review.update(review_params)
       redirect_to company_job_review_path(@job)
     else
       render :edit
@@ -37,10 +37,17 @@ class Company::ReviewsController < Company::BaseController
     end
 
     def set_review
-      @review = @job.review
+      @freelancer_review = @job.freelancer_review
     end
 
     def review_params
-      params.require(:review).permit(:rating, :body)
+      params.require(:freelancer_review).permit(
+        :availability,
+        :communication,
+        :adherence_to_schedule,
+        :skill_and_quality_of_work,
+        :overall_experience,
+        :comments
+      )
     end
 end

@@ -57,6 +57,10 @@ class Company < ApplicationRecord
     self.contact_name = name unless contact_name
   end
 
+  def rating
+    company_reviews.average("(#{CompanyReview::RATING_ATTRS.map(&:to_s).join('+')}) / #{CompanyReview::RATING_ATTRS.length}").round
+  end
+
   # This SQL needs to stay exactly in sync with it's related index (index_on_companies_location)
   # otherwise the index won't be used. (don't even add whitespace!)
   # https://github.com/pairshaped/postgis-on-rails-example
