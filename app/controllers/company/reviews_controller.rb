@@ -1,32 +1,21 @@
 class Company::ReviewsController < Company::BaseController
   before_action :set_job
-  before_action :set_review, only: [:show, :edit, :update]
 
-  def new
-    @freelancer_review = @job.build_freelancer_review
+  def show
+    @review =
+      @job.freelancer_review ||
+      @job.build_freelancer_review
   end
 
   def create
-    @freelancer_review = @job.build_freelancer_review(review_params)
+    @review = @job.build_freelancer_review(review_params)
+    @review.freelancer = @job.freelancer
+    @review.company = current_company
 
-    if @freelancer_review.save
+    if @review.save
       redirect_to company_job_review_path(@job)
     else
-      render :new
-    end
-  end
-
-  def show
-  end
-
-  def edit
-  end
-
-  def update
-    if @freelancer_review.update(review_params)
-      redirect_to company_job_review_path(@job)
-    else
-      render :edit
+      render :show
     end
   end
 
@@ -34,10 +23,6 @@ class Company::ReviewsController < Company::BaseController
 
     def set_job
       @job = current_company.jobs.find(params[:job_id])
-    end
-
-    def set_review
-      @freelancer_review = @job.freelancer_review
     end
 
     def review_params

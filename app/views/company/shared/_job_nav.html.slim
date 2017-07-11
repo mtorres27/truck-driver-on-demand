@@ -34,7 +34,7 @@
         - else
           a href=company_job_payments_path(job)
             | Payments
-      li class=("active" if request.path.index(/payment/))
+      li class=("active" if request.path.index(/review/))
         - unless job.completed?
           | Review
         - else

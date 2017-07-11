@@ -19,7 +19,6 @@ Rails.application.routes.draw do
     resources :freelancers, only: [:index, :show]
     resources :applicants
 
-    root "projects#index"
     resources :projects
     resources :jobs, except: [:index] do
       resources :applicants do
@@ -36,7 +35,7 @@ Rails.application.routes.draw do
         get :print, on: :member
         get :mark_as_paid, on: :member
       end
-      resource :review
+      resource :review, only: [:show, :create]
     end
   end
 

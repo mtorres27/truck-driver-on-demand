@@ -3,7 +3,7 @@ module Reviewable
 
   included do |base|
     base::RATING_ATTRS.each do |attr|
-      validates attr, inclusion: { in: 1..5 }
+      validates attr, inclusion: { in: 1..5, message: "Please select a rating." }
     end
 
     def average
