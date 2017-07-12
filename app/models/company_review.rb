@@ -31,5 +31,7 @@ class CompanyReview < ApplicationRecord
   belongs_to :company
   belongs_to :job
 
+  schema_validations auto_create: false
+
   audited
 end

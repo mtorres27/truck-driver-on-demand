@@ -31,5 +31,7 @@ class FreelancerReview < ApplicationRecord
   belongs_to :freelancer
   belongs_to :job
 
+  schema_validations auto_create: false
+
   audited
 end
