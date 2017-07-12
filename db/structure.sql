@@ -235,7 +235,8 @@ CREATE TABLE companies (
     disabled boolean DEFAULT false NOT NULL,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
-    messages_count integer DEFAULT 0 NOT NULL
+    messages_count integer DEFAULT 0 NOT NULL,
+    company_reviews_count integer DEFAULT 0 NOT NULL
 );
 
 
@@ -363,7 +364,8 @@ CREATE TABLE freelancers (
     disabled boolean DEFAULT false NOT NULL,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
-    messages_count integer DEFAULT 0 NOT NULL
+    messages_count integer DEFAULT 0 NOT NULL,
+    freelancer_reviews_count integer DEFAULT 0 NOT NULL
 );
 
 
@@ -1357,6 +1359,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20170616143054'),
 ('20170710124433'),
 ('20170710124506'),
-('20170712161401');
+('20170712161401'),
+('20170712165459');
 
 
