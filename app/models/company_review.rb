@@ -30,4 +30,6 @@ class CompanyReview < ApplicationRecord
   belongs_to :freelancer
   belongs_to :company
   belongs_to :job
+
+  audited
 end
