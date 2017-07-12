@@ -42,7 +42,7 @@ schools.sample(20).each do |school|
     budget = Faker::Number.number(4)
     job = project.jobs.create!(
       company: company,
-      title: Faker::Educator.campus,
+      title: "#{Faker::Address.city} #{%w(Unit Campus Building Block Room Floor Section Mazzanine Landing Basement).sample}",
       summary: Faker::Lorem.paragraphs(2).join("\n\n"),
       budget: budget,
       job_function: Job.job_function.values.sample,
