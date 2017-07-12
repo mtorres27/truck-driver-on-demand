@@ -15,7 +15,13 @@ class Company::PaymentsController < Company::BaseController
 
   def mark_as_paid
     @payment.mark_as_paid!
-    redirect_to company_job_payment_path(@job, @payment)
+
+    if @job.payments.outstanding.empty?
+      @job.update(state: :completed)
+      redirect_to company_job_review_path(@job)
+    else
+      redirect_to company_job_payments_path(@job)
+    end
   end
 
   private

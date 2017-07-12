@@ -22,8 +22,10 @@ class Payment < ApplicationRecord
 
   audited
 
+  scope :outstanding, -> { where(paid_on: nil) }
+  scope :paid, -> { where.not(paid_on: nil) }
+
   def mark_as_paid!
-    self.paid_on = Time.zone.now.to_date
-    save
+    update(paid_on: Time.zone.now.to_date)
   end
 end
