@@ -1,0 +1,25 @@
+table.table
+  tr
+    th Description
+    th Amount
+    th Status
+    th Aging
+    th Date Issued
+    th Date Paid
+    th
+  - payments.each do |payment|
+    tr
+      td= payment.description
+      td= number_to_currency(payment.amount, precision: 0)
+      td
+        - if payment.paid_on.present?
+          span.text-success Paid
+        - else
+          | Unpaid
+      td
+        - if payment.paid_on.blank? && payment.issued_on.present? && payment.issued_on < Time.zone.now
+          = pluralize((Time.zone.now.to_date - payment.issued_on).to_i, "day")
+      td= payment.issued_on
+      td= payment.paid_on
+      td.text-right
+        = link_to (payment.paid_on.blank? ? "Make Payment" : "View Invoice"), company_job_payment_path(job, payment)

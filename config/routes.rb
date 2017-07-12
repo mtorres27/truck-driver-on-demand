@@ -18,8 +18,9 @@ Rails.application.routes.draw do
     resource :company, only: [:show, :edit, :update]
     resources :freelancers, only: [:index, :show]
     resources :applicants
-
+    resources :payments
     resources :projects
+
     resources :jobs, except: [:index] do
       resources :applicants do
         get :request_quote, on: :member
@@ -31,7 +32,7 @@ Rails.application.routes.draw do
       end
       resource :contract, only: [:show, :edit, :update]
       resources :messages, only: [:index, :create]
-      resources :payments, only: [:index, :show] do
+      resources :payments, controller: "job_payments", only: [:index, :show] do
         get :print, on: :member
         get :mark_as_paid, on: :member
       end
