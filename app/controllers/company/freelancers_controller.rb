@@ -16,6 +16,13 @@ class Company::FreelancersController < Company::BaseController
     @freelancers = @freelancers.page(params[:page]).per(5)
   end
 
+  def hired
+    @freelancers = current_company.
+      freelancers.
+      page(params[:page]).
+      per(5)
+  end
+
   def show
     Freelancer.find(params[:id])
   end

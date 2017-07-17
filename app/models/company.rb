@@ -38,6 +38,14 @@ class Company < ApplicationRecord
   has_many :freelancer_reviews, dependent: :nullify
   has_many :company_reviews, dependent: :destroy
 
+  def freelancers
+    Freelancer.
+      joins(applicants: :job).
+      where(jobs: { company_id: id }).
+      where(applicants: { state: :accepted }).
+      order(:name)
+  end
+
   audited
 
   pg_search_scope :search, against: {

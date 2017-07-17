@@ -16,7 +16,9 @@ Rails.application.routes.draw do
     root "main#index"
 
     resource :company, only: [:show, :edit, :update]
-    resources :freelancers, only: [:index, :show]
+    resources :freelancers, only: [:index, :show] do
+      get :hired, on: :collection
+    end
     resources :applicants
     resources :payments
     resources :projects
