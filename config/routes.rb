@@ -15,7 +15,7 @@ Rails.application.routes.draw do
   namespace :company do
     root "main#index"
 
-    resource :company, only: [:show, :edit, :update]
+    resource :profile, only: [:show, :edit, :update]
     resources :freelancers, only: [:index, :show] do
       get :hired, on: :collection
     end
