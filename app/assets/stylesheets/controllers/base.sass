@@ -3,12 +3,19 @@ html
   min-height: 100%
 
 body
+  font-family: "Open Sans", sans-serif
   padding: 70px 0 20px 0
   margin-bottom: 60px
-  font-family: 'Roboto', sans-serif
 
 h1, h2, h3, h4, h5, h6, th
   color: $gray-light
+  font-family: "Raleway", sans-serif
+
+h1
+  font-weight: 600
+
+h2, h3, h4, h5, h6
+  font-weight: 300
 
 label
   text-transform: uppercase
@@ -30,8 +37,9 @@ a:hover, a:focus, a:active
   box-shadow: 1px 1px 1px 1px lighten($gray-light, 40%)
 
   &-brand
-    padding-left: 30px
-    font-size: 24px
+    padding: 0 0 0 15px
+    .logo_header
+      height: 50px
 
 .content
   padding: 0 40px

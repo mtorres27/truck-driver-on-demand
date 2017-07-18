@@ -6,7 +6,8 @@ nav.navbar.navbar-fixed-top
         span.icon-bar
         span.icon-bar
         span.icon-bar
-      = link_to "AV Junction", root_path, class: "navbar-brand"
+      a.navbar-brand href=root_path title="AV Junction"
+        = image_tag("logo_header.png", class: "logo_header", alt: "AV Junction")
     #navbar.collapse.navbar-collapse
       ul.nav.navbar-nav.navbar-right
         li( class=("active" if request.path == company_root_path) )
