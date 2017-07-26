@@ -8,3 +8,14 @@ h2 Temporary Links During Development
 p= link_to "Login As Company", login_as_session_path(section: "company", id: Company.order(:name).first)
 p= link_to "Login As Freelancer", login_as_session_path(section: "freelancer", id: Freelancer.order(:name).first)
 p= link_to "Login As Admin", login_as_session_path(section: "admin", id: Admin.order(:name).first)
+
+h2 Color Palette
+p
+  a href="http://getbootstrap.com/customize/" target="_blank"
+    | See Bootstrap Customization for Details
+.colors-demo
+  .brand-primary Primary
+  .brand-danger Danger
+  .brand-success Success
+  .brand-warning Warning
+  .brand-info Info

@@ -1,8 +1,7 @@
-- content_for :header do
-  h1 Payments
-  br
+h1 Payments
+br
 
-- content_for :body do
+- content_for :secondary do
   #projects-accordion.panel-group role="tablist" area-multiselectable="true"
     - @projects.each do |project|
       .panel.panel-default

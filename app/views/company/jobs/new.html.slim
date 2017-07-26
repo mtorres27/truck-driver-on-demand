@@ -1,5 +1,4 @@
-- content_for :header do
-  = render partial: "company/shared/job_nav", locals: { job: @job }
+= render partial: "company/shared/job_nav", locals: { job: @job }
 
-- content_for :body do
+- content_for :secondary do
   = render "form"

@@ -1,8 +1,7 @@
-- content_for :header do
-  h1 Search for Freelancers
-  = render "company/shared/freelancer_search_form"
+h1 Search for Freelancers
+= render "company/shared/freelancer_search_form"
 
-- content_for :body do
+- content_for :secondary do
   - @freelancers.each do |freelancer|
     a.result-row href=company_freelancer_path(freelancer)
       .media

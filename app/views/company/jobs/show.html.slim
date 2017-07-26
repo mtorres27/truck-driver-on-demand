@@ -1,7 +1,6 @@
-- content_for :header do
-  = render partial: "company/shared/job_nav", locals: { job: @job }
+= render partial: "company/shared/job_nav", locals: { job: @job }
 
-- content_for :body do
+- content_for :secondary do
   .row
     .col-xs-12.col-md-6
       .show_field

@@ -20,6 +20,7 @@ html
       .container= yield
 
     - if content_for(:secondary)
-      .secondary= yield :secondary
+      .secondary
+        .container= yield :secondary
 
     = render "shared/footer"

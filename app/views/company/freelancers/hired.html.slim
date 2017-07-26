@@ -1,8 +1,7 @@
-- content_for :header do
-  h1 My Technicians
-  br
+h1 My Technicians
+br
 
-- content_for :body do
+- content_for :secondary do
   - @freelancers.each do |freelancer|
     a.result-row href=company_freelancer_path(freelancer)
       .media
