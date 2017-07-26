@@ -21,6 +21,8 @@ module Avjunction
 
     config.middleware.use WickedPdf::Middleware, {}, only: %r[/payments\/.*\/print]
 
+    config.sass.preferred_syntax = :sass
+
     # Authication providers
     config.middleware.use OmniAuth::Builder do
       provider(
