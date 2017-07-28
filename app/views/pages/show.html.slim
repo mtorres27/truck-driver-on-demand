@@ -1,0 +1,6 @@
+h1= @page.title
+
+= raw $markdown.render(@page.body)
+
+strong
+  | Last Modified: #{l @page.updated_at.to_date}

@@ -518,6 +518,39 @@ ALTER SEQUENCE messages_id_seq OWNED BY messages.id;
 
 
 --
+-- Name: pages; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE pages (
+    id bigint NOT NULL,
+    slug character varying NOT NULL,
+    title character varying NOT NULL,
+    body text NOT NULL,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: pages_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE pages_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: pages_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE pages_id_seq OWNED BY pages.id;
+
+
+--
 -- Name: payments; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -719,6 +752,13 @@ ALTER TABLE ONLY messages ALTER COLUMN id SET DEFAULT nextval('messages_id_seq':
 
 
 --
+-- Name: pages id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY pages ALTER COLUMN id SET DEFAULT nextval('pages_id_seq'::regclass);
+
+
+--
 -- Name: payments id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -833,6 +873,14 @@ ALTER TABLE ONLY jobs
 
 ALTER TABLE ONLY messages
     ADD CONSTRAINT messages_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: pages pages_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY pages
+    ADD CONSTRAINT pages_pkey PRIMARY KEY (id);
 
 
 --
@@ -1106,6 +1154,13 @@ CREATE INDEX index_on_projects_loc ON projects USING gist (st_geographyfromtext(
 
 
 --
+-- Name: index_pages_on_slug; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_pages_on_slug ON pages USING btree (slug);
+
+
+--
 -- Name: index_payments_on_company_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -1360,6 +1415,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20170710124433'),
 ('20170710124506'),
 ('20170712161401'),
-('20170712165459');
+('20170712165459'),
+('20170728145820');
 
 

@@ -4,13 +4,13 @@
       .logo= image_tag "avjunction-logo_footer.svg"
       .links
         ul
-          li Blog
-          li Subscribe
-          li Social
+          li= link_to "Blog", "#"
+          li= link_to "Subscribe", "#"
+          li= link_to "Social", "#"
   .footer-bottom
     .container
       span &copy; 2017 AV Junction Inc.
       ' &middot;
-      = link_to "Privacy Policy", "#"
+      = link_to "Privacy Policy", "/privacy-policy"
       ' &middot;
-      = link_to "Terms of Service", "#"
+      = link_to "Terms of Service", "/terms-of-service"

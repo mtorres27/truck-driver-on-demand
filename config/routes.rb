@@ -1,6 +1,9 @@
 Rails.application.routes.draw do
   root "main#index"
 
+  get "privacy-policy", to: "pages#show", id: "privacy-policy"
+  get "terms-of-service", to: "pages#show", id: "terms-of-service"
+
   get "auth/:provider/callback", to: "sessions#create"
   resource :session, only: [:new, :create, :destroy] do
     get :login_as, on: :collection
@@ -57,6 +60,7 @@ Rails.application.routes.draw do
       get :enable, on: :member
     end
 
+    resources :pages, only: [:index, :edit, :update]
     resources :audits, only: [:index]
   end
 end
