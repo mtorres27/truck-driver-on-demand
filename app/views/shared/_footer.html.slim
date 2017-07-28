@@ -1,29 +1,16 @@
-.container
-  .footer
-    .row
-      .col-lg-offset-1.col-lg-2
-        p.section-title Company
-        p.section-link= link_to "About", "#"
-        p.section-link= link_to "Blog", "https://blog.avjunction.com"
-        p.section-link= link_to "Support", "https://avjunction.zendesk.com"
-        p.section-link= link_to "Press", "#"
-      .col-lg-2
-        p.section-title Legal
-        p.section-link= link_to "Terms and Conditions", "#"
-        p.section-link= link_to "Privacy Policy", "#"
-        p.section-link= link_to "Code of Conduct", "#"
-      .col-lg-2
-        p.section-title Connect
-        p.section-link= link_to "Facebook", "#"
-        p.section-link= link_to "Twitter", "#"
-        p.section-link= link_to "YouTube", "#"
-      .col-lg-4
-        p.section-title Subscribe for Occasional Updates
-        = simple_form_for(:subscribe, url: "#") do |f|
-          .row
-            .col-xs-9
-              = f.input :email, label: false, placeholder: "Enter your email address"
-            .col-xs-3
-              = f.submit "Subscribe", class: "btn btn-default"
-        = image_tag "logo_header.png", height: 50
-        p.text-muted &copy; 2017 AV Junction Inc. All rights reserved.
+.footer
+  .footer-top
+    .container
+      .logo= image_tag "avjunction-logo_footer.svg"
+      .links
+        ul
+          li Blog
+          li Subscribe
+          li Social
+  .footer-bottom
+    .container
+      span &copy; 2017 AV Junction Inc.
+      ' &middot;
+      = link_to "Privacy Policy", "#"
+      ' &middot;
+      = link_to "Terms of Service", "#"

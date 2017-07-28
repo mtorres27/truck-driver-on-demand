@@ -12,10 +12,16 @@ h1
 h2, h3, h4, h5, h6
   font-weight: 300
 
+a:hover, a:active
+  text-decoration: none
+
 label
   text-transform: uppercase
   &.boolean
     text-transform: none
+
+.btn
+  border-radius: 1px
 
 .btn, .label
   text-transform: uppercase
@@ -39,7 +45,6 @@ label
     a
       color: $gray-light
       &:hover
-        text-decoration: none
         color: $link-color
   .active
     border-bottom: 3px solid $link-color

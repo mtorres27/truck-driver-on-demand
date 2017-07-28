@@ -1,7 +1,40 @@
 .footer
-  margin-top: 40px
-  padding-top: 20px
-  background: $gray-lighter
-  .section-title
-    font-weight: 600
-    text-transform: uppercase
+  margin-top: 30px
+  color: darken(white, 8%)
+
+  ul
+    margin: 0
+
+  li
+    display: inline
+
+  a
+    color: darken(white, 5%)
+    &:hover
+      color: white
+
+  .footer-top
+    background-color: $color-orange-light
+    line-height: 143px
+
+    .logo
+      float: left
+      img
+        max-width: 250px
+        width: 100%
+
+    .links
+      float: right
+      font-family: 'Raleway', sans-serif
+      font-weight: 600
+      letter-spacing: 2px
+      text-transform: uppercase
+      li
+        padding-left: 20px
+
+  .footer-bottom
+    padding: 18px 0
+    background-color: $color-orange-dark
+    text-align: center
+    span, a
+      padding: 5px 7px
