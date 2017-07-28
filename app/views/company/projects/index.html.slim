@@ -6,14 +6,14 @@
 
 .row
   .col-xs-12
-    ul.list-inline.page_nav
+    ul.secondary_nav
       li class=("active" unless params[:closed]) role="presentation"
         = link_to "Open Projects", company_projects_path, "aria-controlers" => "open", role: "tab"
       li class=("active" if params[:closed]) role="presentation"
         = link_to "Closed Projects", company_projects_path(closed: true), "aria-controlers" => "closed", role: "tab"
 
 - content_for :secondary do
-  .content_card_title
+  .secondary_title
     .row
       .col-md-10.col-sm-12
         h2 #{@projects.total_count} #{params[:closed] ? 'Closed' : 'Open'} Projects with a total of #{@job_count} jobs.
@@ -71,7 +71,13 @@ javascript:
 
   var toggleJobs = function(caller) {
     show = caller.dataset.action == "show"
-    caller.dataset.action = (show ? "hide" : "show")
+    if (show) {
+      caller.innerText = caller.innerText.replace("EXPAND", "HIDE")
+      caller.dataset.action = "hide"
+    } else {
+      caller.innerText = caller.innerText.replace("HIDE", "EXPAND")
+      caller.dataset.action = "show"
+    }
 
     filteredJobs = Array.prototype.filter.call(jobs, function(job) {
       return (show && !job.classList.contains("in")) || (!show && job.classList.contains("in"))

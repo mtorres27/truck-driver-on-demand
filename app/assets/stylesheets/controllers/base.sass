@@ -31,43 +31,9 @@ label
 .btn, .label
   text-transform: uppercase
 
-.content
-  padding: 0 40px
-  border-left: 1px solid $gray-lighter
-
 .striped_bg
   background-color: $gray-lighter
   padding: 30px 0
-
-.page_nav
-  margin: 20px 0 0 0
-  li
-    width: 145px
-    text-align: center
-    padding: 15px 0
-    font-size: 14px
-    text-transform: uppercase
-    a
-      color: $gray-light
-      &:hover
-        color: $link-color
-  .active
-    border-bottom: 3px solid $link-color
-    color: $link-color
-    a
-      color: $link-color
-
-.content_card
-  padding: 25px
-  background-color: white
-  box-shadow: 1px 1px 3px 1px lighten($gray-light, 25%)
-  border-radius: 2px
-  &_title
-    margin: -25px -25px 15px -25px
-    padding: 15px 25px
-    background-color: lighten($gray-light, 50%)
-    font-size: 28px
-    color: $gray-light
 
 .show_field
   margin-bottom: 20px
@@ -78,3 +44,24 @@ label
 .radio.inline
   margin-right: 20px
   display: inline
+
+.secondary_nav
+  @extend .list-inline
+  margin: 20px 0 0 0
+
+  li
+    width: 145px
+    text-align: center
+    padding: 15px 0
+    font-size: 14px
+    text-transform: uppercase
+    a
+      color: $gray-light
+      &:hover
+        color: $link-color
+
+  .active
+    border-bottom: 3px solid $link-color
+    color: $link-color
+    a
+      color: $link-color
