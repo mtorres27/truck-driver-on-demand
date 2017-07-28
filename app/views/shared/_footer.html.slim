@@ -6,11 +6,17 @@
         ul
           li= link_to "Blog", "#"
           li= link_to "Subscribe", "#"
-          li= link_to "Social", "#"
+          li
+            a href="https://twitter.com/avjunction" target="_blank"
+              = fa_stacked_icon "twitter", base: "square-o"
+            a href="https://facebook.com/avjunction" target="_blank"
+              = fa_stacked_icon "facebook", base: "square-o"
+            a href="https://linkedin.com/in/avjunction" target="_blank"
+              = fa_stacked_icon "linkedin", base: "square-o"
   .footer-bottom
     .container
       span &copy; 2017 AV Junction Inc.
-      ' &middot;
+      | &middot;
       = link_to "Privacy Policy", "/privacy-policy"
-      ' &middot;
+      | &middot;
       = link_to "Terms of Service", "/terms-of-service"
