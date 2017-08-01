@@ -22,6 +22,7 @@
 #
 
 class Company < ApplicationRecord
+  extend Enumerize
   include PgSearch
   include Loginable
   include Geocodable
@@ -37,6 +38,8 @@ class Company < ApplicationRecord
   has_many :messages, -> { order(created_at: :desc) }, as: :authorable
   has_many :freelancer_reviews, dependent: :nullify
   has_many :company_reviews, dependent: :destroy
+
+  enumerize :currency, in: [ "CAD", "USD" ]
 
   def freelancers
     Freelancer.

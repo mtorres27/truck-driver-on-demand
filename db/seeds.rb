@@ -16,6 +16,8 @@ Admin.create!(email: "pweather24@gmail.com", name: "Paul Weatherhead")
   )
 end
 
+require Rails.root.join("db/seeds/realistic.rb")
+
 240.times do
   Company.create!(
     email: Faker::Internet.unique.email,
@@ -118,31 +120,5 @@ schools.sample(20).each do |school|
         )
       end
     end
-  end
-
-  Job.includes(:payments).where(state: :completed).each do |job|
-    job.payments.where(paid_on: nil).update_all(paid_on: 2.days.ago)
-    # if rand(2) == 1 && job.freelancer_review.nil?
-    #   job.create_freelancer_review!(
-    #     company: job.company,
-    #     freelancer: job.freelancer,
-    #     availability: 1 + rand(5),
-    #     communication: 1 + rand(5),
-    #     adherence_to_schedule: 1 + rand(5),
-    #     skill_and_quality_of_work: 1 + rand(5),
-    #     overall_experience: 1 + rand(5),
-    #     comments: Faker::ChuckNorris.fact
-    #   )
-    #   job.create_company_review!(
-    #     company: job.company,
-    #     freelancer: job.freelancer,
-    #     quality_of_information_provided: 1 + rand(5),
-    #     communication: 1 + rand(5),
-    #     materials_available_onsite: 1 + rand(5),
-    #     promptness_of_payment: 1 + rand(5),
-    #     overall_experience: 1 + rand(5),
-    #     comments: Faker::ChuckNorris.fact
-    #   )
-    # end
   end
 end
