@@ -286,8 +286,163 @@ Company.create(
   end
 
 
+  # #########
+  # Project 4
+  company.projects.create(
+    name: "University New AV Build - 40 Classrooms (2 room types)",
+    external_project_id: 800603,
+    budget: 9000,
+    address: "University of Cambridge, Downing Pl, Cambridge CB2 3EN, UK",
+    area: "Cambridge",
+    starts_on: Date.parse("2017-10-16"),
+    duration: 20,
+    closed: false
+  ).tap do |project|
+
+    project.jobs.create(
+      company: company,
+      title: "4 AV technician required. Broadcast and videowall experience",
+      budget: 7500,
+      contract_price: 7500,
+      summary: "Lorem ipsum",
+      job_function: :av_installation_technician,
+      starts_on: Date.parse("2017-10-16"),
+      duration: 20,
+      pay_type: :hourly,
+      freelancer_type: :av_labor_company,
+      state: :contracted
+    ).tap do |job|
+
+      job.applicants.create(
+        company: company,
+        freelancer: Freelancer.order("RANDOM()").first,
+        state: :accepted
+      )
+   end
+
+   project.jobs.create(
+      company: company,
+      title: "AV Programmer required.",
+      budget: 1500,
+      contract_price: 1200,
+      summary: "Lorem ipsum",
+      job_function: :av_programmer,
+      starts_on: Date.parse("2017-10-30"),
+      duration: 5,
+      pay_type: :hourly,
+      freelancer_type: :independent,
+      state: :contracted
+    ).tap do |job|
+
+      job.applicants.create(
+        company: company,
+        freelancer: Freelancer.order("RANDOM()").first,
+        state: :accepted
+      ).tap do |applicant|
+
+        job.payments.create(
+          company: company,
+          description: "Deposit",
+          amount: 500,
+          issued_on: 8.days.ago,
+          paid_on: 5.days.ago
+        )
+        job.payments.create(
+          company: company,
+          description: "Final Payment",
+          amount: 700,
+          issued_on: 2.days.ago
+        )
+      end
+    end
+  end
 
 
+  # #########
+  # Project 5
+  company.projects.create(
+    name: "Retail Digital Signage Project",
+    external_project_id: 800604,
+    budget: 5500,
+    address: "151 W 34th St, New York, NY 10001, USA",
+    area: "New York",
+    starts_on: Date.parse("2017-09-21"),
+    duration: 7,
+    closed: false
+  ).tap do |project|
+
+    project.jobs.create(
+      company: company,
+      title: "2 AV Technicians required. Digital signage and VW experience.",
+      budget: 4000,
+      contract_price: 4000,
+      summary: "Lorem ipsum",
+      job_function: :av_installation_technician,
+      starts_on: Date.parse("2017-10-16"),
+      duration: 20,
+      pay_type: :hourly,
+      freelancer_type: :av_labor_company,
+      state: :contracted
+    ).tap do |job|
+
+      job.applicants.create(
+        company: company,
+        freelancer: Freelancer.order("RANDOM()").first,
+        state: :accepted
+      ).tap do |applicant|
+
+        job.payments.create(
+          company: company,
+          description: "Deposit",
+          amount: 1200,
+          issued_on: 8.days.ago,
+          paid_on: 5.days.ago
+        )
+        job.payments.create(
+          company: company,
+          description: "Final Payment",
+          amount: 2800,
+          issued_on: 2.days.ago
+        )
+      end
+   end
+
+   project.jobs.create(
+      company: company,
+      title: "AV Programmer required.",
+      budget: 1500,
+      contract_price: 1200,
+      summary: "Lorem ipsum",
+      job_function: :av_programmer,
+      starts_on: Date.parse("2017-10-30"),
+      duration: 5,
+      pay_type: :hourly,
+      freelancer_type: :independent,
+      state: :contracted
+    ).tap do |job|
+
+      job.applicants.create(
+        company: company,
+        freelancer: Freelancer.order("RANDOM()").first,
+        state: :accepted
+      ).tap do |applicant|
+
+        job.payments.create(
+          company: company,
+          description: "Deposit",
+          amount: 500,
+          issued_on: 8.days.ago,
+          paid_on: 5.days.ago
+        )
+        job.payments.create(
+          company: company,
+          description: "Final Payment",
+          amount: 700,
+          issued_on: 2.days.ago
+        )
+      end
+    end
+  end
 
 
 
