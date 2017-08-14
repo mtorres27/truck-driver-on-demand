@@ -21,6 +21,7 @@ gem "font-awesome-rails", "~> 4.7.0"
 gem "jquery-rails", "~> 4.3.1"
 gem "coderay", "~> 1.1.1"
 gem "redcarpet", "~> 3.4.0"
+gem 'easy_postgis'
 
 # See https://github.com/rails/execjs#readme for more supported runtimes
 # gem "therubyracer", platforms: :ruby

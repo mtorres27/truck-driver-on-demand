@@ -32,6 +32,7 @@ class Freelancer < ApplicationRecord
   include Geocodable
   include Disableable
   include AvatarUploader[:avatar]
+  include EasyPostgis
 
   has_many :identities, as: :loginable, dependent: :destroy
   has_many :applicants, -> { order(updated_at: :desc) }, dependent: :destroy
@@ -46,8 +47,6 @@ class Freelancer < ApplicationRecord
 
   # after_validation :queue_geocode
 
-  attr_accessor :distance
-
   pg_search_scope :search, against: {
     name: "A",
     keywords: "B",
@@ -55,7 +54,7 @@ class Freelancer < ApplicationRecord
     tagline: "C",
     bio: "C"
   }, using: {
-    tsearch: { prefix: true }
+    tsearch: { prefix: true, any_word: true }
   }
 
   def rating
@@ -63,13 +62,10 @@ class Freelancer < ApplicationRecord
   end
 
   def self.avg_rating(freelancer)
-    # TODO: Calculate this properly
-    avg = freelancer.freelancer_reviews
-
     if freelancer.freelancer_reviews_count == 0
       return nil
     end
 
-    return freelancer.freelancer_reviews.average(:overall_experience)
+    return freelancer.rating
   end
 end

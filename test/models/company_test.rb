@@ -91,7 +91,7 @@ class CompanyTest < ActiveSupport::TestCase
       lng: -75.990000
     )
 
-    near_companies = Company.near(39.000000, -76.000000).load
+    near_companies = Company.nearby(39.000000, -76.000000).load
 
     assert_equal 1, near_companies.size
     assert_equal near_company, near_companies.first

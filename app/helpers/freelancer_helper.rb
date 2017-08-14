@@ -53,15 +53,10 @@ module FreelancerHelper
   RAD_PER_DEG = Math::PI / 180
   RM = 6371000 # Earth radius in meters
 
-  def distance_between(loc1, loc2)
-    lat1 = loc1.lat
-    lat2 = loc2.lat
-    lon1 = loc1.lng
-    lon2 = loc2.lng
-
-    self.calc_distance(lat1, lat2, lon1, lon2)
+  def distance_from(freelancer)
+    return (((freelancer.distance / 1609.344)*10.0)/10.0).round(2)
   end
-
+  
 
   def calc_distance(lat1, lat2, lon1, lon2)
     if (lat1.nil? or lat2.nil? or lon1.nil? or lon2.nil?)

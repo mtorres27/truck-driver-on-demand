@@ -11,17 +11,30 @@ class Company::FreelancersController < Company::BaseController
       sort = :asc
     elsif @sort == "DESC"
       sort = :desc
-    else
-      sort = :asc
+    elsif @sort == "RELEVANCE"
+      sort = nil
     end
 
-    @freelancers = Freelancer.order(name: sort)
+    if sort != nil
+      @freelancers = Freelancer.order(name: sort)
+    else
+      @freelancers = Freelancer.all
+    end
 
     if @address
-      @geocode = do_geocode(@address)
+      # check for cached version of address
+      if Rails.cache.read(@address)
+        @geocode = Rails.cache.read(@address)
+      else
+        # save cached version of address
+        @geocode = do_geocode(@address)
+        Rails.cache.write(@address, @geocode)
+      end
 
       if @geocode
-        @freelancers = @freelancers.near(@geocode[:lat],@geocode[:lng],60000)
+        point = OpenStruct.new(:lat => @geocode[:lat], :lng => @geocode[:lng])
+        @freelancers = @freelancers.near(point, 60000).with_distance(point).order("distance")
+        p "ORDERING BY DISTANCE, THEORETICALLY"
       else
         @freelancers = Freelancer.none
       end
@@ -31,6 +44,7 @@ class Company::FreelancersController < Company::BaseController
       @freelancers = @freelancers.search(@keywords)
     end
 
+    # @freelancers = @freelancers.reverse()
     @freelancers = @freelancers.page(params[:page]).per(5)
   end
 
