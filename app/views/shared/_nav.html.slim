@@ -12,7 +12,7 @@ nav#top-nav.navbar.navbar-fixed-top
       ul.nav.navbar-nav.navbar-right
         - if request.path.index(/\/company/)
           li( class=("active" if request.path == company_root_path) )
-            = link_to "Search for Freelancers", company_root_path
+            = link_to "Search for Techs", company_root_path
           li( class=("active" if request.path.include?(company_projects_path)) )
             = link_to "Job Postings", company_projects_path
           li.dropdown

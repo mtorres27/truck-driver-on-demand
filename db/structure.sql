@@ -299,6 +299,38 @@ ALTER SEQUENCE company_reviews_id_seq OWNED BY company_reviews.id;
 
 
 --
+-- Name: favourites; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE favourites (
+    id bigint NOT NULL,
+    freelancer_id integer,
+    company_id integer,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: favourites_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE favourites_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: favourites_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE favourites_id_seq OWNED BY favourites.id;
+
+
+--
 -- Name: freelancer_reviews; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -365,7 +397,8 @@ CREATE TABLE freelancers (
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
     messages_count integer DEFAULT 0 NOT NULL,
-    freelancer_reviews_count integer DEFAULT 0 NOT NULL
+    freelancer_reviews_count integer DEFAULT 0 NOT NULL,
+    skills citext
 );
 
 
@@ -717,6 +750,13 @@ ALTER TABLE ONLY company_reviews ALTER COLUMN id SET DEFAULT nextval('company_re
 
 
 --
+-- Name: favourites id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY favourites ALTER COLUMN id SET DEFAULT nextval('favourites_id_seq'::regclass);
+
+
+--
 -- Name: freelancer_reviews id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -833,6 +873,14 @@ ALTER TABLE ONLY companies
 
 ALTER TABLE ONLY company_reviews
     ADD CONSTRAINT company_reviews_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: favourites favourites_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY favourites
+    ADD CONSTRAINT favourites_pkey PRIMARY KEY (id);
 
 
 --
@@ -1088,6 +1136,13 @@ CREATE INDEX index_freelancers_on_keywords ON freelancers USING btree (keywords)
 --
 
 CREATE INDEX index_freelancers_on_name ON freelancers USING btree (name);
+
+
+--
+-- Name: index_freelancers_on_skills; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_freelancers_on_skills ON freelancers USING btree (skills);
 
 
 --
@@ -1416,6 +1471,10 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20170710124506'),
 ('20170712161401'),
 ('20170712165459'),
-('20170728145820');
+('20170728145820'),
+('20170808203809'),
+('20170808204344'),
+('20170808204412'),
+('20170809143023');
 
 

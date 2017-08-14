@@ -76,6 +76,7 @@ group :development, :test do
   gem "annotate", "~> 2.7.2"
 
   gem "mocha", "~> 1.2.1"
+  gem "rails-erd"
 end
 
 group :development do

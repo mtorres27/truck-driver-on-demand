@@ -1,13 +1,84 @@
 .company-freelancers
+  .result-freelancers
+    padding: 0px 20px
+    box-sizing: border-box
   .result-row
     display: block
-    border-bottom: 2px solid $gray-lighter
+    border-bottom: 2px solid $freelancer-separator
     padding: 20px 0
     color: $gray-light
+    z-index: 1
   .media-left img
     width: 75px
     height: 75px
     border: 1px solid $gray-light
     border-radius: 2px
   .pagination
-    margin-top: 20px
+    margin-bottom: 20px
+    display: inline-block
+    width: 100%
+  .media-left
+    min-width: 22px
+
+.company-freelancer
+  &__favourite-checkbox
+    z-index: 20
+
+  &__favourite-button
+    margin: 20px 0px
+    border: 0px
+    text-transform: uppercase
+    font-size: 11px
+    padding: 10px 20px
+    cursor: pointer
+  
+  &__sort
+    width: 200px
+
+.freelancer-keywords
+  width: 100%
+  display: inline-block
+
+.freelancer-keyword
+  float: left
+  margin-right: 8px
+  padding: 3px 6px
+  border: 1px solid $skills-border
+  border-radius: 4px
+  background-color: $skills-background 
+  text-transform: uppercase
+  color: $black-color
+  font-size: 10px
+  font-weight: bold
+
+.result-wrapper
+  background-color: $white-color
+  margin: 30px 0px 30px 0px
+  box-sizing: border-box
+  border-radius: 4px
+  -webkit-box-shadow: 0px 0px 1px 1px rgba(0,0,0,0.1)
+  -moz-box-shadow: 0px 0px 1px 1px rgba(0,0,0,0.1)
+  box-shadow: 0px 0px 1px 1px rgba(0,0,0,0.1)
+
+.result-header
+  width: 100%
+  display: inline-block
+  padding: 20px
+  box-sizing: border-box
+  font-size: 13px
+  background-color: $search-header-background
+
+  &__text
+    float: left
+
+    &--strong
+      font-weight: bold
+  
+  &__sort
+    float: right
+
+  &__sort-text
+    text-transform: uppercase
+    margin-right: 10px
+    font-size: 13px
+    font-weight: bold

@@ -1,15 +1,60 @@
-h1 Search for Freelancers
+h1 Search for Techs
 = render "company/shared/freelancer_search_form"
 
+.
 - content_for :secondary do
-  - @freelancers.each do |freelancer|
-    a.result-row href=company_freelancer_path(freelancer)
-      .media
-        .media-left
-          = image_tag(freelancer.avatar_url, size: "75x75")
-        .media-body
-          h4.media-heading= freelancer.name
-          p= freelancer.area
-          p= freelancer.tagline
+  .result-wrapper
+    .result-header
+      .result-header__text
+        = "#{@freelancers.total_count} freelancers found for "
+        span class="result-header__text--strong"
+          = params[:search][:keywords]
+        - if params[:search][:address] > ""
+          = " near "
+          span class="result-header__text--strong"
+            = params[:search][:address]
+        
 
-  = paginate @freelancers
+      .result-header__sort
+        span class="result-header__sort-text"
+          | sort by
+        select id="freelance_sort" class="company-freelancer__sort"
+          option value="ASC" label="Name (A to Z)"
+          - if params.dig(:search, :sort) == 'DESC'
+            option value="DESC" label="Name (Z to A)" selected="selected"
+          - else
+            option value="DESC" label="Name (Z to A)"
+
+
+    .result-freelancers
+      - @freelancers.each do |freelancer|
+        a.result-row href=company_freelancer_path(freelancer)
+          .media
+            .media-left
+              - if !is_favourite(freelancer)
+                input type="checkbox" freelancer-id=freelancer.id class="company-freelancer__favourite-checkbox"
+            .media-left
+              = image_tag(freelancer.avatar_url, size: "75x75")
+              .reviews
+                - @stars = freelancer_avg_rating(freelancer)
+                - @stars.each do |star|
+                  .span class=star
+                = freelancer_ratings_link(freelancer)
+              
+            .media-body
+              h4.media-heading
+                = freelancer.name
+                | &nbsp;
+                - if is_favourite(freelancer)
+                  .span class="fa fa-check-circle"
+                
+              p= "#{freelancer.area}, #{distance_between(freelancer, current_company)} miles away"
+              p= freelancer.tagline
+              .freelancer-keywords
+                - if !freelancer.keywords.nil?
+                  - freelancer.keywords.split(", ").map(&:lstrip)[0..3].each do |keyword|
+                    .freelancer-keyword
+                      = keyword
+
+      input type="button" value="favourite selected" disabled="true" class="btn-primary company-freelancer__favourite-button"
+      = paginate @freelancers

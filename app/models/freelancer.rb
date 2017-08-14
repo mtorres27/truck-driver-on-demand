@@ -44,9 +44,14 @@ class Freelancer < ApplicationRecord
 
   audited
 
+  # after_validation :queue_geocode
+
+  attr_accessor :distance
+
   pg_search_scope :search, against: {
     name: "A",
     keywords: "B",
+    skills: "B",
     tagline: "C",
     bio: "C"
   }, using: {
@@ -55,5 +60,16 @@ class Freelancer < ApplicationRecord
 
   def rating
     freelancer_reviews.average("(#{FreelancerReview::RATING_ATTRS.map(&:to_s).join('+')}) / #{FreelancerReview::RATING_ATTRS.length}").round
+  end
+
+  def self.avg_rating(freelancer)
+    # TODO: Calculate this properly
+    avg = freelancer.freelancer_reviews
+
+    if freelancer.freelancer_reviews_count == 0
+      return nil
+    end
+
+    return freelancer.freelancer_reviews.average(:overall_experience)
   end
 end
