@@ -236,7 +236,8 @@ CREATE TABLE companies (
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
     messages_count integer DEFAULT 0 NOT NULL,
-    company_reviews_count integer DEFAULT 0 NOT NULL
+    company_reviews_count integer DEFAULT 0 NOT NULL,
+    profile_header_data text
 );
 
 
@@ -398,7 +399,8 @@ CREATE TABLE freelancers (
     updated_at timestamp without time zone NOT NULL,
     messages_count integer DEFAULT 0 NOT NULL,
     freelancer_reviews_count integer DEFAULT 0 NOT NULL,
-    skills citext
+    skills citext,
+    profile_header_data text
 );
 
 
@@ -1476,6 +1478,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20170808204344'),
 ('20170808204412'),
 ('20170809143023'),
-('20170814162250');
+('20170814162250'),
+('20170815124107');
 
 

@@ -56,7 +56,23 @@ class Company::FreelancersController < Company::BaseController
   end
 
   def show
-    Freelancer.find(params[:id])
+    # check for params
+    @freelancer = Freelancer.find(params[:id])
+    @favourite = current_company.favourites.where({freelancer_id: params[:id]}).length > 0 ? true : false
+    if params.dig(:toggle_favourite) == "true"
+      if @favourite == false
+        # remove from favourites
+        current_company.favourite_freelancers << @freelancer
+        @favourite = true
+      else
+        current_company.favourites.where({freelancer_id: @freelancer.id}).destroy_all
+        @favourite = false
+      end
+    end
+
+    if params.dig(:invite_to_quote)
+      # TODO: Add this logic
+    end
   end
 
   def add_favourites

@@ -32,6 +32,7 @@ class Freelancer < ApplicationRecord
   include Geocodable
   include Disableable
   include AvatarUploader[:avatar]
+  include ProfileHeaderUploader[:profile_header]
   include EasyPostgis
 
   has_many :identities, as: :loginable, dependent: :destroy

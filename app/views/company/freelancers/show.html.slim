@@ -1,4 +1,126 @@
-h1 Freelancer
+.freelancer__wrapper
+  .freelancer__wrapper-bg style="background: url(/assets/#{@freelancer.profile_header_url})"
 
-- content_for :secondary do
-  p TODO
+  .freelancer__block
+    .freelancer__block__name
+      = @freelancer.name
+    .freelancer__block__status
+      - if @freelancer.available
+        | Available For Work
+      - else
+        | Not Available For Work
+
+    a.freelancer__block__favourite href="#{params[:id]}?toggle_favourite=true"
+      - if @favourite
+        .span class="fa fa-heart"
+      - else
+        .span class="fa fa-heart-o"    
+    
+    a.freelancer__block__invite-to-quote href="#{params[:id]}?invite_to_quote=true"
+      | Invite to Quote
+
+  .freelancer__meta
+    .freelancer__meta-left
+      .freelancer__meta-left__avatar
+
+      .freelancer__meta-left__stars
+
+      .freelancer__meta-left__number-of-reviews
+
+    .freelancer__meta-center
+      .freelancer__meta-center__name
+        = @freelancer.name
+      .freelancer__meta-center__area
+        = @freelancer.area
+      .freelancer__meta-center__member-since
+        = "Member since #{@freelancer.created_at.strftime('%B %d, %Y')}"
+      .freelancer__meta-center__tagline
+        = @freelancer.tagline
+      .freelancer__meta-center__keywords
+        - if !@freelancer.keywords.nil?
+          - @freelancer.keywords.split(", ").map(&:lstrip)[0..4].each do |keyword|
+            .freelancer__meta-center__keyword
+              = keyword
+
+
+    .freelancer__meta-right
+      .freelancer__meta-right__pay-pref
+        .freelancer__meta-right__pay-pref-value
+          - if !@freelancer.pay_unit_time_preference.nil?
+            = @freelancer.pay_unit_time_preference
+          - else
+            | N/A
+          = @freelancer.pay_unit_time_preference
+        .freelancer__meta-right__pay-pref-label
+          | pay pref
+      .freelancer__meta-right__pay-unit
+        .freelancer__meta-right__pay-unit-value
+          - if !@freelancer.pay_per_unit_time.nil?
+            = @freelancer.pay_per_unit_time
+          - else
+            | N/A
+        .freelancer__meta-right__pay-unit-label
+          | rate
+      
+  .freelancer__bona-fides
+    .freelancer__bona-fides__review
+      - if @freelancer.freelancer_reviews_count > 0
+        .freelancer__bona-fides__review-text
+          = @freelancer.freelancer_reviews.first.comments
+        .freelancer_bona-fides__review-name
+          = "#{@freelancer.freelancer_reviews.first.company.contact_name}, #{@freelancer.freelancer_reviews.first.company.name}"
+
+    .freelancer__bona-fides__years-of-experience
+      .freelancer__bona-fides__years-of-experience-value
+        = @freelancer.years_of_experience
+      .freelancer__bona-fides__years-of-experience-label
+        | Years of experience
+    .freelancer__bona-fides__profile-views
+      .freelancer__bona-fides__profile-views-value
+        = @freelancer.profile_views
+      .freelancer__bona-fides__profile-views-label
+        | Profile views
+    .freelancer__bona-fides__projects-completed
+      .freelancer__bona-fides__projects-completed-value
+        = @freelancer.projects_completed
+      .freelancer__bona-fides__projects-completed-label
+        | Projects Completed
+
+
+  .freelancer__abilities
+    .freelancer__abilities__bio
+      .freelancer__abilities__bio-label
+        | bio
+      .freelancer__abilities__bio-value
+        = @freelancer.bio  
+    .freelancer__abilities__specialties   
+      .freelancer__abilities__specialties-label
+        | specialties
+      .freelancer__abilities__specialties__markets
+        .freelancer__abilities__specialties__markets-label
+          | markets
+        .freelancer__abilities__specialties__markets-value
+          = "TAGS GO HERE"
+      .freelancer__abilities__specialties__skills
+        .freelancer__abilities__specialties__skills-label
+          | skills
+        .freelancer__abilities__specialties__skills-value
+          = "TAGS GO HERE"
+      
+
+  .freelancer__credentials
+    .freelancer__credentials-label
+      | 
+    .freelancer__credentials-value
+      
+
+  .freelancer__reviews
+    .freelancer__reviews-label
+      | reviews
+    .freelancer__reviews-value
+      - if @freelancer.freelancer_reviews_count > 0
+        - @freelancer.freelancer_reviews.each do |review|
+          .freelancer__reviews__review-text
+            = review.comments
+          .freelancer__reviews__review-name
+            = "#{review.company.contact_name}, #{review.company.name}"
