@@ -389,3 +389,28 @@
         font-size: 12px
 
 
+.tab-bar
+  width: 100%
+  display: inline-block
+  margin-bottom: -5px
+
+  &__item
+    width: 150px
+    height: 50px
+    font-size: 12px
+    font-weight: bold
+    text-align: center
+    text-transform: uppercase
+    color: $black-color
+    display: block
+    float: left
+    line-height: 4em
+
+    &:hover
+      text-decoration: none
+      color: $freelancer-sub-nav-color
+      border-bottom: 3px solid $freelancer-sub-nav-color
+
+    &--active
+      color: $freelancer-sub-nav-color
+      border-bottom: 3px solid $freelancer-sub-nav-color
