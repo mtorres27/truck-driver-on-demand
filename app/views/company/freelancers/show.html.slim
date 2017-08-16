@@ -132,15 +132,34 @@
 
     .freelancer__certifications
       .freelancer__certifications-label
-        | 
+        | certifications
       .freelancer__certifications-value
-
+        - @freelancer.certifications.each do |certification|
+          .freelancer__certifications__certificate
+            - url = certification.certificate_url
+            - if certification.certificate_url == "certification/missing.pdf"
+              - url = "/assets/certification/certification.certificate_url"
+              a href=url target="_blank"
+                - if certification.thumbnail.nil?
+                  img src="/assets/certification/missing_thumbnail.png"
+                - else 
+                  img src=certification.thumbnail
+            - else
+              - url = certification.certificate_url
+              a href=url target="_blank"
+                - if certification.thumbnail.nil?
+                  img src="/assets/certification/missing_thumbnail.png"
+                - else 
+                  img src=certification.thumbnail
+            .freelancer__certifications__certification-name
+              = certification.name
 
     .freelancer__reviews
       .freelancer__reviews-label
         | reviews
       .freelancer__reviews-value
         - if @freelancer.freelancer_reviews_count > 0
+          .freelancer__reviews__review
           - @freelancer.freelancer_reviews.each do |review|
             .freelancer__reviews__review-text
               = review.comments

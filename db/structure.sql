@@ -179,6 +179,41 @@ ALTER SEQUENCE audits_id_seq OWNED BY audits.id;
 
 
 --
+-- Name: certifications; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE certifications (
+    id bigint NOT NULL,
+    freelancer_id integer,
+    certificate text,
+    name text,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL,
+    thumbnail text,
+    certificate_data text
+);
+
+
+--
+-- Name: certifications_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE certifications_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: certifications_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE certifications_id_seq OWNED BY certifications.id;
+
+
+--
 -- Name: change_orders; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -731,6 +766,13 @@ ALTER TABLE ONLY audits ALTER COLUMN id SET DEFAULT nextval('audits_id_seq'::reg
 
 
 --
+-- Name: certifications id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY certifications ALTER COLUMN id SET DEFAULT nextval('certifications_id_seq'::regclass);
+
+
+--
 -- Name: change_orders id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -851,6 +893,14 @@ ALTER TABLE ONLY ar_internal_metadata
 
 ALTER TABLE ONLY audits
     ADD CONSTRAINT audits_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: certifications certifications_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY certifications
+    ADD CONSTRAINT certifications_pkey PRIMARY KEY (id);
 
 
 --
@@ -1479,6 +1529,10 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20170808204412'),
 ('20170809143023'),
 ('20170814162250'),
-('20170815124107');
+('20170815124107'),
+('20170816140329'),
+('20170816140705'),
+('20170816141721'),
+('20170816144823');
 
 

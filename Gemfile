@@ -30,6 +30,8 @@ gem "jbuilder", "~> 2.5"
 gem "wicked_pdf", "~> 1.1.0"
 gem "wkhtmltopdf-binary", "~> 0.12.3.1"
 
+gem "rmagick"
+
 gem "omniauth", "~> 1.6.1"
 gem "omniauth-facebook", "~> 4.0.0"
 gem "omniauth-google-oauth2", "~> 0.4.1"

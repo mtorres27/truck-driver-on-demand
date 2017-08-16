@@ -41,6 +41,7 @@ class Freelancer < ApplicationRecord
   has_many :messages, -> { order(created_at: :desc) }, as: :authorable, dependent: :destroy
   has_many :company_reviews, dependent: :destroy
   has_many :freelancer_reviews, dependent: :nullify
+  has_many :certifications
 
   validates :years_of_experience, numericality: { only_integer: true }
 
