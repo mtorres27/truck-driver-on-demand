@@ -16,8 +16,11 @@ html
 
     = render "shared/flash"
 
-    .primary
-      .container= yield
+    - if params[:controller]&.gsub("/", "-") == "company-freelancers" && params[:id]
+      = yield
+    - else
+      .primary
+        .container= yield
 
     - if content_for(:secondary)
       .secondary

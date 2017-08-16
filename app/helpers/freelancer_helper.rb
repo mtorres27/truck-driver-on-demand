@@ -30,7 +30,7 @@ module FreelancerHelper
 
 
   def freelancer_ratings_link(freelancer)
-    "#{freelancer.freelancer_reviews_count} Reviews"
+    "#{freelancer.freelancer_reviews_count} Review#{freelancer.freelancer_reviews_count == 1 ? '' : 's'}"
   end
 
 
@@ -56,7 +56,7 @@ module FreelancerHelper
   def distance_from(freelancer)
     return (((freelancer.distance / 1609.344)*10.0)/10.0).round(2)
   end
-  
+
 
   def calc_distance(lat1, lat2, lon1, lon2)
     if (lat1.nil? or lat2.nil? or lon1.nil? or lon2.nil?)
