@@ -35,7 +35,7 @@ class Company::FreelancersController < Company::BaseController
       if @geocode
         point = OpenStruct.new(:lat => @geocode[:lat], :lng => @geocode[:lng])
         if @distance.nil?
-          @distance = 6000
+          @distance = 60000
         end
         @freelancers = @freelancers.nearby(@geocode[:lat], @geocode[:lng], @distance).with_distance(point).order("distance")
       else
@@ -59,12 +59,15 @@ class Company::FreelancersController < Company::BaseController
   end
 
   def show
-    # check for params
     @freelancer = Freelancer.find(params[:id])
+
+    # analytic
+    @freelancer.profile_views += 1
+    @freelancer.save
+
     @favourite = current_company.favourites.where({freelancer_id: params[:id]}).length > 0 ? true : false
     if params.dig(:toggle_favourite) == "true"
       if @favourite == false
-        # remove from favourites
         current_company.favourite_freelancers << @freelancer
         @favourite = true
       else

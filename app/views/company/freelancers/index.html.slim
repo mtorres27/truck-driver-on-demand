@@ -14,26 +14,6 @@ h1 Search for Techs
           span class="result-header__text--strong"
             = params[:search][:address]
         
-      .result-header__sort
-        span class="result-header__sort-text"
-          | sort by
-        select id="freelance_sort" class="company-freelancer__sort"
-          - if params.dig(:search, :sort) == 'RELEVANCE'
-            option value="RELEVANCE" label="Relevance" selected="selected"
-          - elsif params.dig(:search, :sort) == ''
-            option value="RELEVANCE" label="Relevance" selected="selected"
-          - elsif params.dig(:search, :sort) == nil
-            option value="RELEVANCE" label="Relevance" selected="selected"
-          - else
-            option value="RELEVANCE" label="Relevance"
-          - if params.dig(:search, :sort) == 'ASC'
-            option value="ASC" label="Name (A to Z)" selected="selected"
-          - else
-            option value="ASC" label="Name (A to Z)"
-          - if params.dig(:search, :sort) == 'DESC'
-            option value="DESC" label="Name (Z to A)" selected="selected"
-          - else
-            option value="DESC" label="Name (Z to A)"
 
       .result-header__distance
         span class="result-header__distance-text"
