@@ -6,6 +6,7 @@ class Company::FreelancersController < Company::BaseController
     @address = params.dig(:search, :address).presence
 
     @sort = params.dig(:search, :sort).presence
+    @distance = params.dig(:search, :distance).presence
 
     if @sort == "ASC"
       sort = :asc
@@ -33,8 +34,10 @@ class Company::FreelancersController < Company::BaseController
 
       if @geocode
         point = OpenStruct.new(:lat => @geocode[:lat], :lng => @geocode[:lng])
-        @freelancers = @freelancers.near(point, 60000).with_distance(point).order("distance")
-        p "ORDERING BY DISTANCE, THEORETICALLY"
+        if @distance.nil?
+          @distance = 6000
+        end
+        @freelancers = @freelancers.nearby(@geocode[:lat], @geocode[:lng], @distance).with_distance(point).order("distance")
       else
         @freelancers = Freelancer.none
       end
