@@ -1,0 +1,15 @@
+h1 My Favourite Technicians
+br
+
+- content_for :secondary do
+  - @freelancers.each do |freelancer|
+    a.result-row href=company_freelancer_path(freelancer)
+      .media
+        .media-left
+          = image_tag(freelancer.avatar_url, size: "75x75")
+        .media-body
+          h4.media-heading= freelancer.name
+          p= freelancer.area
+          p= freelancer.tagline
+
+  = paginate @freelancers

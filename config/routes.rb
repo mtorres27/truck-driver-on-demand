@@ -21,6 +21,7 @@ Rails.application.routes.draw do
     resource :profile, only: [:show, :edit, :update]
     resources :freelancers, only: [:index, :show] do
       get :hired, on: :collection
+      get :favourites, on: :collection
       post :add_favourites, on: :collection
     end
     resources :applicants

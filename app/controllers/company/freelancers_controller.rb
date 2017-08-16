@@ -58,6 +58,14 @@ class Company::FreelancersController < Company::BaseController
       per(5)
   end
 
+  def favourites
+    @freelancers = current_company.
+      favourite_freelancers.
+      page(params[:page]).
+      per(5)
+  end
+
+
   def show
     @freelancer = Freelancer.find(params[:id])
 
