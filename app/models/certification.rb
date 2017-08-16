@@ -1,5 +1,4 @@
 class Certification < ApplicationRecord
-  require "rmagick"
   include CertificationUploader[:certificate]
   belongs_to :freelancer
 
@@ -9,6 +8,8 @@ class Certification < ApplicationRecord
     if self.certificate_data.nil?
       return
     end
+
+    return
 
     page_index_path = self.certificate_data + "[0]" # first page in PDF
     pdf_page = Magick::Image.read( page_index_path ).first # first item in Magick::ImageList
