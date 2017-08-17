@@ -179,6 +179,41 @@ ALTER SEQUENCE audits_id_seq OWNED BY audits.id;
 
 
 --
+-- Name: certifications; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE certifications (
+    id bigint NOT NULL,
+    freelancer_id integer,
+    certificate text,
+    name text,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL,
+    thumbnail text,
+    certificate_data text
+);
+
+
+--
+-- Name: certifications_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE certifications_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: certifications_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE certifications_id_seq OWNED BY certifications.id;
+
+
+--
 -- Name: change_orders; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -236,7 +271,8 @@ CREATE TABLE companies (
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
     messages_count integer DEFAULT 0 NOT NULL,
-    company_reviews_count integer DEFAULT 0 NOT NULL
+    company_reviews_count integer DEFAULT 0 NOT NULL,
+    profile_header_data text
 );
 
 
@@ -296,6 +332,38 @@ CREATE SEQUENCE company_reviews_id_seq
 --
 
 ALTER SEQUENCE company_reviews_id_seq OWNED BY company_reviews.id;
+
+
+--
+-- Name: favourites; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE favourites (
+    id bigint NOT NULL,
+    freelancer_id integer,
+    company_id integer,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: favourites_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE favourites_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: favourites_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE favourites_id_seq OWNED BY favourites.id;
 
 
 --
@@ -365,7 +433,9 @@ CREATE TABLE freelancers (
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
     messages_count integer DEFAULT 0 NOT NULL,
-    freelancer_reviews_count integer DEFAULT 0 NOT NULL
+    freelancer_reviews_count integer DEFAULT 0 NOT NULL,
+    skills citext,
+    profile_header_data text
 );
 
 
@@ -696,6 +766,13 @@ ALTER TABLE ONLY audits ALTER COLUMN id SET DEFAULT nextval('audits_id_seq'::reg
 
 
 --
+-- Name: certifications id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY certifications ALTER COLUMN id SET DEFAULT nextval('certifications_id_seq'::regclass);
+
+
+--
 -- Name: change_orders id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -714,6 +791,13 @@ ALTER TABLE ONLY companies ALTER COLUMN id SET DEFAULT nextval('companies_id_seq
 --
 
 ALTER TABLE ONLY company_reviews ALTER COLUMN id SET DEFAULT nextval('company_reviews_id_seq'::regclass);
+
+
+--
+-- Name: favourites id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY favourites ALTER COLUMN id SET DEFAULT nextval('favourites_id_seq'::regclass);
 
 
 --
@@ -812,6 +896,14 @@ ALTER TABLE ONLY audits
 
 
 --
+-- Name: certifications certifications_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY certifications
+    ADD CONSTRAINT certifications_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: change_orders change_orders_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -833,6 +925,14 @@ ALTER TABLE ONLY companies
 
 ALTER TABLE ONLY company_reviews
     ADD CONSTRAINT company_reviews_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: favourites favourites_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY favourites
+    ADD CONSTRAINT favourites_pkey PRIMARY KEY (id);
 
 
 --
@@ -1088,6 +1188,13 @@ CREATE INDEX index_freelancers_on_keywords ON freelancers USING btree (keywords)
 --
 
 CREATE INDEX index_freelancers_on_name ON freelancers USING btree (name);
+
+
+--
+-- Name: index_freelancers_on_skills; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_freelancers_on_skills ON freelancers USING btree (skills);
 
 
 --
@@ -1416,6 +1523,16 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20170710124506'),
 ('20170712161401'),
 ('20170712165459'),
-('20170728145820');
+('20170728145820'),
+('20170808203809'),
+('20170808204344'),
+('20170808204412'),
+('20170809143023'),
+('20170814162250'),
+('20170815124107'),
+('20170816140329'),
+('20170816140705'),
+('20170816141721'),
+('20170816144823');
 
 

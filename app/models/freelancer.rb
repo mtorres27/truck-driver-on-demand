@@ -32,6 +32,8 @@ class Freelancer < ApplicationRecord
   include Geocodable
   include Disableable
   include AvatarUploader[:avatar]
+  include ProfileHeaderUploader[:profile_header]
+  include EasyPostgis
 
   has_many :identities, as: :loginable, dependent: :destroy
   has_many :applicants, -> { order(updated_at: :desc) }, dependent: :destroy
@@ -39,21 +41,33 @@ class Freelancer < ApplicationRecord
   has_many :messages, -> { order(created_at: :desc) }, as: :authorable, dependent: :destroy
   has_many :company_reviews, dependent: :destroy
   has_many :freelancer_reviews, dependent: :nullify
+  has_many :certifications
 
   validates :years_of_experience, numericality: { only_integer: true }
 
   audited
 
+  # after_validation :queue_geocode
+
   pg_search_scope :search, against: {
     name: "A",
     keywords: "B",
+    skills: "B",
     tagline: "C",
     bio: "C"
   }, using: {
-    tsearch: { prefix: true }
+    tsearch: { prefix: true, any_word: true }
   }
 
   def rating
     freelancer_reviews.average("(#{FreelancerReview::RATING_ATTRS.map(&:to_s).join('+')}) / #{FreelancerReview::RATING_ATTRS.length}").round
+  end
+
+  def self.avg_rating(freelancer)
+    if freelancer.freelancer_reviews_count == 0
+      return nil
+    end
+
+    return freelancer.rating
   end
 end

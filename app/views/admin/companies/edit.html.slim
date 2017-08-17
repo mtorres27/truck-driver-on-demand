@@ -5,7 +5,7 @@ h1 Editing Company
 
   .form-inputs
     = f.input :name
-    = f.input :email
+    = f.input :email, as: :string
     - if @company.avatar&.exists?
       img src=@company.avatar_url
     = f.hidden_field :avatar, value: @company.cached_avatar_data

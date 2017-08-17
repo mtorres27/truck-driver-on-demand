@@ -96,7 +96,7 @@ class FreelancerTest < ActiveSupport::TestCase
       lng: -75.990000
     )
 
-    near_freelancers = Freelancer.near(39.000000, -76.000000).load
+    near_freelancers = Freelancer.nearby(39.000000, -76.000000).load
 
     assert_equal 1, near_freelancers.size
     assert_equal near_freelancer, near_freelancers.first

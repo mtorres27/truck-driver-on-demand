@@ -44,7 +44,7 @@ module Geocodable
     # This SQL needs to stay exactly in sync with it's related index (index_on_???_loc)
     # otherwise the index won't be used. (don't even add whitespace!)
     # https://github.com/pairshaped/postgis-on-rails-example
-    scope :near, -> (lat, lng, distance_in_meters = 2000) {
+    scope :nearby, -> (lat, lng, distance_in_meters = 2000) {
       where(
         <<-SQL.squish
           ST_DWithin(

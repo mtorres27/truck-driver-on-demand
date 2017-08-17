@@ -28,6 +28,7 @@ class Company < ApplicationRecord
   include Geocodable
   include Disableable
   include AvatarUploader[:avatar]
+  include ProfileHeaderUploader[:profile_header]
 
   has_many :identities, as: :loginable, dependent: :destroy
   has_many :projects, -> { order(updated_at: :desc) }, dependent: :destroy
@@ -38,8 +39,12 @@ class Company < ApplicationRecord
   has_many :messages, -> { order(created_at: :desc) }, as: :authorable
   has_many :freelancer_reviews, dependent: :nullify
   has_many :company_reviews, dependent: :destroy
+  has_many :favourites
+  has_many :favourite_freelancers, through: :favourites, source: :freelancer
 
   enumerize :currency, in: [ "CAD", "USD" ]
+
+  # after_validation :queue_geocode
 
   def freelancers
     Freelancer.

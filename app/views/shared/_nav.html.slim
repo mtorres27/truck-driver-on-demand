@@ -12,9 +12,11 @@ nav#top-nav.navbar.navbar-fixed-top
       ul.nav.navbar-nav.navbar-right
         - if request.path.index(/\/company/)
           li( class=("active" if request.path == company_root_path) )
-            = link_to "Search for Freelancers", company_root_path
+            = link_to "Search for Techs", company_root_path
           li( class=("active" if request.path.include?(company_projects_path)) )
             = link_to "Job Postings", company_projects_path
+          li
+            = link_to "My Techs", hired_company_freelancers_path
           li.dropdown
             a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"
               ' Company
@@ -22,8 +24,6 @@ nav#top-nav.navbar.navbar-fixed-top
             ul class="dropdown-menu"
               li
                 a href="#" Notifications
-              li
-                = link_to "My Freelancers", hired_company_freelancers_path
               li
                 = link_to "Payments", company_payments_path
               li
