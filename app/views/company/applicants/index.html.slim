@@ -7,12 +7,14 @@
     - @applicants.each do |applicant|
       li.media.applicant
         .media-left
-          .media-object= image_tag(applicant.freelancer.avatar_url, size: "70x70", class: "freelancer_avatar")
+          a href="/company/freelancers/#{applicant.freelancer.id}" class="media-object"
+            = image_tag(applicant.freelancer.avatar_url, size: "70x70", class: "freelancer_avatar")
         .media-body
           .col-xs-12.col-md-5
             = applicant_state_label(applicant)
             - applicant.freelancer.tap do |freelancer|
-              .freelancer_name= freelancer.name
+              a href="/company/freelancers/#{applicant.freelancer.id}"
+                .freelancer_name= freelancer.name
               .freelancer_area= freelancer.area
               .freelancer_tagline= freelancer.tagline
           .col-xs-12.col-md-5.text-right
