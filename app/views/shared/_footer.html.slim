@@ -1,22 +1,49 @@
 .footer
-  .footer-top
-    .container
-      .logo= image_tag "avjunction-logo_footer.svg"
-      .links
-        ul
-          li= link_to "Blog", "#"
-          li= link_to "Subscribe", "#"
-          li.social-icons
-            a href="https://twitter.com/avjunction" target="_blank"
-              = fa_stacked_icon "twitter", base: "square-o"
-            a href="https://facebook.com/avjunction" target="_blank"
-              = fa_stacked_icon "facebook", base: "square-o"
-            a href="https://linkedin.com/in/avjunction" target="_blank"
-              = fa_stacked_icon "linkedin", base: "square-o"
-  .footer-bottom
-    .container
-      span &copy; 2017 AV Junction Inc.
-      | &middot;
-      = link_to "Privacy Policy", "/privacy-policy"
-      | &middot;
-      = link_to "Terms of Service", "/terms-of-service"
+  .container
+    .footer__column--small
+      .footer__column__title
+        | Company
+      a.footer__link href="/about"
+        | About
+      a.footer__link href="/blog"
+        | Blog
+      a.footer__link href="/support"
+        | Support
+      a.footer__link href="/press"
+        | Press
+
+    .footer__column--small
+      .footer__column__title
+        | Legal
+      a.footer__link href="/terms-and-conditions"
+        | Terms and Conditions
+      a.footer__link href="/privacy-policy"
+        | Privacy Policy
+      a.footer__link href="/code-of-conduct"
+        | Code of Conduct
+
+    .footer__column--small
+      .footer__column__title
+        | Connect
+      a.footer__link href="https://facebook.com/avjunction" target="_blank"
+        | Facebook
+      a.footer__link href="https://twitter.com/avjunction" target="_blank"
+        | Twitter
+      a.footer__link href="#" target="_blank"
+        | Youtube
+      a.footer__link href="#" target="https://linkedin.com/in/avjunction"
+        | LinkedIn
+
+    .footer__column--large
+      .footer__column__title
+        | Subscribe for occasional updates
+      .footer__column__email
+        input type="text" placeholder="Enter your email address" id="subscribe_email" class="footer__column__email-address"
+        input type="button" id="subscribe_btn" value="SUBSCRIBE" class="footer__column__email-button"
+
+
+      .footer__column__logo
+        = image_tag "avjunction-logo_header.svg"
+
+      .footer__column__copyright
+        | &copy; 2017 AV Junction Inc. All rights reserved.
