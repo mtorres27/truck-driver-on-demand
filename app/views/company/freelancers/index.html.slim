@@ -49,7 +49,8 @@ h1 Search for Techs
                 - @stars = freelancer_avg_rating(freelancer)
                 - @stars.each do |star|
                   .span class=star
-                = freelancer_ratings_link(freelancer)
+                - if freelancer.freelancer_reviews_count > 0
+                  = freelancer_ratings_link(freelancer)
               
             .media-body
               h4.media-heading

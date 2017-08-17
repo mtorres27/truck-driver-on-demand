@@ -48,21 +48,21 @@ class Company::FreelancersController < Company::BaseController
     end
 
     # @freelancers = @freelancers.reverse()
-    @freelancers = @freelancers.page(params[:page]).per(5)
+    @freelancers = @freelancers.page(params[:page]).per(50)
   end
 
   def hired
     @freelancers = current_company.
       freelancers.
       page(params[:page]).
-      per(5)
+      per(50)
   end
 
   def favourites
     @freelancers = current_company.
       favourite_freelancers.
       page(params[:page]).
-      per(5)
+      per(50)
   end
 
 

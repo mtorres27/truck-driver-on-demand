@@ -9,7 +9,7 @@ class Company::ProjectsController < Company::BaseController
       where(closed: params[:closed].present?).
       order({ external_project_id: :desc, id: :desc }).
       page(params[:page]).
-      per(5)
+      per(50)
 
     @job_count = Job.joins(:project).where(
       projects: {
