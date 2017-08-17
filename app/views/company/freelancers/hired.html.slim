@@ -16,6 +16,7 @@ br
         .media-body
           h4.media-heading= freelancer.name
           p= freelancer.area
-          p= freelancer.tagline
+          p.media-tagline
+            = freelancer.tagline
 
   = paginate @freelancers

@@ -60,12 +60,13 @@ h1 Search for Techs
                   .span class="fa fa-check-circle"
                 
               - if params.dig(:search, :address) == nil
-                p= "#{freelancer.area}1"
+                p= "#{freelancer.area}"
               - elsif params.dig(:search, :address) == ''
-                p= "#{freelancer.area}2"
+                p= "#{freelancer.area}"
               - else
                 p= "#{freelancer.area}, #{distance_from(freelancer)} miles away"
-              p= freelancer.tagline
+              p.media-tagline
+                = freelancer.tagline
               .freelancer-keywords
                 - if !freelancer.keywords.nil?
                   - freelancer.keywords.split(", ").map(&:lstrip)[0..3].each do |keyword|
