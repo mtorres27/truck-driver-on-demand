@@ -32,7 +32,7 @@
                     = link_to content_tag(:span, "", class:"fa fa-pencil"), edit_company_project_path(project), class: "project_edit_link"
                 .col-xs-4.col-md-3.col-lg-2.text-right
                   button.btn.btn-secondary.item-btn data-toggle="collapse" data-target="#jobsFor#{project.id}" type="button" aria-expanded="false" aria-controls="jobsFor#{project.id}"
-                    | Show #{project.jobs.size} Jobs
+                    | #{project.jobs.size} Jobs
             .collapse.jobs( id="jobsFor#{project.id}" )
               .row.job-row
                 - project.jobs.each do |job|
