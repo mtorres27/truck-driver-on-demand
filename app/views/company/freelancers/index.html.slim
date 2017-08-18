@@ -22,22 +22,10 @@ h1 Search for Techs
         span class="result-header__distance-text"
           | distance
         select id="freelance_distance" class="company-freelancer__distance"
-          - if params.dig(:search, :distance) == '40234'
-            option value="40234" label="25 Miles" selected="selected"
-          - else
-            option value="40234" label="25 Miles"
-          - if params.dig(:search, :distance) == '80467'
-            option value="80467" label="50 Miles" selected="selected"
-          - else
-            option value="80467" label="50 Miles"
-          - if params.dig(:search, :distance) == '120701'
-            option value="120701" label="75 Miles" selected="selected"
-          - else
-            option value="120701" label="75 Miles"
-          - if params.dig(:search, :distance) == '160934'
-            option value="160934" label="100 Miles" selected="selected"
-          - else
-            option value="160934" label="100 Miles"
+            option value="40234" label="25 Miles" selected=("selected" if params.dig(:search, :distance) == '40234')
+            option value="80467" label="50 Miles" selected=("selected" if params.dig(:search, :distance) == '80467')
+            option value="120701" label="75 Miles" selected=("selected" if params.dig(:search, :distance) == '120701')
+            option value="160934" label="100 Miles" selected=("selected" if params.dig(:search, :distance) == '160934')
 
     .result-freelancers
       - @freelancers.each do |freelancer|

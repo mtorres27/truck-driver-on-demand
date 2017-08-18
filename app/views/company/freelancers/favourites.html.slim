@@ -12,7 +12,7 @@ br
       .result-header__distance
         span class="result-header__distance-text"
           | filter by location
-        select id="freelance_distance" class="company-freelancer__distance"
+        select id="freelancer_favourites_location" class="company-freelancer__distance"
           option value="" label="All" selected=("selected" if params.dig(:location) == "" || !params.dig(:location).presence)
           - @locations.each do |location|
             option value="#{location}" label="#{location}" selected=("selected" if params.dig(:location) == location)

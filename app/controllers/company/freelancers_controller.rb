@@ -53,19 +53,25 @@ class Company::FreelancersController < Company::BaseController
 
   def hired
     @locations = current_company.freelancers.uniq.pluck(:area)
+    @freelancers = current_company.freelancers
 
-    @freelancers = current_company.
-      freelancers.
-      page(params[:page]).
+    if params[:location] && params[:location] != ""
+      @freelancers = @freelancers.where({ area: params[:location] })
+    end
+    
+    @freelancers = @freelancers.page(params[:page]).
       per(50)
   end
 
   def favourites
-    @locations = current_company.freelancers.uniq.pluck(:area)
-    
-    @freelancers = current_company.
-      favourite_freelancers.
-      page(params[:page]).
+    @locations = current_company.favourite_freelancers.uniq.pluck(:area)
+    @freelancers = current_company.favourite_freelancers
+
+    if params[:location] && params[:location] != ""
+      @freelancers = @freelancers.where({ area: params[:location] })
+    end
+
+    @freelancers = @freelancers.page(params[:page]).
       per(50)
   end
 
