@@ -6,7 +6,10 @@ h1 Search for Techs
   .result-wrapper
     .result-header
       .result-header__text
-        = "#{@freelancers.total_count} freelancers found for "
+        - if params.dig(:search, :keywords).presence || params.dig(:search, :address).presence
+          = "#{@freelancers.total_count} freelancers found for "
+        - else
+          = "#{@freelancers.total_count} freelancers found"
         span class="result-header__text--strong"
           = params[:search][:keywords]
         - if params[:search][:address] > ""
@@ -38,40 +41,7 @@ h1 Search for Techs
 
     .result-freelancers
       - @freelancers.each do |freelancer|
-        a.result-row href=company_freelancer_path(freelancer)
-          .media
-            .media-left
-              - if !is_favourite(freelancer)
-                input type="checkbox" freelancer-id=freelancer.id class="company-freelancer__favourite-checkbox"
-            .media-left
-              = image_tag(freelancer.avatar_url, size: "75x75")
-              .reviews
-                - @stars = freelancer_avg_rating(freelancer)
-                - @stars.each do |star|
-                  .span class=star
-                - if freelancer.freelancer_reviews_count > 0
-                  = freelancer_ratings_link(freelancer)
-              
-            .media-body
-              h4.media-heading
-                = freelancer.name
-                | &nbsp;
-                - if is_favourite(freelancer)
-                  .span class="fa fa-check-circle"
-                
-              - if params.dig(:search, :address) == nil
-                p= "#{freelancer.area}"
-              - elsif params.dig(:search, :address) == ''
-                p= "#{freelancer.area}"
-              - else
-                p= "#{freelancer.area}, #{distance_from(freelancer)} miles away"
-              p.media-tagline
-                = freelancer.tagline
-              .freelancer-keywords
-                - if !freelancer.keywords.nil?
-                  - freelancer.keywords.split(", ").map(&:lstrip)[0..3].each do |keyword|
-                    .freelancer-keyword
-                      = keyword
+        .result-row href=company_freelancer_path(freelancer)
+          = render partial: "company/shared/freelancer_info", locals: { freelancer: freelancer }
 
-      input type="button" value="favourite selected" disabled="true" class="btn-primary company-freelancer__favourite-button"
       = paginate @freelancers

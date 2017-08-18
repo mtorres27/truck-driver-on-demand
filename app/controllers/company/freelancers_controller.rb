@@ -52,6 +52,8 @@ class Company::FreelancersController < Company::BaseController
   end
 
   def hired
+    @locations = current_company.freelancers.uniq.pluck(:area)
+
     @freelancers = current_company.
       freelancers.
       page(params[:page]).
@@ -59,6 +61,8 @@ class Company::FreelancersController < Company::BaseController
   end
 
   def favourites
+    @locations = current_company.freelancers.uniq.pluck(:area)
+    
     @freelancers = current_company.
       favourite_freelancers.
       page(params[:page]).

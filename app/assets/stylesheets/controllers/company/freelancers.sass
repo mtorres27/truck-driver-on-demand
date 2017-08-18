@@ -8,6 +8,10 @@
     padding: 20px 0
     color: $gray-light
     z-index: 1
+
+    &:last-of-type
+      border-bottom: none
+      
   .media-left img
     width: 75px
     height: 75px
@@ -19,6 +23,7 @@
     width: 100%
   .media-left
     min-width: 22px
+    position: relative
 
 .company-freelancer
   &__favourite-checkbox
@@ -178,6 +183,7 @@
         border-radius: 2px
         overflow: hidden
         margin-bottom: 5px
+        position: relative
       
       &__stars
         float: left
@@ -434,3 +440,9 @@
       &:hover
         color: $freelancer-sub-nav-color
         border-bottom: 3px solid $freelancer-sub-nav-color
+
+.freelancer-favourite
+  color: $brand-primary
+  position: absolute
+  right: 15px
+  top: 54px

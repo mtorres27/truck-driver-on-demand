@@ -1,0 +1,33 @@
+.media
+  .media-left
+    = image_tag(freelancer.avatar_url, size: "75x75")
+    .reviews
+      - @stars = freelancer_avg_rating(freelancer)
+      - @stars.each do |star|
+        .span class=star
+    - if freelancer.freelancer_reviews_count > 0
+      a class="reviews__counter" href="/company/freelancers/#{freelancer.id}#reviews" data-turbolinks="false"
+        = freelancer_ratings_link(freelancer)
+    - if is_favourite(freelancer)
+      span class="freelancer-favourite fa fa-heart"
+    
+  .media-body
+    h4.media-heading
+      = freelancer.name
+      | &nbsp;
+      - if is_verified(freelancer)
+        .span class="freelancer__verified fa fa-check-circle"
+      
+    - if params.dig(:search, :address) == nil
+      p= "#{freelancer.area}"
+    - elsif params.dig(:search, :address) == ''
+      p= "#{freelancer.area}"
+    - else
+      p= "#{freelancer.area}, #{distance_from(freelancer)} miles away"
+    p.media-tagline
+      = freelancer.tagline
+    .freelancer-keywords
+      - if !freelancer.keywords.nil?
+        - freelancer.keywords.split(", ").map(&:lstrip)[0..3].each do |keyword|
+          .freelancer-keyword
+            = keyword

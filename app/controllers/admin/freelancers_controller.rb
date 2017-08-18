@@ -50,7 +50,7 @@ class Admin::FreelancersController < Admin::BaseController
 
     def freelancer_params
       # params.fetch(:freelancer, {})
-      params.require(:freelancer).permit(:name, :email)
+      params.require(:freelancer).permit(:name, :email, :verified)
     end
 
 end

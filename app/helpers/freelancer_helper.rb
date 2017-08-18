@@ -50,6 +50,18 @@ module FreelancerHelper
 
   end
 
+  def is_verified(freelancer)
+    return freelancer.verified
+  end
+
+  def is_showing_freelancer(path)
+    if request.path.include?(company_freelancers_path) && !request.path.include?("hired") && !request.path.include?("favourites")
+      true
+    else
+      false
+    end
+  end
+
   RAD_PER_DEG = Math::PI / 180
   RM = 6371000 # Earth radius in meters
 

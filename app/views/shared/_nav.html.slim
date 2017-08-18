@@ -11,11 +11,11 @@ nav#top-nav.navbar.navbar-fixed-top
     #navbar-lg.collapse.navbar-collapse
       ul.nav.navbar-nav.navbar-right
         - if request.path.index(/\/company/)
-          li( class=("active" if request.path == company_root_path) )
+          li( class=("active" if request.path == company_root_path || is_showing_freelancer(request.path)) )
             = link_to "Search for Techs", company_root_path
           li( class=("active" if request.path.include?(company_projects_path)) )
             = link_to "Job Postings", company_projects_path
-          li( class=("active" if request.path.include?(company_freelancers_path)) )
+          li( class=("active" if request.path == company_freelancers_path + "/hired" || request.path == company_freelancers_path + "/favourites") )
             = link_to "My Techs", hired_company_freelancers_path
           li( class=("active" if request.path.include?(company_payments_path)) )
             = link_to "Payments", company_payments_path

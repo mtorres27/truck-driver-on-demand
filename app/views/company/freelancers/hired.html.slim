@@ -8,15 +8,19 @@ br
     | Favourites
 
 - content_for :secondary do
-  - @freelancers.each do |freelancer|
-    a.result-row href=company_freelancer_path(freelancer)
-      .media
-        .media-left
-          = image_tag(freelancer.avatar_url, size: "75x75")
-        .media-body
-          h4.media-heading= freelancer.name
-          p= freelancer.area
-          p.media-tagline
-            = freelancer.tagline
+  .result-wrapper
+    .result-header
+      .result-header__distance
+        span class="result-header__distance-text"
+          | filter by location
+        select id="freelance_distance" class="company-freelancer__distance"
+          option value="" label="All" selected=("selected" if params.dig(:location) == "" || !params.dig(:location).presence)
+          - @locations.each do |location|
+            option value="#{location}" label="#{location}" selected=("selected" if params.dig(:location) == location)
 
-  = paginate @freelancers
+    .result-freelancers
+      - @freelancers.each do |freelancer|
+        a.result-row href=company_freelancer_path(freelancer)
+          = render partial: "company/shared/freelancer_info", locals: { freelancer: freelancer }
+
+      = paginate @freelancers

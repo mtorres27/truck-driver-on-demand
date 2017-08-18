@@ -435,7 +435,8 @@ CREATE TABLE freelancers (
     messages_count integer DEFAULT 0 NOT NULL,
     freelancer_reviews_count integer DEFAULT 0 NOT NULL,
     skills citext,
-    profile_header_data text
+    profile_header_data text,
+    verified boolean DEFAULT false
 );
 
 
@@ -1533,6 +1534,8 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20170816140329'),
 ('20170816140705'),
 ('20170816141721'),
-('20170816144823');
+('20170816144823'),
+('20170818132847'),
+('20170818133107');
 
 
