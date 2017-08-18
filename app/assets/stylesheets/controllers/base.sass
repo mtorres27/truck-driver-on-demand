@@ -22,18 +22,36 @@ h1
 h2, h3, h4, h5, h6
   font-weight: 300
 
+h2
+  font-weight: 400
+  font-size: 24px
+
+h3
+  font-weight: 600
+  font-size: 18px
+  color: $job-title-color
+
 a:hover, a:active
   text-decoration: none
 
 label
   text-transform: uppercase
+  font-weight: 300 !important
   &.boolean
     text-transform: none
 
-.btn, .btn-primary
+.btn, .btn-primary, .btn-secondary
   border-radius: 4px
   font-weight: bold
   font-size: 14px 
+
+.btn-secondary
+  border: 1px solid $brand-primary
+  background-color: transparent
+  color: $black-color
+
+  &:hover
+    background-color: $brand-primary
 
 .btn, .label
   text-transform: uppercase

@@ -9,7 +9,7 @@
         .media-left
           a href="/company/freelancers/#{applicant.freelancer.id}" class="media-object"
             = image_tag(applicant.freelancer.avatar_url, size: "70x70", class: "freelancer_avatar")
-          - if is_favourite(freelancer)
+          - if is_favourite(applicant.freelancer)
             span class="freelancer-favourite fa fa-heart"
         .media-body
           .col-xs-12.col-md-5

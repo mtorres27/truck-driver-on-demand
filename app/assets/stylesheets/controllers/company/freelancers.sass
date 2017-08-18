@@ -11,7 +11,7 @@
 
     &:last-of-type
       border-bottom: none
-      
+
   .media-left img
     width: 75px
     height: 75px
@@ -78,6 +78,10 @@
 
     &--strong
       font-weight: bold
+    
+    &--projects
+      @extend .result-header__text
+      font-size: 24px
   
   &__sort, &__distance
     float: right
@@ -87,6 +91,9 @@
     margin-right: 10px
     font-size: 13px
     font-weight: bold
+
+  &__button
+    float: right
 
 .freelancer
   &__wrapper
@@ -424,22 +431,22 @@
     font-weight: bold
     text-align: center
     text-transform: uppercase
-    color: $freelancer-sub-nav-text-color
+    color: $freelancer-sub-nav-text-color !important
     display: block
     float: left
     line-height: 4em
 
     &:hover
       text-decoration: none
-      color: $freelancer-sub-nav-text-color
-      border-bottom: 3px solid $freelancer-sub-nav-border-color
+      color: $freelancer-sub-nav-text-color !important
+      border-bottom: 3px solid $freelancer-sub-nav-border-color !important
 
     &--active
-      color: $freelancer-sub-nav-color
-      border-bottom: 3px solid $freelancer-sub-nav-color
+      color: $freelancer-sub-nav-color !important
+      border-bottom: 3px solid $freelancer-sub-nav-color !important
       &:hover
-        color: $freelancer-sub-nav-color
-        border-bottom: 3px solid $freelancer-sub-nav-color
+        color: $freelancer-sub-nav-color !important
+        border-bottom: 3px solid $freelancer-sub-nav-color !important
 
 .freelancer-favourite
   color: $brand-primary

@@ -35,7 +35,7 @@
         .freelancer__meta-left__number-of-reviews
           a href="#reviews" data-turbolinks="false"
             = freelancer_ratings_link(@freelancer)
-        - if is_favourite(freelancer)
+        - if is_favourite(@freelancer)
           span class="freelancer-favourite fa fa-heart"
 
       .freelancer__meta-center
