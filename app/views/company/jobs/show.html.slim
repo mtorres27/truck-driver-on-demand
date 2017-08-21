@@ -1,65 +1,70 @@
 = render partial: "company/shared/job_nav", locals: { job: @job }
 
 - content_for :secondary do
-  .row
-    .col-xs-12.col-md-6
-      .show_field
-        label= t(:project, scope: [:form, :labels, :job])
-        .show_value_em= project_reference(@job.project)
+  .result-wrapper
+    .result-header
+      .result-header__text
+        | Job Details
+    .result-content
+      .row
+        .col-xs-12.col-md-6
+          .show_field
+            label= t(:project, scope: [:form, :labels, :job])
+            .show_value_em= project_reference(@job.project)
 
-      .show_field
-        label= t(:title, scope: [:form, :labels, :job])
-        .show_value_em= @job.title
+          .show_field
+            label= t(:title, scope: [:form, :labels, :job])
+            .show_value_em= @job.title
 
-      .show_field
-        label= t(:summary, scope: [:form, :labels, :job])
-        .show_value= @job.summary
+          .show_field
+            label= t(:summary, scope: [:form, :labels, :job])
+            .show_value= @job.summary
 
-      .show_field
-        label= t(:scope_of_work, scope: [:form, :labels, :job])
-        .show_value= @job.scope_of_work || "Not Specified"
+          .show_field
+            label= t(:scope_of_work, scope: [:form, :labels, :job])
+            .show_value= @job.scope_of_work || "Not Specified"
 
-    .col-xs-12.col-md-6
-      .show_field
-        label= t(:budget, scope: [:form, :labels, :job])
-        .show-budget= number_to_currency(@job.budget, precision: 0)
+        .col-xs-12.col-md-6
+          .show_field
+            label= t(:budget, scope: [:form, :labels, :job])
+            .show-budget= number_to_currency(@job.budget, precision: 0)
 
-      .show_field
-        label= t(:job_function, scope: [:form, :labels, :job])
-        .show_value_em= @job.job_function&.text
+          .show_field
+            label= t(:job_function, scope: [:form, :labels, :job])
+            .show_value_em= @job.job_function&.text
 
-      .show_field
-        .row
-          .col-xs-12.col-lg-6
-            label= t(:starts_on, scope: [:form, :labels, :job])
-            .show_value_em= l @job.starts_on
-          .col-xs-12.col-lg-6
-            label= t(:duration, scope: [:form, :labels, :job])
-            .show_value_em= @job.duration
+          .show_field
+            .row
+              .col-xs-12.col-lg-6
+                label= t(:starts_on, scope: [:form, :labels, :job])
+                .show_value_em= l @job.starts_on
+              .col-xs-12.col-lg-6
+                label= t(:duration, scope: [:form, :labels, :job])
+                .show_value_em= @job.duration
 
-      .show_field
-        .row
-          .col-xs-12.col-lg-6
-            label= t(:pay_type, scope: [:form, :labels, :job])
-            .show_value_em= @job.pay_type&.text || "Not Specified"
-          .col-xs-12.col-lg-6
-            label= t(:freelancer_type, scope: [:form, :labels, :job])
-            .show_value_em= @job.freelancer_type&.text
+          .show_field
+            .row
+              .col-xs-12.col-lg-6
+                label= t(:pay_type, scope: [:form, :labels, :job])
+                .show_value_em= @job.pay_type&.text || "Not Specified"
+              .col-xs-12.col-lg-6
+                label= t(:freelancer_type, scope: [:form, :labels, :job])
+                .show_value_em= @job.freelancer_type&.text
 
-      .show_field
-        label= t(:keywords, scope: [:form, :labels, :job])
-        .show_value= @job.keywords || "None Specified"
+          .show_field
+            label= t(:keywords, scope: [:form, :labels, :job])
+            .show_value= @job.keywords || "None Specified"
 
-      .show_field
-        ul
-          - if @job.invite_only?
-            li.show_value= t(:invite_only, scope: [:form, :labels, :job])
-          - if @job.scope_is_public?
-            li.show_value= t(:scope_is_public, scope: [:form, :labels, :job])
-          - if @job.budget_is_public?
-            li.show_value= t(:budget_is_public, scope: [:form, :labels, :job])
+          .show_field
+            ul
+              - if @job.invite_only?
+                li.show_value= t(:invite_only, scope: [:form, :labels, :job])
+              - if @job.scope_is_public?
+                li.show_value= t(:scope_is_public, scope: [:form, :labels, :job])
+              - if @job.budget_is_public?
+                li.show_value= t(:budget_is_public, scope: [:form, :labels, :job])
 
-  - if @job.pre_contracted?
-    hr
-    .form-actions
-      = link_to "Edit", edit_company_job_path(@job), class: "btn btn-primary"
+      - if @job.pre_contracted?
+        hr
+        .form-actions
+          = link_to "Edit", edit_company_job_path(@job), class: "btn btn-primary"

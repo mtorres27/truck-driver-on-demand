@@ -1,24 +1,27 @@
 = render partial: "company/shared/job_nav", locals: { job: @job }
 
 - content_for :secondary do
-  .content_card_title
-    | Job Progress Report
-  .post
-    = simple_form_for(:message, url: company_job_messages_path(@job)) do |f|
-      = render partial: "company/shared/new_message", locals: { f: f }
+  .result-wrapper
+    .result-header
+      .result-header__text
+        | Messages
+    .result-content
+      .post
+        = simple_form_for(:message, url: company_job_messages_path(@job)) do |f|
+          = render partial: "company/shared/new_message", locals: { f: f }
 
-  h4.messages-and-activity Messages and Activity
-  ol.media-list
-    - @messages.each do |message|
-      li.media.message
-        .media-left
-          = image_tag message.authorable.avatar_url, size: "65x65", class: "avatar"
-        .media-body
-          h5.media-heading
-            | #{message.authorable.name} #{time_ago_in_words(message.created_at)} ago
-          .row
-            .col-xs-12.col-md-8.col-lg-9
-              = message.body
-            - if message.attachment
-              .col-xs-12.col-md-4.col-lg-3.text-right
-                = attachment_image_link(message.attachment)
+      h4.messages-and-activity Messages and Activity
+      ol.media-list
+        - @messages.each do |message|
+          li.media.message
+            .media-left
+              = image_tag message.authorable.avatar_url, size: "65x65", class: "avatar"
+            .media-body
+              h5.media-heading
+                | #{message.authorable.name} #{time_ago_in_words(message.created_at)} ago
+              .row
+                .col-xs-12.col-md-8.col-lg-9
+                  = message.body
+                - if message.attachment
+                  .col-xs-12.col-md-4.col-lg-3.text-right
+                    = attachment_image_link(message.attachment)

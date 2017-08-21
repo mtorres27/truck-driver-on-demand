@@ -64,6 +64,9 @@
   -moz-box-shadow: 0px 0px 1px 1px rgba(0,0,0,0.1)
   box-shadow: 0px 0px 1px 1px rgba(0,0,0,0.1)
 
+.result-content
+  padding: 20px
+
 .result-header
   width: 100%
   display: inline-block
@@ -71,6 +74,8 @@
   box-sizing: border-box
   font-size: 13px
   background-color: $search-header-background
+  &:after
+    clear: both
 
   &__text
     float: left
@@ -447,6 +452,11 @@
       &:hover
         color: $freelancer-sub-nav-color !important
         border-bottom: 3px solid $freelancer-sub-nav-color !important
+
+    &--inactive
+      &:hover
+        border-bottom: none !important
+
 
 .freelancer-favourite
   color: $brand-primary
