@@ -11,21 +11,22 @@ nav#top-nav.navbar.navbar-fixed-top
     #navbar-lg.collapse.navbar-collapse
       ul.nav.navbar-nav.navbar-right
         - if request.path.index(/\/company/)
-          li( class=("active" if request.path == company_root_path) )
+          li( class=("active" if request.path == company_root_path || is_showing_freelancer(request.path)) )
             = link_to "Search for Techs", company_root_path
           li( class=("active" if request.path.include?(company_projects_path)) )
             = link_to "Job Postings", company_projects_path
-          li
+          li( class=("active" if request.path == company_freelancers_path + "/hired" || request.path == company_freelancers_path + "/favourites") )
             = link_to "My Techs", hired_company_freelancers_path
+          li( class=("active" if request.path.include?(company_payments_path)) )
+            = link_to "Payments", company_payments_path
           li.dropdown
             a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"
-              ' Company
+              .dropdown-avatar
+                = image_tag(current_company.avatar_url, size: "35x35")
               span.caret
             ul class="dropdown-menu"
               li
                 a href="#" Notifications
-              li
-                = link_to "Payments", company_payments_path
               li
                 = link_to "Profile", company_profile_path
               li.divider role="separator"
@@ -38,7 +39,8 @@ nav#top-nav.navbar.navbar-fixed-top
             = link_to "Dashboard", freelancer_root_path
           li.dropdown
             a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"
-              ' Freelancer
+              .dropdown-avatar
+                = image_tag(current_freelancer.avatar_url, size: "67x67")
               span.caret
             ul class="dropdown-menu"
               li

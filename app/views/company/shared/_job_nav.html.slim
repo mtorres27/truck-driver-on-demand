@@ -6,35 +6,36 @@
         a.project_name href=company_projects_path
           | &#8592; #{job.project&.name}
     = job.title || "New Job"
-  ul.list-inline.page_nav
+  .tab-bar
     - if job.new_record?
-      li.active Job Details
+      .tab-bar__item--active
+        Job Details
     - else
-      li class=("active" if controller.controller_name == "jobs")
+      .tab-bar__item class=("tab-bar__item--active" if controller.controller_name == "jobs")
         a href=company_job_path(job)
           | Job Details
-      li class=("active" if request.path.index(/applicant/))
+      .tab-bar__item class=("tab-bar__item--active" if request.path.index(/applicant/))
         a href=company_job_applicants_path(job)
           | Applicants
-      li class=("active" if request.path.index(/contract/))
+      .tab-bar__item class=("tab-bar__item--active" if request.path.index(/contract/))
         - if job.pre_negotiated?
           | Contract
         - else
           a href=company_job_contract_path(job)
             | Contract
-      li class=("active" if request.path.index(/message/))
+      .tab-bar__item class=("tab-bar__item--active" if request.path.index(/message/)) class=("tab-bar__item--inactive" if job.pre_contracted?)
         - if job.pre_contracted?
           | Progress
         - else
           a href=company_job_messages_path(job)
             | Progress
-      li class=("active" if request.path.index(/payment/))
+      .tab-bar__item class=("tab-bar__item--active" if request.path.index(/payment/)) class=("tab-bar__item--inactive" if job.pre_contracted?)
         - if job.pre_contracted?
           | Payments
         - else
           a href=company_job_payments_path(job)
             | Payments
-      li class=("active" if request.path.index(/review/))
+      .tab-bar__item class=("tab-bar__item--active" if request.path.index(/review/)) class=("tab-bar__item--inactive" unless job.completed?)
         - unless job.completed?
           | Review
         - else

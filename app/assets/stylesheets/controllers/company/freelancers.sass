@@ -4,10 +4,14 @@
     box-sizing: border-box
   .result-row
     display: block
-    border-bottom: 2px solid $freelancer-separator
+    border-bottom: 1px solid $freelancer-separator
     padding: 20px 0
     color: $gray-light
     z-index: 1
+
+    &:last-of-type
+      border-bottom: none
+
   .media-left img
     width: 75px
     height: 75px
@@ -19,6 +23,7 @@
     width: 100%
   .media-left
     min-width: 22px
+    position: relative
 
 .company-freelancer
   &__favourite-checkbox
@@ -34,6 +39,14 @@
   
   &__sort, &__distance
     width: 200px
+
+.media-heading
+  margin-top: 0
+  font-size: 16px
+  font-weight: bold
+
+.media-tagline
+  font-style: italic
 
 .freelancer-keywords
   width: 100%
@@ -51,6 +64,9 @@
   -moz-box-shadow: 0px 0px 1px 1px rgba(0,0,0,0.1)
   box-shadow: 0px 0px 1px 1px rgba(0,0,0,0.1)
 
+.result-content
+  padding: 20px
+
 .result-header
   width: 100%
   display: inline-block
@@ -58,12 +74,19 @@
   box-sizing: border-box
   font-size: 13px
   background-color: $search-header-background
+  &:after
+    clear: both
 
   &__text
     float: left
+    font-size: 16px
 
     &--strong
       font-weight: bold
+    
+    &--projects
+      @extend .result-header__text
+      font-size: 24px
   
   &__sort, &__distance
     float: right
@@ -73,6 +96,9 @@
     margin-right: 10px
     font-size: 13px
     font-weight: bold
+
+  &__button
+    float: right
 
 .freelancer
   &__wrapper
@@ -169,6 +195,7 @@
         border-radius: 2px
         overflow: hidden
         margin-bottom: 5px
+        position: relative
       
       &__stars
         float: left
@@ -223,6 +250,7 @@
           font-size: 12px
           text-align: center
           color: $freelancer-rate-label
+          font-weight: bold
 
       &__pay-unit
         float: right
@@ -236,6 +264,7 @@
           text-transform: uppercase
           font-size: 12px
           text-align: center
+          font-weight: bold
           color: $freelancer-rate-label
 
   &__bona-fides
@@ -285,6 +314,7 @@
           font-size: 12px
           text-align: center
           color: $freelancer-rate-label
+          font-weight: bold
   &__abilities
     width: 100%
     display: inline-block
@@ -301,6 +331,7 @@
         font-size: 14px
         color: $freelancer-section-color
         margin-bottom: 10px
+        font-weight: bold
 
     &__specialties
       float: left
@@ -311,6 +342,7 @@
         font-size: 15px
         color: $freelancer-section-color
         margin-bottom: 10px
+        font-weight: bold
 
       &__markets, &__skills
         width: 100%
@@ -321,6 +353,7 @@
           font-size: 12px
           color: $freelancer-section-color
           margin-bottom: 10px
+          font-weight: bold
 
         &-value
       
@@ -341,6 +374,7 @@
       font-size: 14px
       color: $freelancer-section-color
       margin-bottom: 10px
+      font-weight: bold
 
     &-value
       display: inline-block
@@ -370,6 +404,7 @@
       font-size: 14px
       color: $freelancer-section-color
       margin-bottom: 10px
+      font-weight: bold
 
     &-value
       width: 100%
@@ -397,20 +432,34 @@
   &__item
     width: 150px
     height: 50px
-    font-size: 12px
+    font-size: 14px
     font-weight: bold
     text-align: center
     text-transform: uppercase
-    color: $black-color
+    color: $freelancer-sub-nav-text-color !important
     display: block
     float: left
     line-height: 4em
 
     &:hover
       text-decoration: none
-      color: $freelancer-sub-nav-color
-      border-bottom: 3px solid $freelancer-sub-nav-color
+      color: $freelancer-sub-nav-text-color !important
+      border-bottom: 3px solid $freelancer-sub-nav-border-color !important
 
     &--active
-      color: $freelancer-sub-nav-color
-      border-bottom: 3px solid $freelancer-sub-nav-color
+      color: $freelancer-sub-nav-color !important
+      border-bottom: 3px solid $freelancer-sub-nav-color !important
+      &:hover
+        color: $freelancer-sub-nav-color !important
+        border-bottom: 3px solid $freelancer-sub-nav-color !important
+
+    &--inactive
+      &:hover
+        border-bottom: none !important
+
+
+.freelancer-favourite
+  color: $brand-primary
+  position: absolute
+  right: 15px
+  top: 54px

@@ -8,7 +8,7 @@ class Company::PaymentsController < Company::BaseController
       includes(jobs: :payments).
       order(created_at: :desc).
       page(params[:page]).
-      per(5)
+      per(50)
   end
 
 end

@@ -1,21 +1,41 @@
 .navbar
-  height: 75px
-  font-size: 14px
+  height: 70px
+  font-size: 16px
   text-transform: uppercase
   background-color: white
-  font-family: 'Raleway', sans-serif
+  font-family: 'Open Sans', sans-serif
   font-weight: 600
 
 .navbar-brand
   padding: 15px 0 20px 15px
   .header-logo
-    height: 40px
+    height: 25px
 
 .navbar-nav
   > li
     > a
-      padding: 27px 15px
+      padding: 22px 15px
+      color: $gray-dark
+      background-color: $white-color !important
+      &:hover
+        color: $brand-primary
+
+  > li.active
+    > a
+      background-color: $white-color !important
+      color: $brand-primary
 
 .navbar-floating
   box-shadow: 0 0 10px rgba(0,0,0,0.4)
 
+.dropdown-avatar
+  width: 35px
+  height: 35px
+  overflow: hidden
+  border: 1px solid $nav-border-color
+  border-radius: 4px
+  float: left
+  margin: -8px 5px 0px 0px
+
+  &:hover
+    border: 1px solid $brand-primary

@@ -1,4 +1,9 @@
 = render partial: "company/shared/job_nav", locals: { job: @job }
 
 - content_for :secondary do
-  = render "invoice"
+  .result-wrapper
+    .result-header
+      .result-header__text
+        | Applicants
+    .result-content
+      = render "invoice"

@@ -6,27 +6,52 @@ body
   font-family: "Open Sans", sans-serif
   padding-top: 70px
   margin-bottom: 250px
+  font-size: 16px
+  background-color: $gray-eee
+
+.primary
+  background-color: $white-color
 
 h1, h2, h3, h4, h5, h6, th
   color: $gray-light
-  font-family: "Raleway", sans-serif
+  font-family: "Open Sans", sans-serif
 
 h1
-  font-weight: 600
+  font-weight: 300
 
 h2, h3, h4, h5, h6
   font-weight: 300
+
+h2
+  font-weight: 400
+  font-size: 24px
+
+h3
+  font-weight: 600
+  font-size: 18px
+  color: $job-title-color
 
 a:hover, a:active
   text-decoration: none
 
 label
   text-transform: uppercase
+  font-weight: 300 !important
   &.boolean
     text-transform: none
 
-.btn
-  border-radius: 1px
+.btn, .btn-primary, .btn-secondary
+  border-radius: 4px
+  font-weight: bold
+  font-size: 14px 
+
+.btn-secondary
+  border: 1px solid $brand-primary
+  background-color: transparent
+  color: $black-color
+
+  &:hover
+    background-color: $brand-primary
 
 .btn, .label
   text-transform: uppercase
@@ -86,3 +111,13 @@ label
   color: $black-color
   font-size: 10px
   font-weight: bold
+
+.reviews
+  .fa
+    color: $reviews-color
+    font-size: 12px
+
+  &__counter
+    color: $brand-primary
+    display: block
+    font-size: 12px

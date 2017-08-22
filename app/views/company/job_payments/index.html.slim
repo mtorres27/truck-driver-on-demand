@@ -1,14 +1,16 @@
 = render partial: "company/shared/job_nav", locals: { job: @job }
 
 - content_for :secondary do
-  .content_card_title
-    | Payments
+  .result-wrapper
+    .result-header
+      .result-header__text
+        | Applicants
+    .result-content
+      .row
+        .col-xs-12.col-sm-8
+          .job_title= @job.title
+        .col-xs-12.col-sm-4
+          .job_paid
+            | Paid #{number_to_currency(@job.payments_sum_paid, precision: 0)} of #{number_to_currency(@job.payments_sum_total, precision: 0)}
 
-  .row
-    .col-xs-12.col-sm-8
-      .job_title= @job.title
-    .col-xs-12.col-sm-4
-      .job_paid
-        | Paid #{number_to_currency(@job.payments_sum_paid, precision: 0)} of #{number_to_currency(@job.payments_sum_total, precision: 0)}
-
-  = render partial: "table", locals: { job: @job, payments: @payments }
+      = render partial: "table", locals: { job: @job, payments: @payments }

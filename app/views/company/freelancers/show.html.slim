@@ -33,7 +33,10 @@
               .span class=star
 
         .freelancer__meta-left__number-of-reviews
-          = freelancer_ratings_link(@freelancer)
+          a href="#reviews" data-turbolinks="false"
+            = freelancer_ratings_link(@freelancer)
+        - if is_favourite(@freelancer)
+          span class="freelancer-favourite fa fa-heart"
 
       .freelancer__meta-center
         .freelancer__meta-center__name
@@ -164,8 +167,9 @@
               = certification.name
 
     .freelancer__reviews
-      .freelancer__reviews-label
-        | reviews
+      a name="reviews"
+        .freelancer__reviews-label
+          | reviews
       .freelancer__reviews-value
         - if @freelancer.freelancer_reviews_count > 0
           .freelancer__reviews__review

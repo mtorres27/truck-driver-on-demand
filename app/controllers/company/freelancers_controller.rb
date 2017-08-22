@@ -48,21 +48,31 @@ class Company::FreelancersController < Company::BaseController
     end
 
     # @freelancers = @freelancers.reverse()
-    @freelancers = @freelancers.page(params[:page]).per(5)
+    @freelancers = @freelancers.page(params[:page]).per(50)
   end
 
   def hired
-    @freelancers = current_company.
-      freelancers.
-      page(params[:page]).
-      per(5)
+    @locations = current_company.freelancers.uniq.pluck(:area)
+    @freelancers = current_company.freelancers
+
+    if params[:location] && params[:location] != ""
+      @freelancers = @freelancers.where({ area: params[:location] })
+    end
+    
+    @freelancers = @freelancers.page(params[:page]).
+      per(50)
   end
 
   def favourites
-    @freelancers = current_company.
-      favourite_freelancers.
-      page(params[:page]).
-      per(5)
+    @locations = current_company.favourite_freelancers.uniq.pluck(:area)
+    @freelancers = current_company.favourite_freelancers
+
+    if params[:location] && params[:location] != ""
+      @freelancers = @freelancers.where({ area: params[:location] })
+    end
+
+    @freelancers = @freelancers.page(params[:page]).
+      per(50)
   end
 
 

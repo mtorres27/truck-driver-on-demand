@@ -1,23 +1,28 @@
 = render partial: "company/shared/job_nav", locals: { job: @job }
 
 - content_for :secondary do
-  - if @review.new_record?
-    .content_card_title
-      | Give us your feedback
-    = simple_form_for(@review, url: company_job_review_path(@job)) do |f|
-      = f.error_notification
-      .row
-        - FreelancerReview::RATING_ATTRS.each do |attr|
-          .col-sm-12.col-md-6.col-lg-4= f.input attr, collection: 1..5, as: :radio_buttons
-      = f.input :comments
-      = f.submit "Submit Review", class: "btn btn-primary"
-  - else
-    .content_card_title
-      | Thank you for your feedback
-    .row
-      - FreelancerReview::RATING_ATTRS.each do |attr|
-        .col-sm-12.col-md-6.col-lg-4
-          label.control-label= t(attr, scope: [:form, :labels, :freelancer_review])
-          p= @review.send(attr)
-    label.control-label Comments
-    p= @review.comments
+  .result-wrapper
+    .result-header
+      .result-header__text
+        | Reviews
+    .result-content
+      - if @review.new_record?
+        .content_card_title
+          | Give us your feedback
+        = simple_form_for(@review, url: company_job_review_path(@job)) do |f|
+          = f.error_notification
+          .row
+            - FreelancerReview::RATING_ATTRS.each do |attr|
+              .col-sm-12.col-md-6.col-lg-4= f.input attr, collection: 1..5, as: :radio_buttons
+          = f.input :comments
+          = f.submit "Submit Review", class: "btn btn-primary"
+      - else
+        .content_card_title
+          | Thank you for your feedback
+        .row
+          - FreelancerReview::RATING_ATTRS.each do |attr|
+            .col-sm-12.col-md-6.col-lg-4
+              label.control-label= t(attr, scope: [:form, :labels, :freelancer_review])
+              p= @review.send(attr)
+        label.control-label Comments
+        p= @review.comments

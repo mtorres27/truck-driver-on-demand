@@ -97,7 +97,7 @@ CREATE TABLE applicants (
     company_id bigint NOT NULL,
     job_id bigint NOT NULL,
     freelancer_id bigint NOT NULL,
-    state character varying DEFAULT 'interested'::character varying NOT NULL,
+    state character varying DEFAULT 'quoting'::character varying NOT NULL,
     quotes_count integer DEFAULT 0 NOT NULL,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
@@ -435,7 +435,8 @@ CREATE TABLE freelancers (
     messages_count integer DEFAULT 0 NOT NULL,
     freelancer_reviews_count integer DEFAULT 0 NOT NULL,
     skills citext,
-    profile_header_data text
+    profile_header_data text,
+    verified boolean DEFAULT false
 );
 
 
@@ -564,7 +565,9 @@ CREATE TABLE messages (
     body text,
     attachment_data text,
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+    updated_at timestamp without time zone NOT NULL,
+    checkin boolean DEFAULT false,
+    counter_offer character varying
 );
 
 
@@ -1533,6 +1536,10 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20170816140329'),
 ('20170816140705'),
 ('20170816141721'),
-('20170816144823');
+('20170816144823'),
+('20170818132847'),
+('20170818133107'),
+('20170822182057'),
+('20170822183600');
 
 

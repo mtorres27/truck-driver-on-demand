@@ -46,6 +46,8 @@ class Company::QuotesController < Company::BaseController
     def set_collections
       @messages = @applicant.messages
       @quotes = @applicant.quotes
+      @all_quotes = @applicant.job.quotes
+
     end
 
     def message_params
