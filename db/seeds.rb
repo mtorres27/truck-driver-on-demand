@@ -61,20 +61,18 @@ schools.sample(20).each do |school|
           freelancer: Freelancer.order("RANDOM()").first,
           state: Applicant.state.values.select{ |v| v != :accepted }.sample
         )
-        unless applicant.state == "interested"
-          quote = applicant.quotes.new(
-            company: company,
-            pay_type: Quote.pay_type.values.sample,
-            state: "declined"
-          )
-          quote.amount =
-            if quote.fixed?
-              [(budget.to_f - Faker::Number.number(2).to_f), (budget.to_f + Faker::Number.number(2).to_f)].sample
-            else
-              Faker::Number.number(2).to_f
-            end
-          quote.save
-        end
+        quote = applicant.quotes.new(
+          company: company,
+          pay_type: Quote.pay_type.values.sample,
+          state: "declined"
+        )
+        quote.amount =
+          if quote.fixed?
+            [(budget.to_f - Faker::Number.number(2).to_f), (budget.to_f + Faker::Number.number(2).to_f)].sample
+          else
+            Faker::Number.number(2).to_f
+          end
+        quote.save
       rescue Exception => e
         puts e
         # do nothing, this is just in case we get the exact same freelancer more than once
@@ -82,7 +80,7 @@ schools.sample(20).each do |school|
     end
 
     unless job.pre_negotiated?
-      applicant = job.applicants.where.not(state: "interested").first
+      applicant = job.applicants.first
       if applicant
         quote = applicant.quotes.order(created_at: :desc).first
         applicant.update_columns(state: "accepted")

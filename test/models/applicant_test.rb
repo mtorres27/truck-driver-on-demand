@@ -6,7 +6,7 @@
 #  company_id    :integer          not null
 #  job_id        :integer          not null
 #  freelancer_id :integer          not null
-#  state         :string           default("interested"), not null
+#  state         :string           default("quoting"), not null
 #  quotes_count  :integer          default(0), not null
 #  created_at    :datetime         not null
 #  updated_at    :datetime         not null

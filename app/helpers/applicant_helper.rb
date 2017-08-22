@@ -2,7 +2,6 @@ module ApplicantHelper
 
   def applicant_state_label(applicant)
     mappings = {
-      interested: :warning,
       ignored: :default,
       quoting: :info,
       accepted: :success
