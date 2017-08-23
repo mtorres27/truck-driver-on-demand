@@ -30,7 +30,7 @@
               .quote_pay_type= quote.pay_type.text
               - if quote.fixed? && quote.amount > @job.budget
                 .quote_over-budget= "Over Budget"
-              - elsif quote.fixed && quote.amount < @job.budget
+              - elsif quote.fixed? && quote.amount < @job.budget
                 .quote_under-budget= "Under Budget"
               - if quote.pending?
                 - if quote.fixed? && quote.amount > @job.budget
