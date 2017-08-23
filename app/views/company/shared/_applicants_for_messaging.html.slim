@@ -1,6 +1,14 @@
 .result-header
   .result-header__text
-    | Applicant Filter
+    .messaging-filter
+      .messaging-filter__text
+        | Filter 
+      .messaging-filter__select
+        select id="messaging-filter"
+          option value="" label="All Applicants"
+          option value="quoting" label="Quoting Applicants" selected=("quoting" if params[:filter] == "quoting")
+          option value="accepted" label="Accepted Applicant" selected=("selected" if params[:filter] == "accepted")
+
 .applicant-messages__list-wrapper
   .applicant-messages__list
     - applicants.each do |applicant|
@@ -13,5 +21,15 @@
           .media-body
             - applicant.freelancer.tap do |freelancer|
               .freelancer_name= freelancer.name
-              .freelancer_distance= "#{1} miles away"
+              - distance = calc_distance_from(freelancer)
+              - if distance == "N/A"
+                .freelancer_distance= "#{freelancer.area}"
+              - else
+                .freelancer_distance= "#{freelancer.area}, #{distance} miles away"
             = applicant_state_label(applicant)
+
+javascript:
+  $("#messaging-filter").on('change', function() {
+    var val = $(this).val();
+    window.location.href = "http://"+window.location.host+window.location.pathname+"?filter="+val;
+  })

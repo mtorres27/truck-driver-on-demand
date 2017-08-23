@@ -12,11 +12,24 @@ module ApplicationHelper
   end
 
   def is_image(url)
-
     if ['.png', '.gif', '.jpg', '.jpeg', '.svg'].include?(File.extname(url))
       return true
     else
       return false
     end
+  end
+
+  def calc_distance_from(freelancer)
+    if current_company.lat.nil?
+      return "N/A"
+    end
+
+    point = OpenStruct.new(:lat => current_company.lat, :lng => current_company.lng)
+    @freelancer = Freelancer.where({id: freelancer.id}).with_distance(point).first
+
+    if @freelancer.lat.nil?
+      return "N/A"
+    end
+    return distance_from(@freelancer)
   end
 end
