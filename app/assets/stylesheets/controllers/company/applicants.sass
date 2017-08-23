@@ -32,11 +32,14 @@
       font-style: italic
 
   .quote
-    &_over-budget
+    &_over-budget, &_under-budget
       text-align: right
       color: $brand-danger
       text-transform: uppercase
       font-weight: bold
+
+    &_under-budget
+      color: $brand-success
     &_amount
       text-align: right
       font-size: 36px
@@ -57,6 +60,33 @@
 
   .authorable_body
     font-size: 14px
+
+  .authorable_attachment
+    margin-top: 15px
+    border: 1px solid $attachment-border
+    text-decoration: none
+    border-radius: 4px
+    display: block
+    font-size: 26px
+    padding: 10px
+    width: calc(100% - 200px)
+    box-sizing: border-box
+
+  .authorable_attachment_icon
+    float: left
+    margin-right: 10px
+    color: $brand-primary
+
+  .authorable_attachment__filename
+    width: calc(100% - 45px)
+    font-size: 14px
+    font-weight: bold
+    overflow: hidden
+    text-overflow: ellipsis
+    color: $black-color
+    line-height: 1.8em
+    overflow: hidden
+    white-space: nowrap
     
 
   .quote_state

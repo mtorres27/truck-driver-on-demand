@@ -33,11 +33,11 @@
     box-sizing: border-box
     display: inline-block
     height: auto
+    min-height: 500px
 
   &__list-wrapper
     border-right: 1px solid $messages-border
     height: 100%
-    margin-top: -6px
     float: left
     display: inline-block
   
@@ -50,7 +50,57 @@
     width: calc(100% - 301px)
     float: left
     box-sizing: border-box
-    padding: 0px 56px 0px 15px
+    padding: 15px 15px 0px 15px
+    position: relative
+    min-height: 500px
 
     .media
       margin-bottom: 30px
+
+
+.new-message--wrapper
+  width: 100%
+  display: inline-block
+  border-top: 1px solid $gray-ccc
+  padding: 15px 15px 15px 15px
+  margin: 0px -15px
+  position: absolute
+  bottom: 0
+
+
+.new-message
+  width: 100%
+  display: inline-block
+  padding: 0px 15px 0px 15px
+  box-sizing: border-box
+  bottom: 0
+  &__input
+    width: calc(100% - 140px)
+    border: 1px solid $gray-ccc
+    float: left
+    border-radius: 4px
+    margin: 0px 10px 0px 0px
+    input
+      width: calc(100% - 30px)
+      border: none
+      float: left
+  &__attachment-button
+    width: 10px
+    margin: -10px 10px 0px 10px
+    float: left
+    cursor: pointer
+    &:hover
+      color: $brand-primary
+    &--active
+      color: $brand-primary
+  &__attachment
+    visibility: hidden
+    height: 0px
+  &__submit
+    width: 130px
+    float: left
+
+  .simple_form, .message
+    position: relative
+
+  

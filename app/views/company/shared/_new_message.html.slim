@@ -1,9 +1,28 @@
-.row
-  .col-xs-12
-    = f.input :body, as: :text
-  .col-xs-6
-    = f.input :attachment, as: :file, label: false
-  .col-xs-6.text-right
-    = f.submit "Post Message", class: "btn btn-primary"
-    '
-    = link_to "Cancel", company_job_applicants_path(@job), class: "btn btn-default"
+.new-message--wrapper
+  .new-message
+    - if type == "quote"
+      .new-message__options
+        | 
+        
+    .new-message__input
+
+      = f.input :body, as: :string, placeholder: "Send a message to #{n}", label: false
+      .new-message__attachment-button onclick="triggerFileUpload()"
+        .span class="fa fa-paperclip"
+        
+    .new-message__submit
+      = f.submit "Post Message", class: "btn btn-primary"
+    .new-message__attachment
+      = f.input :attachment, as: :file, label: false
+
+
+javascript:
+  var triggerFileUpload = function () {
+    console.log("trigger");
+    $("#message_attachment").click();
+  }
+
+  $("#message_attachment").change(function() {
+    $(".new-message__attachment-button").addClass("new-message__attachment-button--active");
+
+  })

@@ -10,4 +10,13 @@ module ApplicationHelper
       end
     end
   end
+
+  def is_image(url)
+
+    if ['.png', '.gif', '.jpg', '.jpeg', '.svg'].include?(File.extname(url))
+      return true
+    else
+      return false
+    end
+  end
 end

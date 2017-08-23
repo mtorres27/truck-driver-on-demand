@@ -44,7 +44,7 @@ class Company::QuotesController < Company::BaseController
     end
 
     def set_collections
-      @messages = @applicant.messages
+      @messages = @applicant.messages.reverse()
       @quotes = @applicant.quotes
       @all_quotes = @applicant.job.quotes
       @applicants = @applicant.job.applicants.without_state(:ignored)
