@@ -47,6 +47,8 @@ class Company::QuotesController < Company::BaseController
       @messages = @applicant.messages
       @quotes = @applicant.quotes
       @all_quotes = @applicant.job.quotes
+      @applicants = @applicant.job.applicants.without_state(:ignored)
+      @current_applicant_id = @applicant.id
 
     end
 

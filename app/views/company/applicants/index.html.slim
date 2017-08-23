@@ -2,36 +2,6 @@
 
 - content_for :secondary do
   .result-wrapper
-    .result-header
-      .result-header__text
-        | Applicants
-    .result-content
-      ul.media-list
-        - @applicants.each do |applicant|
-          li.media.applicant
-            .media-left
-              a href="/company/freelancers/#{applicant.freelancer.id}" class="media-object"
-                = image_tag(applicant.freelancer.avatar_url, size: "70x70", class: "freelancer_avatar")
-              - if is_favourite(applicant.freelancer)
-                span class="freelancer-favourite fa fa-heart"
-            .media-body
-              .col-xs-12.col-md-5
-                = applicant_state_label(applicant)
-                - applicant.freelancer.tap do |freelancer|
-                  a href="/company/freelancers/#{applicant.freelancer.id}"
-                    .freelancer_name= freelancer.name
-                  .freelancer_area= freelancer.area
-                  .freelancer_tagline= freelancer.tagline
-              .col-xs-12.col-md-5.text-right
-                .btn-group role="group" aria-label="..." style="display: none"
-                  - if applicant.quotes&.first&.pending?
-                    a.btn.btn-default type="button" href=company_job_applicant_quotes_path(@job, applicant)
-                      | View Quote
-                  a.btn.btn-default type="button" href=company_job_applicant_quotes_path(@job, applicant)
-                    | Message
-              .col-xs-12.col-md-2
-                - applicant.quotes.first&.tap do |quote|
-                  - if quote.fixed? && quote.amount > @job.budget
-                    .quote_over-budget= "Over Budget"
-                  .quote_amount= number_to_currency(quote.amount, precision: 0)
-                  .quote_pay_type= quote.pay_type.text
+    = render partial: "company/shared/applicants_for_messaging", locals: { applicants: @applicants, job: @job, current_applicant_id: @current_applicant_id }
+
+    

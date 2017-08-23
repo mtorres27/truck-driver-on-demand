@@ -6,6 +6,12 @@ module ApplicantHelper
       quoting: :info,
       accepted: :success
     }
+    if applicant.state == "interested" 
+      applicant.state = "quoting"
+    end
+
+    p "applicant state "
+    p applicant
 
     content_tag(:span, class: "applicant_state label label-#{mappings[applicant.state.to_sym]}") do
       applicant.state.text
@@ -18,6 +24,8 @@ module ApplicantHelper
       pending: :info,
       accepted: :success
     }
+
+    
 
     content_tag(:span, class: "applicant_state label label-#{mappings[quote.state.to_sym]}") do
       quote.state.text

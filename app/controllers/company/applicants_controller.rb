@@ -4,6 +4,7 @@ class Company::ApplicantsController < Company::BaseController
 
   def index
     @applicants = @job.applicants.includes(:quotes, :freelancer).without_state(:ignored).order(created_at: :desc)
+    @current_applicant_id = nil
   end
 
   def request_quote

@@ -18,3 +18,39 @@
     max-height: 200px
     border: 1px solid $gray-light
     border-radius: 2px
+
+.applicant-messages
+  width: 100%
+  display: inline-block
+  max-height: 800px
+  overflow-x: hidden
+  overflow-y: scroll
+  margin-top: -6px
+
+  &__list
+    float: left
+    width: 300px
+    box-sizing: border-box
+    display: inline-block
+    height: auto
+
+  &__list-wrapper
+    border-right: 1px solid $messages-border
+    height: 100%
+    margin-top: -6px
+    float: left
+    display: inline-block
+  
+
+  &__item
+    float: left
+    width: 100%
+  
+  &__messages
+    width: calc(100% - 301px)
+    float: left
+    box-sizing: border-box
+    padding: 0px 56px 0px 15px
+
+    .media
+      margin-bottom: 30px

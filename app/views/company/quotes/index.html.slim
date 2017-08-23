@@ -1,37 +1,33 @@
 = render partial: "company/shared/job_nav", locals: { job: @job }
 
 - content_for :secondary do
-  .content_card_title
-    | #{@applicant.freelancer&.name}: Messages and Quotes
-  .row
-    .col-xs-12.col-md-8.col-sm-7
+  .result-wrapper
+    = render partial: "company/shared/applicants_for_messaging", locals: { applicants: @applicants, job: @job, current_applicant_id: @current_applicant_id }
+    .applicant-messages__messages
       - if @all_quotes.where({state: "accepted"}).length == 0
         = simple_form_for(:message, url: company_job_applicant_quotes_path(@job, @applicant)) do |f|
           = render partial: "company/shared/new_message", locals: { f: f }
       - @messages.each do |message|
-        hr
         .media
           .media-left
-            = image_tag(message.authorable.avatar_url, size: "65x65")
+            .freelancer_avatar
+              = image_tag(message.authorable.avatar_url, size: "40x40")
           .media-body
-            .authorable_name #{message.authorable.name} #{time_ago_in_words(message.created_at)} ago
+            span.authorable_name #{message.authorable.name}
+            span.authorable_date #{time_ago_in_words(message.created_at)} ago
             .authorable_body= message.body
-    .col-xs-12.col-md-3.col-sm-4.col-sm-offset-1
-      - if @quotes.empty?
-        h4 No Quotes Yet
-      - else
-        - @quotes.each do |quote|
-          .media
-            .media-body
-              .quote_state= quote_state_label(quote)
-              .quote_amount= number_to_currency(quote.amount, precision: 0)
-              .quote_pay_type= quote.pay_type.text
+      - @quotes.each do |quote|
+        .media
+          .media-body
+            .quote_state= quote_state_label(quote)
+            .quote_amount= number_to_currency(quote.amount, precision: 0)
+            .quote_pay_type= quote.pay_type.text
+            - if quote.fixed? && quote.amount > @job.budget
+              .quote_over-budget= "Over Budget"
+            - if quote.pending?
               - if quote.fixed? && quote.amount > @job.budget
                 .quote_over-budget= "Over Budget"
-              - if quote.pending?
-                - if quote.fixed? && quote.amount > @job.budget
-                  .quote_over-budget= "Over Budget"
-                = link_to "Accept", accept_company_job_applicant_quote_path(@job, @applicant, quote), class: "btn btn-success"
-                '
-                = link_to "Decline", decline_company_job_applicant_quote_path(@job, @applicant, quote), class: "btn btn-danger"
-              hr
+              = link_to "Accept", accept_company_job_applicant_quote_path(@job, @applicant, quote), class: "btn btn-success"
+              '
+              = link_to "Decline", decline_company_job_applicant_quote_path(@job, @applicant, quote), class: "btn btn-danger"
+            hr

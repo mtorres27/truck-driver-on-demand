@@ -1,0 +1,17 @@
+.result-header
+  .result-header__text
+    | Applicant Filter
+.applicant-messages__list-wrapper
+  .applicant-messages__list
+    - applicants.each do |applicant|
+      a href=company_job_applicant_quotes_path(job, applicant)
+        .media.applicant class=("applicant--current" if applicant.id == current_applicant_id)
+          .media-left
+            = image_tag(applicant.freelancer.avatar_url, size: "40x40", class: "freelancer_avatar")
+            - if is_verified(applicant.freelancer)
+              span class="freelancer-verified fa fa-check-circle"
+          .media-body
+            - applicant.freelancer.tap do |freelancer|
+              .freelancer_name= freelancer.name
+              .freelancer_distance= "#{1} miles away"
+            = applicant_state_label(applicant)
