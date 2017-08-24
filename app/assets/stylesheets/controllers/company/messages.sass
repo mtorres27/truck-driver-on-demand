@@ -36,7 +36,7 @@
     min-height: 500px
 
   &__list-wrapper
-    border-right: 1px solid $messages-border
+    
     height: 100%
     float: left
     display: inline-block
@@ -53,6 +53,8 @@
     padding: 15px 15px 0px 15px
     position: relative
     min-height: 500px
+    padding-bottom: 150px
+    border-left: 1px solid $messages-border
 
     .media
       margin-bottom: 30px
@@ -74,6 +76,15 @@
   padding: 0px 15px 0px 15px
   box-sizing: border-box
   bottom: 0
+
+  &__options
+    margin-bottom: 15px
+    label
+      text-transform: none
+      font-size: 16px
+      margin: 0px 10px 0px 5px
+      color: $gray-333
+
   &__input
     width: calc(100% - 140px)
     border: 1px solid $gray-ccc
@@ -84,6 +95,24 @@
       width: calc(100% - 30px)
       border: none
       float: left
+    &--counter-visible
+      width: calc(100% - 300px)
+
+  &__counter
+    width: 150px
+    border: 1px solid $gray-ccc
+    float: left
+    border-radius: 4px
+    margin: 0px 10px 0px 0px
+    display: none
+    input
+      width: 100%
+      border: none
+      float: left
+    
+    &--visible
+      display: block
+
   &__attachment-button
     width: 10px
     margin: -10px 10px 0px 10px

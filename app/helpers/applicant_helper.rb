@@ -10,9 +10,6 @@ module ApplicantHelper
       applicant.state = "quoting"
     end
 
-    p "applicant state "
-    p applicant
-
     content_tag(:span, class: "applicant_state label label-#{mappings[applicant.state.to_sym]}") do
       applicant.state.text
     end

@@ -2,14 +2,22 @@
   .new-message
     - if type == "quote"
       .new-message__options
-        | 
+        = f.radio_button :status, "accept"
+        = f.label :status_accept, "Accept this quote"
+        = f.radio_button :status, "negotiate"
+        = f.label :status_negotiate, "Negotiate a better price"
+        = f.radio_button :status, "decline"
+        = f.label :status_decline, "Decline this quote"
         
     .new-message__input
 
       = f.input :body, as: :string, placeholder: "Send a message to #{n}", label: false
       .new-message__attachment-button onclick="triggerFileUpload()"
         .span class="fa fa-paperclip"
-        
+      
+    .new-message__counter
+      = f.input :counter, as: :string, placeholder: "Counter offer", label: false
+
     .new-message__submit
       = f.submit "Post Message", class: "btn btn-primary"
     .new-message__attachment
@@ -18,11 +26,56 @@
 
 javascript:
   var triggerFileUpload = function () {
-    console.log("trigger");
     $("#message_attachment").click();
   }
 
   $("#message_attachment").change(function() {
     $(".new-message__attachment-button").addClass("new-message__attachment-button--active");
+  });
 
-  })
+  var showCounterOffer = function() {
+    var input_ref = $(".new-message__input");
+    var counter_ref = $(".new-message__counter");
+    if (!input_ref.hasClass("new-message__input--counter-visible")) {
+      input_ref.addClass("new-message__input--counter-visible");
+      counter_ref.addClass("new-message__counter--visible");
+    };
+  }
+
+  var hideCounterOffer = function() {
+    var input_ref = $(".new-message__input");
+    var counter_ref = $(".new-message__counter");
+    if (input_ref.hasClass("new-message__input--counter-visible")) {
+      input_ref.removeClass("new-message__input--counter-visible");
+      counter_ref.removeClass("new-message__counter--visible");
+    };
+  }
+
+  var makeRadiosDeselectableByName = function(name){
+    $('#' + name).click(function() {
+        console.log("ha");
+        console.log($(this).attr('previousValue'));
+        if($(this).attr('previousValue') == 'true'){
+            $(this).attr('checked', false)
+        } else {
+            $('#' + name).attr('previousValue', false);
+        }
+
+        if ($(this).is(':checked')) {
+          if ($(this).attr("id").indexOf("_negotiate", 0) > 0) {
+            showCounterOffer();
+          } else {
+            hideCounterOffer();
+          }
+        } else {
+          hideCounterOffer();
+        }
+
+        $(this).attr('previousValue', $(this).is(':checked'));
+    });
+  };
+
+  makeRadiosDeselectableByName("message_status_accept");
+  makeRadiosDeselectableByName("message_status_decline");
+  makeRadiosDeselectableByName("message_status_negotiate");
+
