@@ -9,17 +9,16 @@ class Company::QuotesController < Company::BaseController
   def create
     set_collections
 
-    if params[:message][:body].nil?
-      params[:message][:body] = ""
-    end
-
     @message = @applicant.messages.new(message_params)
     @message.authorable = current_company
     
     if @message.save
       if params[:message][:status] == "accept"
         @quotes.last.accept!
+        @applicant.accept!
+        self.send_decline_message
       elsif params[:message][:status] == "decline"
+        @applicant.reject!
         @quotes.last.decline!
       elsif params[:message][:status] == "negotiate"
         # not sure what goes here.
@@ -31,18 +30,44 @@ class Company::QuotesController < Company::BaseController
           quote.save
         end
 
-        @new_quote = @quotes.last.dup
-
+        if @quotes.count > 0
+          @new_quote = @quotes.last.dup
+        else
+          @new_quote = Quote.new
+        end
+        
         @new_quote.amount = params[:message][:counter]
         @new_quote.state = "pending"
-
         @new_quote.save
+        
+        if @quotes.count == 0
+          @applicant.quotes << @new_quote
+        end
+
       end
 
       redirect_to company_job_applicant_quotes_path(@job, @applicant)
     else
       set_collections
       render :index
+    end
+  end
+
+  def send_decline_message
+    set_collections
+    @applicants.each do |applicant|
+      if applicant.state != "declined" and applicant.state != "accepted"
+        # send message
+        message = Message.new
+        message.authorable = current_company
+        message.receivable = applicant
+        message.body = "We have decided to go with another provider. Thanks for your interest!"
+        message.save
+
+        # update quote to be declined
+        applicant.state = "declined"
+        applicant.save
+      end
     end
   end
 

@@ -5,38 +5,39 @@
     = render partial: "company/shared/applicants_for_messaging", locals: { applicants: @applicants, job: @job, current_applicant_id: @current_applicant_id }
     = simple_form_for(:message, url: company_job_applicant_quotes_path(@job, @applicant)) do |f|
       .applicant-messages__messages
-        - @harmonized_items.each do |item|
-          - if item[:type] == "message"
-            .media
-              .media-left
-                .freelancer_avatar
-                  = image_tag(item[:payload].authorable.avatar_url, size: "40x40")
-              .media-body
-                span.authorable_name #{item[:payload].authorable.name}
-                span.authorable_date #{time_ago_in_words(item[:payload].created_at)} ago
-                .authorable_body= item[:payload].body
-                - if item[:payload].attachment_url
-                  a.authorable_attachment href=item[:payload].attachment_url target="_blank"
-                    - if is_image(item[:payload].attachment_url)
-                      span class="authorable_attachment_icon fa fa-image"
-                    - else
-                      span class="authorable_attachment_icon fa fa-file-text"
-                    .authorable_attachment__filename
-                      = eval(item[:payload].attachment_data)[:metadata][:filename]
-          - elsif item[:type] == "quote"
-            .media
-              .media-body
-                .quote_state= quote_state_label(item[:payload])
-                .quote_amount= number_to_currency(item[:payload].amount, precision: 0)
-                .quote_pay_type= item[:payload].pay_type.text
-                - if item[:payload].fixed? && item[:payload].amount > @job.budget
-                  .quote_over-budget= "Over Budget"
-                - elsif item[:payload].fixed? && item[:payload].amount < @job.budget
-                  .quote_under-budget= "Under Budget"
-                - elsif item[:payload].pending?
+        .applicant-messages__messages--inner
+          - @harmonized_items.each do |item|
+            - if item[:type] == "message"
+              .media
+                .media-left
+                  .freelancer_avatar
+                    = image_tag(item[:payload].authorable.avatar_url, size: "40x40")
+                .media-body
+                  span.authorable_name #{item[:payload].authorable.name}
+                  span.authorable_date #{time_ago_in_words(item[:payload].created_at)} ago
+                  .authorable_body= item[:payload].body
+                  - if item[:payload].attachment_url
+                    a.authorable_attachment href=item[:payload].attachment_url target="_blank"
+                      - if is_image(item[:payload].attachment_url)
+                        span class="authorable_attachment_icon fa fa-image"
+                      - else
+                        span class="authorable_attachment_icon fa fa-file-text"
+                      .authorable_attachment__filename
+                        = eval(item[:payload].attachment_data)[:metadata][:filename]
+            - elsif item[:type] == "quote"
+              .media
+                .media-body
+                  .quote_state= quote_state_label(item[:payload])
+                  .quote_amount= number_to_currency(item[:payload].amount, precision: 0)
+                  .quote_pay_type= item[:payload].pay_type.text
                   - if item[:payload].fixed? && item[:payload].amount > @job.budget
                     .quote_over-budget= "Over Budget"
                   - elsif item[:payload].fixed? && item[:payload].amount < @job.budget
                     .quote_under-budget= "Under Budget"
+                  - elsif item[:payload].pending?
+                    - if item[:payload].fixed? && item[:payload].amount > @job.budget
+                      .quote_over-budget= "Over Budget"
+                    - elsif item[:payload].fixed? && item[:payload].amount < @job.budget
+                      .quote_under-budget= "Under Budget"
         - if @all_quotes.where({state: "accepted"}).length
           = render partial: "company/shared/new_message", locals: { f: f, n: @applicant.freelancer.name, type: "quote", quotes: @quotes }

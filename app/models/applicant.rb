@@ -29,7 +29,8 @@ class Applicant < ApplicationRecord
   enumerize :state, in: [
     :ignored,
     :quoting,
-    :accepted
+    :accepted,
+    :declined
   ], predicates: true, scope: true
 
   scope :with_pending_quotes, -> {
@@ -58,6 +59,12 @@ class Applicant < ApplicationRecord
       job.update(contract_price: quote.amount, pay_type: quote.pay_type)
     end
   end
+
+  def reject!
+    self.state = :declined
+    save
+  end
+
 
   def ignore!
     self.state = :ignored

@@ -1,6 +1,6 @@
 .new-message--wrapper
   .new-message
-    - if type == "quote"
+    - if type == "quote" and quotes.length > 0
       .new-message__options
         = f.radio_button :status, "accept"
         = f.label :status_accept, "Accept this quote"
@@ -53,8 +53,6 @@ javascript:
 
   var makeRadiosDeselectableByName = function(name){
     $('#' + name).click(function() {
-        console.log("ha");
-        console.log($(this).attr('previousValue'));
         if($(this).attr('previousValue') == 'true'){
             $(this).attr('checked', false)
         } else {

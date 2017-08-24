@@ -22,7 +22,8 @@ module JobHelper
       quoted: :success,
       negotiated: :info,
       contracted: :warning,
-      completed: :danger
+      completed: :danger,
+      declined: :danger
     }
 
     content_tag(:span, class: "job_state label label-#{mappings[job.state.to_sym]}") do

@@ -4,7 +4,8 @@ module ApplicantHelper
     mappings = {
       ignored: :default,
       quoting: :info,
-      accepted: :success
+      accepted: :success,
+      declined: :danger
     }
     if applicant.state == "interested" 
       applicant.state = "quoting"
@@ -21,8 +22,6 @@ module ApplicantHelper
       pending: :info,
       accepted: :success
     }
-
-    
 
     content_tag(:span, class: "applicant_state label label-#{mappings[quote.state.to_sym]}") do
       quote.state.text
