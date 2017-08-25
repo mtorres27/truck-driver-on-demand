@@ -1,7 +1,7 @@
 - if @applicant
   = simple_form_for(:message, url: company_job_applicant_quotes_path(@job, @applicant)) do |f|
     .applicant-messages__messages
-      .applicant-messages__messages--inner
+      .applicant-messages__messages--inner class=("applicant-messages__messages--inner--inactive" if @applicant_accepted == true)
         - @harmonized_items.each do |item|
           - if item[:type] == "message"
             .media

@@ -10,13 +10,12 @@ class Company::ApplicantsController < Company::BaseController
 
     set_job
 
-
     if @job.applicants.where({state: "accepted"}).length > 0
       @applicant = @job.applicants.where({state: "accepted"}).first
       @current_applicant_id = @applicant.id
     else
       if @job.applicants.length > 0
-        @applicant = @job.applicants.without_state(:ignored).includes(:messages).order("messages.created_at").first
+        @applicant = Applicant.where({job_id:@job.id}).includes(:messages).order("messages.created_at").where('messages_count > 0').last
         @current_applicant_id = @applicant.id
       else
         @applicant = nil
@@ -60,6 +59,12 @@ class Company::ApplicantsController < Company::BaseController
       @combined_items = []
       @harmonized_items = []
       @harmonized_indices = []
+
+      if @applicant and @applicant.job.applicants.where({state: "accepted"}).length > 0
+        @applicant_accepted = true
+      else
+        @applicant_accepted = false
+      end
 
       @messages.each do |message|
         @combined_items.push({ type: "message", payload: message, date: message.created_at.to_i })

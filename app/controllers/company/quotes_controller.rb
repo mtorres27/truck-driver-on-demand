@@ -19,7 +19,6 @@ class Company::QuotesController < Company::BaseController
         self.send_decline_message
         redirect_to company_job_contract_path(@job)
         return
-        
       elsif params[:message][:status] == "decline"
         @applicant.reject!
         @quotes.last.decline!
@@ -111,6 +110,12 @@ class Company::QuotesController < Company::BaseController
       @combined_items = []
       @harmonized_items = []
       @harmonized_indices = []
+
+      if @applicants.where({state: "accepted"}).length > 0
+        @applicant_accepted = true
+      else
+        @applicant_accepted = false
+      end
 
       @messages.each do |message|
         @combined_items.push({ type: "message", payload: message, date: message.created_at.to_i })
