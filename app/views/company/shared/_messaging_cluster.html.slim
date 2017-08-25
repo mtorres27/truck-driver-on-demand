@@ -1,6 +1,28 @@
 - if @applicant
   = simple_form_for(:message, url: company_job_applicant_quotes_path(@job, @applicant)) do |f|
     .applicant-messages__messages
+      - if @all_quotes.where({state: "accepted"}).length == 0
+        = render partial: "company/shared/new_message", locals: { f: f, n: @applicant.freelancer.name, type: "quote", quotes: @quotes }
+      - else 
+        .new-message--wrapper
+          .new-message_amount
+            .new-message__freelancer-selected
+              .new-message__freelancer-selected__avatar
+                - if @job.freelancer.avatar_url.include?("missing.png")
+                  = image_tag("http://graph.facebook.com/v2.5/111#{@job.freelancer.id}/picture?height=65&height=65", size: "65x65")
+                - else
+                  = image_tag(@job.freelancer.avatar_url, size: "65x65")
+
+              .new-message__freelancer-selected__text
+                b
+                  = "Congratulations, you've selected #{@job.freelancer.name} for this job."
+                p
+                  = "The next step is to create a contract with #{@job.freelancer.name}. We've made this super simple by doing all the hard work for you. "
+                  = "Simply click the button below to proceed to createing a contract."
+
+                div
+                a.btn.btn-primary href=company_job_contract_path(@job)
+                  | view contract
       .applicant-messages__messages--inner class=("applicant-messages__messages--inner--inactive" if @applicant_accepted == true)
         - @harmonized_items.each do |item|
           - if item[:type] == "message"
@@ -38,26 +60,6 @@
                     .quote_over-budget= "Over Budget"
                   - elsif item[:payload].fixed? && item[:payload].amount < @job.budget
                     .quote_under-budget= "Under Budget"
-      - if @all_quotes.where({state: "accepted"}).length == 0
-        = render partial: "company/shared/new_message", locals: { f: f, n: @applicant.freelancer.name, type: "quote", quotes: @quotes }
-      - else 
-        .new-message--wrapper
-          .new-message_amount
-            .new-message__freelancer-selected
-              .new-message__freelancer-selected__avatar
-                - if @job.freelancer.avatar_url.include?("missing.png")
-                  = image_tag("http://graph.facebook.com/v2.5/111#{@job.freelancer.id}/picture?height=65&height=65", size: "65x65")
-                - else
-                  = image_tag(@job.freelancer.avatar_url, size: "65x65")
-
-              .new-message__freelancer-selected__text
-                p
-                  = "The next step is to create a contract with #{@job.freelancer.name}. We've made this super simple by doing all the hard work for you. "
-                  = "Simply click the button below to proceed to createing a contract."
-
-                div
-                a.btn.btn-primary href=company_job_contract_path(@job)
-                  | view contract
 
   - if @quotes.length > 0
     .modal__accept-quote

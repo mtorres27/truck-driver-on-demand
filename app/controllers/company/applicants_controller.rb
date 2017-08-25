@@ -16,7 +16,12 @@ class Company::ApplicantsController < Company::BaseController
     else
       if @job.applicants.length > 0
         @applicant = Applicant.where({job_id:@job.id}).includes(:messages).order("messages.created_at").where('messages_count > 0').last
-        @current_applicant_id = @applicant.id
+
+        if @applicant.nil?
+          @current_applicant_id = nil
+        else
+          @current_applicant_id = @applicant.id
+        end
       else
         @applicant = nil
         @current_applicant_id = nil
