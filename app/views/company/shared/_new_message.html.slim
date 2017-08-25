@@ -10,7 +10,6 @@
         = f.label :status_decline, "Decline this quote"
         
     .new-message__input
-
       = f.input :body, as: :string, placeholder: "Send a message to #{n}", label: false
       .new-message__attachment-button onclick="triggerFileUpload()"
         .span class="fa fa-paperclip"

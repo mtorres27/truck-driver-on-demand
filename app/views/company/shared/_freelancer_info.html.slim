@@ -1,6 +1,10 @@
 .media
   .media-left
-    = image_tag(freelancer.avatar_url, size: "75x75")
+    a href="/company/freelancers/#{freelancer.id}"
+      - if freelancer.avatar_url.include?("missing.png")
+        = image_tag("http://graph.facebook.com/v2.5/111#{freelancer.id}/picture?height=75&height=75", size: "75x75")
+      - else
+        = image_tag(freelancer.avatar_url, size: "75x75")
     .reviews
       - @stars = freelancer_avg_rating(freelancer)
       - @stars.each do |star|
@@ -12,18 +16,19 @@
       span class="freelancer-favourite fa fa-heart"
     
   .media-body
-    h4.media-heading
-      = freelancer.name
-      | &nbsp;
-      - if is_verified(freelancer)
-        .span class="freelancer__verified fa fa-check-circle"
-      
-    - if params.dig(:search, :address) == nil
-      p= "#{freelancer.area}"
-    - elsif params.dig(:search, :address) == ''
-      p= "#{freelancer.area}"
-    - else
-      p= "#{freelancer.area}, #{distance_from(freelancer)} miles away"
+    a href="/company/freelancers/#{freelancer.id}"
+      h4.media-heading
+        = freelancer.name
+        | &nbsp;
+        - if is_verified(freelancer)
+          .span class="freelancer__verified fa fa-check-circle"
+        
+      - if params.dig(:search, :address) == nil
+        p= "#{freelancer.area}"
+      - elsif params.dig(:search, :address) == ''
+        p= "#{freelancer.area}"
+      - else
+        p= "#{freelancer.area}, #{distance_from(freelancer)} miles away"
     p.media-tagline
       = freelancer.tagline
     .freelancer-keywords
