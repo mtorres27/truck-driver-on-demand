@@ -1,0 +1,108 @@
+- if @applicant
+  = simple_form_for(:message, url: company_job_applicant_quotes_path(@job, @applicant)) do |f|
+    .applicant-messages__messages
+      .applicant-messages__messages--inner
+        - @harmonized_items.each do |item|
+          - if item[:type] == "message"
+            .media
+              .media-left
+                .freelancer_avatar
+                  - if item[:payload].authorable.avatar_url.include?("missing.png")
+                    = image_tag("http://graph.facebook.com/v2.5/111#{item[:payload].authorable.id}/picture?height=40&height=40", size: "40x40")
+                  - else
+                    = image_tag(item[:payload].authorable.avatar_url, size: "40x40")
+              .media-body
+                span.authorable_name #{item[:payload].authorable.name}
+                span.authorable_date #{time_ago_in_words(item[:payload].created_at)} ago
+                .authorable_body= item[:payload].body
+                - if item[:payload].attachment_url
+                  a.authorable_attachment href=item[:payload].attachment_url target="_blank"
+                    - if is_image(item[:payload].attachment_url)
+                      span class="authorable_attachment_icon fa fa-image"
+                    - else
+                      span class="authorable_attachment_icon fa fa-file-text"
+                    .authorable_attachment__filename
+                      = eval(item[:payload].attachment_data)[:metadata][:filename]
+          - elsif item[:type] == "quote"
+            .media
+              .media-body
+                div.quote_amount class=("quote_amount--declined" if item[:payload].state == "declined")
+                  = number_to_currency(item[:payload].amount, precision: 0)
+                .quote_pay_type= item[:payload].pay_type.text
+                - if item[:payload].fixed? && item[:payload].amount > @job.budget
+                  .quote_over-budget= "Over Budget"
+                - elsif item[:payload].fixed? && item[:payload].amount < @job.budget
+                  .quote_under-budget= "Under Budget"
+                - elsif item[:payload].pending?
+                  - if item[:payload].fixed? && item[:payload].amount > @job.budget
+                    .quote_over-budget= "Over Budget"
+                  - elsif item[:payload].fixed? && item[:payload].amount < @job.budget
+                    .quote_under-budget= "Under Budget"
+      - if @all_quotes.where({state: "accepted"}).length
+        = render partial: "company/shared/new_message", locals: { f: f, n: @applicant.freelancer.name, type: "quote", quotes: @quotes }
+      - else 
+        .new-message--wrapper
+          .new-message_amount
+            .new-message__freelancer-selected
+              | A freelancer has been selected for this project, so you are unable to communicate further.
+
+  - if @quotes.length > 0
+    .modal__accept-quote
+      .modal__accept-quote__content
+        .modal__accept-quote__content__header
+          .modal__accept-quote__content__header__text
+            = "Accept Quote of #{number_to_currency(@quotes.last.amount, precision: 0)}"
+        .modal__accept-quote__content__body
+          b
+            | CONGRATULATIONS, YOU'VE FOUND YOUR FREELANCER.
+          p
+            = "The next step is to create a contract with #{@applicant.freelancer.name}. We've made this super simple by doing all the hard work for you. "
+            | "Simply click the button below to proceed to creating a contract. If you don't have the time right now you can find this in the job details section."
+          p
+            em
+              = "Remember, by accepting this quote of #{number_to_currency(@quotes.last.amount, precision: 0)} with #{@applicant.freelancer.name}, all other applications for this"
+              = " job will automatically be declined, and receive a general notification iforming them the job has been filled. Details of who you've selected will not be shared."
+        .modal__accept-quote__content__buttons
+          .accept_button.btn.btn-primary
+            | Accept Quote and Create Contract
+          .cancel_button.btn.btn-tertiary
+            | Cancel
+
+
+
+    .modal__decline-quote
+      .modal__decline-quote__content
+        .modal__decline-quote__content__header
+          .modal__decline-quote__content__header__text
+            = "Decline Quote of #{number_to_currency(@quotes.last.amount, precision: 0)}"
+        .modal__decline-quote__content__body
+          b
+            | YOU HAVE DECIDED TO DECLINE THIS QUOTE
+
+          p
+            | More text will go here.
+
+        .modal__decline-quote__content__buttons
+          .decline_button.btn.btn-primary
+            | Decline Quote
+          .cancel_button.btn.btn-tertiary
+            | Cancel
+
+  javascript:
+    $(".accept_button").on('click', function() {
+      $("input[name='message[override]']").val("true");
+      $("form").submit();
+    });
+
+    $(".decline_button").on('click', function() {
+      $("input[name='message[override]']").val("true");
+      $("form").submit();
+    });
+
+    $(".cancel_button").on('click', function() {
+      $(".modal__accept-quote").removeClass("modal--visible");
+      $(".modal__decline-quote").removeClass("modal--visible");
+
+      $("input[name='message[override]']").val("");
+      $("#new-message__submit").attr('disabled', false);
+    })

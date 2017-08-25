@@ -4,7 +4,6 @@ class Company::QuotesController < Company::BaseController
 
   def index
     set_collections
-    p "INDEX"
   end
 
   def create
@@ -18,6 +17,9 @@ class Company::QuotesController < Company::BaseController
         @quotes.last.accept!
         @applicant.accept!
         self.send_decline_message
+        redirect_to company_job_contract_path(@job)
+        return
+        
       elsif params[:message][:status] == "decline"
         @applicant.reject!
         @quotes.last.decline!
@@ -90,7 +92,11 @@ class Company::QuotesController < Company::BaseController
 
     def set_applicant
       set_job
-      @applicant = @job.applicants.find(params[:applicant_id])
+      if params[:applicant_id]
+        @applicant = @job.applicants.find(params[:applicant_id])
+      else
+        @applicant = @job.applicants.without_state(:ignored).includes(:messages).order("messages.created_at").first
+      end
     end
 
     def set_quote

@@ -8,6 +8,7 @@
         = f.label :status_negotiate, "Negotiate a better price"
         = f.radio_button :status, "decline"
         = f.label :status_decline, "Decline this quote"
+        = f.hidden_field :override, value: ""
         
     .new-message__input
       = f.input :body, as: :string, placeholder: "Send a message to #{n}", label: false
@@ -18,7 +19,7 @@
       = f.input :counter, as: :string, placeholder: "Counter offer", label: false
 
     .new-message__submit
-      = f.submit "Post Message", class: "btn btn-primary"
+      = f.submit "Post Message", class: "btn btn-primary", id: "new-message__submit"
     .new-message__attachment
       = f.input :attachment, as: :file, label: false
 
@@ -26,7 +27,20 @@
 javascript:
   var triggerFileUpload = function () {
     $("#message_attachment").click();
-  }
+  };
+
+  $(".simple_form").on('submit', function(e) {
+    if ($("#message_status_accept").is(":checked") && $("input[name='message[override]']").val() != "true") {
+      $(".modal__accept-quote").addClass("modal--visible");
+      e.preventDefault();
+    }
+
+    if ($("#message_status_decline").is(":checked")&& $("input[name='message[override]']").val() != "true") {
+      $(".modal__decline-quote").addClass("modal--visible");
+      e.preventDefault();
+    }
+  });
+
 
   $("#message_attachment").change(function() {
     $(".new-message__attachment-button").addClass("new-message__attachment-button--active");
