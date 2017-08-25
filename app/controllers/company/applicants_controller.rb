@@ -4,6 +4,10 @@ class Company::ApplicantsController < Company::BaseController
 
   def index
     @applicants = @job.applicants.includes(:quotes, :freelancer).without_state(:ignored).order(created_at: :desc)
+    if params[:filter].presence
+      @applicants = @applicants.where({state: params[:filter]})
+    end
+
     @current_applicant_id = nil
   end
 

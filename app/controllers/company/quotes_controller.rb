@@ -4,6 +4,7 @@ class Company::QuotesController < Company::BaseController
 
   def index
     set_collections
+    p "INDEX"
   end
 
   def create
@@ -120,7 +121,6 @@ class Company::QuotesController < Company::BaseController
       @harmonized_indices.each do |index|
         search_in_combined(@combined_items, index)
       end
-
 
       if params[:filter].presence
         @applicants = @applicants.where({state: params[:filter]})
