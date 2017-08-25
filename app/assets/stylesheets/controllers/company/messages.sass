@@ -92,8 +92,23 @@
   bottom: 0
 
   &__freelancer-selected
-    font-style: italic
-    margin-top: 34px
+    display: inline-block
+
+    &__avatar
+      width: 65px
+      margin-right: 15px
+      float: left
+      border-radius: 4px
+      overflow: hidden
+
+    &__text
+      float: left
+      width: calc(100% - 80px)
+      font-size: 16px
+
+      p
+        margin-top: -5px
+
 
   &__options
     margin-bottom: 15px
