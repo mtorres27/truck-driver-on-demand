@@ -24,7 +24,7 @@ class Company::MessagesController < Company::BaseController
     end
 
     def set_collection
-      @messages = @job.messages.reverse()
+      @messages = @job.messages
     end
 
     def message_params

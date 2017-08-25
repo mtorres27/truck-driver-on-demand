@@ -97,8 +97,8 @@ class Company::QuotesController < Company::BaseController
     end
 
     def set_collections
-      @messages = @applicant.messages.reverse()
-      @quotes = @applicant.quotes.reverse()
+      @messages = @applicant.messages
+      @quotes = @applicant.quotes
       @all_quotes = @applicant.job.quotes
       @applicants = @applicant.job.applicants.without_state(:ignored)
       @combined_items = []
@@ -115,7 +115,7 @@ class Company::QuotesController < Company::BaseController
         @harmonized_indices.push(quote.created_at.to_i)
       end
 
-      @harmonized_indices = @harmonized_indices.sort
+      @harmonized_indices = @harmonized_indices.sort.reverse()
 
       @harmonized_indices.each do |index|
         search_in_combined(@combined_items, index)

@@ -58,13 +58,14 @@
     padding: 15px 15px 0px 15px
     position: relative
     min-height: 500px
-    padding-bottom: 150px
     border-left: 1px solid $messages-border
 
     &--inner
-      height: 360px
+      height: 450px
       overflow-x: hidden
       overflow-y: scroll
+      margin-top: 120px
+      margin-bottom: 10px
 
     .media
       margin-bottom: 30px
@@ -73,12 +74,12 @@
 .new-message--wrapper
   width: 100%
   display: inline-block
-  border-top: 1px solid $gray-ccc
+  border-bottom: 1px solid $gray-ccc
   padding: 15px 15px 15px 15px
   margin: 0px -15px
   position: absolute
-  bottom: 0
-
+  top: 0
+  height: 126px
 
 .new-message
   width: 100%
@@ -86,6 +87,10 @@
   padding: 0px 15px 0px 15px
   box-sizing: border-box
   bottom: 0
+
+  &__freelancer-selected
+    font-style: italic
+    margin-top: 34px
 
   &__options
     margin-bottom: 15px

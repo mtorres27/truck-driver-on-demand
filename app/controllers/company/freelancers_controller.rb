@@ -47,7 +47,6 @@ class Company::FreelancersController < Company::BaseController
       @freelancers = @freelancers.search(@keywords)
     end
 
-    # @freelancers = @freelancers.reverse()
     @freelancers = @freelancers.page(params[:page]).per(50)
   end
 
