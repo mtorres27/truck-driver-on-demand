@@ -39,5 +39,5 @@
                       .quote_over-budget= "Over Budget"
                     - elsif item[:payload].fixed? && item[:payload].amount < @job.budget
                       .quote_under-budget= "Under Budget"
-        - if @all_quotes.where({state: "accepted"}).length
+        - if @all_quotes.where({state: "accepted"}).length == 0
           = render partial: "company/shared/new_message", locals: { f: f, n: @applicant.freelancer.name, type: "quote", quotes: @quotes }
