@@ -3,6 +3,8 @@
 - content_for :secondary do
   .result-wrapper
     .result-header
+      a.result-header__link-back href=company_job_path(@job)
+        span class="fa fa-long-arrow-left"
       .result-header__text
         | Contract
     .result-content
@@ -28,6 +30,8 @@
                 .show-budget
                   - if @job.contract_price
                     = number_to_currency(@job.contract_price, precision: 0)
+                    br
+                    = @job.currency
                   - else
                     | Not Specified
               .col-xs-12.col-lg-6
@@ -51,7 +55,10 @@
                   - @job.payments.each do |payment|
                     tr
                       td= payment.description
-                      td.text-right= number_to_currency(payment.amount, precision: 0)
+                      td.text-right
+                        = number_to_currency(payment.amount, precision: 0)
+                        br
+                        = @job.currency
               - else
                 | None Specified
 

@@ -21,6 +21,7 @@
 
 class Project < ApplicationRecord
   include Geocodable
+  extend Enumerize
 
   belongs_to :company
   has_many :jobs, -> { order(updated_at: :desc) }, dependent: :destroy
@@ -29,6 +30,15 @@ class Project < ApplicationRecord
   validates :duration, numericality: { only_integer: true, greater_than: 0, less_than: 365 }, allow_blank: true
 
   audited
+
+  enumerize :currency, in: [
+    :cad,
+    :euro,
+    :ruble,
+    :rupee,
+    :usd,
+    :yen,
+  ]
 
   def contract_value
     jobs.sum { |job| job.contract_price || 0 }

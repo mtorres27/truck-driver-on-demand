@@ -6,6 +6,8 @@
         = f.input :external_project_id, placeholder: "Enter the project number"
       .col-xs-12.col-sm-6
         = f.input :budget, placeholder: "Enter a budget", input_html: { value: number_with_precision(f.object.budget, precision: 0) }
+      .col-xs-12.col-sm-6
+        = f.select :currency, @currencies
     = f.input :address, placeholder: "Enter the address"
     .row
       .col-xs-12.col-md-6

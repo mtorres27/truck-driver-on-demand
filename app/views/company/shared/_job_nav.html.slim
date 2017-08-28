@@ -17,14 +17,8 @@
       .tab-bar__item class=("tab-bar__item--active" if request.path.index(/applicant/))
         a href=company_job_applicants_path(job)
           | Applicants
-      .tab-bar__item class=("tab-bar__item--active" if request.path.index(/contract/))
-        - if job.pre_negotiated?
-          | Contract
-        - else
-          a href=company_job_contract_path(job)
-            | Contract
       .tab-bar__item class=("tab-bar__item--active" if request.path.index(/message/)) class=("tab-bar__item--inactive" if job.pre_contracted?)
-        - if job.pre_contracted?
+        - if !job.freelancer
           | Progress
         - else
           a href=company_job_messages_path(job)

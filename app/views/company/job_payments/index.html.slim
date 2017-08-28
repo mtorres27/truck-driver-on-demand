@@ -11,6 +11,6 @@
           .job_title= @job.title
         .col-xs-12.col-sm-4
           .job_paid
-            | Paid #{number_to_currency(@job.payments_sum_paid, precision: 0)} of #{number_to_currency(@job.payments_sum_total, precision: 0)}
+            | Paid #{number_to_currency(@job.payments_sum_paid, precision: 0)} #{@job.currency} of #{number_to_currency(@job.payments_sum_total, precision: 0)} #{@job.currency}
 
       = render partial: "table", locals: { job: @job, payments: @payments }

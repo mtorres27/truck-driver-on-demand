@@ -5,66 +5,107 @@
     .result-header
       .result-header__text
         | Job Details
+      .result-header__link
+        - if @job.pre_contracted?
+          a.btn.btn-tertiary href=edit_company_job_path(@job)
+            | Edit Details
+
     .result-content
-      .row
-        .col-xs-12.col-md-6
-          .show_field
-            label= t(:project, scope: [:form, :labels, :job])
-            .show_value_em= project_reference(@job.project)
+      .job-details
+        .job-details__right
+          .job-details__title
+            | Budget
+          .show-budget= number_to_currency(@job.budget, precision: 0) + " " + @job.currency
 
-          .show_field
-            label= t(:title, scope: [:form, :labels, :job])
-            .show_value_em= @job.title
+        .job-details__left
+          .job-details__title
+            | Project Reference
+          a.btn.btn-tertiary.job-details__link= project_reference(@job.project)
 
-          .show_field
-            label= t(:summary, scope: [:form, :labels, :job])
-            .show_value= @job.summary
+        .job-details__left
+          .job-details__title
+            | Job Title
+          .show_value_em= @job.title
 
-          .show_field
-            label= t(:scope_of_work, scope: [:form, :labels, :job])
-            .show_value= @job.scope_of_work || "Not Specified"
 
-        .col-xs-12.col-md-6
-          .show_field
-            label= t(:budget, scope: [:form, :labels, :job])
-            .show-budget= number_to_currency(@job.budget, precision: 0)
+      .job-details
+        .job-details__title
+          | Work order
+        .job-details__work-order
+          .job-details__work-order__content
+            .job-details__work-order__status
+              - if !@job.freelancer
+                | Freelancer not chosen
+              - elsif @job.pre_contracted?
+                | Determine contract stuff.
+              - elsif @job.contracted?
+                | Contract determined
+            - if @job.freelancer
+              a.btn-primary.job-details__work-order__btn href=company_job_contract_path(@job)
+                | Create Contract
+            - else
+              div.btn-primary.job-details__work-order__btn--disabled
+                | Create Contract
+            
 
-          .show_field
-            label= t(:job_function, scope: [:form, :labels, :job])
-            .show_value_em= @job.job_function&.text
+      .job-details
+        .job-details__bar
+          .job-details__title
+            | Job Function
+          .show_value_em= @job.job_function&.text
 
-          .show_field
-            .row
-              .col-xs-12.col-lg-6
-                label= t(:starts_on, scope: [:form, :labels, :job])
-                .show_value_em= l @job.starts_on
-              .col-xs-12.col-lg-6
-                label= t(:duration, scope: [:form, :labels, :job])
-                .show_value_em= @job.duration
+        .job-details__bar
+          .job-details__title
+            | Est. Start
+          .show_value_em= l @job.starts_on
+        .job-details__bar
+          .job-details__title
+            | Duration
+          .show_value_em= @job.duration
 
-          .show_field
-            .row
-              .col-xs-12.col-lg-6
-                label= t(:pay_type, scope: [:form, :labels, :job])
-                .show_value_em= @job.pay_type&.text || "Not Specified"
-              .col-xs-12.col-lg-6
-                label= t(:freelancer_type, scope: [:form, :labels, :job])
-                .show_value_em= @job.freelancer_type&.text
+        .job-details__bar
+          .job-details__title
+            | Pay Type
+          .show_value_em= @job.pay_type&.text || "Not Specified"
 
-          .show_field
-            label= t(:keywords, scope: [:form, :labels, :job])
-            .show_value= @job.keywords || "None Specified"
+        .job-details__bar
+          .job-details__title
+            | Freelancer Type
+          .show_value_em= @job.freelancer_type&.text
 
-          .show_field
-            ul
-              - if @job.invite_only?
-                li.show_value= t(:invite_only, scope: [:form, :labels, :job])
-              - if @job.scope_is_public?
-                li.show_value= t(:scope_is_public, scope: [:form, :labels, :job])
-              - if @job.budget_is_public?
-                li.show_value= t(:budget_is_public, scope: [:form, :labels, :job])
 
-      - if @job.pre_contracted?
-        hr
-        .form-actions
-          = link_to "Edit", edit_company_job_path(@job), class: "btn btn-primary"
+      .job-details
+        .job-details__title
+          | Keywords
+        .show_value
+          - if !@job.keywords
+            | None Specified
+          - else
+            - @job.keywords.split(", ").map(&:lstrip)[0..1].each do |keyword|
+              .freelancer__meta-center__keyword
+                = keyword
+      
+      .job-details
+        .job-details__title
+          | Job Summary
+        .show_value= @job.summary
+
+      .job-details
+        .job-details__title
+          | Scope of Work
+        .show_value= @job.scope_of_work || "Not Specified"
+
+      .job-details
+        .job-details__title
+          | Addenda
+        
+
+
+      .job-details
+        ul
+          - if @job.invite_only?
+            li.show_value= t(:invite_only, scope: [:form, :labels, :job])
+          - if @job.scope_is_public?
+            li.show_value= t(:scope_is_public, scope: [:form, :labels, :job])
+          - if @job.budget_is_public?
+            li.show_value= t(:budget_is_public, scope: [:form, :labels, :job])

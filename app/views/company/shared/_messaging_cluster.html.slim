@@ -49,7 +49,7 @@
             .media
               .media-body
                 div.quote_amount class=("quote_amount--declined" if item[:payload].state == "declined")
-                  = number_to_currency(item[:payload].amount, precision: 0)
+                  = number_to_currency(item[:payload].amount, precision: 0) + " " + job.currency
                 .quote_pay_type= item[:payload].pay_type.text
                 - if item[:payload].fixed? && item[:payload].amount > @job.budget
                   .quote_over-budget= "Over Budget"
@@ -75,7 +75,7 @@
             | "Simply click the button below to proceed to creating a contract. If you don't have the time right now you can find this in the job details section."
           p
             em
-              = "Remember, by accepting this quote of #{number_to_currency(@quotes.last.amount, precision: 0)} with #{@applicant.freelancer.name}, all other applications for this"
+              = "Remember, by accepting this quote of #{number_to_currency(@quotes.last.amount, precision: 0)}  #{job.currency} with #{@applicant.freelancer.name}, all other applications for this"
               = " job will automatically be declined, and receive a general notification iforming them the job has been filled. Details of who you've selected will not be shared."
         .modal__accept-quote__content__buttons
           .accept_button.btn.btn-primary

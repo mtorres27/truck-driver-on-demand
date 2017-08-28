@@ -3,6 +3,15 @@ class Company::JobsController < Company::BaseController
 
   def new
     @job = Job.new(project_id: params[:project_id])
+
+    @currencies = [
+      ["Canadian Dollars", "cad"],
+      ["Euro", "euro"],
+      ["Ruble", "ruble"],
+      ["Rupee", "rupee"],
+      ["US Dollars", "usd"],
+      ["Yen", "yen"]
+    ]
   end
 
   def create
@@ -24,9 +33,25 @@ class Company::JobsController < Company::BaseController
   end
 
   def show
+    @currencies = [
+      ["Canadian Dollars", "cad"],
+      ["Euro", "euro"],
+      ["Ruble", "ruble"],
+      ["Rupee", "rupee"],
+      ["US Dollars", "usd"],
+      ["Yen", "yen"]
+    ]
   end
 
   def edit
+    @currencies = [
+      ["Canadian Dollars", "cad"],
+      ["Euro", "euro"],
+      ["Ruble", "ruble"],
+      ["Rupee", "rupee"],
+      ["US Dollars", "usd"],
+      ["Yen", "yen"]
+    ]
   end
 
   def update
@@ -68,6 +93,7 @@ class Company::JobsController < Company::BaseController
         :summary,
         :scope_of_work,
         :budget,
+        :currency,
         :job_function,
         :pay_type,
         :starts_on,

@@ -73,6 +73,16 @@ class Job < ApplicationRecord
     :completed
   ], predicates: true, scope: true
 
+  enumerize :currency, in: [
+    :cad,
+    :euro,
+    :ruble,
+    :rupee,
+    :usd,
+    :yen,
+  ]
+  
+
   def pre_negotiated?
     %w(created published quoted).include?(state)
   end

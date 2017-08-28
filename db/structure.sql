@@ -529,7 +529,8 @@ CREATE TABLE jobs (
     applicants_count integer DEFAULT 0 NOT NULL,
     messages_count integer DEFAULT 0 NOT NULL,
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+    updated_at timestamp without time zone NOT NULL,
+    currency character varying
 );
 
 
@@ -679,7 +680,8 @@ CREATE TABLE projects (
     lng numeric(9,6),
     closed boolean DEFAULT false NOT NULL,
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+    updated_at timestamp without time zone NOT NULL,
+    currency character varying
 );
 
 
@@ -1540,6 +1542,8 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20170818132847'),
 ('20170818133107'),
 ('20170822182057'),
-('20170822183600');
+('20170822183600'),
+('20170828175939'),
+('20170828184903');
 
 

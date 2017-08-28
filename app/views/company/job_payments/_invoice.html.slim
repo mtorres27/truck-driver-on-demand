@@ -62,7 +62,8 @@ br
       th Amount
     tr
       td= @payment.description
-      td= number_to_currency(@payment.amount)
+      td= number_to_currency(@payment.amount) + " " + @job.currency
+
     tr.total
       td Total Due
-      td= number_to_currency(@payment.amount)
+      td= number_to_currency(@payment.amount) + " " + @job.currency

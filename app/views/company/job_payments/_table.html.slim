@@ -10,7 +10,7 @@ table.table
   - payments.each do |payment|
     tr
       td= payment.description
-      td= number_to_currency(payment.amount, precision: 0)
+      td= number_to_currency(payment.amount, precision: 0) + " " + payment.job.currency
       td
         - if payment.paid_on.present?
           span.text-success Paid

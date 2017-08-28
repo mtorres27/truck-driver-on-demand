@@ -16,10 +16,27 @@ class Company::ProjectsController < Company::BaseController
         company_id: current_company.id,
         closed: params[:closed].present?
       }).count
+
+      @currencies = [
+        ["Canadian Dollars", "cad"],
+        ["Euro", "euro"],
+        ["Ruble", "ruble"],
+        ["Rupee", "rupee"],
+        ["US Dollars", "usd"],
+        ["Yen", "yen"]
+      ]
   end
 
   def new
     @project = current_company.projects.new
+    @currencies = [
+      ["Canadian Dollars", "cad"],
+      ["Euro", "euro"],
+      ["Ruble", "ruble"],
+      ["Rupee", "rupee"],
+      ["US Dollars", "usd"],
+      ["Yen", "yen"]
+    ]
   end
 
   def create
@@ -41,9 +58,25 @@ class Company::ProjectsController < Company::BaseController
   end
 
   def show
+    @currencies = [
+      ["Canadian Dollars", "cad"],
+      ["Euro", "euro"],
+      ["Ruble", "ruble"],
+      ["Rupee", "rupee"],
+      ["US Dollars", "usd"],
+      ["Yen", "yen"]
+    ]
   end
 
   def edit
+    @currencies = [
+      ["Canadian Dollars", "cad"],
+      ["Euro", "euro"],
+      ["Ruble", "ruble"],
+      ["Rupee", "rupee"],
+      ["US Dollars", "usd"],
+      ["Yen", "yen"]
+    ]
   end
 
   def update
@@ -67,6 +100,6 @@ class Company::ProjectsController < Company::BaseController
     end
 
     def project_params
-      params.require(:project).permit(:name, :external_project_id, :budget, :address, :starts_on, :duration)
+      params.require(:project).permit(:name, :external_project_id, :budget, :currency, :address, :starts_on, :duration)
     end
 end

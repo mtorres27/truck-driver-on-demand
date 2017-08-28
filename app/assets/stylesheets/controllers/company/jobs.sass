@@ -7,7 +7,8 @@
       height: 200px
 
   .show-budget
-    font-size: 28px
+    font-size: 45px
+    font-weight: bold
 
   #payments
     margin-bottom: 15px
@@ -26,3 +27,72 @@
     .radio
       label
         text-transform: none
+
+.job-details__title
+  width: 100%
+  float: left
+  text-transform: uppercase
+  font-weight: bold
+  color: $gray-dark
+  font-size: 14px
+
+.job-details
+  width: 100%
+  display: inline-block
+  margin-bottom: 20px
+
+  &__bar
+    float: left
+    width: calc(100%/5)
+
+  &__text
+    font-size: 18px
+    color: $gray-dark
+
+  &__left
+    float: left
+    margin: 0px 15px 20px 0px
+    font-weight: normal
+    width: calc(65% - 15px)
+
+    &:last-of-type
+      margin-bottom: 0px
+
+
+  &__link
+    font-size: 16px
+    padding: 0px
+    text-transform: none
+    white-space: normal
+    text-align: left
+
+  &__right
+    float: right
+    width: 35%
+
+  &__work-order
+    width: 100%
+    border-radius: 4px
+
+    &__content
+      display: inline-block
+      background-color: $search-header-background
+      padding: 15px 25px
+      width: 100%
+
+
+    &__status
+      font-size: 18px
+      float: left
+      line-height: 2em
+
+    &__btn, &__btn--disabled
+      text-transform: uppercase
+      font-size: 14px
+      padding: 12px 34px
+      background-radius: 4px
+      float: right
+    
+    &__btn--disabled
+      color: $white-color
+      background-color: $gray-ccc
