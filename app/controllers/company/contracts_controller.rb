@@ -38,6 +38,7 @@ class Company::ContractsController < Company::BaseController
         :require_photos_on_updates,
         :require_checkin,
         :require_uniform,
+        attachments_attributes: [:id, :file, :_destroy],
         payments_attributes: [:id, :description, :amount, :_destroy]
       )
     end

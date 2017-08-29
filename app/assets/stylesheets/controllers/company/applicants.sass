@@ -64,33 +64,39 @@
   .authorable_body
     font-size: 14px
 
-  .authorable_attachment
-    margin-top: 15px
-    border: 1px solid $attachment-border
-    text-decoration: none
-    border-radius: 4px
-    display: block
-    font-size: 26px
-    padding: 10px
-    width: calc(100% - 200px)
-    box-sizing: border-box
-
-  .authorable_attachment_icon
-    float: left
-    margin-right: 10px
-    color: $brand-primary
-
-  .authorable_attachment__filename
-    width: calc(100% - 45px)
-    font-size: 14px
-    font-weight: bold
-    overflow: hidden
-    text-overflow: ellipsis
-    color: $black-color
-    line-height: 1.8em
-    overflow: hidden
-    white-space: nowrap
-    
-
   .quote_state
     text-align: right
+
+.authorable_attachment
+  margin-top: 15px
+  border: 1px solid $attachment-border
+  text-decoration: none
+  border-radius: 4px
+  display: block
+  font-size: 26px
+  padding: 10px
+  width: calc(100% - 200px)
+  box-sizing: border-box
+
+  &--full
+    @extend .authorable_attachment
+    width: 100%
+    margin: 5px 0px
+    display: inline-block
+
+.authorable_attachment_icon
+  float: left
+  margin-right: 10px
+  color: $brand-primary
+
+.authorable_attachment__filename
+  width: calc(100% - 45px)
+  font-size: 14px
+  font-weight: bold
+  overflow: hidden
+  text-overflow: ellipsis
+  color: $black-color
+  line-height: 1.8em
+  overflow: hidden
+  white-space: nowrap
+  

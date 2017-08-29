@@ -16,6 +16,12 @@
                 p= @job.summary
               = f.input :scope_of_work, required: true, placeholder: "Please enter in more details about the job to receive a better quote. If you already have these documents please attach them below."
               = f.input :addendums, placeholder: "Enter any supplemental information as part of the contract."
+              #attachments
+                label Addendums
+                = f.simple_fields_for :attachments do |attachment_form|
+                  = render "attachment_fields", f: attachment_form
+                .links
+                  = link_to_add_association 'Add Addendum', f, :attachments, class: "btn btn-default"
 
             .col-sm-12.col-md-6.col-lg-5
               .row

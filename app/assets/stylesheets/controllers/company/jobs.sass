@@ -22,6 +22,18 @@
     .job_payments_amount
       width: 25%
       min-width: 100px
+  #attachments
+    margin-bottom: 15px
+    .form-group
+      margin-bottom: 10px
+    .nested_fields
+      display: flex
+      justify-content: space-between
+      &--full-width
+        width: 100%
+        display: block
+    .job_attachments_file
+      width: 65%
 
   .job_reporting_frequency
     .radio
@@ -96,3 +108,30 @@
     &__btn--disabled
       color: $white-color
       background-color: $gray-ccc
+
+.job-details__attachments
+  width: 100%
+
+.job-details__attachment
+  position: relative
+  height: 200px
+  float: left
+  width: 150px
+  margin-right: 50px
+
+  &__file
+    width: 150px
+
+    img
+      width: 100%
+      height: auto
+
+    span
+      font-size: 100px
+      color: $project-edit-icon
+
+  &__name
+    font-size: 16px
+    word-break: break-all
+    position: absolute
+    bottom: 0

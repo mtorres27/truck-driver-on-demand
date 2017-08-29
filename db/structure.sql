@@ -137,6 +137,38 @@ CREATE TABLE ar_internal_metadata (
 
 
 --
+-- Name: attachments; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE attachments (
+    id bigint NOT NULL,
+    file_data character varying,
+    job_id integer,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: attachments_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE attachments_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: attachments_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE attachments_id_seq OWNED BY attachments.id;
+
+
+--
 -- Name: audits; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -764,6 +796,13 @@ ALTER TABLE ONLY applicants ALTER COLUMN id SET DEFAULT nextval('applicants_id_s
 
 
 --
+-- Name: attachments id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY attachments ALTER COLUMN id SET DEFAULT nextval('attachments_id_seq'::regclass);
+
+
+--
 -- Name: audits id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -890,6 +929,14 @@ ALTER TABLE ONLY applicants
 
 ALTER TABLE ONLY ar_internal_metadata
     ADD CONSTRAINT ar_internal_metadata_pkey PRIMARY KEY (key);
+
+
+--
+-- Name: attachments attachments_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY attachments
+    ADD CONSTRAINT attachments_pkey PRIMARY KEY (id);
 
 
 --
@@ -1544,6 +1591,8 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20170822182057'),
 ('20170822183600'),
 ('20170828175939'),
-('20170828184903');
+('20170828184903'),
+('20170829140913'),
+('20170829141232');
 
 
