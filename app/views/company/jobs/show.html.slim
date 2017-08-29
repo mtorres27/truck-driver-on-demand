@@ -10,7 +10,7 @@
           a.btn.btn-tertiary href=edit_company_job_path(@job)
             | Edit Details
 
-    .result-content
+    .result-content.result-content--collapsed
       .job-details
         .job-details__right
           .job-details__title
@@ -20,7 +20,8 @@
         .job-details__left
           .job-details__title
             | Project Reference
-          a.btn.btn-tertiary.job-details__link= project_reference(@job.project)
+          a.btn.btn-tertiary.job-details__link href=company_projects_path()
+            = project_reference(@job.project) 
 
         .job-details__left
           .job-details__title
@@ -109,3 +110,25 @@
             li.show_value= t(:scope_is_public, scope: [:form, :labels, :job])
           - if @job.budget_is_public?
             li.show_value= t(:budget_is_public, scope: [:form, :labels, :job])
+        
+    .result-content__expand onclick="toggleExpandedJobDetails()"
+      .result-content__expand__gradient
+      .result-content__expand__bg
+        .btn.btn-tertiary.result-content__expand-btn
+          | expand job details
+
+
+javascript:
+  var toggleExpandedJobDetails = function() {
+    var collapsed = "result-content--collapsed";
+    if ($(".result-content").hasClass(collapsed)) {
+      $(".result-content").removeClass(collapsed);
+      $(".result-content__expand__gradient").addClass("result-content__expand__gradient--hidden");
+      $(".result-content__expand-btn").html("collapse job details");
+    } else {
+      $(".result-content").addClass(collapsed);
+      $(".result-content__expand__gradient").removeClass("result-content__expand__gradient--hidden");
+      $(".result-content__expand-btn").html("expand job details");
+    }
+
+  }

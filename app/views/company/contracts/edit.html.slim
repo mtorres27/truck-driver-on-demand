@@ -1,37 +1,43 @@
 = render partial: "company/shared/job_nav", locals: { job: @job }
 
 - content_for :secondary do
-  = simple_form_for(@job, url: company_job_contract_path(@job)) do |f|
-    .form-inputs
-      .row
-        .col-sm-12.col-md-6.col-lg-7
-          .form-group
-            label.control-label Job Summary
-            p= @job.summary
-          = f.input :scope_of_work, required: true, placeholder: "Please enter in more details about the job to receive a better quote. If you already have these documents please attach them below."
-          = f.input :addendums, placeholder: "Enter any supplemental information as part of the contract."
+  .result-wrapper
+    .result-header
+      .result-header__text
+        | Edit Contract
 
-        .col-sm-12.col-md-6.col-lg-5
+    .result-content
+      = simple_form_for(@job, url: company_job_contract_path(@job)) do |f|
+        .form-inputs
           .row
-            .col-xs-12.col-md-6
-              = f.input :contract_price, required: true, input_html: { value: number_with_precision(f.object.contract_price, precision: 0) }
-            .col-xs-12.col-md-6
-              = f.input :pay_type, required: true, prompt: "Select"
-            .col-xs-12.col-md-6
-              = f.input :starts_on, html5: true
-            .col-xs-12.col-md-6
-              = f.input :ends_on, html5: true, required: true
-          #payments
-            label Payment Schedule
-            = f.simple_fields_for :payments do |payment_form|
-              = render "payment_fields", f: payment_form
-            .links
-              = link_to_add_association 'Add Payment', f, :payments, class: "btn btn-default"
-          label Reporting Requirements
-          = f.input :reporting_frequency, as: :radio_buttons, item_wrapper_class: "inline", label: false
-          = f.input :require_photos_on_updates
-          = f.input :require_checkin
-          = f.input :require_uniform
-    hr
-    .form-actions
-      = f.button :submit, "Save", class: "btn btn-primary"
+            .col-sm-12.col-md-6.col-lg-7
+              .form-group
+                label.control-label Job Summary
+                p= @job.summary
+              = f.input :scope_of_work, required: true, placeholder: "Please enter in more details about the job to receive a better quote. If you already have these documents please attach them below."
+              = f.input :addendums, placeholder: "Enter any supplemental information as part of the contract."
+
+            .col-sm-12.col-md-6.col-lg-5
+              .row
+                .col-xs-12.col-md-6
+                  = f.input :contract_price, required: true, input_html: { value: number_with_precision(f.object.contract_price, precision: 0) }
+                .col-xs-12.col-md-6
+                  = f.input :pay_type, required: true, prompt: "Select"
+                .col-xs-12.col-md-6
+                  = f.input :starts_on, html5: true
+                .col-xs-12.col-md-6
+                  = f.input :ends_on, html5: true, required: true
+              #payments
+                label Payment Schedule
+                = f.simple_fields_for :payments do |payment_form|
+                  = render "payment_fields", f: payment_form
+                .links
+                  = link_to_add_association 'Add Payment', f, :payments, class: "btn btn-default"
+              label Reporting Requirements
+              = f.input :reporting_frequency, as: :radio_buttons, item_wrapper_class: "inline", label: false
+              = f.input :require_photos_on_updates
+              = f.input :require_checkin
+              = f.input :require_uniform
+        hr
+        .form-actions
+          = f.button :submit, "Save", class: "btn btn-primary"
