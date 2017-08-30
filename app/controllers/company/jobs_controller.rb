@@ -62,11 +62,21 @@ class Company::JobsController < Company::BaseController
     end
 
     if @job.update(job_params)
-      redirect_to company_job_path(@job)
+      if params.dig(:job, :send_contract).presence
+        @m = Message.new
+        @m.authorable = @job.company
+        @m.receivable = @job.freelancer
+        @m.send_contract = true
+        @m.body = "Hi #{@job.freelancer}! This is a note to let you know that we've just sent a contract to you. <a href='/freelancer/jobs/#{@job.id}/contract'>Click here</a> to view it!"
+        @m.save
+      end
+
+      redirect_to edit_company_job_contract_path(@job)
     else
       render :edit
     end
   end
+
 
   def destroy
     @job.destroy
@@ -103,7 +113,8 @@ class Company::JobsController < Company::BaseController
         :invite_only,
         :scope_is_public,
         :budget_is_public,
-        :state
+        :state,
+        attachments_attributes: [:id, :file, :_destroy]
       )
     end
 end

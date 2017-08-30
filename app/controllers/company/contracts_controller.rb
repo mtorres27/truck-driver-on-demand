@@ -10,7 +10,17 @@ class Company::ContractsController < Company::BaseController
 
   def update
     if @job.update(job_params)
-      redirect_to company_job_contract_path(@job)
+      if params.dig(:job, :send_contract) == "true"
+        @m = Message.new
+        @m.authorable = @job.company
+        @m.receivable = @job.freelancer
+        @m.send_contract = true
+        @m.body = "Hi #{@job.freelancer.name}! This is a note to let you know that we've just sent a contract to you. <a href='/freelancer/jobs/#{@job.id}/contract'>Click here</a> to view it!"
+        @m.save
+
+        @job.messages << @m
+      end
+      redirect_to edit_company_job_contract_path(@job)
     else
       build_payments
       render :edit

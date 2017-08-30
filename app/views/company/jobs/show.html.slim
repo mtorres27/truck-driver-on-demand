@@ -42,7 +42,7 @@
               - elsif @job.contracted?
                 | Contract determined
             - if @job.freelancer
-              a.btn-primary.job-details__work-order__btn href=company_job_contract_path(@job)
+              a.btn-primary.job-details__work-order__btn href=edit_company_job_contract_path(@job)
                 | Create Contract
             - else
               div.btn-primary.job-details__work-order__btn--disabled

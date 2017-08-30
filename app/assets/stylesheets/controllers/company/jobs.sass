@@ -42,16 +42,44 @@
 
 .job-details__title
   width: 100%
-  float: left
+  // float: left
   text-transform: uppercase
   font-weight: bold
   color: $gray-dark
   font-size: 14px
+  margin-top: 10px
 
 .job-details
   width: 100%
   display: inline-block
   margin-bottom: 20px
+
+  &__date
+    float: left
+    width: 267px
+    margin-right: 17px
+
+  &__price
+    width: 170px
+    float: left
+    margin-right: 12px
+
+  &__price-status
+    float: left
+    width: calc(100% - 170px)
+    &:after
+      clear:both
+
+    &
+
+  &__expand
+    margin-top: 20px  
+
+  &--collapsed
+    display: none
+
+  &__expand-btn
+    padding: 0px
 
   &__bar
     float: left
@@ -135,3 +163,7 @@
     word-break: break-all
     position: absolute
     bottom: 0
+
+.contract-edit__btn
+  text-transform: none
+  padding: 0px

@@ -600,7 +600,7 @@ CREATE TABLE messages (
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
     checkin boolean DEFAULT false,
-    counter_offer character varying
+    send_contract boolean DEFAULT false
 );
 
 
@@ -1593,6 +1593,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20170828175939'),
 ('20170828184903'),
 ('20170829140913'),
-('20170829141232');
+('20170829141232'),
+('20170830104424');
 
 

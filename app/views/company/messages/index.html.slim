@@ -21,7 +21,10 @@
                   | #{message.authorable.name} #{time_ago_in_words(message.created_at)} ago
                 .row
                   .col-xs-12.col-md-8.col-lg-9
-                    = message.body
+                    - if message.send_contract != true
+                      = message.body
+                    - else
+                      = message.body.html_safe
                   - if message.attachment
                     .col-xs-12.col-md-4.col-lg-3.text-right
                       = attachment_image_link(message.attachment)
