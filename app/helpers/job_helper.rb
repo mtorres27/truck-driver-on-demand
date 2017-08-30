@@ -7,7 +7,7 @@ module JobHelper
     elsif job.quoted?
       company_job_applicants_path(job) \
     elsif job.negotiated?
-      company_job_contract_path(job) \
+      edit_company_job_contract_path(job) \
     elsif job.contracted?
       company_job_messages_path(job) \
     else
