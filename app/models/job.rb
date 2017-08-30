@@ -62,6 +62,13 @@ class Job < ApplicationRecord
     :av_programmer
   ]
 
+  enumerize :working_time, in: [
+    :standard_workday,
+    :evenings,
+    :weekend,
+    :any_time
+  ]
+
   enumerize :pay_type, in: [ :fixed, :hourly ]
 
   enumerize :freelancer_type, in: [ :independent, :av_labor_company ]
@@ -138,8 +145,8 @@ class Job < ApplicationRecord
     def reject_attachments(attrs)
       exists = attrs["id"].present?
       empty = attrs["file"].blank?
-      attrs.merge!({ _destroy: 1 }) if exists && empty
-      !exists and empty
+
+      exists
     end
 
 end

@@ -46,6 +46,12 @@
               .col-xs-12.col-lg-6
                 label= t(:ends_on, scope: [:form, :labels, :job])
                 .show_value_em= @job.ends_on ? l(@job.ends_on) : "Not Specified"
+          
+          .show_field
+            .row
+              .col-xs-12.col-lg-6
+                label= t(:working_time, scope: [:form, :labels, :job])
+                .show_value_em= @job.working_time ? t(@job.working_time) : "Not Specified"
 
           .show_field
             label Payment Schedule

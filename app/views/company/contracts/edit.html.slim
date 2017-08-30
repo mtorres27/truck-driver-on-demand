@@ -55,6 +55,11 @@
                 | End date (estimated)
               = f.input :ends_on, html5: true, required: true, label: false
 
+          .job-details
+            .job-details__title
+              | Acceptable Working Hours
+            = f.input :working_time, required: true, prompt: "Select", label: false
+
     
 
           .job-details  

@@ -43,6 +43,7 @@ class Company::ContractsController < Company::BaseController
         :ends_on,
         :pay_type,
         :freelancer_type,
+        :working_time,
         :state,
         :reporting_frequency,
         :require_photos_on_updates,

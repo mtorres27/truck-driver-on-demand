@@ -17,3 +17,9 @@ en:
         created: "Not Published"
         published: "Accepting Applicants"
         negotiated: "Quote Accepted"
+
+      working_time:
+        standard_workday: "Standard Workday (Mon-Fri, 9AM-5PM)"
+        evenings: "Evenings (After 5PM)"
+        weekend: "Weekends (Sat & Sun)"
+        any_time: "Any Time (Workday, Evenings, Weekends)"
