@@ -77,7 +77,7 @@ class Freelancer < ApplicationRecord
 
   after_save :check_if_should_do_geocode
   def check_if_should_do_geocode
-    if saved_changes.include?("address") or (!address.nil? and lat.nil?)c
+    if saved_changes.include?("address") or (!address.nil? and lat.nil?)
       do_geocode
       update_columns(lat: lat, lng: lng)
     end
