@@ -1,14 +1,14 @@
 .profile__wrapper
-  .profile__wrapper-bg style="background: url(/assets/#{@company.profile_header_url})"
+  .profile__wrapper-bg style="background: url(#{@company.profile_header_url.include?("missing") ? "/assets/" : "" }#{@company.profile_header_url})"
 
   .profile__content
     .profile__block
       .profile__block__name
         = @company.name
       
-
-      a.profile__block__invite-to-quote href=edit_company_profile_path
-        | EDIT
+      - if @company.id == current_company.id
+        a.profile__block__invite-to-quote href=edit_company_profile_path
+          | EDIT PROFILE
 
 
     .profile__meta

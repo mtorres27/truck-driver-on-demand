@@ -46,6 +46,7 @@ class Company < ApplicationRecord
   enumerize :contract_preference, in: [:prefer_fixed, :prefer_hourly]
 
   # after_validation :queue_geocode
+  after_save :check_if_should_do_geocode
 
   def freelancers
     Freelancer.
@@ -79,6 +80,13 @@ class Company < ApplicationRecord
       company_reviews.average("(#{CompanyReview::RATING_ATTRS.map(&:to_s).join('+')}) / #{CompanyReview::RATING_ATTRS.length}").round
     else
       return nil
+    end
+  end
+
+  def check_if_should_do_geocode
+    if saved_changes.include?("address") or (!address.nil? and lat.nil?)
+      do_geocode
+      update_columns(lat: lat, lng: lng)
     end
   end
 

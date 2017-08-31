@@ -5,3 +5,27 @@
         | Edit Company Profile
     
     .result-content
+      = simple_form_for(@company, url: company_profile_path) do |f|
+        = f.input :name, required: true
+        = f.input :contact_name, required: true
+        = f.input :email, required: true, as: :string
+        = f.input :area, as: :string
+        = f.input :address, as: :string
+        p
+          | AVATAR
+          br
+          = image_tag(@company.avatar_url, size: "135x135")
+          = f.input :avatar, as: :file, label: false
+        
+        p
+          | PROFILE HEADER
+          br
+          = image_tag(@company.profile_header_url, style: "width:400px;height:auto")
+          = f.input :profile_header, as: :file, label: false
+
+        p
+          | Project Editing will go here, eventually.
+
+    
+        .form-actions
+          = f.button :submit, class: "btn btn-primary", label: "Update Profile"
