@@ -43,6 +43,7 @@ class Company < ApplicationRecord
   has_many :favourite_freelancers, through: :favourites, source: :freelancer
 
   enumerize :currency, in: [ "CAD", "USD" ]
+  enumerize :contract_preference, in: [:prefer_fixed, :prefer_hourly]
 
   # after_validation :queue_geocode
 
@@ -74,7 +75,11 @@ class Company < ApplicationRecord
   end
 
   def rating
-    company_reviews.average("(#{CompanyReview::RATING_ATTRS.map(&:to_s).join('+')}) / #{CompanyReview::RATING_ATTRS.length}").round
+    if company_reviews.count > 0
+      company_reviews.average("(#{CompanyReview::RATING_ATTRS.map(&:to_s).join('+')}) / #{CompanyReview::RATING_ATTRS.length}").round
+    else
+      return nil
+    end
   end
 
   # This SQL needs to stay exactly in sync with it's related index (index_on_companies_location)

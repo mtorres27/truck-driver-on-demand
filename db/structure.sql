@@ -304,7 +304,11 @@ CREATE TABLE companies (
     updated_at timestamp without time zone NOT NULL,
     messages_count integer DEFAULT 0 NOT NULL,
     company_reviews_count integer DEFAULT 0 NOT NULL,
-    profile_header_data text
+    profile_header_data text,
+    contract_preference character varying DEFAULT 'no_preference'::character varying,
+    keywords citext,
+    skills citext,
+    profile_views integer DEFAULT 0 NOT NULL
 );
 
 
@@ -1152,10 +1156,24 @@ CREATE UNIQUE INDEX index_companies_on_email ON companies USING btree (email);
 
 
 --
+-- Name: index_companies_on_keywords; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_companies_on_keywords ON companies USING btree (keywords);
+
+
+--
 -- Name: index_companies_on_name; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_companies_on_name ON companies USING btree (name);
+
+
+--
+-- Name: index_companies_on_skills; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_companies_on_skills ON companies USING btree (skills);
 
 
 --
@@ -1594,6 +1612,9 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20170828184903'),
 ('20170829140913'),
 ('20170829141232'),
-('20170830104424');
+('20170830104424'),
+('20170831120937'),
+('20170831122235'),
+('20170831123047');
 
 

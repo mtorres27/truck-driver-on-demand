@@ -15,9 +15,10 @@ html
     = render "shared/nav"
 
     = render "shared/flash"
-
     - if params[:controller]&.gsub("/", "-") == "company-freelancers" && params[:id]
       = yield
+    - elsif params[:controller]&.gsub("/", "-") == "company-profiles"
+      =yield
     - else
       .primary
         .container= yield

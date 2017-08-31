@@ -60,7 +60,11 @@ class Freelancer < ApplicationRecord
   }
 
   def rating
-    freelancer_reviews.average("(#{FreelancerReview::RATING_ATTRS.map(&:to_s).join('+')}) / #{FreelancerReview::RATING_ATTRS.length}").round
+    if freelancer_reviews.count > 0
+      freelancer_reviews.average("(#{FreelancerReview::RATING_ATTRS.map(&:to_s).join('+')}) / #{FreelancerReview::RATING_ATTRS.length}").round
+    else
+      return nil
+    end
   end
 
   def self.avg_rating(freelancer)

@@ -23,3 +23,10 @@ en:
         evenings: "Evenings (After 5PM)"
         weekend: "Weekends (Sat & Sun)"
         any_time: "Any Time (Workday, Evenings, Weekends)"
+    company:
+      contract_preference:
+        prefer_fixed: "Fixed Price Contracts"
+        prefer_hourly: "Hourly Contracts"
+        no_preference: "No Preference"
+        preferes: "Prefers"
+  has_no_preference: "Has no Contract Preference"

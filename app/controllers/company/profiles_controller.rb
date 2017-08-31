@@ -1,7 +1,14 @@
 class Company::ProfilesController < Company::BaseController
 
   def show
-    @company = current_company
+    if params[:id]
+      @company = Company.find(params[:id])
+    else
+      @company = current_company
+    end
+
+    @company.profile_views += 1
+    @company.save
   end
 
   def edit
