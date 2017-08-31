@@ -74,4 +74,12 @@ class Freelancer < ApplicationRecord
 
     return freelancer.rating
   end
+
+  after_save :check_if_should_do_geocode
+  def check_if_should_do_geocode
+    if saved_changes.include?("address") or (!address.nil? and lat.nil?)c
+      do_geocode
+      update_columns(lat: lat, lng: lng)
+    end
+  end
 end

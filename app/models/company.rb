@@ -45,19 +45,17 @@ class Company < ApplicationRecord
   enumerize :currency, in: [ "CAD", "USD" ]
   enumerize :contract_preference, in: [:prefer_fixed, :prefer_hourly]
 
-  # after_validation :queue_geocode
-  after_save :check_if_should_do_geocode
-
+  
   def freelancers
     Freelancer.
-      joins(applicants: :job).
-      where(jobs: { company_id: id }).
-      where(applicants: { state: :accepted }).
-      order(:name)
+    joins(applicants: :job).
+    where(jobs: { company_id: id }).
+    where(applicants: { state: :accepted }).
+    order(:name)
   end
-
+  
   audited
-
+  
   pg_search_scope :search, against: {
     name: "A",
     email: "A",
@@ -65,30 +63,32 @@ class Company < ApplicationRecord
     area: "B",
     formatted_address: "C",
     description: "C"
-  }, using: {
-    tsearch: { prefix: true }
-  }
-
-  # We want to populate both name and contact_name on sign up
-  before_validation :set_contact_name, on: :create
-  def set_contact_name
-    self.contact_name = name unless contact_name
-  end
-
-  def rating
-    if company_reviews.count > 0
-      company_reviews.average("(#{CompanyReview::RATING_ATTRS.map(&:to_s).join('+')}) / #{CompanyReview::RATING_ATTRS.length}").round
-    else
-      return nil
+    }, using: {
+      tsearch: { prefix: true }
+    }
+    
+    # We want to populate both name and contact_name on sign up
+    before_validation :set_contact_name, on: :create
+    def set_contact_name
+      self.contact_name = name unless contact_name
     end
-  end
-
-  def check_if_should_do_geocode
-    if saved_changes.include?("address") or (!address.nil? and lat.nil?)
-      do_geocode
-      update_columns(lat: lat, lng: lng)
+    
+    def rating
+      if company_reviews.count > 0
+        company_reviews.average("(#{CompanyReview::RATING_ATTRS.map(&:to_s).join('+')}) / #{CompanyReview::RATING_ATTRS.length}").round
+      else
+        return nil
+      end
     end
-  end
+    
+    
+    after_save :check_if_should_do_geocode
+    def check_if_should_do_geocode
+      if saved_changes.include?("address") or (!address.nil? and lat.nil?)c
+        do_geocode
+        update_columns(lat: lat, lng: lng)
+      end
+    end
 
   # This SQL needs to stay exactly in sync with it's related index (index_on_companies_location)
   # otherwise the index won't be used. (don't even add whitespace!)
