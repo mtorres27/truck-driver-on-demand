@@ -403,6 +403,40 @@ ALTER SEQUENCE favourites_id_seq OWNED BY favourites.id;
 
 
 --
+-- Name: featured_projects; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE featured_projects (
+    id bigint NOT NULL,
+    company_id integer,
+    name character varying,
+    file character varying,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL,
+    file_data character varying
+);
+
+
+--
+-- Name: featured_projects_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE featured_projects_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: featured_projects_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE featured_projects_id_seq OWNED BY featured_projects.id;
+
+
+--
 -- Name: freelancer_reviews; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -849,6 +883,13 @@ ALTER TABLE ONLY favourites ALTER COLUMN id SET DEFAULT nextval('favourites_id_s
 
 
 --
+-- Name: featured_projects id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY featured_projects ALTER COLUMN id SET DEFAULT nextval('featured_projects_id_seq'::regclass);
+
+
+--
 -- Name: freelancer_reviews id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -989,6 +1030,14 @@ ALTER TABLE ONLY company_reviews
 
 ALTER TABLE ONLY favourites
     ADD CONSTRAINT favourites_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: featured_projects featured_projects_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY featured_projects
+    ADD CONSTRAINT featured_projects_pkey PRIMARY KEY (id);
 
 
 --
@@ -1615,6 +1664,8 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20170830104424'),
 ('20170831120937'),
 ('20170831122235'),
-('20170831123047');
+('20170831123047'),
+('20170831171827'),
+('20170831174408');
 
 

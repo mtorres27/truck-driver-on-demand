@@ -33,7 +33,8 @@ class Company::ProfilesController < Company::BaseController
       :area,
       :address,
       :avatar,
-      :profile_header
+      :profile_header,
+      featured_projects_attributes: [:id, :file, :name, :_destroy],
     )
   end
 

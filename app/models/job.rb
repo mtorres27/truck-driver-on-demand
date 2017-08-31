@@ -145,7 +145,6 @@ class Job < ApplicationRecord
     def reject_attachments(attrs)
       exists = attrs["id"].present?
       empty = attrs["file"].blank?
-
       exists
     end
 

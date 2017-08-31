@@ -23,9 +23,14 @@
           = image_tag(@company.profile_header_url, style: "width:400px;height:auto")
           = f.input :profile_header, as: :file, label: false
 
-        p
-          | Project Editing will go here, eventually.
-
+        .job-details
+          #featured_projects
+            .job-details__title
+              | Featured Projects
+              = f.simple_fields_for :featured_projects do |project_form|
+                = render "featured_project_fields", f: project_form
+              .links
+                = link_to_add_association 'Add', f, :featured_projects, class: "btn btn-default"
     
         .form-actions
           = f.button :submit, class: "btn btn-primary", label: "Update Profile"

@@ -119,10 +119,14 @@
       .profile__projects-label
         | projects
       .profile__projects-value
-        - if @company.projects.length > 0
-          - @company.projects.each do |project|
-            .profile__projects__project
-              = "#{project.name} (#{number_to_currency(project.budget)})"
+        - if @company.featured_projects.length > 0
+          - @company.featured_projects.each do |project|
+            a.profile__projects__project href="#{project.file_url.include?('missing') ? '/assets/' : ''} #{project.file_url}" target="_blank"
+              .profile__projects__project__image style="background-image: url(#{project.file_url.include?('missing') ? '/assets/' : ''} #{project.file_url})"
+              .profile__projects__project__name
+                = project.name
+        - else 
+          | This company has no featured projects.
 
     .profile__reviews
       a name="reviews"
