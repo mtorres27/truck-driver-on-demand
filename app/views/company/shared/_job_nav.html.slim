@@ -5,7 +5,8 @@
       - if @job.project
         a.project_name href=company_projects_path
           | &#8592; #{job.project&.name}
-    = job.title || "New Job"
+    - if job.title
+      = job.title
   .tab-bar
     - if job.new_record?
       .tab-bar__item--active

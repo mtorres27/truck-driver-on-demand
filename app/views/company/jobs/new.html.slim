@@ -1,4 +1,10 @@
 = render partial: "company/shared/job_nav", locals: { job: @job }
 
 - content_for :secondary do
-  = render "form"
+  .result-wrapper
+    .result-header
+      .result-header__text
+        | New job
+
+    .result-content
+      = render "form"

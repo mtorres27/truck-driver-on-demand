@@ -15,13 +15,13 @@
           | AVATAR
           br
           = image_tag(@company.avatar_url, size: "135x135")
-          = f.input :avatar, as: :file, label: false
+          = f.file_field :avatar, label: false, :accept => 'image/png,image/gif,image/jpeg'
         
         p
           | PROFILE HEADER
           br
           = image_tag(@company.profile_header_url, style: "width:400px;height:auto")
-          = f.input :profile_header, as: :file, label: false
+          = f.file_field :profile_header, label: false, :accept => 'image/png,image/gif,image/jpeg'
 
         .job-details
           #featured_projects
