@@ -114,6 +114,7 @@ class Company::JobsController < Company::BaseController
         :scope_is_public,
         :budget_is_public,
         :state,
+        :address,
         attachments_attributes: [:id, :file, :_destroy]
       )
     end

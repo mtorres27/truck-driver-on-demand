@@ -28,6 +28,14 @@
             | Job Title
           .show_value_em= @job.title
 
+        .job-details__left
+          .job-details__title
+            | Address of Job
+          - if @job.address?
+            .show_value_em= @job.address
+          - else
+            .show_value_em= "Address Not Specified"
+
 
       .job-details
         .job-details__title

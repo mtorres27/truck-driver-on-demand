@@ -37,7 +37,8 @@
 
 class Job < ApplicationRecord
   extend Enumerize
-
+  include Geocodable
+  
   belongs_to :company
   belongs_to :project
   has_many :applicants, -> { includes(:freelancer).order(updated_at: :desc) }, dependent: :destroy
@@ -146,6 +147,14 @@ class Job < ApplicationRecord
       exists = attrs["id"].present?
       empty = attrs["file"].blank?
       exists
+    end
+
+    after_save :check_if_should_do_geocode
+    def check_if_should_do_geocode
+      if saved_changes.include?("address") or (!address.nil? and lat.nil?)
+        do_geocode
+        update_columns(lat: lat, lng: lng)
+      end
     end
 
 end

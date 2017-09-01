@@ -638,7 +638,11 @@ CREATE TABLE jobs (
     messages_count integer DEFAULT 0 NOT NULL,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
-    currency character varying
+    currency character varying,
+    address character varying,
+    lat numeric(9,6),
+    lng numeric(9,6),
+    formatted_address character varying
 );
 
 
@@ -1723,6 +1727,9 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20170901144348'),
 ('20170901145302'),
 ('20170901150719'),
-('20170901150851');
+('20170901150851'),
+('20170901182130'),
+('20170901182440'),
+('20170901182938');
 
 
