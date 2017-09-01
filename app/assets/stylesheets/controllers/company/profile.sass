@@ -194,14 +194,17 @@
       &-name
         font-size: 12px
 
-    &__data
+      margin-bottom: 10px
+
+    &__data, &__data--freelancer
       width: 50%
       float: left
       display: inline-block
 
       &__years-of-experience, &__profile-views, &__projects-completed
-        width: 33%
+        width: 50%
         float: left
+        margin-bottom: 10px
 
         &-value
           font-size: 60px
@@ -214,6 +217,10 @@
           text-align: center
           color: $freelancer-rate-label
           font-weight: bold
+    &__data--freelancer
+      .profile__bona-fides__data
+        &__years-of-experience, &__profile-views, &__projects-completed
+          width: 33%
   &__abilities
     width: 100%
     display: inline-block
@@ -231,6 +238,9 @@
         color: $freelancer-section-color
         margin-bottom: 10px
         font-weight: bold
+      
+      &-value
+        margin-bottom: 20px
 
     &__specialties
       float: left
@@ -255,6 +265,10 @@
           font-weight: bold
 
         &-value
+
+        &-value--italic
+          font-style: italic
+          margin-bottom: 5px
       
       &__skills
         margin-top: 20px
@@ -307,6 +321,10 @@
     &-value
       display: inline-block
       width: 100%
+
+    &-value--installations
+      .profile__projects__project
+        height: auto
 
     &__project
       width: calc(25% - 10px)

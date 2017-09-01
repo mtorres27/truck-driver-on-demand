@@ -32,4 +32,12 @@ module ApplicationHelper
     end
     return distance_from(@freelancer)
   end
+
+  def proper_website_link(url)
+    if url.include?("http://") or url.include?("https://")
+      return url
+    else
+      return "http://"+url
+    end
+  end
 end

@@ -6,20 +6,71 @@
     
     .result-content
       = simple_form_for(@company, url: company_profile_path) do |f|
-        = f.input :name, required: true
-        = f.input :contact_name, required: true
-        = f.input :email, required: true, as: :string
-        = f.input :area, as: :string
-        = f.input :address, as: :string
-        p
-          | AVATAR
-          br
+        .company-profile__item
+          .company-profile__title
+            | Company Name
+          = f.input :name, required: true, label: false, placeholder: "Enter a Company Name."
+        .company-profile__item
+          .company-profile__title
+            | Contact Name
+          = f.input :contact_name, required: true, label: false, placeholder: "Enter your preferred Company Contact Name."
+        .company-profile__item
+          .company-profile__title
+            | Contact Email
+          = f.input :email, required: true, as: :string, label: false, placeholder: "Enter your preferred Email Address."
+        .company-profile__item
+          .company-profile__title
+            | Company Markets
+          = f.input :keywords, as: :string, label: false, placeholder: "Enter the markets your company operates in (separate multiple markets with commas)."
+        .company-profile__item
+          .company-profile__title
+            | Company Skills
+          = f.input :skills, as: :string, label: false, placeholder: "Enter your company's skills (separate multiple skills with commas)."
+        .company-profile__item
+          .company-profile__title
+            | Service Areas
+          = f.input :area, as: :string, label: false, placeholder: "Enter the areas your company services (separate multiple areas with commas)."
+        .company-profile__item
+          .company-profile__title
+            | HQ Company Address
+          = f.input :address, as: :string, label: false, placeholder: "Enter the address of your company's Headquarters."
+        .company-profile__item
+          .company-profile__title
+            | Phone Number
+          = f.input :phone_number, as: :string, label: false, placeholder: "Your Contact's Phone Number"
+        .company-profile__item
+          .company-profile__title
+            | Number of Offices
+          = f.input :number_of_offices, as: :integer, label: false
+        .company-profile__item
+          .company-profile__title
+            | Contract Type Preference
+          = f.input :contract_preference, required: true, prompt: "Select", label: false
+        .company-profile__item
+          .company-profile__title
+            | Number of Employees
+          = f.input :number_of_employees, required: true, prompt: "Select", label: false
+        .company-profile__item
+          .company-profile__title
+            | Year Company was Established
+          = f.input :established_in, as: :integer, label: false
+        .company-profile__item
+          .company-profile__title
+            | Website
+          = f.input :website, as: :string, label: false, placeholder: "Enter Company's Website URL"
+        .company-profile__item
+          .company-profile__title
+            | About the Company
+          = f.input :description, as: :text, label: false, placeholder: "Describe your company."
+        .company-profile__item
+          .company-profile__title
+            | Profile Picture
           = image_tag(@company.avatar_url, size: "135x135")
           = f.file_field :avatar, label: false, :accept => 'image/png,image/gif,image/jpeg'
         
-        p
-          | PROFILE HEADER
-          br
+        .company-profile__item
+          .company-profile__title
+            | PROFILE HEADER
           = image_tag(@company.profile_header_url, style: "width:400px;height:auto")
           = f.file_field :profile_header, label: false, :accept => 'image/png,image/gif,image/jpeg'
 
@@ -31,6 +82,15 @@
                 = render "featured_project_fields", f: project_form
               .links
                 = link_to_add_association 'Add', f, :featured_projects, class: "btn btn-default"
+
+        .job-details
+          #company_installs
+            .job-details__title
+              | Company Installs (by year)
+              = f.simple_fields_for :company_installs do |install_form|
+                = render "company_install_fields", f: install_form
+              .links
+                = link_to_add_association 'Add', f, :company_installs, class: "btn btn-default"
     
         .form-actions
           = f.button :submit, class: "btn btn-primary", label: "Update Profile"

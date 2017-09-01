@@ -308,7 +308,12 @@ CREATE TABLE companies (
     contract_preference character varying DEFAULT 'no_preference'::character varying,
     keywords citext,
     skills citext,
-    profile_views integer DEFAULT 0 NOT NULL
+    profile_views integer DEFAULT 0 NOT NULL,
+    website character varying,
+    phone_number character varying,
+    number_of_offices integer DEFAULT 0,
+    number_of_employees character varying,
+    established_in integer
 );
 
 
@@ -329,6 +334,39 @@ CREATE SEQUENCE companies_id_seq
 --
 
 ALTER SEQUENCE companies_id_seq OWNED BY companies.id;
+
+
+--
+-- Name: company_installs; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE company_installs (
+    id bigint NOT NULL,
+    company_id integer,
+    year integer,
+    installs integer,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: company_installs_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE company_installs_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: company_installs_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE company_installs_id_seq OWNED BY company_installs.id;
 
 
 --
@@ -869,6 +907,13 @@ ALTER TABLE ONLY companies ALTER COLUMN id SET DEFAULT nextval('companies_id_seq
 
 
 --
+-- Name: company_installs id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY company_installs ALTER COLUMN id SET DEFAULT nextval('company_installs_id_seq'::regclass);
+
+
+--
 -- Name: company_reviews id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -1014,6 +1059,14 @@ ALTER TABLE ONLY change_orders
 
 ALTER TABLE ONLY companies
     ADD CONSTRAINT companies_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: company_installs company_installs_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY company_installs
+    ADD CONSTRAINT company_installs_pkey PRIMARY KEY (id);
 
 
 --
@@ -1666,6 +1719,10 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20170831122235'),
 ('20170831123047'),
 ('20170831171827'),
-('20170831174408');
+('20170831174408'),
+('20170901144348'),
+('20170901145302'),
+('20170901150719'),
+('20170901150851');
 
 

@@ -91,7 +91,7 @@
             .profile__bona-fides__review-name
               = "#{@freelancer.freelancer_reviews.first.company.contact_name}, #{@freelancer.freelancer_reviews.first.company.name}"
 
-      .profile__bona-fides__data
+      .profile__bona-fides__data--freelancer
         .profile__bona-fides__data__years-of-experience
           .profile__bona-fides__data__years-of-experience-value
             = @freelancer.years_of_experience
@@ -99,7 +99,7 @@
             | Years of experience
         .profile__bona-fides__data__profile-views
           .profile__bona-fides__data__profile-views-value
-            = @freelancer.profile_views
+            = number_to_human(@freelancer.profile_views, :format => '%n%u', :precision => 3, :units => { :thousand => 'K', :million => 'M', :billion => 'B' })
           .profile__bona-fides__data__profile-views-label
             | Profile views
         .profile__bona-fides__data__projects-completed

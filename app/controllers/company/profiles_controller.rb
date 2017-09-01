@@ -34,6 +34,16 @@ class Company::ProfilesController < Company::BaseController
       :address,
       :avatar,
       :profile_header,
+      :description,
+      :skills,
+      :keywords,
+      :phone_number,
+      :number_of_offices,
+      :number_of_employees,
+      :contract_preference,
+      :established_in,
+      :website,
+      company_installs_attributes: [:id, :year, :installs, :_destroy],
       featured_projects_attributes: [:id, :file, :name, :_destroy],
     )
   end

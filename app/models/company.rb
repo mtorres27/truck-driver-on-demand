@@ -42,11 +42,19 @@ class Company < ApplicationRecord
   has_many :featured_projects, dependent: :destroy
   has_many :favourites
   has_many :favourite_freelancers, through: :favourites, source: :freelancer
+  has_many :company_installs, dependent: :destroy
 
   enumerize :currency, in: [ "CAD", "USD" ]
   enumerize :contract_preference, in: [:prefer_fixed, :prefer_hourly]
+  enumerize :number_of_employees, in: [
+    :one_to_ten,
+    :eleven_to_one_hundred,
+    :one_hundred_one_to_one_thousand,
+    :more_than_one_thousand
+  ]
 
   accepts_nested_attributes_for :featured_projects, allow_destroy: true, reject_if: :reject_featured_projects
+  accepts_nested_attributes_for :company_installs, allow_destroy: true, reject_if: :reject_company_installs
   
   def freelancers
     Freelancer.
@@ -94,8 +102,14 @@ class Company < ApplicationRecord
 
     def reject_featured_projects(attrs)
       exists = attrs["id"].present?
-      empty = attrs["file"].blank? and attrs[""]
-      exists
+      empty = attrs["file"].blank? and attrs["name"].blank?
+      !exists and empty
+    end
+
+    def reject_company_installs(attrs)
+      exists = attrs["id"].present?
+      empty = attrs["year"].blank? and attrs["installs"].blank
+      !exists and empty
     end
 
   # This SQL needs to stay exactly in sync with it's related index (index_on_companies_location)

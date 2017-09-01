@@ -39,7 +39,7 @@
           - if @company.contract_preference == :no_preference or @company.contract_preference.nil?
             = t(:has_no_preference)
           - else
-            = "#{t('prefers')} #{t(@company.contract_preference)}"
+            = "#{t(:prefers)} #{t(@company.contract_preference)}"
         .profile__meta-center__keywords
           - if !@company.keywords.nil?
             - @company.keywords.split(", ").map(&:lstrip)[0..1].each do |keyword|
@@ -64,6 +64,20 @@
       .profile__bona-fides__data
         .profile__bona-fides__data__years-of-experience
           .profile__bona-fides__data__years-of-experience-value
+            - if !@company.number_of_offices.nil?
+              = @company.number_of_offices
+            - else
+              | N/A
+          .profile__bona-fides__data__years-of-experience-label
+            | Number of Offices
+        
+        .profile__bona-fides__data__projects-completed
+          .profile__bona-fides__data__projects-completed-value
+            = @company.established_in ? Time.now.year - @company.established_in : "N/A"
+          .profile__bona-fides__data__projects-completed-label
+            | Years in Business
+        .profile__bona-fides__data__years-of-experience
+          .profile__bona-fides__data__years-of-experience-value
             - if !@company.rating.nil?
               = @company.rating
             - else
@@ -72,14 +86,9 @@
             | Star Rating
         .profile__bona-fides__data__profile-views
           .profile__bona-fides__data__profile-views-value
-            = @company.profile_views
+            = number_to_human(@company.profile_views, :format => '%n%u', :precision => 3, :units => { :thousand => 'K', :million => 'M', :billion => 'B' })
           .profile__bona-fides__data__profile-views-label
             | Profile views
-        .profile__bona-fides__data__projects-completed
-          .profile__bona-fides__data__projects-completed-value
-            = @company.jobs.where({state: "completed"}).count
-          .profile__bona-fides__data__projects-completed-label
-            | Projects Completed
 
 
     .profile__abilities
@@ -91,6 +100,22 @@
             | This company has not yet added a description.
           - else
             = @company.description  
+        - if @company.website?
+          .profile__abilities__bio-value
+            | Visit us at 
+            a href=proper_website_link(@company.website) target="_blank"
+              = @company.website
+        - if @company.phone_number?
+          .profile__abilities__bio-value
+            strong
+              = "Call us at #{@company.phone_number}"
+        .profile__abilities__specialties__markets-label
+          | Stats
+        .profile__abilities__specialties__markets-value--italic
+          = @company.established_in ? "#{Time.now.year - @company.established_in} years in business" : "N/A"
+
+        .profile__abilities__specialties__markets-value--italic
+          = @company.number_of_employees ? "#{t(@company.number_of_employees)} employees" : "N/A"
       .profile__abilities__specialties   
         .profile__abilities__specialties-label
           | specialties
@@ -115,6 +140,21 @@
             - else
               | This company has no skills listed.
         
+    .profile__projects
+      .profile__projects-label
+        | Installations
+      .profile__projects-value--installations
+        - if @company.company_installs.length > 0
+          - @company.company_installs.each do |installation|
+            .profile__projects__project
+              strong
+                = "#{installation.year}: "
+              em
+                = number_with_delimiter(installation.installs, :delimiter => ',')
+
+        - else 
+          | This company has no information about installs by year
+
     .profile__projects
       .profile__projects-label
         | projects
