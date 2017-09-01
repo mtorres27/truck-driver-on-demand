@@ -30,9 +30,31 @@
 
       .profile__meta-center
         .profile__meta-center__name
-          = @company.name
+          - if @company.website?
+            a href=proper_website_link(@company.website) target="_blank"
+              = @company.name
+          - else
+            = @company.name
+        .profile__meta-center__area
+          b
+            = @company.contact_name
         .profile__meta-center__area
           = @company.area
+        - if @company.email?
+          .profile__meta-center__area
+            | Email: 
+            a href="mailto:#{@company.email}" target="_blank"
+              = @company.email
+        - if @company.website?
+          .profile__meta-center__area
+            | URL: 
+            a href=proper_website_link(@company.website) target="_blank"
+              = @company.website
+        - if @company.phone_number?
+          .profile__meta-center__area
+            = "Phone: #{@company.phone_number}"
+          
+
         .profile__meta-center__member-since
           = "Member since #{@company.created_at.strftime('%B %d, %Y')}"
         .profile__meta-center__tagline
@@ -59,7 +81,7 @@
             .profile__bona-fides__review-text
               = @company.company_reviews.first.comments
             .profile__bona-fides__review-name
-              = "#{@company.company_reviews.first.company.contact_name}, #{@company.company_reviews.first.company.name}"
+              = "#{@company.company_reviews.first.freelancer.name}, #{@company.company_reviews.first.company.name}"
 
       .profile__bona-fides__data
         .profile__bona-fides__data__years-of-experience
@@ -100,15 +122,6 @@
             | This company has not yet added a description.
           - else
             = @company.description  
-        - if @company.website?
-          .profile__abilities__bio-value
-            | Visit us at 
-            a href=proper_website_link(@company.website) target="_blank"
-              = @company.website
-        - if @company.phone_number?
-          .profile__abilities__bio-value
-            strong
-              = "Call us at #{@company.phone_number}"
         .profile__abilities__specialties__markets-label
           | Stats
         .profile__abilities__specialties__markets-value--italic
@@ -179,6 +192,6 @@
             .profile__reviews__review-text
               = review.comments
             .profile__reviews__review-name
-              = "#{review.company.contact_name}, #{review.company.name}"
+              = review.freelancer.name
         - else
           | This company doesn't have any reviews.

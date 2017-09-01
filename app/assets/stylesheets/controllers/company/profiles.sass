@@ -2,8 +2,19 @@
 
 
 .company-profile
+  &__full
+    width: 100%
+    display: inline-block
+
   &__item
     margin-bottom: 20px
+
+    &--half
+      @extend .company-profile__item
+      width: 50%
+      float: left
+
+
     
   &__title
     width: 100%
