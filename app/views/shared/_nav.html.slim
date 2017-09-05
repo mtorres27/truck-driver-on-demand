@@ -11,57 +11,58 @@ nav#top-nav.navbar.navbar-fixed-top
     #navbar-lg.collapse.navbar-collapse
       ul.nav.navbar-nav.navbar-right
         - if request.path.index(/\/company/)
-          li( class=("active" if request.path == company_root_path || is_showing_freelancer(request.path)) )
-            = link_to "Search for Techs", company_root_path
-          li( class=("active" if request.path.include?(company_projects_path)) )
-            = link_to "Job Postings", company_projects_path
-          li( class=("active" if request.path == company_freelancers_path + "/hired" || request.path == company_freelancers_path + "/favourites") )
-            = link_to "My Techs", hired_company_freelancers_path
-          li( class=("active" if request.path.include?(company_payments_path)) )
+          - if current_company
+            li( class=("active" if request.path == company_root_path || is_showing_freelancer(request.path)) )
+              = link_to "Search for Techs", company_root_path
+            li( class=("active" if request.path.include?(company_projects_path)) )
+              = link_to "Job Postings", company_projects_path
+            li( class=("active" if request.path == company_freelancers_path + "/hired" || request.path == company_freelancers_path + "/favourites") )
+              = link_to "My Techs", hired_company_freelancers_path
+            li( class=("active" if request.path.include?(company_payments_path)) )
             = link_to "Payments", company_payments_path
-          li.dropdown
-            a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"
-              .dropdown-avatar
-                = image_tag(current_company.avatar_url, size: "35x35")
-              span.caret
-            ul class="dropdown-menu"
-              li
-                = link_to "Profile", company_profile_path
-              li.divider role="separator"
-              li.dropdown-header= current_company.name
-              li
-                = link_to "Logout", session_path(section: "company"), method: :delete
+            li.dropdown
+              a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"
+                .dropdown-avatar
+                  = image_tag(current_company.avatar_url, size: "35x35")
+                span.caret
+              ul class="dropdown-menu"
+                li
+                  = link_to "Profile", company_profile_path
+                li.divider role="separator"
+                li.dropdown-header= current_company.name
+                li
+                  = link_to "Logout", destroy_user_session_path, method: :delete
 
-        - elsif request.path.index(/^freelancer/)
-          li( class=("active" if request.path == freelancer_root_path) )
-            = link_to "Dashboard", freelancer_root_path
-          li.dropdown
-            a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"
-              .dropdown-avatar
-                = image_tag(current_freelancer.avatar_url, size: "67x67")
-              span.caret
-            ul class="dropdown-menu"
-              li
-                a href="#" Action
-              li
-                a href="#" Another action
-              li.divider role="separator"
-              li.dropdown-header= current_freelancer.name
-              li
-                = link_to "Logout", session_path(section: "freelancer"), method: :delete
+          - elsif request.path.index(/^freelancer/)
+            li( class=("active" if request.path == freelancer_root_path) )
+              = link_to "Dashboard", freelancer_root_path
+            li.dropdown
+              a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"
+                .dropdown-avatar
+                  = image_tag(current_freelancer.avatar_url, size: "67x67")
+                span.caret
+              ul class="dropdown-menu"
+                li
+                  a href="#" Action
+                li
+                  a href="#" Another action
+                li.divider role="separator"
+                li.dropdown-header= current_freelancer.name
+                li
+                  = link_to "Logout", destroy_user_session_path, method: :delete
 
-        - elsif request.path.index(/^\/admin/)
-          li( class=("active" if request.path == admin_root_path) )
-            = link_to "Dashboard", admin_root_path
-          li( class=("active" if request.path.index(/^\/admin\/companies/)) )
-            = link_to "Companies", admin_companies_path
-          li( class=("active" if request.path.index(/^\/admin\/freelancers/)) )
-            = link_to "Freelancers", admin_freelancers_path
-          li( class=("active" if request.path.index(/^\/admin\/pages/)) )
-            = link_to "Pages", admin_pages_path
+          - elsif request.path.index(/^\/admin/)
+            li( class=("active" if request.path == admin_root_path) )
+              = link_to "Dashboard", admin_root_path
+            li( class=("active" if request.path.index(/^\/admin\/companies/)) )
+              = link_to "Companies", admin_companies_path
+            li( class=("active" if request.path.index(/^\/admin\/freelancers/)) )
+              = link_to "Freelancers", admin_freelancers_path
+            li( class=("active" if request.path.index(/^\/admin\/pages/)) )
+              = link_to "Pages", admin_pages_path
 
-        - else
-          li( class=("active" if request.path == admin_root_path) )
-            = link_to "Freelancers", freelancer_root_path
-          li( class=("active" if request.path.include?(admin_freelancers_path)) )
-            = link_to "Companies", company_root_path
+          - else
+            li( class=("active" if request.path == admin_root_path) )
+              = link_to "Freelancers", freelancer_root_path
+            li( class=("active" if request.path.include?(admin_freelancers_path)) )
+              = link_to "Companies", company_root_path

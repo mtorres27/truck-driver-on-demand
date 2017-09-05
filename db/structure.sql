@@ -65,7 +65,16 @@ CREATE TABLE admins (
     email citext NOT NULL,
     name character varying NOT NULL,
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+    updated_at timestamp without time zone NOT NULL,
+    encrypted_password character varying DEFAULT ''::character varying NOT NULL,
+    reset_password_token character varying,
+    reset_password_sent_at timestamp without time zone,
+    remember_created_at timestamp without time zone,
+    sign_in_count integer DEFAULT 0 NOT NULL,
+    current_sign_in_at timestamp without time zone,
+    last_sign_in_at timestamp without time zone,
+    current_sign_in_ip inet,
+    last_sign_in_ip inet
 );
 
 
@@ -313,7 +322,16 @@ CREATE TABLE companies (
     phone_number character varying,
     number_of_offices integer DEFAULT 0,
     number_of_employees character varying,
-    established_in integer
+    established_in integer,
+    encrypted_password character varying DEFAULT ''::character varying NOT NULL,
+    reset_password_token character varying,
+    reset_password_sent_at timestamp without time zone,
+    remember_created_at timestamp without time zone,
+    sign_in_count integer DEFAULT 0 NOT NULL,
+    current_sign_in_at timestamp without time zone,
+    last_sign_in_at timestamp without time zone,
+    current_sign_in_ip inet,
+    last_sign_in_ip inet
 );
 
 
@@ -544,7 +562,16 @@ CREATE TABLE freelancers (
     freelancer_reviews_count integer DEFAULT 0 NOT NULL,
     skills citext,
     profile_header_data text,
-    verified boolean DEFAULT false
+    verified boolean DEFAULT false,
+    encrypted_password character varying DEFAULT ''::character varying NOT NULL,
+    reset_password_token character varying,
+    reset_password_sent_at timestamp without time zone,
+    remember_created_at timestamp without time zone,
+    sign_in_count integer DEFAULT 0 NOT NULL,
+    current_sign_in_at timestamp without time zone,
+    last_sign_in_at timestamp without time zone,
+    current_sign_in_ip inet,
+    last_sign_in_ip inet
 );
 
 
@@ -862,6 +889,46 @@ CREATE TABLE schema_migrations (
 
 
 --
+-- Name: users; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE users (
+    id bigint NOT NULL,
+    email character varying DEFAULT ''::character varying NOT NULL,
+    encrypted_password character varying DEFAULT ''::character varying NOT NULL,
+    reset_password_token character varying,
+    reset_password_sent_at timestamp without time zone,
+    remember_created_at timestamp without time zone,
+    sign_in_count integer DEFAULT 0 NOT NULL,
+    current_sign_in_at timestamp without time zone,
+    last_sign_in_at timestamp without time zone,
+    current_sign_in_ip inet,
+    last_sign_in_ip inet,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: users_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE users_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: users_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE users_id_seq OWNED BY users.id;
+
+
+--
 -- Name: admins id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -999,6 +1066,13 @@ ALTER TABLE ONLY projects ALTER COLUMN id SET DEFAULT nextval('projects_id_seq':
 --
 
 ALTER TABLE ONLY quotes ALTER COLUMN id SET DEFAULT nextval('quotes_id_seq'::regclass);
+
+
+--
+-- Name: users id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY users ALTER COLUMN id SET DEFAULT nextval('users_id_seq'::regclass);
 
 
 --
@@ -1178,6 +1252,14 @@ ALTER TABLE ONLY schema_migrations
 
 
 --
+-- Name: users users_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY users
+    ADD CONSTRAINT users_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: associated_index; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -1196,6 +1278,13 @@ CREATE INDEX auditable_index ON audits USING btree (auditable_id, auditable_type
 --
 
 CREATE UNIQUE INDEX index_admins_on_email ON admins USING btree (email);
+
+
+--
+-- Name: index_admins_on_reset_password_token; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX index_admins_on_reset_password_token ON admins USING btree (reset_password_token);
 
 
 --
@@ -1273,6 +1362,13 @@ CREATE INDEX index_companies_on_keywords ON companies USING btree (keywords);
 --
 
 CREATE INDEX index_companies_on_name ON companies USING btree (name);
+
+
+--
+-- Name: index_companies_on_reset_password_token; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX index_companies_on_reset_password_token ON companies USING btree (reset_password_token);
 
 
 --
@@ -1364,6 +1460,13 @@ CREATE INDEX index_freelancers_on_keywords ON freelancers USING btree (keywords)
 --
 
 CREATE INDEX index_freelancers_on_name ON freelancers USING btree (name);
+
+
+--
+-- Name: index_freelancers_on_reset_password_token; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX index_freelancers_on_reset_password_token ON freelancers USING btree (reset_password_token);
 
 
 --
@@ -1518,6 +1621,20 @@ CREATE INDEX index_quotes_on_applicant_id ON quotes USING btree (applicant_id);
 --
 
 CREATE INDEX index_quotes_on_company_id ON quotes USING btree (company_id);
+
+
+--
+-- Name: index_users_on_email; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX index_users_on_email ON users USING btree (email);
+
+
+--
+-- Name: index_users_on_reset_password_token; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX index_users_on_reset_password_token ON users USING btree (reset_password_token);
 
 
 --
@@ -1730,6 +1847,10 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20170901150851'),
 ('20170901182130'),
 ('20170901182440'),
-('20170901182938');
+('20170901182938'),
+('20170905134525'),
+('20170905135835'),
+('20170905135846'),
+('20170905135938');
 
 

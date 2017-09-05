@@ -1,13 +1,12 @@
 Rails.application.routes.draw do
+  devise_for :company
+  devise_for :freelancer
+  devise_for :admins
+  devise_for :users
   root "main#index"
 
   get "privacy-policy", to: "pages#show", id: "privacy-policy"
   get "terms-of-service", to: "pages#show", id: "terms-of-service"
-
-  get "auth/:provider/callback", to: "sessions#create"
-  resource :session, only: [:new, :create, :destroy] do
-    get :login_as, on: :collection
-  end
 
   namespace :freelancer do
     root "freelancers#show"
