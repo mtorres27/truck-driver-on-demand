@@ -22,15 +22,17 @@
 #
 
 class Company < ApplicationRecord
+  # Include default devise modules. Others available are:
+  # :confirmable, :lockable, :timeoutable and :omniauthable
+  devise :database_authenticatable, :registerable,
+         :recoverable, :rememberable, :trackable, :validatable
   extend Enumerize
   include PgSearch
-  include Loginable
   include Geocodable
   include Disableable
   include AvatarUploader[:avatar]
   include ProfileHeaderUploader[:profile_header]
 
-  has_many :identities, as: :loginable, dependent: :destroy
   has_many :projects, -> { order(updated_at: :desc) }, dependent: :destroy
   has_many :jobs, dependent: :destroy
   has_many :applicants, dependent: :destroy
@@ -77,6 +79,7 @@ class Company < ApplicationRecord
       tsearch: { prefix: true }
     }
     
+    attr_accessor :user_type
     # We want to populate both name and contact_name on sign up
     before_validation :set_contact_name, on: :create
     def set_contact_name

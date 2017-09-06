@@ -1,0 +1,17 @@
+.full-height
+  | 
+.register__form
+  .register__title
+    | Resend unlock instructions
+
+  = simple_form_for(resource, as: resource_name, url: unlock_path(resource_name), html: { method: :post }) do |f| 
+    = f.error_notification 
+    = f.full_error :unlock_token 
+
+    .form-inputs
+      = f.input :email, as: :string, required: true, autofocus: true 
+
+    .form-actions
+      = f.button :submit, "Resend unlock instructions" 
+
+  = render "devise/shared/links" 

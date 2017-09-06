@@ -1,0 +1,56 @@
+.full-height
+  | 
+.register__form
+  .register__title
+    | Register with AV Junction
+
+  = simple_form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f|
+    = f.error_notification
+    .form-inputs
+      .register__label
+        | Full Name
+      = f.input :name, as: :string, label: false, required: true, autofocus: true, placeholder: (resource.class.name.downcase == "freelancer" ? "Enter your full name" : "Enter your company name")
+      .register__label
+        | Email Address
+      = f.input :email, as: :string, label: false, required: true, autofocus: true, placeholder: "Enter your email address"
+      - if resource.class.name == "Company"
+        .register__label
+          | Contact Name
+        = f.input :contact_name, as: :string, label: false, required: true, autofocus: true, placeholder: "Enter your full name"
+
+      .register__account-selector
+        .register__label
+          | Choose the account type you'd like to register
+        span
+          - if resource.class.name.downcase == "freelancer"
+            = radio_button_tag :user_type, "freelancer", selected: true
+          - else 
+            = radio_button_tag :user_type, "freelancer"
+          = label :user_type, "freelancer"
+        span
+          - if resource.class.name.downcase == "company"
+            = radio_button_tag :user_type, "company", selected: true
+          - else
+            = radio_button_tag :user_type, "company"
+          = label :user_type, "company"
+
+      .register__label
+        | Enter a Password
+      = f.input :password, required: true, label: false, placeholder: "Enter a password"
+      .register__label
+        | Confirm Your password
+      = f.input :password_confirmation, label: false, required: true, placeholder: "Confirm your password"
+
+    .form-actions
+      = f.button :submit, "Register", class: "btn-primary"
+
+  = render "devise/shared/links"
+
+javascript:
+  $("#user_type_freelancer").on('click', function() {
+    window.location = "/freelancer/sign_up";
+  })
+
+  $("#user_type_company").on('click', function() {
+    window.location = "/company/sign_up";
+  })

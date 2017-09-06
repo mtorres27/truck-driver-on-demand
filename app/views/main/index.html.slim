@@ -4,12 +4,6 @@ p= link_to "Freelancer", freelancer_root_path
 p= link_to "Company", company_root_path
 p= link_to "Admin", admin_root_path
 
-h2 Temporary Links During Development
-p= link_to "Login As Paul's AV Company", login_as_session_path(section: "company", id: Company.find_by(email: "pweather24@gmail.com"))
-p= link_to "Login As Company", login_as_session_path(section: "company", id: Company.order(:name).first)
-p= link_to "Login As Freelancer", login_as_session_path(section: "freelancer", id: Freelancer.order(:name).first)
-p= link_to "Login As Admin", login_as_session_path(section: "admin", id: Admin.order(:name).first)
-
 h2 Color Palette
 p
   a href="http://getbootstrap.com/customize/" target="_blank"

@@ -27,15 +27,17 @@
 #
 
 class Freelancer < ApplicationRecord
+  # Include default devise modules. Others available are:
+  # :confirmable, :lockable, :timeoutable and :omniauthable
+  devise :database_authenticatable, :registerable,
+         :recoverable, :rememberable, :trackable, :validatable
   include PgSearch
-  include Loginable
   include Geocodable
   include Disableable
   include AvatarUploader[:avatar]
   include ProfileHeaderUploader[:profile_header]
   include EasyPostgis
 
-  has_many :identities, as: :loginable, dependent: :destroy
   has_many :applicants, -> { order(updated_at: :desc) }, dependent: :destroy
   has_many :jobs, through: :applicants
   has_many :messages, -> { order(created_at: :desc) }, as: :authorable, dependent: :destroy
@@ -58,6 +60,8 @@ class Freelancer < ApplicationRecord
   }, using: {
     tsearch: { prefix: true, any_word: true }
   }
+
+  attr_accessor :user_type
 
   def rating
     if freelancer_reviews.count > 0

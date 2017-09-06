@@ -23,17 +23,15 @@ gem "coderay", "~> 1.1.1"
 gem "redcarpet", "~> 3.4.0"
 gem 'easy_postgis'
 
+gem 'devise'
+
+
 # See https://github.com/rails/execjs#readme for more supported runtimes
 # gem "therubyracer", platforms: :ruby
 
 gem "jbuilder", "~> 2.5"
 gem "wicked_pdf", "~> 1.1.0"
 gem "wkhtmltopdf-binary", "~> 0.12.3.1"
-
-gem "omniauth", "~> 1.6.1"
-gem "omniauth-facebook", "~> 4.0.0"
-gem "omniauth-google-oauth2", "~> 0.4.1"
-gem "omniauth-linkedin-oauth2", "~> 0.2.5", git: "https://github.com/decioferreira/omniauth-linkedin-oauth2.git"
 
 gem "activejob-perform_later", "~> 1.0.2"
 

@@ -23,25 +23,5 @@ module Avjunction
 
     config.sass.preferred_syntax = :sass
 
-    # Authication providers
-    config.middleware.use OmniAuth::Builder do
-      provider(
-        :google_oauth2,
-        Rails.application.secrets.auth_google_client_id,
-        Rails.application.secrets.auth_google_secret
-      )
-
-      provider(
-        :facebook,
-        Rails.application.secrets.auth_facebook_client_id,
-        Rails.application.secrets.auth_facebook_secret
-      )
-
-      provider(
-        :linkedin,
-        Rails.application.secrets.auth_linkedin_client_id,
-        Rails.application.secrets.auth_linkedin_secret
-      )
-    end
   end
 end
