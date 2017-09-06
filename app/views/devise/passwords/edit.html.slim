@@ -1,0 +1,20 @@
+.full-height
+  | 
+.login__form
+  .login__title
+    | Change your Password
+
+  = simple_form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :put }) do |f| 
+    = f.error_notification 
+    
+    = f.input :reset_password_token, as: :hidden 
+    = f.full_error :reset_password_token 
+
+    .form-inputs
+      = f.input :password, label: false, required: true, autofocus: true, placeholder: "Enter your New Password"
+      = f.input :password_confirmation, label: false, required: true, placeholder: "Confirm your New Password"
+
+    .form-actions
+      = f.button :submit, "Change my password", class: "btn-primary"
+    
+  = render "devise/shared/links" 

@@ -1,0 +1,49 @@
+.full-height
+  | 
+.login__form
+  .login__title
+    | Login to AV Junction
+  = simple_form_for(resource, as: resource_name, url: session_path(resource_name)) do |f|
+    = f.error_notification
+    .form-inputs
+      = f.input :email, as: :string, label: false, required: true, autofocus: true, placeholder: "Enter your Email Address"
+      = f.input :password, required: true, label: false, placeholder: "Enter your Password"
+      .login__account-selector
+        .login__label
+          | Choose the account type you'd like to register
+        span
+          - if resource.class.name.downcase == "freelancer"
+            = radio_button_tag :user_type, "freelancer", selected: true
+          - else 
+            = radio_button_tag :user_type, "freelancer"
+          = label :user_type, "freelancer"
+        span
+          - if resource.class.name.downcase == "company"
+            = radio_button_tag :user_type, "company", selected: true
+          - else
+            = radio_button_tag :user_type, "company"
+          = label :user_type, "company"
+      
+      .login__checkbox
+        = f.input :remember_me, as: :boolean if devise_mapping.rememberable?
+
+    .form-actions.login__buttons
+      .login__buttons-left
+        = f.button :submit, "Login", class:"btn-primary"
+
+      .login__buttons-right
+        - if devise_mapping.recoverable? && controller_name != 'passwords' && controller_name != 'registrations'
+          a.btn.btn-tertiary href=new_password_path(resource_name)
+            | Forgot your password?
+          br
+
+  = render "devise/shared/links"
+
+javascript:
+  $("#user_type_freelancer").on('click', function() {
+    window.location = "/freelancer/sign_in";
+  })
+
+  $("#user_type_company").on('click', function() {
+    window.location = "/company/sign_in";
+  })
