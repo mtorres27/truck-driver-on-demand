@@ -10,7 +10,7 @@
       = f.input :password, required: true, label: false, placeholder: "Enter your Password"
       .login__account-selector
         .login__label
-          | Choose the account type you'd like to register
+          | Choose your account type:
         span
           - if resource.class.name.downcase == "freelancer"
             = radio_button_tag :user_type, "freelancer", selected: true

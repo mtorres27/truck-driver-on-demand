@@ -20,7 +20,7 @@
 
       .register__account-selector
         .register__label
-          | Choose the account type you'd like to register
+          | Choose the account type you'd like to register:
         span
           - if resource.class.name.downcase == "freelancer"
             = radio_button_tag :user_type, "freelancer", selected: true
