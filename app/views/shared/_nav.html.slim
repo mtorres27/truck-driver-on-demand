@@ -19,7 +19,7 @@ nav#top-nav.navbar.navbar-fixed-top
             li( class=("active" if request.path == company_freelancers_path + "/hired" || request.path == company_freelancers_path + "/favourites") )
               = link_to "My Techs", hired_company_freelancers_path
             li( class=("active" if request.path.include?(company_payments_path)) )
-            = link_to "Payments", company_payments_path
+              = link_to "Payments", company_payments_path
             li.dropdown
               a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"
                 .dropdown-avatar
