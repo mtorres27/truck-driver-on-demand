@@ -14,7 +14,7 @@ en:
       defaults:
         starts_on: "Est. Start"
       project:
-        external_project_id: "Projrailect Number"
+        external_project_id: "Project Number"
       company:
         avatar: "Logo"
       job:
