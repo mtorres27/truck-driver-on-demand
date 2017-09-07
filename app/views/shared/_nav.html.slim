@@ -31,7 +31,7 @@ nav#top-nav.navbar.navbar-fixed-top
                 li.divider role="separator"
                 li.dropdown-header= current_company.name
                 li
-                  = link_to "Logout", destroy_user_session_path, method: :delete
+                  = link_to "Logout", destroy_company_session_path, method: :delete
 
           - elsif request.path.index(/^freelancer/)
             li( class=("active" if request.path == freelancer_root_path) )
@@ -49,7 +49,7 @@ nav#top-nav.navbar.navbar-fixed-top
                 li.divider role="separator"
                 li.dropdown-header= current_freelancer.name
                 li
-                  = link_to "Logout", destroy_user_session_path, method: :delete
+                  = link_to "Logout", destroy_company_session_path, method: :delete
 
           - elsif request.path.index(/^\/admin/)
             li( class=("active" if request.path == admin_root_path) )

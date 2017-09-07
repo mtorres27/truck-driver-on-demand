@@ -1,10 +1,12 @@
 Rails.application.routes.draw do
-  devise_for :company
-  devise_for :freelancer
+  devise_for :companies, path: 'company', path_names: { sign_in: "login", sign_up: "register" }
+  devise_for :freelancers, path: 'freelancer', path_names: { sign_in: "login", sign_up: "register" }
   devise_for :admins
-  devise_for :users
+
+
   root "main#index"
 
+  get "company/login", to: "devise/session#new"
   get "privacy-policy", to: "pages#show", id: "privacy-policy"
   get "terms-of-service", to: "pages#show", id: "terms-of-service"
 
