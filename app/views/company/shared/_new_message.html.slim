@@ -11,7 +11,7 @@
         = f.hidden_field :override, value: ""
         
     .new-message__input
-      = f.input :body, as: :string, placeholder: "Send a message to #{n}", label: false
+      = f.input :body, as: :string, placeholder: "Send a message to #{n.split(" ").first}", label: false
       .new-message__attachment-button onclick="triggerFileUpload()"
         .span class="fa fa-paperclip"
       

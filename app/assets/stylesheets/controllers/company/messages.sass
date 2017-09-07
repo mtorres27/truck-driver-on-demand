@@ -1,8 +1,6 @@
 .company-messages
   .post
-    padding-bottom: 20px
     margin-bottom: 20px
-    border-bottom: 1px solid $gray-lighter
 
   .messages-and-activity
     height: 472px
@@ -14,9 +12,9 @@
       position: relative
 
   .message
-    padding-bottom: 27px
-    margin-bottom: 27px
-    border-bottom: 1px solid $gray-ccc
+    // padding-bottom: 27px
+    // margin-bottom: 27px
+    // border-bottom: 1px solid $gray-ccc
 
   .attachment-image
     max-width: 200px
@@ -72,6 +70,26 @@
     .media
       margin-bottom: 30px
 
+
+.new-message__item
+  padding-bottom: 25px
+  margin-bottom: 25px
+  border-bottom: 1px solid $gray-ccc
+
+  &:last-of-type
+    border-bottom: none
+
+.new-message__image
+  margin-top: 8px
+
+.new-message__checkin
+  color: $brand-primary
+  margin-right: 5px
+
+.messages-and-activity
+  .authorable_body
+    font-size: 18px !important
+    margin-top: 6px
 
 .new-message--wrapper
   width: 100%
