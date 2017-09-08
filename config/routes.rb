@@ -29,6 +29,8 @@ Rails.application.routes.draw do
     resources :payments
     resources :projects
 
+    resources :notifications
+
     resources :jobs, except: [:index] do
       resources :applicants do
         get :request_quote, on: :member

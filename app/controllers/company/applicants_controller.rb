@@ -21,6 +21,10 @@ class Company::ApplicantsController < Company::BaseController
           @current_applicant_id = nil
         else
           @current_applicant_id = @applicant.id
+          @applicant.messages.each do |m|
+            m.unread = false
+            m.save
+          end
         end
       else
         @applicant = nil

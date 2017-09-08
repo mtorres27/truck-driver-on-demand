@@ -1,0 +1,25 @@
+- content_for :secondary do
+  .result-wrapper
+    .result-header
+      .result-header__text
+        | Notifications
+    .result-content
+      - @messages.each do |message|
+        div
+          - if message.receivable_type.downcase == "applicant"
+            div.applicant
+              - if message.unread
+                | *
+              = "APPLICANT: "
+              = "#{message.authorable.name} left a message "
+
+              a href=company_job_applicant_quotes_path({applicant_id: message.receivable.id, job_id: message.receivable.job}) 
+                = sanitize(truncate(message.body, length: 30))
+          - elsif message.receivable_type.downcase == "job"
+            div.job
+              - if message.unread
+                | *
+              = "JOB: "
+              = "#{message.authorable.name} left a message "
+              a href=company_job_messages_path(message.receivable) 
+                = sanitize(truncate(message.body, length: 30))
