@@ -45,6 +45,12 @@ class Freelancer < ApplicationRecord
   has_many :freelancer_reviews, dependent: :nullify
   has_many :certifications
 
+  has_many :job_favourites
+  has_many :favourite_jobs, through: :job_favourites, source: :job
+
+  has_many :company_favourites
+  has_many :favourite_companies, through: :company_favourites, source: :company
+
   validates :years_of_experience, numericality: { only_integer: true }
 
   audited

@@ -355,6 +355,38 @@ ALTER SEQUENCE companies_id_seq OWNED BY companies.id;
 
 
 --
+-- Name: company_favourites; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE company_favourites (
+    id bigint NOT NULL,
+    freelancer_id integer,
+    company_id integer,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: company_favourites_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE company_favourites_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: company_favourites_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE company_favourites_id_seq OWNED BY company_favourites.id;
+
+
+--
 -- Name: company_installs; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -627,6 +659,38 @@ CREATE SEQUENCE identities_id_seq
 --
 
 ALTER SEQUENCE identities_id_seq OWNED BY identities.id;
+
+
+--
+-- Name: job_favourites; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE job_favourites (
+    id bigint NOT NULL,
+    freelancer_id integer,
+    job_id integer,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: job_favourites_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE job_favourites_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: job_favourites_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE job_favourites_id_seq OWNED BY job_favourites.id;
 
 
 --
@@ -979,6 +1043,13 @@ ALTER TABLE ONLY companies ALTER COLUMN id SET DEFAULT nextval('companies_id_seq
 
 
 --
+-- Name: company_favourites id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY company_favourites ALTER COLUMN id SET DEFAULT nextval('company_favourites_id_seq'::regclass);
+
+
+--
 -- Name: company_installs id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -1025,6 +1096,13 @@ ALTER TABLE ONLY freelancers ALTER COLUMN id SET DEFAULT nextval('freelancers_id
 --
 
 ALTER TABLE ONLY identities ALTER COLUMN id SET DEFAULT nextval('identities_id_seq'::regclass);
+
+
+--
+-- Name: job_favourites id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY job_favourites ALTER COLUMN id SET DEFAULT nextval('job_favourites_id_seq'::regclass);
 
 
 --
@@ -1141,6 +1219,14 @@ ALTER TABLE ONLY companies
 
 
 --
+-- Name: company_favourites company_favourites_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY company_favourites
+    ADD CONSTRAINT company_favourites_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: company_installs company_installs_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -1194,6 +1280,14 @@ ALTER TABLE ONLY freelancers
 
 ALTER TABLE ONLY identities
     ADD CONSTRAINT identities_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: job_favourites job_favourites_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY job_favourites
+    ADD CONSTRAINT job_favourites_pkey PRIMARY KEY (id);
 
 
 --
@@ -1853,6 +1947,8 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20170905135835'),
 ('20170905135846'),
 ('20170905135938'),
-('20170908180901');
+('20170908180901'),
+('20170911175055'),
+('20170911175108');
 
 

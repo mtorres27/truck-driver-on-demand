@@ -19,9 +19,6 @@
     a href="/freelancer/companies/#{company.id}"
       h4.media-heading
         = company.name
-        | &nbsp;
-        - if is_verified(company)
-          .span class="freelancer__verified fa fa-check-circle"
         
       - if params.dig(:search, :address) == nil
         p= "#{company.area}"
@@ -29,8 +26,6 @@
         p= "#{company.area}"
       - else
         p= "#{company.area}, #{distance_from(company)} miles away"
-    p.media-tagline
-      = company.tagline
     .freelancer-keywords
       - if !company.keywords.nil?
         - company.keywords.split(", ").map(&:lstrip)[0..3].each do |keyword|

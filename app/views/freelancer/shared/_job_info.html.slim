@@ -3,7 +3,8 @@
     = "#{time_ago_in_words(job.created_at)}"
   
   .search-result__job-title
-    = job.title
+    a href=freelancer_job_path(job)
+      = job.title
 
   .search-result__company
     a.search-result__company-name href=freelancer_company_path(job.company)

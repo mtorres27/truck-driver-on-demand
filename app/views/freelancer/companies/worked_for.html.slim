@@ -2,9 +2,9 @@ h1 My Companies
 br
 
 .tab-bar
-  a.tab-bar__item href="/company/freelancers/hired" class=("tab-bar__item--active" if request.path == "/freelancer/companies/worked_for")
-    | Worked For
-  a.tab-bar__item href="/company/freelancers/favourites" class=("tab-bar__item--active" if request.path == "/freelancer/companies/favourites")
+  a.tab-bar__item href="/freelancers/company/hired" class=("tab-bar__item--active" if request.path == "/freelancer/companies/worked_for")
+    | My integrators
+  a.tab-bar__item href="/freelancers/company/favourites" class=("tab-bar__item--active" if request.path == "/freelancer/companies/favourites")
     | Favourites
 - content_for :secondary do
   .result-wrapper
@@ -19,7 +19,7 @@ br
 
     .result-freelancers
       - @companies.each do |company|
-        a.result-row href=company_freelancer_path(freelancer)
-          = render partial: "company/shared/company_info", locals: { company: company }
+        a.result-row href=company_freelancer_path(company)
+          = render partial: "freelancer/shared/company_info", locals: { company: company }
 
       = paginate @companies

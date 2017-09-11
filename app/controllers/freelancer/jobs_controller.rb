@@ -1,5 +1,5 @@
 class Freelancer::JobsController < Freelancer::BaseController
-  include CompanyHelper
+  include JobHelper
 
   def index
     @keywords = params.dig(:search, :keywords).presence
@@ -66,18 +66,21 @@ class Freelancer::JobsController < Freelancer::BaseController
   def show
     @job = Job.find(params[:id])
 
-    @favourite = current_freelancer.favourite_jobs.where({job_id: params[:id]}).length > 0 ? true : false
+    @favourite = current_freelancer.job_favourites.where({job_id: params[:id]}).length > 0 ? true : false
     if params.dig(:toggle_favourite) == "true"
       if @favourite == false
         current_freelancer.favourite_jobs << @job
         @favourite = true
       else
-        current_freelancer.favourites_jobs.where({job_id: @job.id}).destroy_all
+        current_freelancer.job_favourites.where({job_id: @job.id}).destroy_all
         @favourite = false
       end
     end
+  end
 
-    
+
+  def my_job
+
   end
 
 

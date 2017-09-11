@@ -18,11 +18,13 @@ Rails.application.routes.draw do
       get :worked_for, on: :collection
       get :favourites, on: :collection
       post :add_favourites, on: :collection
+      get :my_integrators, on: :collection
     end
 
     resources :jobs, only: [:index, :show] do
       get :favourites, on: :collection
       post :add_favourites, on: :collection
+      get :my_jobs, on: :collection
     end
 
     resources :notifications
