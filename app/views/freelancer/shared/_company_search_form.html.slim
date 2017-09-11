@@ -1,0 +1,7 @@
+.row.freelancer-search
+  = simple_form_for :search, url: freelancer_jobs_path, method: :get, html: { id: "company_search_form" } do |f|
+    input type="hidden" value="#{params.dig(:search, :sort)}" id="sort" name="search[sort]"
+    input type="hidden" value="#{params.dig(:search, :distance)}" id="distance" name="search[distance]"
+    .col-xs-12.col-sm-6= f.input :keywords, label: false, placeholder: "Search by job function, skills etc", input_html: { value: @keywords }
+    .col-xs-8.col-sm-4= f.input :address, label: false, placeholder: "Enter Location", input_html: { value: @address }
+    .col-xs-4.col-sm-2.text-right= f.submit "Search for jobs", class: "btn btn-primary"

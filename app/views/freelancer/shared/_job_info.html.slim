@@ -1,0 +1,15 @@
+.search-result__job
+  .search-result__job-created
+    = "#{time_ago_in_words(job.created_at)}"
+  
+  .search-result__job-title
+    = job.title
+
+  .search-result__company
+    a.search-result__company-name href=freelancer_company_path(job.company)
+      = job.company.name
+    
+    .search-result__company-ratinmg
+      - @stars = company_avg_rating(job.company)
+      - @stars.each do |star|
+        .span class=star

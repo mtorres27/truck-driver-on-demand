@@ -94,6 +94,13 @@ class Company < ApplicationRecord
       end
     end
     
+    def self.avg_rating(company)
+      if company.company_reviews_count == 0
+        return nil
+      end
+  
+      return company.rating
+    end
 
     after_save :check_if_should_do_geocode
     def check_if_should_do_geocode

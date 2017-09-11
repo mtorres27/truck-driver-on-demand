@@ -20,11 +20,12 @@ nav#top-nav.navbar.navbar-fixed-top
               = link_to "My Techs", hired_company_freelancers_path
             li( class=("active" if request.path.include?(company_payments_path)) )
               = link_to "Payments", company_payments_path
-            li( class=("active" if request.path.include?(company_notifications_path)) )
-              a href=company_notifications_path
-                | Notifications
-                - if current_company.messages.where(unread: true).count > 0
-                  span class="new-message__bell fa fa-bell"
+            if 1 == 2
+              li( class=("active" if request.path.include?(company_notifications_path)) )
+                a href=company_notifications_path
+                  | Notifications
+                  - if current_company.messages.where(unread: true).count > 0
+                    span class="new-message__bell fa fa-bell"
             
             li.dropdown
               a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"

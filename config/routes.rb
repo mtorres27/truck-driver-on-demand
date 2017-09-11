@@ -11,9 +11,33 @@ Rails.application.routes.draw do
   get "terms-of-service", to: "pages#show", id: "terms-of-service"
 
   namespace :freelancer do
-    root "freelancers#show"
-
+    root "main#index"
     resource :freelancer, only: [:show, :edit, :update]
+
+    resources :companies, only: [:index, :show] do
+      get :worked_for, on: :collection
+      get :favourites, on: :collection
+      post :add_favourites, on: :collection
+    end
+
+    resources :jobs, only: [:index, :show] do
+      get :favourites, on: :collection
+      post :add_favourites, on: :collection
+    end
+
+    resources :notifications
+
+    # resources :jobs, except: [:index] do
+    #   resource :contract, only: [:show]
+    #   resources :messages, only: [:index, :create]
+    #   resources :payments, controller: "job_payments", only: [:index, :show] do
+    #     get :print, on: :member
+    #     get :request_payment, on: :member
+    #   end
+    #   resource :review, only: [:show, :create]
+    # end
+
+
   end
 
   namespace :company do

@@ -1,0 +1,156 @@
+.profile__wrapper
+  .profile__wrapper-bg style="background-image: url(#{@job.company.profile_header_url.include?("missing") ? "/assets/" : ""}#{@job.company.profile_header_url})"
+
+  .profile__content
+    .profile__block
+      .profile__block__name
+        = @job.name
+
+
+      a.profile__block__invite-to-quote href="#{params[:id]}?submit_quote=true"
+        | Apply for this job
+
+      a.profile__block__favourite href="#{params[:id]}?toggle_favourite=true"
+        - if @favourite
+          .span class="fa fa-heart"
+        - else
+          .span class="fa fa-heart-o"    
+      
+
+    .profile__meta
+      .profile__meta-left
+      .profile__meta-center
+        .profile__meta-center__name
+          = @job.title
+        
+        .profile__meta-center__company
+          a href=freelancer_company_path(@job.company)
+            = @job.company.name
+          - @stars = company_avg_rating(@job.company)
+            - @stars.each do |star|
+              .span class=star
+        .profile__meta-center__description
+          = @job.summary
+
+        .profile__meta-center__keywords
+          - if !@job.keywords.nil?
+            - @job.keywords.split(", ").map(&:lstrip)[0..1].each do |keyword|
+              .profile__meta-center__keyword
+                = keyword
+
+
+    .profile__bona-fides
+      .profile__bona-fides__data--freelancer
+        .profile__bona-fides__data__years-of-experience
+          .profile__bona-fides__data__years-of-experience-value
+            = @job.job_function
+          .profile__bona-fides__data__years-of-experience-label
+            | Job Function
+        
+        .profile__bona-fides__data__years-of-experience
+          .profile__bona-fides__data__years-of-experience-value
+            = @job.starts_on
+          .profile__bona-fides__data__years-of-experience-label
+            | Est. Start
+        
+        .profile__bona-fides__data__years-of-experience
+          .profile__bona-fides__data__years-of-experience-value
+            = @job.duration
+          .profile__bona-fides__data__years-of-experience-label
+            | Duration
+        
+        
+
+      .profile__meta-right
+        .profile__meta-right__pay-pref
+          .profile__meta-right__pay-pref-value
+            - if !@job.pay_type.nil?
+              = @job.pay_type
+            - else
+              | N/A
+          .profile__meta-right__pay-pref-label
+            | Preferred Pay Type
+        .profile__meta-right__pay-unit
+          .profile__meta-right__pay-unit-value
+            - if !@job.freelancer_type.nil?
+              = @job.freelancer_type
+            - else
+              | N/A
+          .profile__meta-right__pay-unit-label
+            | Freelancer Type
+
+
+    .profile__abilities
+      .profile__abilities__bio
+        .profile__abilities__bio-label
+          | bio
+        .profile__abilities__bio-value
+          - if @job.bio.nil?
+            | This freelancer has not yet added a bio.
+          - else
+            = @job.bio  
+      .profile__abilities__specialties   
+        .profile__abilities__specialties-label
+          | specialties
+        .profile__abilities__specialties__markets
+          .profile__abilities__specialties__markets-label
+            | markets
+          .profile__abilities__specialties__markets-value
+            - if !@job.keywords.nil?
+              - @job.keywords.split(", ").map(&:lstrip).each do |keyword|
+                .profile__abilities__specialties__market
+                  = keyword
+            - else
+              | This freelancer has no markets listed.
+        .profile__abilities__specialties__skills
+          .profile__abilities__specialties__skills-label
+            | skills
+          .profile__abilities__specialties__skills-value
+            - if !@job.skills.nil?
+              - @job.skills.split(", ").map(&:lstrip).each do |skill|
+                .profile__abilities__specialties__skill
+                  = skill
+            - else
+              | This freelancer has no skills listed.
+        
+
+    .profile__certifications
+      .profile__certifications-label
+        | certifications
+      .profile__certifications-value
+        - if @job.certifications.count == 0
+          | This freelancer has not yet added any certifications.
+        - @job.certifications.each do |certification|
+          .profile__certifications__certificate
+            - url = certification.certificate_url
+            - if certification.certificate_url == "certification/missing.pdf"
+              - url = "/assets/certification/certification.certificate_url"
+              a href=url target="_blank"
+                - if certification.thumbnail.nil?
+                  img src="/assets/certification/missing_thumbnail.png"
+                - else 
+                  img src=certification.thumbnail
+            - else
+              - url = certification.certificate_url
+              a href=url target="_blank"
+                - if certification.thumbnail.nil?
+                  img src="/assets/certification/missing_thumbnail.png"
+                - else 
+                  img src=certification.thumbnail
+            .profile__certifications__certification-name
+              = certification.name
+
+    .profile__reviews
+      a name="reviews"
+        .profile__reviews-label
+          | reviews
+      .profile__reviews-value
+        - if @job.freelancer_reviews_count > 0
+          .profile__reviews__review
+          - @job.freelancer_reviews.each do |review|
+            .profile__reviews__review-text
+              = review.comments
+            .profile__reviews__review-name
+              = "#{review.company.contact_name}, #{review.company.name}"
+        - else
+          | This freelancer doesn't have any reviews.

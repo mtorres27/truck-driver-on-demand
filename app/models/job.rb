@@ -38,6 +38,8 @@
 class Job < ApplicationRecord
   extend Enumerize
   include Geocodable
+  include PgSearch
+  include EasyPostgis
   
   belongs_to :company
   belongs_to :project
@@ -69,6 +71,15 @@ class Job < ApplicationRecord
     :weekend,
     :any_time
   ]
+
+  pg_search_scope :search, against: {
+    title: "A",
+    keywords: "B",
+    summary: "C",
+    scope_of_work: "C"
+  }, using: {
+    tsearch: { prefix: true, any_word: true }
+  }
 
   enumerize :pay_type, in: [ :fixed, :hourly ]
 
