@@ -1,9 +1,5 @@
-class Freelancer::MainController < Company::BaseController
-  
-    def index
-    end
-
-    
-  
+class Freelancer::MainController < Freelancer::BaseController
+  def index
   end
+end
   
