@@ -7,7 +7,7 @@ class ApplicationController < ActionController::Base
 
   before_action do
     if Rails.env.development?
-      Rack::MiniProfiler.authorize_request
+      # Rack::MiniProfiler.authorize_request
     end
   end
 

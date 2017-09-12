@@ -79,8 +79,14 @@ class Freelancer::JobsController < Freelancer::BaseController
   end
 
 
-  def my_job
+  def my_jobs
+    @jobs = current_freelancer.jobs
 
+  end
+
+  
+  def my_applications
+    @jobs = current_freelancer.applicants
   end
 
 

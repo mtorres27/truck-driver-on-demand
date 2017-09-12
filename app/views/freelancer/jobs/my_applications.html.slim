@@ -4,7 +4,7 @@
     .result-freelancers
       - if @jobs.count == 0
         .result-content
-          | You haven't yet done any work for any integrators yet.
+          | You haven't applied to any jobs yet.
       - @jobs.each do |job|
         a.result-row href=job_freelancer_path(job)
           = render partial: "/freelancer/shared/job_info", locals: { job: job }

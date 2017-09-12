@@ -51,29 +51,32 @@ class Freelancer::CompaniesController < Freelancer::BaseController
   end
 
 
-  def worked_for
-    @locations = current_freelancer.companies.uniq.pluck(:area)
-    @companies = current_freelancer.companies
-
-    if params[:location] && params[:location] != ""
-      @companies = @companies.where({ area: params[:location] })
-    end
-    
-    @companies = @companies.page(params[:page]).
-      per(50)
-  end
-
-
   def favourites
     @locations = current_freelancer.favourite_companies.uniq.pluck(:area)
     @companies = current_freelancer.favourite_companies
 
+    @locations = []
+    @companies = []
+
+    current_freelancer.jobs.each do |job|
+      @locations << job.company.area
+      @companies << job.company
+    end
+
+    current_freelancer.favourite_jobs.each do |job|
+      @locations << job.company.area
+      @companies << job.company
+    end
+
+    @locations = @locations.uniq
+    @companies = @companies.uniq
+
     if params[:location] && params[:location] != ""
       @companies = @companies.where({ area: params[:location] })
     end
 
-    @companies = @companies.page(params[:page]).
-      per(50)
+    # @companies = @companies.page(params[:page]).
+    #   per(50)
   end
 
 
@@ -101,15 +104,19 @@ class Freelancer::CompaniesController < Freelancer::BaseController
     @locations = []
     @companies = []
 
-    current_freelancer.jobs.each do |job|
-      @locations << job.company
-      @companies << job.company
+    if params[:location] && params[:location] != ""
+      current_freelancer.jobs.where({ area: params[:location] }).each do |job|
+        @locations << job.company.area
+        @companies << job.company
+      end
+    else
+
+      current_freelancer.jobs.each do |job|
+        @locations << job.company.area
+        @companies << job.company
+      end
     end
 
-    current_freelancer.favourite_jobs.each do |job|
-      @locations << job.company
-      @companies << job.company
-    end
 
     @locations = @locations.uniq
     @companies = @companies.uniq

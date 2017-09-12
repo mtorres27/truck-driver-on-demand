@@ -1,25 +1,24 @@
 h1 My Companies
 br
 
-.tab-bar
-  a.tab-bar__item href="/company/freelancers/hired" class=("tab-bar__item--active" if request.path == "/freelancer/companies/worked_for")
-    | My integrators
-  a.tab-bar__item href="/company/freelancers/favourites" class=("tab-bar__item--active" if request.path == "/freelancer/companies/favourites")
-    | Favourites
+= render partial: "/freelancer/shared/companies_sub_nav"
 - content_for :secondary do
   .result-wrapper
     .result-header
-      .result-header__distance
-        span class="result-header__distance-text"
-          | filter by location
-        select id="company_favourites_location" class="freelancer-company__distance"
-          option value="" label="All" selected=("selected" if params.dig(:location) == "" || !params.dig(:location).presence)
-          - @locations.each do |location|
-            option value="#{location}" label="#{location}" selected=("selected" if params.dig(:location) == location)
+      - if @companies.count > 0
+        .result-header__distance
+          span class="result-header__distance-text"
+            | filter by location
+          select id="company_favourites_location" class="freelancer-company__distance"
+            option value="" label="All" selected=("selected" if params.dig(:location) == "" || !params.dig(:location).presence)
+            - @locations.each do |location|
+              option value="#{location}" label="#{location}" selected=("selected" if params.dig(:location) == location)
 
     .result-freelancers
+      - if @companies.count == 0
+        .result-content
+          | You don't yet have any favourite integrators.
       - @companies.each do |company|
         a.result-row href=company_freelancer_path(company)
-          = render partial: "freelancer/shared/company_info", locals: { company: company }
+          = render partial: "/freelancer/shared/company_info", locals: { company: company }
 
-      = paginate @companies

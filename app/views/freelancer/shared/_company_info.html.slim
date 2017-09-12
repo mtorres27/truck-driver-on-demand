@@ -1,10 +1,7 @@
 .media
   .media-left
     a href="/freelancer/companies/#{company.id}"
-      - if company.avatar_url.include?("missing.png")
-        = image_tag("http://graph.facebook.com/v2.5/111#{freelancer.id}/picture?height=75&height=75", size: "75x75")
-      - else
-        = image_tag(company.avatar_url, size: "75x75")
+      = image_tag(company.avatar_url, size: "75x75")
     .reviews
       - @stars = company_avg_rating(company)
       - @stars.each do |star|

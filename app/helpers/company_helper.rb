@@ -58,7 +58,7 @@ module CompanyHelper
 
 
   def is_showing_company(path)
-    if request.path.include?(freelancer_companies_path) && !request.path.include?("worked_for") && !request.path.include?("favourites")
+    if request.path.include?(freelancer_companies_path) && !request.path.include?("my_integrators") && !request.path.include?("favourites")
       true
     else
       false

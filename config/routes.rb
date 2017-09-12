@@ -15,7 +15,6 @@ Rails.application.routes.draw do
     resource :freelancer, only: [:show, :edit, :update]
 
     resources :companies, only: [:index, :show] do
-      get :worked_for, on: :collection
       get :favourites, on: :collection
       post :add_favourites, on: :collection
       get :my_integrators, on: :collection
@@ -25,6 +24,7 @@ Rails.application.routes.draw do
       get :favourites, on: :collection
       post :add_favourites, on: :collection
       get :my_jobs, on: :collection
+      get :my_applications, on: :collection
     end
 
     resources :notifications

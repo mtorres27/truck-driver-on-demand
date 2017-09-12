@@ -1,0 +1,58 @@
+.mobile-nav
+  .mobile-nav__header
+    .mobile-nav__header__toggle
+      .mobile-nav__header__toggle--on
+        span class="fa fa-align-justify"
+      .mobile-nav__header__toggle--off
+        span class="fa fa-close"
+
+    .mobile-nav__header__title
+      = image_tag "avjunction-logo_header.svg"
+
+  .mobile-nav__blocker
+    |  
+  .mobile-nav__menu
+    - if current_freelancer.nil? and current_company.nil?
+      a.mobile-nav__menu__item href=new_freelancer_session_path
+        | Login 
+      a.mobile-nav__menu__item href=new_company_registration_path
+        | Register
+    - else
+      a.mobile-nav__menu__item href=freelancer_root_path
+        | search for jobs
+      a.mobile-nav__menu__item href=my_jobs_freelancer_jobs_path
+        | my jobs
+      a.mobile-nav__menu__item href=my_integrators_freelancer_companies_path
+        | integrators
+      a.mobile-nav__menu__item
+        | payments
+      a.mobile-nav__menu__item
+        = image_tag current_freelancer.avatar_url
+        | my profile
+
+
+
+javascript:
+  var hideNav = function() {
+    $(".mobile-nav__header__toggle--off").hide();
+    $(".mobile-nav__header__toggle--on").show();
+    $(".mobile-nav__blocker").removeClass("mobile-nav__blocker--visible");
+    $(".mobile-nav__menu").removeClass("mobile-nav__menu--visible");
+  }
+
+  $(".mobile-nav__header__toggle--on").on('click', function() {
+    $(".mobile-nav__header__toggle--off").show();
+    $(".mobile-nav__header__toggle--on").hide();
+    $(".mobile-nav__blocker").addClass("mobile-nav__blocker--visible");
+    $(".mobile-nav__blocker").height($(window).height());
+    $(".mobile-nav__menu").addClass("mobile-nav__menu--visible");
+  });
+
+  $(".mobile-nav__header__toggle--off").on('click', function() {
+    hideNav();
+  });
+
+  $("mobile-nav__blocker").on('click', function() {
+    hideNav();
+  })
+
