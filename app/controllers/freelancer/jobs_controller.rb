@@ -86,7 +86,10 @@ class Freelancer::JobsController < Freelancer::BaseController
 
   
   def my_applications
-    @jobs = current_freelancer.applicants
+    @jobs = []
+    current_freelancer.applicants.each do |applicant|
+      @jobs << applicant.job
+    end
   end
 
 
