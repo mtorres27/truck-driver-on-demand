@@ -10,7 +10,7 @@ nav#top-nav.navbar.navbar-fixed-top
         = image_tag("avjunction-logo_header.svg", class: "header-logo", alt: "AV Junction")
     #navbar-lg.collapse.navbar-collapse
       ul.nav.navbar-nav.navbar-right
-        - if request.path.index(/\/company/)
+        - if request.path.index('company') == 1
           - if current_company
             li( class=("active" if request.path == company_root_path || is_showing_freelancer(request.path)) )
               = link_to "Search for Techs", company_root_path
@@ -20,7 +20,7 @@ nav#top-nav.navbar.navbar-fixed-top
               = link_to "My Techs", hired_company_freelancers_path
             li( class=("active" if request.path.include?(company_payments_path)) )
               = link_to "Payments", company_payments_path
-            if 1 == 2
+            - if 1 == 2
               li( class=("active" if request.path.include?(company_notifications_path)) )
                 a href=company_notifications_path
                   | Notifications
@@ -39,26 +39,7 @@ nav#top-nav.navbar.navbar-fixed-top
                 li.dropdown-header= current_company.name
                 li
                   = link_to "Logout", destroy_company_session_path, method: :delete
-
-          - elsif request.path.index(/^freelancer/)
-            li( class=("active" if request.path == freelancer_root_path) )
-              = link_to "Dashboard", freelancer_root_path
-            li.dropdown
-              a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"
-                .dropdown-avatar
-                  = image_tag(current_freelancer.avatar_url, size: "67x67")
-                span.caret
-              ul class="dropdown-menu"
-                li
-                  a href="#" Action
-                li
-                  a href="#" Another action
-                li.divider role="separator"
-                li.dropdown-header= current_freelancer.name
-                li
-                  = link_to "Logout", destroy_company_session_path, method: :delete
-
-          - elsif request.path.index(/^\/admin/)
+          - elsif request.path.index('admin') == 1
             li( class=("active" if request.path == admin_root_path) )
               = link_to "Dashboard", admin_root_path
             li( class=("active" if request.path.index(/^\/admin\/companies/)) )
