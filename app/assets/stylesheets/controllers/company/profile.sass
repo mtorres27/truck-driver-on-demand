@@ -333,10 +333,10 @@
       box-sizing: border-box
       margin: 0px 10px 10px 0px
 
-      @media (max-width: 480px)
+      @media (max-width: $breakpoint-mobile)
         width: 100%
 
-      @media (min-width: 481px) and (max-width: 768px)
+      @media (min-width: $breakpoint-mobile+1) and (max-width: $breakpoint-tablet)
         width: 50%
 
       &__image

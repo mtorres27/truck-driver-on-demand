@@ -1,83 +1,113 @@
-.profile__wrapper
-  .profile__wrapper-bg style="background-image: url(#{@job.company.profile_header_url.include?("missing") ? "/assets/" : ""}#{@job.company.profile_header_url})"
+- content_for :secondary do
+  .freelancer-job__apply
+    a.freelancer-job__apply-for-job href="#" id="apply-for-job"
+      | Apply for this job
 
-  .profile__content
-    .profile__block
-      .profile__block__name
-        = @job.title
+    - if is_favourite(@job)
+      a.freelancer-job__favourite--active href="#{params[:id]}?toggle_favourite=true"
+        .span class="fa fa-heart"
+    - else
+      a.freelancer-job__favourite href="#{params[:id]}?toggle_favourite=true"
+        .span class="fa fa-heart"  
 
+  .freelance-job__header
+    .freelancer-job__top-row
+      .freelancer-job__back
+        a.freelancer-job__back-button href="javascript:history.go(-1)"
+          span class="fa fa-arrow-left"
+      .freelancer-job__top
+        .freelancer-job__top-row
+          .freelancer-job__top-state
+            = job_state_label(@job)
+          .freelancer-job__top-created-at
+            = @job.created_at.strftime('%B %d, %Y')
 
-      a.profile__block__invite-to-quote href="#{params[:id]}?submit_quote=true"
-        | Apply for this job
+        .freelancer-job__top-row
+          .freelancer-job__top-title
+            = @job.title
 
-      a.profile__block__favourite href="#{params[:id]}?toggle_favourite=true"
-        - if is_favourite(@job)
-          .span class="fa fa-heart"
-        - else
-          .span class="fa fa-heart-o"    
+        .freelancer-job__top-row
+          .search-result__company
+            a.search-result__company-name href=freelancer_company_path(@job.company)
+              = @job.company.name
+            
+            .search-result__company-rating
+              - @stars = company_avg_rating(@job.company)
+              - @stars.each do |star|
+                .span class=star
+
+  .freelancer-job__summary
+    = @job.summary
+
+  .freelancer-job__keywords
+    - if !@job.keywords.nil?
+      - @job.keywords.split(", ").map(&:lstrip)[0..1].each do |keyword|
+        .profile__meta-center__keyword
+          = keyword
+
+  .freelancer-job__meta
+    .freelancer-job__meta-row
+      .freelancer-job__meta-item
+        .freelancer-job__meta-item__title
+          | Job Function
+        .freelancer-job__meta-item__value
+          - if @job.job_function.nil? 
+            = "N/A"
+          - else 
+            = t("enumerize.job.job_function.#{@job.job_function}")
       
-
-    .profile__meta
-      .profile__meta-left
-      .profile__meta-center
-        .profile__meta-center__name
-          = @job.title
-        
-        .profile__meta-center__company
-          a href=freelancer_company_path(@job.company)
-            = @job.company.name
-          - @stars = company_avg_rating(@job.company)
-            - @stars.each do |star|
-              .span class=star
-        .profile__meta-center__description
-          = @job.summary
-
-        .profile__meta-center__keywords
-          - if !@job.keywords.nil?
-            - @job.keywords.split(", ").map(&:lstrip)[0..1].each do |keyword|
-              .profile__meta-center__keyword
-                = keyword
-
-
-    .profile__bona-fides
-      .profile__bona-fides__data--freelancer
-        .profile__bona-fides__data__years-of-experience
-          .profile__bona-fides__data__years-of-experience-value
-            = @job.job_function
-          .profile__bona-fides__data__years-of-experience-label
-            | Job Function
-        
-        .profile__bona-fides__data__years-of-experience
-          .profile__bona-fides__data__years-of-experience-value
-            = @job.starts_on
-          .profile__bona-fides__data__years-of-experience-label
-            | Est. Start
-        
-        .profile__bona-fides__data__years-of-experience
-          .profile__bona-fides__data__years-of-experience-value
-            = @job.duration
-          .profile__bona-fides__data__years-of-experience-label
-            | Duration
-        
-        
-
-      .profile__meta-right
-        .profile__meta-right__pay-pref
-          .profile__meta-right__pay-pref-value
-            - if !@job.pay_type.nil?
-              = @job.pay_type
-            - else
-              | N/A
-          .profile__meta-right__pay-pref-label
-            | Preferred Pay Type
-        .profile__meta-right__pay-unit
-          .profile__meta-right__pay-unit-value
-            - if !@job.freelancer_type.nil?
-              = @job.freelancer_type
-            - else
-              | N/A
-          .profile__meta-right__pay-unit-label
-            | Freelancer Type
-
-
+      .freelancer-job__meta-item
+        .freelancer-job__meta-item__title
+          | Location
+        .freelancer-job__meta-item__value
+          - if @job.address.nil? 
+            = "N/A"
+          - else
+            = @job.address
     
+    .freelancer-job__meta-row
+      .freelancer-job__meta-item
+        .freelancer-job__meta-item__title
+          | Est. Start
+        .freelancer-job__meta-item__value
+          - if @job.starts_on.nil? 
+            = "N/A"
+          - else
+            = @job.starts_on
+      
+      .freelancer-job__meta-item
+        .freelancer-job__meta-item__title
+          | Duration
+        .freelancer-job__meta-item__value
+          - if  @job.duration.nil?
+            = "N/A" 
+          - else
+            = @job.duration
+
+    .freelancer-job__meta-row
+      .freelancer-job__meta-item
+        .freelancer-job__meta-item__title
+          | Preferred Pay Type
+        .freelancer-job__meta-item__value
+          - if @job.pay_type.nil?
+            = "N/A"
+          - else
+            = @job.pay_type
+
+      .freelancer-job__meta-item
+        .freelancer-job__meta-item__title
+          | Freelance Type
+        .freelancer-job__meta-item__value
+          - if @job.freelancer_type.nil? 
+            = "N/A"
+          - else 
+            = t("enumerize.job.freelancer_type.#{@job.freelancer_type}")
+
+  .freelancer-job__apply-modal
+    | STUFF GOES HERE.
+  
+javascript:
+  $("#apply-for-job").on('click', function(e) {
+    e.preventDefault();
+    $(".freelancer-job__apply-modal").show();
+  });

@@ -1,5 +1,9 @@
-h2.title Search for Jobs
-= render "freelancer/shared/company_search_form"
+.search-header
+  h2.title Search for Jobs
+  = render "freelancer/shared/company_search_form"
 
 h1.hero.text-center
-  | With over #{number_to_human(Job.count)} jobs, something something something.
+  | With over #{number_to_human(Job.count)} jobs available 
+  underline
+    | right now 
+  | on the AV Junction, that next gig is just a search away

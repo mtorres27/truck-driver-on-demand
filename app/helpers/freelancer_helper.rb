@@ -37,6 +37,7 @@ module FreelancerHelper
     f = Freelancer.avg_rating(freelancer)
 
     rating = (f*2.0).round / 2.0
+
     results = []
     5.times do |index|
       if rating >= 1

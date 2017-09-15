@@ -1,6 +1,6 @@
 .search-result__job
   .search-result__job-created
-    = "#{time_ago_in_words(job.created_at)}"
+    = "#{time_ago_in_words(job.created_at)} ago"
   
   .search-result__job-title
     a href=freelancer_job_path(job)
@@ -10,7 +10,7 @@
     a.search-result__company-name href=freelancer_company_path(job.company)
       = job.company.name
     
-    .search-result__company-ratinmg
+    .search-result__company-rating
       - @stars = company_avg_rating(job.company)
       - @stars.each do |star|
         .span class=star
