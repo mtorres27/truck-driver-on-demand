@@ -1,24 +1,10 @@
-h1 My Companies
-br
-
 = render partial: "/freelancer/shared/companies_sub_nav"
 - content_for :secondary do
-  .result-wrapper
-    .result-header
-      - if @companies.count > 0
-        .result-header__distance
-          span class="result-header__distance-text"
-            | filter by location
-          select id="company_favourites_location" class="freelancer-company__distance"
-            option value="" label="All" selected=("selected" if params.dig(:location) == "" || !params.dig(:location).presence)
-            - @locations.each do |location|
-              option value="#{location}" label="#{location}" selected=("selected" if params.dig(:location) == location)
-
-    .result-freelancers
-      - if @companies.count == 0
-        .result-content
-          | You don't yet have any favourite integrators.
-      - @companies.each do |company|
-        a.result-row href=company_freelancer_path(company)
-          = render partial: "/freelancer/shared/company_info", locals: { company: company }
+  .result-freelancers
+    - if @companies.count == 0
+      .result-content
+        | You don't yet have any favourite integrators.
+    - @companies.each do |company|
+      a.result-row href=company_freelancer_path(company)
+        = render partial: "/freelancer/shared/company_info", locals: { company: company }
 

@@ -55,14 +55,6 @@ class Freelancer::CompaniesController < Freelancer::BaseController
     @locations = current_freelancer.favourite_companies.uniq.pluck(:area)
     @companies = current_freelancer.favourite_companies
 
-    @locations = []
-    @companies = []
-
-    current_freelancer.jobs.each do |job|
-      @locations << job.company.area
-      @companies << job.company
-    end
-
     current_freelancer.favourite_jobs.each do |job|
       @locations << job.company.area
       @companies << job.company
@@ -70,10 +62,6 @@ class Freelancer::CompaniesController < Freelancer::BaseController
 
     @locations = @locations.uniq
     @companies = @companies.uniq
-
-    if params[:location] && params[:location] != ""
-      @companies = @companies.where({ area: params[:location] })
-    end
 
     # @companies = @companies.page(params[:page]).
     #   per(50)

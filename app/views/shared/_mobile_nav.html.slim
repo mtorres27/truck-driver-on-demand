@@ -14,16 +14,16 @@
   .mobile-nav__menu
     - if request.path.index('freelancer') == 1 
       - if current_freelancer.nil?
-        a.mobile-nav__menu__item href=new_freelancer_session_path
+        a.mobile-nav__menu__item href=new_freelancer_session_path data-turbolinks="false"
           | Login 
-        a.mobile-nav__menu__item href=new_freelancer_registration_path
+        a.mobile-nav__menu__item href=new_freelancer_registration_path data-turbolinks="false"
           | Register
       - else
-        a.mobile-nav__menu__item href=freelancer_root_path
+        a.mobile-nav__menu__item href=freelancer_root_path data-turbolinks="false"
           | search for jobs
-        a.mobile-nav__menu__item href=my_jobs_freelancer_jobs_path
+        a.mobile-nav__menu__item href=my_jobs_freelancer_jobs_path data-turbolinks="false"
           | my jobs
-        a.mobile-nav__menu__item href=my_integrators_freelancer_companies_path
+        a.mobile-nav__menu__item href=my_integrators_freelancer_companies_path data-turbolinks="false"
           | integrators
         a.mobile-nav__menu__item
           | payments
@@ -33,31 +33,31 @@
         = link_to "Logout", destroy_freelancer_session_path, method: :delete, class: "mobile-nav__menu__item"
     - elsif request.path.index('company') == 1
       - if current_company.nil?
-        a.mobile-nav__menu__item href=new_company_session_path
+        a.mobile-nav__menu__item href=new_company_session_path data-turbolinks="false"
           | Login 
-        a.mobile-nav__menu__item href=new_company_registration_path
+        a.mobile-nav__menu__item href=new_company_registration_path data-turbolinks="false"
           | Register
       - else
-        a.mobile-nav__menu__item href=company_root_path
+        a.mobile-nav__menu__item href=company_root_path data-turbolinks="false"
           | Search for Techs
-        a.mobile-nav__menu__item href=company_projects_path
+        a.mobile-nav__menu__item href=company_projects_path data-turbolinks="false"
           | Job Postings
-        a.mobile-nav__menu__item href=hired_company_freelancers_path
+        a.mobile-nav__menu__item href=hired_company_freelancers_path data-turbolinks="false"
           | My Techs
-        a.mobile-nav__menu__item href=company_payments_path
+        a.mobile-nav__menu__item href=company_payments_path data-turbolinks="false"
           | Payments
         a.mobile-nav__menu__item
           = image_tag current_company.avatar_url
           | my profile
         = link_to "Logout", destroy_company_session_path, method: :delete, class: "mobile-nav__menu__item"
     - elsif request.path.index('admin') == 1
-      a.mobile-nav__menu__item href=admin_root_path
+      a.mobile-nav__menu__item href=admin_root_path data-turbolinks="false"
         Dashboard
-      a.mobile-nav__menu__item href=admin_companies_path
+      a.mobile-nav__menu__item href=admin_companies_path data-turbolinks="false"
         | Companies
-      a.mobile-nav__menu__item href=admin_freelancers_path
+      a.mobile-nav__menu__item href=admin_freelancers_path data-turbolinks="false"
         | Freelancers
-      a.mobile-nav__menu__item href=admin_pages_path
+      a.mobile-nav__menu__item href=admin_pages_path data-turbolinks="false"
         | Pages
 
 

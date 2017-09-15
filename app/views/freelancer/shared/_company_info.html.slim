@@ -1,30 +1,24 @@
-.media
+.company-info
   .media-left
     a href="/freelancer/companies/#{company.id}"
-      = image_tag(company.avatar_url, size: "75x75")
-    .reviews
-      - @stars = company_avg_rating(company)
-      - @stars.each do |star|
-        .span class=star
-    - if company.company_reviews_count > 0
-      a class="reviews__counter" href="/freelancers/company/#{company.id}#reviews" data-turbolinks="false"
-        = company_ratings_link(company)
-    - if is_favourite(company)
-      span class="freelancer-favourite fa fa-heart"
+      = image_tag(company.avatar_url, size: "50x50")
+    - if !is_favourite(company)
+      span class="company-info__favourite fa fa-heart"
+    
     
   .media-body
     a href="/freelancer/companies/#{company.id}"
-      h4.media-heading
+      span.company-info__name 
         = company.name
-        
-      - if params.dig(:search, :address) == nil
-        p= "#{company.area}"
-      - elsif params.dig(:search, :address) == ''
-        p= "#{company.area}"
-      - else
-        p= "#{company.area}, #{distance_from(company)} miles away"
-    .freelancer-keywords
-      - if !company.keywords.nil?
-        - company.keywords.split(", ").map(&:lstrip)[0..3].each do |keyword|
-          .freelancer-keyword
-            = keyword
+      span.company-info__area
+        - if params.dig(:search, :address) == nil
+          = "#{company.area}"
+        - elsif params.dig(:search, :address) == ''
+          = "#{company.area}"
+        - else
+          = "#{company.area}, #{distance_from(company)} miles away".company-info__rating
+      
+      .company-info__rating
+        - @stars = company_avg_rating(company)
+        - @stars.each do |star|
+          .span class=star

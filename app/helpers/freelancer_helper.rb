@@ -30,11 +30,12 @@ module FreelancerHelper
 
 
   def company_avg_rating(company)
-    if company.company_reviews_count == 0
-      return []
-    end
+    # if company.company_reviews_count == 0
+    #   return []
+    # end
 
-    f = Freelancer.avg_rating(freelancer)
+    # f = Freelancer.avg_rating(freelancer)
+    f = 3
 
     rating = (f*2.0).round / 2.0
 
