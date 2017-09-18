@@ -1,4 +1,31 @@
 h2= @freelancer.name
+hr
+- if @freelancer.avatar&.exists?
+  p
+    img src=@freelancer.avatar_url
+
+p
+  = "Email: #{@freelancer.email}"
+p
+  = "Verified: #{@freelancer.verified}"
+p
+  = "Available: #{@freelancer.available}"
+p
+  = "Address: #{@freelancer.address}"
+p
+  = "Area: #{@freelancer.area}"
+p
+  = "Tagline: #{@freelancer.tagline}"
+p 
+  = "Bio: #{@freelancer.bio}"
+p
+  = "Keywords: #{@freelancer.keywords}"
+p
+  = "Skills: #{@freelancer.skills}"
+p
+  = "Years of Experience: #{@freelancer.years_of_experience}"
+p
+  = "Pay Preference: #{@freelancer.pay_unit_time_preference}"
 
 hr
 = link_to 'Edit', edit_admin_freelancer_path(@freelancer)

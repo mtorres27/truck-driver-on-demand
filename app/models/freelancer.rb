@@ -31,6 +31,7 @@ class Freelancer < ApplicationRecord
   # :confirmable, :lockable, :timeoutable and :omniauthable
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable
+  extend Enumerize
   include PgSearch
   include Geocodable
   include Disableable
@@ -66,6 +67,11 @@ class Freelancer < ApplicationRecord
   }, using: {
     tsearch: { prefix: true, any_word: true }
   }
+
+  enumerize :pay_unit_time_preference, in: [
+    :fixed, :hourly
+  ]
+
 
   attr_accessor :user_type
 

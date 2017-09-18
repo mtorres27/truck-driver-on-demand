@@ -39,18 +39,18 @@ nav#top-nav.navbar.navbar-fixed-top
                 li.dropdown-header= current_company.name
                 li
                   = link_to "Logout", destroy_company_session_path, method: :delete
-          - elsif request.path.index('admin') == 1
-            li( class=("active" if request.path == admin_root_path) )
-              = link_to "Dashboard", admin_root_path
-            li( class=("active" if request.path.index(/^\/admin\/companies/)) )
-              = link_to "Companies", admin_companies_path
-            li( class=("active" if request.path.index(/^\/admin\/freelancers/)) )
-              = link_to "Freelancers", admin_freelancers_path
-            li( class=("active" if request.path.index(/^\/admin\/pages/)) )
-              = link_to "Pages", admin_pages_path
+        - elsif request.path.index('admin') == 1
+          li( class=("active" if request.path == admin_root_path) )
+            = link_to "Dashboard", admin_root_path
+          li( class=("active" if request.path.index(/^\/admin\/companies/)) )
+            = link_to "Companies", admin_companies_path
+          li( class=("active" if request.path.index(/^\/admin\/freelancers/)) )
+            = link_to "Freelancers", admin_freelancers_path
+          li( class=("active" if request.path.index(/^\/admin\/pages/)) )
+            = link_to "Pages", admin_pages_path
 
-          - else
-            li( class=("active" if request.path == admin_root_path) )
-              = link_to "Freelancers", freelancer_root_path
-            li( class=("active" if request.path.include?(admin_freelancers_path)) )
-              = link_to "Companies", company_root_path
+        - else
+          li( class=("active" if request.path == admin_root_path) )
+            = link_to "Freelancers", freelancer_root_path
+          li( class=("active" if request.path.include?(admin_freelancers_path)) )
+            = link_to "Companies", company_root_path

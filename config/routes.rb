@@ -80,13 +80,21 @@ Rails.application.routes.draw do
     root "main#index"
 
     resources :freelancers, except: [:new, :create] do
-      get :login_as, on: :member
       get :disable, on: :member
       get :enable, on: :member
     end
 
     resources :companies, except: [:new, :create] do
-      get :login_as, on: :member
+      get :disable, on: :member
+      get :enable, on: :member
+    end
+
+    resources :projects, except: [:new, :create] do
+      get :disable, on: :member
+      get :enable, on: :member
+    end
+
+    resources :jobs, except: [:new, :create] do
       get :disable, on: :member
       get :enable, on: :member
     end

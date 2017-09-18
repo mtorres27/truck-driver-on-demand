@@ -13,6 +13,9 @@ en:
         av_programmer: "AV Programmer"
       freelancer_type:
         av_labor_company: "AV Labor Company"
+      pay_type:
+        fixed: "Fixed"
+        hourly: "Hourly"
       state:
         created: "Not Published"
         published: "Accepting Applicants"
