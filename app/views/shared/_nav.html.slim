@@ -48,6 +48,8 @@ nav#top-nav.navbar.navbar-fixed-top
             = link_to "Freelancers", admin_freelancers_path
           li( class=("active" if request.path.index(/^\/admin\/pages/)) )
             = link_to "Pages", admin_pages_path
+          li
+            = link_to "Logout", destroy_admin_session_path, method: :delete
 
         - else
           li( class=("active" if request.path == admin_root_path) )
