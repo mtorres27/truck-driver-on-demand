@@ -331,7 +331,14 @@ CREATE TABLE companies (
     current_sign_in_at timestamp without time zone,
     last_sign_in_at timestamp without time zone,
     current_sign_in_ip inet,
-    last_sign_in_ip inet
+    last_sign_in_ip inet,
+    stripe_customer_id character varying(20),
+    is_active boolean DEFAULT true,
+    expires_at timestamp without time zone,
+    last_4_digits character varying(4),
+    card_brand character varying(10),
+    exp_month character varying(2),
+    exp_year character varying(4)
 );
 
 
@@ -1853,6 +1860,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20170905135835'),
 ('20170905135846'),
 ('20170905135938'),
-('20170908180901');
+('20170908180901'),
+('20170919185701');
 
 
