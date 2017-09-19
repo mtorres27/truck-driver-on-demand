@@ -24,6 +24,7 @@ gem "redcarpet", "~> 3.4.0"
 gem 'easy_postgis'
 
 gem 'devise'
+gem 'stripe'
 
 
 # See https://github.com/rails/execjs#readme for more supported runtimes

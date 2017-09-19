@@ -52,6 +52,7 @@ Rails.application.routes.draw do
     resources :applicants
     resources :payments
     resources :projects
+    resources :charges
 
     resources :notifications
 
