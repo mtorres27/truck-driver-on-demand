@@ -1,0 +1,13 @@
+<br /><br /><br /><br />
+= form_tag company_charges_path do
+  article
+    - if flash[:error].present?
+      #error_explanation
+        p
+          = flash[:error]
+    label.amount
+      span
+        | Amount: $150.00
+  |  <script src="https://checkout.stripe.com/checkout.js" class="stripe-button" data-key="
+  = Rails.application.secrets.stripe_publishable_key
+  | " data-description="A month's subscription" data-amount="15000" data-locale="auto">
