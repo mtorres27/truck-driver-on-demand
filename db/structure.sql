@@ -332,11 +332,11 @@ CREATE TABLE companies (
     last_sign_in_at timestamp without time zone,
     current_sign_in_ip inet,
     last_sign_in_ip inet,
-    stripe_customer_id character varying(20),
-    is_active boolean DEFAULT true,
+    stripe_customer_id character varying(40),
+    is_active boolean DEFAULT false,
     expires_at timestamp without time zone,
     last_4_digits character varying(4),
-    card_brand character varying(10),
+    card_brand character varying(20),
     exp_month character varying(2),
     exp_year character varying(4)
 );
