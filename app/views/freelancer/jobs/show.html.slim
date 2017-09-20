@@ -1,7 +1,11 @@
 - content_for :secondary do
   .freelancer-job__apply
-    a.freelancer-job__apply-for-job href="#" id="apply-for-job"
-      | Apply for this job
+    - if @have_applied == false
+      a.freelancer-job__apply-for-job href="#" id="apply-for-job"
+        | Apply for this job
+    - else
+      a.freelancer-job__apply-for-job href="#" id="view-job-details"
+        | Already applied: View Job
 
     - if is_favourite(@job)
       a.freelancer-job__favourite--active href="#{params[:id]}?toggle_favourite=true"
@@ -104,10 +108,75 @@
             = t("enumerize.job.freelancer_type.#{@job.freelancer_type}")
 
   .freelancer-job__apply-modal
-    | STUFF GOES HERE.
+    = simple_form_for "freelancer_job_apply_path", html: { multipart: true } do |f|
+      .freelancer-job__apply-modal__header
+        .freelancer-job__apply-modal__header-title
+          | Quote on this job
+        .freelancer-job__apply-modal__header-close id="close-modal"
+          span class="fa fa-close"
+      .freelancer-job__apply-modal__content
+        .freelancer-job__apply-modal__content-title
+          = @job.title
+        .freelancer-job__apply-modal__content-pay-type
+          = f.radio_button :pay_type, "fixed", checked: true
+          = f.label :pay_type_fixed, "fixed"
+
+          = f.radio_button :pay_type, "hourly"
+          = f.label :pay_type_hourly, "hourly"
+
+        = f.hidden_field :job, value: @job.id
+
+        .freelancer-job__apply-modal__content-amount--fixed
+          .freelancer-job__apply-modal__content-amount-fixed-value
+            = f.input :amount, type: "text", id: "quote-amount-fixed", placeholder: "Your quote in USD"
+
+        .freelancer-job__apply-modal__content-amount--hourly
+          .freelancer-job__apply-modal__content-amount-fixed-value
+            = f.input :number_of_hours, type: "text", id: "quote-amount-hourly", placeholder: "No. of Hrs"
+          .freelancer-job__apply-modal__content-amount-fixed-value
+            = f.input :hourly_rate, type: "text", id: "quote-amount-hourly-rate", placeholder: "Rate"
+
+
+        .freelancer-job__apply-modal__content-message--wrapper
+
+          .freelancer-job__apply-modal__content-wrapper
+            = f.input :message, id: "quote-message", placeholder: "Your message to #{@job.company.name}"
+            = f.input :attachment, as: :file
+
+
+
+      .freelancer-job__apply-modal__buttons
+        = f.button :submit, prompt: "Submit Quote", value: "Submit Quote", data: { disable_with: "Submitting..." }, class: "btn btn-primary"
+        .btn.btn-secondary id="close-modal-2"
+          | cancel
+
+
   
 javascript:
   $("#apply-for-job").on('click', function(e) {
     e.preventDefault();
     $(".freelancer-job__apply-modal").show();
   });
+
+  $("#close-modal").on('click', function(e) {
+    e.preventDefault();
+    $(".freelancer-job__apply-modal").hide();
+  });
+
+  $("#close-modal-2").on('click', function(e) {
+    e.preventDefault();
+    $(".freelancer-job__apply-modal").hide();
+  });
+
+  $("#freelancer_job_apply_path_quote_type_hourly").on('click', function() {
+    $(".freelancer-job__apply-modal__content-amount--fixed").hide();
+    $(".freelancer-job__apply-modal__content-amount--hourly").show();
+  });
+
+  $("#freelancer_job_apply_path_quote_type_fixed").on('click', function() {
+    $(".freelancer-job__apply-modal__content-amount--fixed").show();
+    $(".freelancer-job__apply-modal__content-amount--hourly").hide();
+  });
+
+  $(".freelancer-job__apply-modal__content-amount--hourly").hide();
+

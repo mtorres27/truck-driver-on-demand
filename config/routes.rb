@@ -25,20 +25,15 @@ Rails.application.routes.draw do
       post :add_favourites, on: :collection
       get :my_jobs, on: :collection
       get :my_applications, on: :collection
+      post :apply, on: :collection
     end
+    
+    post "jobs/:id", to: "jobs#apply"
+    post "job/apply", to: "jobs#apply"
+    get "jobs/my_jobs/:id", to: "jobs#my_job"
+    get "jobs/my_applications/:id", to: "jobs#my_application"
 
     resources :notifications
-
-    # resources :jobs, except: [:index] do
-    #   resource :contract, only: [:show]
-    #   resources :messages, only: [:index, :create]
-    #   resources :payments, controller: "job_payments", only: [:index, :show] do
-    #     get :print, on: :member
-    #     get :request_payment, on: :member
-    #   end
-    #   resource :review, only: [:show, :create]
-    # end
-
 
   end
 

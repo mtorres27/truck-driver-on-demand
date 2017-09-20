@@ -921,7 +921,9 @@ CREATE TABLE quotes (
     pay_type character varying DEFAULT 'fixed'::character varying NOT NULL,
     attachment_data text,
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+    updated_at timestamp without time zone NOT NULL,
+    number_of_hours integer,
+    hourly_rate integer
 );
 
 
@@ -1949,6 +1951,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20170905135938'),
 ('20170908180901'),
 ('20170911175055'),
-('20170911175108');
+('20170911175108'),
+('20170920173223');
 
 
