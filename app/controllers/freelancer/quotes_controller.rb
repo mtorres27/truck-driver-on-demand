@@ -41,7 +41,6 @@ class Freelancer::QuotesController < Freelancer::BaseController
       redirect_to freelancer_job_application_index_path(@job, @applicant)
     else
         
-      p @message.errors.full_messages
       set_collections
       redirect_to freelancer_job_application_index_path(@job, @applicant)
     end

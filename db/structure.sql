@@ -733,7 +733,8 @@ CREATE TABLE jobs (
     address character varying,
     lat numeric(9,6),
     lng numeric(9,6),
-    formatted_address character varying
+    formatted_address character varying,
+    contract_sent boolean DEFAULT false
 );
 
 
@@ -1952,6 +1953,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20170908180901'),
 ('20170911175055'),
 ('20170911175108'),
-('20170920173223');
+('20170920173223'),
+('20170921184950');
 
 

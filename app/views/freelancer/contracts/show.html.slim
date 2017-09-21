@@ -5,7 +5,7 @@
       .result-header__text
         | Contract
     .result-content
-      - if @job.pre_contracted?
+      - if @job.contract_sent == false
         | Can't show the contract yet, it hasn't been set.
       - else
         .row

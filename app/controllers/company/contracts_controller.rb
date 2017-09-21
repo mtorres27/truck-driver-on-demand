@@ -9,8 +9,14 @@ class Company::ContractsController < Company::BaseController
   end
 
   def update
+    if params.dig(:job, :send_contract) == "true"
+      @send_contract = true
+    else
+      @send_contract = false
+    end
+
     if @job.update(job_params)
-      if params.dig(:job, :send_contract) == "true"
+      if @send_contract
         @m = Message.new
         @m.authorable = @job.company
         @m.receivable = @job.freelancer
@@ -21,10 +27,13 @@ class Company::ContractsController < Company::BaseController
         @job.messages << @m
 
         # TODO: Add bit of code here that sets something in the table to denote being sent?
+        @job.contract_sent = true
+        @job.save
       end
-      redirect_to edit_company_job_contract_path(@job)
+      redirect_to company_job_contract_path(@job), notice: "Contract updated."
     else
       build_payments
+      flash[:error] = "Unable to save: please ensure all fields are filled out."
       render :edit
     end
   end
@@ -41,6 +50,7 @@ class Company::ContractsController < Company::BaseController
         :scope_of_work,
         :addendums,
         :contract_price,
+        :send_contract,
         :starts_on,
         :ends_on,
         :pay_type,
@@ -52,7 +62,7 @@ class Company::ContractsController < Company::BaseController
         :require_checkin,
         :require_uniform,
         attachments_attributes: [:id, :file, :_destroy],
-        payments_attributes: [:id, :description, :amount, :_destroy]
+        payments_attributes: [:id, :description, :company_id, :amount, :_destroy]
       )
     end
 

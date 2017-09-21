@@ -57,6 +57,8 @@ class Job < ApplicationRecord
 
   schema_validations except: :working_days
 
+  attr_accessor :send_contract
+
   audited
 
   enumerize :job_function, in: [
