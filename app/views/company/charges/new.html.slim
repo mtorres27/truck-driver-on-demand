@@ -1,4 +1,6 @@
-<br /><br /><br /><br />
+br
+br
+br
 = form_tag company_charges_path do
   article
     - if flash[:error].present?
@@ -7,7 +9,10 @@
           = flash[:error]
     label.amount
       span
-        | Amount: $150.00
+        | Amount:
+        = pretty_amount(@amount)
   |  <script src="https://checkout.stripe.com/checkout.js" class="stripe-button" data-key="
   = Rails.application.secrets.stripe_publishable_key
-  | " data-description="A month's subscription" data-amount="15000" data-locale="auto">
+  | " data-description="A month's subscription" data-amount="
+  = @amount
+  |  " data-locale="auto">
