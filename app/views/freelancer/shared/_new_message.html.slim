@@ -1,0 +1,88 @@
+.new-message--wrapper
+  .new-message
+    - if type == "quote" and quotes.length > 0
+      .new-message__options
+        = f.radio_button :status, "negotiate"
+        = f.label :status_negotiate, "Negotiate a better price"
+        = f.hidden_field :override, value: ""
+    = f.hidden_field :checkin, value: "false"
+        
+    .new-message__input
+      = f.input :body, as: :string, placeholder: "Send a message to #{n.split(" ").first}", label: false
+      .new-message__attachment-button.new-message__checkin onclick="triggerCheckin()"
+        .span class="fa fa-map-marker"
+
+      .new-message__attachment-button onclick="triggerFileUpload()"
+        .span class="fa fa-paperclip"
+      
+    .new-message__counter
+      = f.input :counter, as: :string, placeholder: "Counter offer", label: false
+
+    .new-message__submit
+      = f.submit "Post Message", class: "btn btn-primary", id: "new-message__submit"
+    .new-message__attachment
+      = f.input :attachment, as: :file, label: false
+
+
+javascript:
+  var triggerFileUpload = function () {
+    $("#message_attachment").click();
+  };
+
+  $("#message_attachment").change(function() {
+    $(".new-message__attachment-button").addClass("new-message__attachment-button--active");
+  });
+
+  var triggerCheckin = function() {
+    if ($(".new-message__checkin").hasClass("new-message__checkin--active")) {
+      $(".new-message__checkin").removeClass("new-message__checkin--active");
+      $("#message_checkin").val("false");
+    } else {
+      $(".new-message__checkin").addClass("new-message__checkin--active");
+      $("#message_checkin").val("true");
+    }
+  }
+  var showCounterOffer = function() {
+    var input_ref = $(".new-message__input");
+    var counter_ref = $(".new-message__counter");
+    if (!input_ref.hasClass("new-message__input--counter-visible")) {
+      input_ref.addClass("new-message__input--counter-visible");
+      counter_ref.addClass("new-message__counter--visible");
+    };
+  }
+
+  var hideCounterOffer = function() {
+    var input_ref = $(".new-message__input");
+    var counter_ref = $(".new-message__counter");
+    if (input_ref.hasClass("new-message__input--counter-visible")) {
+      input_ref.removeClass("new-message__input--counter-visible");
+      counter_ref.removeClass("new-message__counter--visible");
+    };
+  }
+
+  var makeRadiosDeselectableByName = function(name){
+    $('#' + name).click(function() {
+        if($(this).attr('previousValue') == 'true'){
+            $(this).attr('checked', false)
+        } else {
+            $('#' + name).attr('previousValue', false);
+        }
+
+        if ($(this).is(':checked')) {
+          if ($(this).attr("id").indexOf("_negotiate", 0) > 0) {
+            showCounterOffer();
+          } else {
+            hideCounterOffer();
+          }
+        } else {
+          hideCounterOffer();
+        }
+
+        $(this).attr('previousValue', $(this).is(':checked'));
+    });
+  };
+
+  makeRadiosDeselectableByName("message_status_accept");
+  makeRadiosDeselectableByName("message_status_decline");
+  makeRadiosDeselectableByName("message_status_negotiate");
+

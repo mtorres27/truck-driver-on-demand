@@ -26,12 +26,22 @@ Rails.application.routes.draw do
       get :my_jobs, on: :collection
       get :my_applications, on: :collection
       post :apply, on: :collection
+      
+      resources :application, only: [:index, :create]
+      resource :contract, only: [:show]
+      resources :messages, only: [:index, :create]    
+      resources :payments, controller: "job_payments", only: [:index]
+      resource :review, only: [:show, :create]  
+      resources :quotes, only: [:index, :create] do
+        get :accept, on: :member
+        get :decline, on: :member
+      end
+
     end
+
     
     post "jobs/:id", to: "jobs#apply"
     post "job/apply", to: "jobs#apply"
-    get "jobs/my_jobs/:id", to: "jobs#my_job"
-    get "jobs/my_applications/:id", to: "jobs#my_application"
 
     resources :notifications
 

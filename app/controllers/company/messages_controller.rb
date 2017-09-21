@@ -2,11 +2,6 @@ class Company::MessagesController < Company::BaseController
   before_action :set_job
 
   def index
-    @job.messages.each do |m|
-      m.unread = false
-      m.save
-    end
-
     set_collection
   end
 

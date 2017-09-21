@@ -1,7 +1,6 @@
-= render partial: "company/shared/job_nav", locals: { job: @job }
-
+= render partial: "/freelancer/shared/job_shared_nav", locals: { job: @job }
 - content_for :secondary do
-  .result-wrapper
+  .result-mobile
     .result-header
       .result-header__text
         | Progress
@@ -10,8 +9,8 @@
       .messages-and-activity--wrapper
         .messages-and-activity
           .post
-            = simple_form_for(:message, url: company_job_messages_path(@job)) do |f|
-              = render partial: "company/shared/new_message", locals: { f: f, n: @job.freelancer.name, type: "message", quotes: []  }
+            = simple_form_for(:message, url: freelancer_job_messages_path(@job)) do |f|
+              = render partial: "freelancer/shared/new_message", locals: { f: f, n: @job.company.name, type: "message", quotes: []  }
           - @messages.each do |message|
             .media.new-message__item
               .media-left

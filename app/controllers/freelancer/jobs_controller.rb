@@ -127,6 +127,7 @@ class Freelancer::JobsController < Freelancer::BaseController
       end
     end
   end
+  
 
   def my_job
     @job = Job.find(params[:id])

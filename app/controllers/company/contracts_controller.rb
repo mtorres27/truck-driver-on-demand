@@ -19,6 +19,8 @@ class Company::ContractsController < Company::BaseController
         @m.save
 
         @job.messages << @m
+
+        # TODO: Add bit of code here that sets something in the table to denote being sent?
       end
       redirect_to edit_company_job_contract_path(@job)
     else

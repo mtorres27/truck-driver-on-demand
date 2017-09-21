@@ -1,11 +1,10 @@
+- if @have_applied
+  = render partial: "/freelancer/shared/job_shared_nav", locals: { job: @job }
 - content_for :secondary do
   .freelancer-job__apply
     - if @have_applied == false
       a.freelancer-job__apply-for-job href="#" id="apply-for-job"
         | Apply for this job
-    - else
-      a.freelancer-job__apply-for-job href="#" id="view-job-details"
-        | Already applied: View Job
 
     - if is_favourite(@job)
       a.freelancer-job__favourite--active href="#{params[:id]}?toggle_favourite=true"
