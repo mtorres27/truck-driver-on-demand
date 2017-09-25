@@ -53,6 +53,9 @@ Rails.application.routes.draw do
     resources :payments
     resources :projects
     resources :charges
+      get 'thanks', to: 'charges#thanks', as: 'thanks'
+      get 'plans', to: 'charges#plans', as: 'plans'
+
 
     resources :notifications
 
