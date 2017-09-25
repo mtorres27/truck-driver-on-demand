@@ -44,7 +44,8 @@ class Freelancer < ApplicationRecord
   has_many :messages, -> { order(created_at: :desc) }, as: :authorable, dependent: :destroy
   has_many :company_reviews, dependent: :destroy
   has_many :freelancer_reviews, dependent: :nullify
-  has_many :certifications
+  has_many :certifications, -> { order(updated_at: :desc) }, dependent: :destroy
+  accepts_nested_attributes_for :certifications, allow_destroy: true, reject_if: :reject_certification
 
   has_many :job_favourites
   has_many :favourite_jobs, through: :job_favourites, source: :job
@@ -109,5 +110,11 @@ class Freelancer < ApplicationRecord
       do_geocode
       update_columns(lat: lat, lng: lng)
     end
+  end
+
+  def reject_certification(attrs)
+    exists = attrs["id"].present?
+    empty = attrs["certificate"].blank? and attrs["name"].blank?
+    !exists and empty
   end
 end

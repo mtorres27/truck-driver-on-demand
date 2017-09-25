@@ -29,10 +29,69 @@
           .freelancer-profile__title
             | Name
           = f.input :name, required: true, label: false, placeholder: "Enter your Name."
+
+        .freelancer-profile__item
+          .freelancer-profile__title
+            | Email
+          = f.input :email, as: :string, required: true, label: false, placeholder: "Email"
+
+        .freelancer-profile__item
+          .freelancer-profile__title
+            | Address
+          = f.input :address, required: true, label: false, placeholder: "Address"
+
+        .freelancer-profile__item
+          .freelancer-profile__title
+            | Area
+          = f.input :email, as: :string, required: true, label: false, placeholder: "Area"        
+
         .freelancer-profile__item
           .freelancer-profile__title
             | Country
           = f.input :country, required: true, label: false, prompt: "Select Country"
+
+        .freelancer-profile__item
+          .freelancer-profile__title
+            | Tagline
+          = f.input :tagline, required: true, label: false, placeholder: "Tagline"
+
+        .freelancer-profile__item
+          .freelancer-profile__title
+            | Bio
+          = f.input :bio, label: false
+        
+        .freelancer-profile__item
+          .freelancer-profile__title
+            | Markets
+          = f.input :keywords, as: :string, label: false
+        
+        .freelancer-profile__item
+          .freelancer-profile__title
+            | Skills
+          = f.input :skills, as: :string, label: false
+
+        .freelancer-profile__item
+          .freelancer-profile__title
+            | Years of Experience
+          = f.input :years_of_experience, label: false
+
+        .freelancer-profile__item
+          .freelancer-profile__title
+            | Availability
+          = f.input :available
+
+        .freelancer-profile__item
+          .freelancer-profile__title
+            | Pay Type Preference
+          = f.input :pay_unit_time_preference, label: false, prompt: "Select Pay Type Preference"
+
+        .freelancer-profile__item
+          .freelancer-profile__title
+            | Certifications
+            = f.simple_fields_for :certifications do |certification_form|
+              = render "certification_fields", f: certification_form
+            .links
+              = link_to_add_association 'Add', f, :certifications, class: "btn btn-default"
         
         .form-actions
           = f.button :submit, class: "btn btn-primary", label: "Update Profile"

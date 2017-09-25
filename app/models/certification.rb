@@ -1,3 +1,6 @@
+require "image_processing/mini_magick"
+include ImageProcessing::MiniMagick
+
 class Certification < ApplicationRecord
   include CertificationUploader[:certificate]
   belongs_to :freelancer
@@ -11,8 +14,9 @@ class Certification < ApplicationRecord
 
     return
 
+
     page_index_path = self.certificate_data + "[0]" # first page in PDF
-    pdf_page = Magick::Image.read( page_index_path ).first # first item in Magick::ImageList
+    pdf_page = MiniMagick::Image.read( page_index_path ).first # first item in Magick::ImageList
     filename = "#{id}.pdf"
     pdf_page.write( "/uploads/images/certifications/#{filename}" )
 
