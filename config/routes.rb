@@ -56,6 +56,7 @@ Rails.application.routes.draw do
       get 'thanks', to: 'charges#thanks', as: 'thanks'
       get 'plans', to: 'charges#plans', as: 'plans'
       post 'subscription_checkout' => 'charges#subscription_checkout'
+      post 'webhooks' => 'charges#webhooks'
 
     resources :notifications
 

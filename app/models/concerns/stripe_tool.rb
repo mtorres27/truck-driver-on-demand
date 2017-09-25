@@ -1,4 +1,15 @@
 module StripeTool
+  def self.update_company_info(company: company, customer: customer)
+    company.expires_at = Date.today + 1.year
+    company.stripe_customer_id = customer.id
+    company.is_active = true
+    company.last_4_digits = customer.sources.data[0].last4
+    company.card_brand = customer.sources.data[0].brand
+    company.exp_month = customer.sources.data[0].exp_month
+    company.exp_year = customer.sources.data[0].exp_year
+    company.save
+  end
+
   def self.create_customer(email: email, stripe_token: stripe_token)
     Stripe::Customer.create(
       email: email,
@@ -15,12 +26,8 @@ module StripeTool
     )
   end
 
-  def self.subscribe(email: email, plan_id: plan_id, stripe_token: stripe_token)
-    #plan = Stripe::Plan.retrieve(plan_id)
-    #This should be created on signup.
-    customer = self.create_customer(email: email, stripe_token: stripe_token)
-    # Save this in your DB and associate with the user;s email
-    stripe_subscription = customer.subscriptions.create(:plan => plan_id)
+  def self.subscribe(customer: customer, plan_id: plan_id)
+    customer.subscriptions.create(:plan => plan_id)
   end
 
   def self.get_plans

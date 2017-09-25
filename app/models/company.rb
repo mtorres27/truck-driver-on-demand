@@ -57,7 +57,7 @@ class Company < ApplicationRecord
 
   accepts_nested_attributes_for :featured_projects, allow_destroy: true, reject_if: :reject_featured_projects
   accepts_nested_attributes_for :company_installs, allow_destroy: true, reject_if: :reject_company_installs
-  
+
   def freelancers
     Freelancer.
     joins(applicants: :job).
@@ -65,9 +65,16 @@ class Company < ApplicationRecord
     where(applicants: { state: :accepted }).
     order(:name)
   end
-  
+
+  def renew_month
+    self.expires_at = Date.today + 1.month
+  end
+
+  def renew_year
+    self.expires_at = Date.today + 1.year
+  end
+
   audited
-  
   pg_search_scope :search, against: {
     name: "A",
     email: "A",
@@ -78,14 +85,14 @@ class Company < ApplicationRecord
     }, using: {
       tsearch: { prefix: true }
     }
-    
+
     attr_accessor :user_type
     # We want to populate both name and contact_name on sign up
     before_validation :set_contact_name, on: :create
     def set_contact_name
       self.contact_name = name unless contact_name
     end
-    
+
     def rating
       if company_reviews.count > 0
         company_reviews.average("(#{CompanyReview::RATING_ATTRS.map(&:to_s).join('+')}) / #{CompanyReview::RATING_ATTRS.length}").round
@@ -93,12 +100,12 @@ class Company < ApplicationRecord
         return nil
       end
     end
-    
+
     def self.avg_rating(company)
       if company.company_reviews_count == 0
         return nil
       end
-  
+
       return company.rating
     end
 
