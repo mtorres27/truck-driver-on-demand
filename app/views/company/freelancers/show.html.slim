@@ -1,5 +1,5 @@
 .profile__wrapper
-  .profile__wrapper-bg style="background-image: url(#{@freelancer.profile_header_url.include?("missing") ? "/assets/" : ""}#{@freelancer.profile_header_url})"
+  .profile__wrapper-bg style="background-image: url(#{@freelancer.profile_header_url.include?("missing") ? "" : @freelancer.profile_header_url}); background-color: '#{@freelancer.header_color}'
 
   .profile__content
     .profile__block
@@ -24,7 +24,7 @@
 
     .profile__meta
       .profile__meta-left
-        .profile__meta-left__avatar
+        .profile__meta-left__avatar style
           - if @freelancer.avatar_url.include?("missing.png")
             = image_tag("http://graph.facebook.com/v2.5/111#{@freelancer.id}/picture?height=135&height=135", size: "135x135")
           - else

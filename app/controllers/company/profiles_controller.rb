@@ -30,6 +30,7 @@ class Company::ProfilesController < Company::BaseController
       :name,
       :contact_name,
       :email,
+      :country,
       :area,
       :address,
       :avatar,

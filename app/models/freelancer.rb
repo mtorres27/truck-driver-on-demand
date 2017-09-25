@@ -72,6 +72,10 @@ class Freelancer < ApplicationRecord
     :fixed, :hourly
   ]
 
+  enumerize :country, in: [
+    :at, :au, :be, :ca, :ch, :de, :dk, :es, :fi, :fr, :gb, :hk, :ie, :it, :jp, :lu, :nl, :no, :nz, :pt, :se, :sg, :us
+  ]
+
 
   attr_accessor :user_type
 

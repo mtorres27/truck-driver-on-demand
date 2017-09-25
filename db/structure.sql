@@ -331,7 +331,9 @@ CREATE TABLE companies (
     current_sign_in_at timestamp without time zone,
     last_sign_in_at timestamp without time zone,
     current_sign_in_ip inet,
-    last_sign_in_ip inet
+    last_sign_in_ip inet,
+    header_color character varying DEFAULT 'FF6C38'::character varying,
+    country character varying
 );
 
 
@@ -603,7 +605,9 @@ CREATE TABLE freelancers (
     current_sign_in_at timestamp without time zone,
     last_sign_in_at timestamp without time zone,
     current_sign_in_ip inet,
-    last_sign_in_ip inet
+    last_sign_in_ip inet,
+    header_color character varying DEFAULT 'FF6C38'::character varying,
+    country character varying
 );
 
 
@@ -1954,6 +1958,8 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20170911175055'),
 ('20170911175108'),
 ('20170920173223'),
-('20170921184950');
+('20170921184950'),
+('20170925141902'),
+('20170925143659');
 
 

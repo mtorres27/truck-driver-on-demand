@@ -1,5 +1,5 @@
 .profile__wrapper
-  .profile__wrapper-bg style="background-image: url(#{@company.profile_header_url.include?("missing") ? "/assets/" : "" }#{@company.profile_header_url})"
+  .profile__wrapper-bg style="background-image: url(#{@company.profile_header_url.include?("missing") ? "" : @company.profile_header_url}); background-color: '#{@company.header_color}'
 
   .profile__content
     .profile__block

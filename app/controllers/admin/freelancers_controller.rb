@@ -53,6 +53,7 @@ class Admin::FreelancersController < Admin::BaseController
       params.require(:freelancer).permit(
         :name, 
         :email, 
+        :country,
         :verified,
         :address,
         :area,
