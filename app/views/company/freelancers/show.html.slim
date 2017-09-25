@@ -1,5 +1,5 @@
 .profile__wrapper
-  .profile__wrapper-bg style="background-image: url(#{@freelancer.profile_header_url.include?("missing") ? "" : @freelancer.profile_header_url}); background-color: '#{@freelancer.header_color}'
+  .profile__wrapper-bg style="background-image: url(#{@freelancer.profile_header_url.include?("missing") ? "" : @freelancer.profile_header_url}); background-color: ##{@freelancer.header_color}"
 
   .profile__content
     .profile__block
