@@ -1,0 +1,8 @@
+= render partial: "/freelancer/shared/profile_sub_nav"
+
+- content_for :secondary do
+  .result-wrapper
+
+    p= @freelancer.name
+
+    = link_to 'EDIT', edit_freelancer_profile_path

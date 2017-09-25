@@ -27,7 +27,7 @@
           | integrators
         a.mobile-nav__menu__item
           | payments
-        a.mobile-nav__menu__item
+        a.mobile-nav__menu__item href=freelancer_profile_path data-turbolinks="false"
           = image_tag current_freelancer.avatar_url
           | my profile
         = link_to "Logout", destroy_freelancer_session_path, method: :delete, class: "mobile-nav__menu__item"

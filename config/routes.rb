@@ -38,8 +38,18 @@ Rails.application.routes.draw do
       end
 
     end
+    resource :profile, only: [:show, :edit, :update] do
+      resource :banking, only: [:index, :edit, :update, :verify, :update_verify]
+      resource :settings, only: [:index, :edit, :update]
 
+    end
     
+    # resources :profile, only: [:index, :edit, :update] do
+    #   get :edit, on: :member
+    # end
+    
+    get "profile/banking", to: "banking#index"
+    get "profile/settings", to: "settings#index"
     post "jobs/:id", to: "jobs#apply"
     post "job/apply", to: "jobs#apply"
 

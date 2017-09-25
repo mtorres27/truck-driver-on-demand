@@ -1,0 +1,38 @@
+= render partial: "/freelancer/shared/profile_sub_nav"
+
+- content_for :secondary do
+  .result-wrapper
+    .result-header
+      .result-header__text
+        | Edit Freelancer Profile
+    
+    .result-content
+      = simple_form_for(@freelancer, url: freelancer_profile_path) do |f|
+        .freelancer-profile__item
+          .freelancer-profile__title
+            | PROFILE HEADER
+          = image_tag(@freelancer.profile_header_url, style: "width:100%;height:auto")
+          = f.file_field :profile_header, label: false, :accept => 'image/png,image/gif,image/jpeg'
+
+        .freelancer-profile__item
+          .freelancer-profile__title
+            | Profile Picture
+          = image_tag(@freelancer.avatar_url, size: "135x135")
+          = f.file_field :avatar, label: false, :accept => 'image/png,image/gif,image/jpeg'
+
+        .freelancer-profile__item
+          .freelancer-profile__title
+            | Profile Colour
+          = f.input :header_color, required: true, label: false, placeholder: "FF6C38"  
+
+        .freelancer-profile__item
+          .freelancer-profile__title
+            | Name
+          = f.input :name, required: true, label: false, placeholder: "Enter your Name."
+        .freelancer-profile__item
+          .freelancer-profile__title
+            | Country
+          = f.input :country, required: true, label: false, prompt: "Select Country"
+        
+        .form-actions
+          = f.button :submit, class: "btn btn-primary", label: "Update Profile"
