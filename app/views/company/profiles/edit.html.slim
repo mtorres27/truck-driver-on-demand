@@ -20,6 +20,11 @@
 
         .company-profile__item
           .company-profile__title
+            | Profile Colour
+          = f.input :header_color, required: true, label: false, placeholder: "FF6C38"  
+
+        .company-profile__item
+          .company-profile__title
             | Company Name
           = f.input :name, required: true, label: false, placeholder: "Enter a Company Name."
         .company-profile__item

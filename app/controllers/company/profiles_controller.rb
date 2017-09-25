@@ -34,6 +34,7 @@ class Company::ProfilesController < Company::BaseController
       :area,
       :address,
       :avatar,
+      :header_color,
       :profile_header,
       :description,
       :skills,
