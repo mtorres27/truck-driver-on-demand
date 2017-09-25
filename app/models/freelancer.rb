@@ -58,6 +58,14 @@ class Freelancer < ApplicationRecord
 
   # after_validation :queue_geocode
 
+  after_create :add_to_hubspot
+
+  def add_to_hubspot
+    Hubspot::Contact.create_or_update!([
+      {email: email, firstname: name.split(" ")[0], lastname: name.split(" ")[1]}
+    ])
+  end
+
   pg_search_scope :search, against: {
     name: "A",
     keywords: "B",

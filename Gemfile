@@ -25,6 +25,8 @@ gem 'easy_postgis'
 
 gem 'devise'
 
+gem 'hubspot-ruby'
+
 
 # See https://github.com/rails/execjs#readme for more supported runtimes
 # gem "therubyracer", platforms: :ruby

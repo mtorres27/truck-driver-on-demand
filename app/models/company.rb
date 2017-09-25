@@ -71,6 +71,14 @@ class Company < ApplicationRecord
   end
   
   audited
+
+  after_create :add_to_hubspot
+  
+    def add_to_hubspot
+      Hubspot::Contact.create_or_update!([
+        {email: email, firstname: name, lastname: ""}
+      ])
+    end
   
   pg_search_scope :search, against: {
     name: "A",
