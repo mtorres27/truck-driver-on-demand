@@ -5,7 +5,13 @@ class Company::ChargesController < Company::BaseController
     @plans = StripeTool.get_plans
   end
 
+  def subscription_checkout
+    logger
+    subscription = StripeTool.subscribe(email: params[:stripeEmail], plan_id: params[:plan_id], stripe_token: params[:stripeToken])
 
+    flash[:notice] = "Successfully created a charge"
+    redirect_to company_plans_path
+  end
 
 
   def new

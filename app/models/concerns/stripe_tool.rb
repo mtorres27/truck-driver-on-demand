@@ -15,7 +15,13 @@ module StripeTool
     )
   end
 
-
+  def self.subscribe(email: email, plan_id: plan_id, stripe_token: stripe_token)
+    #plan = Stripe::Plan.retrieve(plan_id)
+    #This should be created on signup.
+    customer = self.create_customer(email: email, stripe_token: stripe_token)
+    # Save this in your DB and associate with the user;s email
+    stripe_subscription = customer.subscriptions.create(:plan => plan_id)
+  end
 
   def self.get_plans
     stripe_list = Stripe::Plan.all
