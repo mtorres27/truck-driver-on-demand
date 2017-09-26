@@ -88,7 +88,7 @@ class Freelancer::CompaniesController < Freelancer::BaseController
   end
 
 
-  def my_integrators
+  def av_companies
     @locations = []
     @companies = []
 

@@ -17,7 +17,7 @@ Rails.application.routes.draw do
     resources :companies, only: [:index, :show] do
       get :favourites, on: :collection
       post :add_favourites, on: :collection
-      get :my_integrators, on: :collection
+      get :av_companies, on: :collection
     end
 
     resources :jobs, only: [:index, :show] do
