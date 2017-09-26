@@ -1,6 +1,7 @@
 module StripeTool
-  def self.update_company_info(company: company, customer: customer)
-    company.expires_at = Date.today + 1.year
+  def self.update_company_info(company: company, customer: customer, subscription: subscription)
+    period = subscription.plan.interval == "month" ? 1.month : 1.year
+    company.expires_at = Date.today + period
     company.stripe_customer_id = customer.id
     company.is_active = true
     company.last_4_digits = customer.sources.data[0].last4
