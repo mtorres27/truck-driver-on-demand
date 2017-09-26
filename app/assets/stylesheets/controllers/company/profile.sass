@@ -299,6 +299,11 @@
       padding-right: 10px
       box-sizing: border-box
 
+      @media (max-width: $breakpoint-tablet)
+        width: 100%
+        float: none
+        padding-right: 0px
+
       &-text
         font-size: 13px
         font-style: italic
@@ -333,15 +338,16 @@
       box-sizing: border-box
       margin: 0px 10px 10px 0px
 
-      @media (max-width: 480px)
-        width: 100%
+      @media (max-width: $breakpoint-mobile)
+        width: calc(50% - 10px)
 
-      @media (min-width: 481px) and (max-width: 768px)
-        width: 50%
+      @media (min-width: $breakpoint-mobile+1) and (max-width: $breakpoint-tablet)
+        width: calc(50% - 10px)
 
       &__image
         padding: 0px 5px
-        width: 150px
+        width: 100%
+        max-width: 200px
         height: 89px
         overflow: hidden
         +cover

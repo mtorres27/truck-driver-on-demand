@@ -1,9 +1,22 @@
-.company-main
+.company-main, .freelancer-main
   .title
     margin-top: 6rem
     font-size: 3.5rem
+
+    @media (max-width: $breakpoint-tablet)
+      margin-top: 1rem
+      font-size: 2rem
 
   .hero
     font-size: 5rem
     color: $brand-primary
     margin: 11rem 21rem
+
+    underline
+      text-decoration: underline
+
+    @media (max-width: $breakpoint-tablet)
+      font-weight: bold
+      color: $brand-primary
+      font-size: 3rem
+      margin: 3rem 2rem

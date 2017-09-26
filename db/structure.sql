@@ -331,7 +331,12 @@ CREATE TABLE companies (
     current_sign_in_at timestamp without time zone,
     last_sign_in_at timestamp without time zone,
     current_sign_in_ip inet,
-    last_sign_in_ip inet
+    last_sign_in_ip inet,
+    header_color character varying DEFAULT 'FF6C38'::character varying,
+    country character varying,
+    confirmation_token character varying,
+    confirmed_at timestamp without time zone,
+    confirmation_sent_at timestamp without time zone
 );
 
 
@@ -352,6 +357,38 @@ CREATE SEQUENCE companies_id_seq
 --
 
 ALTER SEQUENCE companies_id_seq OWNED BY companies.id;
+
+
+--
+-- Name: company_favourites; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE company_favourites (
+    id bigint NOT NULL,
+    freelancer_id integer,
+    company_id integer,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: company_favourites_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE company_favourites_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: company_favourites_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE company_favourites_id_seq OWNED BY company_favourites.id;
 
 
 --
@@ -571,7 +608,12 @@ CREATE TABLE freelancers (
     current_sign_in_at timestamp without time zone,
     last_sign_in_at timestamp without time zone,
     current_sign_in_ip inet,
-    last_sign_in_ip inet
+    last_sign_in_ip inet,
+    header_color character varying DEFAULT 'FF6C38'::character varying,
+    country character varying,
+    confirmation_token character varying,
+    confirmed_at timestamp without time zone,
+    confirmation_sent_at timestamp without time zone
 );
 
 
@@ -630,6 +672,38 @@ ALTER SEQUENCE identities_id_seq OWNED BY identities.id;
 
 
 --
+-- Name: job_favourites; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE job_favourites (
+    id bigint NOT NULL,
+    freelancer_id integer,
+    job_id integer,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: job_favourites_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE job_favourites_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: job_favourites_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE job_favourites_id_seq OWNED BY job_favourites.id;
+
+
+--
 -- Name: jobs; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -669,7 +743,8 @@ CREATE TABLE jobs (
     address character varying,
     lat numeric(9,6),
     lng numeric(9,6),
-    formatted_address character varying
+    formatted_address character varying,
+    contract_sent boolean DEFAULT false
 );
 
 
@@ -857,7 +932,9 @@ CREATE TABLE quotes (
     pay_type character varying DEFAULT 'fixed'::character varying NOT NULL,
     attachment_data text,
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+    updated_at timestamp without time zone NOT NULL,
+    number_of_hours integer,
+    hourly_rate integer
 );
 
 
@@ -979,6 +1056,13 @@ ALTER TABLE ONLY companies ALTER COLUMN id SET DEFAULT nextval('companies_id_seq
 
 
 --
+-- Name: company_favourites id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY company_favourites ALTER COLUMN id SET DEFAULT nextval('company_favourites_id_seq'::regclass);
+
+
+--
 -- Name: company_installs id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -1025,6 +1109,13 @@ ALTER TABLE ONLY freelancers ALTER COLUMN id SET DEFAULT nextval('freelancers_id
 --
 
 ALTER TABLE ONLY identities ALTER COLUMN id SET DEFAULT nextval('identities_id_seq'::regclass);
+
+
+--
+-- Name: job_favourites id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY job_favourites ALTER COLUMN id SET DEFAULT nextval('job_favourites_id_seq'::regclass);
 
 
 --
@@ -1141,6 +1232,14 @@ ALTER TABLE ONLY companies
 
 
 --
+-- Name: company_favourites company_favourites_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY company_favourites
+    ADD CONSTRAINT company_favourites_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: company_installs company_installs_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -1194,6 +1293,14 @@ ALTER TABLE ONLY freelancers
 
 ALTER TABLE ONLY identities
     ADD CONSTRAINT identities_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: job_favourites job_favourites_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY job_favourites
+    ADD CONSTRAINT job_favourites_pkey PRIMARY KEY (id);
 
 
 --
@@ -1338,6 +1445,13 @@ CREATE INDEX index_change_orders_on_job_id ON change_orders USING btree (job_id)
 
 
 --
+-- Name: index_companies_on_confirmation_token; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX index_companies_on_confirmation_token ON companies USING btree (confirmation_token);
+
+
+--
 -- Name: index_companies_on_disabled; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -1433,6 +1547,13 @@ CREATE INDEX index_freelancers_on_area ON freelancers USING btree (area);
 --
 
 CREATE INDEX index_freelancers_on_available ON freelancers USING btree (available);
+
+
+--
+-- Name: index_freelancers_on_confirmation_token; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX index_freelancers_on_confirmation_token ON freelancers USING btree (confirmation_token);
 
 
 --
@@ -1853,6 +1974,13 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20170905135835'),
 ('20170905135846'),
 ('20170905135938'),
-('20170908180901');
+('20170908180901'),
+('20170911175055'),
+('20170911175108'),
+('20170920173223'),
+('20170921184950'),
+('20170925141902'),
+('20170925143659'),
+('20170926143146');
 
 

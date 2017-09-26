@@ -1,0 +1,87 @@
+= render partial: "/freelancer/shared/job_shared_nav", locals: { job: @job }
+- content_for :secondary do
+  .result-mobile
+    .result-header
+      .result-header__text
+        | Contract
+    .result-content
+      - if @job.contract_sent == false
+        | Can't show the contract yet, it hasn't been set.
+      - else
+        .row
+        .col-xs-12.col-md-6
+          .show_field
+            label= t(:summary, scope: [:form, :labels, :job])
+            .show_value= @job.summary
+
+          .show_field
+            label= t(:scope_of_work, scope: [:form, :labels, :job])
+            .show_value= @job.scope_of_work || "Not Specified"
+
+          .show_field
+            label= t(:addendums, scope: [:form, :labels, :job])
+            .show_value= @job.addendums || "Not Specified"
+
+        .col-xs-12.col-md-6
+          .show_field
+            .row
+              .col-xs-12.col-lg-6
+                label= t(:contract_price, scope: [:form, :labels, :job])
+                .show-budget
+                  - if @job.contract_price
+                    = number_to_currency(@job.contract_price, precision: 0)
+                    br
+                    = @job.currency
+                  - else
+                    | Not Specified
+              .col-xs-12.col-lg-6
+                label= t(:pay_type, scope: [:form, :labels, :job])
+                .show_value_em= @job.pay_type&.text || "Not Specified"
+
+          .show_field
+            .row
+              .col-xs-12.col-lg-6
+                label= t(:starts_on, scope: [:form, :labels, :job])
+                .show_value_em= l @job.starts_on
+              .col-xs-12.col-lg-6
+                label= t(:ends_on, scope: [:form, :labels, :job])
+                .show_value_em= @job.ends_on ? l(@job.ends_on) : "Not Specified"
+          
+          .show_field
+            .row
+              .col-xs-12.col-lg-6
+                label= t(:working_time, scope: [:form, :labels, :job])
+                .show_value_em= @job.working_time ? t(@job.working_time) : "Not Specified"
+
+          .show_field
+            label Payment Schedule
+            .show_value
+              - if @job.payments.any?
+                table.table
+                  - @job.payments.each do |payment|
+                    tr
+                      td= payment.description
+                      td.text-right
+                        = number_to_currency(payment.amount, precision: 0)
+                        br
+                        = @job.currency
+              - else
+                | None Specified
+
+          .show_field
+            label= t(:reporting_frequency, scope: [:form, :labels, :job])
+            .show_value= @job.reporting_frequency&.text || "None Specified"
+
+          .show_field
+            label Reporting Requirements
+            ul
+              - if @job.require_photos_on_updates?
+                li.show_value= t(:require_photos_on_updates, scope: [:form, :labels, :job])
+              - if @job.require_checkin?
+                li.show_value= t(:require_checkin, scope: [:form, :labels, :job])
+              - if @job.require_uniform?
+                li.show_value= t(:require_uniform, scope: [:form, :labels, :job])
+
+      
+
+      

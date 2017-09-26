@@ -10,6 +10,20 @@ h1 Editing Company
       img src=@company.avatar_url
     = f.hidden_field :avatar, value: @company.cached_avatar_data
     = f.input :avatar, as: :file
+    = f.input :contact_name
+    = f.input :address, as: :string
+    = f.input :area
+    = f.input :country
+    = f.input :description
+    = f.input :contract_preference
+    = f.input :keywords, as: :string
+    = f.input :skills, as: :string
+    = f.input :website
+    = f.input :phone_number
+    = f.input :number_of_offices
+    = f.input :number_of_employees
+    = f.input :established_in
+    = f.input :disabled
 
   .form-actions
     = f.button :submit, class: "btn btn-primary"

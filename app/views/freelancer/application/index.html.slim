@@ -1,0 +1,5 @@
+- content_for :secondary do
+  .result-wrapper
+    = render partial: "freelancer/shared/messaging_cluster", locals: { applicant_accepted: @applicant_accepted, applicants: @applicants, job: @job, current_applicant_id: @current_applicant_id,  }
+
+    

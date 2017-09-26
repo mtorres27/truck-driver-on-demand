@@ -5,11 +5,25 @@ h1 Editing Freelancer
 
   .form-inputs
     = f.input :name
+    - if @freelancer.avatar&.exists?
+      img src=@freelancer.avatar_url
+    = f.hidden_field :avatar, value: @freelancer.cached_avatar_data
+    = f.input :avatar, as: :file
     = f.input :email, as: :string
+    = f.input :address, as: :string
+    = f.input :area, as: :string
+    = f.input :country
+    = f.input :tagline
+    = f.input :bio
+    = f.input :keywords, as: :string
+    = f.input :skills, as: :string
+    = f.input :years_of_experience
+    = f.input :available
     = f.input :verified
+    = f.input :pay_unit_time_preference
 
   .form-actions
-    = f.button :submit, class: "btn btn-primary"
+    = f.button :submit, class: "btn btn-primary", prompt: "Select"
 
 hr
 = link_to 'Show', admin_freelancer_path(@freelancer)

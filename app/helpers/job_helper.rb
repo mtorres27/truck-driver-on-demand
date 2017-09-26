@@ -30,4 +30,16 @@ module JobHelper
       job.state.text
     end
   end
+
+
+  def is_favourite_job(job)
+    favourites = current_freelancer.job_favourites.where({job_id: job.id})
+
+    if favourites.count == 0
+      return false
+    else
+      return true
+    end
+
+  end
 end

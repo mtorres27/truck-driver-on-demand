@@ -1,0 +1,34 @@
+h2= @project.name
+h2
+  | Company: 
+  = link_to @project.company.name, admin_company_path(@project.company)
+
+p= "External Project ID: #{@project.external_project_id}"
+p= "Budget #{number_to_currency(@project.budget, precision: 0)}"
+p= "Starts On: #{@project.starts_on}"
+p= "Duration: #{@project.duration}"
+p= "Address: #{@project.address}"
+p= "Area: #{@project.area}"
+p= "Closed: #{@project.closed}"
+p= "Currency: #{@project.currency}"
+
+h2
+  | This Project's Jobs:
+.table-responsive
+  table.table.table-striped
+    thead
+      tr
+        th Title
+        th.text-right Actions
+
+    tbody
+      - @project.jobs.each do |job|
+        tr
+          td= link_to job.title, admin_job_path(job)
+          td.text-right= link_to 'Edit', edit_admin_job_path(job)
+      end
+
+hr
+= link_to 'Edit', edit_admin_project_path(@project)
+'  |
+= link_to 'Back', admin_jobs_path

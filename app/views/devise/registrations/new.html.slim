@@ -18,6 +18,10 @@
           | Contact Name
         = f.input :contact_name, as: :string, label: false, required: true, autofocus: true, placeholder: "Enter your full name"
 
+      .register__label
+        | Country
+      = f.input :country, required: true, label: false, prompt: "Select Country"
+
       .register__account-selector
         .register__label
           | Choose the account type you'd like to register:
@@ -33,6 +37,7 @@
           - else
             = radio_button_tag :user_type, "company"
           = label :user_type, "company"
+
 
       .register__label
         | Enter a Password

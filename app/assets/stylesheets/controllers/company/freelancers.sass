@@ -189,3 +189,252 @@
   font-size: 16px
   right: 14px
   top: 26px
+
+.search-header
+  background-color: $current-applicant-bg-color
+  padding: 10px 15px
+  margin: 0px -15px
+
+
+.result-mobile
+  background-color: $white-color
+  padding-top: 10px
+
+.freelancer-job
+  display: table
+  &__back
+    display: table-cell
+    width: 50px
+    text-align: center
+    vertical-align: middle
+
+    &-button
+      color: $black-color
+
+  &__apply-modal
+    display: none
+    position: fixed
+    left: 0
+    top: 0
+    width: 100%
+    height: 100%
+
+
+  &__apply
+    position: fixed
+    bottom: 0
+    background-color: #ffffff
+    width: 100%
+    left: 0
+    display: inline-block
+    padding: 10px
+    border-top: 1px solid $gray-f3
+
+  &__favourite
+    float: right
+    font-size: 13px
+    margin: 5px 10px 0px 0px
+    color: $gray-300
+    border-radius: 4px
+    border: 1px solid $gray-300
+    padding: 3px 10px
+
+    &--active
+      @extend .freelancer-job__favourite
+      color: $freelancer-profile-favourite-color
+      border: 1px solid $freelancer-profile-favourite-color
+  
+  &__apply-for-job
+    background-color: $freelancer-profile-favourite-color
+    padding: 10px 10px
+    border-radius: 2px
+    margin: 3px 0px 0px 10px
+    float: left
+    color: $white-color
+    font-size: 11px
+    text-transform: uppercase
+
+    &:hover
+      text-decoration: none
+      color: $white-color
+      background-color: $link-color
+
+  &__state
+    font-size: 10px !important
+    text-transform: uppercase
+
+  &__summary
+    margin: 10px 0px
+
+  &__keywords
+    margin: 10px 0px
+    display: inline-block
+
+  &__meta
+    width: 100%
+
+    &-row
+      width: 100%
+      display: table
+      margin-bottom: 15px
+
+    &-item
+      width: 50%
+      display: table-cell
+
+      &__title
+        font-size: 10px
+        color: $gray-dark
+        margin-bottom: 5px
+        text-transform: uppercase
+        font-weight: bold
+
+
+      &__value
+        font-size: 14px
+
+
+.freelancer-job__header
+  background-color: $current-applicant-bg-color
+  padding-top: 10px
+  margin: 0px -15px
+
+.freelancer-job__top
+  &-row
+    display: table
+    width: 100%
+    padding-bottom: 10px
+
+    &:last-of-kind
+      padding-bottom: 0px
+
+    .search-result__company
+      margin-top: -4px
+
+  &-state
+    display: table-cell
+    width: 50%
+
+  &-created-at
+    display: table-cell
+    width: 50%
+    color: $gray-lightest
+    text-transform: uppercase
+    font-size: 12px
+    text-align: right
+
+  &-title
+    display: table-cell
+    width: 100%
+
+.company-info
+  width: 100%
+  position: relative
+  padding: 10px 0px
+  border-bottom: 1px solid $gray-f3
+
+  &__rating
+    color: $freelancer-stars-color
+    font-size: 12px
+    float: right
+
+  &:last-of-type
+    border-bottom: 0
+
+  &__favourite
+    position: absolute
+    color: $brand-primary
+    left: 32px
+    top: 42px
+
+
+  &__name
+    display: block
+    font-size: 16px
+
+  &__area
+    color: $black-color
+    font-size: 14px
+
+.company-mobile
+  &__row
+    width: 100%
+    display: table
+
+    &--margin-top
+      @extend .company-mobile__row
+      margin-top: 20px
+
+    &--margin-bottom
+      @extend .company-mobile__row
+      margin-bottom: 20px
+
+  &__avatar
+    width: 50px
+    height: 50px
+    margin-right: 10px
+    display: table-cell
+
+  &__link
+    margin-top: 15px
+    font-size: 16px
+    span
+      padding-left: 5px
+
+  &__label
+    color: $gray-dark
+
+  &__value
+    font-size: 15px
+
+  &__label-small
+    font-size: 10px
+
+  &__text
+    font-size: 14px
+
+  &__name
+    font-size: 24px
+    display: table-cell
+    padding-left: 10px
+
+
+  &__reviews
+    font-size: 12px
+
+  &__review-content--empty
+    font-size: 14px
+
+  &__area
+    color: $black-color
+    font-size: 14px
+    display: table-cell
+  
+  &__consumer-satisfaction
+    display: table-cell
+    text-align: right
+
+  &__member-since
+    font-size: 14px
+    color: $black-color
+
+  &__contract-preference
+    font-size: 14px
+    color: $black-color
+  
+  &__meta__item
+    display: table-cell
+
+    &-value
+      font-size: 35px
+      color: $black-color
+      text-align: center
+
+    &-label
+      font-size: 10px
+      color: $gray-dark
+      text-align: center
+      font-weight: bold
+      text-transform: uppercase
+
+  

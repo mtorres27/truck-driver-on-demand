@@ -1,0 +1,35 @@
+h1 Editing Job
+
+= simple_form_for([:admin, @job]) do |f|
+  = f.error_notification
+
+  .form-inputs
+    = f.input :title
+    = f.input :state
+    = f.input :summary
+    = f.input :scope_of_work
+    = f.input :budget
+    = f.input :job_function
+    = f.input :starts_on
+    = f.input :ends_on
+    = f.input :duration
+    = f.input :pay_type
+    = f.input :freelancer_type
+    = f.input :keywords
+    = f.input :invite_only
+    = f.input :scope_is_public
+    = f.input :budget_is_public
+    = f.input :contract_price
+    = f.input :reporting_frequency
+    = f.input :require_photos_on_updates
+    = f.input :require_checkin
+    = f.input :require_uniform
+
+  .form-actions
+    = f.button :submit, class: "btn btn-primary", prompt: "Select"
+
+hr
+= link_to 'Show', admin_job_path(@job)
+'  |
+= link_to 'Back', admin_jobs_path
+

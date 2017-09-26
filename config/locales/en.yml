@@ -6,6 +6,30 @@ en:
     formats:
       default: ! '%b %-d, %Y %-l:%M %p'
   enumerize:
+    country:
+      at: "Austria"
+      au: "Australia"
+      be: "Belgium"
+      ca: "Canada"
+      ch: "Switzerland"
+      de: "Germany"
+      dk: "Denmark"
+      es: "Spain"
+      fi: "Finland"
+      fr: "France"
+      gb: "United Kingdom"
+      hk: "Hong Kong"
+      ie: "Ireland"
+      it: "Italy"
+      jp: "Japan"
+      lu: "Luxembourg"
+      nl: "Netherlands"
+      no: "Norway"
+      nz: "New Zealand"
+      pt: "Portugal"
+      se: "Sweden"
+      sg: "Singapore"
+      us: "United States"
     job:
       job_function:
         av_installation_technician: "AV Installation Technician"
@@ -13,6 +37,9 @@ en:
         av_programmer: "AV Programmer"
       freelancer_type:
         av_labor_company: "AV Labor Company"
+      pay_type:
+        fixed: "Fixed"
+        hourly: "Hourly"
       state:
         created: "Not Published"
         published: "Accepting Applicants"

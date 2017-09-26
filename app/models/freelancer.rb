@@ -30,7 +30,8 @@ class Freelancer < ApplicationRecord
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
   devise :database_authenticatable, :registerable,
-         :recoverable, :rememberable, :trackable, :validatable
+         :recoverable, :rememberable, :trackable, :validatable, :confirmable
+  extend Enumerize
   include PgSearch
   include Geocodable
   include Disableable
@@ -43,13 +44,28 @@ class Freelancer < ApplicationRecord
   has_many :messages, -> { order(created_at: :desc) }, as: :authorable, dependent: :destroy
   has_many :company_reviews, dependent: :destroy
   has_many :freelancer_reviews, dependent: :nullify
-  has_many :certifications
+  has_many :certifications, -> { order(updated_at: :desc) }, dependent: :destroy
+  accepts_nested_attributes_for :certifications, allow_destroy: true, reject_if: :reject_certification
+
+  has_many :job_favourites
+  has_many :favourite_jobs, through: :job_favourites, source: :job
+
+  has_many :company_favourites
+  has_many :favourite_companies, through: :company_favourites, source: :company
 
   validates :years_of_experience, numericality: { only_integer: true }
 
   audited
 
   # after_validation :queue_geocode
+
+  after_create :add_to_hubspot
+
+  def add_to_hubspot
+    Hubspot::Contact.create_or_update!([
+      {email: email, firstname: name.split(" ")[0], lastname: name.split(" ")[1]}
+    ])
+  end
 
   pg_search_scope :search, against: {
     name: "A",
@@ -60,6 +76,15 @@ class Freelancer < ApplicationRecord
   }, using: {
     tsearch: { prefix: true, any_word: true }
   }
+
+  enumerize :pay_unit_time_preference, in: [
+    :fixed, :hourly
+  ]
+
+  enumerize :country, in: [
+    :at, :au, :be, :ca, :ch, :de, :dk, :es, :fi, :fr, :gb, :hk, :ie, :it, :jp, :lu, :nl, :no, :nz, :pt, :se, :sg, :us
+  ]
+
 
   attr_accessor :user_type
 
@@ -85,5 +110,11 @@ class Freelancer < ApplicationRecord
       do_geocode
       update_columns(lat: lat, lng: lng)
     end
+  end
+
+  def reject_certification(attrs)
+    exists = attrs["id"].present?
+    empty = attrs["certificate"].blank? and attrs["name"].blank?
+    !exists and empty
   end
 end

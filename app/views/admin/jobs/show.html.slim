@@ -1,0 +1,37 @@
+h2= @job.title
+h2
+  | Project: 
+  = link_to @job.project.name, admin_project_path(@job.project)
+
+p= "Freelancer Type: #{@job.freelancer_type}"
+p= "State: #{@job.state}"
+p= "Summary: #{@job.summary}"
+p= "Budget #{number_to_currency(@job.budget)}"
+p
+  | Job Function: 
+  = t("enumerize.job.job_function.#{@job.job_function}")
+p= "Starts On: #{@job.starts_on}"
+p= "Ends On: #{@job.ends_on}"
+p= "Duration: #{@job.duration}"
+p
+  | Pay Type: 
+  = t("enumerize.job.pay_type.#{@job.pay_type}")
+p
+  | Freelancer Type: 
+  = t("enumerize.job.freelancer_type.#{@job.freelancer_type}")
+p= "Keywords: #{@job.keywords}"
+p= "Invite Only: #{@job.invite_only}"
+p= "Scope is Public: #{@job.scope_is_public}"
+p= "Budget is Public: #{@job.budget_is_public}"
+p= "Contract Price: #{@job.contract_price}"
+p= "Payment Schedule: #{@job.payment_schedule}"
+p= "Reporting Frequency: #{@job.reporting_frequency}"
+p= "Require Photos on Updates: #{@job.require_photos_on_updates}"
+p= "Require Checkin: #{@job.require_checkin}"
+p= "Require Uniform: #{@job.require_uniform}"
+
+
+hr
+= link_to 'Edit', edit_admin_job_path(@job)
+'  |
+= link_to 'Back', admin_jobs_path

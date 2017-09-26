@@ -1,0 +1,10 @@
+= render partial: "/freelancer/shared/profile_sub_nav"
+
+- content_for :secondary do
+  .result-wrapper
+    .result-header
+      .result-header__text
+        | Banking Information
+    p banking
+
+    = link_to 'EDIT', edit_freelancer_profile_banking_path

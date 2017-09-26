@@ -15,8 +15,8 @@
 #
 
 class Payment < ApplicationRecord
-  belongs_to :company
   belongs_to :job
+  belongs_to :company
 
   validates :amount, numericality: true, sane_price: true
 

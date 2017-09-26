@@ -10,7 +10,7 @@ nav#top-nav.navbar.navbar-fixed-top
         = image_tag("avjunction-logo_header.svg", class: "header-logo", alt: "AV Junction")
     #navbar-lg.collapse.navbar-collapse
       ul.nav.navbar-nav.navbar-right
-        - if request.path.index(/\/company/)
+        - if request.path.index('company') == 1
           - if current_company
             li( class=("active" if request.path == company_root_path || is_showing_freelancer(request.path)) )
               = link_to "Search for Techs", company_root_path
@@ -20,7 +20,7 @@ nav#top-nav.navbar.navbar-fixed-top
               = link_to "My Techs", hired_company_freelancers_path
             li( class=("active" if request.path.include?(company_payments_path)) )
               = link_to "Payments", company_payments_path
-            if 1 == 2
+            - if 1 == 2
               li( class=("active" if request.path.include?(company_notifications_path)) )
                 a href=company_notifications_path
                   | Notifications
@@ -39,26 +39,13 @@ nav#top-nav.navbar.navbar-fixed-top
                 li.dropdown-header= current_company.name
                 li
                   = link_to "Logout", destroy_company_session_path, method: :delete
-
-          - elsif request.path.index(/^freelancer/)
-            li( class=("active" if request.path == freelancer_root_path) )
-              = link_to "Dashboard", freelancer_root_path
-            li.dropdown
-              a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"
-                .dropdown-avatar
-                  = image_tag(current_freelancer.avatar_url, size: "67x67")
-                span.caret
-              ul class="dropdown-menu"
-                li
-                  a href="#" Action
-                li
-                  a href="#" Another action
-                li.divider role="separator"
-                li.dropdown-header= current_freelancer.name
-                li
-                  = link_to "Logout", destroy_company_session_path, method: :delete
-
-          - elsif request.path.index(/^\/admin/)
+          - else
+            li( class=("active" if request.path == admin_root_path) )
+              = link_to "Freelancers", freelancer_root_path
+            li( class=("active" if request.path.include?(admin_freelancers_path)) )
+              = link_to "Companies", company_root_path
+        - elsif request.path.index('admin') == 1
+          - if current_admin
             li( class=("active" if request.path == admin_root_path) )
               = link_to "Dashboard", admin_root_path
             li( class=("active" if request.path.index(/^\/admin\/companies/)) )
@@ -67,9 +54,40 @@ nav#top-nav.navbar.navbar-fixed-top
               = link_to "Freelancers", admin_freelancers_path
             li( class=("active" if request.path.index(/^\/admin\/pages/)) )
               = link_to "Pages", admin_pages_path
-
+            li
+              = link_to "Logout", destroy_admin_session_path, method: :delete
           - else
             li( class=("active" if request.path == admin_root_path) )
               = link_to "Freelancers", freelancer_root_path
             li( class=("active" if request.path.include?(admin_freelancers_path)) )
               = link_to "Companies", company_root_path
+        - elsif request.path.index('freelancer') == 1
+          - if current_freelancer
+            li( class=("active" if request.path.include?(company_notifications_path)) )
+              a.mobile-nav__menu__item href=freelancer_root_path data-turbolinks="false"
+                | search for jobs
+            li( class=("active" if request.path.include?(freelancer_root_path)) )
+              a.mobile-nav__menu__item href=my_jobs_freelancer_jobs_path data-turbolinks="false"
+                | my jobs
+            li
+              a.mobile-nav__menu__item href=av_companies_freelancer_companies_path data-turbolinks="false"
+                | av companies
+            li
+              a.mobile-nav__menu__item
+                | payments
+            li
+              a.mobile-nav__menu__item href=freelancer_profile_path data-turbolinks="false"
+                | my profile
+            li
+              = link_to "Logout", destroy_freelancer_session_path, method: :delete, class: "mobile-nav__menu__item"
+          - else
+            li( class=("active" if request.path == admin_root_path) )
+              = link_to "Freelancers", freelancer_root_path
+            li( class=("active" if request.path.include?(admin_freelancers_path)) )
+              = link_to "Companies", company_root_path
+
+        - else
+          li( class=("active" if request.path == admin_root_path) )
+            = link_to "Freelancers", freelancer_root_path
+          li( class=("active" if request.path.include?(admin_freelancers_path)) )
+            = link_to "Companies", company_root_path
