@@ -12,6 +12,7 @@ class Company::SubscriptionController < Company::BaseController
                                           stripe_token: params[:stripeToken])
     subscription = StripeTool.subscribe(customer: customer,
                                         plan_id: params[:plan_id])
+    # invoice = StripeTool.create_invoice(customer_id: customer.id, subscription: subscription)
     StripeTool.update_company_info(company: current_company, customer: customer, subscription: subscription)
     # logger.debug current_company.inspect
     # logger.debug customer.inspect

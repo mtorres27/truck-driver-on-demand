@@ -36,7 +36,17 @@ module StripeTool
     stripe_list[:data]
   end
 
-  def self.create_bank_account
+  def self.create_invoice(customer_id: customer_id, subscription: subscription)
+    invoice_item = Stripe::InvoiceItem.create(
+      customer: customer_id,
+      amount: subscription.plan.amount,
+      currency: "usd",
+      description: subscription.plan.name,
+    )
+    invoice = Stripe::Invoice.create(
+      customer: customer_id
+    )
+    # invoice.pay
   end
 
   def self.connect
