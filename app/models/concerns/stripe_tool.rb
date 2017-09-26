@@ -27,9 +27,10 @@ module StripeTool
     )
   end
 
-  def self.subscribe(customer: customer, plan_id: plan_id)
+  def self.subscribe(customer: customer, plan_id: plan_id, is_new: is_new)
     customer.subscriptions.create(
-      :plan => plan_id
+      plan: plan_id,
+      trial_period_days: is_new ? 90 : 0
     )
   end
 

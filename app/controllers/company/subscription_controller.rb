@@ -11,7 +11,9 @@ class Company::SubscriptionController < Company::BaseController
     customer = StripeTool.create_customer(email: params[:stripeEmail],
                                           stripe_token: params[:stripeToken])
     subscription = StripeTool.subscribe(customer: customer,
-                                        plan_id: params[:plan_id])
+                                        plan_id: params[:plan_id],
+                                        is_new: current_company.stripe_customer_id ? false : true
+                                        )
     # invoice = StripeTool.create_invoice(customer_id: customer.id, subscription: subscription)
     StripeTool.update_company_info(company: current_company, customer: customer, subscription: subscription)
     # logger.debug current_company.inspect
@@ -25,6 +27,7 @@ class Company::SubscriptionController < Company::BaseController
     begin
       event_json = JSON.parse(request.body.read)
       event_object = event_json['data']['object']
+      Rails.logger.debug event_json.inspect
       case event_json['type']
         when 'invoice.payment_succeeded'
           handle_success_invoice event_object
