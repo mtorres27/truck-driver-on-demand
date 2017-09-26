@@ -1,7 +1,7 @@
 module StripeTool
   def self.update_company_info(company: company, customer: customer, subscription: subscription)
     period = subscription.plan.interval == "month" ? 1.month : 1.year
-    company.expires_at = Date.today + period
+    company.expires_at = (company.expires_at && company.expires_at > Date.today ? company.expires_at : Date.today) + period
     company.stripe_customer_id = customer.id
     company.is_active = true
     company.last_4_digits = customer.sources.data[0].last4
@@ -28,7 +28,9 @@ module StripeTool
   end
 
   def self.subscribe(customer: customer, plan_id: plan_id)
-    customer.subscriptions.create(:plan => plan_id)
+    customer.subscriptions.create(
+      :plan => plan_id
+    )
   end
 
   def self.get_plans
