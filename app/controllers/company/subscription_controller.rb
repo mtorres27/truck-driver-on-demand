@@ -1,4 +1,4 @@
-class Company::ChargesController < Company::BaseController
+class Company::SubscriptionController < Company::BaseController
   before_action :amount_to_be_charged, :set_description
   protect_from_forgery except: :webhook
 
@@ -12,10 +12,10 @@ class Company::ChargesController < Company::BaseController
                                           stripe_token: params[:stripeToken])
     subscription = StripeTool.subscribe(customer: customer,
                                         plan_id: params[:plan_id])
-    StripeTool.update_company_info(company: current_company, customer: customer)
+    StripeTool.update_company_info(company: current_company, customer: customer, subscription: subscription)
     # logger.debug current_company.inspect
     # logger.debug customer.inspect
-    # logger.debug subscription.inspect
+    logger.debug subscription.inspect
     flash[:notice] = "Successfully created a charge"
     redirect_to company_plans_path
   end

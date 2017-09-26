@@ -52,11 +52,11 @@ Rails.application.routes.draw do
     resources :applicants
     resources :payments
     resources :projects
-    resources :charges
-      get 'thanks', to: 'charges#thanks', as: 'thanks'
-      get 'plans', to: 'charges#plans', as: 'plans'
-      post 'subscription_checkout' => 'charges#subscription_checkout'
-      post 'webhooks' => 'charges#webhooks'
+    resources :subscription
+      get 'thanks', to: 'subscription#thanks', as: 'thanks'
+      get 'plans', to: 'subscription#plans', as: 'plans'
+      post 'subscription_checkout' => 'subscription#subscription_checkout'
+      post 'webhooks' => 'subscription#webhooks'
 
     resources :notifications
 
