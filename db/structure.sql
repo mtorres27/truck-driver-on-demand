@@ -333,7 +333,10 @@ CREATE TABLE companies (
     current_sign_in_ip inet,
     last_sign_in_ip inet,
     header_color character varying DEFAULT 'FF6C38'::character varying,
-    country character varying
+    country character varying,
+    confirmation_token character varying,
+    confirmed_at timestamp without time zone,
+    confirmation_sent_at timestamp without time zone
 );
 
 
@@ -607,7 +610,10 @@ CREATE TABLE freelancers (
     current_sign_in_ip inet,
     last_sign_in_ip inet,
     header_color character varying DEFAULT 'FF6C38'::character varying,
-    country character varying
+    country character varying,
+    confirmation_token character varying,
+    confirmed_at timestamp without time zone,
+    confirmation_sent_at timestamp without time zone
 );
 
 
@@ -1439,6 +1445,13 @@ CREATE INDEX index_change_orders_on_job_id ON change_orders USING btree (job_id)
 
 
 --
+-- Name: index_companies_on_confirmation_token; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX index_companies_on_confirmation_token ON companies USING btree (confirmation_token);
+
+
+--
 -- Name: index_companies_on_disabled; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -1534,6 +1547,13 @@ CREATE INDEX index_freelancers_on_area ON freelancers USING btree (area);
 --
 
 CREATE INDEX index_freelancers_on_available ON freelancers USING btree (available);
+
+
+--
+-- Name: index_freelancers_on_confirmation_token; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX index_freelancers_on_confirmation_token ON freelancers USING btree (confirmation_token);
 
 
 --
@@ -1960,6 +1980,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20170920173223'),
 ('20170921184950'),
 ('20170925141902'),
-('20170925143659');
+('20170925143659'),
+('20170926143146');
 
 
