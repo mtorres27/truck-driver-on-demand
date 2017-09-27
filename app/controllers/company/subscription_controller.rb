@@ -12,7 +12,8 @@ class Company::SubscriptionController < Company::BaseController
                                           stripe_token: params[:stripeToken])
     subscription = StripeTool.subscribe(customer: customer,
                                         plan_id: params[:plan_id],
-                                        is_new: current_company.stripe_customer_id ? false : true
+                                        is_new: current_company.stripe_customer_id ? false : true,
+                                        registered_from: ((Time.now- current_company.created_at)/1.day).floor
                                         )
     # invoice = StripeTool.create_invoice(customer_id: customer.id, subscription: subscription)
     StripeTool.update_company_info(company: current_company, customer: customer, subscription: subscription)
