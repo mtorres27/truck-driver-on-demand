@@ -46,7 +46,15 @@ class Company < ApplicationRecord
   has_many :favourite_freelancers, through: :favourites, source: :freelancer
   has_many :company_installs, dependent: :destroy
 
-  enumerize :currency, in: [ "CAD", "USD" ]
+  enumerize :currency, in: [
+    :cad,
+    :euro,
+    :ruble,
+    :rupee,
+    :usd,
+    :yen,
+  ]
+  
   enumerize :contract_preference, in: [:prefer_fixed, :prefer_hourly]
   enumerize :number_of_employees, in: [
     :one_to_ten,
