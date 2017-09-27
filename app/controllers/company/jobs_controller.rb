@@ -16,6 +16,7 @@ class Company::JobsController < Company::BaseController
 
   def create
     @job = Job.new(job_params)
+    @job.company = current_company
 
     validate_ownership
     if @job.errors.size > 0
@@ -33,25 +34,9 @@ class Company::JobsController < Company::BaseController
   end
 
   def show
-    @currencies = [
-      ["Canadian Dollars", "cad"],
-      ["Euro", "euro"],
-      ["Ruble", "ruble"],
-      ["Rupee", "rupee"],
-      ["US Dollars", "usd"],
-      ["Yen", "yen"]
-    ]
   end
 
   def edit
-    @currencies = [
-      ["Canadian Dollars", "cad"],
-      ["Euro", "euro"],
-      ["Ruble", "ruble"],
-      ["Rupee", "rupee"],
-      ["US Dollars", "usd"],
-      ["Yen", "yen"]
-    ]
   end
 
   def update

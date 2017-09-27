@@ -64,7 +64,19 @@ class Job < ApplicationRecord
   enumerize :job_function, in: [
     :av_installation_technician,
     :av_rental_and_staging_technician,
-    :av_programmer
+    :av_programmer,
+    :general_laborer,
+    :camera_operator,
+    :projectionist,
+    :project_manager,
+    :drafter,
+    :a1_audio_engineer,
+    :a2_audio_assist,
+    :l1_lighting_engineer,
+    :l2_lighting_assist,
+    :me_master_electrician,
+    :v1_video_engineer,
+    :v2_video_assist
   ]
 
   enumerize :working_time, in: [
