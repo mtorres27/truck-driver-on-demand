@@ -20,11 +20,14 @@ class Quote < ApplicationRecord
   belongs_to :company
   belongs_to :applicant, counter_cache: true
 
-  validates :amount, numericality: true, sane_price: true
+  validates :amount, numericality: true, sane_price: true, allow_blank: true
+  validates :daily_rate, numericality: true, sane_price: true, allow_blank: true
+  validates :hourly_rate, numericality: true, sane_price: true, allow_blank: true
+
 
   audited
 
-  enumerize :pay_type, in: [ :fixed, :hourly ], predicates: true
+  enumerize :pay_type, in: [ :fixed, :hourly, :daily ], predicates: true
   enumerize :state, in: [ :pending, :declined, :accepted ], predicates: true
 
   def accept!

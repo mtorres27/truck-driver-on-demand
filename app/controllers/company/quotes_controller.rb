@@ -38,7 +38,22 @@ class Company::QuotesController < Company::BaseController
           @new_quote = Quote.new
         end
         
-        @new_quote.amount = params[:message][:counter]
+        @new_quote.author_type = "company"
+        
+        if params[:message][:counter_type] == "fixed"
+          @new_quote.amount = params[:message][:counter]
+        elsif params[:message][:counter_type] == "hourly"
+          @new_quote.hourly_rate = params[:message][:counter_hourly_rate]
+          @new_quote.number_of_hours = params[:message][:counter_number_of_hours]
+          @new_quote.amount = params[:message][:counter_hourly_rate].to_i * params[:message][:counter_number_of_hours].to_i
+        elsif params[:message][:counter_type] == "daily"
+          @new_quote.daily_rate = params[:message][:counter_daily_rate]
+          @new_quote.number_of_days = params[:message][:counter_number_of_daily]
+          @new_quote.amount = params[:message][:counter_daily_rate].to_i * params[:message][:counter_number_of_days].to_i
+        end
+
+
+        @new_quote.pay_type = params[:message][:counter_type]
         @new_quote.state = "pending"
         @new_quote.save
         

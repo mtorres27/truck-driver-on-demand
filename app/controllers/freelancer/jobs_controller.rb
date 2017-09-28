@@ -69,8 +69,8 @@ class Freelancer::JobsController < Freelancer::BaseController
     @applicant.freelancer = current_freelancer
     @applicant.job = @job
     @applicant.company = @job.company
-    
-    if apply_params[:message].nil? or apply_params[:amount].nil? or apply_params[:pay_type].nil?
+
+    if apply_params[:message].nil? or apply_params[:pay_type].nil?
       redirect_to freelancer_job_path(@job), alert: "Required data not found; please ensure your message and amount have both been entered."
     else
       if @applicant.save
@@ -86,13 +86,22 @@ class Freelancer::JobsController < Freelancer::BaseController
             amount: apply_params[:amount],
             attachment: apply_params[:attachment]
           })
-        else
+        elsif apply_params[:pay_type] == "hourly"
           @applicant.quotes << Quote.create({
             company: @job.company, 
             pay_type: apply_params[:pay_type],
-            amount: apply_params[:amount],
             hourly_rate: apply_params[:hourly_rate],
+            amount: (apply_params[:hourly_rate].to_i * apply_params[:number_of_hours].to_i),
             number_of_hours: apply_params[:number_of_hours],
+            attachment: apply_params[:attachment]
+          })
+        elsif apply_params[:pay_type] == "daily"
+          @applicant.quotes << Quote.create({
+            company: @job.company, 
+            pay_type: apply_params[:pay_type],
+            daily_rate: apply_params[:daily_rate],
+            amount: (apply_params[:daily_rate].to_i * apply_params[:number_of_days].to_i),
+            number_of_days: apply_params[:number_of_days],
             attachment: apply_params[:attachment]
           })
         end
@@ -204,7 +213,9 @@ class Freelancer::JobsController < Freelancer::BaseController
         :number_of_hours,
         :hourly_rate,
         :message,
-        :attachment
+        :attachment,
+        :daily_rate,
+        :number_of_days
       )
     end
 end

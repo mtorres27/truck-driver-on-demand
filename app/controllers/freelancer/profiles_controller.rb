@@ -17,7 +17,7 @@ class Freelancer::ProfilesController < Freelancer::BaseController
   def update
     @freelancer = current_freelancer
     if @freelancer.update(freelancer_params)
-      redirect_to freelancer_profile_path(@freelancer), notice: "Company profile updated."
+      redirect_to freelancer_profile_path(@freelancer), notice: "Freelancer profile updated."
     else
       render :edit
     end

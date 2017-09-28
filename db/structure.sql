@@ -934,7 +934,11 @@ CREATE TABLE quotes (
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
     number_of_hours integer,
-    hourly_rate integer
+    hourly_rate integer,
+    number_of_days integer,
+    daily_rate integer,
+    author_type character varying DEFAULT 'freelancer'::character varying,
+    accepted_by_freelancer boolean DEFAULT false
 );
 
 
@@ -1981,6 +1985,9 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20170921184950'),
 ('20170925141902'),
 ('20170925143659'),
-('20170926143146');
+('20170926143146'),
+('20170928133148'),
+('20170928151229'),
+('20170928151921');
 
 

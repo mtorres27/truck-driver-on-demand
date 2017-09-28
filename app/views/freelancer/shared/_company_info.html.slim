@@ -2,7 +2,7 @@
   .media-left
     a href="/freelancer/companies/#{company.id}"
       = image_tag(company.avatar_url, size: "50x50")
-    - if !is_favourite(company)
+    - if !is_favourite_company(company)
       span class="company-info__favourite fa fa-heart"
     
     

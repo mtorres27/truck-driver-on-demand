@@ -9,7 +9,8 @@ class Freelancer::ApplicationController < Freelancer::BaseController
   private
 
     def set_job
-      @job = current_company.jobs.includes(:applicants).find(params[:job_id])
+
+      @job = current_freelancer.jobs.includes(:applicants).find(params[:job_id])
     end
 
 

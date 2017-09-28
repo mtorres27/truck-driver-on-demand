@@ -6,7 +6,7 @@
       a.freelancer-job__apply-for-job href="#" id="apply-for-job"
         | Apply for this job
 
-    - if is_favourite(@job)
+    - if is_favourite_job(@job)
       a.freelancer-job__favourite--active href="#{params[:id]}?toggle_favourite=true"
         .span class="fa fa-heart"
     - else
@@ -123,6 +123,9 @@
           = f.radio_button :pay_type, "hourly"
           = f.label :pay_type_hourly, "hourly"
 
+          = f.radio_button :pay_type, "daily"
+          = f.label :pay_type_daily, "daily"
+
         = f.hidden_field :job, value: @job.id
 
         .freelancer-job__apply-modal__content-amount--fixed
@@ -135,14 +138,17 @@
           .freelancer-job__apply-modal__content-amount-fixed-value
             = f.input :hourly_rate, type: "text", id: "quote-amount-hourly-rate", placeholder: "Rate"
 
+        .freelancer-job__apply-modal__content-amount--daily
+          .freelancer-job__apply-modal__content-amount-fixed-value
+            = f.input :number_of_days, type: "text", id: "quote-amount-daily", placeholder: "No. of Days"
+          .freelancer-job__apply-modal__content-amount-fixed-value
+            = f.input :daily_rate, type: "text", id: "quote-amount-daily-rate", placeholder: "Rate"
+
 
         .freelancer-job__apply-modal__content-message--wrapper
-
           .freelancer-job__apply-modal__content-wrapper
             = f.input :message, id: "quote-message", placeholder: "Your message to #{@job.company.name}"
             = f.input :attachment, as: :file
-
-
 
       .freelancer-job__apply-modal__buttons
         = f.button :submit, prompt: "Submit Quote", value: "Submit Quote", data: { disable_with: "Submitting..." }, class: "btn btn-primary"
@@ -166,16 +172,25 @@ javascript:
     e.preventDefault();
     $(".freelancer-job__apply-modal").hide();
   });
-
-  $("#freelancer_job_apply_path_quote_type_hourly").on('click', function() {
+      
+  $("#freelancer_job_apply_path_pay_type_hourly").on('click', function() {
     $(".freelancer-job__apply-modal__content-amount--fixed").hide();
     $(".freelancer-job__apply-modal__content-amount--hourly").show();
+    $(".freelancer-job__apply-modal__content-amount--daily").hide();
   });
 
-  $("#freelancer_job_apply_path_quote_type_fixed").on('click', function() {
+  $("#freelancer_job_apply_path_pay_type_daily").on('click', function() {
+    $(".freelancer-job__apply-modal__content-amount--fixed").hide();
+    $(".freelancer-job__apply-modal__content-amount--hourly").hide();
+    $(".freelancer-job__apply-modal__content-amount--daily").show();
+  });
+
+  $("#freelancer_job_apply_path_pay_type_fixed").on('click', function() {
     $(".freelancer-job__apply-modal__content-amount--fixed").show();
     $(".freelancer-job__apply-modal__content-amount--hourly").hide();
+    $(".freelancer-job__apply-modal__content-amount--daily").hide();
   });
 
   $(".freelancer-job__apply-modal__content-amount--hourly").hide();
+  $(".freelancer-job__apply-modal__content-amount--daily").hide();
 
