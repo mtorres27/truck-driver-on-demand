@@ -48,7 +48,9 @@ en:
         v1_video_engineer: "V1 - Video Engineer"
         v2_video_assist: "V2 - Video Assist"
       freelancer_type:
-        av_labor_company: "AV Labor Company"
+        independent: "Independent"
+        team: "Team"
+
       pay_type:
         fixed: "Fixed"
         hourly: "Hourly"

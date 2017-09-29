@@ -97,7 +97,7 @@ class Job < ApplicationRecord
 
   enumerize :pay_type, in: [ :fixed, :hourly ]
 
-  enumerize :freelancer_type, in: [ :independent, :av_labor_company ]
+  enumerize :freelancer_type, in: [ :independent, :team ]
 
   enumerize :state, in: [
     :created,
