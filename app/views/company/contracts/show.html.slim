@@ -31,7 +31,7 @@
                   - if @job.budget
                     = number_to_currency(@job.accepted_quote.amount, precision: 0)
                     br
-                    = @job.currency
+                    = @job.currency.upcase
                   - else
                     | Not Specified
                   - if @job.accepted_quote.pay_type == "hourly"
@@ -68,7 +68,7 @@
                       td.text-right
                         = number_to_currency(payment.amount, precision: 0)
                         br
-                        = @job.currency
+                        = @job.currency.upcase
               - else
                 | None Specified
 

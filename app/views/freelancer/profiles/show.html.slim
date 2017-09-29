@@ -135,6 +135,21 @@
             - else
               | This freelancer has no skills listed.
         
+    .profile__certifications
+      .profile__certifications-label
+        | Type
+      .profile__certifications-value
+        - if @freelancer.freelancer_type.nil?
+          | N/A
+        - else
+          - if @freelancer.freelancer_type == :independent
+            = @freelancer.freelancer_type.text
+          - else
+            = "#{@freelancer.freelancer_type.text} "
+            - if @freelancer.freelancer_team_size.nil?
+              = ""
+            - else 
+              = "(#{@freelancer.freelancer_team_size.text})"
 
     .profile__certifications
       .profile__certifications-label

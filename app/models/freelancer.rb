@@ -57,8 +57,6 @@ class Freelancer < ApplicationRecord
 
   audited
 
-  # after_validation :queue_geocode
-
   after_create :add_to_hubspot
 
   def add_to_hubspot
@@ -79,6 +77,18 @@ class Freelancer < ApplicationRecord
 
   enumerize :pay_unit_time_preference, in: [
     :fixed, :hourly
+  ]
+
+  enumerize :freelancer_type, in: [
+    :independent, :team
+  ]
+
+  enumerize :freelancer_team_size, in: [
+    :less_than_five, 
+    :six_to_ten, 
+    :eleven_to_twenty, 
+    :twentyone_to_thirty, 
+    :more_than_thirty
   ]
 
   enumerize :country, in: [

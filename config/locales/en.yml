@@ -50,7 +50,12 @@ en:
       freelancer_type:
         independent: "Independent"
         team: "Team"
-
+      freelancer_team_size:
+        less_than_five: "1 - 5"
+        six_to_ten: "6 - 10"
+        eleven_to_twenty: "11 - 20"
+        twentyone_to_thirty: "21 - 30"
+        more_than_thirty: "30+"
       pay_type:
         fixed: "Fixed"
         hourly: "Hourly"

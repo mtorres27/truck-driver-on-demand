@@ -57,6 +57,16 @@
 
         .freelancer-profile__item
           .freelancer-profile__title
+            | Type
+          = f.input :freelancer_type, required: true, label: false, prompt: "Freelancer Type"
+
+        .freelancer-profile__item
+          .freelancer-profile__title
+            | Team Size
+          = f.input :freelancer_team_size, required: true, label: false, prompt: "Team Size"
+
+        .freelancer-profile__item
+          .freelancer-profile__title
             | Bio
           = f.input :bio, label: false
         

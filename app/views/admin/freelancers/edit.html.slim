@@ -10,6 +10,8 @@ h1 Editing Freelancer
     = f.hidden_field :avatar, value: @freelancer.cached_avatar_data
     = f.input :avatar, as: :file
     = f.input :email, as: :string
+    = f.input :freelancer_type
+    = f.input :freelancer_team_size
     = f.input :address, as: :string
     = f.input :area, as: :string
     = f.input :country

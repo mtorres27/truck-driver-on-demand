@@ -613,7 +613,9 @@ CREATE TABLE freelancers (
     country character varying,
     confirmation_token character varying,
     confirmed_at timestamp without time zone,
-    confirmation_sent_at timestamp without time zone
+    confirmation_sent_at timestamp without time zone,
+    freelancer_team_size character varying,
+    freelancer_type character varying
 );
 
 
@@ -1988,6 +1990,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20170926143146'),
 ('20170928133148'),
 ('20170928151229'),
-('20170928151921');
+('20170928151921'),
+('20170929133938');
 
 

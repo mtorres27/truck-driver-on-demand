@@ -43,6 +43,8 @@ class Freelancer::ProfilesController < Freelancer::BaseController
       :avatar,
       :header_color,
       :profile_header,
+      :freelancer_type,
+      :freelancer_team_size,
       :pay_unit_time_preference,
       certifications_attributes: [:id, :certificate, :name, :_destroy],
     )
