@@ -73,10 +73,10 @@ Rails.application.configure do
   config.action_mailer.smtp_settings = {
     address:              'smtp.mailgun.org',
     port:                 587,
-    domain:               'sandboxd47d41b6351e4d918585d5febee8bfe6.mailgun.org',
+    domain:               'mg.avjunction.com',
     authentication:       :plain,
-    user_name:            'postmaster@sandboxd47d41b6351e4d918585d5febee8bfe6.mailgun.org',
-    password:             'dd7de713f285c5c3900e52af90e4c91e',
+    user_name:            'postmaster@mg.avjunction.com',
+    password:             '86cce58250969e6a3e564391e35c5543',
   }
 
   # Enable locale fallbacks for I18n (makes lookups for any locale fall back to
