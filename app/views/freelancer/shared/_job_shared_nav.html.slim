@@ -1,5 +1,5 @@
 .tab-bar
-  .tab-bar__item class=("tab-bar__item--active" if request.path == "/freelancer/jobs/#{job.id}/application")
+  .tab-bar__item class=("tab-bar__item--active" if request.path == "/freelancer/jobs/#{job.id}")
     a href=freelancer_job_path(job)
       | Job Details
   .tab-bar__item class=("tab-bar__item--active" if request.path == "/freelancer/jobs/#{job.id}/application")

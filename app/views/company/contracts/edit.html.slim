@@ -40,7 +40,7 @@
             .job-details__title
               | Job Contract Price
             .job-details__price
-              = f.input :contract_price, required: true, input_html: { value: number_with_precision(f.object.contract_price, precision: 0) }, label: false
+              = f.input :contract_price, required: true, input_html: { value: number_with_precision(f.object.accepted_quote.amount, precision: 0) }, label: false, disabled: true
             .job-details__price-status
               = ""
 

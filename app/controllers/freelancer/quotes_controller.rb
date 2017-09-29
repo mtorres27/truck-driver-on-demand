@@ -38,7 +38,7 @@ class Freelancer::QuotesController < Freelancer::BaseController
           @new_quote.amount = params[:message][:counter_hourly_rate].to_i * params[:message][:counter_number_of_hours].to_i
         elsif params[:message][:counter_type] == "daily"
           @new_quote.daily_rate = params[:message][:counter_daily_rate]
-          @new_quote.number_of_days = params[:message][:counter_number_of_daily]
+          @new_quote.number_of_days = params[:message][:counter_number_of_days]
           @new_quote.amount = params[:message][:counter_daily_rate].to_i * params[:message][:counter_number_of_days].to_i
         end
 

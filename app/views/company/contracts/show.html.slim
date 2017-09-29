@@ -28,15 +28,19 @@
               .col-xs-12.col-lg-6
                 label= t(:contract_price, scope: [:form, :labels, :job])
                 .show-budget
-                  - if @job.contract_price
-                    = number_to_currency(@job.contract_price, precision: 0)
+                  - if @job.budget
+                    = number_to_currency(@job.accepted_quote.amount, precision: 0)
                     br
                     = @job.currency
                   - else
                     | Not Specified
+                  - if @job.accepted_quote.pay_type == "hourly"
+                    = "(#{@job.accepted_quote.number_of_hours} hours @ #{number_to_currency(@job.accepted_quote.hourly_rate, precision: 0)}/hour)"
+                  - elsif @job.accepted_quote.pay_type == "daily"
+                    = "(#{@job.accepted_quote.number_of_days} days @ #{number_to_currency(@job.accepted_quote.daily_rate, precision: 0)}/day)"
               .col-xs-12.col-lg-6
                 label= t(:pay_type, scope: [:form, :labels, :job])
-                .show_value_em= @job.pay_type&.text || "Not Specified"
+                .show_value_em= @job.accepted_quote.pay_type&.text || "Not Specified"
 
           .show_field
             .row

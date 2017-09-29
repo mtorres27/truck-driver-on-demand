@@ -126,6 +126,14 @@ class Job < ApplicationRecord
     pre_negotiated? || negotiated?
   end
 
+  def accepted_quote
+    if quotes.where({state: :accepted}).count > 0
+      return quotes.where({state: :accepted}).first
+    else
+      return nil
+    end
+  end
+
   enumerize :reporting_frequency, in: [
     :daily,
     :every_other_day,

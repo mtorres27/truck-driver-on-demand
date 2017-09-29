@@ -45,6 +45,10 @@
                 div.quote_amount class=("quote_amount--declined" if item[:payload].state == "declined")
                   = number_to_currency(item[:payload].amount, precision: 0) + " " + job.currency
                 .quote_pay_type= item[:payload].pay_type.text
+                - if item[:payload].pay_type == "hourly"
+                  = "(#{item[:payload].number_of_hours} hours @ #{number_to_currency(item[:payload].hourly_rate, precision: 0)} #{job.currency}/hour)"
+                - if item[:payload].pay_type == "daily"
+                  = "(#{item[:payload].number_of_days} days @ #{number_to_currency(item[:payload].daily_rate, precision: 0)} #{job.currency}/day)"
                 - if item[:payload].fixed? && item[:payload].amount > @job.budget
                   .quote_over-budget= "Over Budget"
                 - elsif item[:payload].fixed? && item[:payload].amount < @job.budget

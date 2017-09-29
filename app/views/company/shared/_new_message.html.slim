@@ -10,7 +10,7 @@
           = f.radio_button :status, "decline"
           = f.label :status_decline, "Decline this quote"
         - elsif quotes.first.author_type == "company" and quotes.first.accepted_by_freelancer == true
-          = f.radio_button :status, "accept
+          = f.radio_button :status, "accept"
           = f.label :status_accept, "Accept this quote"
         = f.hidden_field :override, value: ""
         
