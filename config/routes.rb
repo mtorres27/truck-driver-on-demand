@@ -54,7 +54,10 @@ Rails.application.routes.draw do
     resources :projects
     resources :subscription
       get 'thanks', to: 'subscription#thanks', as: 'thanks'
+      get 'reset', to: 'subscription#reset_company', as: 'reset'
       get 'plans', to: 'subscription#plans', as: 'plans'
+      get 'subscription_cancel', to: 'subscription#cancel', as: 'subscription_cancel'
+      get 'subscription_change', to: 'subscription#change_plan', as: 'subscription_change'
       post 'subscription_checkout' => 'subscription#subscription_checkout'
       post 'webhooks' => 'subscription#webhooks'
 

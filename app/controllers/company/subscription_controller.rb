@@ -2,9 +2,37 @@ class Company::SubscriptionController < Company::BaseController
   before_action :amount_to_be_charged, :set_description
   protect_from_forgery except: :webhook
 
-  def plans
+  def cancel
+    # logger.debug current_company.inspect
+    StripeTool.cancel_subscription(company: current_company)
+    redirect_to company_plans_path
+  end
+
+  def change_plan
     logger.debug current_company.inspect
+    # StripeTool.cancel_subscription
+  end
+
+  def plans
+    # logger.debug current_company.inspect
     @plans = StripeTool.get_plans
+  end
+
+  def reset_company
+    current_company.created_at                = 3.months.ago-5.day #2.days.ago 3.months.ago-5.day
+    current_company.billing_period_ends_at    = nil
+    current_company.stripe_customer_id        = nil
+    current_company.stripe_subscription_id    = nil
+    current_company.stripe_plan_id            = nil
+    current_company.subscription_cycle        = nil
+    current_company.subscription_status       = nil
+    current_company.is_subscription_cancelled = false
+    current_company.last_4_digits             = nil
+    current_company.card_brand                = nil
+    current_company.exp_month                 = nil
+    current_company.exp_year                  = nil
+    current_company.save
+    redirect_to company_plans_path
   end
 
   def subscription_checkout
@@ -28,7 +56,7 @@ class Company::SubscriptionController < Company::BaseController
     begin
       event_json = JSON.parse(request.body.read)
       event_object = event_json['data']['object']
-      Rails.logger.debug event_json.inspect
+      # Rails.logger.debug event_json.inspect
       case event_json['type']
         when 'invoice.payment_succeeded'
           handle_success_invoice event_object
