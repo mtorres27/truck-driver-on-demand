@@ -1,14 +1,40 @@
-br
-br
-br
-.plan-container
+.plan-container{ style='margin-top: 200px;' }
   ul
-    - @plans.each do |plan|
-      li.plan
-        .header
-          =plan[:name]
-        .price
-          =(plan[:amount]/100)
-        = form_tag '/company/subscription_checkout', method: 'post', plan: plan  do
-          input type="hidden" name="plan_id" value=plan[:id]
-          script.stripe-button data-amount=plan[:amount] data-email=("#{current_company.email}") data-description=plan[:name]  data-key=("#{Rails.configuration.stripe[:publishable_key]}") data-locale="auto" src="https://checkout.stripe.com/checkout.js" data-currency = plan[:currency]
+    - if current_company.subscription_status == "trialing" || current_company.subscription_status == "active"
+      .current_plan
+        | You're currently subscribed to the #{current_company.subscription_cycle}ly plan
+      - if current_company.subscription_status == "trialing"
+        | but in "trial" period
+      - if current_company.is_subscription_cancelled == true
+        | , But unfortunately you requested to cancel your subscription, it'll end at #{current_company.billing_period_ends_at}
+      - else
+        | , the #{ current_company.subscription_status == "trialing" ? "trial":"subscription"} will end at #{current_company.billing_period_ends_at}
+      .card
+        = current_company.card_brand << "-" <<  current_company.last_4_digits << "-" << current_company.exp_month << "/" << current_company.exp_year
+      .actions
+        #cancel
+          = link_to 'Cancel', company_subscription_cancel_path, :data => {:confirm => 'Are you sure idiot?'}
+        #change
+          = link_to 'Change plan', '#', :onclick => "toggleSubPlans(event)".html_safe
+          #change_plan.hidden
+            - @plans.each do |plan|
+              - next if current_company.stripe_plan_id == plan.id
+              = link_to plan.name, company_subscription_change_path(plan_id: plan.id), :data => {:confirm => 'Are you sure?'}
+    - else
+      - @plans.each do |plan|
+        li.plan
+          .header
+            =plan[:name]
+          .price
+            =(plan[:amount]/100)
+            | /
+            = plan[:currency]
+          = form_tag '/company/subscription_checkout', method: 'post', plan: plan  do
+            input type="hidden" name="plan_id" value=plan[:id]
+            script.stripe-button data-amount=plan[:amount] data-email=("#{current_company.email}") data-description=plan[:name]  data-key=("#{Rails.configuration.stripe[:publishable_key]}") data-locale="auto" src="https://checkout.stripe.com/checkout.js" data-currency = plan[:currency]
+
+javascript:
+  var toggleSubPlans = function (e) {
+    e.preventDefault();
+    $('#change_plan').toggleClass("hidden");
+  };
