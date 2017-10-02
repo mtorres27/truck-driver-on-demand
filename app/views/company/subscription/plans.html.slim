@@ -11,11 +11,15 @@
         | , the #{ current_company.subscription_status == "trialing" ? "trial":"subscription"} will end at #{current_company.billing_period_ends_at}
       .card
         = current_company.card_brand << "-" <<  current_company.last_4_digits << "-" << current_company.exp_month << "/" << current_company.exp_year
+        .update_card
+          = form_tag '/company/update_card_info', method: 'post' do
+            script.stripe-button  data-email=("#{current_company.email}") src="https://checkout.stripe.com/checkout.js" class="stripe-button" data-key="pk_test_Pq6cvwflOIyhEhJNcY3VpaiA" data-image="/assets/avjunction-logo_header.svg" data-name="AVJunction" data-panel-label="Update Card Details" data-label="Update Card Details" data-allow-remember-me=false data-locale="auto"
+
       .actions
         #cancel
           = link_to 'Cancel', company_subscription_cancel_path, :data => {:confirm => 'Are you sure idiot?'}
         #change
-          = link_to 'Change plan', '#', :onclick => "toggleSubPlans(event)".html_safe
+          = link_to 'Change plan to', '#', :onclick => "toggleSubPlans(event)".html_safe
           #change_plan.hidden
             - @plans.each do |plan|
               - next if current_company.stripe_plan_id == plan.id

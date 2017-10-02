@@ -59,6 +59,7 @@ Rails.application.routes.draw do
       get 'subscription_cancel', to: 'subscription#cancel', as: 'subscription_cancel'
       get 'subscription_change', to: 'subscription#change_plan', as: 'subscription_change'
       post 'subscription_checkout' => 'subscription#subscription_checkout'
+      post 'update_card_info' => 'subscription#update_card_info'
       post 'webhooks' => 'subscription#webhooks'
 
     resources :notifications

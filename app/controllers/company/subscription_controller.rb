@@ -5,12 +5,14 @@ class Company::SubscriptionController < Company::BaseController
   def cancel
     # logger.debug current_company.inspect
     StripeTool.cancel_subscription(company: current_company)
+    flash[:notice] = "Your just cancelled your company subscription!"
     redirect_to company_plans_path
   end
 
   def change_plan
-    logger.debug current_company.inspect
+    # logger.debug current_company.inspect
     # StripeTool.cancel_subscription
+    redirect_to company_plans_path
   end
 
   def plans
@@ -32,6 +34,22 @@ class Company::SubscriptionController < Company::BaseController
     current_company.exp_month                 = nil
     current_company.exp_year                  = nil
     current_company.save
+    flash[:notice] = "Your just reset your company Successfully"
+    redirect_to company_plans_path
+  end
+
+  def update_card_info
+    if params[:stripeToken]
+      customer = Stripe::Customer.retrieve(current_company.stripe_customer_id)
+      customer.source = params[:stripeToken]
+      customer.save
+      StripeTool.update_company_card_info(company: current_company,
+                                          last_4_digits: customer.sources.data[0].last4,
+                                          card_brand: customer.sources.data[0].brand,
+                                          exp_month: customer.sources.data[0].exp_month,
+                                          exp_year: customer.sources.data[0].exp_year)
+    end
+    flash[:notice] = 'Successfully updated your card. '
     redirect_to company_plans_path
   end
 
@@ -44,11 +62,9 @@ class Company::SubscriptionController < Company::BaseController
                                         registered_from: ((Time.now- current_company.created_at)/1.day).floor
                                         )
     # invoice = StripeTool.create_invoice(customer_id: customer.id, subscription: subscription)
-    StripeTool.update_company_info(company: current_company, customer: customer, subscription: subscription)
-    # logger.debug current_company.inspect
-    # logger.debug customer.inspect
-    logger.debug subscription.inspect
-    flash[:notice] = "Successfully created a charge"
+    StripeTool.update_company_info_with_subscription(company: current_company, customer: customer, subscription: subscription)
+
+    flash[:notice] = 'Successfully subscribed to ' + subscription.plan.name
     redirect_to company_plans_path
   end
 
@@ -65,6 +81,7 @@ class Company::SubscriptionController < Company::BaseController
         when 'charge.failed'
           handle_failure_charge event_object
         when 'customer.subscription.deleted'
+          # fully delete the sub
         when 'customer.subscription.updated'
       end
     rescue Exception => ex
@@ -83,7 +100,6 @@ class Company::SubscriptionController < Company::BaseController
   end
 
   def create
-
     # Amount in cents
     customer = StripeTool.create_customer(email: params[:stripeEmail],
                                           stripe_token: params[:stripeToken])

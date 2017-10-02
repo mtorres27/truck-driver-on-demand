@@ -1,5 +1,5 @@
 module StripeTool
-  def self.update_company_info(company: company, customer: customer, subscription: subscription)
+  def self.update_company_info_with_subscription(company: company, customer: customer, subscription: subscription)
     company.billing_period_ends_at    = Time.at(subscription.current_period_end).to_datetime
     company.stripe_customer_id        = customer.id
     company.stripe_subscription_id    = subscription.id
@@ -11,6 +11,14 @@ module StripeTool
     company.card_brand                = customer.sources.data[0].brand
     company.exp_month                 = customer.sources.data[0].exp_month
     company.exp_year                  = customer.sources.data[0].exp_year
+    company.save
+  end
+
+  def self.update_company_card_info(company: company, last_4_digits: last_4_digits, card_brand: card_brand, exp_month: exp_month, exp_year: exp_year)
+    company.last_4_digits             = last_4_digits
+    company.card_brand                = card_brand
+    company.exp_month                 = exp_month
+    company.exp_year                  = exp_year
     company.save
   end
 
