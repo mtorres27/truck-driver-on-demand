@@ -56,6 +56,7 @@ class Admin::CompaniesController < Admin::BaseController
         :avatar,
         :contact_name,
         :country,
+        :currency,
         :address,
         :area,
         :description,
