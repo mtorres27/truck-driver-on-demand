@@ -31,7 +31,9 @@
                       = message.body
                     - else
                       span class="new-message__checkin fa fa-map-marker"
-                      = "Checked in at job site #{message.created_at.strftime("%B %d, %Y at %l:%M %P")}"
+                      = "Checked in at job site #{message.created_at.strftime("%B %d, %Y at %l:%M %P")}:"
+                      br
+                      = message.body
                   - else
                       = message.body.html_safe
 

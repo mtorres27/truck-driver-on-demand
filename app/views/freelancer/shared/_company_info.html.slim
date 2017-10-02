@@ -1,0 +1,24 @@
+.company-info
+  .media-left
+    a href="/freelancer/companies/#{company.id}"
+      = image_tag(company.avatar_url, size: "50x50")
+    - if !is_favourite_company(company)
+      span class="company-info__favourite fa fa-heart"
+    
+    
+  .media-body
+    a href="/freelancer/companies/#{company.id}"
+      span.company-info__name 
+        = company.name
+      span.company-info__area
+        - if params.dig(:search, :address) == nil
+          = "#{company.area}"
+        - elsif params.dig(:search, :address) == ''
+          = "#{company.area}"
+        - else
+          = "#{company.area}, #{distance_from(company)} miles away".company-info__rating
+      
+      .company-info__rating
+        - @stars = company_avg_rating(company)
+        - @stars.each do |star|
+          .span class=star

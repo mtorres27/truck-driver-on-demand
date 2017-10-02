@@ -11,7 +11,7 @@ Rails.application.configure do
   config.eager_load = true
 
   # Full error reports are disabled and caching is turned on.
-  config.consider_all_requests_local       = false
+  config.consider_all_requests_local       = true
   config.action_controller.perform_caching = true
 
   # Attempt to read encrypted secrets from `config/secrets.yml.enc`.
@@ -71,13 +71,12 @@ Rails.application.configure do
 
   config.action_mailer.delivery_method = :smtp
   config.action_mailer.smtp_settings = {
-    address:              'smtp.mandrillapp.com',
+    address:              'smtp.mailgun.org',
     port:                 587,
-    domain:               'domain.com',
-    authentication:       'login',
-    user_name:            'email@domain.com',
-    password:             'pass',
-    enable_starttls_auto: true  
+    domain:               'mg.avjunction.com',
+    authentication:       :plain,
+    user_name:            'postmaster@mg.avjunction.com',
+    password:             '86cce58250969e6a3e564391e35c5543',
   }
 
   # Enable locale fallbacks for I18n (makes lookups for any locale fall back to

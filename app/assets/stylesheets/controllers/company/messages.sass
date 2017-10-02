@@ -58,6 +58,9 @@
     min-height: 500px
     border-left: 1px solid $messages-border
 
+    @media (max-width: $breakpoint-tablet)
+      width: 100%
+
     &--inner
       height: 450px
       overflow-x: hidden
@@ -87,8 +90,10 @@
   margin-top: 8px
 
 .new-message__checkin
-  color: $brand-primary
   margin-right: 5px
+
+  &--active
+    color: $brand-primary
 
 .messages-and-activity
   .authorable_body

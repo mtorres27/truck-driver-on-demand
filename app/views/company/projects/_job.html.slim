@@ -14,7 +14,7 @@
         .job_key Applicants
       - else
         .job_value= number_to_currency(job.contract_price || 0, precision: 0) + " " + job.currency
-        .job_key Contract
+        .job_key Work Order
     .job_cell.job_cell_bot_left
       - if job.created?
         .job_value -

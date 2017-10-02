@@ -1,7 +1,7 @@
 Rails.application.routes.draw do
   devise_for :companies, path: 'company', path_names: { sign_in: "login", sign_up: "register" }
   devise_for :freelancers, path: 'freelancer', path_names: { sign_in: "login", sign_up: "register" }
-  devise_for :admins
+  devise_for :admins, path: 'admin', path_names: { sign_in: "login", sign_up: "register" }
 
 
   root "main#index"
@@ -15,28 +15,45 @@ Rails.application.routes.draw do
     resource :freelancer, only: [:show, :edit, :update]
 
     resources :companies, only: [:index, :show] do
-      get :worked_for, on: :collection
       get :favourites, on: :collection
       post :add_favourites, on: :collection
+      get :av_companies, on: :collection
     end
 
     resources :jobs, only: [:index, :show] do
       get :favourites, on: :collection
       post :add_favourites, on: :collection
+      get :my_jobs, on: :collection
+      get :my_applications, on: :collection
+      post :apply, on: :collection
+      
+      resources :application, only: [:index, :create]
+      resource :contract, only: [:show]
+      resources :messages, only: [:index, :create]    
+      resources :payments, controller: "job_payments", only: [:index]
+      resource :review, only: [:show, :create]  
+      resources :quotes, only: [:index, :create] do
+        get :accept, on: :member
+        get :decline, on: :member
+      end
+
     end
+    resource :profile, only: [:show, :edit, :update] do
+      resource :banking, only: [:index, :edit, :update, :verify, :update_verify]
+      resource :settings, only: [:index, :edit, :update]
+
+    end
+    
+    # resources :profile, only: [:index, :edit, :update] do
+    #   get :edit, on: :member
+    # end
+    
+    get "profile/banking", to: "banking#index"
+    get "profile/settings", to: "settings#index"
+    post "jobs/:id", to: "jobs#apply"
+    post "job/apply", to: "jobs#apply"
 
     resources :notifications
-
-    # resources :jobs, except: [:index] do
-    #   resource :contract, only: [:show]
-    #   resources :messages, only: [:index, :create]
-    #   resources :payments, controller: "job_payments", only: [:index, :show] do
-    #     get :print, on: :member
-    #     get :request_payment, on: :member
-    #   end
-    #   resource :review, only: [:show, :create]
-    # end
-
 
   end
 
@@ -87,13 +104,21 @@ Rails.application.routes.draw do
     root "main#index"
 
     resources :freelancers, except: [:new, :create] do
-      get :login_as, on: :member
       get :disable, on: :member
       get :enable, on: :member
     end
 
     resources :companies, except: [:new, :create] do
-      get :login_as, on: :member
+      get :disable, on: :member
+      get :enable, on: :member
+    end
+
+    resources :projects, except: [:new, :create] do
+      get :disable, on: :member
+      get :enable, on: :member
+    end
+
+    resources :jobs, except: [:new, :create] do
       get :disable, on: :member
       get :enable, on: :member
     end

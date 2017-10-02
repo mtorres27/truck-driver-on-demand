@@ -54,6 +54,8 @@ class Company::ProjectsController < Company::BaseController
         format.js
         format.json { render json: @project, status: :unprocessable_entity }
       end
+
+      p @project.errors.full_messages
     end
   end
 

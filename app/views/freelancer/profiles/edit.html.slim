@@ -1,0 +1,107 @@
+= render partial: "/freelancer/shared/profile_sub_nav"
+
+- content_for :secondary do
+  .result-wrapper
+    .result-header
+      .result-header__text
+        | Edit Freelancer Profile
+    
+    .result-content
+      = simple_form_for(@freelancer, url: freelancer_profile_path) do |f|
+        .freelancer-profile__item
+          .freelancer-profile__title
+            | PROFILE HEADER
+          = image_tag(@freelancer.profile_header_url, style: "width:100%;height:auto")
+          = f.file_field :profile_header, label: false, :accept => 'image/png,image/gif,image/jpeg'
+
+        .freelancer-profile__item
+          .freelancer-profile__title
+            | Profile Picture
+          = image_tag(@freelancer.avatar_url, size: "135x135")
+          = f.file_field :avatar, label: false, :accept => 'image/png,image/gif,image/jpeg'
+
+        .freelancer-profile__item
+          .freelancer-profile__title
+            | Profile Colour
+          = f.input :header_color, required: true, label: false, placeholder: "FF6C38"  
+
+        .freelancer-profile__item
+          .freelancer-profile__title
+            | Name
+          = f.input :name, required: true, label: false, placeholder: "Enter your Name."
+
+        .freelancer-profile__item
+          .freelancer-profile__title
+            | Email
+          = f.input :email, as: :string, required: true, label: false, placeholder: "Email"
+
+        .freelancer-profile__item
+          .freelancer-profile__title
+            | Address
+          = f.input :address, required: true, label: false, placeholder: "Address"
+
+        .freelancer-profile__item
+          .freelancer-profile__title
+            | Area
+          = f.input :area, as: :string, required: true, label: false, placeholder: "Area"        
+
+        .freelancer-profile__item
+          .freelancer-profile__title
+            | Country
+          = f.input :country, required: true, label: false, prompt: "Select Country"
+
+        .freelancer-profile__item
+          .freelancer-profile__title
+            | Tagline
+          = f.input :tagline, required: true, label: false, placeholder: "Tagline"
+
+        .freelancer-profile__item
+          .freelancer-profile__title
+            | Type
+          = f.input :freelancer_type, required: true, label: false, prompt: "Freelancer Type"
+
+        .freelancer-profile__item
+          .freelancer-profile__title
+            | Team Size
+          = f.input :freelancer_team_size, required: true, label: false, prompt: "Team Size"
+
+        .freelancer-profile__item
+          .freelancer-profile__title
+            | Bio
+          = f.input :bio, label: false
+        
+        .freelancer-profile__item
+          .freelancer-profile__title
+            | Markets
+          = f.input :keywords, as: :string, label: false
+        
+        .freelancer-profile__item
+          .freelancer-profile__title
+            | Skills
+          = f.input :skills, as: :string, label: false
+
+        .freelancer-profile__item
+          .freelancer-profile__title
+            | Years of Experience
+          = f.input :years_of_experience, label: false
+
+        .freelancer-profile__item
+          .freelancer-profile__title
+            | Availability
+          = f.input :available
+
+        .freelancer-profile__item
+          .freelancer-profile__title
+            | Pay Type Preference
+          = f.input :pay_unit_time_preference, label: false, prompt: "Select Pay Type Preference"
+
+        .freelancer-profile__item
+          .freelancer-profile__title
+            | Certifications
+            = f.simple_fields_for :certifications do |certification_form|
+              = render "certification_fields", f: certification_form
+            .links
+              = link_to_add_association 'Add', f, :certifications, class: "btn btn-default"
+        
+        .form-actions
+          = f.button :submit, class: "btn btn-primary", label: "Update Profile"

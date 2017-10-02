@@ -1,0 +1,28 @@
+.tab-bar
+  .tab-bar__item class=("tab-bar__item--active" if request.path == "/freelancer/jobs/#{job.id}")
+    a href=freelancer_job_path(job)
+      | Job Details
+  .tab-bar__item class=("tab-bar__item--active" if request.path == "/freelancer/jobs/#{job.id}/application")
+    a href=freelancer_job_application_index_path(job)
+      | Application
+  .tab-bar__item class=("tab-bar__item--active" if request.path == "/freelancer/jobs/#{job.id}/contract")
+    a href=freelancer_job_contract_path(job)
+      | Contract
+  .tab-bar__item class=("tab-bar__item--active" if request.path == "/freelancer/jobs/#{job.id}/messages")
+    - if !job.freelancer
+      | Progress
+    - else
+      a href=freelancer_job_messages_path(job)
+        | Progress
+  .tab-bar__item class=("tab-bar__item--active" if request.path == "/freelancer/jobs/#{job.id}/payments")
+    - if job.pre_contracted?
+      | Payments
+    - else
+      a href=freelancer_job_payments_path(job)
+        | Payments
+  .tab-bar__item href=freelancer_job_review_path(job) class=("tab-bar__item--active" if request.path == "/freelancer/jobs/#{job.id}/review")
+    - unless job.completed?
+      | Review
+    - else
+      a href=freelancer_job_review_path(job)
+        | Review

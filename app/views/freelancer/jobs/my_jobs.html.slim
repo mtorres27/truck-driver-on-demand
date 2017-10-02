@@ -1,0 +1,10 @@
+= render partial: "/freelancer/shared/jobs_sub_nav"
+- content_for :secondary do
+  .result-wrapper
+    .result-freelancers
+      - if @jobs.count == 0
+        .result-content
+          | You haven't yet done any work for any integrators yet.
+      - @jobs.each do |job|
+        a.result-row href=freelancer_job_path(job)
+          = render partial: "/freelancer/shared/my_job_info", locals: { job: job }

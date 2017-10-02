@@ -34,8 +34,19 @@ module CompanyHelper
   end
 
   
-  def is_favourite(company)
-    favourites = current_freelancer.favourites.where({company_id: company.id})
+  def _is_favourite(company)
+    favourites = current_freelancer.favourite_companies.where({company_id: company.id})
+
+    if favourites.count == 0
+      return false
+    else
+      return true
+    end
+
+  end
+
+  def is_favourite_company(company)
+    favourites = current_freelancer.company_favourites.where({company_id: company.id})
 
     if favourites.count == 0
       return false
@@ -47,7 +58,7 @@ module CompanyHelper
 
 
   def is_showing_company(path)
-    if request.path.include?(freelancer_companies_path) && !request.path.include?("worked_for") && !request.path.include?("favourites")
+    if request.path.include?(freelancer_companies_path) && !request.path.include?("av_companies") && !request.path.include?("favourites")
       true
     else
       false

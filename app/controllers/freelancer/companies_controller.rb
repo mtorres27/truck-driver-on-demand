@@ -50,49 +50,64 @@ class Freelancer::CompaniesController < Freelancer::BaseController
     @jobs = @jobs.page(params[:page]).per(50)
   end
 
-  def worked_for
-    @locations = current_freelancer.companies.uniq.pluck(:area)
-    @companies = current_freelancer.companies
-
-    if params[:location] && params[:location] != ""
-      @companies = @companies.where({ area: params[:location] })
-    end
-    
-    @companies = @companies.page(params[:page]).
-      per(50)
-  end
 
   def favourites
     @locations = current_freelancer.favourite_companies.uniq.pluck(:area)
     @companies = current_freelancer.favourite_companies
 
-    if params[:location] && params[:location] != ""
-      @companies = @companies.where({ area: params[:location] })
+    current_freelancer.favourite_jobs.each do |job|
+      @locations << job.company.area
+      @companies << job.company
     end
 
-    @companies = @companies.page(params[:page]).
-      per(50)
+    @locations = @locations.uniq
+    @companies = @companies.uniq
+
+    # @companies = @companies.page(params[:page]).
+    #   per(50)
   end
 
 
-  def show_company
+  def show
     @company = Company.find(params[:id])
 
     # analytic
     @company.profile_views += 1
     @company.save
 
-    @favourite = current_freelancer.favourites.where({company_id: params[:id]}).length > 0 ? true : false
+    @favourite = current_freelancer.company_favourites.where({company_id: params[:id]}).length > 0 ? true : false
     if params.dig(:toggle_favourite) == "true"
       if @favourite == false
         current_freelancer.favourite_companies << @company
         @favourite = true
       else
-        current_freelancer.favourites.where({company_id: @company.id}).destroy_all
+        current_freelancer.company_favourites.where({company_id: @company.id}).destroy_all
         @favourite = false
       end
     end
+  end
 
+
+  def av_companies
+    @locations = []
+    @companies = []
+
+    if params[:location] && params[:location] != ""
+      current_freelancer.jobs.where({ area: params[:location] }).each do |job|
+        @locations << job.company.area
+        @companies << job.company
+      end
+    else
+
+      current_freelancer.jobs.each do |job|
+        @locations << job.company.area
+        @companies << job.company
+      end
+    end
+
+
+    @locations = @locations.uniq
+    @companies = @companies.uniq
     
   end
 

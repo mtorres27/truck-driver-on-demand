@@ -4,6 +4,37 @@ p= mail_to @company.email
   p
     img src=@company.avatar_url
 
+p= "Contact Name: #{@company.contact_name}"
+p= "Address: #{@company.address}"
+p= "Area: #{@company.area}"
+p= "Description: #{@company.description}"
+p= "Work Order Preference: #{@company.contract_preference}"
+p= "Keywords: #{@company.keywords}"
+p= "Skills: #{@company.skills}"
+p= "Website: #{@company.website}"
+p= "Phone Number: #{@company.phone_number}"
+p= "Number of Offices: #{@company.number_of_offices}"
+p= "Number of Employees: #{@company.number_of_employees}"
+p= "Established In: #{@company.established_in}"
+p= "Disabled: #{@company.disabled}"
+
+h2
+  | This Company's Projects:
+.table-responsive
+  table.table.table-striped
+    thead
+      tr
+        th Name
+        th.text-right Actions
+
+    tbody
+      - @company.projects.each do |project|
+        tr
+          td= link_to project.name, admin_project_path(project)
+          td.text-right= link_to 'Edit', edit_admin_project_path(project)
+      end
+
+
 hr
 = link_to 'Edit', edit_admin_company_path(@company)
 '  |

@@ -87,6 +87,8 @@ class Company::ApplicantsController < Company::BaseController
 
       @harmonized_indices = @harmonized_indices.sort.reverse()
 
+      
+
       @harmonized_indices.each do |index|
         search_in_combined(@combined_items, index)
       end

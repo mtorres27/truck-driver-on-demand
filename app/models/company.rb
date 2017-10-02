@@ -25,7 +25,7 @@ class Company < ApplicationRecord
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
   devise :database_authenticatable, :registerable,
-         :recoverable, :rememberable, :trackable, :validatable
+         :recoverable, :rememberable, :trackable, :validatable, :confirmable
   extend Enumerize
   include PgSearch
   include Geocodable
@@ -46,13 +46,25 @@ class Company < ApplicationRecord
   has_many :favourite_freelancers, through: :favourites, source: :freelancer
   has_many :company_installs, dependent: :destroy
 
-  enumerize :currency, in: [ "CAD", "USD" ]
+  enumerize :currency, in: [
+    :cad,
+    :euro,
+    :ruble,
+    :rupee,
+    :usd,
+    :yen,
+  ]
+
   enumerize :contract_preference, in: [:prefer_fixed, :prefer_hourly]
   enumerize :number_of_employees, in: [
     :one_to_ten,
     :eleven_to_one_hundred,
     :one_hundred_one_to_one_thousand,
     :more_than_one_thousand
+  ]
+
+  enumerize :country, in: [
+    :at, :au, :be, :ca, :ch, :de, :dk, :es, :fi, :fr, :gb, :hk, :ie, :it, :jp, :lu, :nl, :no, :nz, :pt, :se, :sg, :us
   ]
 
   accepts_nested_attributes_for :featured_projects, allow_destroy: true, reject_if: :reject_featured_projects
@@ -75,6 +87,15 @@ class Company < ApplicationRecord
   end
 
   audited
+
+  after_create :add_to_hubspot
+
+    def add_to_hubspot
+      Hubspot::Contact.create_or_update!([
+        {email: email, firstname: name, lastname: ""}
+      ])
+    end
+
   pg_search_scope :search, against: {
     name: "A",
     email: "A",
