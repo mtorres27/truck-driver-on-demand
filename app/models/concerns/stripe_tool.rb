@@ -84,13 +84,14 @@ module StripeTool
     end
 
     def self.cancel_month(subscription: subscription, period_end: period_end)
+      cancel_at_period_end = subscription.status == 'past_due'?  false: true
       if subscription.status == 'trialing'
         subscription.trial_end = period_end
         subscription.prorate = false
         subscription.save
       end
       subscription.delete(
-        at_period_end: true
+        at_period_end: cancel_at_period_end
       )
     end
 
@@ -114,12 +115,13 @@ module StripeTool
     end
 
     def self.cancel_year(subscription: subscription, period_end: period_end)
+      cancel_at_period_end = subscription.status == 'past_due'?  false: true
       subscription.trial_end = period_end
       subscription.prorate = false
       subscription.save
 
       subscription.delete(
-        at_period_end: false
+        at_period_end: cancel_at_period_end
       )
       # Refund the rest of period
     end
