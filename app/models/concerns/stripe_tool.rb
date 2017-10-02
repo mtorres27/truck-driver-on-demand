@@ -59,10 +59,8 @@ module StripeTool
     company.is_subscription_cancelled = true
     subscription = Stripe::Subscription.retrieve(company.stripe_subscription_id)
     period_end = self.get_cancel_period_end(subscription: subscription)
-    if subscription.plan.interval == 'month'
-      self.cancel_month(subscription: subscription, period_end: period_end)
-    else
-      self.cancel_year(subscription: subscription, period_end: period_end)
+    self.cancel(subscription: subscription, period_end: period_end)
+    if subscription.plan.interval != 'month'
       self.refund_customer(customer: company.stripe_customer_id, old_exp: company.billing_period_ends_at.to_time.to_i, new_exp: period_end)
     end
     company.billing_period_ends_at = Time.at(period_end).to_date
@@ -83,9 +81,9 @@ module StripeTool
       return subscription.current_period_end
     end
 
-    def self.cancel_month(subscription: subscription, period_end: period_end)
+    def self.cancel(subscription: subscription, period_end: period_end)
       cancel_at_period_end = subscription.status == 'past_due'?  false: true
-      if subscription.status == 'trialing'
+      if subscription.status == 'trialing' || subscription.plan.interval != 'month'
         subscription.trial_end = period_end
         subscription.prorate = false
         subscription.save
@@ -96,8 +94,6 @@ module StripeTool
     end
 
     def self.refund_customer(customer: customer, old_exp: old_exp, new_exp: new_exp)
-      Rails.logger.debug old_exp
-      Rails.logger.debug new_exp
       # calculate months
       monthly_plan = Stripe::Plan.retrieve("avj_monthly")
       no_of_month = ((old_exp - new_exp - 1.day.second)/1.month.second).to_i
@@ -112,17 +108,5 @@ module StripeTool
       Stripe::Refund.create(
         charge: charge.id
       )
-    end
-
-    def self.cancel_year(subscription: subscription, period_end: period_end)
-      cancel_at_period_end = subscription.status == 'past_due'?  false: true
-      subscription.trial_end = period_end
-      subscription.prorate = false
-      subscription.save
-
-      subscription.delete(
-        at_period_end: cancel_at_period_end
-      )
-      # Refund the rest of period
     end
 end
