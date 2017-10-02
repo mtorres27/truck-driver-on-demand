@@ -61,7 +61,7 @@ module StripeTool
     period_end = self.get_cancel_period_end(subscription: subscription)
     self.cancel(subscription: subscription, period_end: period_end)
     if subscription.plan.interval != 'month'
-      self.refund_customer(customer: company.stripe_customer_id, old_exp: company.billing_period_ends_at.to_time.to_i, new_exp: period_end)
+      self.refund_customer(customer: company.stripe_customer_id, old_exp: company.billing_period_ends_at.to_time.to_i)
     end
     company.billing_period_ends_at = Time.at(period_end).to_date
     company.save
@@ -72,7 +72,7 @@ module StripeTool
     def self.get_cancel_period_end(subscription: subscription)
       if (subscription.status == 'trialing' || subscription.plan.interval != 'month') && Time.at(subscription.current_period_start).to_date != Date.today && (subscription.current_period_end - Time.now.to_i) / 86_400 > 31
         period_end = Time.at(subscription.current_period_end).to_date
-        period_end = period_end >> -1 while period_end >= Date.today
+        period_end = period_end >> -1 while period_end > Date.today
         return (period_end >> 1).to_time.to_i
       end
       if Time.at(subscription.current_period_start).to_date == Date.today
@@ -93,10 +93,10 @@ module StripeTool
       )
     end
 
-    def self.refund_customer(customer: customer, old_exp: old_exp, new_exp: new_exp)
+    def self.refund_customer(customer: customer, old_exp: old_exp)
       # calculate months
       monthly_plan = Stripe::Plan.retrieve("avj_monthly")
-      no_of_month = ((old_exp - new_exp - 1.day.second)/1.month.second).to_i
+      no_of_month = ((old_exp - Time.now.to_time.to_i)/1.month.second).to_i
       amount = no_of_month * monthly_plan.amount
       # generate the refund
       charge = Stripe::Charge.create(
