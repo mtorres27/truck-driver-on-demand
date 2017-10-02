@@ -11,7 +11,7 @@
     = f.hidden_field :checkin, value: "false"
         
     .new-message__input
-      = f.input :body, as: :string, placeholder: "Send a message to #{n.split(" ").first}", label: false
+      = f.input :body, as: :string, placeholder: "Send a message to #{n}", label: false
       .new-message__attachment-button.new-message__checkin onclick="triggerCheckin()"
         .span class="fa fa-map-marker"
 

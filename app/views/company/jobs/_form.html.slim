@@ -14,7 +14,7 @@
         = f.input :title, placeholder: "Enter the job title"
         = f.input :address, placeholder: "Enter the address of the job"
         = f.input :summary, placeholder: "Enter the job summary"
-        = f.input :scope_of_work, placeholder: "Please enter in more details about the job to receive a better quote. If you already have these documents please attach them below."
+        = f.input :scope_of_work, placeholder: "Please enter in more details about the job to receive a better quote."
 
       .col-sm-12.col-md-6.col-lg-5
         = f.input :budget, placeholder: "Enter a budget", input_html: { value: number_with_precision(f.object.budget, precision: 0) }
