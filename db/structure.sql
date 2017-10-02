@@ -332,17 +332,17 @@ CREATE TABLE companies (
     last_sign_in_at timestamp without time zone,
     current_sign_in_ip inet,
     last_sign_in_ip inet,
-    stripe_customer_id character varying(40),
-    stripe_subscription_id character varying(30),
-    stripe_plan_id character varying(20),
-    subscription_cycle character varying(10),
+    stripe_customer_id character varying,
+    stripe_subscription_id character varying,
+    stripe_plan_id character varying,
+    subscription_cycle character varying,
     is_subscription_cancelled boolean DEFAULT false,
-    subscription_status character varying(10),
+    subscription_status character varying,
     billing_period_ends_at timestamp without time zone,
-    last_4_digits character varying(4),
-    card_brand character varying(20),
-    exp_month character varying(2),
-    exp_year character varying(4)
+    last_4_digits character varying,
+    card_brand character varying,
+    exp_month character varying,
+    exp_year character varying,
     header_color character varying DEFAULT 'FF6C38'::character varying,
     country character varying,
     confirmation_token character varying,
@@ -1992,9 +1992,9 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20170905135846'),
 ('20170905135938'),
 ('20170908180901'),
-('20170919185701');
 ('20170911175055'),
 ('20170911175108'),
+('20170919185701'),
 ('20170920173223'),
 ('20170921184950'),
 ('20170925141902'),
@@ -2003,6 +2003,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20170928133148'),
 ('20170928151229'),
 ('20170928151921'),
-('20170929133938');
+('20170929133938'),
+('20171002193000');
 
 
