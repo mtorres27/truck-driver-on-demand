@@ -1,7 +1,5 @@
 module StripeTool
   def self.update_company_info(company: company, customer: customer, subscription: subscription)
-    # period = subscription.plan.interval == "month" ? 1.month : 1.year
-    # company.expires_at = (company.expires_at && company.expires_at > Date.today ? company.expires_at : Date.today) + period
     company.billing_period_ends_at    = Time.at(subscription.current_period_end).to_datetime
     company.stripe_customer_id        = customer.id
     company.stripe_subscription_id    = subscription.id
@@ -65,7 +63,7 @@ module StripeTool
       self.cancel_month(subscription: subscription, period_end: period_end)
     else
       self.cancel_year(subscription: subscription, period_end: period_end)
-      # self.refund_customer(subscription: subscription)
+      self.refund_customer(customer: company.stripe_customer_id, old_exp: company.billing_period_ends_at.to_time.to_i, new_exp: period_end)
     end
     company.billing_period_ends_at = Time.at(period_end).to_date
     company.save
@@ -96,11 +94,22 @@ module StripeTool
       )
     end
 
-    def self.refund_customer(subscription: subscription, period_end: period_end)
-      subscription.prorate = false
-      subscription.save
-      subscription.delete(
-        at_period_end: true
+    def self.refund_customer(customer: customer, old_exp: old_exp, new_exp: new_exp)
+      Rails.logger.debug old_exp
+      Rails.logger.debug new_exp
+      # calculate months
+      monthly_plan = Stripe::Plan.retrieve("avj_monthly")
+      no_of_month = ((old_exp - new_exp - 1.day.second)/1.month.second).to_i
+      amount = no_of_month * monthly_plan.amount
+      # generate the refund
+      charge = Stripe::Charge.create(
+        amount: amount,
+        currency:  'usd',
+        customer: customer,
+        description: 'Refund for unused period in the annual plan.'
+      )
+      Stripe::Refund.create(
+        charge: charge.id
       )
     end
 
