@@ -46,15 +46,15 @@
               - if !@job.freelancer
                 | Freelancer not chosen
               - elsif @job.pre_contracted?
-                | Determine contract stuff.
+                | Freelencer selected: work order pending.
               - elsif @job.contracted?
-                | Contract determined
+                | Work Order determined
             - if @job.freelancer
               a.btn-primary.job-details__work-order__btn href=edit_company_job_contract_path(@job)
-                | Create Contract
+                | Create Work Order
             - else
               div.btn-primary.job-details__work-order__btn--disabled
-                | Create Contract
+                | Create Work Order
             
 
       .job-details

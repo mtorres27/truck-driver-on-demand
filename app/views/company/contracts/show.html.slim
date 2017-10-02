@@ -6,7 +6,7 @@
       a.result-header__link-back href=company_job_path(@job)
         span class="fa fa-long-arrow-left"
       .result-header__text
-        | Contract
+        | Work Order
     .result-content
       .row
         .col-xs-12.col-md-6
@@ -31,7 +31,10 @@
                   - if @job.budget
                     = number_to_currency(@job.accepted_quote.amount, precision: 0)
                     br
-                    = @job.currency.upcase
+                    - if @job.currency.nil?
+                      | 
+                    - else
+                      = @job.currency.upcase
                   - else
                     | Not Specified
                   - if @job.accepted_quote.pay_type == "hourly"
@@ -68,7 +71,10 @@
                       td.text-right
                         = number_to_currency(payment.amount, precision: 0)
                         br
-                        = @job.currency.upcase
+                        - if @job.currency.nil?
+                          | 
+                        - else
+                          = @job.currency.upcase
               - else
                 | None Specified
 

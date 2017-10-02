@@ -4,7 +4,7 @@
   .result-wrapper
     .result-header
       .result-header__text
-        | Edit Contract
+        | Edit Work Order
 
     .result-content
       = simple_form_for(@job, url: company_job_contract_path(@job)) do |f|
@@ -38,7 +38,7 @@
 
           .job-details
             .job-details__title
-              | Job Contract Price
+              | Job Work Order Price
             .job-details__price
               - if f.object and f.object.accepted_quote
                 = f.input :contract_price, required: true, input_html: { value: number_with_precision(f.object.accepted_quote.amount, precision: 0) }, label: false, disabled: true
@@ -104,7 +104,7 @@
         .form-actions
           = f.hidden_field :send_contract, value: false
           div.btn.btn-primary onclick="sendContract()"
-            | Send Contract
+            | Send Work Order
           div.btn.btn-secondary onclick="saveDraft()"
             | Save Draft
 
