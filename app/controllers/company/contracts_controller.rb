@@ -21,7 +21,7 @@ class Company::ContractsController < Company::BaseController
         @m.authorable = @job.company
         @m.receivable = @job.freelancer
         @m.send_contract = true
-        @m.body = "Hi #{@job.freelancer.name}! This is a note to let you know that we've just sent a contract to you. <a href='/freelancer/jobs/#{@job.id}/contract'>Click here</a> to view it!"
+        @m.body = "Hi #{@job.freelancer.name}! This is a note to let you know that we've just sent a work order to you. <a href='/freelancer/jobs/#{@job.id}/work_order'>Click here</a> to view it!"
         @m.save
 
         @job.messages << @m
@@ -30,7 +30,7 @@ class Company::ContractsController < Company::BaseController
         @job.contract_sent = true
         @job.save
       end
-      redirect_to company_job_contract_path(@job), notice: "Contract updated."
+      redirect_to company_job_work_order_path(@job), notice: "Work Order updated."
     else
       build_payments
       flash[:error] = "Unable to save: please ensure all fields are filled out."

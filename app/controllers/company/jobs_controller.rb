@@ -52,11 +52,11 @@ class Company::JobsController < Company::BaseController
         @m.authorable = @job.company
         @m.receivable = @job.freelancer
         @m.send_contract = true
-        @m.body = "Hi #{@job.freelancer}! This is a note to let you know that we've just sent a contract to you. <a href='/freelancer/jobs/#{@job.id}/contract'>Click here</a> to view it!"
+        @m.body = "Hi #{@job.freelancer}! This is a note to let you know that we've just sent a contract to you. <a href='/freelancer/jobs/#{@job.id}/work_order'>Click here</a> to view it!"
         @m.save
       end
 
-      redirect_to edit_company_job_contract_path(@job)
+      redirect_to edit_company_job_work_order_path(@job)
     else
       render :edit
     end

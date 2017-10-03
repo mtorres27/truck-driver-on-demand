@@ -3,10 +3,10 @@
   .result-mobile
     .result-header
       .result-header__text
-        | Contract
+        | Work Order
     .result-content
       - if @job.contract_sent == false
-        | Can't show the contract yet, it hasn't been set.
+        | Can't show the work order yet, it hasn't been set.
       - else
         .row
         .col-xs-12.col-md-6
@@ -91,6 +91,20 @@
                 li.show_value= t(:require_checkin, scope: [:form, :labels, :job])
               - if @job.require_uniform?
                 li.show_value= t(:require_uniform, scope: [:form, :labels, :job])
+
+
+          - if @job.state != :contracted
+            p
+              | If the terms of this work order are acceptable to you, click on the link below. If you want to negotiate the terms, enter a message in the 
+              a href=freelancer_job_messages_path(@job)
+                | Progress
+              |  view
+            a.btn.btn-primary href="/freelancer/jobs/#{@job.id}/work_order/accept"
+              | Accept Work Order
+          - else
+            p
+              | You have accepted the terms of this work_order. 
+
 
       
 

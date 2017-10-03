@@ -7,7 +7,7 @@
         | Edit Work Order
 
     .result-content
-      = simple_form_for(@job, url: company_job_contract_path(@job)) do |f|
+      = simple_form_for(@job, url: company_job_work_order_path(@job)) do |f|
         .job-details
           .job-details__work-order
             .job-details__work-order__content
@@ -43,7 +43,7 @@
               - if f.object and f.object.accepted_quote
                 = f.input :contract_price, required: true, input_html: { value: number_with_precision(f.object.accepted_quote.amount, precision: 0) }, label: false, disabled: true
               - else 
-                = f.input :contract_price, required: true, input_html: '', label: false, disabled: true
+                = f.input :contract_price, required: true, label: false, disabled: true
             .job-details__price-status
               = ""
 

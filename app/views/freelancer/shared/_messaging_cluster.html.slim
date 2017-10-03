@@ -8,15 +8,17 @@
           .new-message_amount
             .new-message__freelancer-selected
               .new-message__freelancer-selected__text
-                -if @applicant_accepted
+                - if @applicant_accepted
                   b
                     = "Congratulations, you've been selected for this job."
                   p
                     = "Click the link below to view the particulars of the job with #{@job.company.name}:"
-
-                div
-                a.btn.btn-primary href=freelancer_job_contract_path(@job)
-                  | view contract
+                  div
+                    a.btn.btn-primary href=freelancer_job_work_order_path(@job)
+                      | view work order
+                - else 
+                  p 
+                    | Unfortunately, you haven't been selected for this job.
       .applicant-messages__messages--inner class=("applicant-messages__messages--inner--inactive" if @applicant_accepted == true)
         - @harmonized_items.each do |item|
           - if item[:type] == "message"
@@ -42,6 +44,14 @@
           - elsif item[:type] == "quote"
             .media
               .media-body
+                - if item[:payload].attachment_url
+                  a.authorable_attachment href=item[:payload].attachment_url target="_blank"
+                    - if is_image(item[:payload].attachment_url)
+                      span class="authorable_attachment_icon fa fa-image"
+                    - else
+                      span class="authorable_attachment_icon fa fa-file-text"
+                    .authorable_attachment__filename
+                      = eval(item[:payload].attachment_data)[:metadata][:filename]
                 div.quote_amount class=("quote_amount--declined" if item[:payload].state == "declined")
                   = number_to_currency(item[:payload].amount, precision: 0) + " " + job.currency
                 .quote_pay_type= item[:payload].pay_type.text

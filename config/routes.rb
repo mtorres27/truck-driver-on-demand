@@ -28,7 +28,7 @@ Rails.application.routes.draw do
       post :apply, on: :collection
       
       resources :application, only: [:index, :create]
-      resource :contract, only: [:show]
+      resource :contract, only: [:show, :accept], as: "work_order", path: "work_order"
       resources :messages, only: [:index, :create]    
       resources :payments, controller: "job_payments", only: [:index]
       resource :review, only: [:show, :create]  
@@ -44,14 +44,11 @@ Rails.application.routes.draw do
 
     end
     
-    # resources :profile, only: [:index, :edit, :update] do
-    #   get :edit, on: :member
-    # end
-    
     get "profile/banking", to: "banking#index"
     get "profile/settings", to: "settings#index"
     post "jobs/:id", to: "jobs#apply"
     post "job/apply", to: "jobs#apply"
+    get "jobs/:id/work_order/accept", to: "contracts#accept"
 
     resources :notifications
 
@@ -81,7 +78,7 @@ Rails.application.routes.draw do
           get :decline, on: :member
         end
       end
-      resource :contract, only: [:show, :edit, :update]
+      resource :contract, only: [:show, :edit, :update], as: "work_order", path: "work_order"
       resources :messages, only: [:index, :create]
       resources :payments, controller: "job_payments", only: [:index, :show] do
         get :print, on: :member

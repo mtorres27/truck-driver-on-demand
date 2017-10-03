@@ -71,8 +71,8 @@ en:
         any_time: "Any Time (Workday, Evenings, Weekends)"
     company:
       contract_preference:
-        prefer_fixed: "Fixed Price Contracts"
-        prefer_hourly: "Hourly Contracts"
+        prefer_fixed: "Fixed Price Work Orders"
+        prefer_hourly: "Hourly Work Orders"
         no_preference: "No Preference"
         prefers: "Prefers"
       number_of_employees:
@@ -88,9 +88,9 @@ en:
       usd: "US Dollars"
       yen: "Yen"
     
-  has_no_preference: "Has no Contract Preference"
-  prefer_fixed: "Fixed Price Contracts"
-  prefer_hourly: "Hourly Contracts"
+  has_no_preference: "Has no Work Order Preference"
+  prefer_fixed: "Fixed Price Work Orders"
+  prefer_hourly: "Hourly Work Orders"
   no_preference: "No Preference"
   prefers: "Prefers"
   one_to_ten: "1 - 10"
