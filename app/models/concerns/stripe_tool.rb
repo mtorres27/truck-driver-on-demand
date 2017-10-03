@@ -23,6 +23,10 @@ module StripeTool
     company.save
   end
 
+  def self.updown_subscription()
+
+  end
+
   def self.create_customer(email: email, stripe_token: stripe_token)
     Stripe::Customer.create(
       email: email,
@@ -42,7 +46,7 @@ module StripeTool
   def self.subscribe(customer: customer, plan_id: plan_id, is_new: is_new, registered_from: registered_from)
     customer.subscriptions.create(
       plan: plan_id,
-      trial_period_days: (90-registered_from > 0) ? 90-registered_from : 0
+      trial_period_days: (90-registered_from > 0 && is_new) ? 90-registered_from : 0
     )
   end
 
@@ -76,6 +80,10 @@ module StripeTool
     company.save
   end
 
+  def self.get_stripe_plan (id: id)
+    Stripe::Plan.retrieve(id)
+  end
+
   private
 
     def self.get_cancel_period_end(subscription: subscription)
@@ -91,7 +99,7 @@ module StripeTool
     end
 
     def self.cancel(subscription: subscription, period_end: period_end)
-      cancel_at_period_end = subscription.status == 'past_due'?  false: true
+      cancel_at_period_end = subscription.status == 'past_due' ? false : true
       if subscription.status == 'trialing' || subscription.plan.interval != 'month'
         subscription.trial_end = period_end
         subscription.prorate = false
@@ -104,7 +112,7 @@ module StripeTool
 
     def self.refund_customer(customer: customer, old_exp: old_exp)
       # calculate months
-      monthly_plan = Stripe::Plan.retrieve("avj_monthly")
+      monthly_plan = self.get_stripe_plan (avj_monthly)
       no_of_month = ((old_exp - Time.now.to_time.to_i)/1.month.second).to_i
       amount = no_of_month * monthly_plan.amount
       # generate the refund

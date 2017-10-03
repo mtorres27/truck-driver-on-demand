@@ -11,7 +11,11 @@ class Company::SubscriptionController < Company::BaseController
 
   def change_plan
     # logger.debug current_company.inspect
-    # StripeTool.cancel_subscription
+    if current_company.stripe_plan_id != params[:plan]
+      new_plan = StripeTool.get_stripe_plan (params[:plan])
+      StripeTool.cancel_subscription
+      flash[:notice] = 'Your just cancelled your company subscription!'
+    end
     redirect_to company_plans_path
   end
 
