@@ -299,7 +299,6 @@ CREATE TABLE companies (
     email citext NOT NULL,
     name character varying NOT NULL,
     contact_name character varying NOT NULL,
-    currency character varying DEFAULT 'CAD'::character varying NOT NULL,
     address character varying,
     formatted_address character varying,
     area character varying,
@@ -1991,6 +1990,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20170928133148'),
 ('20170928151229'),
 ('20170928151921'),
-('20170929133938');
+('20170929133938'),
+('20171003125747');
 
 
