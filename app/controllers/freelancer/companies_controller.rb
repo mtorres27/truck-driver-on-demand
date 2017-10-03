@@ -93,13 +93,13 @@ class Freelancer::CompaniesController < Freelancer::BaseController
     @companies = []
 
     if params[:location] && params[:location] != ""
-      current_freelancer.jobs.where({ area: params[:location] }).each do |job|
+      current_freelancer.applicants.where({ state: "accepted" }).where({ area: params[:location] }).each do |job|
         @locations << job.company.area
         @companies << job.company
       end
     else
 
-      current_freelancer.jobs.each do |job|
+      current_freelancer.applicants.where({ state: "accepted" }).each do |job|
         @locations << job.company.area
         @companies << job.company
       end

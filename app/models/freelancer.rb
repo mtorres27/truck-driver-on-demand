@@ -53,6 +53,9 @@ class Freelancer < ApplicationRecord
   has_many :company_favourites
   has_many :favourite_companies, through: :company_favourites, source: :company
 
+  serialize :keywords
+  serialize :skills
+
   validates :years_of_experience, numericality: { only_integer: true }
 
   audited

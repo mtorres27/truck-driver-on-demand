@@ -31,7 +31,8 @@
                     = image_tag(item[:payload].authorable.avatar_url, size: "40x40")
               .media-body
                 span.authorable_name #{item[:payload].authorable.name}
-                span.authorable_date #{time_ago_in_words(item[:payload].created_at)} ago
+                - if !item[:payload].created_at.nil?
+                  span.authorable_date #{time_ago_in_words(item[:payload].created_at)} ago
                 .authorable_body= item[:payload].body
                 - if item[:payload].attachment_url
                   a.authorable_attachment href=item[:payload].attachment_url target="_blank"

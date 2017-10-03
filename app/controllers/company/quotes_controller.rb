@@ -23,6 +23,7 @@ class Company::QuotesController < Company::BaseController
       if @status == "accept"
         @quotes.last.accept!
         @applicant.accept!
+          
         self.send_decline_message
         redirect_to company_job_work_order_path(@job)
         @job.state = "negotiated"

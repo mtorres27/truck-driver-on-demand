@@ -6,5 +6,5 @@
         .result-content
           | You haven't applied to any jobs yet.
       - @jobs.each do |job|
-        a.result-row href=freelancer_job_path(job)
-          = render partial: "/freelancer/shared/my_job_info", locals: { job: job }
+        a.result-row href=freelancer_job_path(job[:job])
+          = render partial: "/freelancer/shared/my_job_info", locals: { job: job[:job], type: "applicant", applicant: job[:applicant]  }

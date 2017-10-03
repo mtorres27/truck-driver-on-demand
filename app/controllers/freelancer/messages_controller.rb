@@ -20,7 +20,7 @@ class Freelancer::MessagesController < Freelancer::BaseController
   private
 
   def set_job
-    @job = current_freelancer.jobs.includes(messages: :authorable).find(params[:job_id])
+    @job = current_freelancer.applicants.includes(messages: :authorable).find(params[:job_id])
   end
 
   def set_collection

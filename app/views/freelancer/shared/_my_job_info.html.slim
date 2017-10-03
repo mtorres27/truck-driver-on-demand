@@ -5,6 +5,12 @@
   .search-result__job-title
     a href=freelancer_job_path(job)
       = job.title
+      - if type == 'applicant'
+        span.search-result__company-status
+          = applicant_state_label(applicant)
+      - elsif type == 'job'
+        span.search-result__company-status
+          = job_state_label(job)
 
   .search-result__company
     a.search-result__company-name href=freelancer_company_path(job.company)

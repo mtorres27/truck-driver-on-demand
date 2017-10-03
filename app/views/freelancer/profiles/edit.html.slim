@@ -73,12 +73,18 @@
         .freelancer-profile__item
           .freelancer-profile__title
             | Markets
-          = f.input :keywords, as: :string, label: false
+          - I18n.t('enumerize.freelancer_keywords').each do |index, value|
+            = check_box_tag "keywords[#{index.to_s}]", index, ((!@freelancer.keywords.nil? and @freelancer.keywords.include?(index.to_s)) ? true : false)
+            = value
+            br
         
         .freelancer-profile__item
           .freelancer-profile__title
             | Skills
-          = f.input :skills, as: :string, label: false
+          - I18n.t('enumerize.freelancer_skills').each do |index, value|
+            = check_box_tag "skills[#{index.to_s}]", index, ((!@freelancer.skills.nil? and @freelancer.skills.include?(index.to_s)) ? true : false)
+            = value
+            br
 
         .freelancer-profile__item
           .freelancer-profile__title

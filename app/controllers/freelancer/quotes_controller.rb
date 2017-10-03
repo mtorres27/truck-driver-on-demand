@@ -67,7 +67,7 @@ class Freelancer::QuotesController < Freelancer::BaseController
   private
 
     def set_job
-      @job = current_freelancer.jobs.includes(applicants: [:quotes, :messages]).find(params[:job_id])
+      @job = current_freelancer.applicants.includes(applicants: [:quotes, :messages]).find(params[:job_id])
     end
 
     def set_applicant
