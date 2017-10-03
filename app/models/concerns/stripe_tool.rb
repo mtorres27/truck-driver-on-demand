@@ -11,7 +11,7 @@ module StripeTool
     company.card_brand                = customer.sources.data[0].brand
     company.exp_month                 = customer.sources.data[0].exp_month
     company.exp_year                  = customer.sources.data[0].exp_year
-    company.currency                  = 'cad' if company.currency == nil
+    # company.currency                  = 'cad' if company.currency == nil
     company.save
   end
 
