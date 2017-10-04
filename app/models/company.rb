@@ -63,6 +63,9 @@ class Company < ApplicationRecord
     :more_than_one_thousand
   ]
 
+  serialize :keywords
+  serialize :skills
+
   enumerize :country, in: [
     :at, :au, :be, :ca, :ch, :de, :dk, :es, :fi, :fr, :gb, :hk, :ie, :it, :jp, :lu, :nl, :no, :nz, :pt, :se, :sg, :us
   ]

@@ -9,8 +9,18 @@ p= "Address: #{@company.address}"
 p= "Area: #{@company.area}"
 p= "Description: #{@company.description}"
 p= "Work Order Preference: #{@company.contract_preference}"
-p= "Keywords: #{@company.keywords}"
-p= "Skills: #{@company.skills}"
+p
+  = "Keywords: "
+  - if !@company.keywords.nil? and @company.keywords.kind_of?(Hash)
+      - @company.keywords.each do |index, value|
+        = I18n.t("enumerize.freelancer_keywords.#{index}")
+        = ", "
+p
+  = "Skills: "
+  - if !@company.skills.nil? and @company.skills.kind_of?(Hash)
+    - @company.skills.each do |index, value|
+      = I18n.t("enumerize.freelancer_skills.#{index}")
+      = ", "
 p= "Website: #{@company.website}"
 p= "Phone Number: #{@company.phone_number}"
 p= "Number of Offices: #{@company.number_of_offices}"
