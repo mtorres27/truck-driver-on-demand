@@ -158,13 +158,12 @@
         | Installations
       .profile__projects-value--installations
         - if @company.company_installs.length > 0
-          - @company.company_installs.each do |installation|
+          - @company.company_installs.order('year ASC').each do |installation|
             .profile__projects__project
               strong
                 = "#{installation.year}: "
               em
                 = number_with_delimiter(installation.installs, :delimiter => ',')
-
         - else 
           | This company has no information about installs by year
 

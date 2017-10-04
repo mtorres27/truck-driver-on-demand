@@ -116,6 +116,20 @@
       - else
         .company-mobile__review-content--empty
           | This company doesn't have any reviews.
+
+  .company-mobile__row
+    .profile__abilities__specialties__skills-label.company-mobile__label
+      | Installations
+    .profile__projects-value--installations
+      - if @company.company_installs.length > 0
+        - @company.company_installs.order('year ASC').each do |installation|
+          .profile__projects__project
+            strong
+              = "#{installation.year}: "
+            em
+              = number_with_delimiter(installation.installs, :delimiter => ',')
+      - else 
+        | This company has no information about installs by year
       
   .company-mobile__row--margin-top
     .profile__abilities__specialties__skills-label.company-mobile__label
