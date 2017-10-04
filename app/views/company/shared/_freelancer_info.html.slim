@@ -32,7 +32,7 @@
     p.media-tagline
       = freelancer.tagline
     .freelancer-keywords
-      - if !freelancer.keywords.nil?
-        - freelancer.keywords.split(", ").map(&:lstrip)[0..3].each do |keyword|
+      - if !freelancer.keywords.nil? and freelancer.keywords.kind_of?(Hash)
+        - freelancer.keywords.first(4).each do |index, value|
           .freelancer-keyword
-            = keyword
+            = I18n.t("enumerize.freelancer_keywords.#{index}")
