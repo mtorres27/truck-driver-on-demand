@@ -6,6 +6,6 @@ div
         = JSON.parse(f.object.certificate_data)["metadata"]["filename"]
   
 .nested_fields
-  = f.file_field :certificate, label: false, :accept => 'document/pdf', label: false
+  = f.file_field :certificate, :accept => 'document/pdf', label: false
   = f.input :name, as: :string, placeholder: "Name of Certification", label: false
   = link_to_remove_association "X", f

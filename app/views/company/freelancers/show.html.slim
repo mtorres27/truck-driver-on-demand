@@ -51,14 +51,14 @@
         .profile__meta-center__tagline
           = @freelancer.tagline
         .profile__meta-center__keywords
-          - if !@freelancer.keywords.nil?
-            - @freelancer.keywords.split(", ").map(&:lstrip)[0..1].each do |keyword|
+           if !@freelancer.keywords.nil? and @freelancer.keywords.kind_of?(Hash)
+            - @freelancer.keywords.first(2).each do |index, value|
               .profile__meta-center__keyword
-                = keyword
-          - if !@freelancer.skills.nil?
-            - @freelancer.skills.split(", ").map(&:lstrip)[0..1].each do |skill|
+                = I18n.t("enumerize.freelancer_keywords.#{index}")
+          - if !@freelancer.skills.nil? and @freelancer.skills.kind_of?(Hash)
+            - @freelancer.skills.first(2).each do |index, value|
               .profile__meta-center__keyword
-                = skill
+                = I18n.t("enumerize.freelancer_skills.#{index}")
 
 
       .profile__meta-right
@@ -124,20 +124,20 @@
           .profile__abilities__specialties__markets-label
             | markets
           .profile__abilities__specialties__markets-value
-            - if !@freelancer.keywords.nil?
-              - @freelancer.keywords.split(", ").map(&:lstrip).each do |keyword|
+            - if !@freelancer.keywords.nil? and @freelancer.keywords.kind_of?(Hash)
+              - @freelancer.keywords.each do |index, value|
                 .profile__abilities__specialties__market
-                  = keyword
+                  = I18n.t("enumerize.freelancer_keywords.#{index}")
             - else
               | This freelancer has no markets listed.
         .profile__abilities__specialties__skills
           .profile__abilities__specialties__skills-label
             | skills
           .profile__abilities__specialties__skills-value
-            - if !@freelancer.skills.nil?
-              - @freelancer.skills.split(", ").map(&:lstrip).each do |skill|
+            - if !@freelancer.skills.nil? and @freelancer.skills.kind_of?(Hash)
+              - @freelancer.skills.each do |index, value|
                 .profile__abilities__specialties__skill
-                  = skill
+                  = I18n.t("enumerize.freelancer_skills.#{index}")
             - else
               | This freelancer has no skills listed.
         

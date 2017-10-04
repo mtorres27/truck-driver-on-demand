@@ -19,9 +19,17 @@ p
 p 
   = "Bio: #{@freelancer.bio}"
 p
-  = "Keywords: #{@freelancer.keywords}"
+  = "Keywords: "
+  - if !@freelancer.keywords.nil? and @freelancer.keywords.kind_of?(Hash)
+      - @freelancer.keywords.each do |index, value|
+        = I18n.t("enumerize.freelancer_keywords.#{index}")
+        = ", "
 p
-  = "Skills: #{@freelancer.skills}"
+  = "Skills: "
+  - if !@freelancer.skills.nil? and @freelancer.skills.kind_of?(Hash)
+    - @freelancer.skills.each do |index, value|
+      = I18n.t("enumerize.freelancer_skills.#{index}")
+      = ", "
 p
   = "Years of Experience: #{@freelancer.years_of_experience}"
 p
