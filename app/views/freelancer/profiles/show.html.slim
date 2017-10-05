@@ -160,7 +160,7 @@
         - @freelancer.certifications.each do |certification|
           .profile__certifications__certificate
             - url = certification.certificate_url
-            - if certification.certificate_url == "certification/missing.pdf"
+            - if certification.certificate_url != "certification/missing.pdf"
               - url = certification.certificate_url
               a href=url target="_blank"
                 - if is_image(url)
