@@ -166,23 +166,13 @@
         - @freelancer.certifications.each do |certification|
           .profile__certifications__certificate
             - url = certification.certificate_url
-            - if certification.certificate_url == "certification/missing.pdf"
-              - url = "/assets/certification/certification.certificate_url"
-              a href=url target="_blank"
-                - if certification.thumbnail.nil?
-                  img src="/assets/certification/missing_thumbnail.png"
-                - else 
-                  img src=certification.thumbnail
-            - else
+            - if certification.certificate_url != "certification/missing.pdf"
               - url = certification.certificate_url
               a href=url target="_blank"
-                - if certification.thumbnail.nil?
-                  img src="/assets/certification/missing_thumbnail.png"
-                - else 
-                  - if is_image(certification.thumbnail)
-                    img src=certification.thumbnail
-                  - else
-                    img src="/assets/certification/certification_placeholder.png"
+                - if is_image(url)
+                  img src=url
+                - else
+                  img src="/assets/certification/certification_placeholder.png"
 
             .profile__certifications__certification-name
               = certification.name
