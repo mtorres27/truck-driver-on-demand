@@ -179,7 +179,11 @@
                 - if certification.thumbnail.nil?
                   img src="/assets/certification/missing_thumbnail.png"
                 - else 
-                  img src=certification.thumbnail
+                  - if is_image(certification.thumbnail)
+                    img src=certification.thumbnail
+                  - else
+                    img src="/assets/certification/certification_placeholder.png"
+
             .profile__certifications__certification-name
               = certification.name
 
