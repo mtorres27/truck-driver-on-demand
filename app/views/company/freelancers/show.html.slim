@@ -51,7 +51,7 @@
         .profile__meta-center__tagline
           = @freelancer.tagline
         .profile__meta-center__keywords
-           if !@freelancer.keywords.nil? and @freelancer.keywords.kind_of?(Hash)
+          - if !@freelancer.keywords.nil? and @freelancer.keywords.kind_of?(Hash)
             - @freelancer.keywords.first(2).each do |index, value|
               .profile__meta-center__keyword
                 = I18n.t("enumerize.freelancer_keywords.#{index}")
