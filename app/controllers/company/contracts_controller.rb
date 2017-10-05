@@ -33,7 +33,13 @@ class Company::ContractsController < Company::BaseController
       redirect_to company_job_work_order_path(@job), notice: "Work Order updated."
     else
       build_payments
-      flash[:error] = "Unable to save: please ensure all fields are filled out."
+
+      @errors = []
+      @job.errors.messages.each do |key, index|
+        @errors << key.to_s.underscore.humanize.titlecase
+      end
+      
+      flash[:error] = "Unable to save: the following fields need to be filled out: " + @errors.join(", ") + ". If any of the fields aren't visible on the contract page, you might need to provide additional information in the job details page."
       render :edit
     end
   end
