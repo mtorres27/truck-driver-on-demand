@@ -19,6 +19,20 @@ module ApplicationHelper
     end
   end
 
+  def has_seen_onboarding
+    if cookies[:onboarding]
+      return true
+    else
+      return false
+    end
+  end
+
+
+  def set_has_seen_onboarding
+    cookies[:onboarding] = { value: true }
+  end
+
+
   def calc_distance_from(freelancer)
     if current_company.lat.nil?
       return "N/A"
