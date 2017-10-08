@@ -1,4 +1,4 @@
-server "production.avjunction.com", user: "deploy", roles: %w{app db web}
+server "app.avjunction.com", user: "deploy", roles: %w{app db web}
 
 # server-based syntax
 # ======================
