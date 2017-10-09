@@ -22,6 +22,23 @@
     .job_payments_amount
       width: 25%
       min-width: 100px
+
+  #featured_projects
+    .nested_fields
+      &-title
+        width: calc(100% - 30px)
+        padding-top: 20px
+        margin-left: 10px
+      a
+        margin-top: 48px
+    .featured-project__item
+      border: 1px solid $attachment-border
+      border-radius: 4px
+      padding: 10px
+      margin-bottom: 10px
+      &:last-of-type
+        margin-bottom: 20px
+
   #attachments
     margin-bottom: 15px
     .form-group
@@ -238,9 +255,22 @@
     padding: 15px
     border: 1px solid $attachment-border
     margin-bottom: 10px
+    width: 100%
 
   &__checkbox
     margin-bottom: 5px
+    width: 100%
+
+    @media (min-width: $breakpoint-mobile)
+      width: 50%
+      float: left
+
+    @media (min-width: $breakpoint-desktop)
+      width: 33%
+      float: left
+      
+    input[type=checkbox]
+      margin-right: 4px
 
   &__image
     position: relative
