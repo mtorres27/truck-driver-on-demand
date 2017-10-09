@@ -45,6 +45,7 @@ class Freelancer::ProfilesController < Freelancer::BaseController
       :freelancer_type,
       :freelancer_team_size,
       :pay_unit_time_preference,
+      :pay_per_unit_time,
       skills: [
         :flat_panel_displays,
         :video_walls,

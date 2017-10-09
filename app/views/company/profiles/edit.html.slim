@@ -111,7 +111,7 @@
               = f.simple_fields_for :company_installs do |install_form|
                 = render "company_install_fields", f: install_form
               .links
-                = link_to_add_association 'Add', f, :company_installs, class: "btn btn-default"
+                = link_to_add_association 'Add Install', f, :company_installs, class: "btn btn-default"
 
         .job-details
           #featured_projects
@@ -120,7 +120,7 @@
               = f.simple_fields_for :featured_projects do |project_form|
                 = render "featured_project_fields", f: project_form
               .links
-                = link_to_add_association 'Add', f, :featured_projects, class: "btn btn-default"
+                = link_to_add_association 'Add Project', f, :featured_projects, class: "btn btn-default"
 
     
         .form-actions

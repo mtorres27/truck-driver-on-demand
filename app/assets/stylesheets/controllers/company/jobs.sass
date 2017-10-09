@@ -198,3 +198,68 @@
       color: $freelancer-stars-color
     &-status
       margin-left: 10px
+
+.freelancer-profiles
+  .nested_fields
+    margin: 22px 0px 0px 10px
+    display: inline-block
+    width: calc(100% - 110px)
+    position: relative
+    &-title
+      font-size: 12px
+      font-weight: bold
+
+    input[type=file]
+      width: 100%
+      margin-bottom: 10px
+
+    
+    div
+      width: calc(100% - 34px)
+      float: left
+      margin-right: 8px
+      display: inline-block
+
+    a
+      display: block
+      line-height: 2.4em
+      width: 22px
+      float: left
+      text-align: center
+
+    
+
+.file-input--hidden
+  display: none !important
+
+
+.freelancer-profile
+  &__checkboxes
+    padding: 15px
+    border: 1px solid $attachment-border
+    margin-bottom: 10px
+
+  &__checkbox
+    margin-bottom: 5px
+
+  &__image
+    position: relative
+    display: inline-block
+
+  &__image-upload
+    color: $white-color
+    position: absolute
+    bottom: 5px
+    right: 5px
+    cursor: pointer
+    font-size: 16px
+    z-index: 1000
+
+    &:hover
+      color: $brand-primary
+
+.float
+  &-left
+    float: left
+  &-right
+    float: right
