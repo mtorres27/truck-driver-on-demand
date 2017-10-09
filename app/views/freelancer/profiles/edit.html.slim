@@ -160,9 +160,7 @@ javascript:
   }
 
   function uploadCertificate (index) {
-    
     if (index != undefined) {
-      console.log("haaaa");
       var ref = $("#freelancer_certifications_attributes_"+index+"_certificate");
     } else {
       var ref = $(".add-new-certificate").prev('div').find(".nested_fields").find(".file-input--hidden");
