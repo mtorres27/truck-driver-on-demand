@@ -11,7 +11,8 @@ Rails.application.routes.draw do
   get "terms-of-service", to: "pages#show", id: "terms-of-service"
 
   namespace :freelancer do
-    root "profiles#show"
+    # root "profiles#show"
+    root "main#index"
     resource :freelancer, only: [:show, :edit, :update]
 
     resources :companies, only: [:index, :show] do
@@ -55,7 +56,8 @@ Rails.application.routes.draw do
   end
 
   namespace :company do
-    root "profiles#show"
+    # root "profiles#show"
+    root "main#index"
 
     resource :profile, only: [:show, :edit, :update]
     resources :freelancers, only: [:index, :show] do
