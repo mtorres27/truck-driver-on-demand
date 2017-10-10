@@ -46,6 +46,14 @@ class Company < ApplicationRecord
   has_many :favourite_freelancers, through: :favourites, source: :freelancer
   has_many :company_installs, dependent: :destroy
 
+  attr_accessor :accept_terms_of_service
+  attr_accessor :accept_privacy_policy
+  attr_accessor :accept_code_of_conduct
+
+  validates_acceptance_of :accept_terms_of_service
+  validates_acceptance_of :accept_privacy_policy
+  validates_acceptance_of :accept_code_of_conduct
+
   enumerize :currency, in: [
     :cad,
     :euro,

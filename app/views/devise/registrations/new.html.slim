@@ -45,6 +45,40 @@
       .register__label
         | Confirm Your password
       = f.input :password_confirmation, label: false, required: true, placeholder: "Confirm your password"
+      - privacy_policy_error = false
+      - terms_of_service_error = false
+      - code_of_conduct_error = false
+      - @freelancer.errors.full_messages.each do |error|
+        - if error.include?("privacy policy")
+          - privacy_policy_error = true
+        - elsif error.include?("terms of service")
+          - terms_of_service_error = true
+        - elsif error.include?("code of conduct")
+          - code_of_conduct_error = true
+      span class=(terms_of_service_error == true ? "validation-error" : "")
+        = f.check_box :accept_terms_of_service, required: true
+        = " "
+        | I accept the 
+        a href="http://www.avjunction.com/term-of-service" target="_blank"
+          | Terms of Service
+      br
+      span class=(privacy_policy_error == true ? "validation-error" : "fine")
+        = f.check_box :accept_privacy_policy, required: true
+        = " "
+        | I accept the 
+        a href="http://www.avjunction.com/privacy-policy" target="_blank"
+          | Privacy Policy
+      br
+      span class=(code_of_conduct_error == true ? "validation-error" : "")
+        = f.check_box :accept_code_of_conduct, required: true
+        = " "
+        | I accept the 
+        a href="http://www.avjunction.com/code-of-conduct" target="_blank"
+          | Code of Conduct
+      
+      br
+      br
+
 
     .form-actions
       = f.button :submit, "Register", class: "btn-primary"

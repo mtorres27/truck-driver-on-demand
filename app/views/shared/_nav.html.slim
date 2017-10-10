@@ -40,11 +40,6 @@ nav#top-nav.navbar.navbar-fixed-top
                 li.dropdown-header= current_company.name
                 li
                   = link_to "Logout", destroy_company_session_path, method: :delete
-          - else
-            li( class=("active" if request.path == admin_root_path) )
-              = link_to "Freelancers", freelancer_root_path
-            li( class=("active" if request.path.include?(admin_freelancers_path)) )
-              = link_to "Companies", company_root_path
         - elsif request.path.index('admin') == 1
           - if current_admin
             li( class=("active" if request.path == admin_root_path) )
@@ -57,11 +52,6 @@ nav#top-nav.navbar.navbar-fixed-top
               = link_to "Pages", admin_pages_path
             li
               = link_to "Logout", destroy_admin_session_path, method: :delete
-          - else
-            li( class=("active" if request.path == admin_root_path) )
-              = link_to "Freelancers", freelancer_root_path
-            li( class=("active" if request.path.include?(admin_freelancers_path)) )
-              = link_to "Companies", company_root_path
         - elsif request.path.index('freelancer') == 1
           - if current_freelancer
             - if 1 == 2
@@ -82,14 +72,3 @@ nav#top-nav.navbar.navbar-fixed-top
                 | my profile
             li
               = link_to "Logout", destroy_freelancer_session_path, method: :delete, class: "mobile-nav__menu__item"
-          - else
-            li( class=("active" if request.path == admin_root_path) )
-              = link_to "Freelancers", freelancer_root_path
-            li( class=("active" if request.path.include?(admin_freelancers_path)) )
-              = link_to "Companies", company_root_path
-
-        - else
-          li( class=("active" if request.path == admin_root_path) )
-            = link_to "Freelancers", freelancer_root_path
-          li( class=("active" if request.path.include?(admin_freelancers_path)) )
-            = link_to "Companies", company_root_path
