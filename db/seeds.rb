@@ -4,15 +4,17 @@ ApplicationRecord.descendants.each do |klass|
   klass.auditing_enabled = false
 end
 
-Admin.create!(email: "dave@rapin.com", name: "Dave Rapin")
-Admin.create!(email: "pweather24@gmail.com", name: "Paul Weatherhead")
+Admin.create!(email: "dave@rapin.com", name: "Dave Rapin", password: "654321", password_confirmation: "654321")
+Admin.create!(email: "pweather24@gmail.com", name: "Paul Weatherhead", password: "654321", password_confirmation: "654321")
 
 420.times do
   Freelancer.create!(
     email: Faker::Internet.unique.email,
     name: Faker::Name.unique.name,
     area: Faker::Address.city,
-    tagline: Faker::Company.catch_phrase
+    tagline: Faker::Company.catch_phrase,
+    password: "654321", 
+    password_confirmation: "654321"
   )
 end
 
@@ -21,7 +23,9 @@ require Rails.root.join("db/seeds/realistic.rb")
 240.times do
   Company.create!(
     email: Faker::Internet.unique.email,
-    name: Faker::Company.unique.name
+    name: Faker::Company.unique.name,
+    password: "654321", 
+    password_confirmation: "654321"
   )
 end
 
