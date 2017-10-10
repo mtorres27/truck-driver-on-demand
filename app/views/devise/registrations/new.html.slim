@@ -7,6 +7,21 @@
   = simple_form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f|
     = f.error_notification
     .form-inputs
+      .register__account-selector
+        .register__label
+          | Choose the account type you'd like to register:
+        span
+          - if resource.class.name.downcase == "freelancer"
+            = radio_button_tag :user_type, "freelancer", selected: true
+          - else 
+            = radio_button_tag :user_type, "freelancer"
+          = label :user_type, "freelancer"
+        span
+          - if resource.class.name.downcase == "company"
+            = radio_button_tag :user_type, "company", selected: true
+          - else
+            = radio_button_tag :user_type, "company"
+          = label :user_type, "company"
       .register__label
         | Full Name
       = f.input :name, as: :string, label: false, required: true, autofocus: true, placeholder: (resource.class.name.downcase == "freelancer" ? "Enter your full name" : "Enter your company name")
@@ -23,23 +38,6 @@
           | Country
         
         = f.input :country, required: true, label: false, prompt: "Select Country"
-
-      .register__account-selector
-        .register__label
-          | Choose the account type you'd like to register:
-        span
-          - if resource.class.name.downcase == "freelancer"
-            = radio_button_tag :user_type, "freelancer", selected: true
-          - else 
-            = radio_button_tag :user_type, "freelancer"
-          = label :user_type, "freelancer"
-        span
-          - if resource.class.name.downcase == "company"
-            = radio_button_tag :user_type, "company", selected: true
-          - else
-            = radio_button_tag :user_type, "company"
-          = label :user_type, "company"
-
 
       .register__label
         | Enter a Password
