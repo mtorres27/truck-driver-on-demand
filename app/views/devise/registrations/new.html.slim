@@ -48,7 +48,11 @@
       - privacy_policy_error = false
       - terms_of_service_error = false
       - code_of_conduct_error = false
-      - @freelancer.errors.full_messages.each do |error|
+      - if resource.class.name.downcase == "freelancer"
+        - obj = @freelancer
+      - else
+        - obj = @company
+      - obj.errors.full_messages.each do |error|
         - if error.include?("privacy policy")
           - privacy_policy_error = true
         - elsif error.include?("terms of service")
