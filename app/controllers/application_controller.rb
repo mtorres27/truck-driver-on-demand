@@ -34,7 +34,18 @@ class ApplicationController < ActionController::Base
 
   def configure_permitted_parameters
     devise_parameter_sanitizer.permit(:sign_up) do |user_params|
-      user_params.permit(:email, :password, :password_confirmation, :name, :contact_name, :country, :currency)
+      user_params.permit(
+        :email, 
+        :password, 
+        :password_confirmation, 
+        :name, 
+        :contact_name, 
+        :country, 
+        :currency, 
+        :accept_terms_of_service, 
+        :accept_privacy_policy,
+        :accept_code_of_conduct
+      )
     end
   end
 

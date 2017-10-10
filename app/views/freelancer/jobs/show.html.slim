@@ -95,7 +95,7 @@
           - if @job.pay_type.nil?
             = "N/A"
           - else
-            = @job.pay_type
+            = t("enumerize.job.pay_type.#{@job.pay_type}")
 
       .freelancer-job__meta-item
         .freelancer-job__meta-item__title
