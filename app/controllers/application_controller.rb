@@ -11,6 +11,10 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  def after_inactive_sign_up_path_for(resource)
+    '/confirm_email'
+  end
+
   def do_geocode(address)
     url = "https://maps.googleapis.com/maps/api/geocode/json?address=#{url_encode(address)}&key=#{Rails.application.secrets.google_maps_api_key}"
     # Make the API request
@@ -34,7 +38,18 @@ class ApplicationController < ActionController::Base
 
   def configure_permitted_parameters
     devise_parameter_sanitizer.permit(:sign_up) do |user_params|
-      user_params.permit(:email, :password, :password_confirmation, :name, :contact_name, :country, :currency)
+      user_params.permit(
+        :email, 
+        :password, 
+        :password_confirmation, 
+        :name, 
+        :contact_name, 
+        :country, 
+        :currency, 
+        :accept_terms_of_service, 
+        :accept_privacy_policy,
+        :accept_code_of_conduct
+      )
     end
   end
 
