@@ -11,6 +11,10 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  def after_inactive_sign_up_path_for(resource)
+    '/confirm_email'
+  end
+
   def do_geocode(address)
     url = "https://maps.googleapis.com/maps/api/geocode/json?address=#{url_encode(address)}&key=#{Rails.application.secrets.google_maps_api_key}"
     # Make the API request

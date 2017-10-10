@@ -7,4 +7,8 @@ class MainController < ApplicationController
 
   def terms
   end
+
+  def confirm_email
+
+  end
 end

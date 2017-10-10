@@ -1,6 +1,6 @@
 Rails.application.routes.draw do
-  devise_for :companies, path: 'company', path_names: { sign_in: "login", sign_up: "register" }
-  devise_for :freelancers, path: 'freelancer', path_names: { sign_in: "login", sign_up: "register" }
+  devise_for :companies, path: 'company', path_names: { sign_in: "login", sign_up: "register" }, controllers: { registrations: "registrations" }
+  devise_for :freelancers, path: 'freelancer', path_names: { sign_in: "login", sign_up: "register" }, controllers: { registrations: "registrations" }
   devise_for :admins, path: 'admin', path_names: { sign_in: "login" }, skip: [:registrations]
 
 
@@ -9,6 +9,10 @@ Rails.application.routes.draw do
   get "company/login", to: "devise/session#new"
   get "privacy-policy", to: "pages#show", id: "privacy-policy"
   get "terms-of-service", to: "pages#show", id: "terms-of-service"
+
+
+  get "confirm_email", to: "main#confirm_email"
+
 
   namespace :freelancer do
     root "profiles#show"
