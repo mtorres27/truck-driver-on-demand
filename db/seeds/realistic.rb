@@ -3,7 +3,9 @@ Company.create(
   name: "Paul's AV Company",
   contact_name: "Paul Weatherhead",
   address: "2010 Winston Park Drive, Suite 200, Oakville, ON, L6H 6P5",
-  avatar: File.new(Rails.root.join("app", "assets", "images", "avjunction-logo_header.svg"))
+  avatar: File.new(Rails.root.join("app", "assets", "images", "avjunction-logo_header.svg")),
+  password: "654321", 
+  password_confirmation: "654321"
 ).tap do |company|
 
   # Project 1
