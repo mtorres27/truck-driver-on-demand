@@ -29,7 +29,7 @@ gem 'hubspot-ruby'
 
 
 # See https://github.com/rails/execjs#readme for more supported runtimes
-# gem "therubyracer", platforms: :ruby
+gem "therubyracer", platforms: :ruby
 
 gem "jbuilder", "~> 2.5"
 gem "wicked_pdf", "~> 1.1.0"
