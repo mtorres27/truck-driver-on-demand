@@ -43,6 +43,7 @@ class Company::ProfilesController < Company::BaseController
       :contract_preference,
       :established_in,
       :website,
+      :header_source,
       company_installs_attributes: [:id, :year, :installs, :_destroy],
       featured_projects_attributes: [:id, :file, :name, :_destroy],
       skills: [

@@ -1,7 +1,11 @@
 = render partial: "/freelancer/shared/profile_sub_nav"
 
 .profile__wrapper
-  .profile__wrapper-bg style="background-image: url(#{@freelancer.profile_header_url.include?("missing") ? "" : @freelancer.profile_header_url}); background-color: ##{@freelancer.header_color}"
+  - if @freelancer.profile_header_url.include?("missing") or @freelancer.header_source == "color"
+    .profile__wrapper-bg style="background-color: ##{@freelancer.header_color}"
+  - else
+    .profile__wrapper-bg style="background-image: url(#{@freelancer.profile_header_url.include?("missing") ? "" : @freelancer.profile_header_url});"
+
 
   .profile__content
     .profile__block

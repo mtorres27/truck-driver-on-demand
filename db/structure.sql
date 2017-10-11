@@ -335,7 +335,8 @@ CREATE TABLE companies (
     country character varying,
     confirmation_token character varying,
     confirmed_at timestamp without time zone,
-    confirmation_sent_at timestamp without time zone
+    confirmation_sent_at timestamp without time zone,
+    header_source character varying DEFAULT 'color'::character varying
 );
 
 
@@ -614,7 +615,8 @@ CREATE TABLE freelancers (
     confirmed_at timestamp without time zone,
     confirmation_sent_at timestamp without time zone,
     freelancer_team_size character varying,
-    freelancer_type character varying
+    freelancer_type character varying,
+    header_source character varying DEFAULT 'color'::character varying
 );
 
 
@@ -1991,6 +1993,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20170928151229'),
 ('20170928151921'),
 ('20170929133938'),
-('20171003125747');
+('20171003125747'),
+('20171011195102');
 
 

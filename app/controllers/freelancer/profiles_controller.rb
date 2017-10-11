@@ -42,6 +42,7 @@ class Freelancer::ProfilesController < Freelancer::BaseController
       :avatar,
       :header_color,
       :profile_header,
+      :header_source,
       :freelancer_type,
       :freelancer_team_size,
       :pay_unit_time_preference,
