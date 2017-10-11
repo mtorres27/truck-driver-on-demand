@@ -128,8 +128,6 @@ GEM
       railties (>= 3.2, < 5.2)
     globalid (0.4.0)
       activesupport (>= 4.2.0)
-    graphicsmagick (1.0.5)
-      subexec
     httparty (0.15.6)
       multi_xml (>= 0.5.2)
     hubspot-ruby (0.2.1)
@@ -300,7 +298,6 @@ GEM
       net-scp (>= 1.1.2)
       net-ssh (>= 2.8.0)
     stackprof (0.2.10)
-    subexec (0.2.3)
     temple (0.8.0)
     therubyracer (0.12.3)
       libv8 (~> 3.16.14.15)
@@ -358,7 +355,6 @@ DEPENDENCIES
   fastimage (~> 2.1.0)
   flamegraph (~> 0.9.5)
   font-awesome-rails (~> 4.7.0)
-  graphicsmagick
   hubspot-ruby
   image_processing (~> 0.4.1)
   jbuilder (~> 2.5)

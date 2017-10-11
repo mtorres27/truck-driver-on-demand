@@ -51,7 +51,6 @@ gem "enumerize", "~> 2.1.2"
 gem "rack-mini-profiler", "~> 0.10.2"
 gem "flamegraph", "~> 0.9.5"
 gem "stackprof", "~> 0.2.10"
-gem 'graphicsmagick'
 
 gem "audited", "~> 4.5.0"
 
