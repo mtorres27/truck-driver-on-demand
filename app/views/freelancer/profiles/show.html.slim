@@ -25,10 +25,7 @@
     .profile__meta
       .profile__meta-left
         .profile__meta-left__avatar 
-          - if @freelancer.avatar_url.include?("missing.png")
-            = image_tag("http://graph.facebook.com/v2.5/111#{@freelancer.id}/picture?height=135&height=135", size: "135x135")
-          - else
-            = image_tag(@freelancer.avatar_url, size: "135x135")
+          = image_tag(@freelancer.avatar_url, size: "135x135")
 
         .profile__meta-left__stars
           - @stars = freelancer_avg_rating(@freelancer)

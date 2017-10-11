@@ -18,10 +18,7 @@
     .profile__meta
       .profile__meta-left
         .profile__meta-left__avatar
-          - if @company.avatar_url.include?("missing.png")
-            = image_tag("http://graph.facebook.com/v2.5/111#{@company.id}/picture?height=135&height=135", size: "135x135")
-          - else
-            = image_tag(@company.avatar_url, size: "135x135")
+          = image_tag(@company.avatar_url, size: "135x135")
 
         .profile__meta-left__stars
           - @stars = company_avg_rating(@company)
