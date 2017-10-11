@@ -123,6 +123,11 @@
           .company-profile__title
             | Wallpaper Colour
           = f.input :header_color, required: true, label: false, placeholder: "FF6C38"  
+
+        .company-profile__item
+          .company-profile__title
+            | Header Source
+          = f.input :header_source, label: false, prompt: "Select"
     
         .form-actions
           = f.button :submit, class: "btn btn-primary", label: "Update Profile"

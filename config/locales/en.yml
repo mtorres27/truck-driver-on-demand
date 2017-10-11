@@ -50,6 +50,9 @@ en:
       freelancer_type:
         independent: "Independent"
         team: "Team"
+      header_source:
+        color: "Colour"
+        wallpaper: "Wallpaper"
       freelancer_team_size:
         less_than_five: "1 - 5"
         six_to_ten: "6 - 10"

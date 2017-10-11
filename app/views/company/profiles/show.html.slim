@@ -1,5 +1,9 @@
 .profile__wrapper
-  .profile__wrapper-bg style="background-image: url(#{@company.profile_header_url.include?("missing") ? "" : @company.profile_header_url}); background-color: ##{@company.header_color}"
+  - if @company.profile_header_url.include?("missing") or @company.header_source == "color"
+    .profile__wrapper-bg style="background-color: #{ @company.header_color.include?("#") ? "" : "#"}#{@company.header_color}"
+  - else
+    .profile__wrapper-bg style="background-image: url(#{@company.profile_header_url.include?("missing") ? "" : @company.profile_header_url});"
+
 
   .profile__content
     .profile__block

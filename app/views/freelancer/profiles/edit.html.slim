@@ -18,6 +18,17 @@
             .freelancer-profile__image-upload onclick="updateHeaderImage()"
               span class="fa fa-camera"
           = f.file_field :profile_header, label: false, :accept => 'image/png,image/gif,image/jpeg', id: "edit-freelancer-profile-header", class: "file-input--hidden"
+        br
+        br
+        .freelancer-profile__item
+          .freelancer-profile__title
+            | Wallpaper Colour
+          = f.input :header_color, required: true, label: false, placeholder: "FF6C38" 
+        
+        .freelancer-profile__item
+          .freelancer-profile__title
+            | Header Source
+          = f.input :header_source, label: false, prompt: "Select"
 
         .freelancer-profile__item
           .freelancer-profile__title
@@ -27,6 +38,7 @@
             .freelancer-profile__image-upload onclick="updateProfilePicture()"
               span class="fa fa-camera" 
           = f.file_field :avatar, label: false, :accept => 'image/png,image/gif,image/jpeg', id: "edit-freelancer-profile-avatar", class: "file-input--hidden"
+
 
         .freelancer-profile__item
           .freelancer-profile__title
@@ -136,10 +148,6 @@
           .links.add-new-certificate
             = link_to_add_association 'Add Another', f, :certifications, class: "btn btn-default"
 
-        .freelancer-profile__item
-          .freelancer-profile__title
-            | Wallpaper Colour
-          = f.input :header_color, required: true, label: false, placeholder: "FF6C38"  
         
         p style="height: 20px;"
 

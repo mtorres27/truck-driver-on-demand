@@ -135,6 +135,11 @@ class Freelancer < ApplicationRecord
     :more_than_thirty
   ]
 
+  enumerize :header_source, in: [
+    :color,
+    :wallpaper
+  ]
+
   enumerize :country, in: [
     :at, :au, :be, :ca, :ch, :de, :dk, :es, :fi, :fr, :gb, :hk, :ie, :it, :jp, :lu, :nl, :no, :nz, :pt, :se, :sg, :us
   ]
