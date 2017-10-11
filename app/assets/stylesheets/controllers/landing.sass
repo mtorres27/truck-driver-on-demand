@@ -21,6 +21,7 @@
 .landing-h3
   font-family: 'Open Sans', sans-serif
   font-weight: 400
+  font-size: 24px
 
 .landing-account-flex
   display: -webkit-box
@@ -51,9 +52,7 @@
   -ms-flex-align: start
   align-items: flex-start
 
-@media (max-width: 991px)
-  .landing-account-block
-    width: 48%
+@media (max-width: 1199px)
   .landing-cta-flex
     -webkit-box-orient: vertical
     -webkit-box-direction: normal
@@ -64,16 +63,14 @@
     -webkit-align-items: stretch
     -ms-flex-align: stretch
     align-items: stretch
+    height: 80px
 
-@media (max-width: 767px)
+
+@media (max-width: 991px)
   .landing-account-block
-    width: 100%
-    margin-top: 16px
-    margin-right: 0px
-    margin-left: 0px
-    padding-right: 24px
-    padding-left: 24px
-  .landing-account-flex-container
+    width: 48%
+  
+  .landing-account-flex
     -webkit-box-orient: vertical
     -webkit-box-direction: normal
     -webkit-flex-direction: column
@@ -85,3 +82,14 @@
     -webkit-align-content: center
     -ms-flex-line-pack: center
     align-content: center
+
+  .landing-account-block
+    width: 100%
+    margin-top: 16px
+    margin-right: 0px
+    margin-left: 0px
+    padding-right: 24px
+    padding-left: 24px
+  
+
+  

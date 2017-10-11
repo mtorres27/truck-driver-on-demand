@@ -1,24 +1,18 @@
-h1 AV Junction Home
-
-p= link_to "Freelancer", freelancer_root_path
-p= link_to "Company", company_root_path
-p= link_to "Admin", admin_root_path
-
 h1.landing-h1 Choose the type of account you'd like to continue with.
 .landing-account-flex
   .landing-account-block
     h3.landing-h3 AV Freelancer
     .text-block I'm an&nbsp;AV Freelancer looking to work with progressive companies
     .landing-cta-flex
-      a._24px-margin.button-active.w-inline-block href="#" 
-      .button-text register as a freelancer
-      a.button-active.hollow.w-inline-block href="#" 
-      .button-text login to your account
+      a.btn.btn-primary href=new_freelancer_registration_path
+        | Register as a Freelancer
+      a.btn.btn-secondary href=new_freelancer_session_path
+        | Login to your Account
   .landing-account-block
     h3.landing-h3 AV Company
-    div I'm an AV Company looking to find great professionals
+    div I'm an AV Company looking to find great professionals to work with on my projects
     .landing-cta-flex
-      a._24px-margin.button-active.w-inline-block href="#" 
-      .button-text register as a Company
-      a.button-active.hollow.w-inline-block href="#" 
-      .button-text login to your account
+      a.btn.btn-primary href=new_company_registration_path
+        | Register as a Company
+      a.btn.btn-secondary href=new_company_session_path
+        | Login to your Account
