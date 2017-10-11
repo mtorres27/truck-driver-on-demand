@@ -8,7 +8,7 @@ h1 Editing Freelancer
     - if @freelancer.avatar&.exists?
       img src=@freelancer.avatar_url
     = f.hidden_field :avatar, value: @freelancer.cached_avatar_data
-    = f.input :avatar, as: :file
+    = f.input :avatar, as: :file, accept: 'image/gif, image/jpg, image/jpeg, image/png'
     = f.input :email, as: :string
     = f.input :freelancer_type
     = f.input :freelancer_team_size

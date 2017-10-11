@@ -22,6 +22,23 @@
     .job_payments_amount
       width: 25%
       min-width: 100px
+
+  #featured_projects
+    .nested_fields
+      &-title
+        width: calc(100% - 30px)
+        padding-top: 20px
+        margin-left: 10px
+      a
+        margin-top: 48px
+    .featured-project__item
+      border: 1px solid $attachment-border
+      border-radius: 4px
+      padding: 10px
+      margin-bottom: 10px
+      &:last-of-type
+        margin-bottom: 20px
+
   #attachments
     margin-bottom: 15px
     .form-group
@@ -198,3 +215,85 @@
       color: $freelancer-stars-color
     &-status
       margin-left: 10px
+
+.freelancer-profiles
+  .nested_fields
+    margin: 22px 0px 0px 10px
+    display: inline-block
+    width: calc(100% - 110px)
+    position: relative
+    &-title
+      font-size: 12px
+      font-weight: bold
+
+    input[type=file]
+      width: 100%
+      margin-bottom: 10px
+
+    
+    div
+      width: calc(100% - 34px)
+      float: left
+      margin-right: 8px
+      display: inline-block
+
+    a
+      display: block
+      line-height: 2.4em
+      width: 22px
+      float: left
+      text-align: center
+
+    
+
+.file-input--hidden
+  display: none !important
+
+
+.freelancer-profile
+  &__checkboxes
+    padding: 15px
+    border: 1px solid $attachment-border
+    margin-bottom: 10px
+    width: 100%
+    display: inline-block
+
+  &__checkbox
+    margin-bottom: 5px
+    width: 100%
+
+    @media (min-width: $breakpoint-mobile)
+      width: 50%
+      float: left
+
+    @media (min-width: $breakpoint-desktop)
+      width: 33%
+      float: left
+      
+    input[type=checkbox]
+      margin-right: 4px
+
+  &__image
+    position: relative
+    display: inline-block
+
+  &__image-upload
+    color: $white-color
+    position: absolute
+    bottom: 11px
+    right: 5px
+    cursor: pointer
+    font-size: 16px
+    z-index: 1000
+    background-color: $dark-modal-bg
+    padding: 4px 7px
+    border-radius: 20px
+
+    &:hover
+      color: $brand-primary
+
+.float
+  &-left
+    float: left
+  &-right
+    float: right

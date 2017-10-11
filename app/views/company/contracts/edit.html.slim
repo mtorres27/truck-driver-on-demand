@@ -72,7 +72,7 @@
               = f.simple_fields_for :payments do |payment_form|
                 = render "payment_fields", f: payment_form
               .links
-                = link_to_add_association 'Add', f, :payments, class: "btn btn-default"
+                = link_to_add_association 'Add Schedule Item', f, :payments, class: "btn btn-default"
           
           .job-details
             .job-details__title
@@ -85,11 +85,11 @@
           .job-details
             #attachments
               .job-details__title 
-                | Addendums
+                | Addenda
               = f.simple_fields_for :attachments do |attachment_form|
                 = render "attachment_fields", f: attachment_form
               .links
-                = link_to_add_association 'Add', f, :attachments, class: "btn btn-default"
+                = link_to_add_association 'Add Addendum', f, :attachments, class: "btn btn-default"
           
           .job-details
             .job-details__title
