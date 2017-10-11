@@ -149,7 +149,11 @@
             - if @freelancer.freelancer_team_size.nil?
               = ""
             - else 
-              = "(#{@freelancer.freelancer_team_size.text})"
+              = "("
+              = t("enumerize.job.freelancer_team_size.#{@freelancer.freelancer_team_size}")
+              = ")"
+      br
+      br
 
     .profile__certifications
       .profile__certifications-label
