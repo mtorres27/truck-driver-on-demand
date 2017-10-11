@@ -2,7 +2,7 @@
 
 .profile__wrapper
   - if @freelancer.profile_header_url.include?("missing") or @freelancer.header_source == "color"
-    .profile__wrapper-bg style="background-color: ##{@freelancer.header_color}"
+    .profile__wrapper-bg style="background-color: #{ @freelancer.header_colour.include?("#") ? "" : "#"}#{@freelancer.header_color}"
   - else
     .profile__wrapper-bg style="background-image: url(#{@freelancer.profile_header_url.include?("missing") ? "" : @freelancer.profile_header_url});"
 
