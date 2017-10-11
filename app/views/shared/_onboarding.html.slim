@@ -10,23 +10,44 @@
 
 - if sign_in_count <= 1000000000
   - set_has_seen_onboarding
-  .onboarding-container
-    .onboarding-navbar
-      a.modal-close.w-inline-block href="#" 
-      span class="fa fa-close" onClick="hideOnboard()"
-    .onboarding-content-container
-      .onboarding-content
-        h1.onboarding-title Welcome to AV Junction.
-        p Finding new work outside of your network is difficult—that’s why we created AV Junction—to empower you with the freedom and flexibility to work on your terms by connecting you with AV jobs from reputable system integrators all over the world.
-        p Cali today, NYC tomorrow… we know what you’re thinking. But before we get ahead of ourselves we’ll need put your best foot forward and create a killer profile.
-        p Ready? Let’s do it.
-        .btn.btn-primary onClick="hideOnboard()"
-          | Build a killer profile
-        P
-        p
-          | Need some killer profile inspiration?
-          br/
-          a.link href="#" target="_blank"  View examples in our Knowledge Center and learn how to create yours.
+
+  - if !current_company.nil?
+    .onboarding-container
+      .onboarding-navbar
+        a.modal-close.w-inline-block href="#" 
+        span class="fa fa-close" onClick="hideOnboard()"
+      .onboarding-content-container
+        .onboarding-content
+          h1.onboarding-title Welcome to AV Junction, COMPANY
+          p Finding new work outside of your network is difficult—that’s why we created AV Junction—to empower you with the freedom and flexibility to work on your terms by connecting you with AV jobs from reputable system integrators all over the world.
+          p Cali today, NYC tomorrow… we know what you’re thinking. But before we get ahead of ourselves we’ll need put your best foot forward and create a killer profile.
+          p Ready? Let’s do it.
+          .btn.btn-primary onClick="hideOnboard()"
+            | Build a killer profile
+          P
+          p
+            | Need some killer profile inspiration?
+            br/
+            a.link href="#" target="_blank"  View examples in our Knowledge Center and learn how to create yours.
+
+  - elsif !current_freelancer.nil?
+    .onboarding-container
+      .onboarding-navbar
+        a.modal-close.w-inline-block href="#" 
+        span class="fa fa-close" onClick="hideOnboard()"
+      .onboarding-content-container
+        .onboarding-content
+          h1.onboarding-title Welcome to AV Junction
+          p Finding new work outside of your network is difficult—that’s why we created AV Junction—to empower you with the freedom and flexibility to work on your terms by connecting you with AV jobs from reputable system integrators all over the world.
+          p Cali today, NYC tomorrow… we know what you’re thinking. But before we get ahead of ourselves we’ll need put your best foot forward and create a killer profile.
+          p Ready? Let’s do it.
+          .btn.btn-primary onClick="hideOnboard()"
+            | Build a killer profile
+          P
+          p
+            | Need some killer profile inspiration?
+            br/
+            a.link href="#" target="_blank"  View examples in our Knowledge Center and learn how to create yours.
 
   javascript:
     var hideOnboard = function() {
