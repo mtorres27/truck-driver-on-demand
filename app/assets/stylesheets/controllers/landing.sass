@@ -1,0 +1,87 @@
+.landing-h1
+  font-family: 'Open Sans', sans-serif
+  font-weight: 300
+  text-align: center
+
+.landing-container
+  display: block
+  max-width: 1200px
+  margin-right: auto
+  margin-left: auto
+
+.landing-account-block
+  width: 45%
+  margin-right: 0px
+  margin-left: 0px
+  padding: 24px
+  border: 1px solid #a1a1a1
+  border-radius: 4px
+  background-color: #fff
+
+.landing-h3
+  font-family: 'Open Sans', sans-serif
+  font-weight: 400
+
+.landing-account-flex
+  display: -webkit-box
+  display: -webkit-flex
+  display: -ms-flexbox
+  display: flex
+  margin-top: 64px
+  padding-right: 24px
+  padding-left: 24px
+  -webkit-box-pack: justify
+  -webkit-justify-content: space-between
+  -ms-flex-pack: justify
+  justify-content: space-between
+
+.landing-cta-flex
+  display: -webkit-box
+  display: -webkit-flex
+  display: -ms-flexbox
+  display: flex
+  margin-top: 24px
+  margin-bottom: 24px
+  -webkit-box-pack: justify
+  -webkit-justify-content: space-between
+  -ms-flex-pack: justify
+  justify-content: space-between
+  -webkit-box-align: start
+  -webkit-align-items: flex-start
+  -ms-flex-align: start
+  align-items: flex-start
+
+@media (max-width: 991px)
+  .landing-account-block
+    width: 48%
+  .landing-cta-flex
+    -webkit-box-orient: vertical
+    -webkit-box-direction: normal
+    -webkit-flex-direction: column
+    -ms-flex-direction: column
+    flex-direction: column
+    -webkit-box-align: stretch
+    -webkit-align-items: stretch
+    -ms-flex-align: stretch
+    align-items: stretch
+
+@media (max-width: 767px)
+  .landing-account-block
+    width: 100%
+    margin-top: 16px
+    margin-right: 0px
+    margin-left: 0px
+    padding-right: 24px
+    padding-left: 24px
+  .landing-account-flex-container
+    -webkit-box-orient: vertical
+    -webkit-box-direction: normal
+    -webkit-flex-direction: column
+    -ms-flex-direction: column
+    flex-direction: column
+    -webkit-flex-wrap: wrap
+    -ms-flex-wrap: wrap
+    flex-wrap: wrap
+    -webkit-align-content: center
+    -ms-flex-line-pack: center
+    align-content: center

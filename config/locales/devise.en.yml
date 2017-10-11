@@ -18,7 +18,7 @@ en:
       unconfirmed: "You have to confirm your email address before continuing."
     mailer:
       confirmation_instructions:
-        subject: "Confirm your emal with AV Junction"
+        subject: "Confirm your e-mail with AV Junction"
       reset_password_instructions:
         subject: "Reset password instructions"
       unlock_instructions:
