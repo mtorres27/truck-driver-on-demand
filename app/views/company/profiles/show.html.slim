@@ -1,6 +1,6 @@
 .profile__wrapper
   - if @company.profile_header_url.include?("missing") or @company.header_source == "color"
-    .profile__wrapper-bg style="background-color: #{ @company.header_colour.include?("#") ? "" : "#"}#{@company.header_color}"
+    .profile__wrapper-bg style="background-color: #{ @company.header_color.include?("#") ? "" : "#"}#{@company.header_color}"
   - else
     .profile__wrapper-bg style="background-image: url(#{@company.profile_header_url.include?("missing") ? "" : @company.profile_header_url});"
 
