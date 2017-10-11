@@ -8,10 +8,6 @@
     
     .result-content
       = simple_form_for(@freelancer, url: freelancer_profile_path) do |f|
-        .freelancer-profile__item
-          .freelancer-profile__title
-            | Profile Colour
-          = f.input :header_color, required: true, label: false, placeholder: "FF6C38"  
 
         .freelancer-profile__item
           .freelancer-profile__title
