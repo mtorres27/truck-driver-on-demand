@@ -7,9 +7,9 @@ class CertificationUploader < Shrine
   plugin :processing
   plugin :default_url
 
-  # process(:store) do |io, context|
-  #   resize_to_limit!(io.download, 300, 300)
-  # end
+  process(:store) do |io, context|
+    resize_to_limit!(io.download, 300, 300)
+  end
 
   Attacher.default_url do
     "#{name}/missing.pdf"
