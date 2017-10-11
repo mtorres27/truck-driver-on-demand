@@ -25,10 +25,7 @@
             .media
               .media-left
                 .freelancer_avatar
-                  - if item[:payload].authorable.avatar_url.include?("missing.png")
-                    = image_tag("http://graph.facebook.com/v2.5/111#{item[:payload].authorable.id}/picture?height=40&height=40", size: "40x40")
-                  - else
-                    = image_tag(item[:payload].authorable.avatar_url, size: "40x40")
+                  = image_tag(item[:payload].authorable.avatar_url, size: "40x40")
               .media-body
                 span.authorable_name #{item[:payload].authorable.name}
                 - if !item[:payload].created_at.nil?

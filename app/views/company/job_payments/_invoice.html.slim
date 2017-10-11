@@ -23,10 +23,7 @@
 
 .row
   .invoice-col-1
-    - if @job.freelancer.avatar_url.include?("missing.png")
-      = image_tag("http://graph.facebook.com/v2.5/111#{@job.freelancer.id}/picture?height=65&height=65", size: "65x65")
-    - else
-      = image_tag(@job.freelancer.avatar_url, size: "65x65")
+    = image_tag(@job.freelancer.avatar_url, size: "65x65")
   .invoice-col-2
     h4= @job.freelancer&.name
     p= @job.freelancer&.formatted_address || @job.freelancer&.address

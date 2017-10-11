@@ -10,10 +10,7 @@
   .search-header
     .company-mobile__row
       .company-mobile__avatar
-        - if @company.avatar_url.include?("missing.png")
-          = image_tag("http://graph.facebook.com/v2.5/111#{@company.id}/picture?height=135&height=135", size: "135x135")
-        - else
-          = image_tag(@company.avatar_url, size: "50x50")
+        = image_tag(@company.avatar_url, size: "50x50")
       .company-mobile__name
         = @company.name
 
