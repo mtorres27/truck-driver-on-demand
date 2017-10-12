@@ -120,7 +120,7 @@ class Freelancer < ApplicationRecord
   }
 
   enumerize :pay_unit_time_preference, in: [
-    :fixed, :hourly
+    :fixed, :hourly, :daily
   ]
 
   enumerize :freelancer_type, in: [

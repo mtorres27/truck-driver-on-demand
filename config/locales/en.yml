@@ -62,6 +62,7 @@ en:
       pay_type:
         fixed: "Fixed"
         hourly: "Hourly"
+        daily: "Daily"
       state:
         created: "Not Published"
         published: "Accepting Applicants"
@@ -76,6 +77,7 @@ en:
       contract_preference:
         prefer_fixed: "Fixed Price Work Orders"
         prefer_hourly: "Hourly Work Orders"
+        prefer_daily: "Daily Work Orders"
         no_preference: "No Preference"
         prefers: "Prefers"
       number_of_employees:
@@ -129,6 +131,7 @@ en:
   has_no_preference: "Has no Work Order Preference"
   prefer_fixed: "Fixed Price Work Orders"
   prefer_hourly: "Hourly Work Orders"
+  prefer_daily: "Daily Work Orders"
   no_preference: "No Preference"
   prefers: "Prefers"
   one_to_ten: "1 - 10"
