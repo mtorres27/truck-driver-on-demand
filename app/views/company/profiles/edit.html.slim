@@ -130,6 +130,9 @@
           = f.input :header_source, label: false, prompt: "Select"
     
         .form-actions
+          a.btn.btn-secondary href=company_profile_path(@company)
+            | Cancel
+          = " "
           = f.button :submit, class: "btn btn-primary", label: "Update Profile"
 
 javascript:
