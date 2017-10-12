@@ -132,8 +132,8 @@
 
         .freelancer-profile__item
           .freelancer-profile__title
-            | Hourly Rate
-          = f.input :pay_per_unit_time, label: false, placeholder: "Enter your hourly rate"
+            | Rate
+          = f.input :pay_per_unit_time, label: false, placeholder: "Enter your rate"
 
         .freelancer-profile__item
           .freelancer-profile__title
@@ -152,6 +152,9 @@
         p style="height: 20px;"
 
         .form-actions
+          a.btn.btn-secondary href=freelancer_profile_path
+            | Cancel
+          = " "
           = f.button :submit, class: "btn btn-primary", label: "Update Profile"
 
 javascript:

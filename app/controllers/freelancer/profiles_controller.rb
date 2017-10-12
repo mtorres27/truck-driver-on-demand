@@ -6,8 +6,8 @@ class Freelancer::ProfilesController < Freelancer::BaseController
       @freelancer = current_freelancer
     end
 
-    @freelancer.profile_views += 1
-    @freelancer.save
+    # @freelancer.profile_views += 1
+    # @freelancer.save
   end
 
   def edit

@@ -63,7 +63,7 @@ class Company < ApplicationRecord
     :yen,
   ]
   
-  enumerize :contract_preference, in: [:prefer_fixed, :prefer_hourly]
+  enumerize :contract_preference, in: [:prefer_fixed, :prefer_hourly, :prefer_daily]
   enumerize :number_of_employees, in: [
     :one_to_ten,
     :eleven_to_one_hundred,

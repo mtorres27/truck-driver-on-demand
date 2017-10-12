@@ -240,9 +240,7 @@
             - if @freelancer.freelancer_team_size.nil?
               = ""
             - else 
-              = "("
-              = t("enumerize.job.freelancer_team_size.#{@freelancer.freelancer_team_size}")
-              = ")"
+              = "(#{@freelancer.freelancer_team_size})"
       br
       br
 

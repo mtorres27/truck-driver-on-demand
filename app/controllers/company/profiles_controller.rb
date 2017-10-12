@@ -7,8 +7,8 @@ class Company::ProfilesController < Company::BaseController
       @company = current_company
     end
 
-    @company.profile_views += 1
-    @company.save
+    # @company.profile_views += 1
+    # @company.save
   end
 
   def edit
