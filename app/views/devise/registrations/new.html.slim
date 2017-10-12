@@ -50,8 +50,11 @@
       - code_of_conduct_error = false
       - if resource.class.name.downcase == "freelancer"
         - obj = @freelancer
-      - else
+      - elsif resource.class.name.downcase == "company"
         - obj = @company
+      - else
+        - obj = @admin
+
       - obj.errors.full_messages.each do |error|
         - if error.include?("privacy policy")
           - privacy_policy_error = true
