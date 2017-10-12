@@ -1,253 +1,90 @@
 = render partial: "/freelancer/shared/profile_sub_nav"
 
 .fprofile__container
-  .fprofile__wallpaper
+  - if @freelancer.profile_header_url.include?("missing") or @freelancer.header_source == "color"
+    .fprofile__wallpaper style="background-color: #{ @freelancer.header_color.include?("#") ? "" : "#"}#{@freelancer.header_color}"
+  - else
+    .fprofile__wallpaper style="background-image: url(#{@freelancer.profile_header_url.include?("missing") ? "" : @freelancer.profile_header_url});"
+
   .fprofile__content
     .fprofile__header.w-clearfix
-      h1.fprofile__h1 Dayton Aluisio Pereira
-      .fprofile__tag.green Available for work
+      h1.fprofile__h1= @freelancer.name
+      a.profile__block__invite-to-quote href=edit_freelancer_profile_path
+        | Edit
+      - if @freelancer.available
+        .fprofile__tag.green Available for work
+      - else
+        .fprofile__tag.red Not Available for Work
     .fprofile__meta__details__1
       .fprofile__meta__details__1-1
         .fprofile__meta__image
-        .fprofile__meta__info.w-clearfix
-          .fprofile__meta__name Dayton Aluisio Pereira
-          .fprofile__meta__joined Joined October 3, 2017
-          .fprofile__meta__reviews 0 Reviews
-          .fprofile__meta__rating *****
-      .fprofile__meta__details__1-2
-        .fprofile__meta__tagline Great technical AV work and awesome customer service...what more could you want?
-        .fprofile__specialties--summary
-          .fprofile__tag.grey video conferecing
-          .fprofile__tag.grey audio
-          .fprofile__tag.grey cabling
-          .fprofile__tag.grey displays
-      .fprofile__meta__details__1-3
-        .fprofile__meta__details-stat
-          .fprofile__meta__stat--label Pay Pref
-          .fprofile__meta__stat--value Hourly
-        .fprofile__meta__details-stat
-          .fprofile__meta__stat--label rate
-          .fprofile__meta__stat--value $55/hr
-        .fprofile__meta__details-stat
-          .fprofile__meta__stat--label EXPERIENCE
-          .fprofile__meta__stat--value 14 yrs
-    .fprofile__meta__details__2
-      .fprofile__biography
-        h3.fprofile__h3 BIO
-        p I was introduced into the audio visual market about 8 years ago.  I was working as a warehouse picker for an integration company staging equipment and consumable items for various av integration projects.  I would regularly be chatting with the company's field technicians and I gradually became more and more interested in how all these pieces of equipment came together.  I researched a bit more and managed to go out onsite with the technicians just as a junior tech.  I then looked into getting my Infocomm CTS certification and the rest is history!  So enough about the boring “how did I get into AV chat…” If you want a reliable, hardworking and skilled tech (check out my certifications) then look no further.  I am great with customers and have an appreciation of all the various functions that are involved with implementing an AV project.  As a side note one of my passions is photography so if you want professional looking pictures of your install at completion I can help you with that too!
-      .fprofile__specialties
-        h3.fprofile__h3 Specialties
-        h4.fprofile__h4 markets
-        .fprofile__tag.grey video 
-        .fprofile__tag.grey video conferecing
-        .fprofile__tag.grey video conferecing
-        .fprofile__tag.grey video conferecing
-        .fprofile__tag.grey video conferecing
-        .fprofile__tag.grey video conferecing
-        .fprofile__tag.grey video conferecing
-        .fprofile__tag.grey video conferecing
-        .fprofile__tag.grey video conferecing
-        h4.fprofile__h4 skills
-        .fprofile__tag.grey video conferecing
-        .fprofile__tag.grey video conferecing
-        .fprofile__tag.grey video conferecing
-        .fprofile__tag.grey video conferecing
-        .fprofile__tag.grey video conferecing
-        .fprofile__tag.grey video conferecing
-        .fprofile__tag.grey video conferecing
-        .fprofile__tag.grey video conferecing
-    .fprofile__meta__details__3
-      h3.fprofile__h3 Certifications
-      .fprofile__certifications__container
-        .fprofile__certification
-          img.fprofile__certification__image sizes="185.96875px" src="images/profile-picture---freelancer-1.png" srcset=("images/profile-picture---freelancer-1-p-500.png 500w), images/profile-picture---freelancer-1-p-800.png 800w, images/profile-picture---freelancer-1.png 981w" /
-          .fprofile__certification__label 1 Certification of Awesomeness
-        .fprofile__certification
-          img.fprofile__certification__image sizes="256px" src="images/4443091-cool-backgrounds.jpg" srcset=("images/4443091-cool-backgrounds-p-1080.jpeg 1080w), images/4443091-cool-backgrounds-p-1600.jpeg 1600w, images/4443091-cool-backgrounds-p-2000.jpeg 2000w, images/4443091-cool-backgrounds.jpg 2560w" /
-          .fprofile__certification__label 2 Certification of Awesomeness
-        .fprofile__certification
-          img.fprofile__certification__image sizes="213.328125px" src="images/2017-07-13-09.59.33.jpg" srcset=("images/2017-07-13-09.59.33-p-500.jpeg 500w), images/2017-07-13-09.59.33-p-1080.jpeg 1080w, images/2017-07-13-09.59.33-p-1600.jpeg 1600w, images/2017-07-13-09.59.33-p-2000.jpeg 2000w, images/2017-07-13-09.59.33.jpg 2048w" /
-          .fprofile__certification__label 3 Certification of Awesomeness
-        .fprofile__certification
-          img.fprofile__certification__image sizes="213.328125px" src="images/2017-07-13-09.59.33.jpg" srcset=("images/2017-07-13-09.59.33-p-500.jpeg 500w), images/2017-07-13-09.59.33-p-1080.jpeg 1080w, images/2017-07-13-09.59.33-p-1600.jpeg 1600w, images/2017-07-13-09.59.33-p-2000.jpeg 2000w, images/2017-07-13-09.59.33.jpg 2048w" /
-          .fprofile__certification__label 4 Certification of Awesomeness
-        .fprofile__certification
-          img.fprofile__certification__image sizes="213.328125px" src="images/2017-07-13-09.59.33.jpg" srcset=("images/2017-07-13-09.59.33-p-500.jpeg 500w), images/2017-07-13-09.59.33-p-1080.jpeg 1080w, images/2017-07-13-09.59.33-p-1600.jpeg 1600w, images/2017-07-13-09.59.33-p-2000.jpeg 2000w, images/2017-07-13-09.59.33.jpg 2048w" /
-          .fprofile__certification__label 5 Certification of Awesomeness
-        .fprofile__certification
-          img.fprofile__certification__image sizes="213.328125px" src="images/2017-07-13-09.59.33.jpg" srcset=("images/2017-07-13-09.59.33-p-500.jpeg 500w), images/2017-07-13-09.59.33-p-1080.jpeg 1080w, images/2017-07-13-09.59.33-p-1600.jpeg 1600w, images/2017-07-13-09.59.33-p-2000.jpeg 2000w, images/2017-07-13-09.59.33.jpg 2048w" /
-          .fprofile__certification__label 5 Certification of Awesomeness
-        .fprofile__certification
-          img.fprofile__certification__image sizes="213.328125px" src="images/2017-07-13-09.59.33.jpg" srcset=("images/2017-07-13-09.59.33-p-500.jpeg 500w), images/2017-07-13-09.59.33-p-1080.jpeg 1080w, images/2017-07-13-09.59.33-p-1600.jpeg 1600w, images/2017-07-13-09.59.33-p-2000.jpeg 2000w, images/2017-07-13-09.59.33.jpg 2048w" /
-          .fprofile__certification__label 5 Certification of Awesomeness
-        .fprofile__certification
-          img.fprofile__certification__image sizes="213.328125px" src="images/2017-07-13-09.59.33.jpg" srcset=("images/2017-07-13-09.59.33-p-500.jpeg 500w), images/2017-07-13-09.59.33-p-1080.jpeg 1080w, images/2017-07-13-09.59.33-p-1600.jpeg 1600w, images/2017-07-13-09.59.33-p-2000.jpeg 2000w, images/2017-07-13-09.59.33.jpg 2048w" /
-          .fprofile__certification__label 5 Certification of Awesomeness
-
-
-
-
-
-
-
-.profile__wrapper
-  - if @freelancer.profile_header_url.include?("missing") or @freelancer.header_source == "color"
-    .profile__wrapper-bg style="background-color: #{ @freelancer.header_color.include?("#") ? "" : "#"}#{@freelancer.header_color}"
-  - else
-    .profile__wrapper-bg style="background-image: url(#{@freelancer.profile_header_url.include?("missing") ? "" : @freelancer.profile_header_url});"
-
-
-  .profile__content
-    .profile__block
-      .profile__block__name
-        = @freelancer.name
-      - if @freelancer.available
-        .profile__block__status--available
-          | Available For Work
-      - else
-        .profile__block__status--busy
-          | Not Available For Work
-
-      a.profile__block__invite-to-quote href=edit_freelancer_profile_path
-        | Edit
-      
-
-    .profile__meta
-      .profile__meta-left
-        .profile__meta-left__avatar 
           = image_tag(@freelancer.avatar_url, size: "135x135")
-
-        .profile__meta-left__stars
-          - @stars = freelancer_avg_rating(@freelancer)
+        .fprofile__meta__info.w-clearfix
+          .fprofile__meta__name= @freelancer.name
+          .fprofile__meta__joined= "Joined #{@freelancer.created_at.strftime('%B %d, %Y')}"
+          .fprofile__meta__reviews 
+            = freelancer_ratings_link(@freelancer)
+          .fprofile__meta__rating
+            - @stars = freelancer_avg_rating(@freelancer)
             - @stars.each do |star|
               .span class=star
-
-        .profile__meta-left__number-of-reviews
-          a href="#reviews" data-turbolinks="false"
-            = freelancer_ratings_link(@freelancer)
-
-      .profile__meta-center
-        .profile__meta-center__name
-          = @freelancer.name
-        .profile__meta-center__area
-          = @freelancer.area
-        .profile__meta-center__member-since
-          = "Member since #{@freelancer.created_at.strftime('%B %d, %Y')}"
-        .profile__meta-center__tagline
-          = @freelancer.tagline
-        .profile__meta-center__keywords
+      .fprofile__meta__details__1-2
+        .fprofile__meta__tagline= @freelancer.tagline
+        .fprofile__specialties--summary
           - if !@freelancer.keywords.nil? and @freelancer.keywords.kind_of?(Hash)
             - @freelancer.keywords.first(2).each do |index, value|
-              .profile__meta-center__keyword
+              .fprofile__tag.grey
                 = I18n.t("enumerize.freelancer_keywords.#{index}")
           - if !@freelancer.skills.nil? and @freelancer.skills.kind_of?(Hash)
             - @freelancer.skills.first(2).each do |index, value|
-              .profile__meta-center__keyword
+              .fprofile__tag.grey
                 = I18n.t("enumerize.freelancer_skills.#{index}")
-
-
-      .profile__meta-right
-        .profile__meta-right__pay-pref
-          .profile__meta-right__pay-pref-value
+      .fprofile__meta__details__1-3
+        .fprofile__meta__details-stat
+          .fprofile__meta__stat--label Pay Pref
+          .fprofile__meta__stat--value
             - if !@freelancer.pay_unit_time_preference.nil?
               = t("enumerize.job.pay_type.#{@freelancer.pay_unit_time_preference}")
             - else
               | N/A
-          .profile__meta-right__pay-pref-label
-            | pay pref
-        .profile__meta-right__pay-unit
-          .profile__meta-right__pay-unit-value
+        .fprofile__meta__details-stat
+          .fprofile__meta__stat--label rate
+          .fprofile__meta__stat--value
             - if !@freelancer.pay_per_unit_time.nil?
               = @freelancer.pay_per_unit_time
             - else
               | N/A
-          .profile__meta-right__pay-unit-label
-            | rate
-        
-    .profile__bona-fides
-      .profile__bona-fides__review
-        - if @freelancer.freelancer_reviews_count > 0
-          .profile__bona-fides__review-quote
-            span class="fa fa-quote-left"
-          .profile__bona-fides__review-data
-            .profile__bona-fides__review-text
-              = @freelancer.freelancer_reviews.first.comments
-            .profile__bona-fides__review-name
-              = "#{@freelancer.freelancer_reviews.first.company.contact_name}, #{@freelancer.freelancer_reviews.first.company.name}"
-
-      .profile__bona-fides__data--freelancer
-        .profile__bona-fides__data__years-of-experience
-          .profile__bona-fides__data__years-of-experience-value
-            = @freelancer.years_of_experience
-          .profile__bona-fides__data__years-of-experience-label
-            | Years of experience
-        .profile__bona-fides__data__profile-views
-          .profile__bona-fides__data__profile-views-value
-            = number_to_human(@freelancer.profile_views, :format => '%n%u', :precision => 3, :units => { :thousand => 'K', :million => 'M', :billion => 'B' })
-          .profile__bona-fides__data__profile-views-label
-            | Profile views
-        .profile__bona-fides__data__projects-completed
-          .profile__bona-fides__data__projects-completed-value
-            = @freelancer.jobs.where({state:"completed"}).count
-          .profile__bona-fides__data__projects-completed-label
-            | Projects Completed
-
-
-    .profile__abilities
-      .profile__abilities__bio
-        .profile__abilities__bio-label
-          | bio
-        .profile__abilities__bio-value
-          - if @freelancer.bio.nil?
-            | This freelancer has not yet added a bio.
-          - else
-            = @freelancer.bio  
-      .profile__abilities__specialties   
-        .profile__abilities__specialties-label
-          | specialties
-        .profile__abilities__specialties__markets
-          .profile__abilities__specialties__markets-label
-            | markets
-          .profile__abilities__specialties__markets-value
-            - if !@freelancer.keywords.nil? and @freelancer.keywords.kind_of?(Hash)
-              - @freelancer.keywords.each do |index, value|
-                .profile__abilities__specialties__market
-                  = I18n.t("enumerize.freelancer_keywords.#{index}")
+        .fprofile__meta__details-stat
+          .fprofile__meta__stat--label EXPERIENCE
+          .fprofile__meta__stat--value= "#{@freelancer.years_of_experience} yrs"
+    .fprofile__meta__details__2
+      .fprofile__biography
+        h3.fprofile__h3
+          p
+            - if @freelancer.bio.nil? or @freelancer.bio == ""
+              | This freelancer has not yet added a bio.
             - else
-              | This freelancer has no markets listed.
-        .profile__abilities__specialties__skills
-          .profile__abilities__specialties__skills-label
-            | skills
-          .profile__abilities__specialties__skills-value
-            - if !@freelancer.skills.nil? and @freelancer.skills.kind_of?(Hash)
-              - @freelancer.skills.each do |index, value|
-                .profile__abilities__specialties__skill
-                  = I18n.t("enumerize.freelancer_skills.#{index}")
-            - else
-              | This freelancer has no skills listed.
-        
-    .profile__certifications
-      .profile__certifications-label
-        | Type
-      .profile__certifications-value
-        - if @freelancer.freelancer_type.nil?
-          | N/A
+              = "#{@freelancer.bio}"
+      .fprofile__specialties
+        h3.fprofile__h3 Specialties
+        h4.fprofile__h4 markets
+        - if !@freelancer.keywords.nil? and @freelancer.keywords.kind_of?(Hash)
+          - @freelancer.keywords.each do |index, value|
+            .fprofile__tag.grey
+              = I18n.t("enumerize.freelancer_keywords.#{index}")
         - else
-          - if @freelancer.freelancer_type == :independent
-            = @freelancer.freelancer_type.text
-          - else
-            = "#{@freelancer.freelancer_type.text} "
-            - if @freelancer.freelancer_team_size.nil?
-              = ""
-            - else 
-              = "(#{@freelancer.freelancer_team_size})"
-      br
-      br
-
-    .profile__certifications
-      .profile__certifications-label
-        | certifications
-      .profile__certifications-value
+          | This freelancer has no markets listed.
+        h4.fprofile__h4 skills
+        - if !@freelancer.skills.nil? and @freelancer.skills.kind_of?(Hash)
+          - @freelancer.skills.each do |index, value|
+            .fprofile__tag.grey
+              = I18n.t("enumerize.freelancer_skills.#{index}")
+        - else
+          | This freelancer has no skills listed.
+        
+    .fprofile__meta__details__3
+      h3.fprofile__h3 Certifications
+      .fprofile__certifications__container
         - if @freelancer.certifications.count == 0
           | This freelancer has not yet added any certifications.
         - @freelancer.certifications.each do |certification|
@@ -257,23 +94,14 @@
               - url = certification.certificate_url
               a href=url target="_blank"
                 - if is_image(url)
-                  img src=url
+                  - src=url
                 - else
-                  img src="/assets/certification/certification_placeholder.png"
-            .profile__certifications__certification-name
-              = certification.name
+                  - src="/assets/certification/certification_placeholder.png"
+                .fprofile__certification
+                  img.fprofile__certification__image sizes="185.96875px" src=src
+                  .fprofile__certification__label= certification.name
+        
 
-    .profile__reviews
-      a name="reviews"
-        .profile__reviews-label
-          | reviews
-      .profile__reviews-value
-        - if @freelancer.freelancer_reviews_count > 0
-          .profile__reviews__review
-          - @freelancer.freelancer_reviews.each do |review|
-            .profile__reviews__review-text
-              = review.comments
-            .profile__reviews__review-name
-              = "#{review.company.contact_name}, #{review.company.name}"
-        - else
-          | This freelancer doesn't have any reviews.
+
+
+

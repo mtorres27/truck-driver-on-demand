@@ -16,7 +16,7 @@ Rails.application.routes.draw do
 
   namespace :freelancer do
     root "profiles#show"
-    resource :freelancer, only: [:show, :edit, :update]
+    resource :freelancer, only: [:show]
 
     resources :companies, only: [:index, :show] do
       get :favourites, on: :collection
