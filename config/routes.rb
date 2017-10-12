@@ -1,7 +1,7 @@
 Rails.application.routes.draw do
   devise_for :companies, path: 'company', path_names: { sign_in: "login", sign_up: "register" }, controllers: { registrations: "registrations" }
   devise_for :freelancers, path: 'freelancer', path_names: { sign_in: "login", sign_up: "register" }, controllers: { registrations: "registrations" }
-  devise_for :admins, path: 'admin', path_names: { sign_in: "login" }, skip: [:registrations]
+  devise_for :admins, path: 'admin', path_names: { sign_in: "login" }
 
 
   root "main#index"
