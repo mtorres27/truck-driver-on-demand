@@ -7,23 +7,6 @@
   = simple_form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f|
     = f.error_notification
     .form-inputs
-      .register__label
-        | Full Name
-      = f.input :name, as: :string, label: false, required: true, autofocus: true, placeholder: (resource.class.name.downcase == "freelancer" ? "Enter your full name" : "Enter your company name")
-      .register__label
-        | Email Address
-      = f.input :email, as: :string, label: false, required: true, autofocus: true, placeholder: "Enter your email address"
-      - if resource.class.name == "Company"
-        .register__label
-          | Contact Name
-        = f.input :contact_name, as: :string, label: false, required: true, autofocus: true, placeholder: "Enter your full name"
-
-      - if resource.class.name != "Admin"
-        .register__label
-          | Country
-        
-        = f.input :country, required: true, label: false, prompt: "Select Country"
-
       .register__account-selector
         .register__label
           | Choose the account type you'd like to register:
@@ -39,7 +22,22 @@
           - else
             = radio_button_tag :user_type, "company"
           = label :user_type, "company"
+      .register__label
+        | Company Name
+      = f.input :name, as: :string, label: false, required: true, autofocus: true, placeholder: (resource.class.name.downcase == "freelancer" ? "Enter your full name" : "Enter your company name")
+      .register__label
+        | Email Address
+      = f.input :email, as: :string, label: false, required: true, autofocus: true, placeholder: "Enter your email address"
+      - if resource.class.name == "Company"
+        .register__label
+          | Contact Name
+        = f.input :contact_name, as: :string, label: false, required: true, autofocus: true, placeholder: "Enter your full name"
 
+      - if resource.class.name != "Admin"
+        .register__label
+          | Country
+        
+        = f.input :country, required: true, label: false, prompt: "Select Country"
 
       .register__label
         | Enter a Password
@@ -47,6 +45,47 @@
       .register__label
         | Confirm Your password
       = f.input :password_confirmation, label: false, required: true, placeholder: "Confirm your password"
+      - privacy_policy_error = false
+      - terms_of_service_error = false
+      - code_of_conduct_error = false
+      - if resource.class.name.downcase == "freelancer"
+        - obj = @freelancer
+      - elsif resource.class.name.downcase == "company"
+        - obj = @company
+      - else
+        - obj = @admin
+
+      - obj.errors.full_messages.each do |error|
+        - if error.include?("privacy policy")
+          - privacy_policy_error = true
+        - elsif error.include?("terms of service")
+          - terms_of_service_error = true
+        - elsif error.include?("code of conduct")
+          - code_of_conduct_error = true
+      span class=(terms_of_service_error == true ? "validation-error" : "")
+        = f.check_box :accept_terms_of_service, required: true
+        = " "
+        | I accept the 
+        a href="http://www.avjunction.com/term-of-service" target="_blank"
+          | Terms of Service
+      br
+      span class=(privacy_policy_error == true ? "validation-error" : "fine")
+        = f.check_box :accept_privacy_policy, required: true
+        = " "
+        | I accept the 
+        a href="http://www.avjunction.com/privacy-policy" target="_blank"
+          | Privacy Policy
+      br
+      span class=(code_of_conduct_error == true ? "validation-error" : "")
+        = f.check_box :accept_code_of_conduct, required: true
+        = " "
+        | I accept the 
+        a href="http://www.avjunction.com/code-of-conduct" target="_blank"
+          | Code of Conduct
+      
+      br
+      br
+
 
     .form-actions
       = f.button :submit, "Register", class: "btn-primary"

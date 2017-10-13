@@ -1,7 +1,8 @@
-.container
-  - flash.each do |type, message|
-    div class="alert #{alert_class_for(type)} alert-dismissible fade in"
-      button type="button" class="close" data-dismiss="alert"
-        span aria-hidden="true" &times;
-        span.sr-only Close
-      = message
+- if request.env['PATH_INFO'] != "/confirm_email"
+  .container
+    - flash.each do |type, message|
+      div class="alert #{alert_class_for(type)} alert-dismissible fade in"
+        button type="button" class="close" data-dismiss="alert"
+          span aria-hidden="true" &times;
+          span.sr-only Close
+        = message

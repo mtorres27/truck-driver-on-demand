@@ -26,6 +26,9 @@
 #  updated_at               :datetime         not null
 #
 
+require 'net/http'
+require 'uri'
+
 class Freelancer < ApplicationRecord
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
@@ -59,6 +62,14 @@ class Freelancer < ApplicationRecord
   validates :years_of_experience, numericality: { only_integer: true }
 
   audited
+
+  attr_accessor :accept_terms_of_service
+  attr_accessor :accept_privacy_policy
+  attr_accessor :accept_code_of_conduct
+
+  validates_acceptance_of :accept_terms_of_service
+  validates_acceptance_of :accept_privacy_policy
+  validates_acceptance_of :accept_code_of_conduct
 
   after_create :add_to_hubspot
 
@@ -109,7 +120,7 @@ class Freelancer < ApplicationRecord
   }
 
   enumerize :pay_unit_time_preference, in: [
-    :fixed, :hourly
+    :fixed, :hourly, :daily
   ]
 
   enumerize :freelancer_type, in: [
@@ -117,11 +128,16 @@ class Freelancer < ApplicationRecord
   ]
 
   enumerize :freelancer_team_size, in: [
-    :less_than_five, 
-    :six_to_ten, 
-    :eleven_to_twenty, 
-    :twentyone_to_thirty, 
-    :more_than_thirty
+    "1 to 5",    
+    "6 to 10", 
+    "11 to 20", 
+    "21 to 30", 
+    "30+"
+  ]
+
+  enumerize :header_source, in: [
+    :color,
+    :wallpaper
   ]
 
   enumerize :country, in: [

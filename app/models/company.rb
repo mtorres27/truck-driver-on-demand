@@ -46,6 +46,14 @@ class Company < ApplicationRecord
   has_many :favourite_freelancers, through: :favourites, source: :freelancer
   has_many :company_installs, dependent: :destroy
 
+  attr_accessor :accept_terms_of_service
+  attr_accessor :accept_privacy_policy
+  attr_accessor :accept_code_of_conduct
+
+  validates_acceptance_of :accept_terms_of_service
+  validates_acceptance_of :accept_privacy_policy
+  validates_acceptance_of :accept_code_of_conduct
+
   enumerize :currency, in: [
     :cad,
     :euro,
@@ -55,7 +63,8 @@ class Company < ApplicationRecord
     :yen,
   ]
 
-  enumerize :contract_preference, in: [:prefer_fixed, :prefer_hourly]
+  enumerize :contract_preference, in: [:prefer_fixed, :prefer_hourly, :prefer_daily]
+
   enumerize :number_of_employees, in: [
     :one_to_ten,
     :eleven_to_one_hundred,
@@ -68,6 +77,11 @@ class Company < ApplicationRecord
 
   enumerize :country, in: [
     :at, :au, :be, :ca, :ch, :de, :dk, :es, :fi, :fr, :gb, :hk, :ie, :it, :jp, :lu, :nl, :no, :nz, :pt, :se, :sg, :us
+  ]
+
+  enumerize :header_source, in: [
+    :color,
+    :wallpaper
   ]
 
   accepts_nested_attributes_for :featured_projects, allow_destroy: true, reject_if: :reject_featured_projects

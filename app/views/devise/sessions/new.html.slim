@@ -6,9 +6,6 @@
   = simple_form_for(resource, as: resource_name, url: session_path(resource_name)) do |f|
     = f.error_notification
     .form-inputs
-      = f.input :email, as: :string, label: false, required: true, autofocus: true, placeholder: "Enter your Email Address"
-      = f.input :password, required: true, label: false, placeholder: "Enter your Password"
-
       - if resource.class.name != "Admin"
         .login__account-selector
           .login__label
@@ -25,6 +22,9 @@
             - else
               = radio_button_tag :user_type, "company"
             = label :user_type, "company"
+      = f.input :email, as: :string, label: false, required: true, autofocus: true, placeholder: "Enter your Email Address"
+      = f.input :password, required: true, label: false, placeholder: "Enter your Password"
+
       
       .login__checkbox
         = f.input :remember_me, as: :boolean if devise_mapping.rememberable?

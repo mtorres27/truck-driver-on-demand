@@ -1,5 +1,8 @@
 .profile__wrapper
-  .profile__wrapper-bg style="background-image: url(#{@freelancer.profile_header_url.include?("missing") ? "" : @freelancer.profile_header_url}); background-color: ##{@freelancer.header_color}"
+  - if @freelancer.profile_header_url.include?("missing") or @freelancer.header_source == "color"
+    .profile__wrapper-bg style="background-color: #{ @freelancer.header_color.include?("#") ? "" : "#"}#{@freelancer.header_color}"
+  - else
+    .profile__wrapper-bg style="background-image: url(#{@freelancer.profile_header_url.include?("missing") ? "" : @freelancer.profile_header_url});"
 
   .profile__content
     .profile__block
@@ -25,10 +28,7 @@
     .profile__meta
       .profile__meta-left
         .profile__meta-left__avatar 
-          - if @freelancer.avatar_url.include?("missing.png")
-            = image_tag("http://graph.facebook.com/v2.5/111#{@freelancer.id}/picture?height=135&height=135", size: "135x135")
-          - else
-            = image_tag(@freelancer.avatar_url, size: "135x135")
+          = image_tag(@freelancer.avatar_url, size: "135x135")
 
         .profile__meta-left__stars
           - @stars = freelancer_avg_rating(@freelancer)
@@ -155,7 +155,9 @@
             - if @freelancer.freelancer_team_size.nil?
               = ""
             - else 
-              = "(#{@freelancer.freelancer_team_size.text})"
+              = "(#{@freelancer.freelancer_team_size})"
+        br
+        br
 
     .profile__certifications
       .profile__certifications-label

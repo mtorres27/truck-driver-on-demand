@@ -15,10 +15,7 @@
       a href=company_job_applicant_quotes_path(job, applicant)
         .media.applicant class=("applicant--current" if applicant.id == current_applicant_id)
           .media-left
-            - if applicant.freelancer.avatar_url.include?("missing.png")
-              = image_tag("http://graph.facebook.com/v2.5/111#{applicant.freelancer.id}/picture?height=40&height=40", size: "40x40")
-            - else
-              = image_tag(applicant.freelancer.avatar_url, size: "40x40")
+            = image_tag(applicant.freelancer.avatar_url, size: "40x40")
             - if is_verified(applicant.freelancer)
               span class="freelancer-verified fa fa-check-circle"
           .media-body

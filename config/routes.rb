@@ -1,6 +1,6 @@
 Rails.application.routes.draw do
-  devise_for :companies, path: 'company', path_names: { sign_in: "login", sign_up: "register" }
-  devise_for :freelancers, path: 'freelancer', path_names: { sign_in: "login", sign_up: "register" }
+  devise_for :companies, path: 'company', path_names: { sign_in: "login", sign_up: "register" }, controllers: { registrations: "registrations" }
+  devise_for :freelancers, path: 'freelancer', path_names: { sign_in: "login", sign_up: "register" }, controllers: { registrations: "registrations" }
   devise_for :admins, path: 'admin', path_names: { sign_in: "login" }, skip: [:registrations]
 
 
@@ -10,10 +10,14 @@ Rails.application.routes.draw do
   get "privacy-policy", to: "pages#show", id: "privacy-policy"
   get "terms-of-service", to: "pages#show", id: "terms-of-service"
 
+
+  get "confirm_email", to: "main#confirm_email"
+
+
   namespace :freelancer do
-    # root "profiles#show"
-    root "main#index"
-    resource :freelancer, only: [:show, :edit, :update]
+
+    root "profiles#show"
+    resource :freelancer, only: [:show]
 
     resources :companies, only: [:index, :show] do
       get :favourites, on: :collection
@@ -27,12 +31,12 @@ Rails.application.routes.draw do
       get :my_jobs, on: :collection
       get :my_applications, on: :collection
       post :apply, on: :collection
-      
+
       resources :application, only: [:index, :create]
       resource :contract, only: [:show, :accept], as: "work_order", path: "work_order"
-      resources :messages, only: [:index, :create]    
+      resources :messages, only: [:index, :create]
       resources :payments, controller: "job_payments", only: [:index]
-      resource :review, only: [:show, :create]  
+      resource :review, only: [:show, :create]
       resources :quotes, only: [:index, :create] do
         get :accept, on: :member
         get :decline, on: :member
@@ -44,7 +48,7 @@ Rails.application.routes.draw do
       resource :settings, only: [:index, :edit, :update]
 
     end
-    
+
     get "profile/banking", to: "banking#index"
     get "profile/settings", to: "settings#index"
     post "jobs/:id", to: "jobs#apply"
