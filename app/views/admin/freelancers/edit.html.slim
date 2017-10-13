@@ -8,7 +8,7 @@ h1 Editing Freelancer
     - if @freelancer.avatar&.exists?
       img src=@freelancer.avatar_url
     = f.hidden_field :avatar, value: @freelancer.cached_avatar_data
-    = f.input :avatar, as: :file
+    = f.input :avatar, as: :file, accept: 'image/gif, image/jpg, image/jpeg, image/png'
     = f.input :email, as: :string
     = f.input :freelancer_type
     = f.input :freelancer_team_size
@@ -17,8 +17,35 @@ h1 Editing Freelancer
     = f.input :country
     = f.input :tagline
     = f.input :bio
-    = f.input :keywords, as: :string
-    = f.input :skills, as: :string
+
+    p
+      | Markets
+      - I18n.t('enumerize.freelancer_keywords').each do |index, value|
+        - tag_name = "freelancer[keywords][#{index.to_s}]"
+        - if @freelancer.keywords and @freelancer.keywords.include?(index.to_s)
+          - checked = true
+        - else
+          - checked = false
+
+        = check_box_tag tag_name, "1", checked
+        = value
+        br
+
+    p    
+      | Skills
+      - I18n.t('enumerize.freelancer_skills').each do |index, value|
+        - tag_name = "freelancer[skills][#{index.to_s}]"
+        - if @freelancer.skills and @freelancer.skills.include?(index.to_s)
+          - checked = true
+        - else
+          - checked = false
+
+        = check_box_tag tag_name, "1", checked
+        = value
+        br
+      br
+    
+
     = f.input :years_of_experience
     = f.input :available
     = f.input :verified

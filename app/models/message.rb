@@ -21,6 +21,14 @@ class Message < ApplicationRecord
 
   validate :must_have_body_or_attachment
 
+  attr_accessor :status, 
+    :counter_type, 
+    :counter, 
+    :counter_hourly_rate, 
+    :counter_daily_rate,
+    :counter_number_of_hours,
+    :counter_number_of_days
+
   audited
 
   def must_have_body_or_attachment

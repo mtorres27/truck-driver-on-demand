@@ -9,15 +9,39 @@ h1 Editing Company
     - if @company.avatar&.exists?
       img src=@company.avatar_url
     = f.hidden_field :avatar, value: @company.cached_avatar_data
-    = f.input :avatar, as: :file
+    = f.input :avatar, as: :file, accept: 'image/gif, image/jpg, image/jpeg, image/png'
     = f.input :contact_name
     = f.input :address, as: :string
     = f.input :area
     = f.input :country
     = f.input :description
     = f.input :contract_preference
-    = f.input :keywords, as: :string
-    = f.input :skills, as: :string
+    p
+      | Markets
+      - I18n.t('enumerize.freelancer_keywords').each do |index, value|
+        - tag_name = "company[keywords][#{index.to_s}]"
+        - if @company.keywords and @company.keywords.include?(index.to_s)
+          - checked = true
+        - else
+          - checked = false
+
+        = check_box_tag tag_name, "1", checked
+        = value
+        br
+
+    p    
+      | Skills
+      - I18n.t('enumerize.freelancer_skills').each do |index, value|
+        - tag_name = "company[skills][#{index.to_s}]"
+        - if @company.skills and @company.skills.include?(index.to_s)
+          - checked = true
+        - else
+          - checked = false
+
+        = check_box_tag tag_name, "1", checked
+        = value
+        br
+      br
     = f.input :website
     = f.input :phone_number
     = f.input :number_of_offices

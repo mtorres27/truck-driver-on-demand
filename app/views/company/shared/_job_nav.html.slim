@@ -12,7 +12,7 @@
       .tab-bar__item--active
         Job Details
     - else
-      .tab-bar__item class=("tab-bar__item--active" if controller.controller_name == "jobs")
+      .tab-bar__item class=("tab-bar__item--active" if controller.controller_name == "jobs" or request.path.index(/work_order/))
         a href=company_job_path(job)
           | Job Details
       .tab-bar__item class=("tab-bar__item--active" if request.path.index(/applicant/))

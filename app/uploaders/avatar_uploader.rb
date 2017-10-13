@@ -10,7 +10,7 @@ class AvatarUploader < Shrine
   plugin :remove_invalid
 
   process(:store) do |io, context|
-    resize_to_limit!(io.download, 300, 300)
+    resize_to_fill(io.download, 150, 150)
   end
 
   Attacher.default_url do

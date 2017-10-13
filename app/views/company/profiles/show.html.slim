@@ -63,14 +63,14 @@
           - else
             = "#{t(:prefers)} #{t(@company.contract_preference)}"
         .profile__meta-center__keywords
-          - if !@company.keywords.nil?
-            - @company.keywords.split(", ").map(&:lstrip)[0..1].each do |keyword|
+          - if !@company.keywords.nil? and @company.keywords.kind_of?(Hash)
+            - @company.keywords.first(2).each do |index, value|
               .profile__meta-center__keyword
-                = keyword
-          - if !@company.skills.nil?
-            - @company.skills.split(", ").map(&:lstrip)[0..1].each do |skill|
+                = I18n.t("enumerize.freelancer_keywords.#{index}")
+          - if !@company.skills.nil? and @company.skills.kind_of?(Hash)
+            - @company.skills.first(2).each do |index, value|
               .profile__meta-center__keyword
-                = skill
+                = I18n.t("enumerize.freelancer_skills.#{index}")
         
     .profile__bona-fides
       .profile__bona-fides__review
@@ -136,20 +136,20 @@
           .profile__abilities__specialties__markets-label
             | markets
           .profile__abilities__specialties__markets-value
-            - if !@company.keywords.nil?
-              - @company.keywords.split(", ").map(&:lstrip).each do |keyword|
+            - if !@company.keywords.nil? and @company.keywords.kind_of?(Hash)
+              - @company.keywords.each do |index, value|
                 .profile__abilities__specialties__market
-                  = keyword
+                  = I18n.t("enumerize.freelancer_keywords.#{index}")
             - else
               | This company has no markets listed.
         .profile__abilities__specialties__skills
           .profile__abilities__specialties__skills-label
             | skills
           .profile__abilities__specialties__skills-value
-            - if !@company.skills.nil?
-              - @company.skills.split(", ").map(&:lstrip).each do |skill|
-                .profile__abilities__specialties__skill
-                  = skill
+            - if !@company.skills.nil? and @company.skills.kind_of?(Hash)
+              - @company.skills.each do |index, value|
+                .profile__abilities__specialties__market
+                  = I18n.t("enumerize.freelancer_skills.#{index}")
             - else
               | This company has no skills listed.
         
@@ -158,13 +158,12 @@
         | Installations
       .profile__projects-value--installations
         - if @company.company_installs.length > 0
-          - @company.company_installs.each do |installation|
+          - @company.company_installs.order('year ASC').each do |installation|
             .profile__projects__project
               strong
                 = "#{installation.year}: "
               em
                 = number_with_delimiter(installation.installs, :delimiter => ',')
-
         - else 
           | This company has no information about installs by year
 

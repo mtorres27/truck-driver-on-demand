@@ -16,6 +16,7 @@ class Freelancer::ProfilesController < Freelancer::BaseController
 
   def update
     @freelancer = current_freelancer
+
     if @freelancer.update(freelancer_params)
       redirect_to freelancer_profile_path(@freelancer), notice: "Freelancer profile updated."
     else
@@ -35,8 +36,6 @@ class Freelancer::ProfilesController < Freelancer::BaseController
       :area,
       :tagline,
       :bio,
-      :keywords,
-      :skills,
       :years_of_experience,
       :available,
       :verified,
@@ -46,6 +45,43 @@ class Freelancer::ProfilesController < Freelancer::BaseController
       :freelancer_type,
       :freelancer_team_size,
       :pay_unit_time_preference,
+      :pay_per_unit_time,
+      skills: [
+        :flat_panel_displays,
+        :video_walls,
+        :structured_cabling,
+        :rack_work,
+        :cable_pull,
+        :cable_termination,
+        :projectors,
+        :troubleshooting,
+        :service_and_repair,
+        :av_programming,
+        :interactive_displays,
+        :audio,
+        :video_conferencing,
+        :video_processors,
+        :stagehand,
+        :lighting,
+        :camera,
+        :general_labor,
+        :installation,
+        :rental
+      ],
+      keywords: [
+        :corporate,
+        :government,
+        :broadcast,
+        :retail,
+        :house_of_worship,
+        :higher_education,
+        :k12_education,
+        :residential,
+        :commercial_av,
+        :live_events_and_staging,
+        :rental,
+        :hospitality
+      ],
       certifications_attributes: [:id, :certificate, :name, :_destroy],
     )
   end

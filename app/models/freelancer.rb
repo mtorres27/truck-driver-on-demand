@@ -53,6 +53,9 @@ class Freelancer < ApplicationRecord
   has_many :company_favourites
   has_many :favourite_companies, through: :company_favourites, source: :company
 
+  serialize :keywords
+  serialize :skills
+
   validates :years_of_experience, numericality: { only_integer: true }
 
   audited
@@ -60,9 +63,39 @@ class Freelancer < ApplicationRecord
   after_create :add_to_hubspot
 
   def add_to_hubspot
-    Hubspot::Contact.create_or_update!([
-      {email: email, firstname: name.split(" ")[0], lastname: name.split(" ")[1]}
-    ])
+    api_key = "5c7ad391-2bfe-4d11-9ba3-82b5622212ba"
+    url = "https://api.hubapi.com/contacts/v1/contact/createOrUpdate/email/#{email}/?hapikey=#{api_key}"
+    uri = URI.parse(url)
+    http = Net::HTTP.new(uri.host, uri.port)
+    http.use_ssl = true if uri.scheme == 'https'
+    req = Net::HTTP::Post.new uri
+    data = {
+      properties: [
+        {
+          property: "email",
+          value: email
+        },
+        {
+          property: "firstname",
+          value: name.split(" ")[0]
+        },
+        {
+          property: "lastname",
+          value: name.split(" ")[1]
+        },
+        {
+          property: "lifecyclestage",
+          value: "customer"
+        },
+        {
+          property: "im_an",
+          value: "AV Freelancer"
+        },
+      ]
+    }
+
+    req.body = data.to_json
+    res = http.start { |http| http.request req }
   end
 
   pg_search_scope :search, against: {

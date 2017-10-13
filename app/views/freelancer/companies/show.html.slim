@@ -75,10 +75,10 @@
       .profile__abilities__specialties__skills-label.company-mobile__label
         | skill job tags
       .profile__abilities__specialties__skills-value
-        - if !@company.skills.nil?
-          - @company.skills.split(", ").map(&:lstrip).each do |skill|
+        - if !@company.skills.nil? and @company.skills.kind_of?(Hash)
+          - @company.skills.each do |index, value|
             .profile__abilities__specialties__skill
-              = skill
+              = I18n.t("enumerize.freelancer_skills.#{index}")
         - else
           | This company has no skills listed.
     p= " "
@@ -86,10 +86,10 @@
       .profile__abilities__specialties__markets-label.company-mobile__label
         | markets
       .profile__abilities__specialties__markets-value
-        - if !@company.keywords.nil?
-          - @company.keywords.split(", ").map(&:lstrip).each do |keyword|
+        - if !@company.keywords.nil? and @company.keywords.kind_of?(Hash)
+          - @company.keywords.each do |index, value|
             .profile__abilities__specialties__market
-              = keyword
+              = I18n.t("enumerize.freelancer_keywords.#{index}")
         - else
           | This company has no markets listed.
 
@@ -116,6 +116,20 @@
       - else
         .company-mobile__review-content--empty
           | This company doesn't have any reviews.
+
+  .company-mobile__row
+    .profile__abilities__specialties__skills-label.company-mobile__label
+      | Installations
+    .profile__projects-value--installations
+      - if @company.company_installs.length > 0
+        - @company.company_installs.order('year ASC').each do |installation|
+          .profile__projects__project
+            strong
+              = "#{installation.year}: "
+            em
+              = number_with_delimiter(installation.installs, :delimiter => ',')
+      - else 
+        | This company has no information about installs by year
       
   .company-mobile__row--margin-top
     .profile__abilities__specialties__skills-label.company-mobile__label

@@ -1,0 +1,23 @@
+- if !current_company.nil?
+  - sign_in_count = current_company.sign_in_count
+- elsif !current_freelancer.nil?
+  - sign_in_count = current_freelancer.sign_in_count
+- elsif !current_admin.nil?
+  - sign_in_count = 1000000000
+- else
+  - sign_in_count = 1000000001
+
+
+- if sign_in_count == 2 and has_seen_onboarding == false
+  - set_has_seen_onboarding
+  .onboarding
+    | Welcome to the site!
+
+
+    btn.btn-primary onClick="hideOnboard()"
+      | Got it!
+
+  javascript:
+    var hideOnboard = function() {
+      $(".onboarding").fadeOut();
+    }

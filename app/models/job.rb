@@ -116,7 +116,6 @@ class Job < ApplicationRecord
     :usd,
     :yen,
   ]
-  
 
   def pre_negotiated?
     %w(created published quoted).include?(state)

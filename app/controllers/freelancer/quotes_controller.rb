@@ -67,7 +67,7 @@ class Freelancer::QuotesController < Freelancer::BaseController
   private
 
     def set_job
-      @job = current_freelancer.jobs.includes(applicants: [:quotes, :messages]).find(params[:job_id])
+      @job = current_freelancer.applicants.includes(applicants: [:quotes, :messages]).find(params[:job_id])
     end
 
     def set_applicant
@@ -75,7 +75,7 @@ class Freelancer::QuotesController < Freelancer::BaseController
       if params[:applicant_id]
         @applicant = @job.applicants.find(params[:applicant_id])
       else
-        @applicant = @job.applicants.without_state(:ignored).includes(:messages).order("messages.created_at").first
+        @applicant = @job.applicants.without_state(:ignored).includes(:messages).order("messages.created_at").where({ freelancer_id: current_freelancer.id }).first
       end
     end
 
