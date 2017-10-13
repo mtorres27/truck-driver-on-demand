@@ -16,8 +16,10 @@
             script.stripe-button  data-email=("#{current_company.email}") src="https://checkout.stripe.com/checkout.js" class="stripe-button" data-key="pk_test_Pq6cvwflOIyhEhJNcY3VpaiA" data-image="/assets/avjunction-logo_header.svg" data-name="AVJunction" data-panel-label="Update Card Details" data-label="Update Card Details" data-allow-remember-me=false data-locale="auto"
 
       .actions
+        #invoices
+          = link_to 'Invoices', company_invoices_path
         #cancel
-          = link_to 'Cancel', company_subscription_cancel_path, :data => {:confirm => 'Are you sure?'}
+          = link_to 'Cancel Your Subscription', company_subscription_cancel_path, :data => {:confirm => 'Are you sure?'}
         / #change
         /   = link_to 'Change plan to', '#', :onclick => "toggleSubPlans(event)".html_safe
         /   #change_plan.hidden

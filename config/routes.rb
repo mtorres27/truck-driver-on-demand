@@ -81,6 +81,8 @@ Rails.application.routes.draw do
       post 'subscription_checkout' => 'subscription#subscription_checkout'
       post 'update_card_info' => 'subscription#update_card_info'
       post 'webhooks' => 'subscription#webhooks'
+      get 'invoices', to: 'subscription#invoices', as: 'invoices'
+      get 'invoice', to: 'subscription#invoice', as: 'invoice'
 
     resources :notifications
 
