@@ -13,7 +13,7 @@ nav#top-nav.navbar.navbar-fixed-top
         - if request.path.index('company') == 1
           - if current_company
             li( class=("active" if request.path == company_root_path || is_showing_freelancer(request.path)) )
-              = link_to "Search for Techs", company_root_path
+              = link_to "Search for AV Freelancers", company_root_path
             li( class=("active" if request.path.include?(company_projects_path)) )
               = link_to "Job Postings", company_projects_path
             li( class=("active" if request.path == company_freelancers_path + "/hired" || request.path == company_freelancers_path + "/favourites") )
