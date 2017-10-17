@@ -34,7 +34,7 @@ class Company::SubscriptionController < Company::BaseController
   end
 
   def reset_company
-    current_company.created_at                = 3.months.ago-5.day #2.days.ago 3.months.ago-5.day
+    current_company.created_at                = 3.months.ago - 5.day #2.days.ago 3.months.ago-5.day
     current_company.billing_period_ends_at    = nil
     current_company.stripe_customer_id        = nil
     current_company.stripe_subscription_id    = nil
