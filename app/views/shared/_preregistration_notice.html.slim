@@ -1,5 +1,8 @@
 
-- if !current_freelancer.nil? or !current_freelancer.nil?
-.container
-  div class="alert alert-info alert-dismissible fade in"
-    | Hello! We're in a pre-registration mode. So while you can't do much yet, you can set up your profile!
+- if (!current_company.nil? or !current_freelancer.nil?) and has_closed_prereg_message == false
+  .container
+    div class="alert alert-info alert-dismissible fade in"
+      button type="button" class="close" data-dismiss="alert" onclick=set_has_closed_prereg_message
+        span aria-hidden="true" &times;
+        span.sr-only Close
+      | We're currently in pre-registration mode with only a limited set of features available to you. While we work on collecting the best AV Companies and Freelancers around, you can get busy building a killer profile.

@@ -10,7 +10,7 @@ class FeaturedProjectUploader < Shrine
   plugin :remove_invalid
 
   process(:store) do |io, context|
-    resize_to_limit!(io.download, 300, 300)
+    resize_to_limit!(io.download, 600, 600)
   end
 
   Attacher.default_url do

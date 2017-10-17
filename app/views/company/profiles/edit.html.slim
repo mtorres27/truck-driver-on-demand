@@ -6,23 +6,6 @@
     
     .result-content
       = simple_form_for(@company, url: company_profile_path) do |f|
-        .company-profile__full
-          .company-profile__item--half
-            .company-profile__title
-              | PROFILE HEADER
-            = image_tag(@company.profile_header_url, style: "width:100%;height:auto")
-            = f.file_field :profile_header, label: false, :accept => 'image/png,image/gif,image/jpeg'
-          .company-profile__item--half
-            .company-profile__title
-              | Profile Picture
-            = image_tag(@company.avatar_url, size: "135x135")
-            = f.file_field :avatar, label: false, :accept => 'image/png,image/gif,image/jpeg'
-
-        .company-profile__item
-          .company-profile__title
-            | Profile Colour
-          = f.input :header_color, required: true, label: false, placeholder: "FF6C38"  
-
         .company-profile__item
           .company-profile__title
             | Company Name
@@ -78,50 +61,94 @@
         .company-profile__item
           .company-profile__title
             | Company Markets
-          - I18n.t('enumerize.freelancer_keywords').each do |index, value|
-            - tag_name = "company[keywords][#{index.to_s}]"
-            - if @company.keywords and @company.keywords.include?(index.to_s)
-              - checked = true
-            - else
-              - checked = false
-
-            = check_box_tag tag_name, "1", checked
-            = value
-            br
-          br
+          .company-profile__checkboxes
+            - I18n.t('enumerize.freelancer_keywords').each do |index, value|
+              - tag_name = "company[keywords][#{index.to_s}]"
+              - if @company.keywords and @company.keywords.include?(index.to_s)
+                - checked = true
+              - else
+                - checked = false
+              .company-profile__checkbox
+                = check_box_tag tag_name, "1", checked
+                = value
+          
         .company-profile__item
           .company-profile__title
             | Company Skills
-          - I18n.t('enumerize.freelancer_skills').each do |index, value|
-            - tag_name = "company[skills][#{index.to_s}]"
-            - if @company.skills and @company.skills.include?(index.to_s)
-              - checked = true
-            - else
-              - checked = false
-
-            = check_box_tag tag_name, "1", checked
-            = value
-            br
-          br
+          .company-profile__checkboxes
+            - I18n.t('enumerize.freelancer_skills').each do |index, value|
+              - tag_name = "company[skills][#{index.to_s}]"
+              - if @company.skills and @company.skills.include?(index.to_s)
+                - checked = true
+              - else
+                - checked = false
+              .company-profile__checkbox
+                = check_box_tag tag_name, "1", checked
+                = value
         
         .job-details
           #company_installs
-            .job-details__title
+            .company-profile__title
               | Company Installs (by year)
-              = f.simple_fields_for :company_installs do |install_form|
-                = render "company_install_fields", f: install_form
-              .links
-                = link_to_add_association 'Add', f, :company_installs, class: "btn btn-default"
+            = f.simple_fields_for :company_installs do |install_form|
+              = render "company_install_fields", f: install_form
+            .links
+              = link_to_add_association 'Add Install', f, :company_installs, class: "btn btn-default"
 
         .job-details
           #featured_projects
-            .job-details__title
+            .company-profile__title
               | Featured Projects
               = f.simple_fields_for :featured_projects do |project_form|
                 = render "featured_project_fields", f: project_form
-              .links
-                = link_to_add_association 'Add', f, :featured_projects, class: "btn btn-default"
+              .links.add-new-project
+                = link_to_add_association 'Add Project', f, :featured_projects, class: "btn btn-default"
 
+        .company-profile__item
+          .company-profile__title
+            | Profile Header
+          .company-profile__image style="background-image: url(#{@company.profile_header_url})"
+            .freelancer-profile__image-upload onclick="updateHeaderImage()"
+              span class="fa fa-camera" 
+          = f.file_field :profile_header, label: false, :accept => 'image/png,image/gif,image/jpeg', class: "file-input--hidden", id: "edit-company-profile-header"
+        .company-profile__item
+          .company-profile__title
+            | Profile Picture
+          .company-profile__image style="width: 135px; height: 135px; background-image: url(#{@company.avatar_url})"
+            .freelancer-profile__image-upload onclick="updateProfilePicture()"
+              span class="fa fa-camera" 
+          = f.file_field :avatar, label: false, :accept => 'image/png,image/gif,image/jpeg', class: "file-input--hidden", id: "edit-company-profile-avatar"
+
+        .company-profile__item
+          .company-profile__title
+            | Wallpaper Colour
+          = f.input :header_color, required: true, label: false, placeholder: "FF6C38"  
+
+        .company-profile__item
+          .company-profile__title
+            | Header Source
+          = f.input :header_source, label: false, prompt: "Select"
     
         .form-actions
+          a.btn.btn-secondary href=company_profile_path(@company)
+            | Cancel
+          = " "
           = f.button :submit, class: "btn btn-primary", label: "Update Profile"
+
+javascript:
+  var updateHeaderImage = function() {
+    $("#edit-company-profile-header").click();
+  }
+
+  var updateProfilePicture = function() {
+    $("#edit-company-profile-avatar").click();
+  }
+
+  function uploadFeaturedProject (index) {
+    if (index != undefined) {
+      var ref = $("#company_featured_projects_attributes_"+index+"_file");
+    } else {
+      var ref = $(".add-new-project").prev('div').find(".nested_fields").find(".file-input--hidden");
+    }
+    ref.click();
+  }

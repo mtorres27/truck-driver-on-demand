@@ -65,6 +65,14 @@ class Freelancer < ApplicationRecord
 
   def connected?; !stripe_account_id.nil?; end
 
+  attr_accessor :accept_terms_of_service
+  attr_accessor :accept_privacy_policy
+  attr_accessor :accept_code_of_conduct
+
+  validates_acceptance_of :accept_terms_of_service
+  validates_acceptance_of :accept_privacy_policy
+  validates_acceptance_of :accept_code_of_conduct
+
   after_create :add_to_hubspot
 
   def add_to_hubspot
@@ -114,7 +122,7 @@ class Freelancer < ApplicationRecord
   }
 
   enumerize :pay_unit_time_preference, in: [
-    :fixed, :hourly
+    :fixed, :hourly, :daily
   ]
 
   enumerize :freelancer_type, in: [
@@ -127,6 +135,11 @@ class Freelancer < ApplicationRecord
     :eleven_to_twenty,
     :twentyone_to_thirty,
     :more_than_thirty
+  ]
+
+  enumerize :header_source, in: [
+    :color,
+    :wallpaper
   ]
 
   enumerize :country, in: [

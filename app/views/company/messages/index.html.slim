@@ -16,10 +16,7 @@
             .media.new-message__item
               .media-left
                 .freelancer_avatar
-                  - if message.authorable.avatar_url.include?("missing.png")
-                    = image_tag("http://graph.facebook.com/v2.5/111#{message.authorable.id}/picture?height=40&height=40", size: "40x40")
-                  - else
-                    = image_tag(message.authorable.avatar_url, size: "40x40")
+                  = image_tag(message.authorable.avatar_url, size: "40x40")
               .media-body
                 span class="authorable_name"
                   = "#{message.authorable.name} "

@@ -1,15 +1,18 @@
-div
-  div
+.featured-project__item
+  .freelancer-profile__image.float-left
     - if !f.object.file_url.include?('missing.png')
-      a.authorable_attachment--full href=f.object.file_url target="_blank"
-        - if is_image(f.object.file_url)
-          span class="authorable_attachment_icon fa fa-image"
-        - else
-          span class="authorable_attachment_icon fa fa-file-text"
-        .authorable_attachment__filename
-          = JSON.parse(f.object.file_data)["metadata"]["filename"]
+      a.authorable_attachment--full href=f.object.file_url target="_blank" style="background-image: url(#{f.object.file_url})"
+      .freelancer-profile__image-upload onclick="uploadFeaturedProject(#{f.index})"
+        span class="fa fa-camera" 
+    - else
+      .authorable_attachment--full
+      .freelancer-profile__image-upload onclick="uploadFeaturedProject()"
+        span class="fa fa-camera" 
     
   .nested_fields
-    = f.file_field :file, label: false, :accept => 'image/png,image/gif,image/jpeg'
-    = f.input :name, as: :string, placeholder: "Name of Project"
+    .nested_fields-title
+      | Project Name
+
+      = f.file_field :file, label: false, :accept => 'image/png,image/gif,image/jpeg', class: "file-input--hidden"
+      = f.input :name, as: :string, placeholder: "Enter a name for this project.", label: false
     = link_to_remove_association "X", f, { onClick: "hide_remove_association(this)"}

@@ -24,12 +24,13 @@ gem "redcarpet", "~> 3.4.0"
 gem 'easy_postgis'
 
 gem 'devise'
+gem 'stripe'
 
 gem 'hubspot-ruby'
 
 
 # See https://github.com/rails/execjs#readme for more supported runtimes
-# gem "therubyracer", platforms: :ruby
+gem "therubyracer", platforms: :ruby
 
 gem "jbuilder", "~> 2.5"
 gem "wicked_pdf", "~> 1.1.0"
@@ -90,6 +91,10 @@ group :development do
 
   gem "rubocop", "~> 0.49", require: false
 
+  gem "bullet", "~> 5.5.1"
+end
+
+group :production do
   gem "bullet", "~> 5.5.1"
 end
 
