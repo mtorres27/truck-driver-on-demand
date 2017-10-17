@@ -108,13 +108,15 @@
           .company-profile__title
             | Profile Header
           .company-profile__image style="background-image: url(#{@company.profile_header_url})"
+            = image_tag(@company.profile_header_url, id: "company-edit-profile__header")
             .freelancer-profile__image-upload onclick="updateHeaderImage()"
               span class="fa fa-camera" 
           = f.file_field :profile_header, label: false, :accept => 'image/png,image/gif,image/jpeg', class: "file-input--hidden", id: "edit-company-profile-header"
         .company-profile__item
           .company-profile__title
             | Profile Picture
-          .company-profile__image style="width: 135px; height: 135px; background-image: url(#{@company.avatar_url})"
+          .company-profile__image style="width: 135px; height: 135px;"
+            =image_tag(@company.avatar_url, id: "company-edit-profile__avatar")
             .freelancer-profile__image-upload onclick="updateProfilePicture()"
               span class="fa fa-camera" 
           = f.file_field :avatar, label: false, :accept => 'image/png,image/gif,image/jpeg', class: "file-input--hidden", id: "edit-company-profile-avatar"
@@ -138,10 +140,46 @@
 javascript:
   var updateHeaderImage = function() {
     $("#edit-company-profile-header").click();
+    $("#edit-company-profile-header").on('change', function(e) {
+      var imgPath = $(this)[0].value;
+      var extn = imgPath.substring(imgPath.lastIndexOf('.') + 1).toLowerCase();
+      var image_holder = $("#company-edit-profile__header");
+
+      if (extn == "gif" || extn == "png" || extn == "jpg" || extn == "jpeg") {
+        if (typeof (FileReader) != "undefined") {
+          var reader = new FileReader();
+          reader.onload = function (e) {
+            image_holder.attr('src', e.target.result);
+          }
+
+          reader.readAsDataURL($(this)[0].files[0]);
+        }
+      } else {
+        alert("Only images can be selected.");
+      }
+    });
   }
 
   var updateProfilePicture = function() {
     $("#edit-company-profile-avatar").click();
+    $("#edit-company-profile-avatar").on('change', function() {
+      var imgPath = $(this)[0].value;
+      var extn = imgPath.substring(imgPath.lastIndexOf('.') + 1).toLowerCase();
+      var image_holder = $("#company-edit-profile__avatar");
+
+      if (extn == "gif" || extn == "png" || extn == "jpg" || extn == "jpeg") {
+        if (typeof (FileReader) != "undefined") {
+          var reader = new FileReader();
+          reader.onload = function (e) {
+            image_holder.attr('src', e.target.result)
+          }
+
+          reader.readAsDataURL($(this)[0].files[0]);
+        }
+      } else {
+        alert("Only images can be selected.");
+      }
+    });
   }
 
   function uploadFeaturedProject (index) {
