@@ -2,12 +2,14 @@
   .new-message
     - if type == "quote" and quotes.length > 0
       .new-message__options
-        - if quotes.first.author_type == "company"
-          = f.radio_button :status, "accept"
-          = f.label :status_accept, "Accept this quote"
-          = f.radio_button :status, "negotiate"
-          = f.label :status_negotiate, "Negotiate a better price"
+        = f.radio_button :status, "accept"
+        = f.label :status_accept, "Accept this quote"
+        = f.radio_button :status, "negotiate"
+        = f.label :status_negotiate, "Negotiate a better price"
         = f.hidden_field :override, value: ""
+        = f.radio_button :status, "decline"
+        = f.label :status_decline, "Decline this quote"
+
     = f.hidden_field :checkin, value: "false"
         
     .new-message__input
