@@ -63,6 +63,8 @@ class Freelancer < ApplicationRecord
 
   audited
 
+  def connected?; !stripe_account_id.nil?; end
+
   after_create :add_to_hubspot
 
   def add_to_hubspot
@@ -120,10 +122,10 @@ class Freelancer < ApplicationRecord
   ]
 
   enumerize :freelancer_team_size, in: [
-    :less_than_five, 
-    :six_to_ten, 
-    :eleven_to_twenty, 
-    :twentyone_to_thirty, 
+    :less_than_five,
+    :six_to_ten,
+    :eleven_to_twenty,
+    :twentyone_to_thirty,
     :more_than_thirty
   ]
 

@@ -40,7 +40,7 @@ class StripeAccount < Struct.new( :freelancer )
           date: Time.now.to_i
         },
         legal_entity: {
-          type: 'individual', # TODO: need to handle company
+          type: 'individual', # TODO: need to handle business accounts
         }
       )
     rescue
@@ -112,7 +112,6 @@ class StripeAccount < Struct.new( :freelancer )
     {
       details_submitted: account.details_submitted,
       charges_enabled: account.charges_enabled,
-      transfers_enabled: account.transfers_enabled,
       fields_needed: account.verification.fields_needed,
       due_by: account.verification.due_by
     }
@@ -120,5 +119,9 @@ class StripeAccount < Struct.new( :freelancer )
 
   def account
     @account ||= Stripe::Account.retrieve( freelancer.stripe_account_id )
+  end
+
+  def legal_entity
+    account.legal_entity
   end
 end
