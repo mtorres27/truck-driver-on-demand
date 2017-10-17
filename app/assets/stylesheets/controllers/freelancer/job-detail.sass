@@ -59,13 +59,13 @@
 .freelancer-job__back-btn
   padding-right: 8px
   padding-left: 0px
-  font-family: 'Material design iconic font', sans-serif
+  font-family: $icon-font, sans-serif
   font-size: 24px
 
 .freelancer-job__rating
   display: inline-block
   float: right
-  font-family: 'Material design iconic font', sans-serif
+  font-family: $icon-font, sans-serif
   color: #e09000
 
 .freelancer-job__h3
@@ -140,3 +140,25 @@
   margin-bottom: 2px
   font-weight: 600
   text-transform: uppercase
+
+.tag
+  display: inline-block
+  padding: 4px 8px
+  float: none
+  border: 1px solid #000
+  border-radius: 4px
+  background-color: #fff
+  font-size: 13px
+  font-weight: 600
+  text-transform: uppercase
+  &.grey
+    margin: 4px 8px 4px 0px
+    border-color: #a7a7a7
+    background-color: #e2e2e2
+  &.green
+    display: inline-block
+    border-color: #12c01e
+    background-color: #8ff696
+
+.freelancer-job__back-arrow
+  font-family: $icon-font

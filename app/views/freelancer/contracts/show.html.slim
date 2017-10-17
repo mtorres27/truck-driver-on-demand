@@ -3,7 +3,7 @@
   .result-mobile
     .result-header
       .result-header__text
-        | Work Order
+        = "Work Order #{@job.work_order}"
     .result-content
       - if @job.contract_sent == false
         | Can't show the work order yet, it hasn't been set.
