@@ -5,6 +5,35 @@
     .result-header
       .result-header__text
         | Banking Information
-    p banking
+    p
+    = form_tag 'stripe_connect_path', method: 'POST' do
+      .field class="field_account_type"
+        |Type:
+        select#account_type  name="account_type"
+          option[value="individual"] Individual
+          option[value="company"] Company
+      #individual_fields
+        - @country_spec.verification_fields.individual.minimum.select{|field| field["legal_entity"] && !field["type"] }.each do |field|
+          .field class="field_#{URI.parse(field).path.split('.')[-1]}"
+            =pretty_name(field)
+            input type="text" name="account_#{URI.parse(field).path.split('.')[-1]}"
+      #company_fields style="display:none"
+        - @country_spec.verification_fields.company.minimum.select{|field| field["legal_entity"] }.each do |field|
+          .field class="field_#{URI.parse(field).path.split('.')[-1]}"
+            =pretty_name(field)
+            input type="text" name="account_#{URI.parse(field).path.split('.')[-1]}"
+      .consent
+        label.tos
+          input type="checkbox" name="tos" checked=false
+          | I accept the
+          '
+          = link_to 'Stripe Terms of Service', 'https://stripe.com/#{current_freelancer.country}/terms', target: '_blank'
 
-    = link_to 'EDIT', edit_freelancer_profile_banking_path
+javascript:
+  $('select[name="account_type"]').on('change', function(e){
+    var optionSelected = $("option:selected", this);
+    console.log(this.value);
+  });
+  $('select').on('change', function() {
+    alert( this.value );
+  })
