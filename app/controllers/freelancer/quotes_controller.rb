@@ -54,6 +54,10 @@ class Freelancer::QuotesController < Freelancer::BaseController
         @q = @quotes.first
         @q.accepted_by_freelancer = true
         @q.save
+      elsif params[:message][:status] == "decline"
+        @q = @quotes.first
+        @q.accepted_by_freelancer = false
+        @q.save
       end
 
       redirect_to freelancer_job_application_index_path(@job, @applicant)
@@ -67,7 +71,8 @@ class Freelancer::QuotesController < Freelancer::BaseController
   private
 
     def set_job
-      @job = current_freelancer.applicants.includes(applicants: [:quotes, :messages]).find(params[:job_id])
+      # @job = current_freelancer.applicants.includes(applicants: [:quotes, :messages]).  find(params[:job_id])
+      @job = current_freelancer.applicants.where({job_id: params[:job_id] }).first.job
     end
 
     def set_applicant
