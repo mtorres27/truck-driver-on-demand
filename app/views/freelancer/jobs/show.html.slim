@@ -91,3 +91,42 @@
           - else 
             = t("enumerize.job.freelancer_type.#{@job.freelancer_type}")
 
+.freelancer-job__apply-modal
+
+
+avascript:
+  $("#apply-for-job").on('click', function(e) {
+    e.preventDefault();
+    $(".freelancer-job__apply-modal").show();
+  });
+
+  $("#close-modal").on('click', function(e) {
+    e.preventDefault();
+    $(".freelancer-job__apply-modal").hide();
+  });
+
+  $("#close-modal-2").on('click', function(e) {
+    e.preventDefault();
+    $(".freelancer-job__apply-modal").hide();
+  });
+      
+  $("#freelancer_job_apply_path_pay_type_hourly").on('click', function() {
+    $(".freelancer-job__apply-modal__content-amount--fixed").hide();
+    $(".freelancer-job__apply-modal__content-amount--hourly").show();
+    $(".freelancer-job__apply-modal__content-amount--daily").hide();
+  });
+
+  $("#freelancer_job_apply_path_pay_type_daily").on('click', function() {
+    $(".freelancer-job__apply-modal__content-amount--fixed").hide();
+    $(".freelancer-job__apply-modal__content-amount--hourly").hide();
+    $(".freelancer-job__apply-modal__content-amount--daily").show();
+  });
+
+  $("#freelancer_job_apply_path_pay_type_fixed").on('click', function() {
+    $(".freelancer-job__apply-modal__content-amount--fixed").show();
+    $(".freelancer-job__apply-modal__content-amount--hourly").hide();
+    $(".freelancer-job__apply-modal__content-amount--daily").hide();
+  });
+
+  $(".freelancer-job__apply-modal__content-amount--hourly").hide();
+  $(".freelancer-job__apply-modal__content-amount--daily").hide();
