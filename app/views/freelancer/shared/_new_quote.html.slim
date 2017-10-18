@@ -20,7 +20,7 @@ div style="display: none;"
       = "Send a message to #{n}"
     a.common__text-field--attach-file.w-inline-block onClick="triggerFileUpload()"
       .common__icon-attach 
-    = f.text_area :body, as: :string, placeholder: "Enter your acceptance message", label: false, maxlength: 5000, class: "w-input"
+    = f.text_area :body, as: :string, placeholder: "Enter your message", label: false, maxlength: 5000, class: "w-input"
 
   .new-message__counter
     .attachment.common__text-field-group
@@ -115,6 +115,7 @@ javascript:
         if($(this).attr('previousValue') == 'true'){
             $(this).attr('checked', false)
             $("#new-message__submit").val("Send");
+            $("#message_body").attr("placeholder", "Enter your message");
         } else {
             $('#' + name).attr('previousValue', false);
         }
@@ -123,12 +124,15 @@ javascript:
           if ($(this).attr("id").indexOf("_negotiate", 0) > 0) {
             showCounterOffer();
             $("#new-message__submit").val("Negotiate");
+            $("#message_body").attr("placeholder", "Enter your negotiation message");
           } else {
             hideCounterOffer();
             if ($(this).attr("id").indexOf("_accept", 0) > 0) {
               $("#new-message__submit").val("Accept");
+              $("#message_body").attr("placeholder", "Enter your acceptance message");
             } else {
               $("#new-message__submit").val("Decline");
+              $("#message_body").attr("placeholder", "Enter your declination message");
             }
           }
         } else {

@@ -90,56 +90,52 @@
       a.freelancer-job__apply-for-job href="#" id="apply-for-job"
         | Apply for this job
 
-          
-
-.freelancer-job__apply-modal
-  = simple_form_for "freelancer_job_apply_path", html: { multipart: true } do |f|
-    .freelancer-job__apply-modal__header
-      .freelancer-job__apply-modal__header-title
-        | Quote on this job
+= simple_form_for "freelancer_job_apply_path", html: { multipart: true } do |f|
+  = f.hidden_field :job, value: @job.id
+  .freelancer-job__apply-modal
+    .w-form
+      h2.common__h2-modal= @job.title
       .freelancer-job__apply-modal__header-close id="close-modal"
         span class="fa fa-close"
-    .freelancer-job__apply-modal__content
-      .freelancer-job__apply-modal__content-title
-        = @job.title
-      .freelancer-job__apply-modal__content-pay-type
-        = f.radio_button :pay_type, "fixed", checked: true
-        = f.label :pay_type_fixed, "fixed"
+      .common__radio-group.w-radio.width-30
+        = f.radio_button :pay_type, "daily", class: "w-radio-input"
+        = f.label :pay_type_daily, "daily", class: "common__field-label"
+      .common__radio-group.w-radio.width-30
+        = f.radio_button :pay_type, "fixed", checked: true, class: "w-radio-input"
+        = f.label :pay_type_fixed, "fixed", class: "common__field-label"
+      .common__radio-group.w-radio.width-30
+        = f.radio_button :pay_type, "hourly", class: "w-radio-input"
+        = f.label :pay_type_hourly, "hourly", class: "common__field-label"
+      
+      .common__text-field-group.width-30.freelancer-job__apply-modal__content-amount--fixed
+        = f.input :amount, type: "text", id: "quote-amount-fixed", placeholder: "Your quote", label: false, class: "common__text-field w-input", label: false
+        = f.label :amount, "Amount", class: "common__field-label"
 
-        = f.radio_button :pay_type, "hourly"
-        = f.label :pay_type_hourly, "hourly"
+      .common__text-field-group.width-30.freelancer-job__apply-modal__content-amount--hourly
+        = f.input :number_of_hours, type: "text", id: "quote-amount-hourly", placeholder: "No. of Hrs", class: "common__text-field w-input", label: false
+        = f.label :number_of_hours, "Number of Hours", class: "common__field-label"
+      .common__text-field-group.width-30.freelancer-job__apply-modal__content-amount--hourly
+        = f.input :hourly_rate, type: "text", id: "quote-amount-hourly-rate", placeholder: "Hourly Rate", class: "common__text-field w-input", label: false
+        = f.label :hourly_rate, "Hourly Rate", class: "common__field-label"
 
-        = f.radio_button :pay_type, "daily"
-        = f.label :pay_type_daily, "daily"
+      .common__text-field-group.width-30.freelancer-job__apply-modal__content-amount--daily
+        = f.input :number_of_days, type: "text", id: "quote-amount-daily", placeholder: "No. of Days", class: "common__text-field w-input", label: false
+        = f.label :number_of_days, "No. of Days", class: "common__field-label"
+      .common__text-field-group.width-30.freelancer-job__apply-modal__content-amount--daily
+        = f.input :daily_rate, type: "text", id: "quote-amount-daily-rate", placeholder: "Daily Rate", class: "common__text-field w-input", label: false
+        = f.label :daily_rate, "Daily Rate", class: "common__field-label"
 
-      = f.hidden_field :job, value: @job.id
+      .common__text-area-group
+        = f.input :message, id: "quote-message", placeholder: "Your message to #{@job.company.name}", label: false
+      
+      .common__text-field-group
+        = f.label :attachment, "Select an Attachment", class: "common__field-label"
+        = f.input :attachment, as: :file, label: false
 
-      .freelancer-job__apply-modal__content-amount--fixed
-        .freelancer-job__apply-modal__content-amount-fixed-value
-          = f.input :amount, type: "text", id: "quote-amount-fixed", placeholder: "Your quote"
-
-      .freelancer-job__apply-modal__content-amount--hourly
-        .freelancer-job__apply-modal__content-amount-fixed-value
-          = f.input :number_of_hours, type: "text", id: "quote-amount-hourly", placeholder: "No. of Hrs"
-        .freelancer-job__apply-modal__content-amount-fixed-value
-          = f.input :hourly_rate, type: "text", id: "quote-amount-hourly-rate", placeholder: "Hourly Rate"
-
-      .freelancer-job__apply-modal__content-amount--daily
-        .freelancer-job__apply-modal__content-amount-fixed-value
-          = f.input :number_of_days, type: "text", id: "quote-amount-daily", placeholder: "No. of Days"
-        .freelancer-job__apply-modal__content-amount-fixed-value
-          = f.input :daily_rate, type: "text", id: "quote-amount-daily-rate", placeholder: "Daily Rate"
-
-
-      .freelancer-job__apply-modal__content-message--wrapper
-        .freelancer-job__apply-modal__content-wrapper
-          = f.input :message, id: "quote-message", placeholder: "Your message to #{@job.company.name}"
-          = f.input :attachment, as: :file
-
-    .freelancer-job__apply-modal__buttons
-      = f.button :submit, prompt: "Submit Quote", value: "Submit Quote", data: { disable_with: "Submitting..." }, class: "btn btn-primary"
-      .btn.btn-secondary id="close-modal-2"
-        | cancel
+      .freelancer-job__apply-modal__buttons
+        = f.button :submit, prompt: "Submit Quote", value: "Submit Quote", data: { disable_with: "Submitting..." }, class: "btn btn-primary"
+        .btn.btn-secondary id="close-modal-2"
+          | cancel
 
 javascript:
   $("#apply-for-job").on('click', function(e) {
@@ -149,12 +145,12 @@ javascript:
 
   $("#close-modal").on('click', function(e) {
     e.preventDefault();
-    $(".freelancer-job__apply-modal").hide();
+    $(".freelancer-job__apply-modal-cont").hide();
   });
 
   $("#close-modal-2").on('click', function(e) {
     e.preventDefault();
-    $(".freelancer-job__apply-modal").hide();
+    $(".freelancer-job__apply-modal-cont").hide();
   });
       
   $("#freelancer_job_apply_path_pay_type_hourly").on('click', function() {
