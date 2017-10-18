@@ -25,7 +25,7 @@ div style="display: none;"
   .new-message__counter
     .attachment.common__text-field-group
       label.common__field-label for="message_counter_type"  Choose a payment type
-      = f.select :counter_type, options: ["fixed", "hourly", "daily"], class: "common__select-field w-select"
+      = f.select :counter_type, [["Fixed Rate", "fixed"], ["Hourly Rate", "hourly"], ["Daily Rate", "daily"]], {}, {class: "common__select-field w-select"}
     
     .new-message__counter--fixed
       .common__text-field-group
