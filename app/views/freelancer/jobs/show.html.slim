@@ -1,8 +1,3 @@
-- if @have_applied == false
-  .freelancer-job__apply
-    a.freelancer-job__apply-for-job href="#" id="apply-for-job"
-      | Apply for this job
-
 .container__body-header
   .freelancer-job__container
     a.freelancer-job__back-btn.w-inline-block href="#" 
@@ -90,11 +85,63 @@
             = "N/A"
           - else 
             = t("enumerize.job.freelancer_type.#{@job.freelancer_type}")
+  - if @have_applied == false
+    .freelancer-job__apply
+      a.freelancer-job__apply-for-job href="#" id="apply-for-job"
+        | Apply for this job
+
+          
 
 .freelancer-job__apply-modal
+  = simple_form_for "freelancer_job_apply_path", html: { multipart: true } do |f|
+    .freelancer-job__apply-modal__header
+      .freelancer-job__apply-modal__header-title
+        | Quote on this job
+      .freelancer-job__apply-modal__header-close id="close-modal"
+        span class="fa fa-close"
+    .freelancer-job__apply-modal__content
+      .freelancer-job__apply-modal__content-title
+        = @job.title
+      .freelancer-job__apply-modal__content-pay-type
+        = f.radio_button :pay_type, "fixed", checked: true
+        = f.label :pay_type_fixed, "fixed"
+
+        = f.radio_button :pay_type, "hourly"
+        = f.label :pay_type_hourly, "hourly"
+
+        = f.radio_button :pay_type, "daily"
+        = f.label :pay_type_daily, "daily"
+
+      = f.hidden_field :job, value: @job.id
+
+      .freelancer-job__apply-modal__content-amount--fixed
+        .freelancer-job__apply-modal__content-amount-fixed-value
+          = f.input :amount, type: "text", id: "quote-amount-fixed", placeholder: "Your quote"
+
+      .freelancer-job__apply-modal__content-amount--hourly
+        .freelancer-job__apply-modal__content-amount-fixed-value
+          = f.input :number_of_hours, type: "text", id: "quote-amount-hourly", placeholder: "No. of Hrs"
+        .freelancer-job__apply-modal__content-amount-fixed-value
+          = f.input :hourly_rate, type: "text", id: "quote-amount-hourly-rate", placeholder: "Hourly Rate"
+
+      .freelancer-job__apply-modal__content-amount--daily
+        .freelancer-job__apply-modal__content-amount-fixed-value
+          = f.input :number_of_days, type: "text", id: "quote-amount-daily", placeholder: "No. of Days"
+        .freelancer-job__apply-modal__content-amount-fixed-value
+          = f.input :daily_rate, type: "text", id: "quote-amount-daily-rate", placeholder: "Daily Rate"
 
 
-avascript:
+      .freelancer-job__apply-modal__content-message--wrapper
+        .freelancer-job__apply-modal__content-wrapper
+          = f.input :message, id: "quote-message", placeholder: "Your message to #{@job.company.name}"
+          = f.input :attachment, as: :file
+
+    .freelancer-job__apply-modal__buttons
+      = f.button :submit, prompt: "Submit Quote", value: "Submit Quote", data: { disable_with: "Submitting..." }, class: "btn btn-primary"
+      .btn.btn-secondary id="close-modal-2"
+        | cancel
+
+javascript:
   $("#apply-for-job").on('click', function(e) {
     e.preventDefault();
     $(".freelancer-job__apply-modal").show();

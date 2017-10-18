@@ -1,0 +1,145 @@
+div style="display: none;"
+  = f.input :attachment, as: :file, label: false
+
+.w-form
+  .common__radio-group.w-radio.width-30
+    = f.radio_button :status, "accept", class: "w-radio-input"
+    = f.label :status_accept, "Accept this quote", class: "common__radio-field-label w-form-label"
+  .common__radio-group.w-radio.width-30
+    = f.radio_button :status, "negotiate", class: "w-radio-input"
+    = f.label :status_negotiate, "Negotiate a better price", class: "common__radio-field-label w-form-label"
+    = f.hidden_field :override, value: ""
+  .common__radio-group.w-radio.width-30
+    = f.radio_button :status, "decline", class: "w-radio-input"
+    = f.label :status_decline, "Decline this quote", class: "common__radio-field-label w-form-label"
+
+  = f.hidden_field :checkin, value: "false"
+      
+  .attachment.common__text-field-group
+    label.common__field-label for="name-4"
+      = "Send a message to #{n}"
+    a.common__text-field--attach-file.w-inline-block onClick="triggerFileUpload()"
+      .common__icon-attach 
+    = f.text_area :body, as: :string, placeholder: "Enter your acceptance message", label: false, maxlength: 5000, class: "w-input"
+
+  .new-message__counter
+    .attachment.common__text-field-group
+      label.common__field-label for="message_counter_type"  Choose a payment type
+      = f.select :counter_type, options: ["fixed", "hourly", "daily"], class: "common__select-field w-select"
+    
+    .new-message__counter--fixed
+      .common__text-field-group
+        label.common__field-label for="message_counter"  Suggested price
+        = f.input :counter, as: :string, maxlength: 256, placeholder: "Enter your suggested price", label: false
+  
+    .new-message__counter--hourly
+      .common__text-field-group.width-30
+        label.common__field-label Rate
+        = f.input :counter_hourly_rate, as: :string, maxlength: 256, placeholder: "$/hr", label: false, class: "w-input"
+      .common__text-field-group.width-30
+        label.common__field-label  Time
+        = f.input :counter_number_of_hours, as: :string, maxlength: 256, placeholder: "hrs", label: false, class: "w-input"
+      .common__text-field-group.width-30
+        label.common__field-label for="name-4" price
+        input.w-input data-name=("Name 3") maxlength="256" name="name-3" placeholder="$$" type="text" id="hourly-counter-price"
+
+    .new-message__counter--daily
+      .common__text-field-group.width-30
+        label.common__field-label Rate
+        = f.input :counter_daily_rate, as: :string, placeholder: "$/day", label: false
+      .common__text-field-group.width-30
+        label.common__field-label Time
+        = f.input :counter_number_of_days, as: :string, placeholder: "days", label: false
+      .common__text-field-group.width-30
+        label.common__field-label for="name-4" price
+        input.w-input data-name=("Name 3") maxlength="256" name="name-4" placeholder="$$" type="text" id="daily-counter-price"
+  
+  .common__form-action-cont.w-clearfix
+    = f.submit "Send", class: "btn btn-primary", id: "new-message__submit", class: "btn btn-primary--active w-inline-block width-100"
+
+  
+
+
+
+
+javascript:
+  var triggerFileUpload = function () {
+    $("#message_attachment").click();
+  };
+
+  $(".new-message__counter--fixed").hide();
+  $(".new-message__counter--hourly").hide();
+  $(".new-message__counter--daily").hide();
+
+  $("#message_counter_type").on('change', function() {
+    $(".new-message__counter--fixed").hide();
+    $(".new-message__counter--hourly").hide();
+    $(".new-message__counter--daily").hide();
+
+    $(".new-message__counter--"+$("#message_counter_type").val()).show();
+
+  })
+
+  $("#message_attachment").change(function() {
+    $(".new-message__attachment-button").addClass("new-message__attachment-button--active");
+  });
+
+  var showCounterOffer = function() {
+    var input_ref = $(".new-message__input");
+    var counter_ref = $(".new-message__counter");
+    if (!input_ref.hasClass("new-message__input--counter-visible")) {
+      input_ref.addClass("new-message__input--counter-visible");
+      counter_ref.addClass("new-message__counter--visible");
+    };
+
+    $(".new-message__counter--fixed").show();
+    $(".new-message__counter--hourly").hide();
+    $(".new-message__counter--daily").hide();
+  }
+
+  var hideCounterOffer = function() {
+    var input_ref = $(".new-message__input");
+    var counter_ref = $(".new-message__counter");
+    if (input_ref.hasClass("new-message__input--counter-visible")) {
+      input_ref.removeClass("new-message__input--counter-visible");
+      counter_ref.removeClass("new-message__counter--visible");
+    };
+
+    $(".new-message__counter--fixed").hide();
+    $(".new-message__counter--hourly").hide();
+    $(".new-message__counter--daily").hide();
+  }
+
+  var makeRadiosDeselectableByName = function(name){
+    $('#' + name).click(function() {
+        if($(this).attr('previousValue') == 'true'){
+            $(this).attr('checked', false)
+            $("#new-message__submit").val("Send");
+        } else {
+            $('#' + name).attr('previousValue', false);
+        }
+
+        if ($(this).is(':checked')) {
+          if ($(this).attr("id").indexOf("_negotiate", 0) > 0) {
+            showCounterOffer();
+            $("#new-message__submit").val("Negotiate");
+          } else {
+            hideCounterOffer();
+            if ($(this).attr("id").indexOf("_accept", 0) > 0) {
+              $("#new-message__submit").val("Accept");
+            } else {
+              $("#new-message__submit").val("Decline");
+            }
+          }
+        } else {
+          hideCounterOffer();
+          $("#new-message__submit").val("Send");
+        }
+
+    });
+  };
+
+  makeRadiosDeselectableByName("message_status_accept");
+  makeRadiosDeselectableByName("message_status_decline");
+  makeRadiosDeselectableByName("message_status_negotiate");
+

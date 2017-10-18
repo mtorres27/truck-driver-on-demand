@@ -104,7 +104,7 @@ class Freelancer::QuotesController < Freelancer::BaseController
       end
 
       @messages.each do |message|
-        @combined_items.push({ type: "message", payload: message, date: message.created_at.to_i })
+        @combined_items.push({ type: "message", payload: message, quote_amount: nil, date: message.created_at.to_i })
         @harmonized_indices.push(message.created_at.to_i)
       end
 
@@ -131,6 +131,17 @@ class Freelancer::QuotesController < Freelancer::BaseController
       index = 0
       haystack.each do |item|
         if needle == item[:date]
+
+          # if item[:type] == "message"
+
+          #   quote = false
+          #   haystack.each do |sub_item|
+          #     if sub_item[:date] == item[:date] and sub_item[:type] == "quote"
+          #       item[:quote_amount] = sub_item[:quote].amount
+          #   end
+          # end
+
+          # should be able to 
           @harmonized_items.push(item)
           haystack.delete_at(index)
           return
