@@ -18,27 +18,29 @@
     = render partial: "/freelancer/shared/job_shared_nav", locals: { job: @job }
 .section__body-content
   .freelancer-job__detail-cont
-    h3.freelancer-job__h3 Work Order
-    .freelancer-job__work-order-cont.w-clearfix
-      .freelancer-job__work-order-status
-        - if @job.contract_sent == false
-          = "Your work order #{@job.work_order} is still being created."
-        - else
-          - if !@job.negotiated?
-            = "Your work order #{@job.work_order} is awaiting your acceptance."
-          - elsif @job.contracted?
-            = "You have accepted the work order #{@job.work_order}."
-      - if @job.contract_sent == true
-        .freelancer-job__work-order-action-cont
-          a.btn-primary--active.no-margin.w-inline-block href=freelancer_job_work_order_path(@job)
-          div View Work Order
+    - if @have_applied
+      h3.freelancer-job__h3 Work Order
+      .freelancer-job__work-order-cont.w-clearfix
+        .freelancer-job__work-order-status
+          - if @job.contract_sent == false
+            = "Your work order #{@job.work_order} is still being created."
+          - else
+            - if !@job.negotiated?
+              = "Your work order #{@job.work_order} is awaiting your acceptance."
+            - elsif @job.contracted?
+              = "You have accepted the work order #{@job.work_order}."
+        - if @job.contract_sent == true
+          .freelancer-job__work-order-action-cont
+            a.btn-primary--active.no-margin.w-inline-block href=freelancer_job_work_order_path(@job)
+            div View Work Order
     .freelancer-job__summary-cont
       h3.freelancer-job__h3 Job Summary
       p= @job.summary
       div
-        - @job.keywords.split(", ").each do |k|
-          .grey.tag
-            = k
+        - if !@job.keywords.nil?
+          - @job.keywords.split(", ").each do |k|
+            .grey.tag
+              = k
     .freelancer-job__summary-group
       .freelancer-job__summary-item
         h6.freelancer-job__h6 Job Function
