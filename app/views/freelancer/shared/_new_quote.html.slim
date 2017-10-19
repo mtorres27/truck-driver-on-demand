@@ -36,32 +36,29 @@
       .new-message__counter--hourly
         .common__text-field-group.width-30
           label.common__field-label Rate
-          = f.input :counter_hourly_rate, as: :string, maxlength: 256, placeholder: "$/hr", label: false, class: "w-input"
+          = f.input :counter_hourly_rate, as: :integer, maxlength: 256, placeholder: "$/hr", label: false, class: "w-input"
         .common__text-field-group.width-30
           label.common__field-label  Time
-          = f.input :counter_number_of_hours, as: :string, maxlength: 256, placeholder: "hrs", label: false, class: "w-input"
+          = f.input :counter_number_of_hours, as: :integer, maxlength: 256, placeholder: "hrs", label: false, class: "w-input"
         .common__text-field-group.width-30
           label.common__field-label for="name-4" price
-          input.w-input data-name=("Name 3") maxlength="256" name="name-3" placeholder="$$" type="text" id="hourly-counter-price"
+          input.w-input data-name=("Name 3") maxlength="256" name="name-3" placeholder="$$" type="text" id="hourly-counter-price" disabled=true
 
       .new-message__counter--daily
         .common__text-field-group.width-30
           label.common__field-label Rate
-          = f.input :counter_daily_rate, as: :string, placeholder: "$/day", label: false
+          = f.input :counter_daily_rate, as: :integer, placeholder: "$/day", label: false
         .common__text-field-group.width-30
           label.common__field-label Time
-          = f.input :counter_number_of_days, as: :string, placeholder: "days", label: false
+          = f.input :counter_number_of_days, as: :integer, placeholder: "days", label: false
         .common__text-field-group.width-30
           label.common__field-label for="name-4" price
-          input.w-input data-name=("Name 3") maxlength="256" name="name-4" placeholder="$$" type="text" id="daily-counter-price"
+          input.w-input data-name=("Name 3") maxlength="256" name="name-4" placeholder="$$" type="text" id="daily-counter-price" disabled=true
     
     .common__form-action-cont.w-clearfix
       a.btn-primary--active.w-inline-block.width-100 onclick="submitForm();"
         div#new-message__submit
           | Send
-    
-
-
 
 
 javascript:
@@ -83,11 +80,64 @@ javascript:
     $(".new-message__counter--daily").hide();
 
     $(".new-message__counter--"+$("#message_counter_type").val()).show();
+
+    $("#message_counter_hourly_rate").val("");
+    $("#message_counter_daily_rate").val("");
+    $("#message_counter_number_of_hours").val("");
+    $("#message_counter_number_of_days").val("");
+    $("#daily-counter-price").val("");
+    $("#hourly-counter-price").val("");
   })
 
   $("#message_attachment").change(function() {
     $(".new-message__attachment-button").addClass("new-message__attachment-button--active");
   });
+
+  $("#message_counter_hourly_rate").on("input", function() {
+    calcHourlyQuote();
+  });
+
+  $("#message_counter_number_of_hours").on("input", function() {
+    calcHourlyQuote();
+  });
+
+  var calcHourlyQuote = function( ) {
+    var rate = $("#message_counter_hourly_rate").val();
+    var num = $("#message_counter_number_of_hours").val();
+    var amt;
+
+    if (rate == "" || num == "") {
+      amt = "N/A";
+    } else {
+      amt = rate *  num;
+    }
+
+    $("#hourly-counter-price").val(amt);
+  }
+
+  $("#message_counter_daily_rate").on("input", function() {
+    calcDailyQuote();
+  });
+
+  $("#message_counter_number_of_days").on("input", function() {
+    calcDailyQuote();
+  });
+
+  var calcDailyQuote = function( ) {
+    var rate = $("#message_counter_daily_rate").val();
+    var num = $("#message_counter_number_of_days").val();
+    var amt;
+
+    if (rate == "" || num == "") {
+      amt = "N/A";
+    } else {
+      amt = rate *  num;
+    }
+
+    $("#daily-counter-price").val(amt);
+  }
+
+
 
   var showCounterOffer = function() {
     var input_ref = $(".new-message__input");
