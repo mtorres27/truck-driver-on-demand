@@ -1,68 +1,74 @@
-div style="display: none;"
-  = f.input :attachment, as: :file, label: false
+= simple_form_for(:message, url: freelancer_job_quotes_path(@job, @applicant), class: "freelancer-job__quote-form") do |f|
+  div style="display: none;"
+    = f.input :attachment, as: :file, label: false
 
-.w-form.freelancer-job__quote-form
-  .common__radio-group.w-radio.width-30
-    = f.radio_button :status, "accept", class: "w-radio-input"
-    = f.label :status_accept, "Accept this quote", class: "common__radio-field-label w-form-label"
-  .common__radio-group.w-radio.width-30
-    = f.radio_button :status, "negotiate", class: "w-radio-input"
-    = f.label :status_negotiate, "Negotiate a better price", class: "common__radio-field-label w-form-label"
-    = f.hidden_field :override, value: ""
-  .common__radio-group.w-radio.width-30
-    = f.radio_button :status, "decline", class: "w-radio-input"
-    = f.label :status_decline, "Decline this quote", class: "common__radio-field-label w-form-label"
+  .w-form.freelancer-job__quote-form
+    .common__radio-group.w-radio.width-30
+      = f.radio_button :status, "accept", class: "w-radio-input"
+      = f.label :status_accept, "Accept this quote", class: "common__radio-field-label w-form-label"
+    .common__radio-group.w-radio.width-30
+      = f.radio_button :status, "negotiate", class: "w-radio-input"
+      = f.label :status_negotiate, "Negotiate a better price", class: "common__radio-field-label w-form-label"
+      = f.hidden_field :override, value: ""
+    .common__radio-group.w-radio.width-30
+      = f.radio_button :status, "decline", class: "w-radio-input"
+      = f.label :status_decline, "Decline this quote", class: "common__radio-field-label w-form-label"
 
-  = f.hidden_field :checkin, value: "false"
-      
-  .attachment.common__text-field-group
-    label.common__field-label for="name-4"
-      = "Send a message to #{n}"
-    a.common__text-field--attach-file.w-inline-block onClick="triggerFileUpload()"
-      .common__icon-attach 
-    = f.text_area :body, as: :string, placeholder: "Enter your message", label: false, maxlength: 5000, class: "w-input"
-
-  .new-message__counter
+    = f.hidden_field :checkin, value: "false"
+        
     .attachment.common__text-field-group
-      label.common__field-label for="message_counter_type"  Choose a payment type
-      = f.select :counter_type, [["Fixed Rate", "fixed"], ["Hourly Rate", "hourly"], ["Daily Rate", "daily"]], {}, {class: "common__select-field w-select"}
+      label.common__field-label for="name-4"
+        = "Send a message to #{n}"
+      a.common__text-field--attach-file.w-inline-block onClick="triggerFileUpload()"
+        .common__icon-attach 
+      = f.text_area :body, as: :string, placeholder: "Enter your message", label: false, maxlength: 5000, class: "w-input"
+
+    .new-message__counter
+      .attachment.common__text-field-group
+        label.common__field-label for="message_counter_type"  Choose a payment type
+        = f.select :counter_type, [["Fixed Rate", "fixed"], ["Hourly Rate", "hourly"], ["Daily Rate", "daily"]], {}, {class: "common__select-field w-select"}
+      
+      .new-message__counter--fixed
+        .common__text-field-group
+          label.common__field-label for="message_counter"  Suggested price
+          = f.input :counter, as: :string, maxlength: 256, placeholder: "Enter your suggested price", label: false
     
-    .new-message__counter--fixed
-      .common__text-field-group
-        label.common__field-label for="message_counter"  Suggested price
-        = f.input :counter, as: :string, maxlength: 256, placeholder: "Enter your suggested price", label: false
-  
-    .new-message__counter--hourly
-      .common__text-field-group.width-30
-        label.common__field-label Rate
-        = f.input :counter_hourly_rate, as: :string, maxlength: 256, placeholder: "$/hr", label: false, class: "w-input"
-      .common__text-field-group.width-30
-        label.common__field-label  Time
-        = f.input :counter_number_of_hours, as: :string, maxlength: 256, placeholder: "hrs", label: false, class: "w-input"
-      .common__text-field-group.width-30
-        label.common__field-label for="name-4" price
-        input.w-input data-name=("Name 3") maxlength="256" name="name-3" placeholder="$$" type="text" id="hourly-counter-price"
+      .new-message__counter--hourly
+        .common__text-field-group.width-30
+          label.common__field-label Rate
+          = f.input :counter_hourly_rate, as: :string, maxlength: 256, placeholder: "$/hr", label: false, class: "w-input"
+        .common__text-field-group.width-30
+          label.common__field-label  Time
+          = f.input :counter_number_of_hours, as: :string, maxlength: 256, placeholder: "hrs", label: false, class: "w-input"
+        .common__text-field-group.width-30
+          label.common__field-label for="name-4" price
+          input.w-input data-name=("Name 3") maxlength="256" name="name-3" placeholder="$$" type="text" id="hourly-counter-price"
 
-    .new-message__counter--daily
-      .common__text-field-group.width-30
-        label.common__field-label Rate
-        = f.input :counter_daily_rate, as: :string, placeholder: "$/day", label: false
-      .common__text-field-group.width-30
-        label.common__field-label Time
-        = f.input :counter_number_of_days, as: :string, placeholder: "days", label: false
-      .common__text-field-group.width-30
-        label.common__field-label for="name-4" price
-        input.w-input data-name=("Name 3") maxlength="256" name="name-4" placeholder="$$" type="text" id="daily-counter-price"
-  
-  .common__form-action-cont.w-clearfix
-    = f.submit "Send", class: "btn btn-primary", id: "new-message__submit", class: "btn btn-primary--active w-inline-block width-100"
-
-  
+      .new-message__counter--daily
+        .common__text-field-group.width-30
+          label.common__field-label Rate
+          = f.input :counter_daily_rate, as: :string, placeholder: "$/day", label: false
+        .common__text-field-group.width-30
+          label.common__field-label Time
+          = f.input :counter_number_of_days, as: :string, placeholder: "days", label: false
+        .common__text-field-group.width-30
+          label.common__field-label for="name-4" price
+          input.w-input data-name=("Name 3") maxlength="256" name="name-4" placeholder="$$" type="text" id="daily-counter-price"
+    
+    .common__form-action-cont.w-clearfix
+      a.btn-primary--active.w-inline-block.width-100 onclick="submitForm();"
+        div#new-message__submit
+          | Send
+    
 
 
 
 
 javascript:
+  var submitForm = function() {
+    $(".simple_form").submit();
+  }
+
   var triggerFileUpload = function () {
     $("#message_attachment").click();
   };
@@ -77,7 +83,6 @@ javascript:
     $(".new-message__counter--daily").hide();
 
     $(".new-message__counter--"+$("#message_counter_type").val()).show();
-
   })
 
   $("#message_attachment").change(function() {
@@ -114,7 +119,8 @@ javascript:
     $('#' + name).click(function() {
         if($(this).attr('previousValue') == 'true'){
             $(this).attr('checked', false)
-            $("#new-message__submit").val("Send");
+            $("#new-message__submit").html("Send");
+            $("#new-message__submit").parent().removeClass("warning");
             $("#message_body").attr("placeholder", "Enter your message");
         } else {
             $('#' + name).attr('previousValue', false);
@@ -123,21 +129,25 @@ javascript:
         if ($(this).is(':checked')) {
           if ($(this).attr("id").indexOf("_negotiate", 0) > 0) {
             showCounterOffer();
-            $("#new-message__submit").val("Negotiate");
+            $("#new-message__submit").html("Negotiate");
+            $("#new-message__submit").parent().removeClass("warning");
             $("#message_body").attr("placeholder", "Enter your negotiation message");
           } else {
             hideCounterOffer();
             if ($(this).attr("id").indexOf("_accept", 0) > 0) {
-              $("#new-message__submit").val("Accept");
+              $("#new-message__submit").html("Accept");
+              $("#new-message__submit").parent().removeClass("warning");
               $("#message_body").attr("placeholder", "Enter your acceptance message");
             } else {
-              $("#new-message__submit").val("Decline");
+              $("#new-message__submit").html("Decline");
+              $("#new-message__submit").parent().addClass("warning");
               $("#message_body").attr("placeholder", "Enter your declination message");
             }
           }
         } else {
           hideCounterOffer();
-          $("#new-message__submit").val("Send");
+          $("#new-message__submit").html("Send");
+          $("#new-message__submit").parent().removeClass("warning");
         }
 
     });

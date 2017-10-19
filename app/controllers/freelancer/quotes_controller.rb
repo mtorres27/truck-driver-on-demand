@@ -130,27 +130,9 @@ class Freelancer::QuotesController < Freelancer::BaseController
     end
 
     def search_in_combined(haystack, needle)
-      p "SEARCH IN COMBINED"
       index = 0
       haystack.each do |item|
         if needle == item[:date]
-
-          if item[:type] == "message"
-            p "TRYING"
-            p "!!!!"
-
-            quote = false
-            haystack.each do |sub_item|
-              if sub_item[:date] == item[:date] and sub_item[:type] == "quote"
-                p "FOUND MATCH"
-                item[:quote_amount] = sub_item[:quote].amount
-              end
-            end
-          end
-
-          p item
-
-          # should be able to 
           @harmonized_items.push(item)
           haystack.delete_at(index)
           return
