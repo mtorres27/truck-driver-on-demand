@@ -2,6 +2,7 @@ class Freelancer::QuotesController < Freelancer::BaseController
   before_action :set_applicant
 
   def index
+    p "IN THE INDEX"
     set_collections
   end
 
@@ -89,6 +90,7 @@ class Freelancer::QuotesController < Freelancer::BaseController
     end
 
     def set_collections
+      p "SETTING COLLECTIONS"
       @messages = @applicant.messages
       @quotes = @applicant.quotes
       @all_quotes = @applicant.job.quotes
@@ -128,18 +130,25 @@ class Freelancer::QuotesController < Freelancer::BaseController
     end
 
     def search_in_combined(haystack, needle)
+      p "SEARCH IN COMBINED"
       index = 0
       haystack.each do |item|
         if needle == item[:date]
 
-          # if item[:type] == "message"
+          if item[:type] == "message"
+            p "TRYING"
+            p "!!!!"
 
-          #   quote = false
-          #   haystack.each do |sub_item|
-          #     if sub_item[:date] == item[:date] and sub_item[:type] == "quote"
-          #       item[:quote_amount] = sub_item[:quote].amount
-          #   end
-          # end
+            quote = false
+            haystack.each do |sub_item|
+              if sub_item[:date] == item[:date] and sub_item[:type] == "quote"
+                p "FOUND MATCH"
+                item[:quote_amount] = sub_item[:quote].amount
+              end
+            end
+          end
+
+          p item
 
           # should be able to 
           @harmonized_items.push(item)

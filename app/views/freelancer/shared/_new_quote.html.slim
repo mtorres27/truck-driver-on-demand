@@ -1,7 +1,7 @@
 div style="display: none;"
   = f.input :attachment, as: :file, label: false
 
-.w-form
+.w-form.freelancer-job__quote-form
   .common__radio-group.w-radio.width-30
     = f.radio_button :status, "accept", class: "w-radio-input"
     = f.label :status_accept, "Accept this quote", class: "common__radio-field-label w-form-label"
