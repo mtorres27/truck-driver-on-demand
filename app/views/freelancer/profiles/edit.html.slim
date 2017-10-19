@@ -13,8 +13,8 @@
           .freelancer-profile__title
             | Wallpaper
 
-          .freelancer-profile__image
-            = image_tag(@freelancer.profile_header_url, style: "width:100%;height:auto", id: "freelancer-edit-profile__header")
+          .freelancer-profile__image--header
+            = image_tag(@freelancer.profile_header_url, id: "freelancer-edit-profile__header")
             .freelancer-profile__image-upload onclick="updateHeaderImage()"
               span class="fa fa-camera"
           = f.file_field :profile_header, label: false, :accept => 'image/png,image/gif,image/jpeg', id: "edit-freelancer-profile-header", class: "file-input--hidden"
@@ -34,7 +34,7 @@
           .freelancer-profile__title
             | Profile Picture
           .freelancer-profile__image style="width: 135px; height: 135px; margin: auto"
-            = image_tag(@freelancer.avatar_url, size: "135x135", id: "freelancer-edit-profile__avatar")
+            = image_tag(@freelancer.avatar_url, id: "freelancer-edit-profile__avatar")
             .freelancer-profile__image-upload onclick="updateProfilePicture()"
               span class="fa fa-camera" 
           = f.file_field :avatar, label: false, :accept => 'image/png,image/gif,image/jpeg', id: "edit-freelancer-profile-avatar", class: "file-input--hidden"
@@ -208,6 +208,26 @@ javascript:
     } else {
       var ref = $(".add-new-certificate").prev('div').find(".nested_fields").find(".file-input--hidden");
     }
+
+    ref.on('change', function() {
+      var imgPath = $(this)[0].value;
+      var extn = imgPath.substring(imgPath.lastIndexOf('.') + 1).toLowerCase();
+      var image_holder = $(this).parent().parent().find(".freelancer-profile__image").find(".authorable_attachment--full").find("img");
+      if (extn == "gif" || extn == "png" || extn == "jpg" || extn == "jpeg") {
+        if (typeof (FileReader) != "undefined") {
+          var reader = new FileReader();
+          reader.onload = function (e) {
+            image_holder.attr('src', e.target.result)
+          }
+
+          reader.readAsDataURL($(this)[0].files[0]);
+        }
+      } else if (extn == "pdf") {
+        image_holder.attr('src', "/assets/certification/certification_placeholder.png")
+      } else {
+        alert("Only images can be selected.");
+      }
+    });
 
     ref.click();
   }
