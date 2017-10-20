@@ -125,11 +125,6 @@ First you’ll need to confirm your account by clicking the button below.</span>
                                                                     <td colspan="1" style="width:16px;height:16px">&shy;</td>
                                                                 </tr>
                                                                 <tr>
-                                                                    <td colspan="3" style="width:168px;height:16px">
-                                                                        If the link above doesn't work, you can go to this url: <a href="<%=confirmation_url(@resource, confirmation_token: @token) %>"><%=confirmation_url(@resource, confirmation_token: @token) %></a> to confirm your account.
-                                                                    </td>
-                                                                </tr>
-                                                                <tr>
                                                                     <td colspan="3" style="width:168px;height:12px">&shy;</td>
                                                                 </tr>
                                                             </table>
@@ -137,6 +132,11 @@ First you’ll need to confirm your account by clicking the button below.</span>
                                                         </a>
                                                     </td>
                                                     <td colspan="2" style="width:166px;height:40px">&shy;</td>
+                                                </tr>
+                                                <tr>
+                                                    <td colspan="3" style="width:500px;height:38px">
+                                                        If the link above doesn't work, you can go to this url: <a href="<%=confirmation_url(@resource, confirmation_token: @token) %>"><%=confirmation_url(@resource, confirmation_token: @token) %></a> to confirm your account.
+                                                    </td>
                                                 </tr>
                                                 <tr>
                                                     <td colspan="5" style="width:500px;height:47px">&shy;</td>
