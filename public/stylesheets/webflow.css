@@ -371,7 +371,7 @@ textarea.w-select {
 .w-radio {
   display: block;
   margin-bottom: 5px;
-  padding-left: 20px;
+  /*padding-left: 20px;*/
 }
 .w-checkbox:before,
 .w-radio:before,

@@ -5,14 +5,14 @@
   .w-form.freelancer-job__quote-form
     .common__radio-group.w-radio.width-30
       = f.radio_button :status, "accept", class: "w-radio-input"
-      = f.label :status_accept, "Accept this quote", class: "common__radio-field-label w-form-label"
+      = f.label :status_accept, "Accept", class: "common__radio-field-label w-form-label"
     .common__radio-group.w-radio.width-30
       = f.radio_button :status, "negotiate", class: "w-radio-input"
-      = f.label :status_negotiate, "Negotiate a better price", class: "common__radio-field-label w-form-label"
+      = f.label :status_negotiate, "Negotiate", class: "common__radio-field-label w-form-label"
       = f.hidden_field :override, value: ""
     .common__radio-group.w-radio.width-30
       = f.radio_button :status, "decline", class: "w-radio-input"
-      = f.label :status_decline, "Decline this quote", class: "common__radio-field-label w-form-label"
+      = f.label :status_decline, "Decline", class: "common__radio-field-label w-form-label"
 
     .attachment.common__text-field-group
       label.common__field-label for="name-4"
