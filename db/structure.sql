@@ -154,7 +154,8 @@ CREATE TABLE attachments (
     file_data character varying,
     job_id integer,
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+    updated_at timestamp without time zone NOT NULL,
+    title character varying
 );
 
 
@@ -1994,6 +1995,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20170928151921'),
 ('20170929133938'),
 ('20171003125747'),
-('20171011195102');
+('20171011195102'),
+('20171020113522');
 
 
