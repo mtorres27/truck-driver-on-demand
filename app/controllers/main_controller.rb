@@ -11,4 +11,42 @@ class MainController < ApplicationController
   def confirm_email
 
   end
+
+  def freelance_service_agreement
+
+    @job = Job.where({id: params[:job]})
+    @months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
+
+    if @job.length == 1
+      @job = @job.first
+      @job_start_day = @job.starts_on.day.to_s
+
+      if @job_start_day[1] == "1" or @job_start_day == "1" and @job_start_day.to_i < 11 and @job_start_day.to_i > 20
+        @job_start_day += "st"
+      elsif @job_start_day[1] == "2" or @job_start_day == "2" and @job_start_day.to_i < 11 and @job_start_day.to_i > 20
+        @job_start_day += "nd"
+      elsif @job_start_day[1] == "3" or @job_start_day == "3" and @job_start_day.to_i < 11 and @job_start_day.to_i > 20
+        @job_start_day += "rd"
+      else
+        @job_start_day += "th"
+      end
+
+      @job_start_month = @months[@job.starts_on.month]
+
+
+
+      @job_start_year = @job.starts_on.year
+    
+      if @job.freelancer.nil?
+        @job = nil
+      elsif current_freelancer and @job.freelancer.id != current_freelancer.id
+        @job = nil
+      elsif current_company and @job.company.id != current_company.id
+        @job = nil
+      end
+      
+    else
+      @job = nil
+    end
+  end
 end

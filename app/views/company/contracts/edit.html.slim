@@ -95,9 +95,14 @@
             .job-details__title
               | Freelancer Agreements
             
-            a.btn.contract-edit__btn href="#" target="_blank"
+            a.btn.contract-edit__btn href="/freelance-service-agreement?job=#{@job.id}#{random_append}" target="_blank"
               | Freelance Service Agreement
             br
+
+            p
+              | AV Junction provides a template freelance service agreement for you to use at your sole discretion.  This template agreement does not bind AV Junction Inc to this work order.  This work order is between you and the hired AV freelancer.  If you would like to opt out of using this template please check the box.
+              = f.input :opt_out_of_freelance_service_agreement, label: "Opt out of Freelance Service Agreement"
+
         
         .form-actions
           = f.hidden_field :send_contract, value: false
@@ -138,7 +143,6 @@ javascript:
       
     }
 
-    console.log("calling ", index);
     ref.on('change', function() {
       var imgPath = $(this)[0].value;
       var extn = imgPath.substring(imgPath.lastIndexOf('.') + 1).toLowerCase();

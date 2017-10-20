@@ -748,7 +748,8 @@ CREATE TABLE jobs (
     lat numeric(9,6),
     lng numeric(9,6),
     formatted_address character varying,
-    contract_sent boolean DEFAULT false
+    contract_sent boolean DEFAULT false,
+    opt_out_of_freelance_service_agreement boolean DEFAULT false
 );
 
 
@@ -1996,6 +1997,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20170929133938'),
 ('20171003125747'),
 ('20171011195102'),
-('20171020113522');
+('20171020113522'),
+('20171020123018');
 
 

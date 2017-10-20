@@ -85,6 +85,15 @@
             = "N/A"
           - else 
             = t("enumerize.job.freelancer_type.#{@job.freelancer_type}")
+      
+    .freelancer-job__summary-cont
+      h3.freelancer-job__h3 Freelance Service Agreement
+      p
+        - if @job.opt_out_of_freelance_service_agreement
+          | This project has opted out of the freelance service agreement"
+        - else
+          a href="/freelance-service-agreement?job=#{@job.id}#{random_append}" target="_blank"
+            | Click here to view the Freelance Service Agreement for this project.
   - if @have_applied == false
     .freelancer-job__apply
       a.freelancer-job__apply-for-job href="#" id="apply-for-job"

@@ -7,8 +7,7 @@ Rails.application.routes.draw do
   root "main#index"
 
   get "company/login", to: "devise/session#new"
-  get "privacy-policy", to: "pages#show", id: "privacy-policy"
-  get "terms-of-service", to: "pages#show", id: "terms-of-service"
+  get "freelance-service-agreement", to: "main#freelance_service_agreement"
 
 
   get "confirm_email", to: "main#confirm_email"

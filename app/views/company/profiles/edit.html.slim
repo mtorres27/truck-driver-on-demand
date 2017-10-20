@@ -198,7 +198,6 @@ javascript:
         if (typeof (FileReader) != "undefined") {
           var reader = new FileReader();
           reader.onload = function (e) {
-            console.log(image_holder);
             image_holder.attr('src', e.target.result)
           }
 
