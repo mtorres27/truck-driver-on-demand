@@ -106,7 +106,7 @@ First you’ll need to confirm your account by clicking the button below.</span>
                                                 <tr>
                                                     <td colspan="2" style="width:166px;height:40px">&shy;</td>
                                                     <td style="vertical-align:top;padding:0px;width:168px;height:40px;" colspan="1" rowspan="1">
-                                                        <a href=<%=confirmation_url(@resource, confirmation_token: @token) %> style="text-decoration:none;">
+                                                        <a href="<%=confirmation_url(@resource, confirmation_token: @token) %>" style="text-decoration:none;">
                                                         <div style="display:block;background-color:#3DAADF;border-radius:3px;color:#3caadf;width:168px;height:40px;">
                                                             <table style="border-collapse:collapse;table-layout:fixed;width:168px;height:40px;margin:auto;" border="0" width="168" height="40">
                                                                 <colgroup>
@@ -123,6 +123,11 @@ First you’ll need to confirm your account by clicking the button below.</span>
                                                                         </div>
                                                                     </td>
                                                                     <td colspan="1" style="width:16px;height:16px">&shy;</td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td colspan="3" style="width:168px;height:16px">
+                                                                        If the link above doesn't work, you can go to this url: <a href="<%=confirmation_url(@resource, confirmation_token: @token) %>"><%=confirmation_url(@resource, confirmation_token: @token) %></a> to confirm your account.
+                                                                    </td>
                                                                 </tr>
                                                                 <tr>
                                                                     <td colspan="3" style="width:168px;height:12px">&shy;</td>

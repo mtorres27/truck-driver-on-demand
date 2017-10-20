@@ -29,7 +29,7 @@
       .new-message__counter--fixed
         .common__text-field-group
           label.common__field-label for="message_counter"  Suggested price
-          = f.input :counter, as: :string, maxlength: 256, placeholder: "Enter your suggested price", label: false
+          = f.input :counter, maxlength: 256, placeholder: "Enter your suggested price", label: false, class: "thing"
     
       .new-message__counter--hourly
         .common__text-field-group.width-30
