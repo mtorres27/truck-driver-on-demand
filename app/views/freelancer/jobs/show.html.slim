@@ -88,6 +88,8 @@
 
 = simple_form_for "freelancer_job_apply_path", html: { multipart: true } do |f|
   = f.hidden_field :job, value: @job.id
+  
+
   .freelancer-job__apply-modal
     .freelancer-job__apply-form.w-form
       h2.common__h2-modal= @job.title
@@ -127,8 +129,9 @@
       .attachment.common__text-field-group
         label.common__field-label for="name-4"
           = "Send a message to #{@job.company.name}"
-        a.common__text-field--attach-file.w-inline-block onClick="triggerFileUpload()"
+        a.common__text-field--attach-file.w-inline-block id="attach_indicator" onClick="triggerFileUpload()"
           .common__icon-attach 
+        = f.file_field :attachment, as: :file, id: "message_attachment", label: false, :accept => 'document/pdf,application/pdf,application/x-pdf,image/png,image/jpg,image/jpeg,image/gif',  class: "file-input--hidden" 
         = f.text_area :body, as: :string, placeholder: "Enter your message", label: false, maxlength: 5000, class: "w-input"
 
       .freelancer-job__apply-modal__buttons
@@ -137,6 +140,14 @@
           | cancel
 
 javascript:
+  var triggerFileUpload = function () {
+    $("#message_attachment").click();
+  };
+
+  $("#message_attachment").change(function() {
+    $("#attach_indicator").find(".common__icon-attach").addClass("common__icon-attach--active");
+  });
+
   $("#apply-for-job").on('click', function(e) {
     e.preventDefault();
     $(".freelancer-job__apply-modal").show();

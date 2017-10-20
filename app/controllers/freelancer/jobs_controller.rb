@@ -215,7 +215,8 @@ class Freelancer::JobsController < Freelancer::BaseController
         :message,
         :attachment,
         :daily_rate,
-        :number_of_days
+        :number_of_days,
+        :body
       )
     end
 end
