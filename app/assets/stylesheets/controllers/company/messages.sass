@@ -161,11 +161,8 @@
       width: calc(100% - 300px)
 
   &__counter
-    width: 150px
-    border: 1px solid $gray-ccc
-    float: left
     border-radius: 4px
-    margin: 0px 10px 0px 0px
+    width: 100%
     display: none
     input
       width: 100%
@@ -173,7 +170,30 @@
       float: left
     
     &--visible
-      display: block
+      display: -webkit-box
+      display: -webkit-flex
+      display: -ms-flexbox
+      display: flex
+      -webkit-box-pack: justify
+      -webkit-justify-content: space-between
+      -ms-flex-pack: justify
+      justify-content: space-between
+      -webkit-flex-wrap: wrap
+      -ms-flex-wrap: wrap
+      flex-wrap: wrap
+
+    &--hourly, &--daily
+      display: -webkit-box
+      display: -webkit-flex
+      display: -ms-flexbox
+      display: flex
+      -webkit-box-pack: justify
+      -webkit-justify-content: space-between
+      -ms-flex-pack: justify
+      justify-content: space-between
+      -webkit-flex-wrap: wrap
+      -ms-flex-wrap: wrap
+      flex-wrap: wrap 
 
   &__attachment-button
     width: 10px
