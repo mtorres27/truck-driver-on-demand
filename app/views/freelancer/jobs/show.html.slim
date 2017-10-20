@@ -82,16 +82,15 @@
             | Click here to view the Freelance Service Agreement for this project.
   - if @have_applied == false
     .freelancer-job__apply
-      a.freelancer-job__apply-for-job href="#" id="apply-for-job"
-        | Apply for this job
+      a.btn-primary--active href="#" id="apply-for-job"
+        div
+          | Apply for this job
 
 = simple_form_for "freelancer_job_apply_path", html: { multipart: true } do |f|
   = f.hidden_field :job, value: @job.id
   .freelancer-job__apply-modal
-    .w-form
+    .freelancer-job__apply-form.w-form
       h2.common__h2-modal= @job.title
-      .freelancer-job__apply-modal__header-close id="close-modal"
-        span class="fa fa-close"
       .common__radio-group.w-radio.width-30
         = f.radio_button :pay_type, "daily", class: "w-radio-input"
         = f.label :pay_type_daily, "daily", class: "common__field-label"
@@ -102,30 +101,35 @@
         = f.radio_button :pay_type, "hourly", class: "w-radio-input"
         = f.label :pay_type_hourly, "hourly", class: "common__field-label"
       
-      .common__text-field-group.width-30.freelancer-job__apply-modal__content-amount--fixed
-        = f.input :amount, type: "text", id: "quote-amount-fixed", placeholder: "Your quote", label: false, class: "common__text-field w-input", label: false
+      .common__text-field-group.freelancer-job__apply-modal__content-amount--fixed
         = f.label :amount, "Amount", class: "common__field-label"
+        = f.input :amount, type: "text", id: "quote-amount-fixed", placeholder: "Your quote", label: false, class: "common__text-field w-input", label: false
+        
 
-      .common__text-field-group.width-30.freelancer-job__apply-modal__content-amount--hourly
-        = f.input :number_of_hours, type: "text", id: "quote-amount-hourly", placeholder: "No. of Hrs", class: "common__text-field w-input", label: false
+      .common__text-field-group.width-50.freelancer-job__apply-modal__content-amount--hourly
         = f.label :number_of_hours, "Number of Hours", class: "common__field-label"
-      .common__text-field-group.width-30.freelancer-job__apply-modal__content-amount--hourly
-        = f.input :hourly_rate, type: "text", id: "quote-amount-hourly-rate", placeholder: "Hourly Rate", class: "common__text-field w-input", label: false
+        = f.input :number_of_hours, type: "text", id: "quote-amount-hourly", placeholder: "No. of Hrs", class: "common__text-field w-input", label: false
+        
+      .common__text-field-group.width-50.freelancer-job__apply-modal__content-amount--hourly
         = f.label :hourly_rate, "Hourly Rate", class: "common__field-label"
+        = f.input :hourly_rate, type: "text", id: "quote-amount-hourly-rate", placeholder: "Hourly Rate", class: "common__text-field w-input", label: false
+        
 
-      .common__text-field-group.width-30.freelancer-job__apply-modal__content-amount--daily
-        = f.input :number_of_days, type: "text", id: "quote-amount-daily", placeholder: "No. of Days", class: "common__text-field w-input", label: false
+      .common__text-field-group.width-50.freelancer-job__apply-modal__content-amount--daily
         = f.label :number_of_days, "No. of Days", class: "common__field-label"
-      .common__text-field-group.width-30.freelancer-job__apply-modal__content-amount--daily
-        = f.input :daily_rate, type: "text", id: "quote-amount-daily-rate", placeholder: "Daily Rate", class: "common__text-field w-input", label: false
+        = f.input :number_of_days, type: "text", id: "quote-amount-daily", placeholder: "No. of Days", class: "common__text-field w-input", label: false
+        
+      .common__text-field-group.width-50.freelancer-job__apply-modal__content-amount--daily
         = f.label :daily_rate, "Daily Rate", class: "common__field-label"
+        = f.input :daily_rate, type: "text", id: "quote-amount-daily-rate", placeholder: "Daily Rate", class: "common__text-field w-input", label: false
+        
 
-      .common__text-area-group
-        = f.input :message, id: "quote-message", placeholder: "Your message to #{@job.company.name}", label: false
-      
-      .common__text-field-group
-        = f.label :attachment, "Select an Attachment", class: "common__field-label"
-        = f.input :attachment, as: :file, label: false
+      .attachment.common__text-field-group
+        label.common__field-label for="name-4"
+          = "Send a message to #{@job.company.name}"
+        a.common__text-field--attach-file.w-inline-block onClick="triggerFileUpload()"
+          .common__icon-attach 
+        = f.text_area :body, as: :string, placeholder: "Enter your message", label: false, maxlength: 5000, class: "w-input"
 
       .freelancer-job__apply-modal__buttons
         = f.button :submit, prompt: "Submit Quote", value: "Submit Quote", data: { disable_with: "Submitting..." }, class: "btn btn-primary"
