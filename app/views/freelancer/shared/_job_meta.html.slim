@@ -1,0 +1,15 @@
+.freelancer-job__container
+    a.freelancer-job__back-btn.w-inline-block href=my_applications_freelancer_jobs_path 
+      .freelancer-job__back-arrow 
+    .freelancer-job__header.w-clearfix
+      = job_state_label(@job)
+      .freelancer-job__created-date
+        = @job.created_at.strftime('%B %d, %Y')
+      .freelancer-job__job-title
+        = @job.title
+      a.freelancer-job__company-name href=freelancer_company_path(@job.company)
+        = @job.company.name
+      .freelancer-job__rating
+        - @stars = company_avg_rating(@job.company)
+        - @stars.each do |star|
+          |  

@@ -31,11 +31,11 @@
                   - next_item = @harmonized_items[index+1]
                   - if next_item[:type] == "quote"
                     - if next_item[:payload].amount <= @job.budget and next_item[:payload].state != "declined"
-                      .freelancer-job__msg-price= number_to_currency(next_item[:payload].amount, precision: 0) + " " + job.currency
+                      .freelancer-job__msg-price= number_to_currency(next_item[:payload].amount, precision: 0)
                     - elsif next_item[:payload].amount <= @job.budget and next_item[:payload].state == "declined"
-                      .freelancer-job__msg-price.rejected= number_to_currency(next_item[:payload].amount, precision: 0) + " " + job.currency
+                      .freelancer-job__msg-price.rejected= number_to_currency(next_item[:payload].amount, precision: 0)
                     - elsif next_item[:payload].amount > @job.budget and next_item[:payload].state != "declined"
-                      .freelancer-job__msg-price.overbudget= number_to_currency(next_item[:payload].amount, precision: 0) + " " + job.currency
+                      .freelancer-job__msg-price.overbudget= number_to_currency(next_item[:payload].amount, precision: 0)
                     - elsif next_item[:payload].amount > @job.budget and next_item[:payload].state == "declined"
                       .freelancer-job__msg-price.overbudget.rejected= number_to_currency(next_item[:payload].amount, precision: 0) + " " + job.currency
                 .freelancer-job__msg-user-name= item[:payload].authorable.name
