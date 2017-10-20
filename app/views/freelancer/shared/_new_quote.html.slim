@@ -197,7 +197,7 @@ javascript:
           $("#new-message__submit").html("Send");
           $("#new-message__submit").parent().removeClass("warning");
         }
-
+      $(this).attr('previousValue', $(this).is(':checked'));
     });
   };
 
