@@ -13,6 +13,12 @@ module StripeHelper
     'legal_entity.personal_id_number' => 'ID Number',
     'legal_entity.business_name' => 'Company Name',
     'legal_entity.business_tax_id' => 'Company Tax ID',
+    'legal_entity.verification.document' => 'Verification Document',
+    'legal_entity.personal_address.city' => 'Personal address city',
+    'legal_entity.personal_address.line1'  => 'Personal Addres Line 1',
+    'legal_entity.personal_address.postal_code'  => 'Personal Postal Code',
+    'legal_entity.additional_owners'  => 'Additional Owners',
+    'legal_entity.personal_address.state' => 'Personal Address State'
   }
 
   def pretty_name(field)

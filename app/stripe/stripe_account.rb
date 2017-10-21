@@ -26,13 +26,13 @@ class StripeAccount < Struct.new( :freelancer )
     { name: 'Ireland', code: 'IE' }
   ]
 
-  def create_account!( country, tos_accepted, ip )
+  def create_account!( type, country, tos_accepted, ip )
     return nil unless tos_accepted
-    return nil unless country.in?( COUNTRIES.map { |c| c[:code] } )
+    return nil unless country.upcase.in?( COUNTRIES.map { |c| c[:code] } )
 
     begin
       @account = Stripe::Account.create(
-        type: true,
+        type: "custom",
         country: country,
         email: freelancer.email,
         tos_acceptance: {
@@ -40,19 +40,18 @@ class StripeAccount < Struct.new( :freelancer )
           date: Time.now.to_i
         },
         legal_entity: {
-          type: 'individual', # TODO: need to handle business accounts
+          type: type,
         }
       )
-    rescue
-      nil # TODO: improve
+    rescue StandardError => ex
+      Rails.logger.debug "WHAT!!!!" # TODO: improve
+      Rails.logger.debug ex.inspect
     end
 
     if @account
-        freelancer.update_attributes(
+      freelancer.update_attributes(
         currency: @account.default_currency,
         stripe_account_id: @account.id,
-        secret_key: @account.keys.secret,
-        publishable_key: @account.keys.publishable,
         stripe_account_status: account_status
       )
     end
@@ -60,24 +59,12 @@ class StripeAccount < Struct.new( :freelancer )
     @account
   end
 
-  def update_account!( params: nil )
+  def update_account!(params: nil)
     if params
-      if params[:bank_account_token]
-        account.bank_account = params[:bank_account_token]
-        account.save
-      end
-
       if params[:legal_entity]
-        # clean up dob fields
-        params[:legal_entity][:dob] = {
-          year: params[:legal_entity].delete('dob(1i)'),
-          month: params[:legal_entity].delete('dob(2i)'),
-          day: params[:legal_entity].delete('dob(3i)')
-        }
-
         # update legal_entity hash from the params
         params[:legal_entity].entries.each do |key, value|
-          if [ :address, :dob ].include? key.to_sym
+          if [ :address, :dob, :personal_address ].include? key.to_sym
             value.entries.each do |akey, avalue|
               next if avalue.blank?
               # Rails.logger.error "#{akey} - #{avalue.inspect}"
@@ -90,11 +77,6 @@ class StripeAccount < Struct.new( :freelancer )
             account.legal_entity[key] = value
           end
         end
-
-        # copy 'address' as 'personal_address'
-        pa = account.legal_entity['address'].dup.to_h
-        account.legal_entity['personal_address'] = pa
-
         account.save
       end
     end

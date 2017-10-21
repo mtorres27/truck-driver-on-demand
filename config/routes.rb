@@ -49,12 +49,13 @@ Rails.application.routes.draw do
 
     end
 
-    get "profile/banking", to: "banking#index"
+    get "profile/banking", to: "banking#index", as: "profile_stripe_banking"
+    post "stripe/connect", to: "banking#connect", as: "stripe_connect"
     get "profile/settings", to: "settings#index"
     post "jobs/:id", to: "jobs#apply"
     post "job/apply", to: "jobs#apply"
     get "jobs/:id/work_order/accept", to: "contracts#accept"
-    post "stripe_connect", to: "banking#connect"
+
 
     resources :notifications
 
