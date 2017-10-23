@@ -83,21 +83,26 @@
             = f.input :require_uniform
 
           .job-details
-            #attachments
+            #featured_projects
               .job-details__title 
                 | Addenda
               = f.simple_fields_for :attachments do |attachment_form|
                 = render "attachment_fields", f: attachment_form
-              .links
+              .links.add-new-addendum
                 = link_to_add_association 'Add Addendum', f, :attachments, class: "btn btn-default"
           
           .job-details
             .job-details__title
               | Freelancer Agreements
             
-            a.btn.contract-edit__btn href="#" target="_blank"
+            a.btn.contract-edit__btn href="/freelance-service-agreement?job=#{@job.id}#{random_append}" target="_blank"
               | Freelance Service Agreement
             br
+
+            p
+              | AV Junction provides a template freelance service agreement for you to use at your sole discretion.  This template agreement does not bind AV Junction Inc to this work order.  This work order is between you and the hired AV freelancer.  If you would like to opt out of using this template please check the box.
+              = f.input :opt_out_of_freelance_service_agreement, label: "Opt out of Freelance Service Agreement"
+
         
         .form-actions
           = f.hidden_field :send_contract, value: false
@@ -127,4 +132,36 @@ javascript:
   var saveDraft = function() {
     $("#job_send_contract").val(false);
     $(".edit_job").submit()
+  }
+
+  function uploadAddendum (index) {
+    if (index != undefined) {
+      var id = "#job_attachments_attributes_"+index+"_file";
+      var ref = $(id);
+    } else {
+      var ref = $(".add-new-addendum").prev('div').find(".nested_fields").find(".file-input--hidden");
+      
+    }
+
+    ref.on('change', function() {
+      var imgPath = $(this)[0].value;
+      var extn = imgPath.substring(imgPath.lastIndexOf('.') + 1).toLowerCase();
+      var image_holder = $(this).parent().parent().find(".freelancer-profile__image").find(".authorable_attachment--full").find("img");
+      if (extn == "gif" || extn == "png" || extn == "jpg" || extn == "jpeg") {
+        if (typeof (FileReader) != "undefined") {
+          var reader = new FileReader();
+          reader.onload = function (e) {
+            image_holder.attr('src', e.target.result)
+          }
+
+          reader.readAsDataURL($(this)[0].files[0]);
+        }
+      } else if (extn == "pdf") {
+        image_holder.attr('src', "/assets/certification/certification_placeholder.png")
+      } else {
+        alert("Only images can be selected.");
+      }
+    });
+
+    ref.click();
   }

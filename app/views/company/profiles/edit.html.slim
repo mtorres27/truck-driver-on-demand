@@ -107,7 +107,7 @@
         .company-profile__item
           .company-profile__title
             | Profile Header
-          .company-profile__image style="background-image: url(#{@company.profile_header_url})"
+          .company-profile__image--header
             = image_tag(@company.profile_header_url, id: "company-edit-profile__header")
             .freelancer-profile__image-upload onclick="updateHeaderImage()"
               span class="fa fa-camera" 
@@ -188,5 +188,25 @@ javascript:
     } else {
       var ref = $(".add-new-project").prev('div').find(".nested_fields").find(".file-input--hidden");
     }
+
+
+    ref.on('change', function() {
+      var imgPath = $(this)[0].value;
+      var extn = imgPath.substring(imgPath.lastIndexOf('.') + 1).toLowerCase();
+      var image_holder = $(this).parent().parent().find(".freelancer-profile__image").find(".authorable_attachment--full").find("img");
+      if (extn == "gif" || extn == "png" || extn == "jpg" || extn == "jpeg") {
+        if (typeof (FileReader) != "undefined") {
+          var reader = new FileReader();
+          reader.onload = function (e) {
+            image_holder.attr('src', e.target.result)
+          }
+
+          reader.readAsDataURL($(this)[0].files[0]);
+        }
+      } else {
+        alert("Only images can be selected.");
+      }
+    });
+
     ref.click();
   }

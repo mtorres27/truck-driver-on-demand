@@ -6,17 +6,19 @@
     width: 100%
     display: inline-block
 
-  &__image
+  &__image, &__image--header
     position: relative
     display: inline-block
     width: 100%
-    background-size: cover
-    background-position: center
-    background-repeat: no-repeat
 
     img
       width: 100%
-      height: auto
+      height: 100%
+      object-fit: cover
+  
+  &__image--header
+    width: 300px
+    height: 200px
 
   &__item
     margin-bottom: 20px

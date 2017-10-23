@@ -17,6 +17,6 @@
     .nested_fields-title
       | Certificate Name
 
-    = f.file_field :certificate, :accept => 'document/pdf', label: false, class: "file-input--hidden" 
+    = f.file_field :certificate, :accept => 'document/pdf,application/pdf,application/x-pdf', label: false, class: "file-input--hidden" 
     = f.input :name, as: :string, placeholder: "Enter the certificate's name", label: false
     = link_to_remove_association "X", f, { onClick: "hide_remove_association(this)"}

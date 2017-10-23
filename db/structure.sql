@@ -154,7 +154,8 @@ CREATE TABLE attachments (
     file_data character varying,
     job_id integer,
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+    updated_at timestamp without time zone NOT NULL,
+    title character varying
 );
 
 
@@ -336,7 +337,18 @@ CREATE TABLE companies (
     confirmation_token character varying,
     confirmed_at timestamp without time zone,
     confirmation_sent_at timestamp without time zone,
-    header_source character varying DEFAULT 'color'::character varying
+    header_source character varying DEFAULT 'color'::character varying,
+    stripe_customer_id character varying,
+    stripe_subscription_id character varying,
+    stripe_plan_id character varying,
+    subscription_cycle character varying,
+    is_subscription_cancelled boolean DEFAULT false,
+    subscription_status character varying,
+    billing_period_ends_at timestamp without time zone,
+    last_4_digits character varying,
+    card_brand character varying,
+    exp_month character varying,
+    exp_year character varying
 );
 
 
@@ -747,7 +759,8 @@ CREATE TABLE jobs (
     lat numeric(9,6),
     lng numeric(9,6),
     formatted_address character varying,
-    contract_sent boolean DEFAULT false
+    contract_sent boolean DEFAULT false,
+    opt_out_of_freelance_service_agreement boolean DEFAULT false
 );
 
 
@@ -1984,6 +1997,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20170908180901'),
 ('20170911175055'),
 ('20170911175108'),
+('20170919185701'),
 ('20170920173223'),
 ('20170921184950'),
 ('20170925141902'),
@@ -1993,7 +2007,10 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20170928151229'),
 ('20170928151921'),
 ('20170929133938'),
+('20171002193000'),
 ('20171003125747'),
-('20171011195102');
+('20171011195102'),
+('20171020113522'),
+('20171020123018');
 
 

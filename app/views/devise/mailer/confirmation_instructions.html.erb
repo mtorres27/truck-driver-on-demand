@@ -40,11 +40,11 @@
     <table id="bodyTable" bgcolor="#ffffff" style="width: 100%; height: 100%; background-color: #ffffff; margin: 0; padding:0;">
         <tr>
             <td style="text-align: center;" valign="top">
-                <table style="border-collapse:collapse;table-layout:fixed;width:640px;height:626px;margin:auto;" border="0" width="640" height="626">
+                <table style="border-collapse:collapse;table-layout:fixed;width:640px;height:783px;margin:auto;" border="0" width="640" height="783">
                 <tr>
-                    <td style="vertical-align:top;padding:0px;width:640px;height:626px;" colspan="1" rowspan="1">
-                        <div style="display:block;background-color:#F3F3F3;color:#f3f3f3;width:640px;height:626px;">
-                            <table style="border-collapse:collapse;table-layout:fixed;width:640px;height:626px;margin:auto;" border="0" width="640" height="626">
+                    <td style="vertical-align:top;padding:0px;width:640px;height:783px;" colspan="1" rowspan="1">
+                        <div style="display:block;background-color:#F3F3F3;color:#f3f3f3;width:640px;height:783px;">
+                            <table style="border-collapse:collapse;table-layout:fixed;width:640px;height:783px;margin:auto;" border="0" width="640" height="784">
                                 <colgroup>
                                     <col style="width:70px;"/><col style="width:63px;"/><col style="width:55px;"/><col style="width:27px;"/><col style="width:28px;"/><col style="width:31px;"/><col style="width:31px;"/><col style="width:31px;"/><col style="width:30px;"/><col style="width:31px;"/><col style="width:29px;"/><col style="width:8px;"/><col style="width:74px;"/><col style="width:62px;"/><col style="width:70px;"/>
                                 </colgroup>
@@ -80,10 +80,10 @@
                                     <td colspan="15" style="width:640px;height:25px">&shy;</td>
                                 </tr>
                                 <tr>
-                                    <td colspan="1" style="width:70px;height:287px">&shy;</td>
-                                    <td style="vertical-align:top;padding:0px;width:500px;height:287px;" colspan="13" rowspan="1">
-                                        <div style="display:block;background-color:#FFFFFF;color:#ffffff;width:500px;height:287px;">
-                                            <table style="border-collapse:collapse;table-layout:fixed;width:500px;height:287px;margin:auto;" border="0" width="500" height="287">
+                                    <td colspan="1" style="width:70px;height:444px">&shy;</td>
+                                    <td style="vertical-align:top;padding:0px;width:500px;height:444px;" colspan="13" rowspan="1">
+                                        <div style="display:block;background-color:#FFFFFF;color:#ffffff;width:500px;height:444px;">
+                                            <table style="border-collapse:collapse;table-layout:fixed;width:500px;height:444px;margin:auto;" border="0" width="500" height="444">
                                                 <colgroup>
                                                     <col style="width:33px;"/><col style="width:133px;"/><col style="width:168px;"/><col style="width:134px;"/><col style="width:32px;"/>
                                                 </colgroup>
@@ -106,7 +106,7 @@ First you’ll need to confirm your account by clicking the button below.</span>
                                                 <tr>
                                                     <td colspan="2" style="width:166px;height:40px">&shy;</td>
                                                     <td style="vertical-align:top;padding:0px;width:168px;height:40px;" colspan="1" rowspan="1">
-                                                        <a href=<%=confirmation_url(@resource, confirmation_token: @token) %> style="text-decoration:none;">
+                                                        <a href="<%=confirmation_url(@resource, confirmation_token: @token) %>" style="text-decoration:none;">
                                                         <div style="display:block;background-color:#3DAADF;border-radius:3px;color:#3caadf;width:168px;height:40px;">
                                                             <table style="border-collapse:collapse;table-layout:fixed;width:168px;height:40px;margin:auto;" border="0" width="168" height="40">
                                                                 <colgroup>
@@ -136,10 +136,22 @@ First you’ll need to confirm your account by clicking the button below.</span>
                                                 <tr>
                                                     <td colspan="5" style="width:500px;height:47px">&shy;</td>
                                                 </tr>
+                                                <tr>
+                                                    <td colspan="1" style="width:33px;height:110px">&shy;</td>
+                                                    <td style="vertical-align:top;padding:0px;width:435px;height:110px;" colspan="3" rowspan="1">
+                                                        <div style="display:block;font-family:ArialMT;font-size:16px;color:#333333;letter-spacing:0;line-height:22px;text-align:left;width:435px;height:110px;">
+                                                            <span style="font-family:'Arial';font-size:16px;color:#333333;">If the link above doesn't work, you can go to this url: <a href="<%=confirmation_url(@resource, confirmation_token: @token) %>"><%=confirmation_url(@resource, confirmation_token: @token) %></a> to confirm your account.</span>
+                                                        </div>
+                                                    </td>
+                                                    <td colspan="1" style="width:32px;height:110px">&shy;</td>
+                                                </tr>
+                                                <tr>
+                                                    <td colspan="5" style="width:500px;height:47px">&shy;</td>
+                                                </tr>
                                             </table>
                                         </div>
                                     </td>
-                                    <td colspan="1" style="width:70px;height:287px">&shy;</td>
+                                    <td colspan="1" style="width:70px;height:444px">&shy;</td>
                                 </tr>
                                 <tr>
                                     <td colspan="15" style="width:640px;height:38px">&shy;</td>
