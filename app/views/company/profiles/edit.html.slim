@@ -61,6 +61,10 @@
         .company-profile__item
           .company-profile__title
             | Company Markets
+          - if @company.errors.full_messages.include?("Keywords can't be blank")
+            .has-error
+              .help-block
+                | One market must be selected.
           .company-profile__checkboxes
             - I18n.t('enumerize.freelancer_keywords').each do |index, value|
               - tag_name = "company[keywords][#{index.to_s}]"
@@ -75,6 +79,10 @@
         .company-profile__item
           .company-profile__title
             | Company Skills
+          - if @company.errors.full_messages.include?("Skills can't be blank")
+            .has-error
+              .help-block
+                | One market must be selected.
           .company-profile__checkboxes
             - I18n.t('enumerize.freelancer_skills').each do |index, value|
               - tag_name = "company[skills][#{index.to_s}]"
