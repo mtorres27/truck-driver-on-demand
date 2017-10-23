@@ -6,6 +6,7 @@
     
     .result-content
       = simple_form_for(@company, url: company_profile_path) do |f|
+        = f.hidden_field :enforce_profile_edit, value: true
         .company-profile__item
           .company-profile__title
             | Company Name

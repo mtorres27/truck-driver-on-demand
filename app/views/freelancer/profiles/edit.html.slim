@@ -8,6 +8,7 @@
     
     .result-content
       = simple_form_for(@freelancer, url: freelancer_profile_path) do |f|
+        = f.hidden_field :enforce_profile_edit, value: true
 
         .freelancer-profile__item
           .freelancer-profile__title
