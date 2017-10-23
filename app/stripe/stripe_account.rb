@@ -1,29 +1,32 @@
 class StripeAccount < Struct.new( :freelancer )
-  ALLOWED = [ 'US', 'CA', 'FR' ]
   COUNTRIES = [
-    { name: 'Austria', code: 'AT', bank: ['IBAN']},
     { name: 'Australia', code: 'AU', bank: ['BSB','Account Number']},
+    { name: 'Austria', code: 'AT', bank: ['IBAN']},
     { name: 'Belgium', code: 'BE', bank: ['IBAN']},
+    { name: 'Belgium', code: 'BR', bank: ['Bank Code','Branch Code','Account Number']},
     { name: 'Canada', code: 'CA', bank: ['Transit Number','Institution Number', 'Account Number']},
-    { name: 'Switzerland', code: 'CH', bank: ['IBAN'] },
-    { name: 'Germany', code: 'DE', bank: ['IBAN'] },
     { name: 'Denmark', code: 'DK', bank: ['IBAN'] },
-    { name: 'Spain', code: 'ES', bank: ['IBAN'] },
     { name: 'Finland', code: 'FI', bank: ['IBAN']},
     { name: 'France', code: 'FR', bank: ['IBAN'] },
+    { name: 'Germany', code: 'DE', bank: ['IBAN'] },
+    { name: 'Gibraltar', code: 'GI', bank: ['IBAN'] },
     { name: 'Hong Kong', code: 'HK', bank: ['Clearing Code','Branch Code', 'Account Number'] },
+    { name: 'Ireland', code: 'IE', bank: ['IBAN'] },
     { name: 'Italy', code: 'IT', bank: ['IBAN'] },
     { name: 'Japan', code: 'JP', bank: ['Bank Name','Branch Name', 'Bank Code', 'Branch Code', 'Account Number', 'Account Owner Name'] },
     { name: 'Luxembourg', code: 'LU', bank: ['IBAN'] },
+    { name: 'Mexico', code: 'MX', bank: ['CLABE'] },
     { name: 'Netherlands', code: 'NL', bank: ['IBAN'] },
-    { name: 'Norway', code: 'NO', bank: ['IBAN'] },
     { name: 'New Zealand', code: 'NZ', bank: ['Routing Number','Account Number'] },
+    { name: 'Norway', code: 'NO', bank: ['IBAN'] },
     { name: 'Portugal', code: 'PT', bank: ['IBAN'] },
-    { name: 'Sweden', code: 'SE', bank: ['IBAN']},
     { name: 'Singapore', code: 'SG', bank: ['Bank Code','Branch Code','Account Number'] },
+    { name: 'Spain', code: 'ES', bank: ['IBAN'] },
+    { name: 'Sweden', code: 'SE', bank: ['IBAN']},
+    { name: 'Switzerland', code: 'CH', bank: ['IBAN'] },
     { name: 'United Kingdom', code: 'GB', bank: ['Sort Code','Account Number'] },
     { name: 'United States', code: 'US', bank: ['Routing Number','Account Number'] },
-    { name: 'Ireland', code: 'IE', bank: ['IBAN'] }
+
   ]
 
   def create_account!( type, country, tos_accepted, ip )
