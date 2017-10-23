@@ -1,34 +1,34 @@
 class StripeAccount < Struct.new( :freelancer )
   ALLOWED = [ 'US', 'CA', 'FR' ]
   COUNTRIES = [
-    { name: 'Austria', code: 'AT' },
-    { name: 'Australia', code: 'AU' },
-    { name: 'Belgium', code: 'BE' },
-    { name: 'Canada', code: 'CA' },
-    { name: 'Switzerland', code: 'CH' },
-    { name: 'Germany', code: 'DE' },
-    { name: 'Denmark', code: 'DK' },
-    { name: 'Spain', code: 'ES' },
-    { name: 'Finland', code: 'FI' },
-    { name: 'France', code: 'FR' },
-    { name: 'Hong Kong', code: 'HK' },
-    { name: 'Italy', code: 'IT' },
-    { name: 'Japan', code: 'JP' },
-    { name: 'Luxembourg', code: 'LU' },
-    { name: 'Netherlands', code: 'NL' },
-    { name: 'Norway', code: 'NO' },
-    { name: 'New Zealand', code: 'NZ' },
-    { name: 'Portugal', code: 'PT' },
-    { name: 'Sweden', code: 'SE' },
-    { name: 'Singapore', code: 'SG' },
-    { name: 'United Kingdom', code: 'GB' },
-    { name: 'United States', code: 'US' },
-    { name: 'Ireland', code: 'IE' }
+    { name: 'Austria', code: 'AT', bank: ['IBAN']},
+    { name: 'Australia', code: 'AU', bank: ['BSB','Account Number']},
+    { name: 'Belgium', code: 'BE', bank: ['IBAN']},
+    { name: 'Canada', code: 'CA', bank: ['Transit Number','Institution Number', 'Account Number']},
+    { name: 'Switzerland', code: 'CH', bank: ['IBAN'] },
+    { name: 'Germany', code: 'DE', bank: ['IBAN'] },
+    { name: 'Denmark', code: 'DK', bank: ['IBAN'] },
+    { name: 'Spain', code: 'ES', bank: ['IBAN'] },
+    { name: 'Finland', code: 'FI', bank: ['IBAN']},
+    { name: 'France', code: 'FR', bank: ['IBAN'] },
+    { name: 'Hong Kong', code: 'HK', bank: ['Clearing Code','Branch Code', 'Account Number'] },
+    { name: 'Italy', code: 'IT', bank: ['IBAN'] },
+    { name: 'Japan', code: 'JP', bank: ['Bank Name','Branch Name', 'Bank Code', 'Branch Code', 'Account Number', 'Account Owner Name'] },
+    { name: 'Luxembourg', code: 'LU', bank: ['IBAN'] },
+    { name: 'Netherlands', code: 'NL', bank: ['IBAN'] },
+    { name: 'Norway', code: 'NO', bank: ['IBAN'] },
+    { name: 'New Zealand', code: 'NZ', bank: ['Routing Number','Account Number'] },
+    { name: 'Portugal', code: 'PT', bank: ['IBAN'] },
+    { name: 'Sweden', code: 'SE', bank: ['IBAN']},
+    { name: 'Singapore', code: 'SG', bank: ['Bank Code','Branch Code','Account Number'] },
+    { name: 'United Kingdom', code: 'GB', bank: ['Sort Code','Account Number'] },
+    { name: 'United States', code: 'US', bank: ['Routing Number','Account Number'] },
+    { name: 'Ireland', code: 'IE', bank: ['IBAN'] }
   ]
 
   def create_account!( type, country, tos_accepted, ip )
     return nil unless tos_accepted
-    return nil unless country.upcase.in?( COUNTRIES.map { |c| c[:code] } )
+    return nil unless country.upcase.in?(COUNTRIES.map { |c| c[:code] })
 
     begin
       @account = Stripe::Account.create(
@@ -86,8 +86,8 @@ class StripeAccount < Struct.new( :freelancer )
     )
   end
 
-  def needs?( field )
-    freelancer.stripe_account_status['fields_needed'].grep( Regexp.new( /#{field}/i ) ).any?
+  def needs?(field)
+    freelancer.stripe_account_status['fields_needed'].grep(Regexp.new(/#{field}/i)).any?
   end
 
   def account_status
@@ -106,4 +106,6 @@ class StripeAccount < Struct.new( :freelancer )
   def legal_entity
     account.legal_entity
   end
+
+
 end

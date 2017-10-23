@@ -6,7 +6,7 @@
       .result-header__text
         | Banking Information
     p
-    = form_tag '/freelancer/stripe/connect', :id => 'account_form', :class => 'account_form', method: 'POST' do
+    = form_tag '/freelancer/stripe/connect', :id => 'account_form', :class => 'account_form', :enctype=>"multipart/form-data", method: 'POST' do
       .field class="field_account_type"
         |Type:
         select#account_type  name="account[type]"
@@ -21,7 +21,7 @@
         - @country_spec.verification_fields.individual.additional.each do |field|
           .field class="field_#{URI.parse(field).path.split('.')[-1]}"
             =pretty_name(field)
-            input type="text" name="account[individual][#{field.gsub('.','][')}]" id="account_individual_#{field}"
+            input type="#{field['document']?"file":"text"}" name="account[individual][#{field.gsub('.','][')}]" id="account_individual_#{field}"
       / Company fields
       .account_fields#company_fields style="display:none"
         - @country_spec.verification_fields.company.minimum.select{|field| field["legal_entity"] && !field["type"] }.each do |field|
@@ -31,7 +31,7 @@
         - @country_spec.verification_fields.company.additional.each do |field|
           .field class="field_#{URI.parse(field).path.split('.')[-1]}"
             =pretty_name(field)
-            input type="text" name="account[company][#{field.gsub('.','][')}]" id="account_company_#{field}"
+            input type="#{field['document']?"file":"text"}" name="account[company][#{field.gsub('.','][')}]" id="account_company_#{field}"
       .consent
         label.tos
           input type="checkbox" name="tos" checked=false

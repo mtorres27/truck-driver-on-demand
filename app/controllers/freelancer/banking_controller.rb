@@ -46,20 +46,37 @@ class Freelancer::BankingController < Freelancer::BaseController
   def prepare_info(account, params)
     if params[:legal_entity]
       params[:legal_entity].each do |key, value|
-        if [ :address, :dob, :personal_address ].include? key.to_sym
+        if [ :address, :dob, :personal_address, :verification ].include? key.to_sym
           value.each do |akey, avalue|
             next if avalue.blank?
-            # Rails.logger.error "1-#{key}-#{akey} - #{avalue.inspect}"
-            account.legal_entity[key] ||= {}
-            account.legal_entity[key][akey] = avalue
+            if akey['document']
+              filename = Digest::SHA1.hexdigest(Time.now.to_s)
+              File.open(Rails.root.join('public', 'uploads/stripe', filename), 'wb') do |file|
+                file.write(avalue.read)
+              end
+              stripe_upload = stripe_upload(@new_name)
+              account.legal_entity[key] ||= {}
+              account.legal_entity[key][akey] = stripe_upload.id
+            else
+              account.legal_entity[key] ||= {}
+              account.legal_entity[key][akey] = avalue
+            end
           end
         else
           next if value.blank? || key == 'verification'
-          # Rails.logger.error "2-#{key} - #{value.inspect}"
           account.legal_entity[key] = value
         end
       end
       account.save
     end
   end
+
+  def stripe_upload(filename)
+    Stripe::FileUpload.create(
+      purpose: 'identity_document',
+      file: File.new(Rails.root.join('public', 'uploads/stripe', filename))
+    )
+  end
+
+
 end
