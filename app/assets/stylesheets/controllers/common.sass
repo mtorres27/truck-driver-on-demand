@@ -1,5 +1,6 @@
 .common__h2-modal
   line-height: 32px
+  width: 100%
 
 .common__field-label
   margin-bottom: 0px
@@ -34,6 +35,8 @@
     width: 30%
   &.attachment
     position: relative
+  &.width-50
+    width: 48%
 
 .common__text-area-group
   width: 100%
@@ -74,8 +77,6 @@
   -ms-flex: 0 0 auto
   flex: 0 0 auto
   background-color: #3daadf
-  @media (max-width: $breakpoint-tablet)
-    display: none 
 
 .common__select-field
   background-image: -webkit-linear-gradient(270deg, #fff, #fff)
@@ -83,6 +84,9 @@
 
 .common__icon-attach 
   font-family: $icon-font
+
+  &--active
+    color: $brand-primary
 
 
 .common__text-field--attach-file 
@@ -95,6 +99,9 @@
   padding: 16px
   float: none
   z-index: 100
+  color: $black-color
+  a, a:hover, a:visited
+    color: $black-color
 
 
 /* Tabs*/
