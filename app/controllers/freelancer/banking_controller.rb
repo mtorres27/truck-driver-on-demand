@@ -78,5 +78,9 @@ class Freelancer::BankingController < Freelancer::BaseController
     )
   end
 
-
+  def bank_account
+    @connector = StripeAccount.new(current_freelancer)
+    # logger.debug current_freelancer.inspect
+    # logger.debug @connector.country.inspect
+  end
 end

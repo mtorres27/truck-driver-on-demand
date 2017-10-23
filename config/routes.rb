@@ -50,7 +50,9 @@ Rails.application.routes.draw do
     end
 
     get "profile/banking", to: "banking#index", as: "profile_stripe_banking"
+    get "profile/bank_account", to: "banking#bank_account", as: "profile_stripe_bank_account"
     post "stripe/connect", to: "banking#connect", as: "stripe_connect"
+    post "stripe/bank", to: "banking#bank_submit", as: "stripe_bank"
     get "profile/settings", to: "settings#index"
     post "jobs/:id", to: "jobs#apply"
     post "job/apply", to: "jobs#apply"

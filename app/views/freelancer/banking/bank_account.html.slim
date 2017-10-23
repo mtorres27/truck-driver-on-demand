@@ -1,0 +1,19 @@
+= render partial: "/freelancer/shared/profile_sub_nav"
+
+- content_for :secondary do
+  .result-wrapper
+    .result-header
+      .result-header__text
+        | Bank Account Information
+    p
+    = form_tag '/freelancer/stripe/bank', :id => 'bank_form', :class => 'bank_form', method: 'POST' do
+      .bank_fields
+        - @connector.country[:bank].each do |field|
+          .field class="field_#{field.downcase.tr(' ', '_')}"
+            =pretty_name(field)
+            input type="text" name="bank[#{field.downcase.tr(' ', '_')}]" id="bank_#{field.downcase.tr(' ', '_')}"
+
+      .submit
+        = button_tag(id: 'submit_btn',type: 'submit', class: 'btn btn-primary') do
+          span.glyphicon.glyphicon-floppy-disk>
+          | Submit

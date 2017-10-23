@@ -107,5 +107,7 @@ class StripeAccount < Struct.new( :freelancer )
     account.legal_entity
   end
 
-
+  def country
+    COUNTRIES.find{|hash| hash[:code] == freelancer.country.upcase }
+  end
 end
