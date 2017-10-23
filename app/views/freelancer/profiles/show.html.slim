@@ -2,8 +2,10 @@
 
 .action-bar__container
   .action-bar
-    a.btn.btn-primary href=edit_freelancer_profile_path
+    a.btn-primary--active.no-margin href=edit_freelancer_profile_path
       | Edit Profile
+    a.btn-primary--active.no-margin href="mailto:info@avjunction.com?subject=I would like my account to be verified" target="_blank"
+      | Get verified
 .fprofile__container
   - if @freelancer.profile_header_url.include?("missing") or @freelancer.header_source == "color"
     .fprofile__wallpaper style="background-color: #{ @freelancer.header_color.include?("#") ? "" : "#"}#{@freelancer.header_color}"

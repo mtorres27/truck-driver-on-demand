@@ -28,8 +28,8 @@
         p= "#{freelancer.area}, #{distance_from(freelancer)} miles away"
     p.media-tagline
       = freelancer.tagline
-    .freelancer-keywords
+    div
       - if !freelancer.keywords.nil? and freelancer.keywords.kind_of?(Hash)
         - freelancer.keywords.first(4).each do |index, value|
-          .freelancer-keyword
+          .common__tag.grey
             = I18n.t("enumerize.freelancer_keywords.#{index}")

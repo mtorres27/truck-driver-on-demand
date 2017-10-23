@@ -72,14 +72,14 @@
           - else 
             = t("enumerize.job.freelancer_type.#{@job.freelancer_type}")
       
-    .freelancer-job__summary-cont
-      h3.freelancer-job__h3 Freelance Service Agreement
-      p
-        - if @job.opt_out_of_freelance_service_agreement
-          | This project has opted out of the freelance service agreement"
-        - else
-          a href="/freelance-service-agreement?job=#{@job.id}#{random_append}" target="_blank"
-            | Click here to view the Freelance Service Agreement for this project.
+      .freelancer-job__summary-cont
+        h3.freelancer-job__h3 Freelance Service Agreement
+        p
+          - if @job.opt_out_of_freelance_service_agreement
+            | This project has opted out of the freelance service agreement"
+          - else
+            a href="/freelance-service-agreement?job=#{@job.id}#{random_append}" target="_blank"
+              | Click here to view the Freelance Service Agreement for this project.
   - if @have_applied == false
     .freelancer-job__apply
       a.btn-primary--active href="#" id="apply-for-job"
@@ -135,8 +135,8 @@
         = f.text_area :body, as: :string, placeholder: "Enter your message", label: false, maxlength: 5000, class: "w-input"
 
       .freelancer-job__apply-modal__buttons
-        = f.button :submit, prompt: "Submit Quote", value: "Submit Quote", data: { disable_with: "Submitting..." }, class: "btn btn-primary"
-        .btn.btn-secondary id="close-modal-2"
+        = f.button :submit, prompt: "Submit Quote", value: "Submit Quote", data: { disable_with: "Submitting..." }, class: "btn-primary--active"
+        .btn-ghost--active.margin-8px id="close-modal-2"
           | cancel
 
 javascript:

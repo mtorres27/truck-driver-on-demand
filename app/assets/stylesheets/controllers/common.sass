@@ -161,12 +161,17 @@
   text-transform: uppercase
   &:hover
     background-color: #208cc0
+    color: #fff
+  &:visited
+    color: #fff
   &.no-margin
     margin-right: 0px
     margin-left: 0px
     font-size: 12px
+    float: none
   &.width-100
     width: 100%
+    float: none
     -webkit-box-flex: 0
     -webkit-flex: 0 auto
     -ms-flex: 0 auto
@@ -177,3 +182,22 @@
       &:hover
         border-color: #8f1b11
         background-color: #8f1b11
+
+.btn-ghost--active
+  display: inline-block
+  padding: 8px
+  border: 1px solid #3daadf
+  border-radius: 4px
+  background-color: transparent
+  color: #333
+  font-size: 12px
+  font-weight: 600
+  text-decoration: none
+  text-transform: uppercase
+  &.margin-8px
+    margin-left: 8px
+    margin-right: 8px
+  &:hover
+    color: #3daadf
+  &:visited
+    color: #333
