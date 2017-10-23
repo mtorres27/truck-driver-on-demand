@@ -71,6 +71,22 @@ class Freelancer < ApplicationRecord
   validates_acceptance_of :accept_privacy_policy
   validates_acceptance_of :accept_code_of_conduct
 
+  attr_accessor :enforce_profile_edit
+  
+    validates_presence_of :name, 
+      :email, 
+      :address, 
+      :area, 
+      :country, 
+      :freelancer_type, 
+      :country, 
+      :bio, 
+      :years_of_experience, 
+      :keywords, 
+      :skills, 
+      :pay_unit_time_preference, 
+      if: :enforce_profile_edit
+
   after_create :add_to_hubspot
 
   def add_to_hubspot
