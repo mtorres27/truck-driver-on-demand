@@ -3,7 +3,7 @@
   - if @have_applied
     = render partial: "/freelancer/shared/job_shared_nav", locals: { job: @job }
 .section__body-content
-  .container
+  .container__fixed-footer
     - if @have_applied
       h3.freelancer-job__h3 Work Order
       .freelancer-job__work-order-cont.w-clearfix
