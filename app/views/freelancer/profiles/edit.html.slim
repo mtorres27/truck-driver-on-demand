@@ -58,8 +58,8 @@
 
         .freelancer-profile__item
           .freelancer-profile__title
-            | Area
-          = f.input :area, as: :string, required: true, label: false, placeholder: "Area"        
+            | City
+          = f.input :area, as: :string, required: true, label: false, placeholder: "City"        
 
         .freelancer-profile__item
           .freelancer-profile__title
@@ -160,10 +160,9 @@
         p style="height: 20px;"
 
         .form-actions
-          a.btn.btn-secondary href=freelancer_profile_path
+          = f.button :submit, class: "btn-primary--active", label: "Update Profile"
+          a.btn-ghost--active.margin-8px href=freelancer_profile_path
             | Cancel
-          = " "
-          = f.button :submit, class: "btn btn-primary", label: "Update Profile"
 
 javascript:
   var updateHeaderImage = function() {

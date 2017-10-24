@@ -1,4 +1,4 @@
-h1 My Techs
+h1 My Freelancers
 br
 
 .tab-bar
@@ -19,7 +19,7 @@ br
 
     .result-freelancers
       - @freelancers.each do |freelancer|
-        a.result-row href=company_freelancer_path(freelancer)
+        a href=company_freelancer_path(freelancer)
           = render partial: "company/shared/freelancer_info", locals: { freelancer: freelancer }
 
       = paginate @freelancers
