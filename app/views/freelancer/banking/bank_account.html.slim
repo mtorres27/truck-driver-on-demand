@@ -10,10 +10,14 @@
     p
     = form_tag '/freelancer/stripe/bank', :id => 'bank_form', :class => 'bank_form', method: 'POST' do
       .bank_fields
-        - @connector.country[:bank].each do |field|
-          .field class="field_#{field.downcase.tr(' ', '_')}"
-            =pretty_name(field)
-            input type="text" name="bank[account][#{field.downcase.tr(' ', '_')}]" id="bank_account_#{field.downcase.tr(' ', '_')}"
+        .field class="field_routing_number"
+          | Routing Number
+          input type="text" name="bank[account][routing_number]" id="bank_account_routing_number"
+          span.optional
+            | Optional
+        .field class="field_routing_number"
+          | Bank Account / IBAN
+          input type="text" name="bank[account][bank_account]" id="bank_account_bank_account"
         .field.field_holder_name
           | Account Holder Name
           input type="text" name="bank[holder_name]" id="bank_holder_name" value="#{current_freelancer.name}"
@@ -41,48 +45,44 @@ javascript:
     var stripe = Stripe('#{Rails.configuration.stripe[:publishable_key]}');
     $('form#bank_form').on('submit', function(e){
       e.preventDefault();
+      $('.error').remove();
       $('#submit_btn').attr('disabled', 'disabled');
+      var routing_number = $('#bank_account_routing_number').val();
+      var bank_account = $('#bank_account_bank_account').val();
       var holder_name = $('#bank_holder_name').val();
       var holder_type = $('#bank_holder_type').val();
       var holder_curreny = $('#bank_currency').val();
       var account_number, routing_number;
-      switch ($("input[id^='bank_account_']").length){
-        case 3:
-          account_number = $("input[id^='bank_account_']")[2].value;
-          routing_number = $("input[id^='bank_account_']")[0].value + $("input[id^='bank_account_']")[1].value;
-          break;
-        case 2:
-          account_number = $("input[id^='bank_account_']")[1].value;
-          routing_number = $("input[id^='bank_account_']")[0].value;
-          break;
-        case 1:
-          account_number = $("input[id^='bank_account_']")[0].value;
-          routing_number = '';
-          break;
-        // default
-
-      }
       // call stripe
-      stripe.createToken('bank_account', {
-        country: '#{current_freelancer.country.upcase}',
-        currency: holder_curreny,
-        routing_number: routing_number,
-        account_number: account_number,
-        account_holder_name: holder_name,
-        account_holder_type: holder_type,
-      }).then(function(result) {
-        // Handle result.error or result.token
-        if (result.error){
-          $('#error').show();
-          $('#error').html(result.error.message);
-          $('#submit_btn').removeAttr('disabled');
-        }
-        else{
-          $('#bank_btok').val(result.token.id);
-          $('#bank_acc_id').val(result.token.bank_account.id);
-          $('form#bank_form').off('submit').submit();
-        }
-      });
+      if (routing_number == "" ){
+        $('#bank_account_routing_number').parent().append("<span class='error'>Don't leave it empty</span>");
+        $('#submit_btn').removeAttr('disabled');
+      }
+      else if (bank_account == ""){
+        $('#bank_account_bank_account').parent().append("<span class='error'>Don't leave it empty</span>");
+        $('#submit_btn').removeAttr('disabled');
+      }
+      else{
+        stripe.createToken('bank_account', {
+          country: '#{current_freelancer.country.upcase}',
+          currency: holder_curreny,
+          routing_number: routing_number,
+          account_number: bank_account,
+          account_holder_name: holder_name,
+          account_holder_type: holder_type,
+        }).then(function(result) {
+          // Handle result.error or result.token
+          if (result.error){
+            $('#error').show();
+            $('#error').html(result.error.message);
+            $('#submit_btn').removeAttr('disabled');
+          }
+          else{
+            $('#bank_btok').val(result.token.id);
+            $('#bank_acc_id').val(result.token.bank_account.id);
+            $('form#bank_form').off('submit').submit();
+          }
+        });
+      }
     });
-
   });

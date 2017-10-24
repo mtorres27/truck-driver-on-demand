@@ -17,10 +17,10 @@
         - @country_spec.verification_fields.individual.minimum.select{|field| field["legal_entity"] && !field["type"] }.each do |field|
           .field class="field_#{URI.parse(field).path.split('.')[-1]}"
             =pretty_name(field)
-            input type="text" name="account[individual][#{field.gsub('.','][')}]" id="account_individual_#{field}"
+            input type="text" name="account[individual][#{field.gsub('.','][')}]" id="account_individual_#{field}" value="#{(@post_data && @post_data.any?) ? @post_data[field] : ''}"
         - @country_spec.verification_fields.individual.additional.each do |field|
           .field class="field_#{URI.parse(field).path.split('.')[-1]}"
-            =pretty_name(field)
+            = pretty_name(field)
             input type="#{field['document']?"file":"text"}" name="account[individual][#{field.gsub('.','][')}]" id="account_individual_#{field}"
       / Company fields
       .account_fields#company_fields style="display:none"
@@ -51,5 +51,9 @@ javascript:
       $('.account_fields').hide();
       $('#'+this.value+'_fields').show();
     });
+    $('#account_form').on('submit', function(e){
+      // validate
+      $('#submit_btn').attr('disabled', 'disabled');
+    })
 
   });
