@@ -94,7 +94,7 @@ class StripeAccount < Struct.new( :freelancer )
 
   def add_bank_account(token)
     account = Stripe::Account.retrieve(freelancer.stripe_account_id)
-    account.external_accounts.create({external_account: token})
+    account.external_accounts.create(external_account: token)
   end
 
   def needs?(field)

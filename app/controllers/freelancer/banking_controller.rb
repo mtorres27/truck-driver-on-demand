@@ -1,36 +1,38 @@
 class Freelancer::BankingController < Freelancer::BaseController
   DOC_TYPES = ['image/jpeg', 'image/jpg', 'image/png', 'application/pdf']
   def index
-    # current_freelancer.stripe_account_id = nil
-    # current_freelancer.stripe_account_status = nil
-    # current_freelancer.currency = nil
-    # current_freelancer.save
     @connector = StripeAccount.new(current_freelancer)
     logger.debug @connector.account
   end
 
   def identity
     @country_spec = Stripe::CountrySpec.retrieve(current_freelancer.country)
-    # logger.debug @country_spec
-    logger.debug current_freelancer.stripe_account_status.inspect
+    @post_data = flash[:data]
+    flash[:data] = nil
+    logger.debug @post_data.inspect
   end
 
   def connect
     logger.debug current_freelancer.inspect
-    flash[:error] = 'Please Accept the terms' unless params.has_key?(:tos)
-
+    @post_data ||= {}
     type = params[:account][:type]
     if flash[:error].nil? || flash[:error].empty?
       params[:account][type][:legal_entity].each do |key, value|
-        if [ :address, :dob, :personal_address ].include? key.to_sym
+        if [ :address, :dob, :personal_address, :verification ].include? key.to_sym
           value.each do |akey, avalue|
-            flash[:error] = 'Please fill all the fields' if avalue.nil? || avalue.empty?
+            flash[:error] = 'Please fill all the fields' if avalue.nil? || (!akey['document'] && avalue.empty?)
+            @post_data['legal_entity.'+key+'.'+akey] ||= {}
+            @post_data['legal_entity.'+key+'.'+akey] = avalue unless akey['document']
           end
         else
           flash[:error] = 'Please fill all the fields' if value.nil? || value.empty?
+          @post_data['legal_entity.'+key] ||= {}
+          @post_data['legal_entity.'+key] = value unless key['document']
         end
       end
     end
+
+    flash[:error] = 'Please Accept the terms' unless params.has_key?(:tos)
 
     if flash[:error].nil? || flash[:error].empty?
       connector = StripeAccount.new(current_freelancer)
@@ -49,8 +51,9 @@ class Freelancer::BankingController < Freelancer::BaseController
         flash[:error] = 'Unable to create Stripe account!'
       end
     end
+    logger.debug @post_data.inspect
     redirect_to freelancer_profile_stripe_banking_info_path if flash[:error].nil?
-    redirect_to freelancer_profile_stripe_banking_path unless flash[:error].nil?
+    redirect_to freelancer_profile_stripe_banking_path, flash: {data: @post_data} unless flash[:error].nil?
   end
 
   def prepare_info(account, params)
@@ -95,7 +98,6 @@ class Freelancer::BankingController < Freelancer::BaseController
       purpose: 'identity_document',
       file: File.new(Rails.root.join('public', 'uploads/stripe', filename))
     )
-
   end
 
   def bank_account
