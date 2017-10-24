@@ -132,14 +132,43 @@
         a.common__text-field--attach-file.w-inline-block id="attach_indicator" onClick="triggerFileUpload()"
           .common__icon-attach 
         = f.file_field :attachment, as: :file, id: "message_attachment", label: false, :accept => 'document/pdf,application/pdf,application/x-pdf,image/png,image/jpg,image/jpeg,image/gif',  class: "file-input--hidden" 
-        = f.text_area :body, as: :string, placeholder: "Enter your message", label: false, maxlength: 5000, class: "w-input"
+        = f.text_area :message, as: :string, placeholder: "Enter your message", label: false, maxlength: 5000, class: "w-input"
 
       .freelancer-job__apply-modal__buttons
-        = f.button :submit, prompt: "Submit Quote", value: "Submit Quote", data: { disable_with: "Submitting..." }, class: "btn btn-primary"
+        .freelancer-job__apply-modal__errors
+        = f.button :submit, prompt: "Submit Quote", value: "Submit Quote", data: { disable_with: "Submitting..." }, class: "btn btn-primary", onClick: "return validateQuote()"
         .btn.btn-secondary id="close-modal-2"
           | cancel
 
 javascript:
+
+  var validateQuote = function( ){
+    $(".freelancer-job__apply-modal__errors").html("");
+    var fixed = $("#freelancer_job_apply_path_pay_type_fixed").is(":checked");
+    var hourly = $("#freelancer_job_apply_path_pay_type_hourly").is(":checked");
+    var daily = $("#freelancer_job_apply_path_pay_type_daily").is(":checked");
+    var safe = true;
+    if (fixed && $("#freelancer_job_apply_path_amount").val() == "") {
+      safe = false;
+    } else if (hourly && ($("#freelancer_job_apply_path_number_of_hours").val() == "" || $("#freelancer_job_apply_path_hourly_rate").val() == "")) {
+      safe = false;
+    } else if (daily && ($("#freelancer_job_apply_path_number_of_days").val() == "" || $("#freelancer_job_apply_path_daily_rate").val() == "")) {
+      safe = false;
+    }
+
+    if ($("#freelancer_job_apply_path_message").val() == "") {  
+      safe = false;
+    }
+
+
+    if (!safe) {
+      $(".freelancer-job__apply-modal__errors").append("Unable to submit quote: please fill out amount and a message.");
+    }
+
+    return safe;
+  }
+
+
   var triggerFileUpload = function () {
     $("#message_attachment").click();
   };
@@ -162,20 +191,31 @@ javascript:
     e.preventDefault();
     $(".freelancer-job__apply-modal").hide();
   });
+
+  var clearAllQuoteValues = function () {
+    $("#freelancer_job_apply_path_amount").val("");
+    $("#freelancer_job_apply_path_number_of_hours").val("");
+    $("#freelancer_job_apply_path_number_of_days").val("");
+    $("#freelancer_job_apply_path_hourly_rate").val("");
+    $("#freelancer_job_apply_path_daily_rate").val("");
+  }
       
   $("#freelancer_job_apply_path_pay_type_hourly").on('click', function() {
+    clearAllQuoteValues();
     $(".freelancer-job__apply-modal__content-amount--fixed").hide();
     $(".freelancer-job__apply-modal__content-amount--hourly").show();
     $(".freelancer-job__apply-modal__content-amount--daily").hide();
   });
 
   $("#freelancer_job_apply_path_pay_type_daily").on('click', function() {
+    clearAllQuoteValues();
     $(".freelancer-job__apply-modal__content-amount--fixed").hide();
     $(".freelancer-job__apply-modal__content-amount--hourly").hide();
     $(".freelancer-job__apply-modal__content-amount--daily").show();
   });
 
   $("#freelancer_job_apply_path_pay_type_fixed").on('click', function() {
+    clearAllQuoteValues();
     $(".freelancer-job__apply-modal__content-amount--fixed").show();
     $(".freelancer-job__apply-modal__content-amount--hourly").hide();
     $(".freelancer-job__apply-modal__content-amount--daily").hide();
