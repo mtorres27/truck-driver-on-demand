@@ -23,7 +23,10 @@
             = radio_button_tag :user_type, "company"
           = label :user_type, "company"
       .register__label
-        | Company Name
+        - if resource.class.name.downcase == "company"
+          | Company Name
+        - else
+          | Full Name
       = f.input :name, as: :string, label: false, required: true, autofocus: true, placeholder: (resource.class.name.downcase == "freelancer" ? "Enter your full name" : "Enter your company name")
       .register__label
         | Email Address

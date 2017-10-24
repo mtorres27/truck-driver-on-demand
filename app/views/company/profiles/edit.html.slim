@@ -8,6 +8,32 @@
       = simple_form_for(@company, url: company_profile_path) do |f|
         .company-profile__item
           .company-profile__title
+            | Profile Header
+          .company-profile__image--header
+            = image_tag(@company.profile_header_url, id: "company-edit-profile__header")
+            .freelancer-profile__image-upload onclick="updateHeaderImage()"
+              span class="fa fa-camera" 
+          = f.file_field :profile_header, label: false, :accept => 'image/png,image/gif,image/jpeg', class: "file-input--hidden", id: "edit-company-profile-header"
+        .company-profile__item
+          .company-profile__title
+            | Profile Picture
+          .company-profile__image style="width: 135px; height: 135px;"
+            =image_tag(@company.avatar_url, id: "company-edit-profile__avatar")
+            .freelancer-profile__image-upload onclick="updateProfilePicture()"
+              span class="fa fa-camera" 
+          = f.file_field :avatar, label: false, :accept => 'image/png,image/gif,image/jpeg', class: "file-input--hidden", id: "edit-company-profile-avatar"
+        .company-profile__item
+          .company-profile__title
+            | Wallpaper Colour
+          = f.input :header_color, required: true, label: false, placeholder: "FF6C38"  
+
+        .company-profile__item
+          .company-profile__title
+            | Header Source
+          = f.input :header_source, label: false, prompt: "Select"
+        
+        .company-profile__item
+          .company-profile__title
             | Company Name
           = f.input :name, required: true, label: false, placeholder: "Enter a Company Name."
         .company-profile__item
@@ -103,45 +129,56 @@
                 = render "featured_project_fields", f: project_form
               .links.add-new-project
                 = link_to_add_association 'Add Project', f, :featured_projects, class: "btn btn-default"
-
-        .company-profile__item
-          .company-profile__title
-            | Profile Header
-          .company-profile__image style="background-image: url(#{@company.profile_header_url})"
-            .freelancer-profile__image-upload onclick="updateHeaderImage()"
-              span class="fa fa-camera" 
-          = f.file_field :profile_header, label: false, :accept => 'image/png,image/gif,image/jpeg', class: "file-input--hidden", id: "edit-company-profile-header"
-        .company-profile__item
-          .company-profile__title
-            | Profile Picture
-          .company-profile__image style="width: 135px; height: 135px; background-image: url(#{@company.avatar_url})"
-            .freelancer-profile__image-upload onclick="updateProfilePicture()"
-              span class="fa fa-camera" 
-          = f.file_field :avatar, label: false, :accept => 'image/png,image/gif,image/jpeg', class: "file-input--hidden", id: "edit-company-profile-avatar"
-
-        .company-profile__item
-          .company-profile__title
-            | Wallpaper Colour
-          = f.input :header_color, required: true, label: false, placeholder: "FF6C38"  
-
-        .company-profile__item
-          .company-profile__title
-            | Header Source
-          = f.input :header_source, label: false, prompt: "Select"
     
         .form-actions
-          a.btn.btn-secondary href=company_profile_path(@company)
+          = f.button :submit, class: "btn-primary--active", label: "Update Profile"
+          a.btn-ghost--active.margin-8px href=company_profile_path(@company)
             | Cancel
-          = " "
-          = f.button :submit, class: "btn btn-primary", label: "Update Profile"
+          
 
 javascript:
   var updateHeaderImage = function() {
     $("#edit-company-profile-header").click();
+    $("#edit-company-profile-header").on('change', function(e) {
+      var imgPath = $(this)[0].value;
+      var extn = imgPath.substring(imgPath.lastIndexOf('.') + 1).toLowerCase();
+      var image_holder = $("#company-edit-profile__header");
+
+      if (extn == "gif" || extn == "png" || extn == "jpg" || extn == "jpeg") {
+        if (typeof (FileReader) != "undefined") {
+          var reader = new FileReader();
+          reader.onload = function (e) {
+            image_holder.attr('src', e.target.result);
+          }
+
+          reader.readAsDataURL($(this)[0].files[0]);
+        }
+      } else {
+        alert("Only images can be selected.");
+      }
+    });
   }
 
   var updateProfilePicture = function() {
     $("#edit-company-profile-avatar").click();
+    $("#edit-company-profile-avatar").on('change', function() {
+      var imgPath = $(this)[0].value;
+      var extn = imgPath.substring(imgPath.lastIndexOf('.') + 1).toLowerCase();
+      var image_holder = $("#company-edit-profile__avatar");
+
+      if (extn == "gif" || extn == "png" || extn == "jpg" || extn == "jpeg") {
+        if (typeof (FileReader) != "undefined") {
+          var reader = new FileReader();
+          reader.onload = function (e) {
+            image_holder.attr('src', e.target.result)
+          }
+
+          reader.readAsDataURL($(this)[0].files[0]);
+        }
+      } else {
+        alert("Only images can be selected.");
+      }
+    });
   }
 
   function uploadFeaturedProject (index) {
@@ -150,5 +187,25 @@ javascript:
     } else {
       var ref = $(".add-new-project").prev('div').find(".nested_fields").find(".file-input--hidden");
     }
+
+
+    ref.on('change', function() {
+      var imgPath = $(this)[0].value;
+      var extn = imgPath.substring(imgPath.lastIndexOf('.') + 1).toLowerCase();
+      var image_holder = $(this).parent().parent().find(".freelancer-profile__image").find(".authorable_attachment--full").find("img");
+      if (extn == "gif" || extn == "png" || extn == "jpg" || extn == "jpeg") {
+        if (typeof (FileReader) != "undefined") {
+          var reader = new FileReader();
+          reader.onload = function (e) {
+            image_holder.attr('src', e.target.result)
+          }
+
+          reader.readAsDataURL($(this)[0].files[0]);
+        }
+      } else {
+        alert("Only images can be selected.");
+      }
+    });
+
     ref.click();
   }

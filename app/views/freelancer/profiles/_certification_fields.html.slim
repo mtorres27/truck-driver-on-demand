@@ -3,11 +3,13 @@
     .freelancer-profile__image.float-left
       - if !f.object.certificate_url.include?('missing.pdf')
         - url = is_image(f.object.certificate_url) ? f.object.certificate_url : "/assets/certification/certification_placeholder.png"
-        a.authorable_attachment--full href=f.object.certificate_url target="_blank" style="background-image: url(#{url})"
+        a.authorable_attachment--full href=f.object.certificate_url target="_blank"
+          img src=url
         .freelancer-profile__image-upload onclick="uploadCertificate(#{f.index})"
           span class="fa fa-camera" 
       - else
         .authorable_attachment--full
+          img src=""
         .freelancer-profile__image-upload onclick="uploadCertificate()"
           span class="fa fa-camera" 
     
@@ -15,6 +17,6 @@
     .nested_fields-title
       | Certificate Name
 
-    = f.file_field :certificate, :accept => 'document/pdf', label: false, class: "file-input--hidden" 
+    = f.file_field :certificate, :accept => 'document/pdf,application/pdf,application/x-pdf', label: false, class: "file-input--hidden" 
     = f.input :name, as: :string, placeholder: "Enter the certificate's name", label: false
     = link_to_remove_association "X", f, { onClick: "hide_remove_association(this)"}

@@ -2,6 +2,7 @@ class Freelancer::QuotesController < Freelancer::BaseController
   before_action :set_applicant
 
   def index
+    p "IN THE INDEX"
     set_collections
   end
 
@@ -54,6 +55,10 @@ class Freelancer::QuotesController < Freelancer::BaseController
         @q = @quotes.first
         @q.accepted_by_freelancer = true
         @q.save
+      elsif params[:message][:status] == "decline"
+        @q = @quotes.first
+        @q.accepted_by_freelancer = false
+        @q.save
       end
 
       redirect_to freelancer_job_application_index_path(@job, @applicant)
@@ -67,7 +72,8 @@ class Freelancer::QuotesController < Freelancer::BaseController
   private
 
     def set_job
-      @job = current_freelancer.applicants.includes(applicants: [:quotes, :messages]).find(params[:job_id])
+      # @job = current_freelancer.applicants.includes(applicants: [:quotes, :messages]).  find(params[:job_id])
+      @job = current_freelancer.applicants.where({job_id: params[:job_id] }).first.job
     end
 
     def set_applicant
@@ -84,6 +90,7 @@ class Freelancer::QuotesController < Freelancer::BaseController
     end
 
     def set_collections
+      p "SETTING COLLECTIONS"
       @messages = @applicant.messages
       @quotes = @applicant.quotes
       @all_quotes = @applicant.job.quotes
@@ -99,7 +106,7 @@ class Freelancer::QuotesController < Freelancer::BaseController
       end
 
       @messages.each do |message|
-        @combined_items.push({ type: "message", payload: message, date: message.created_at.to_i })
+        @combined_items.push({ type: "message", payload: message, quote_amount: nil, date: message.created_at.to_i })
         @harmonized_indices.push(message.created_at.to_i)
       end
 

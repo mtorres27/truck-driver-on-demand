@@ -7,8 +7,7 @@ Rails.application.routes.draw do
   root "main#index"
 
   get "company/login", to: "devise/session#new"
-  get "privacy-policy", to: "pages#show", id: "privacy-policy"
-  get "terms-of-service", to: "pages#show", id: "terms-of-service"
+  get "freelance-service-agreement", to: "main#freelance_service_agreement"
 
 
   get "confirm_email", to: "main#confirm_email"
@@ -17,6 +16,7 @@ Rails.application.routes.draw do
   namespace :freelancer do
 
     root "profiles#show"
+    root "main#index"
     resource :freelancer, only: [:show]
 
     resources :companies, only: [:index, :show] do
@@ -65,7 +65,6 @@ Rails.application.routes.draw do
   end
 
   namespace :company do
-    # root "profiles#show"
     root "main#index"
 
     resource :profile, only: [:show, :edit, :update]

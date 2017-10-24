@@ -12,7 +12,7 @@
                 button.btn.btn-default type="button" data-toggle="modal" data-target="#new_project"
                   | New Project
         = f.input :title, placeholder: "Enter the job title"
-        = f.input :address, placeholder: "Enter the address of the job"
+        = f.input :address, placeholder: "Enter the city of the job"
         = f.input :summary, placeholder: "Enter the job summary"
         = f.input :scope_of_work, placeholder: "Please enter in more details about the job to receive a better quote."
 
@@ -34,20 +34,16 @@
         = f.input :invite_only
         = f.input :scope_is_public
         = f.input :budget_is_public
-  hr
   .form-actions
     .row
-      - if @job.created?
-        .col-xs-6.col-sm-3.col-md-2
-          = f.button :submit, "Save as Draft", class: "btn btn-primary"
-        .col-xs-6.col-sm-3.col-md-2
-          = f.button :button, "Publish", name: "job[state]", value: "published", class: "btn btn-default"
-      - else
-        .col-xs-6.col-sm-6.col-md-4
-          = f.button :submit, "Save", class: "btn btn-primary"
-      - unless @job.new_record?
-        .col-xs-12.col-sm-6.col-md-8.text-right
-          = link_to "Delete Job", company_job_path(@job), data: { confirm: "Are you sure?" }, method: :delete
+      .col-sm-12.col-md-6.col-lg-5
+        - if @job.created?
+            = f.button :button, "Publish", name: "job[state]", value: "published", class: "btn-primary--active"
+            = f.button :submit, "Save as Draft", class: "btn-ghost--active margin-8px"
+        - else
+            = f.button :submit, "Save", class: "btn-primary--active"
+        - unless @job.new_record?
+            = link_to "Delete Job", company_job_path(@job), data: { confirm: "Are you sure?" }, method: :delete
 
 .modal#new_project role="dialog" tabindex="-1"
   .modal-dialog role="document"
@@ -70,7 +66,7 @@
                 = f.input :duration, placeholder: "Number of days"
         .modal-footer
           .form-actions
-            = f.button :submit, class: "btn-primary"
+            = f.button :submit, class: "btn-primary--active"
             '
             a.btn.btn-default data-dismiss="modal" href="#"
               | Cancel

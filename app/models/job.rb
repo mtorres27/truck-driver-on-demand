@@ -133,6 +133,10 @@ class Job < ApplicationRecord
     end
   end
 
+  def work_order
+    "WO-"+(id.to_s.rjust(5, '0'))
+  end
+
   enumerize :reporting_frequency, in: [
     :daily,
     :every_other_day,

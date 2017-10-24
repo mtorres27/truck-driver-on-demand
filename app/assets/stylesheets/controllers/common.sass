@@ -1,0 +1,203 @@
+.common__h2-modal
+  line-height: 32px
+  width: 100%
+
+.common__field-label
+  margin-bottom: 0px
+  color: #333
+  font-size: 13px
+  font-weight: 600
+  text-transform: uppercase
+
+.common__text-field
+  border-radius: 4px
+
+.common__radio-field-label
+  font-size: 14px
+  font-weight: 600
+  text-transform: none
+
+.common__radio-group
+  display: block
+  width: 100%
+  margin-top: 8px
+  -webkit-box-pack: justify
+  -webkit-justify-content: space-between
+  -ms-flex-pack: justify
+  justify-content: space-between
+  &.width-30
+    width: 30%
+
+.common__text-field-group
+  width: 100%
+  margin-top: 8px
+  &.width-30
+    width: 30%
+  &.attachment
+    position: relative
+  &.width-50
+    width: 48%
+
+.common__text-area-group
+  width: 100%
+  margin-top: 8px
+  -webkit-box-flex: 0
+  -webkit-flex: 0 auto
+  -ms-flex: 0 auto
+  flex: 0 auto
+
+.common__tag
+  display: inline-block
+  padding: 4px 8px
+  float: none
+  border: 1px solid #000
+  border-radius: 4px
+  background-color: #fff
+  font-size: 13px
+  font-weight: 600
+  text-transform: uppercase
+  &.grey
+    margin: 4px 8px 4px 0px
+    border-color: #a7a7a7
+    background-color: #e2e2e2
+  &.green
+    display: inline-block
+    border-color: #12c01e
+    background-color: #8ff696
+
+.common__form-action-cont
+  width: 100%
+
+.common__user-avatar
+  display: inline-block
+  width: 40px
+  height: 40px
+  -webkit-box-flex: 0
+  -webkit-flex: 0 0 auto
+  -ms-flex: 0 0 auto
+  flex: 0 0 auto
+  background-color: #3daadf
+
+.common__select-field
+  background-image: -webkit-linear-gradient(270deg, #fff, #fff)
+  background-image: linear-gradient(180deg, #fff, #fff)
+
+.common__icon-attach 
+  font-family: $icon-font
+
+  &--active
+    color: $brand-primary
+
+
+.common__text-field--attach-file 
+  position: absolute
+  right: 0px
+  bottom: 0px
+  display: inline-block
+  margin-top: -55px
+  margin-right: 0px
+  padding: 16px
+  float: none
+  z-index: 100
+  color: $black-color
+  a, a:hover, a:visited
+    color: $black-color
+
+
+/* Tabs*/
+.common__tab-bar
+  overflow: auto
+  white-space: nowrap
+
+.common__tab-item--active
+  display: inline-block
+  padding: 8px 24px
+  box-shadow: inset 0 -3px 0 0 #3daadf
+  -webkit-transition: box-shadow 200ms ease
+  transition: box-shadow 200ms ease
+  color: #3daadf
+  font-size: 14px
+  font-weight: 600
+  text-decoration: none
+  text-transform: uppercase
+  &:hover
+    box-shadow: inset 0 -5px 0 0 #208cc0
+
+.common__tab-item--inactive
+  display: inline-block
+  padding: 8px 24px
+  border-bottom: 0px solid #000
+  -webkit-transition: box-shadow 200ms ease
+  transition: box-shadow 200ms ease
+  color: #666
+  font-size: 14px
+  font-weight: 600
+  text-decoration: none
+  text-transform: uppercase
+  &:hover
+    box-shadow: inset 0 -3px 0 0 #a7a7a7
+
+
+/* Buttons*/
+.btn-primary--active
+  display: block
+  padding: 8px
+  float: left
+  clear: both
+  -webkit-box-flex: 0
+  -webkit-flex: 0 auto
+  -ms-flex: 0 auto
+  flex: 0 auto
+  border: 1px solid #3daadf
+  border-radius: 4px
+  background-color: #3daadf
+  -webkit-transition: background-color 200ms ease
+  transition: background-color 200ms ease
+  color: #fff
+  font-size: 12px
+  font-weight: 600
+  text-align: center
+  text-decoration: none
+  text-transform: uppercase
+  &:hover
+    background-color: #208cc0
+    color: #fff
+  &:visited
+    color: #fff
+  &.no-margin
+    margin-right: 0px
+    margin-left: 0px
+    font-size: 12px
+    float: none
+  &.width-100
+    width: 100%
+    float: none
+    -webkit-box-flex: 0
+    -webkit-flex: 0 auto
+    -ms-flex: 0 auto
+    flex: 0 auto
+    &.warning
+      border-color: #b3271b
+      background-color: #b3271b
+      &:hover
+        border-color: #8f1b11
+        background-color: #8f1b11
+
+.btn-ghost--active
+  display: inline-block
+  padding: 8px
+  border: 1px solid #3daadf
+  border-radius: 4px
+  background-color: transparent
+  color: #333
+  font-size: 12px
+  font-weight: 600
+  text-decoration: none
+  text-transform: uppercase
+  &.margin-8px
+    margin-left: 8px
+    margin-right: 8px
+  &:hover
+    color: #3daadf
+  &:visited
+    color: #333

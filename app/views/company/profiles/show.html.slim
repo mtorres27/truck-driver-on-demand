@@ -156,7 +156,7 @@
         
     .profile__projects
       .profile__projects-label
-        | Installations
+        | Projects
       .profile__projects-value--installations
         - if @company.company_installs.length > 0
           - @company.company_installs.order('year ASC').each do |installation|
