@@ -70,6 +70,17 @@
   width: 100%
   display: inline-block
   margin-bottom: 20px
+  display: -webkit-box
+  display: -webkit-flex
+  display: -ms-flexbox
+  display: flex
+  -webkit-box-pack: justify
+  -webkit-justify-content: space-between
+  -ms-flex-pack: justify
+  justify-content: space-between
+  -webkit-flex-wrap: wrap
+  -ms-flex-wrap: wrap
+  flex-wrap: wrap
 
   &__date
     float: left
@@ -99,8 +110,9 @@
     padding: 0px
 
   &__bar
-    float: left
-    width: calc(100%/5)
+    //float: left
+    //width: calc(100%/5)
+    margin-right: 16px
 
   &__text
     font-size: 18px
