@@ -49,10 +49,11 @@ Rails.application.routes.draw do
 
     end
 
-    get "profile/banking", to: "banking#index", as: "profile_stripe_banking"
+    get "profile/bank_info", to: "banking#index", as: "profile_stripe_banking_info"
+    get "profile/identity", to: "banking#identity", as: "profile_stripe_banking"
     get "profile/bank_account", to: "banking#bank_account", as: "profile_stripe_bank_account"
     post "stripe/connect", to: "banking#connect", as: "stripe_connect"
-    post "stripe/bank", to: "banking#bank_submit", as: "stripe_bank"
+    post "stripe/bank", to: "banking#add_bank_account", as: "stripe_bank_submit"
     get "profile/settings", to: "settings#index"
     post "jobs/:id", to: "jobs#apply"
     post "job/apply", to: "jobs#apply"
