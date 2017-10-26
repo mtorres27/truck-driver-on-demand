@@ -95,7 +95,7 @@ class Job < ApplicationRecord
     tsearch: { prefix: true, any_word: true }
   }
 
-  enumerize :pay_type, in: [ :fixed, :hourly ]
+  enumerize :pay_type, in: [ :fixed, :hourly, :daily ]
 
   enumerize :freelancer_type, in: [ :independent, :team ]
 
