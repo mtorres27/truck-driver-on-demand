@@ -26,8 +26,16 @@ module JobHelper
       declined: :danger
     }
 
-    content_tag(:span, class: "job_state label label-#{mappings[job.state.to_sym]}") do
-      job.state.text
+    sym = job.state.to_sym
+    t = job.state.text
+
+    if current_freelancer and job.applicants.where({freelancer_id: current_freelancer.id, state: "declined"}).count > 0
+      sym = :declined
+      t = "declined"
+    end
+
+    content_tag(:span, class: "job_state label label-#{mappings[sym]}") do
+      t
     end
   end
 
