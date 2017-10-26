@@ -8,14 +8,14 @@ class Freelancer::BankingController < Freelancer::BaseController
   def identity
     @country_spec = Stripe::CountrySpec.retrieve(current_freelancer.country)
     @post_data = flash[:data]
-    flash[:data] = nil
-    logger.debug @post_data.inspect
+    flash.delete(:data)
   end
 
   def connect
     logger.debug current_freelancer.inspect
     @post_data ||= {}
     type = params[:account][:type]
+    @post_data['type'] = type
     if flash[:error].nil? || flash[:error].empty?
       params[:account][type][:legal_entity].each do |key, value|
         if [ :address, :dob, :personal_address, :verification ].include? key.to_sym
@@ -51,7 +51,7 @@ class Freelancer::BankingController < Freelancer::BaseController
         flash[:error] = 'Unable to create Stripe account!'
       end
     end
-    logger.debug @post_data.inspect
+    logger.debug flash.inspect
     redirect_to freelancer_profile_stripe_banking_info_path if flash[:error].nil?
     redirect_to freelancer_profile_stripe_banking_path, flash: {data: @post_data} unless flash[:error].nil?
   end
@@ -101,6 +101,7 @@ class Freelancer::BankingController < Freelancer::BaseController
   end
 
   def bank_account
+    redirect_to freelancer_profile_stripe_banking_info_path if !current_freelancer.stripe_account_id
     @country_spec = Stripe::CountrySpec.retrieve(current_freelancer.country)
     @connector = StripeAccount.new(current_freelancer)
   end

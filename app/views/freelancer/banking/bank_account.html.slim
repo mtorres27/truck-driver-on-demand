@@ -8,68 +8,72 @@
         h2 Add Bank Account details
         p To accept payouts from an AV Company to your personal or company Bank Account, you will need to add your banking details to your AV Junction account.
         .w-form
-          form#email-form-4.common__form data-name=("Email Form 4") name="email-form-4" 
+          = form_tag '/freelancer/stripe/bank', :id => 'bank_form', :class => 'common__form', method: 'POST' do
             .attachment.common__text-field-group
               label.common__field-label for="name-4"  Account type
-              select#field-4.common__select-field.w-select name="field-4" 
+              select.common__select-field.w-select name="bank[holder_type]"  id="bank_holder_type"
                 option value="Individual"  Individual
                 option value="Company"  Company
             .common__text-field-group
               label.common__field-label for="name-4"  Routing Number (optional)
-              input#name-3.w-input data-name=("Name 3") maxlength="256" name="name-3" placeholder=("Routing number for your account") type="text" /
+              input.w-input data-name=("Name 3") maxlength="256" id="bank_account_routing_number" name="bank[account][routing_number]" placeholder=("Routing number for your account") type="text" /
             .common__text-field-group
               label.common__field-label for="name-4"  Bank Account Number / IBAN
-              input#name-3.w-input data-name=("Name 3") maxlength="256" name="name-3" placeholder=("Bank Account Number/ IBAN") type="text" /
+              input.w-input data-name=("Name 3") maxlength="256" id="bank_account_bank_account" name="bank[account][bank_account]" placeholder=("Bank Account Number/ IBAN") type="text" /
             .common__text-field-group
               label.common__field-label for="name-4"  Account Holder Full Name
-              input#name-3.w-input data-name=("Name 3") maxlength="256" name="name-3" placeholder=("Enter the Full Name") type="text" /
+              input.w-input data-name=("Name 3") maxlength="256" name="bank[holder_name]" id="bank_holder_name" placeholder=("Enter the Full Name") type="text" /
             .attachment.common__text-field-group
               label.common__field-label for="name-4"  Account Currency
-              select#field-4.common__select-field.w-select name="field-4" 
-                option value=""  USD
-                option value=""  CAD
-            a.btn-primary--active.w-inline-block.width-100 href="#" 
+              select.common__select-field.w-select name="bank[currency]" id="bank_currency"
+                - @country_spec.supported_bank_account_currencies.each do |val, arr |
+                  option[value="#{val}"] #{arr[0]}
+            input type="hidden" name="bank[btok]" id="bank_btok"
+            input type="hidden" name="bank[acc_id]" id="bank_acc_id"
+            a#btn-primary.btn-primary--active.w-inline-block.width-100 href="#"
               div SUBMIT
 
 
-        = form_tag '/freelancer/stripe/bank', :id => 'bank_form', :class => 'bank_form', method: 'POST' do
-          .bank_fields
-            .field class="field_routing_number"
-              | Routing Number
-              input type="text" name="bank[account][routing_number]" id="bank_account_routing_number"
-              span.optional
-                | Optional
-            .field class="field_routing_number"
-              | Bank Account / IBAN
-              input type="text" name="bank[account][bank_account]" id="bank_account_bank_account"
-            .field.field_holder_name
-              | Account Holder Name
-              input type="text" name="bank[holder_name]" id="bank_holder_name" value="#{current_freelancer.name}"
-            .field.field_holder_type
-              | Account Type
-              select name="bank[holder_type]" id="bank_holder_type"
-                option[value="individual"] Individual
-                option[value="company"] Company
-            .field.field_holder_type
-              | Account Currency
-              select name="bank[currency]" id="bank_currency"
-                - @country_spec.supported_bank_account_currencies.each do |val, arr |
-                  option[value="#{val}"] #{arr[0]}
-          input type="hidden" name="bank[btok]" id="bank_btok"
-          input type="hidden" name="bank[acc_id]" id="bank_acc_id"
-          .submit
-            = button_tag(id: 'submit_btn',type: 'submit', class: 'btn btn-primary') do
-              span.glyphicon.glyphicon-floppy-disk>
-              | Submit
+        / = form_tag '/freelancer/stripe/bank', :id => 'bank_form', :class => 'bank_form', method: 'POST' do
+        /   .bank_fields
+        /     .field class="field_routing_number"
+        /       | Routing Number
+        /       input type="text" name="bank[account][routing_number]" id="bank_account_routing_number"
+        /       span.optional
+        /         | Optional
+        /     .field class="field_routing_number"
+        /       | Bank Account / IBAN
+        /       input type="text" name="bank[account][bank_account]" id="bank_account_bank_account"
+        /     .field.field_holder_name
+        /       | Account Holder Name
+        /       input type="text" name="bank[holder_name]" id="bank_holder_name" value="#{current_freelancer.name}"
+        /     .field.field_holder_type
+        /       | Account Type
+        /       select name="bank[holder_type]" id="bank_holder_type"
+        /         option[value="individual"] Individual
+        /         option[value="company"] Company
+        /     .field.field_holder_type
+        /       | Account Currency
+        /       select name="bank[currency]" id="bank_currency"
+        /         - @country_spec.supported_bank_account_currencies.each do |val, arr |
+        /           option[value="#{val}"] #{arr[0]}
+          / input type="hidden" name="bank[btok]" id="bank_btok"
+          / input type="hidden" name="bank[acc_id]" id="bank_acc_id"
+        /   .submit
+        /     = button_tag(id: 'submit_btn',type: 'submit', class: 'btn btn-primary') do
+        /       span.glyphicon.glyphicon-floppy-disk>
+        /       | Submit
 
 script src="https://js.stripe.com/v3/"
 
 javascript:
   $(function() {
     var stripe = Stripe('#{Rails.configuration.stripe[:publishable_key]}');
-    $('form#bank_form').on('submit', function(e){
+    $('#btn-primary').on('click', function(e){
       e.preventDefault();
-      $('.error').remove();
+      $('.common__text-field--error').each(function(){
+        $(this).removeClass("common__text-field--error");
+      });
       $('#submit_btn').attr('disabled', 'disabled');
       var routing_number = $('#bank_account_routing_number').val();
       var bank_account = $('#bank_account_bank_account').val();
@@ -79,11 +83,11 @@ javascript:
       var account_number, routing_number;
       // call stripe
       if (routing_number == "" ){
-        $('#bank_account_routing_number').parent().append("<span class='error'>Don't leave it empty</span>");
+        $('#bank_account_routing_number').addClass("common__text-field--error");
         $('#submit_btn').removeAttr('disabled');
       }
       else if (bank_account == ""){
-        $('#bank_account_bank_account').parent().append("<span class='error'>Don't leave it empty</span>");
+        $('#bank_account_bank_account').addClass("common__text-field--error");
         $('#submit_btn').removeAttr('disabled');
       }
       else{
