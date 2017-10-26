@@ -8,7 +8,7 @@
   - sign_in_count = -1
 
 - if sign_in_count <= 1000000000 and sign_in_count > -1 and has_seen_onboarding == false
-  set_has_seen_onboarding
+  - set_has_seen_onboarding
   - if !current_freelancer.nil?
     .onboarding-container
       .onboarding-navbar
@@ -17,9 +17,6 @@
       .onboarding-content-container
         .onboarding-content
           h1.onboarding-title Welcome to AV Junction
-          p= has_seen_onboarding
-          p= cookies[:onboarding]
-          p= cookies[:prereg_message]
           p Finding new work outside of your network is difficult—that’s why we created AV Junction—to empower you with the freedom and flexibility to work on your terms by connecting you with AV jobs from reputable AV Companies all over the world.
           p Cali today, NYC tomorrow… we know what you’re thinking. But before we get ahead of ourselves we’ll need put your best foot forward and create a killer profile.
           p Ready? Let’s do it.
