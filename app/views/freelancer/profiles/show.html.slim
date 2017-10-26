@@ -31,7 +31,7 @@
             .fprofile__meta__rating
               - @stars = freelancer_avg_rating(@freelancer)
               - @stars.each do |star|
-                .span class=star
+                i class=star
         .fprofile__meta__details__1-2
           .fprofile__meta__tagline= @freelancer.tagline
           .fprofile__specialties--summary

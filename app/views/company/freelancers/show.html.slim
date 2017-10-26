@@ -33,7 +33,7 @@
         .profile__meta-left__stars
           - @stars = freelancer_avg_rating(@freelancer)
             - @stars.each do |star|
-              .span class=star
+              i class=star
 
         .profile__meta-left__number-of-reviews
           a href="#reviews" data-turbolinks="false"

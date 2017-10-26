@@ -5,7 +5,7 @@
     .reviews
       - @stars = freelancer_avg_rating(freelancer)
       - @stars.each do |star|
-        .span class=star
+        i class=star
     - if freelancer.freelancer_reviews_count > 0
       a class="reviews__counter" href="/company/freelancers/#{freelancer.id}#reviews" data-turbolinks="false"
         = freelancer_ratings_link(freelancer)

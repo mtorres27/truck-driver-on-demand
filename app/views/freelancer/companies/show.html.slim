@@ -30,7 +30,7 @@
       span.company-mobile__rating
         - @stars = company_avg_rating(@company)
           - @stars.each do |star|
-            .span class=star
+            i class=star
 
       span.company-mobile__reviews
         a href="#reviews" data-turbolinks="false"
