@@ -22,8 +22,6 @@ en:
         title: "Job Title"
         summary: "Job Summary"
         freelancer_type: "Freelancer Type"
-        invite_only: "This job is invite only and will not display in search results."
-        scope_is_public: "The scope of work for this job is public."
         budget_is_public: "The budget for this job is public."
         contract_price: "Job Work Order Price"
         require_checkin: "Require checkin upon arrival at job site"
