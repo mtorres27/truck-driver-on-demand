@@ -8,9 +8,23 @@
   font-size: 13px
   font-weight: 600
   text-transform: uppercase
+  &--error
+    margin-bottom: 0px
+    color: #ff0000
+    font-size: 13px
+    font-weight: 600
+    text-transform: uppercase
 
 .common__text-field
   border-radius: 4px
+  &--error
+    border: 1px solid #FF0000
+
+.common_form-field-helper-text
+  margin-top: -8px
+  color: #666
+  font-size: 14px
+  font-style: italic
 
 .common__radio-field-label
   font-size: 14px
@@ -28,15 +42,31 @@
   &.width-30
     width: 30%
 
+.common__text-field-multi 
+  display: -webkit-box
+  display: -webkit-flex
+  display: -ms-flexbox
+  display: flex
+  -webkit-box-pack: justify
+  -webkit-justify-content: space-between
+  -ms-flex-pack: justify
+  justify-content: space-between
+
+
 .common__text-field-group
   width: 100%
   margin-top: 8px
+  margin-bottom: 8px
   &.width-30
     width: 30%
   &.attachment
     position: relative
   &.width-50
     width: 48%
+
+.common__text-field.width-30 
+  width: 30%
+
 
 .common__text-area-group
   width: 100%
@@ -88,6 +118,18 @@
   &--active
     color: $brand-primary
 
+.common__form
+  display: -webkit-box
+  display: -webkit-flex
+  display: -ms-flexbox
+  display: flex
+  -webkit-box-pack: justify
+  -webkit-justify-content: space-between
+  -ms-flex-pack: justify
+  justify-content: space-between
+  -webkit-flex-wrap: wrap
+  -ms-flex-wrap: wrap
+  flex-wrap: wrap 
 
 .common__text-field--attach-file 
   position: absolute

@@ -2,47 +2,106 @@
 
 - content_for :secondary do
   .result-wrapper
-    .result-header
-      .result-header__text
-        | Banking Information
-    p
-    = form_tag '/freelancer/stripe/connect', :id => 'account_form', :class => 'account_form', :enctype=>"multipart/form-data", method: 'POST' do
-      .field class="field_account_type"
-        |Type:
-        select#account_type  name="account[type]"
-          option[value="individual"] Individual
-          option[value="company"] Company
-      / Individual fields
-      .account_fields#individual_fields
-        - @country_spec.verification_fields.individual.minimum.select{|field| field["legal_entity"] && !field["type"] }.each do |field|
-          .field class="field_#{URI.parse(field).path.split('.')[-1]}"
-            =pretty_name(field)
-            input type="text" name="account[individual][#{field.gsub('.','][')}]" id="account_individual_#{field}" value="#{(@post_data && @post_data.any?) ? @post_data[field] : ''}"
-        - @country_spec.verification_fields.individual.additional.each do |field|
-          .field class="field_#{URI.parse(field).path.split('.')[-1]}"
-            = pretty_name(field)
-            input type="#{field['document']?"file":"text"}" name="account[individual][#{field.gsub('.','][')}]" id="account_individual_#{field}"
-      / Company fields
-      .account_fields#company_fields style="display:none"
-        - @country_spec.verification_fields.company.minimum.select{|field| field["legal_entity"] && !field["type"] }.each do |field|
-          .field class="field_#{URI.parse(field).path.split('.')[-1]}"
-            =pretty_name(field)
-            input type="text" name="account[company][#{field.gsub('.','][')}]" id="account_company_#{field}"
-        - @country_spec.verification_fields.company.additional.each do |field|
-          .field class="field_#{URI.parse(field).path.split('.')[-1]}"
-            =pretty_name(field)
-            input type="#{field['document']?"file":"text"}" name="account[company][#{field.gsub('.','][')}]" id="account_company_#{field}"
-      .consent
-        label.tos
-          input type="checkbox" name="tos" checked=false
-          | I accept the
-          '
-          = link_to 'Stripe Terms of Service', "https://stripe.com/#{current_freelancer.country}/terms", target: '_blank'
+    .result-freelancers
+      .result-content
+        h2 Add details to your profile to verify your identity
+        p
+          | We use
+          a href="http://www.stripe.com"  Stripe 
+          | to handle payments between you and AV Companies on AV Junction. Stripe requires us to verify your identity in order to process payouts on your behalf.
+        p This information is only made available to Stripe for verification purposes, it will never be shared or sold to anyone.
+        .w-form
+          form.common__form data-name="" id="" name="" 
+            .attachment.common__text-field-group
+              label.common__field-label for="name-4"  Account type
+              select#field-4.common__select-field.w-select name="field-4" 
+                option value="Individual"  Individual
+                option value="Company"  Company
+            .common__text-field-group
+              label.common__field-label for="name-4"  First Name
+              input#name-3.w-input data-name=("Name 3") maxlength="256" name="name-3" placeholder=("Enter your first name") type="text" /
+            .common__text-field-group
+              label.common__field-label for="name-4"  Last Name
+              input#name-3.w-input data-name=("Name 3") maxlength="256" name="name-3" placeholder=("Enter your Last Name") type="text" /
+            .common__text-field-group
+              label.common__field-label for="name-4"  Date of birth
+              .common__text-field-multi
+                input#name-3.common__text-field.w-input.width-30 data-name=("Name 3") maxlength="2" name="name-3" placeholder="DD" type="text" /
+                input#name-3.common__text-field.w-input.width-30 data-name=("Name 3") maxlength="2" name="name-3" placeholder="MM" type="text" /
+                input#name-3.common__text-field.w-input.width-30 data-name=("Name 3") maxlength="4" name="name-3" placeholder="YYYY" type="text" /
+            .common__text-field-group
+              label.common__field-label for="name-4"  Address
+              input#name-3.w-input data-name=("Name 3") maxlength="256" name="name-3" placeholder=("Enter your Address") type="text" /
+            .common__text-field-group
+              label.common__field-label for="name-4"  City
+              input#name-3.w-input data-name=("Name 3") maxlength="256" name="name-3" placeholder=("Enter your City") type="text" /
+            .common__text-field-group
+              label.common__field-label for="name-4"  Postal COde
+              input#name-3.w-input data-name=("Name 3") maxlength="256" name="name-3" placeholder=("Enter your Postal Code") type="text" /
+            .common__text-field-group
+              label.common__field-label--error for="name-4"  State/Province/County
+              input#name-3.common__text-field--error.w-input data-name=("Name 3") maxlength="256" name="name-3" placeholder=("Enter your State/Province/County") type="text" /
+            .common__text-field-group
+              label.common__field-label for="name-4"  Personal ID Number
+              input#name-3.w-input data-name=("Name 3") maxlength="256" name="name-3" placeholder=("Enter your Personal ID Number") type="text" /
+              .common_form-field-helper-text
+                | Your Personal ID Number is a government issued ID such as a SIN or SSN. Please note this information is used by Stripe—our payments gateway—to verify your identity. To understand how this data is used please ready Stripe's Privacy Policy found here
+                a href="https://stripe.com/ca/privacy" target="_blank"  stripe.com/ca/privacy
+                |.
+            .common__text-field-group
+              label.common__field-label for="name-4"  Verification Document
+              input#name-3.w-input data-name=("Name 3") maxlength="256" name="name-3" placeholder=("Enter your suggested price") type="text" /
+              .common_form-field-helper-text The Verification Document is any government issued document that identifies you—such as a Passport, Permanent Resident Card or Drivers License. Upload a .jpg or .pdf version of this document.
+            .common__text-field-group
+              label.common__field-label for="name-4"  Stripe Connected Account Agreement
+              .w-checkbox
+                input#checkbox.w-checkbox-input data-name="Checkbox" name="checkbox" type="checkbox" /
+                | &nbsp;I have read and agree to the
+                a href="#https://stripe.com/ca/connect-account/legal" target="_blank"  Stripe Connected Account Agreement
 
-      .submit
-        = button_tag(id: 'submit_btn',type: 'submit', class: 'btn btn-primary') do
-          span.glyphicon.glyphicon-floppy-disk>
-          | Submit
+            a.btn-primary--active.w-inline-block.width-100 href="#" 
+              div SUBMIT  
+
+
+
+
+        = form_tag '/freelancer/stripe/connect', :id => 'account_form', :class => 'account_form', :enctype=>"multipart/form-data", method: 'POST' do
+          .field class="field_account_type"
+            |Type:
+            select#account_type  name="account[type]"
+              option[value="individual"] Individual
+              option[value="company"] Company
+          / Individual fields
+          .account_fields#individual_fields
+            - @country_spec.verification_fields.individual.minimum.select{|field| field["legal_entity"] && !field["type"] }.each do |field|
+              .field class="field_#{URI.parse(field).path.split('.')[-1]}"
+                =pretty_name(field)
+                input type="text" name="account[individual][#{field.gsub('.','][')}]" id="account_individual_#{field}" value="#{(@post_data && @post_data.any?) ? @post_data[field] : ''}"
+            - @country_spec.verification_fields.individual.additional.each do |field|
+              .field class="field_#{URI.parse(field).path.split('.')[-1]}"
+                = pretty_name(field)
+                input type="#{field['document']?"file":"text"}" name="account[individual][#{field.gsub('.','][')}]" id="account_individual_#{field}"
+          / Company fields
+          .account_fields#company_fields style="display:none"
+            - @country_spec.verification_fields.company.minimum.select{|field| field["legal_entity"] && !field["type"] }.each do |field|
+              .field class="field_#{URI.parse(field).path.split('.')[-1]}"
+                =pretty_name(field)
+                input type="text" name="account[company][#{field.gsub('.','][')}]" id="account_company_#{field}"
+            - @country_spec.verification_fields.company.additional.each do |field|
+              .field class="field_#{URI.parse(field).path.split('.')[-1]}"
+                =pretty_name(field)
+                input type="#{field['document']?"file":"text"}" name="account[company][#{field.gsub('.','][')}]" id="account_company_#{field}"
+          .consent
+            label.tos
+              input type="checkbox" name="tos" checked=false
+              | I accept the
+              '
+              = link_to 'Stripe Terms of Service', "https://stripe.com/#{current_freelancer.country}/terms", target: '_blank'
+
+          .submit
+            = button_tag(id: 'submit_btn',type: 'submit', class: 'btn btn-primary') do
+              span.glyphicon.glyphicon-floppy-disk>
+              | Submit
 
 
 javascript:

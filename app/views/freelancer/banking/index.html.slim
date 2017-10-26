@@ -2,72 +2,70 @@
 
 - content_for :secondary do
   .result-wrapper
-    .result-header
-      .result-header__text
-        | Bank Information
-    p
-      .identity_status
-        - if !@connector.account || @connector.account.legal_entity.verification.status == 'unverified'
-          .verify_identity
-            - if @connector.account && !@connector.account.legal_entity.verification.details.empty?
-              .verification_error_details
-                = @connector.account.legal_entity.verification.details
-            a.btn.btn-primary href=freelancer_profile_stripe_banking_path
-              | Verify Identity
-        - elsif @connector.account.legal_entity.verification.status == 'pending'
-          | Identity verification is in progress
-        - else
-          | Your account is #{@connector.account.legal_entity.verification.status} Now
-          .account_table
-            - if @connector.account
-              h1
-                | Personal Info
-              .email
-                = @connector.account.email
-              .account_info_table
-                .legal_entity_info
-                  .legal_entity_address
-                    h2
-                    | Address
-                    - @connector.account.legal_entity.address.each do |key, value|
-                      - next if value.nil?
-                      .row class="field_#{key}"
-                        = key
-                        | =>
-                        = value
-                  .legal_entity_dob
-                    | Date of birth :
-                    = @connector.account.legal_entity.dob.values.join('/')
+    .result-freelancers
+      .result-content
+        .identity_status
+          - if !@connector.account || @connector.account.legal_entity.verification.status == 'unverified'
+            .verify_identity
+              - if @connector.account && !@connector.account.legal_entity.verification.details.empty?
+                .verification_error_details
+                  = @connector.account.legal_entity.verification.details
+              a.btn.btn-primary href=freelancer_profile_stripe_banking_path
+                | Verify Identity
+          - elsif @connector.account.legal_entity.verification.status == 'pending'
+            | Identity verification is in progress
+          - else
+            | Your account is #{@connector.account.legal_entity.verification.status} Now
+            .account_table
+              - if @connector.account
+                h1
+                  | Personal Info
+                .email
+                  = @connector.account.email
+                .account_info_table
+                  .legal_entity_info
+                    .legal_entity_address
+                      h2
+                      | Address
+                      - @connector.account.legal_entity.address.each do |key, value|
+                        - next if value.nil?
+                        .row class="field_#{key}"
+                          = key
+                          | =>
+                          = value
+                    .legal_entity_dob
+                      | Date of birth :
+                      = @connector.account.legal_entity.dob.values.join('/')
 
-                  .legal_entity_personal_address
-                    - @connector.account.legal_entity.address.each do |key, value|
-                      - next if value.nil?
-                      .row class="field_#{key}"
-                        = key
-                        | =>
-                        = value
+                    .legal_entity_personal_address
+                      - @connector.account.legal_entity.address.each do |key, value|
+                        - next if value.nil?
+                        .row class="field_#{key}"
+                          = key
+                          | =>
+                          = value
 
-      .bank_account_info
-        - if !@connector.account
-          .add_bank_account
-            a.btn.btn-primary disabled="disabled"
-              | Add Bank Account
-        - elsif @connector.account.verification.fields_needed.include? 'external_account'
-          a.btn.btn-primary href=freelancer_profile_stripe_bank_account_path
-            | Add bank account
-        - else
-          - if @connector.account.external_accounts.data.any?
-            h1 Bank Info
-            .bank_info_table
-              .row
-                | Holder name : #{@connector.account.external_accounts.data[0].account_holder_name}
-              .row
-                | Account type : #{@connector.account.external_accounts.data[0].account_holder_type}
-              .row
-                | Bank Name : #{@connector.account.external_accounts.data[0].bank_name}
-              .row
-                | Country : #{@connector.account.external_accounts.data[0].country}
-              .row
-                | Currency : #{@connector.account.external_accounts.data[0].currency}
-              .row
-                | Last 4 digits : #{@connector.account.external_accounts.data[0].last4}
+        .bank_account_info
+          - if !@connector.account
+            .add_bank_account
+              a.btn.btn-primary disabled="disabled"
+                | Add Bank Account
+          - elsif @connector.account.verification.fields_needed.include? 'external_account'
+            a.btn.btn-primary href=freelancer_profile_stripe_bank_account_path
+              | Add bank account
+          - else
+            - if @connector.account.external_accounts.data.any?
+              h1 Bank Info
+              .bank_info_table
+                .row
+                  | Holder name : #{@connector.account.external_accounts.data[0].account_holder_name}
+                .row
+                  | Account type : #{@connector.account.external_accounts.data[0].account_holder_type}
+                .row
+                  | Bank Name : #{@connector.account.external_accounts.data[0].bank_name}
+                .row
+                  | Country : #{@connector.account.external_accounts.data[0].country}
+                .row
+                  | Currency : #{@connector.account.external_accounts.data[0].currency}
+                .row
+                  | Last 4 digits : #{@connector.account.external_accounts.data[0].last4}
