@@ -8,6 +8,7 @@
   - sign_in_count = -1
 
 - if sign_in_count <= 1000000000 and sign_in_count > -1 and has_seen_onboarding == false
+  set_has_seen_onboarding
   - if !current_freelancer.nil?
     .onboarding-container
       .onboarding-navbar
