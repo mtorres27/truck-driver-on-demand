@@ -136,14 +136,9 @@
         = f.text_area :message, as: :string, placeholder: "Enter your message", label: false, maxlength: 5000, class: "w-input"
 
       .freelancer-job__apply-modal__buttons
-<<<<<<< HEAD
         .freelancer-job__apply-modal__errors
         = f.button :submit, prompt: "Submit Quote", value: "Submit Quote", data: { disable_with: "Submitting..." }, class: "btn btn-primary", onClick: "return validateQuote()"
         .btn.btn-secondary id="close-modal-2"
-=======
-        = f.button :submit, prompt: "Submit Quote", value: "Submit Quote", data: { disable_with: "Submitting..." }, class: "btn-primary--active"
-        .btn-ghost--active.margin-8px id="close-modal-2"
->>>>>>> freelancer-styling
           | cancel
 
 javascript:
