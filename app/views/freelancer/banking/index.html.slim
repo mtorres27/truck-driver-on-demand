@@ -36,13 +36,31 @@
         p Your identity has been verified by Stripe. You can now receive payments to your AV Junction account from AV Companies.
         hr
         h2.h2-margin-top Banking Info
-        .success.tag bank account verified
-        p
-          | Your bank account has been connected to your AV Junction successfully. You will now be able to accept payouts from an AV Company to your Bank Account.
-          br/
-          em Please note, if you add a new Bank Account, it will need to be verified before being able to process payouts.
+        .bank-card__bg
+          .bank-card__text-group.width-100
+            .success.tag Bank Account verified
+            .bank-card__field-label.large Dayton Pereira
+          .bank-card__text-group.width-30
+            .bank-card__field-title COUNTRY
+            .bank-card__field-label CA
+          .bank-card__text-group.width-30
+            .bank-card__field-title CURRency
+            .bank-card__field-label CAD
+          .bank-card__text-group.width-30
+            .bank-card__field-title LAST 4
+            .bank-card__field-label 3256
+          .bank-card__text-group.width-50
+            .bank-card__field-title ACCOUNT TYPE
+            .bank-card__field-label Company
+          .bank-card__text-group.width-50
+            .bank-card__field-title BANK NAME
+            .bank-card__field-label Bank of Nova Scotia
+        p Your bank account has been connected to your AV Junction successfully. You will now be able to accept payouts from an AV Company to your Bank Account.
         a.btn-ghost--active.w-inline-block.width-100 href="#" 
-          div Add a New Bank Account
+          div remove and add another card
+        p
+          em Please note, if you replace your Bank Account information, it will need to be verified before being able to process payouts.
+
 
       /This is where additional fields are required for identity verification
       .result-content  
