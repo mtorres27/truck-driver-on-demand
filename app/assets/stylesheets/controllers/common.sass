@@ -76,7 +76,7 @@
   -ms-flex: 0 auto
   flex: 0 auto
 
-.common__tag
+.tag
   display: inline-block
   padding: 4px 8px
   float: none
@@ -94,6 +94,14 @@
     display: inline-block
     border-color: #12c01e
     background-color: #8ff696
+  &.in-progress
+    border-color: rgba(0, 0, 0, .2)
+    background-color: #fff501
+  &.success
+    border-color: rgba(0, 0, 0, .2)
+    background-color: #8ff696
+
+
 
 .common__form-action-cont
   width: 100%
@@ -236,6 +244,7 @@
   font-weight: 600
   text-decoration: none
   text-transform: uppercase
+  text-align: center
   &.margin-8px
     margin-left: 8px
     margin-right: 8px
@@ -243,3 +252,18 @@
     color: #3daadf
   &:visited
     color: #333
+  &.width-100
+    width: 100%
+
+.btn-primary--disabled
+  display: inline-block
+  padding: 8px
+  border-radius: 4px
+  background-color: #e2e2e2
+  color: #a8a8a8
+  font-size: 12px
+  font-weight: 600
+  text-align: center
+  text-transform: uppercase
+  &.width-100
+    width: 100%

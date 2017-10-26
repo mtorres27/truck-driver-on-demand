@@ -3,6 +3,48 @@
 - content_for :secondary do
   .result-wrapper
     .result-freelancers
+      
+      /This is the state where the user has not supplied any information
+      .result-content
+        h2 Add details to your profile to verify your identity
+        .grey.tag identity unverified
+        p
+          | In order to receive payments from AV Companies through AV Junction, you will need to verify your identity with Stripe—the payment gateway we use to process transactions. Once this information has been confirmed you will be able to accept payments from AV Companies through AV Junction. For information on why we need this information, please review the
+          a href="https://stripe.com/ca/connect-account/legal" target="_blank"  Stripe Connect Account Policy
+        a.btn-primary--active.w-inline-block.width-100 href="#" 
+          div Verify your account
+        .hr
+        h2.h2-margin-top Banking Info
+        p To accept payouts from an AV Company to your personal or company bank account, you will need to add your banking details to your AV Junction account.
+        .btn-primary--disabled.width-100
+          div Add Bank Account
+      
+      /This is the state where the users information is in progress
+      .result-content
+        h2 Identity Verification
+        .in-progress.tag identity verification In progress
+        p Your identity verification is currently in progress. Once this information has been confirmed you will be able to accept payments from AV Companies through AV Junction.
+        .hr
+        h2.h2-margin-top Banking Info
+        .in-progress.tag bank account verification in progress
+        p Your bank account information is being verified. When completed successfully, you will be able to accept payouts from an AV Company to the Bank Account you have linked your AV Junction account to.
+      
+      /This is the state where the user has completed the verification process
+      .result-content
+        h2 Identity Verification
+        .success.tag identity Verified
+        p Your identity has been verified by Stripe. You can now receive payments to your AV Junction account from AV Companies.
+        .hr
+        h2.h2-margin-top Banking Info
+        .success.tag bank account verified
+        p
+          | Your bank account has been connected to your AV Junction successfully. You will now be able to accept payouts from an AV Company to your Bank Account.
+          br/
+          em Please note, if you edit your Bank Account information, it will need to be verified before being able to process payouts.
+        a.btn-ghost--active.w-inline-block.width-100 href="#" 
+          div Edit bank account
+
+
       .result-content
         .identity_status
           - if !@connector.account || @connector.account.legal_entity.verification.status == 'unverified'
