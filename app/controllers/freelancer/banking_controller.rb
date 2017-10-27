@@ -2,7 +2,7 @@ class Freelancer::BankingController < Freelancer::BaseController
   DOC_TYPES = ['image/jpeg', 'image/jpg', 'image/png', 'application/pdf']
   def index
     @connector = StripeAccount.new(current_freelancer)
-    logger.debug @connector.account
+    # logger.debug @connector.account
   end
 
   def identity
@@ -108,9 +108,14 @@ class Freelancer::BankingController < Freelancer::BaseController
 
   def add_bank_account
     btok = params[:bank][:btok]
-    connector = StripeAccount.new(current_freelancer)
-    connector.add_bank_account(btok)
-    flash[:notice] = 'Your bank account has been added to your account...'
-    redirect_to freelancer_profile_stripe_banking_info_path
+    if btok.nil? || btok.empty?
+      flash[:error] = 'Something wrong happened, please try again!'
+      redirect_to freelancer_profile_stripe_bank_account_path
+    else
+      connector = StripeAccount.new(current_freelancer)
+      connector.add_bank_account(btok)
+      flash[:notice] = 'Your bank account has been added to your account...'
+      redirect_to freelancer_profile_stripe_banking_info_path
+    end
   end
 end

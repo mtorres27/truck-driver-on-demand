@@ -29,7 +29,7 @@
                       label.common__field-label for="name-4" Date of Birth
                       .common__text-field-multi
                         - @country_spec.verification_fields[type].minimum.select{|dob_field| dob_field["legal_entity"] && dob_field['dob']}.each do |dob_field|
-                          input.common__text-field.w-input.width-30 type="text" placeholder="#{pretty_name(dob_field, 'placeholder')}" name="account[#{type}][#{dob_field.gsub('.','][')}]" id="account_#{type}_#{dob_field}" value="#{(@post_data && @post_data.any?) ? @post_data[dob_field] : ''}"
+                          input.common__text-field.w-input.width-30 type="text" maxlength="#{dob_field['year']? 4:2}" placeholder="#{pretty_name(dob_field, 'placeholder')}" name="account[#{type}][#{dob_field.gsub('.','][')}]" id="account_#{type}_#{dob_field}" value="#{(@post_data && @post_data.any?) ? @post_data[dob_field] : ''}"
                   - if field_helper?(field)
                     .common_form-field-helper-text #{pretty_name(field, 'helpertext')}
                 - @country_spec.verification_fields[type].additional.each do |field|
@@ -55,6 +55,16 @@
               div SUBMIT
 
 javascript:
+  function disable_link(id){
+    $(id).attr('disabled','disabled');
+    $(id).addClass('btn-primary--disabled');
+    $(id).removeClass('btn-primary--active');
+  }
+  function enable_link(id){
+    $(id).removeAttr('disabled');
+    $(id).addClass('btn-primary--active');
+    $(id).removeClass('btn-primary--disabled');
+  }
   $(function() {
     $('select#account_type').on('change', function(e){
       console.log(this.value);
@@ -62,8 +72,9 @@ javascript:
       $('#form_'+this.value+'_fields').show();
     });
     $('#submit_btn').on('click', function(e){
+      e.preventDefault();
       // TODO: validate
-      $('#submit_btn').attr('disabled', 'disabled');
+      disable_link('#submit_btn');
       $('#account_form').submit();
     })
   });

@@ -51,27 +51,28 @@
           hr
           h2.h2-margin-top Banking Info
           - if @connector.account.external_accounts.data.any?
-            .bank-card__bg
-              .bank-card__text-group.width-100
-                .success.tag Bank Account verified
-                .bank-card__field-label.large #{@connector.account.external_accounts.data[0].account_holder_name}
-              .bank-card__text-group.width-30
-                .bank-card__field-title COUNTRY
-                .bank-card__field-label #{@connector.account.external_accounts.data[0].country}
-              .bank-card__text-group.width-30
-                .bank-card__field-title CURRency
-                .bank-card__field-label #{@connector.account.external_accounts.data[0].currency}
-              .bank-card__text-group.width-30
-                .bank-card__field-title LAST 4
-                .bank-card__field-label #{@connector.account.external_accounts.data[0].last4}
-              .bank-card__text-group.width-50
-                .bank-card__field-title ACCOUNT TYPE
-                .bank-card__field-label #{@connector.account.external_accounts.data[0].account_holder_type}
-              .bank-card__text-group.width-50
-                .bank-card__field-title BANK NAME
-                .bank-card__field-label #{@connector.account.external_accounts.data[0].bank_name}
+            - @connector.account.external_accounts.data.each do |ex_account|
+              .bank-card__bg
+                .bank-card__text-group.width-100
+                  .success.tag Bank Account verified
+                  .bank-card__field-label.large #{ex_account.account_holder_name}
+                .bank-card__text-group.width-30
+                  .bank-card__field-title COUNTRY
+                  .bank-card__field-label #{ex_account.country}
+                .bank-card__text-group.width-30
+                  .bank-card__field-title CURRency
+                  .bank-card__field-label #{ex_account.currency}
+                .bank-card__text-group.width-30
+                  .bank-card__field-title LAST 4
+                  .bank-card__field-label #{ex_account.last4}
+                .bank-card__text-group.width-50
+                  .bank-card__field-title ACCOUNT TYPE
+                  .bank-card__field-label #{ex_account.account_holder_type}
+                .bank-card__text-group.width-50
+                  .bank-card__field-title BANK NAME
+                  .bank-card__field-label #{ex_account.bank_name}
           p Your bank account has been connected to your AV Junction successfully. You will now be able to accept payouts from an AV Company to your Bank Account.
-          a.btn-ghost--active.w-inline-block.width-100 href="#"
-            div remove and add another card
-          p
-            em Please note, if you replace your Bank Account information, it will need to be verified before being able to process payouts.
+          / a.btn-ghost--active.w-inline-block.width-100 href="#"
+          /   div remove and add another card
+          / p
+          /   em Please note, if you replace your Bank Account information, it will need to be verified before being able to process payouts.
