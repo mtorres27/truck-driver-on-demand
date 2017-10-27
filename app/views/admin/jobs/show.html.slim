@@ -19,7 +19,14 @@ p
 p
   | Freelancer Type: 
   = t("enumerize.job.freelancer_type.#{@job.freelancer_type}")
-p= "Keywords: #{@job.keywords}"
+p
+  = "Keywords:"
+  - if !@job.keywords
+    | None Specified
+  - elsif @job.keywords and @job.keywords.kind_of?(Hash)
+    - @job.keywords.each do |index, value|
+      .grey.tag
+        = I18n.t("enumerize.freelancer_skills.#{index}")
 p= "Budget is Public: #{@job.budget_is_public}"
 p= "Work Order Price: #{@job.contract_price}"
 p= "Payment Schedule: #{@job.payment_schedule}"

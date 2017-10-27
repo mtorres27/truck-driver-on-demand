@@ -23,6 +23,7 @@
       = f.text_area :body, as: :string, placeholder: "Enter your message", label: false, maxlength: 5000, class: "w-input"
 
     .common__form-action-cont.w-clearfix
+      div#new-message__validation-errors
       a.btn-primary--active.w-inline-block.width-100 onclick="submitForm();"
         div#new-message__submit
           | Send
@@ -36,20 +37,19 @@ javascript:
   };
 
   var submitForm = function() {
-    $(".simple_form").submit();
+    var validated = true;
+    $("#new-message__validation-errors").html("");
+    
+    if ($("#message_body").val() == "") {  
+      validated = false;
+    }
+
+    if (validated) {
+      $(".simple_form").submit();
+    } else {
+      $("#new-message__validation-errors").html("The message field cannot be empty.")
+    }
   }
-
-  $(".new-message__counter--fixed").hide();
-  $(".new-message__counter--hourly").hide();
-  $(".new-message__counter--daily").hide();
-
-  $("#message_counter_type").on('change', function() {
-    $(".new-message__counter--fixed").hide();
-    $(".new-message__counter--hourly").hide();
-    $(".new-message__counter--daily").hide();
-
-    $(".new-message__counter--"+$("#message_counter_type").val()).show();
-  })
 
   $("#message_attachment").change(function() {
     $(".new-message__attachment-button").addClass("new-message__attachment-button--active");
@@ -64,55 +64,3 @@ javascript:
       $("#message_checkin").val("true");
     }
   }
-  var showCounterOffer = function() {
-    var input_ref = $(".new-message__input");
-    var counter_ref = $(".new-message__counter");
-    if (!input_ref.hasClass("new-message__input--counter-visible")) {
-      input_ref.addClass("new-message__input--counter-visible");
-      counter_ref.addClass("new-message__counter--visible");
-    };
-
-    $(".new-message__counter--fixed").show();
-    $(".new-message__counter--hourly").hide();
-    $(".new-message__counter--daily").hide();
-  }
-
-  var hideCounterOffer = function() {
-    var input_ref = $(".new-message__input");
-    var counter_ref = $(".new-message__counter");
-    if (input_ref.hasClass("new-message__input--counter-visible")) {
-      input_ref.removeClass("new-message__input--counter-visible");
-      counter_ref.removeClass("new-message__counter--visible");
-    };
-
-    $(".new-message__counter--fixed").hide();
-    $(".new-message__counter--hourly").hide();
-    $(".new-message__counter--daily").hide();
-  }
-
-  var makeRadiosDeselectableByName = function(name){
-    $('#' + name).click(function() {
-        if($(this).attr('previousValue') == 'true'){
-            $(this).attr('checked', false)
-        } else {
-            $('#' + name).attr('previousValue', false);
-        }
-
-        if ($(this).is(':checked')) {
-          if ($(this).attr("id").indexOf("_negotiate", 0) > 0) {
-            showCounterOffer();
-          } else {
-            hideCounterOffer();
-          }
-        } else {
-          hideCounterOffer();
-        }
-
-        $(this).attr('previousValue', $(this).is(':checked'));
-    });
-  };
-
-  makeRadiosDeselectableByName("message_status_accept");
-  makeRadiosDeselectableByName("message_status_decline");
-  makeRadiosDeselectableByName("message_status_negotiate");
-

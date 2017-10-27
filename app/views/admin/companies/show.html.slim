@@ -1,51 +1,219 @@
-h2= @company.name
-p= mail_to @company.email
-- if @company.avatar&.exists?
-  p
-    img src=@company.avatar_url
-
-p= "Contact Name: #{@company.contact_name}"
-p= "Address: #{@company.address}"
-p= "Area: #{@company.area}"
-p= "Description: #{@company.description}"
-p= "Work Order Preference: #{@company.contract_preference}"
-p
-  = "Keywords: "
-  - if !@company.keywords.nil? and @company.keywords.kind_of?(Hash)
-      - @company.keywords.each do |index, value|
-        = I18n.t("enumerize.freelancer_keywords.#{index}")
-        = ", "
-p
-  = "Skills: "
-  - if !@company.skills.nil? and @company.skills.kind_of?(Hash)
-    - @company.skills.each do |index, value|
-      = I18n.t("enumerize.freelancer_skills.#{index}")
-      = ", "
-p= "Website: #{@company.website}"
-p= "Phone Number: #{@company.phone_number}"
-p= "Number of Offices: #{@company.number_of_offices}"
-p= "Number of Employees: #{@company.number_of_employees}"
-p= "Established In: #{@company.established_in}"
-p= "Disabled: #{@company.disabled}"
-
-h2
-  | This Company's Projects:
-.table-responsive
-  table.table.table-striped
-    thead
-      tr
-        th Name
-        th.text-right Actions
-
-    tbody
-      - @company.projects.each do |project|
-        tr
-          td= link_to project.name, admin_project_path(project)
-          td.text-right= link_to 'Edit', edit_admin_project_path(project)
-      end
+.profile__wrapper
+  - if @company.profile_header_url.include?("missing") or @company.header_source == "color"
+    .profile__wrapper-bg style="background-color: #{ @company.header_color.include?("#") ? "" : "#"}#{@company.header_color}"
+  - else
+    .profile__wrapper-bg style="background-image: url(#{@company.profile_header_url.include?("missing") ? "" : @company.profile_header_url});"
 
 
-hr
-= link_to 'Edit', edit_admin_company_path(@company)
-'  |
-= link_to 'Back', admin_companies_path
+  .profile__content
+    .profile__block
+      .profile__block__name
+        = @company.name
+
+      div style="float: right; text-align: right;"
+        a.profile__block__invite-to-quote href=admin_companies_path style="margin-left: 5px;"
+          | BACK
+        a.profile__block__invite-to-quote href=edit_admin_company_path(@company)
+          | EDIT
+
+    .profile__meta
+      .profile__meta-left
+        .profile__meta-left__avatar
+          = image_tag(@company.avatar_url, size: "135x135")
+
+        .profile__meta-left__stars
+          - @stars = company_avg_rating(@company)
+            - @stars.each do |star|
+              i class=star
+
+        .profile__meta-left__number-of-reviews
+          a href="#reviews" data-turbolinks="false"
+            = company_ratings_link(@company)
+
+      .profile__meta-center
+        .profile__meta-center__name
+          - if @company.website?
+            a href=proper_website_link(@company.website) target="_blank"
+              = @company.name
+          - else
+            = @company.name
+        .profile__meta-center__area
+          b
+            = @company.contact_name
+        .profile__meta-center__area
+          = @company.area
+        - if @company.email?
+          .profile__meta-center__area
+            | Email: 
+            a href="mailto:#{@company.email}" target="_blank"
+              = @company.email
+        - if @company.website?
+          .profile__meta-center__area
+            | URL: 
+            a href=proper_website_link(@company.website) target="_blank"
+              = @company.website
+        - if @company.phone_number?
+          .profile__meta-center__area
+            = "Phone: #{@company.phone_number}"
+          
+
+        .profile__meta-center__member-since
+          = "Member since #{@company.created_at.strftime('%B %d, %Y')}"
+        .profile__meta-center__tagline
+          - if @company.contract_preference == :no_preference or @company.contract_preference.nil?
+            = t(:has_no_preference)
+          - else
+            = "#{t(:prefers)} #{t(@company.contract_preference)}"
+        .profile__meta-center__keywords
+          - if !@company.keywords.nil? and @company.keywords.kind_of?(Hash)
+            - @company.keywords.first(2).each do |index, value|
+              .profile__meta-center__keyword
+                = I18n.t("enumerize.freelancer_keywords.#{index}")
+          - if !@company.skills.nil? and @company.skills.kind_of?(Hash)
+            - @company.skills.first(2).each do |index, value|
+              .profile__meta-center__keyword
+                = I18n.t("enumerize.freelancer_skills.#{index}")
+        
+    .profile__bona-fides
+      .profile__bona-fides__review
+        - if @company.company_reviews_count > 0
+          .profile__bona-fides__review-quote
+            span class="fa fa-quote-left"
+          .profile__bona-fides__review-data
+            .profile__bona-fides__review-text
+              = @company.company_reviews.first.comments
+            .profile__bona-fides__review-name
+              = "#{@company.company_reviews.first.freelancer.name}, #{@company.company_reviews.first.company.name}"
+
+      .profile__bona-fides__data
+        .profile__bona-fides__data__years-of-experience
+          .profile__bona-fides__data__years-of-experience-value
+            - if !@company.number_of_offices.nil?
+              = @company.number_of_offices
+            - else
+              | N/A
+          .profile__bona-fides__data__years-of-experience-label
+            | Number of Offices
+        
+        .profile__bona-fides__data__projects-completed
+          .profile__bona-fides__data__projects-completed-value
+            = @company.established_in ? Time.now.year - @company.established_in : "N/A"
+          .profile__bona-fides__data__projects-completed-label
+            | Years in Business
+        .profile__bona-fides__data__years-of-experience
+          .profile__bona-fides__data__years-of-experience-value
+            - if !@company.rating.nil?
+              = @company.rating
+            - else
+              | N/A
+          .profile__bona-fides__data__years-of-experience-label
+            | Star Rating
+        .profile__bona-fides__data__profile-views
+          .profile__bona-fides__data__profile-views-value
+            = number_to_human(@company.profile_views, :format => '%n%u', :precision => 3, :units => { :thousand => 'K', :million => 'M', :billion => 'B' })
+          .profile__bona-fides__data__profile-views-label
+            | Profile views
+
+
+    .profile__abilities
+      .profile__abilities__bio
+        .profile__abilities__bio-label
+          | About
+        .profile__abilities__bio-value
+          - if @company.description.nil?
+            | This company has not yet added a description.
+          - else
+            = @company.description  
+        .profile__abilities__specialties__markets-label
+          | Stats
+        .profile__abilities__specialties__markets-value--italic
+          = @company.established_in ? "#{Time.now.year - @company.established_in} years in business" : "N/A"
+
+        .profile__abilities__specialties__markets-value--italic
+          = @company.number_of_employees ? "#{t(@company.number_of_employees)} employees" : "N/A"
+      .profile__abilities__specialties   
+        .profile__abilities__specialties-label
+          | specialties
+        .profile__abilities__specialties__markets
+          .profile__abilities__specialties__markets-label
+            | markets
+          .profile__abilities__specialties__markets-value
+            - if !@company.keywords.nil? and @company.keywords.kind_of?(Hash)
+              - @company.keywords.each do |index, value|
+                .profile__abilities__specialties__market
+                  = I18n.t("enumerize.freelancer_keywords.#{index}")
+            - else
+              | This company has no markets listed.
+        .profile__abilities__specialties__skills
+          .profile__abilities__specialties__skills-label
+            | skills
+          .profile__abilities__specialties__skills-value
+            - if !@company.skills.nil? and @company.skills.kind_of?(Hash)
+              - @company.skills.each do |index, value|
+                .profile__abilities__specialties__market
+                  = I18n.t("enumerize.freelancer_skills.#{index}")
+            - else
+              | This company has no skills listed.
+        
+    .profile__projects
+      .profile__projects-label
+        | Installs
+      .profile__projects-value--installations
+        - if @company.company_installs.length > 0
+          - @company.company_installs.order('year ASC').each do |installation|
+            .profile__projects__project
+              strong
+                = "#{installation.year}: "
+              em
+                = number_with_delimiter(installation.installs, :delimiter => ',')
+        - else 
+          | This company has no information about installs by year
+
+    .profile__projects
+      .profile__projects-label
+        | Featured projects
+      .profile__projects-value
+        - if @company.featured_projects.length > 0
+          - @company.featured_projects.each do |project|
+            a.profile__projects__project href="#{project.file_url.include?('missing') ? '/assets/' : ''} #{project.file_url}" target="_blank"
+              .profile__projects__project__image style="background-image: url(#{project.file_url.include?('missing') ? '/assets/' : ''} #{project.file_url})"
+              .profile__projects__project__name
+                = project.name
+        - else 
+          | This company has no featured projects.
+
+    .profile__reviews
+      a name="reviews"
+        .profile__reviews-label
+          | reviews
+      .profile__reviews-value
+        - if @company.company_reviews_count > 0
+          .profile__reviews__review
+          - @company.company_reviews.each do |review|
+            .profile__reviews__review-text
+              = review.comments
+            .profile__reviews__review-name
+              = review.freelancer.name
+        - else
+          | This company doesn't have any reviews.
+
+    .profile__projects
+      .profile__projects-label
+        | This Company's Projects:
+      .profile__projects-value--installations
+        .table-responsive
+          table.table.table-striped
+            thead
+              tr
+                th Name
+                th.text-right Actions
+
+            tbody
+              - @company.projects.each do |project|
+                tr
+                  td= link_to project.name, admin_project_path(project)
+                  td.text-right= link_to 'Edit', edit_admin_project_path(project)
+              end
+
+
+
