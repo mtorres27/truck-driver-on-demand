@@ -18,32 +18,33 @@ h1 Editing Freelancer
     = f.input :tagline
     = f.input :bio
 
-    p
-      | Markets
-      - I18n.t('enumerize.freelancer_keywords').each do |index, value|
-        - tag_name = "freelancer[keywords][#{index.to_s}]"
-        - if @freelancer.keywords and @freelancer.keywords.include?(index.to_s)
-          - checked = true
-        - else
-          - checked = false
+    .freelancer-profile__item
+      .freelancer-profile__title
+        | Markets
+      .freelancer-profile__checkboxes
+        - I18n.t('enumerize.freelancer_keywords').each do |index, value|
+          - tag_name = "freelancer[keywords][#{index.to_s}]"
+          - if @freelancer.keywords and @freelancer.keywords.include?(index.to_s)
+            - checked = true
+          - else
+            - checked = false
+          .freelancer-profile__checkbox
+            = check_box_tag tag_name, "1", checked
+            = " #{value}"
 
-        = check_box_tag tag_name, "1", checked
-        = value
-        br
-
-    p    
-      | Skills
-      - I18n.t('enumerize.freelancer_skills').each do |index, value|
-        - tag_name = "freelancer[skills][#{index.to_s}]"
-        - if @freelancer.skills and @freelancer.skills.include?(index.to_s)
-          - checked = true
-        - else
-          - checked = false
-
-        = check_box_tag tag_name, "1", checked
-        = value
-        br
-      br
+    .freelancer-profile__item
+      .freelancer-profile__title  
+        | Skills
+      .freelancer-profile__checkboxes
+        - I18n.t('enumerize.freelancer_skills').each do |index, value|
+          - tag_name = "freelancer[skills][#{index.to_s}]"
+          - if @freelancer.skills and @freelancer.skills.include?(index.to_s)
+            - checked = true
+          - else
+            - checked = false
+          .freelancer-profile__checkbox
+            = check_box_tag tag_name, "1", checked
+            = " #{value}"
     
 
     = f.input :years_of_experience
