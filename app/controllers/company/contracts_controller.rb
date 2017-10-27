@@ -30,7 +30,7 @@ class Company::ContractsController < Company::BaseController
         @job.contract_sent = true
         @job.save
       end
-      redirect_to company_job_work_order_path(@job), notice: "Work Order updated."
+      redirect_to company_job_path(@job), notice: "Work Order updated."
     else
       build_payments
 

@@ -18,15 +18,15 @@
         - if @job.contract_sent == true
           .freelancer-job__work-order-action-cont
             a.btn-primary--active.no-margin.w-inline-block href=freelancer_job_work_order_path(@job)
-            div View Work Order
+              div View Work Order
     .freelancer-job__summary-cont
       h3.freelancer-job__h3 Job Summary
       p= @job.summary
       div
-        - if !@job.keywords.nil?
-          - @job.keywords.split(", ").each do |k|
+        - if !@job.keywords.nil? and @job.keywords.kind_of?(Hash)
+          - @job.keywords.each do |index, value|
             .grey.tag
-              = k
+              = I18n.t("enumerize.freelancer_skills.#{index}")
     .freelancer-job__summary-group
       .freelancer-job__summary-item
         h6.freelancer-job__h6 Job Function

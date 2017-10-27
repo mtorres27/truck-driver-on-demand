@@ -56,7 +56,7 @@ class Company::JobsController < Company::BaseController
         @m.save
       end
 
-      redirect_to edit_company_job_work_order_path(@job)
+      redirect_to company_job_path(@job)
     else
       render :edit
     end
@@ -94,13 +94,34 @@ class Company::JobsController < Company::BaseController
         :starts_on,
         :duration,
         :freelancer_type,
-        :keywords,
         :invite_only,
         :scope_is_public,
         :budget_is_public,
         :state,
         :address,
-        attachments_attributes: [:id, :file, :_destroy]
+        attachments_attributes: [:id, :file, :_destroy],
+        keywords: [
+          :flat_panel_displays,
+          :video_walls,
+          :structured_cabling,
+          :rack_work,
+          :cable_pull,
+          :cable_termination,
+          :projectors,
+          :troubleshooting,
+          :service_and_repair,
+          :av_programming,
+          :interactive_displays,
+          :audio,
+          :video_conferencing,
+          :video_processors,
+          :stagehand,
+          :lighting,
+          :camera,
+          :general_labor,
+          :installation,
+          :rental
+        ],
       )
     end
 end

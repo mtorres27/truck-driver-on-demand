@@ -50,7 +50,6 @@ class Admin::JobsController < Admin::BaseController
           :duration,
           :pay_type,
           :freelancer_type,
-          :keywords,
           :invite_only,
           :scope_is_public,
           :budget_is_public,
@@ -59,7 +58,29 @@ class Admin::JobsController < Admin::BaseController
           :reporting_frequency,
           :require_photos_on_updates,
           :require_checkin,
-          :require_uniform
+          :require_uniform,
+          keywords: [
+            :flat_panel_displays,
+            :video_walls,
+            :structured_cabling,
+            :rack_work,
+            :cable_pull,
+            :cable_termination,
+            :projectors,
+            :troubleshooting,
+            :service_and_repair,
+            :av_programming,
+            :interactive_displays,
+            :audio,
+            :video_conferencing,
+            :video_processors,
+            :stagehand,
+            :lighting,
+            :camera,
+            :general_labor,
+            :installation,
+            :rental
+          ],
         )
       end
   end

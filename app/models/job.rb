@@ -57,6 +57,8 @@ class Job < ApplicationRecord
 
   schema_validations except: :working_days
 
+  serialize :keywords
+
   attr_accessor :send_contract
 
   audited
@@ -151,6 +153,7 @@ class Job < ApplicationRecord
   validates_presence_of :currency
   validates_presence_of :scope_of_work
   validates_presence_of :address
+  validates_presence_of :keywords
 
   def freelancer
     applicants.with_state(:accepted).first&.freelancer
