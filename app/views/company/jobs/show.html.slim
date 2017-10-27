@@ -85,14 +85,14 @@
 
       .job-details
         .job-details__title
-          | Keywords
+          | Skills
         .show_value
           - if !@job.keywords
             | None Specified
-          - else
-            - @job.keywords.split(", ").map(&:lstrip)[0..1].each do |keyword|
-              .freelancer__meta-center__keyword
-                = keyword
+          - elsif @job.keywords and @job.keywords.kind_of?(Hash)
+            - @job.keywords.each do |index, value|
+              .grey.tag
+                = I18n.t("enumerize.freelancer_skills.#{index}")
       
       .job-details
         .job-details__title

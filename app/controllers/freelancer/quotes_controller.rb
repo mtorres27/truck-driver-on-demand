@@ -89,7 +89,6 @@ class Freelancer::QuotesController < Freelancer::BaseController
     end
 
     def set_collections
-      p "SETTING COLLECTIONS"
       @messages = @applicant.messages
       @quotes = @applicant.quotes
       @all_quotes = @applicant.job.quotes
