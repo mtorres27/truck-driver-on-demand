@@ -8,6 +8,7 @@
     
     .result-content
       = simple_form_for(@freelancer, url: freelancer_profile_path) do |f|
+        = f.hidden_field :enforce_profile_edit, value: true
 
         .freelancer-profile__item
           .freelancer-profile__title
@@ -88,7 +89,10 @@
         .freelancer-profile__item
           .freelancer-profile__title
             | Specialties - Markets
-
+          - if @freelancer.errors.full_messages.include?("Keywords can't be blank")
+            .has-error
+              .help-block
+                | One market must be selected.
           .freelancer-profile__checkboxes
             - I18n.t('enumerize.freelancer_keywords').each do |index, value|
               - tag_name = "freelancer[keywords][#{index.to_s}]"
@@ -103,6 +107,10 @@
         .freelancer-profile__item
           .freelancer-profile__title
             | Specialties - Skills
+          - if @freelancer.errors.full_messages.include?("Skills can't be blank")
+            .has-error
+              .help-block
+                | One market must be selected.
           .freelancer-profile__checkboxes
             - I18n.t('enumerize.freelancer_skills').each do |index, value|
               - tag_name = "freelancer[skills][#{index.to_s}]"

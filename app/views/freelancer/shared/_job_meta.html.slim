@@ -3,6 +3,7 @@
       /*my_applications_freelancer_jobs_path*/ 
       .freelancer-job__back-arrow 
     .freelancer-job__header.w-clearfix
+      
       = job_state_label(@job)
       .freelancer-job__created-date
         = @job.created_at.strftime('%B %d, %Y')
@@ -13,4 +14,4 @@
       .freelancer-job__rating
         - @stars = company_avg_rating(@job.company)
         - @stars.each do |star|
-          |  
+          i class=star

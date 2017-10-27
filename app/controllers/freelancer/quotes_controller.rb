@@ -2,7 +2,6 @@ class Freelancer::QuotesController < Freelancer::BaseController
   before_action :set_applicant
 
   def index
-    p "IN THE INDEX"
     set_collections
   end
 

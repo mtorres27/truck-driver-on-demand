@@ -95,7 +95,7 @@ class Job < ApplicationRecord
     tsearch: { prefix: true, any_word: true }
   }
 
-  enumerize :pay_type, in: [ :fixed, :hourly ]
+  enumerize :pay_type, in: [ :fixed, :hourly, :daily ]
 
   enumerize :freelancer_type, in: [ :independent, :team ]
 
@@ -149,6 +149,8 @@ class Job < ApplicationRecord
   validates :pay_type, inclusion: { in: pay_type.values }, allow_blank: true
   validates :freelancer_type, inclusion: { in: freelancer_type.values }
   validates_presence_of :currency
+  validates_presence_of :scope_of_work
+  validates_presence_of :address
 
   def freelancer
     applicants.with_state(:accepted).first&.freelancer

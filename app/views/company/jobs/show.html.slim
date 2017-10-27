@@ -122,22 +122,18 @@
 
       .job-details
         ul
-          - if @job.invite_only?
-            li.show_value= t(:invite_only, scope: [:form, :labels, :job])
-          - if @job.scope_is_public?
-            li.show_value= t(:scope_is_public, scope: [:form, :labels, :job])
           - if @job.budget_is_public?
             li.show_value= t(:budget_is_public, scope: [:form, :labels, :job])
       
-      .job-details
-        .job-details__title
-          | Freelance Service Agreement
-        p
-          - if @job.opt_out_of_freelance_service_agreement
-            | This project has opted out of the freelance service agreement
-          - else
-            a href="/freelance-service-agreement?job=#{@job.id}#{random_append}" target="_blank"
-              | Click here to view the Freelance Service Agreement for this project.
+        .job-details
+          .job-details__title
+            | Freelance Service Agreement
+          p
+            - if @job.opt_out_of_freelance_service_agreement
+              | This project has opted out of the freelance service agreement
+            - else
+              a href="/freelance-service-agreement?job=#{@job.id}#{random_append}" target="_blank"
+                | Click here to view the Freelance Service Agreement for this project.
         
     .result-content__expand onclick="toggleExpandedJobDetails()"
       .result-content__expand__gradient

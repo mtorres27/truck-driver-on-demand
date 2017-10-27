@@ -105,6 +105,20 @@ class Company < ApplicationRecord
 
   audited
 
+  attr_accessor :enforce_profile_edit
+  
+    validates_presence_of :name, 
+      :email, 
+      :address, 
+      :area, 
+      :country, 
+      :country, 
+      :description, 
+      :established_in, 
+      :keywords, 
+      :skills, 
+      if: :enforce_profile_edit
+
   after_create :add_to_hubspot
 
 

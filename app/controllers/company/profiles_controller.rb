@@ -44,6 +44,7 @@ class Company::ProfilesController < Company::BaseController
       :established_in,
       :website,
       :header_source,
+      :enforce_profile_edit,
       company_installs_attributes: [:id, :year, :installs, :_destroy],
       featured_projects_attributes: [:id, :file, :name, :_destroy],
       skills: [
