@@ -54,6 +54,7 @@
           input.w-input data-name=("Name 3") maxlength="256" name="name-4" placeholder="$$" type="text" id="daily-counter-price" disabled=true
     
     .common__form-action-cont.w-clearfix
+      div#new-message__validation-errors
       a.btn-primary--active.w-inline-block.width-100 onclick="submitForm();"
         div#new-message__submit
           | Send
@@ -61,7 +62,35 @@
 
 javascript:
   var submitForm = function() {
-    $(".simple_form").submit();
+    // validate here
+    var validated = true;
+    $("#new-message__validation-errors").html("");
+    
+    var negotiate = $("#message_status_negotiate").is(":checked");
+
+    if (negotiate) {
+      var fixed = $("#message_counter_type").val() == "fixed";
+      var hourly = $("#message_counter_type").val() == "hourly";
+      var daily = $("#message_counter_type").val() == "daily";
+
+      if (fixed && $("#message_counter").val() == "") {
+        validated = false;
+      } else if (hourly && ($("#message_counter_number_of_hours").val() == "" || $("#message_counter_hourly_rate").val() == "")) {
+        validated = false;
+      } else if (daily && ($("#message_counter_number_of_days").val() == "" || $("#message_counter_daily_rate").val() == "")) {
+        validated = false;
+      }
+    }
+
+    if ($("#message_body").val() == "") {  
+      validated = false;
+    }
+
+    if (validated) {
+      $(".simple_form").submit();
+    } else {
+      $("#new-message__validation-errors").html("The message field cannot be empty. Also, if you are sending a counter-offer, the payment type and amounts must be supplied.")
+    }
   }
 
   var triggerFileUpload = function () {

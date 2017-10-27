@@ -77,7 +77,8 @@
         div
           - if @job.budget_is_public
             = number_to_currency(@job.budget, precision: 0) + " "
-            = @job.currency.upcase
+            - if @job.currency
+              = @job.currency.upcase
           - else
             = "N/A"
       
