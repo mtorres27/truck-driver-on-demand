@@ -14,6 +14,8 @@ Rails.application.routes.draw do
 
 
   namespace :freelancer do
+
+    root "profiles#show"
     root "main#index"
     resource :freelancer, only: [:show]
 
@@ -29,12 +31,12 @@ Rails.application.routes.draw do
       get :my_jobs, on: :collection
       get :my_applications, on: :collection
       post :apply, on: :collection
-      
+
       resources :application, only: [:index, :create]
       resource :contract, only: [:show, :accept], as: "work_order", path: "work_order"
-      resources :messages, only: [:index, :create]    
+      resources :messages, only: [:index, :create]
       resources :payments, controller: "job_payments", only: [:index]
-      resource :review, only: [:show, :create]  
+      resource :review, only: [:show, :create]
       resources :quotes, only: [:index, :create] do
         get :accept, on: :member
         get :decline, on: :member
@@ -46,12 +48,17 @@ Rails.application.routes.draw do
       resource :settings, only: [:index, :edit, :update]
 
     end
-    
-    get "profile/banking", to: "banking#index"
+
+    get "profile/bank_info", to: "banking#index", as: "profile_stripe_banking_info"
+    get "profile/identity", to: "banking#identity", as: "profile_stripe_banking"
+    get "profile/bank_account", to: "banking#bank_account", as: "profile_stripe_bank_account"
+    post "stripe/connect", to: "banking#connect", as: "stripe_connect"
+    post "stripe/bank", to: "banking#add_bank_account", as: "stripe_bank_submit"
     get "profile/settings", to: "settings#index"
     post "jobs/:id", to: "jobs#apply"
     post "job/apply", to: "jobs#apply"
     get "jobs/:id/work_order/accept", to: "contracts#accept"
+
 
     resources :notifications
 
@@ -69,6 +76,17 @@ Rails.application.routes.draw do
     resources :applicants
     resources :payments
     resources :projects
+    resources :subscription
+      get 'thanks', to: 'subscription#thanks', as: 'thanks'
+      get 'reset', to: 'subscription#reset_company', as: 'reset'
+      get 'plans', to: 'subscription#plans', as: 'plans'
+      get 'subscription_cancel', to: 'subscription#cancel', as: 'subscription_cancel'
+      get 'subscription_change', to: 'subscription#change_plan', as: 'subscription_change'
+      post 'subscription_checkout' => 'subscription#subscription_checkout'
+      post 'update_card_info' => 'subscription#update_card_info'
+      post 'webhooks' => 'subscription#webhooks'
+      get 'invoices', to: 'subscription#invoices', as: 'invoices'
+      get 'invoice', to: 'subscription#invoice', as: 'invoice'
 
     resources :notifications
 

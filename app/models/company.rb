@@ -62,8 +62,9 @@ class Company < ApplicationRecord
     :usd,
     :yen,
   ]
-  
+
   enumerize :contract_preference, in: [:prefer_fixed, :prefer_hourly, :prefer_daily]
+
   enumerize :number_of_employees, in: [
     :one_to_ten,
     :eleven_to_one_hundred,
@@ -85,7 +86,7 @@ class Company < ApplicationRecord
 
   accepts_nested_attributes_for :featured_projects, allow_destroy: true, reject_if: :reject_featured_projects
   accepts_nested_attributes_for :company_installs, allow_destroy: true, reject_if: :reject_company_installs
-  
+
   def freelancers
     Freelancer.
     joins(applicants: :job).
@@ -93,7 +94,15 @@ class Company < ApplicationRecord
     where(applicants: { state: :accepted }).
     order(:name)
   end
-  
+
+  def renew_month
+    self.expires_at = Date.today + 1.month
+  end
+
+  def renew_year
+    self.expires_at = Date.today + 1.year
+  end
+
   audited
 
   attr_accessor :enforce_profile_edit
@@ -111,7 +120,8 @@ class Company < ApplicationRecord
       if: :enforce_profile_edit
 
   after_create :add_to_hubspot
-  
+
+
   def add_to_hubspot
     api_key = "5c7ad391-2bfe-4d11-9ba3-82b5622212ba"
     url = "https://api.hubapi.com/contacts/v1/contact/createOrUpdate/email/#{email}/?hapikey=#{api_key}"
@@ -151,7 +161,7 @@ class Company < ApplicationRecord
     req.body = data.to_json
     res = http.start { |http| http.request req }
   end
-  
+
   pg_search_scope :search, against: {
     name: "A",
     email: "A",
@@ -162,14 +172,14 @@ class Company < ApplicationRecord
     }, using: {
       tsearch: { prefix: true }
     }
-    
+
     attr_accessor :user_type
     # We want to populate both name and contact_name on sign up
     before_validation :set_contact_name, on: :create
     def set_contact_name
       self.contact_name = name unless contact_name
     end
-    
+
     def rating
       if company_reviews.count > 0
         company_reviews.average("(#{CompanyReview::RATING_ATTRS.map(&:to_s).join('+')}) / #{CompanyReview::RATING_ATTRS.length}").round
@@ -177,12 +187,12 @@ class Company < ApplicationRecord
         return nil
       end
     end
-    
+
     def self.avg_rating(company)
       if company.company_reviews_count == 0
         return nil
       end
-  
+
       return company.rating
     end
 

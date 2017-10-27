@@ -337,18 +337,7 @@ CREATE TABLE companies (
     confirmation_token character varying,
     confirmed_at timestamp without time zone,
     confirmation_sent_at timestamp without time zone,
-    header_source character varying DEFAULT 'color'::character varying,
-    stripe_customer_id character varying,
-    stripe_subscription_id character varying,
-    stripe_plan_id character varying,
-    subscription_cycle character varying,
-    is_subscription_cancelled boolean DEFAULT false,
-    subscription_status character varying,
-    billing_period_ends_at timestamp without time zone,
-    last_4_digits character varying,
-    card_brand character varying,
-    exp_month character varying,
-    exp_year character varying
+    header_source character varying DEFAULT 'color'::character varying
 );
 
 
@@ -628,7 +617,10 @@ CREATE TABLE freelancers (
     confirmation_sent_at timestamp without time zone,
     freelancer_team_size character varying,
     freelancer_type character varying,
-    header_source character varying DEFAULT 'color'::character varying
+    header_source character varying DEFAULT 'color'::character varying,
+    stripe_account_id character varying,
+    stripe_account_status text,
+    currency character varying
 );
 
 
@@ -2010,6 +2002,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20171002193000'),
 ('20171003125747'),
 ('20171011195102'),
+('20171017101132'),
 ('20171020113522'),
 ('20171020123018');
 

@@ -1,0 +1,10 @@
+h2
+  | Invoices
+span
+  | (Next invoice will be at #{Time.at(@upcoming[:date])} for #{pretty_amount(@upcoming[:amount_due])})
+.invoices
+  - @invoices.each do |invoice|
+    li.invoice
+      = link_to Time.at(invoice[:date]), company_invoice_path(invoice: invoice.id)
+      | =>
+      =pretty_amount(invoice[:lines][:data][0][:amount])

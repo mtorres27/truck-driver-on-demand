@@ -63,6 +63,8 @@ class Freelancer < ApplicationRecord
 
   audited
 
+  def connected?; !stripe_account_id.nil?; end
+
   attr_accessor :accept_terms_of_service
   attr_accessor :accept_privacy_policy
   attr_accessor :accept_code_of_conduct
@@ -144,11 +146,11 @@ class Freelancer < ApplicationRecord
   ]
 
   enumerize :freelancer_team_size, in: [
-    "1 to 5",    
-    "6 to 10", 
-    "11 to 20", 
-    "21 to 30", 
-    "30+"
+    :less_than_five,
+    :six_to_ten,
+    :eleven_to_twenty,
+    :twentyone_to_thirty,
+    :more_than_thirty
   ]
 
   enumerize :header_source, in: [
@@ -159,7 +161,6 @@ class Freelancer < ApplicationRecord
   enumerize :country, in: [
     :at, :au, :be, :ca, :ch, :de, :dk, :es, :fi, :fr, :gb, :hk, :ie, :it, :jp, :lu, :nl, :no, :nz, :pt, :se, :sg, :us
   ]
-
 
   attr_accessor :user_type
 

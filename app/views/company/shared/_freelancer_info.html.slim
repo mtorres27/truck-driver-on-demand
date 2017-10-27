@@ -31,5 +31,5 @@
     div
       - if !freelancer.keywords.nil? and freelancer.keywords.kind_of?(Hash)
         - freelancer.keywords.first(4).each do |index, value|
-          .common__tag.grey
+          .tag.grey
             = I18n.t("enumerize.freelancer_keywords.#{index}")

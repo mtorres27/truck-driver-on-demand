@@ -24,6 +24,7 @@ gem "redcarpet", "~> 3.4.0"
 gem 'easy_postgis'
 
 gem 'devise'
+gem 'stripe'
 
 gem 'hubspot-ruby'
 

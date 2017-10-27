@@ -1,0 +1,7 @@
+h1
+  | Profile
+.tab-bar
+  a.tab-bar__item href="/freelancer/profile" class=("tab-bar__item--active" if request.path == "/freelancer/profile")
+    | General
+  a.tab-bar__item href="/freelancer/profile/bank_info" class=("tab-bar__item--active" if request.path == "/freelancer/profile/bank_info" or request.path == "/freelancer/profile/identity" or request.path == "/freelancer/profile/bank_account")
+    | Banking
