@@ -15,7 +15,6 @@ Rails.application.routes.draw do
 
   namespace :freelancer do
 
-    root "profiles#show"
     root "main#index"
     resource :freelancer, only: [:show]
 
