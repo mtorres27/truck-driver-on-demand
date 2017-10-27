@@ -29,29 +29,29 @@
       .new-message__counter--fixed
         .common__text-field-group
           label.common__field-label for="message_counter"  Suggested price
-          = f.input :counter, maxlength: 256, placeholder: "Enter your suggested price", label: false, class: "thing"
+          = f.input :counter, as: :string, maxlength: 256, placeholder: "Enter your suggested price", label: false, class: "w-input--important"
     
       .new-message__counter--hourly
         .common__text-field-group.width-30
           label.common__field-label Rate
-          = f.input :counter_hourly_rate, as: :integer, maxlength: 256, placeholder: "$/hr", label: false, class: "w-input"
+          = f.input :counter_hourly_rate, as: :integer, maxlength: 256, placeholder: "$/hr", label: false, class: "w-input--important"
         .common__text-field-group.width-30
           label.common__field-label  Time
-          = f.input :counter_number_of_hours, as: :integer, maxlength: 256, placeholder: "hrs", label: false, class: "w-input"
+          = f.input :counter_number_of_hours, as: :integer, maxlength: 256, placeholder: "hrs", label: false, class: "w-input--important"
         .common__text-field-group.width-30
           label.common__field-label for="name-4" price
-          input.w-input data-name=("Name 3") maxlength="256" name="name-3" placeholder="$$" type="text" id="hourly-counter-price" disabled=true
+          input.w-input--important data-name=("Name 3") maxlength="256" name="name-3" placeholder="$$" type="text" id="hourly-counter-price" disabled=true
 
       .new-message__counter--daily
         .common__text-field-group.width-30
           label.common__field-label Rate
-          = f.input :counter_daily_rate, as: :integer, placeholder: "$/day", label: false
+          = f.input :counter_daily_rate, as: :integer, placeholder: "$/day", label: false, class: "w-input--important"
         .common__text-field-group.width-30
           label.common__field-label Time
-          = f.input :counter_number_of_days, as: :integer, placeholder: "days", label: false
+          = f.input :counter_number_of_days, as: :integer, placeholder: "days", label: false, class: "w-input--important"
         .common__text-field-group.width-30
           label.common__field-label for="name-4" price
-          input.w-input data-name=("Name 3") maxlength="256" name="name-4" placeholder="$$" type="text" id="daily-counter-price" disabled=true
+          input.w-input--important data-name=("Name 3") maxlength="256" name="name-4" placeholder="$$" type="text" id="daily-counter-price" disabled=true
     
     .common__form-action-cont.w-clearfix
       div#new-message__validation-errors
@@ -61,6 +61,11 @@
 
 
 javascript:
+  $("#message_counter").addClass("w-input--important");
+  $("#message_counter_hourly_rate").addClass("w-input--important");
+  $("#message_counter_number_of_hours").addClass("w-input--important");
+  $("#message_counter_daily_rate").addClass("w-input--important");
+  $("#message_counter_number_of_days").addClass("w-input--important");
   var submitForm = function() {
     // validate here
     var validated = true;
