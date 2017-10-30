@@ -57,6 +57,8 @@ class Job < ApplicationRecord
 
   schema_validations except: :working_days
 
+  serialize :keywords
+
   attr_accessor :send_contract
 
   audited
@@ -95,7 +97,7 @@ class Job < ApplicationRecord
     tsearch: { prefix: true, any_word: true }
   }
 
-  enumerize :pay_type, in: [ :fixed, :hourly ]
+  enumerize :pay_type, in: [ :fixed, :hourly, :daily ]
 
   enumerize :freelancer_type, in: [ :independent, :team ]
 
@@ -116,7 +118,6 @@ class Job < ApplicationRecord
     :usd,
     :yen,
   ]
-  
 
   def pre_negotiated?
     %w(created published quoted).include?(state)
@@ -134,6 +135,10 @@ class Job < ApplicationRecord
     end
   end
 
+  def work_order
+    "WO-"+(id.to_s.rjust(5, '0'))
+  end
+
   enumerize :reporting_frequency, in: [
     :daily,
     :every_other_day,
@@ -146,6 +151,9 @@ class Job < ApplicationRecord
   validates :pay_type, inclusion: { in: pay_type.values }, allow_blank: true
   validates :freelancer_type, inclusion: { in: freelancer_type.values }
   validates_presence_of :currency
+  validates_presence_of :scope_of_work
+  validates_presence_of :address
+  validates_presence_of :keywords
 
   def freelancer
     applicants.with_state(:accepted).first&.freelancer

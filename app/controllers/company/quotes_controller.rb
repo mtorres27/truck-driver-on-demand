@@ -9,20 +9,30 @@ class Company::QuotesController < Company::BaseController
   def create
     set_collections
 
-    @message = @applicant.messages.new(message_params)
+    if !params[:message][:status].nil?
+      @status = params[:message][:status]
+      params[:message].delete :status
+    else
+      @status = ""
+    end
+
+    @message = @applicant.messages.new({ body: params[:message][:body], attachment: params[:message][:attachment] })
     @message.authorable = current_company
-    
+
     if @message.save
-      if params[:message][:status] == "accept"
+      if @status == "accept"
         @quotes.last.accept!
         @applicant.accept!
+          
         self.send_decline_message
-        redirect_to company_job_contract_path(@job)
+        redirect_to company_job_work_order_path(@job)
+        @job.state = "negotiated"
+        @job.save
         return
-      elsif params[:message][:status] == "decline"
+      elsif @status == "decline"
         @applicant.reject!
         @quotes.last.decline!
-      elsif params[:message][:status] == "negotiate"
+      elsif @status == "negotiate"
         # not sure what goes here.
         # either add a new quote, or add a counter offer somehow. NOT SURE.
 

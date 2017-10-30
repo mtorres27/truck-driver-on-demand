@@ -21,7 +21,7 @@ class Company::ContractsController < Company::BaseController
         @m.authorable = @job.company
         @m.receivable = @job.freelancer
         @m.send_contract = true
-        @m.body = "Hi #{@job.freelancer.name}! This is a note to let you know that we've just sent a contract to you. <a href='/freelancer/jobs/#{@job.id}/contract'>Click here</a> to view it!"
+        @m.body = "Hi #{@job.freelancer.name}! This is a note to let you know that we've just sent a work order to you. <a href='/freelancer/jobs/#{@job.id}/work_order'>Click here</a> to view it!"
         @m.save
 
         @job.messages << @m
@@ -30,10 +30,16 @@ class Company::ContractsController < Company::BaseController
         @job.contract_sent = true
         @job.save
       end
-      redirect_to company_job_contract_path(@job), notice: "Contract updated."
+      redirect_to company_job_path(@job), notice: "Work Order updated."
     else
       build_payments
-      flash[:error] = "Unable to save: please ensure all fields are filled out."
+
+      @errors = []
+      @job.errors.messages.each do |key, index|
+        @errors << key.to_s.underscore.humanize.titlecase
+      end
+      
+      flash[:error] = "Unable to save: the following fields need to be filled out: " + @errors.join(", ") + ". If any of the fields aren't visible on the contract page, you might need to provide additional information in the job details page."
       render :edit
     end
   end
@@ -61,6 +67,7 @@ class Company::ContractsController < Company::BaseController
         :require_photos_on_updates,
         :require_checkin,
         :require_uniform,
+        :opt_out_of_freelance_service_agreement,
         attachments_attributes: [:id, :file, :_destroy],
         payments_attributes: [:id, :description, :company_id, :amount, :_destroy]
       )

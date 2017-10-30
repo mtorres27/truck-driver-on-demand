@@ -9,6 +9,15 @@ class Company::SubscriptionController < Company::BaseController
     redirect_to company_plans_path
   end
 
+  def invoices
+    @invoices = StripeTool.get_invoices(customer: current_company.stripe_customer_id)
+    @upcoming = Stripe::Invoice.upcoming(customer: current_company.stripe_customer_id)
+  end
+
+  def invoice
+    @invoice = StripeTool.get_invoice(invoice: params[:invoice])
+  end
+
   def change_plan
     # logger.debug current_company.inspect
     if current_company.stripe_plan_id != params[:plan]
@@ -26,7 +35,7 @@ class Company::SubscriptionController < Company::BaseController
   end
 
   def reset_company
-    current_company.created_at                = 3.months.ago-5.day #2.days.ago 3.months.ago-5.day
+    current_company.created_at                = 3.months.ago - 5.day #2.days.ago 3.months.ago-5.day
     current_company.billing_period_ends_at    = nil
     current_company.stripe_customer_id        = nil
     current_company.stripe_subscription_id    = nil

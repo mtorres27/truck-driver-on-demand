@@ -50,11 +50,16 @@
               - elsif @job.contracted?
                 | Work Order determined
             - if @job.freelancer
-              a.btn-primary.job-details__work-order__btn href=edit_company_job_contract_path(@job)
+              a.btn-primary.job-details__work-order__btn href=edit_company_job_work_order_path(@job)
                 | Create Work Order
             - else
               div.btn-primary.job-details__work-order__btn--disabled
                 | Create Work Order
+
+      - if !@job.freelancer.nil?
+        .job-details
+          .job-details__bar
+            = render partial: "company/shared/contract_meta", locals: { job: @job }
             
 
       .job-details
@@ -85,14 +90,14 @@
 
       .job-details
         .job-details__title
-          | Keywords
+          | Skills
         .show_value
           - if !@job.keywords
             | None Specified
-          - else
-            - @job.keywords.split(", ").map(&:lstrip)[0..1].each do |keyword|
-              .freelancer__meta-center__keyword
-                = keyword
+          - elsif @job.keywords and @job.keywords.kind_of?(Hash)
+            - @job.keywords.each do |index, value|
+              .grey.tag
+                = I18n.t("enumerize.freelancer_skills.#{index}")
       
       .job-details
         .job-details__title
@@ -117,17 +122,23 @@
                 - else
                   span class="fa fa-file-text"
               .job-details__attachment__name
-                = JSON.parse(attachment.file_data)["metadata"]["filename"]
+                = attachment.title
 
 
       .job-details
         ul
-          - if @job.invite_only?
-            li.show_value= t(:invite_only, scope: [:form, :labels, :job])
-          - if @job.scope_is_public?
-            li.show_value= t(:scope_is_public, scope: [:form, :labels, :job])
           - if @job.budget_is_public?
             li.show_value= t(:budget_is_public, scope: [:form, :labels, :job])
+      
+        .job-details
+          .job-details__title
+            | Freelance Service Agreement
+          p
+            - if @job.opt_out_of_freelance_service_agreement
+              | This project has opted out of the freelance service agreement
+            - else
+              a href="/freelance-service-agreement?job=#{@job.id}#{random_append}" target="_blank"
+                | Click here to view the Freelance Service Agreement for this project.
         
     .result-content__expand onclick="toggleExpandedJobDetails()"
       .result-content__expand__gradient

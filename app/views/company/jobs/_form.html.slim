@@ -12,9 +12,19 @@
                 button.btn.btn-default type="button" data-toggle="modal" data-target="#new_project"
                   | New Project
         = f.input :title, placeholder: "Enter the job title"
-        = f.input :address, placeholder: "Enter the address of the job"
-        = f.input :summary, placeholder: "Enter the job summary"
-        = f.input :scope_of_work, placeholder: "Please enter in more details about the job to receive a better quote."
+        = f.input :address, placeholder: "Enter the city of the job"
+        span
+          abbr title="required"= "*"
+          = " "
+          = f.label :summary, "Summary"
+        p= t('summary_description')
+        = f.input :summary, label: false, placeholder: "Enter the job summary"
+        span
+          abbr title="required"= "*"
+          = " "
+          = f.label :summary, "Scope of Work"
+        p= t('scope_of_work_description')
+        = f.input :scope_of_work, label: false, placeholder: "Please enter in more details about the job to receive a better quote."
 
       .col-sm-12.col-md-6.col-lg-5
         = f.input :budget, placeholder: "Enter a budget", input_html: { value: number_with_precision(f.object.budget, precision: 0) }
@@ -30,24 +40,36 @@
             = f.input :pay_type, prompt: "Select"
           .col-xs-12.col-md-6
             = f.input :freelancer_type, prompt: "Select"
-        = f.input :keywords, placeholder: "E.g. crestron, broadcast, education, wall"
-        = f.input :invite_only
-        = f.input :scope_is_public
+        
+        .freelancer-profile__item
+          .freelancer-profile__title
+            | Skills
+          - if @job.errors.full_messages.include?("Keywords can't be blank")
+            .has-error
+              .help-block
+                | One skill must be selected.
+          .freelancer-profile__checkboxes
+            - I18n.t('enumerize.freelancer_skills').each do |index, value|
+              - tag_name = "job[keywords][#{index.to_s}]"
+              - if @job.keywords and @job.keywords.include?(index.to_s)
+                - checked = true
+              - else
+                - checked = false
+              .freelancer-profile__checkbox
+                = check_box_tag tag_name, "1", checked
+                = " #{value}"
+
         = f.input :budget_is_public
-  hr
   .form-actions
     .row
-      - if @job.created?
-        .col-xs-6.col-sm-3.col-md-2
-          = f.button :submit, "Save as Draft", class: "btn btn-primary"
-        .col-xs-6.col-sm-3.col-md-2
-          = f.button :button, "Publish", name: "job[state]", value: "published", class: "btn btn-default"
-      - else
-        .col-xs-6.col-sm-6.col-md-4
-          = f.button :submit, "Save", class: "btn btn-primary"
-      - unless @job.new_record?
-        .col-xs-12.col-sm-6.col-md-8.text-right
-          = link_to "Delete Job", company_job_path(@job), data: { confirm: "Are you sure?" }, method: :delete
+      .col-sm-12.col-md-6.col-lg-5
+        - if @job.created?
+            = f.button :button, "Publish", name: "job[state]", value: "published", class: "btn-primary--active"
+            = f.button :submit, "Save as Draft", class: "btn-ghost--active margin-8px"
+        - else
+            = f.button :submit, "Save", class: "btn-primary--active"
+        - unless @job.new_record?
+            = link_to "Delete Job", company_job_path(@job), data: { confirm: "Are you sure?" }, method: :delete
 
 .modal#new_project role="dialog" tabindex="-1"
   .modal-dialog role="document"
@@ -70,7 +92,7 @@
                 = f.input :duration, placeholder: "Number of days"
         .modal-footer
           .form-actions
-            = f.button :submit, class: "btn-primary"
+            = f.button :submit, class: "btn-primary--active"
             '
             a.btn.btn-default data-dismiss="modal" href="#"
               | Cancel

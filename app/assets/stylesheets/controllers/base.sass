@@ -5,7 +5,7 @@ html
 body
   font-family: $default-font
   padding-top: 70px
-  margin-bottom: 250px
+  /*margin-bottom: 250px*/
   font-size: 16px
   background-color: $gray-eee
 
@@ -13,9 +13,21 @@ body
     padding-top: 50px
     background-color: $white-color
 
-
-.primary
-  background-color: $white-color
+.flex-wrap
+  display: -webkit-box
+  display: -webkit-flex
+  display: -ms-flexbox
+  display: flex
+  min-height: 100vh
+  -webkit-box-orient: vertical
+  -webkit-box-direction: normal
+  -webkit-flex-direction: column
+  -ms-flex-direction: column
+  flex-direction: column
+  -webkit-box-pack: start
+  -webkit-justify-content: flex-start
+  -ms-flex-pack: start
+  justify-content: flex-start
 
 h1, h2, h3, h4, h5, h6, th
   color: $gray-light
@@ -24,28 +36,37 @@ h1, h2, h3, h4, h5, h6, th
 h1
   font-weight: 300
   @media (max-width: $breakpoint-tablet)
-    font-size: 2rem
+    font-size: 24px
     font-weight: 400
     margin-top: 1rem
-
-h2, h3, h4, h5, h6
-  font-weight: 300
 
 h2
   font-weight: 400
   font-size: 24px
+  margin-top: 0px
+  @media (max-width: $breakpoint-tablet)
+    font-size: 20px
+  &.h2-margin-top
+    margin-top: 20px
 
 h3
   font-weight: 600
   font-size: 18px
   color: $job-title-color
 
+h4, h5, h6
+  font-weight: 400
+
+p
+  margin-top: 16px
+  margin-bottom: 16px
+
 a:hover, a:active
   text-decoration: none
 
 label
   text-transform: uppercase
-  font-weight: 300 !important
+  font-weight: 300
   &.boolean
     text-transform: none
 
@@ -89,6 +110,13 @@ label
 
 .secondary
   background-color: $secondary-background
+  -webkit-box-flex: 1
+  -webkit-flex: 1
+  -ms-flex: 1
+  flex: 1
+  @media (max-width: $breakpoint-tablet)
+    background-color: $white-color
+  
 
 .secondary_nav
   @extend .list-inline
@@ -142,6 +170,19 @@ label
 input
   font-family: $default-font
 
+input[type=radio]
+  margin-right: 4px
+
 .container
+  &__fixed-footer
+    margin-bottom: 70px
   @media (max-width: $breakpoint-tablet)
+    margin: 0px
+    padding: 8px 16px 8px 16px
     background-color: $white-color
+
+
+.validation-error
+  color: $validation-error
+  a
+    color: $validation-error

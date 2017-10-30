@@ -13,7 +13,7 @@ nav#top-nav.navbar.navbar-fixed-top
         - if request.path.index('company') == 1
           - if current_company
             li( class=("active" if request.path == company_root_path || is_showing_freelancer(request.path)) )
-              = link_to "Search for Techs", company_root_path
+              = link_to "Search for AV Freelancers", company_root_path
             li( class=("active" if request.path.include?(company_projects_path)) )
               = link_to "Job Postings", company_projects_path
             li( class=("active" if request.path == company_freelancers_path + "/hired" || request.path == company_freelancers_path + "/favourites") )
@@ -41,11 +41,6 @@ nav#top-nav.navbar.navbar-fixed-top
                 li.dropdown-header= current_company.name
                 li
                   = link_to "Logout", destroy_company_session_path, method: :delete
-          - else
-            li( class=("active" if request.path == admin_root_path) )
-              = link_to "Freelancers", freelancer_root_path
-            li( class=("active" if request.path.include?(admin_freelancers_path)) )
-              = link_to "Companies", company_root_path
         - elsif request.path.index('admin') == 1
           - if current_admin
             li( class=("active" if request.path == admin_root_path) )
@@ -58,11 +53,6 @@ nav#top-nav.navbar.navbar-fixed-top
               = link_to "Pages", admin_pages_path
             li
               = link_to "Logout", destroy_admin_session_path, method: :delete
-          - else
-            li( class=("active" if request.path == admin_root_path) )
-              = link_to "Freelancers", freelancer_root_path
-            li( class=("active" if request.path.include?(admin_freelancers_path)) )
-              = link_to "Companies", company_root_path
         - elsif request.path.index('freelancer') == 1
           - if current_freelancer
             li( class=("active" if request.path == (freelancer_root_path)) )
@@ -82,14 +72,3 @@ nav#top-nav.navbar.navbar-fixed-top
                 | my profile
             li
               = link_to "Logout", destroy_freelancer_session_path, method: :delete, class: "mobile-nav__menu__item"
-          - else
-            li( class=("active" if request.path == admin_root_path) )
-              = link_to "Freelancers", freelancer_root_path
-            li( class=("active" if request.path.include?(admin_freelancers_path)) )
-              = link_to "Companies", company_root_path
-
-        - else
-          li( class=("active" if request.path == admin_root_path) )
-            = link_to "Freelancers", freelancer_root_path
-          li( class=("active" if request.path.include?(admin_freelancers_path)) )
-            = link_to "Companies", company_root_path

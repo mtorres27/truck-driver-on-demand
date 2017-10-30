@@ -12,12 +12,38 @@ module ApplicationHelper
   end
 
   def is_image(url)
-    if ['.png', '.gif', '.jpg', '.jpeg', '.svg'].include?(File.extname(url))
+    if ['.png', '.gif', '.jpg', '.jpeg', '.svg'].include?(File.extname(url).downcase)
       return true
     else
       return false
     end
   end
+
+  def has_seen_onboarding
+    if cookies[:onboarding]
+      return true
+    else
+      return false
+    end
+  end
+
+  def has_closed_prereg_message
+    if cookies[:prereg_message]
+      return true
+    else
+      return false
+    end
+  end
+
+
+  def set_has_seen_onboarding
+    cookies[:onboarding] = { value: true }
+  end
+
+  def set_has_closed_prereg_message
+    cookies[:prereg_message] = { value: true }
+  end
+
 
   def calc_distance_from(freelancer)
     if current_company.lat.nil?

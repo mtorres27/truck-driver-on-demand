@@ -15,9 +15,24 @@ h1 Editing Job
     = f.input :duration
     = f.input :pay_type
     = f.input :freelancer_type
-    = f.input :keywords
-    = f.input :invite_only
-    = f.input :scope_is_public
+    .freelancer-profile__item
+      .freelancer-profile__title
+        | Skills
+      - if @job.errors.full_messages.include?("Keywords can't be blank")
+        .has-error
+          .help-block
+            | One skill must be selected.
+      .freelancer-profile__checkboxes
+        - I18n.t('enumerize.freelancer_skills').each do |index, value|
+          - tag_name = "job[keywords][#{index.to_s}]"
+          - if @job.keywords and @job.keywords.include?(index.to_s)
+            - checked = true
+          - else
+            - checked = false
+          .freelancer-profile__checkbox
+            = check_box_tag tag_name, "1", checked
+            = " #{value}"
+
     = f.input :budget_is_public
     = f.input :contract_price
     = f.input :reporting_frequency

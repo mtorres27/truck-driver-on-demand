@@ -1,36 +1,46 @@
 - if @applicant
-  = simple_form_for(:message, url: freelancer_job_quotes_path(@job, @applicant)) do |f|
-    .applicant-messages__messages
+  .freelancer-job__detail-cont
+    .freelancer-job__quote-cont
+      h3.freelancer-job__h3 What would you like to do?
       - if @all_quotes.where({state: "accepted"}).length == 0
-        = render partial: "freelancer/shared/new_message", locals: { f: f, n: @applicant.company.name, type: "quote", quotes: @quotes }
-      - else 
+        = render partial: "freelancer/shared/new_quote", locals: { n: @applicant.company.name, type: "quote", quotes: @quotes }
+      - else
         .new-message--wrapper
           .new-message_amount
             .new-message__freelancer-selected
               .new-message__freelancer-selected__text
-                -if @applicant_accepted
+                - if @applicant_accepted
                   b
                     = "Congratulations, you've been selected for this job."
                   p
                     = "Click the link below to view the particulars of the job with #{@job.company.name}:"
+                  div
+                    a.btn.btn-primary href=freelancer_job_work_order_path(@job)
+                      = "view work order #{@job.work_order}"
+                - else 
+                  p 
+                    | Unfortunately, you haven't been selected for this job.
 
-                div
-                a.btn.btn-primary href=freelancer_job_contract_path(@job)
-                  | view contract
-      .applicant-messages__messages--inner class=("applicant-messages__messages--inner--inactive" if @applicant_accepted == true)
-        - @harmonized_items.each do |item|
+      .freelancer-job__message-history
+        - @harmonized_items.each_with_index do |item, index|
           - if item[:type] == "message"
-            .media
-              .media-left
-                .freelancer_avatar
-                  - if item[:payload].authorable.avatar_url.include?("missing.png")
-                    = image_tag("http://graph.facebook.com/v2.5/111#{item[:payload].authorable.id}/picture?height=40&height=40", size: "40x40")
-                  - else
-                    = image_tag(item[:payload].authorable.avatar_url, size: "40x40")
-              .media-body
-                span.authorable_name #{item[:payload].authorable.name}
-                span.authorable_date #{time_ago_in_words(item[:payload].created_at)} ago
-                .authorable_body= item[:payload].body
+            .freelancer-job__quote-msg
+              .common__user-avatar style="background-image: url(#{item[:payload].authorable.avatar_url})"
+              .freelancer-job__msg-cont.w-clearfix
+                - if index < @harmonized_items.count - 1
+                  - next_item = @harmonized_items[index+1]
+                  - if next_item[:type] == "quote"
+                    - if next_item[:payload].amount <= @job.budget and next_item[:payload].state != "declined"
+                      .freelancer-job__msg-price= number_to_currency(next_item[:payload].amount, precision: 0)
+                    - elsif next_item[:payload].amount <= @job.budget and next_item[:payload].state == "declined"
+                      .freelancer-job__msg-price.rejected= number_to_currency(next_item[:payload].amount, precision: 0)
+                    - elsif next_item[:payload].amount > @job.budget and next_item[:payload].state != "declined"
+                      .freelancer-job__msg-price.overbudget= number_to_currency(next_item[:payload].amount, precision: 0)
+                    - elsif next_item[:payload].amount > @job.budget and next_item[:payload].state == "declined"
+                      .freelancer-job__msg-price.overbudget.rejected= number_to_currency(next_item[:payload].amount, precision: 0) + " " + job.currency
+                .freelancer-job__msg-user-name= item[:payload].authorable.name
+                .freelancer-job__msg-created-at= "#{time_ago_in_words(item[:payload].created_at)} ago"
+                p.freelancer-job__msg-text= item[:payload].body
                 - if item[:payload].attachment_url
                   a.authorable_attachment href=item[:payload].attachment_url target="_blank"
                     - if is_image(item[:payload].attachment_url)
@@ -39,22 +49,3 @@
                       span class="authorable_attachment_icon fa fa-file-text"
                     .authorable_attachment__filename
                       = eval(item[:payload].attachment_data)[:metadata][:filename]
-          - elsif item[:type] == "quote"
-            .media
-              .media-body
-                div.quote_amount class=("quote_amount--declined" if item[:payload].state == "declined")
-                  = number_to_currency(item[:payload].amount, precision: 0) + " " + job.currency
-                .quote_pay_type= item[:payload].pay_type.text
-                - if item[:payload].pay_type == "hourly"
-                  = "(#{item[:payload].number_of_hours} hours @ #{number_to_currency(item[:payload].hourly_rate, precision: 0)} #{job.currency}/hour)"
-                - if item[:payload].pay_type == "daily"
-                  = "(#{item[:payload].number_of_days} days @ #{number_to_currency(item[:payload].daily_rate, precision: 0)} #{job.currency}/day)"
-                - if item[:payload].fixed? && item[:payload].amount > @job.budget
-                  .quote_over-budget= "Over Budget"
-                - elsif item[:payload].fixed? && item[:payload].amount < @job.budget
-                  .quote_under-budget= "Under Budget"
-                - elsif item[:payload].pending?
-                  - if item[:payload].fixed? && item[:payload].amount > @job.budget
-                    .quote_over-budget= "Over Budget"
-                  - elsif item[:payload].fixed? && item[:payload].amount < @job.budget
-                    .quote_under-budget= "Under Budget"

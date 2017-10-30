@@ -17,7 +17,6 @@ $(document).on("turbolinks:load", function () {
 
   $("#freelancer_hired_location").on('change', function() {
     window.location = "/company/freelancers/hired?location="+this.value;
-    console.log(this.value);
   });
 
   $("#freelancer_favourites_location").on('change', function() {

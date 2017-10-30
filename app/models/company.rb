@@ -46,6 +46,14 @@ class Company < ApplicationRecord
   has_many :favourite_freelancers, through: :favourites, source: :freelancer
   has_many :company_installs, dependent: :destroy
 
+  attr_accessor :accept_terms_of_service
+  attr_accessor :accept_privacy_policy
+  attr_accessor :accept_code_of_conduct
+
+  validates_acceptance_of :accept_terms_of_service
+  validates_acceptance_of :accept_privacy_policy
+  validates_acceptance_of :accept_code_of_conduct
+
   enumerize :currency, in: [
     :cad,
     :euro,
@@ -55,7 +63,8 @@ class Company < ApplicationRecord
     :yen,
   ]
 
-  enumerize :contract_preference, in: [:prefer_fixed, :prefer_hourly]
+  enumerize :contract_preference, in: [:prefer_fixed, :prefer_hourly, :prefer_daily]
+
   enumerize :number_of_employees, in: [
     :one_to_ten,
     :eleven_to_one_hundred,
@@ -63,8 +72,16 @@ class Company < ApplicationRecord
     :more_than_one_thousand
   ]
 
+  serialize :keywords
+  serialize :skills
+
   enumerize :country, in: [
     :at, :au, :be, :ca, :ch, :de, :dk, :es, :fi, :fr, :gb, :hk, :ie, :it, :jp, :lu, :nl, :no, :nz, :pt, :se, :sg, :us
+  ]
+
+  enumerize :header_source, in: [
+    :color,
+    :wallpaper
   ]
 
   accepts_nested_attributes_for :featured_projects, allow_destroy: true, reject_if: :reject_featured_projects
@@ -88,13 +105,62 @@ class Company < ApplicationRecord
 
   audited
 
+  attr_accessor :enforce_profile_edit
+  
+    validates_presence_of :name, 
+      :email, 
+      :address, 
+      :area, 
+      :country, 
+      :country, 
+      :description, 
+      :established_in, 
+      :keywords, 
+      :skills, 
+      if: :enforce_profile_edit
+
   after_create :add_to_hubspot
 
-    def add_to_hubspot
-      Hubspot::Contact.create_or_update!([
-        {email: email, firstname: name, lastname: ""}
-      ])
-    end
+
+  def add_to_hubspot
+    api_key = "5c7ad391-2bfe-4d11-9ba3-82b5622212ba"
+    url = "https://api.hubapi.com/contacts/v1/contact/createOrUpdate/email/#{email}/?hapikey=#{api_key}"
+    uri = URI.parse(url)
+    http = Net::HTTP.new(uri.host, uri.port)
+    http.use_ssl = true if uri.scheme == 'https'
+    req = Net::HTTP::Post.new uri
+    data = {
+      properties: [
+        {
+          property: "email",
+          value: email
+        },
+        {
+          property: 'company',
+          value: name
+        },
+        {
+          property: "firstname",
+          value: contact_name.split(" ")[0]
+        },
+        {
+          property: "lastname",
+          value: contact_name.split(" ")[1]
+        },
+        {
+          property: "lifecyclestage",
+          value: "customer"
+        },
+        {
+          property: "im_an",
+          value: "AV Company"
+        },
+      ]
+    }
+
+    req.body = data.to_json
+    res = http.start { |http| http.request req }
+  end
 
   pg_search_scope :search, against: {
     name: "A",

@@ -1,14 +1,11 @@
 .media
   .media-left
     a href="/company/freelancers/#{freelancer.id}"
-      - if freelancer.avatar_url.include?("missing.png")
-        = image_tag("http://graph.facebook.com/v2.5/111#{freelancer.id}/picture?height=75&height=75", size: "75x75")
-      - else
-        = image_tag(freelancer.avatar_url, size: "75x75")
+      = image_tag(freelancer.avatar_url, size: "75x75")
     .reviews
       - @stars = freelancer_avg_rating(freelancer)
       - @stars.each do |star|
-        .span class=star
+        i class=star
     - if freelancer.freelancer_reviews_count > 0
       a class="reviews__counter" href="/company/freelancers/#{freelancer.id}#reviews" data-turbolinks="false"
         = freelancer_ratings_link(freelancer)
@@ -31,8 +28,8 @@
         p= "#{freelancer.area}, #{distance_from(freelancer)} miles away"
     p.media-tagline
       = freelancer.tagline
-    .freelancer-keywords
-      - if !freelancer.keywords.nil?
-        - freelancer.keywords.split(", ").map(&:lstrip)[0..3].each do |keyword|
-          .freelancer-keyword
-            = keyword
+    div
+      - if !freelancer.keywords.nil? and freelancer.keywords.kind_of?(Hash)
+        - freelancer.keywords.first(4).each do |index, value|
+          .tag.grey
+            = I18n.t("enumerize.freelancer_keywords.#{index}")

@@ -55,6 +55,15 @@ module StripeTool
     stripe_list[:data]
   end
 
+  def self.get_invoices(customer: customer)
+    stripe_list = Stripe::Invoice.list(customer: customer)
+    stripe_list[:data]
+  end
+
+  def self.get_invoice(invoice: invoice)
+    Stripe::Invoice.retrieve(invoice)
+  end
+
   def self.create_invoice(customer_id: customer_id, subscription: subscription)
     invoice_item = Stripe::InvoiceItem.create(
       customer: customer_id,

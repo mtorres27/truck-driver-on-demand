@@ -28,4 +28,7 @@ module ApplicantHelper
     end
   end
 
+  def random_append
+    (0...rand(4..8)).map { ('a'..'z').to_a[rand(26)] }.join
+  end
 end

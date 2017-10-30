@@ -1,5 +1,8 @@
 .profile__wrapper
-  .profile__wrapper-bg style="background-image: url(#{@freelancer.profile_header_url.include?("missing") ? "" : @freelancer.profile_header_url}); background-color: ##{@freelancer.header_color}"
+  - if @freelancer.profile_header_url.include?("missing") or @freelancer.header_source == "color"
+    .profile__wrapper-bg style="background-color: #{ @freelancer.header_color.include?("#") ? "" : "#"}#{@freelancer.header_color}"
+  - else
+    .profile__wrapper-bg style="background-image: url(#{@freelancer.profile_header_url.include?("missing") ? "" : @freelancer.profile_header_url});"
 
   .profile__content
     .profile__block
@@ -25,15 +28,12 @@
     .profile__meta
       .profile__meta-left
         .profile__meta-left__avatar 
-          - if @freelancer.avatar_url.include?("missing.png")
-            = image_tag("http://graph.facebook.com/v2.5/111#{@freelancer.id}/picture?height=135&height=135", size: "135x135")
-          - else
-            = image_tag(@freelancer.avatar_url, size: "135x135")
+          = image_tag(@freelancer.avatar_url, size: "135x135")
 
         .profile__meta-left__stars
           - @stars = freelancer_avg_rating(@freelancer)
             - @stars.each do |star|
-              .span class=star
+              i class=star
 
         .profile__meta-left__number-of-reviews
           a href="#reviews" data-turbolinks="false"
@@ -51,14 +51,14 @@
         .profile__meta-center__tagline
           = @freelancer.tagline
         .profile__meta-center__keywords
-          - if !@freelancer.keywords.nil?
-            - @freelancer.keywords.split(", ").map(&:lstrip)[0..1].each do |keyword|
+          - if !@freelancer.keywords.nil? and @freelancer.keywords.kind_of?(Hash)
+            - @freelancer.keywords.first(2).each do |index, value|
               .profile__meta-center__keyword
-                = keyword
-          - if !@freelancer.skills.nil?
-            - @freelancer.skills.split(", ").map(&:lstrip)[0..1].each do |skill|
+                = I18n.t("enumerize.freelancer_keywords.#{index}")
+          - if !@freelancer.skills.nil? and @freelancer.skills.kind_of?(Hash)
+            - @freelancer.skills.first(2).each do |index, value|
               .profile__meta-center__keyword
-                = skill
+                = I18n.t("enumerize.freelancer_skills.#{index}")
 
 
       .profile__meta-right
@@ -124,20 +124,20 @@
           .profile__abilities__specialties__markets-label
             | markets
           .profile__abilities__specialties__markets-value
-            - if !@freelancer.keywords.nil?
-              - @freelancer.keywords.split(", ").map(&:lstrip).each do |keyword|
+            - if !@freelancer.keywords.nil? and @freelancer.keywords.kind_of?(Hash)
+              - @freelancer.keywords.each do |index, value|
                 .profile__abilities__specialties__market
-                  = keyword
+                  = I18n.t("enumerize.freelancer_keywords.#{index}")
             - else
               | This freelancer has no markets listed.
         .profile__abilities__specialties__skills
           .profile__abilities__specialties__skills-label
             | skills
           .profile__abilities__specialties__skills-value
-            - if !@freelancer.skills.nil?
-              - @freelancer.skills.split(", ").map(&:lstrip).each do |skill|
+            - if !@freelancer.skills.nil? and @freelancer.skills.kind_of?(Hash)
+              - @freelancer.skills.each do |index, value|
                 .profile__abilities__specialties__skill
-                  = skill
+                  = I18n.t("enumerize.freelancer_skills.#{index}")
             - else
               | This freelancer has no skills listed.
         
@@ -155,7 +155,9 @@
             - if @freelancer.freelancer_team_size.nil?
               = ""
             - else 
-              = "(#{@freelancer.freelancer_team_size.text})"
+              = "(#{@freelancer.freelancer_team_size})"
+        br
+        br
 
     .profile__certifications
       .profile__certifications-label
@@ -166,20 +168,14 @@
         - @freelancer.certifications.each do |certification|
           .profile__certifications__certificate
             - url = certification.certificate_url
-            - if certification.certificate_url == "certification/missing.pdf"
-              - url = "/assets/certification/certification.certificate_url"
-              a href=url target="_blank"
-                - if certification.thumbnail.nil?
-                  img src="/assets/certification/missing_thumbnail.png"
-                - else 
-                  img src=certification.thumbnail
-            - else
+            - if certification.certificate_url != "certification/missing.pdf"
               - url = certification.certificate_url
               a href=url target="_blank"
-                - if certification.thumbnail.nil?
-                  img src="/assets/certification/missing_thumbnail.png"
-                - else 
-                  img src=certification.thumbnail
+                - if is_image(url)
+                  img src=url
+                - else
+                  img src="/assets/certification/certification_placeholder.png"
+
             .profile__certifications__certification-name
               = certification.name
 

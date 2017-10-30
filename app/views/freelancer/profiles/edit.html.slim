@@ -8,22 +8,38 @@
     
     .result-content
       = simple_form_for(@freelancer, url: freelancer_profile_path) do |f|
+        = f.hidden_field :enforce_profile_edit, value: true
+
         .freelancer-profile__item
           .freelancer-profile__title
-            | PROFILE HEADER
-          = image_tag(@freelancer.profile_header_url, style: "width:100%;height:auto")
-          = f.file_field :profile_header, label: false, :accept => 'image/png,image/gif,image/jpeg'
+            | Wallpaper
+
+          .freelancer-profile__image--header
+            = image_tag(@freelancer.profile_header_url, id: "freelancer-edit-profile__header")
+            .freelancer-profile__image-upload onclick="updateHeaderImage()"
+              span class="fa fa-camera"
+          = f.file_field :profile_header, label: false, :accept => 'image/png,image/gif,image/jpeg', id: "edit-freelancer-profile-header", class: "file-input--hidden"
+        br
+        br
+        .freelancer-profile__item
+          .freelancer-profile__title
+            | Wallpaper Colour
+          = f.input :header_color, required: true, label: false, placeholder: "FF6C38" 
+        
+        .freelancer-profile__item
+          .freelancer-profile__title
+            | Header Source
+          = f.input :header_source, label: false, prompt: "Select"
 
         .freelancer-profile__item
           .freelancer-profile__title
             | Profile Picture
-          = image_tag(@freelancer.avatar_url, size: "135x135")
-          = f.file_field :avatar, label: false, :accept => 'image/png,image/gif,image/jpeg'
+          .freelancer-profile__image style="width: 135px; height: 135px; margin: auto"
+            = image_tag(@freelancer.avatar_url, id: "freelancer-edit-profile__avatar")
+            .freelancer-profile__image-upload onclick="updateProfilePicture()"
+              span class="fa fa-camera" 
+          = f.file_field :avatar, label: false, :accept => 'image/png,image/gif,image/jpeg', id: "edit-freelancer-profile-avatar", class: "file-input--hidden"
 
-        .freelancer-profile__item
-          .freelancer-profile__title
-            | Profile Colour
-          = f.input :header_color, required: true, label: false, placeholder: "FF6C38"  
 
         .freelancer-profile__item
           .freelancer-profile__title
@@ -42,8 +58,8 @@
 
         .freelancer-profile__item
           .freelancer-profile__title
-            | Area
-          = f.input :area, as: :string, required: true, label: false, placeholder: "Area"        
+            | City
+          = f.input :area, as: :string, required: true, label: false, placeholder: "City"        
 
         .freelancer-profile__item
           .freelancer-profile__title
@@ -67,18 +83,44 @@
 
         .freelancer-profile__item
           .freelancer-profile__title
-            | Bio
-          = f.input :bio, label: false
+            | Biography
+          = f.input :bio, label: false, placeholder: "Write a bio"
         
         .freelancer-profile__item
           .freelancer-profile__title
-            | Markets
-          = f.input :keywords, as: :string, label: false
+            | Specialties - Markets
+          - if @freelancer.errors.full_messages.include?("Keywords can't be blank")
+            .has-error
+              .help-block
+                | One market must be selected.
+          .freelancer-profile__checkboxes
+            - I18n.t('enumerize.freelancer_keywords').each do |index, value|
+              - tag_name = "freelancer[keywords][#{index.to_s}]"
+              - if @freelancer.keywords and @freelancer.keywords.include?(index.to_s)
+                - checked = true
+              - else
+                - checked = false
+              .freelancer-profile__checkbox
+                = check_box_tag tag_name, "1", checked
+                = " #{value}"
         
         .freelancer-profile__item
           .freelancer-profile__title
-            | Skills
-          = f.input :skills, as: :string, label: false
+            | Specialties - Skills
+          - if @freelancer.errors.full_messages.include?("Skills can't be blank")
+            .has-error
+              .help-block
+                | One market must be selected.
+          .freelancer-profile__checkboxes
+            - I18n.t('enumerize.freelancer_skills').each do |index, value|
+              - tag_name = "freelancer[skills][#{index.to_s}]"
+              - if @freelancer.skills and @freelancer.skills.include?(index.to_s)
+                - checked = true
+              - else
+                - checked = false
+              .freelancer-profile__checkbox
+                = check_box_tag tag_name, "1", checked
+                = " #{value}"
 
         .freelancer-profile__item
           .freelancer-profile__title
@@ -88,20 +130,113 @@
         .freelancer-profile__item
           .freelancer-profile__title
             | Availability
-          = f.input :available
+          
+          = f.radio_button(:available, true)
+          | I am available for work
+          br
+          = f.radio_button(:available, false)
+          | I am not available for work
+          p style="height: 10px;"
 
         .freelancer-profile__item
           .freelancer-profile__title
-            | Pay Type Preference
-          = f.input :pay_unit_time_preference, label: false, prompt: "Select Pay Type Preference"
+            | Rate
+          = f.input :pay_per_unit_time, label: false, placeholder: "Enter your rate"
 
         .freelancer-profile__item
           .freelancer-profile__title
-            | Certifications
-            = f.simple_fields_for :certifications do |certification_form|
-              = render "certification_fields", f: certification_form
-            .links
-              = link_to_add_association 'Add', f, :certifications, class: "btn btn-default"
+            | Pay Preference
+          = f.input :pay_unit_time_preference, label: false, prompt: "Select"
+
+        .freelancer-profile__item
+          .freelancer-profile__title
+            | Accreditation
+          = f.simple_fields_for :certifications do |certification_form|
+            = render "certification_fields", f: certification_form
+          .links.add-new-certificate
+            = link_to_add_association 'Add Another', f, :certifications, class: "btn btn-default"
+
         
+        p style="height: 20px;"
+
         .form-actions
-          = f.button :submit, class: "btn btn-primary", label: "Update Profile"
+          = f.button :submit, class: "btn-primary--active", label: "Update Profile"
+          a.btn-ghost--active.margin-8px href=freelancer_profile_path
+            | Cancel
+
+javascript:
+  var updateHeaderImage = function() {
+    $("#edit-freelancer-profile-header").click();
+    $("#edit-freelancer-profile-header").on('change', function() {
+      var imgPath = $(this)[0].value;
+      var extn = imgPath.substring(imgPath.lastIndexOf('.') + 1).toLowerCase();
+      var image_holder = $("#freelancer-edit-profile__header");
+
+      if (extn == "gif" || extn == "png" || extn == "jpg" || extn == "jpeg") {
+        if (typeof (FileReader) != "undefined") {
+          var reader = new FileReader();
+          reader.onload = function (e) {
+            image_holder.attr('src', e.target.result)
+          }
+
+          reader.readAsDataURL($(this)[0].files[0]);
+        }
+      } else {
+        alert("Only images can be selected.");
+      }
+    });
+  }
+
+  var updateProfilePicture = function() {
+    $("#edit-freelancer-profile-avatar").click();
+    $("#edit-freelancer-profile-avatar").on('change', function() {
+      var imgPath = $(this)[0].value;
+      var extn = imgPath.substring(imgPath.lastIndexOf('.') + 1).toLowerCase();
+      var image_holder = $("#freelancer-edit-profile__avatar");
+
+      if (extn == "gif" || extn == "png" || extn == "jpg" || extn == "jpeg") {
+        if (typeof (FileReader) != "undefined") {
+          var reader = new FileReader();
+          reader.onload = function (e) {
+            image_holder.attr('src', e.target.result)
+          }
+
+          reader.readAsDataURL($(this)[0].files[0]);
+        }
+      } else {
+        alert("Only images can be selected.");
+      }
+    });
+  }
+
+  function uploadCertificate (index) {
+    if (index != undefined) {
+      var ref = $("#freelancer_certifications_attributes_"+index+"_certificate");
+    } else {
+      var ref = $(".add-new-certificate").prev('div').find(".nested_fields").find(".file-input--hidden");
+    }
+
+    ref.on('change', function() {
+      var imgPath = $(this)[0].value;
+      var extn = imgPath.substring(imgPath.lastIndexOf('.') + 1).toLowerCase();
+      var image_holder = $(this).parent().parent().find(".freelancer-profile__image").find(".authorable_attachment--full").find("img");
+      if (extn == "gif" || extn == "png" || extn == "jpg" || extn == "jpeg") {
+        if (typeof (FileReader) != "undefined") {
+          var reader = new FileReader();
+          reader.onload = function (e) {
+            image_holder.attr('src', e.target.result)
+          }
+
+          reader.readAsDataURL($(this)[0].files[0]);
+        }
+      } else if (extn == "pdf") {
+        image_holder.attr('src', "/assets/certification/certification_placeholder.png")
+      } else {
+        alert("Only images can be selected.");
+      }
+    });
+
+    ref.click();
+  }
+
+  

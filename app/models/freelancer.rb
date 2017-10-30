@@ -26,6 +26,9 @@
 #  updated_at               :datetime         not null
 #
 
+require 'net/http'
+require 'uri'
+
 class Freelancer < ApplicationRecord
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
@@ -53,16 +56,75 @@ class Freelancer < ApplicationRecord
   has_many :company_favourites
   has_many :favourite_companies, through: :company_favourites, source: :company
 
+  serialize :keywords
+  serialize :skills
+
   validates :years_of_experience, numericality: { only_integer: true }
 
   audited
 
+  def connected?; !stripe_account_id.nil?; end
+
+  attr_accessor :accept_terms_of_service
+  attr_accessor :accept_privacy_policy
+  attr_accessor :accept_code_of_conduct
+
+  validates_acceptance_of :accept_terms_of_service
+  validates_acceptance_of :accept_privacy_policy
+  validates_acceptance_of :accept_code_of_conduct
+
+  attr_accessor :enforce_profile_edit
+  
+    validates_presence_of :name, 
+      :email, 
+      :address, 
+      :area, 
+      :country, 
+      :freelancer_type, 
+      :country, 
+      :bio, 
+      :years_of_experience, 
+      :keywords, 
+      :skills, 
+      :pay_unit_time_preference, 
+      if: :enforce_profile_edit
+
   after_create :add_to_hubspot
 
   def add_to_hubspot
-    Hubspot::Contact.create_or_update!([
-      {email: email, firstname: name.split(" ")[0], lastname: name.split(" ")[1]}
-    ])
+    api_key = "5c7ad391-2bfe-4d11-9ba3-82b5622212ba"
+    url = "https://api.hubapi.com/contacts/v1/contact/createOrUpdate/email/#{email}/?hapikey=#{api_key}"
+    uri = URI.parse(url)
+    http = Net::HTTP.new(uri.host, uri.port)
+    http.use_ssl = true if uri.scheme == 'https'
+    req = Net::HTTP::Post.new uri
+    data = {
+      properties: [
+        {
+          property: "email",
+          value: email
+        },
+        {
+          property: "firstname",
+          value: name.split(" ")[0]
+        },
+        {
+          property: "lastname",
+          value: name.split(" ")[1]
+        },
+        {
+          property: "lifecyclestage",
+          value: "customer"
+        },
+        {
+          property: "im_an",
+          value: "AV Freelancer"
+        },
+      ]
+    }
+
+    req.body = data.to_json
+    res = http.start { |http| http.request req }
   end
 
   pg_search_scope :search, against: {
@@ -76,7 +138,7 @@ class Freelancer < ApplicationRecord
   }
 
   enumerize :pay_unit_time_preference, in: [
-    :fixed, :hourly
+    :fixed, :hourly, :daily
   ]
 
   enumerize :freelancer_type, in: [
@@ -84,17 +146,21 @@ class Freelancer < ApplicationRecord
   ]
 
   enumerize :freelancer_team_size, in: [
-    :less_than_five, 
-    :six_to_ten, 
-    :eleven_to_twenty, 
-    :twentyone_to_thirty, 
+    :less_than_five,
+    :six_to_ten,
+    :eleven_to_twenty,
+    :twentyone_to_thirty,
     :more_than_thirty
+  ]
+
+  enumerize :header_source, in: [
+    :color,
+    :wallpaper
   ]
 
   enumerize :country, in: [
     :at, :au, :be, :ca, :ch, :de, :dk, :es, :fi, :fr, :gb, :hk, :ie, :it, :jp, :lu, :nl, :no, :nz, :pt, :se, :sg, :us
   ]
-
 
   attr_accessor :user_type
 

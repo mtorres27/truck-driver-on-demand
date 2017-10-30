@@ -42,12 +42,12 @@ module FreelancerHelper
     results = []
     5.times do |index|
       if rating >= 1
-        results << "fa fa-star"
+        results << "zmdi zmdi-star"
         rating -= 1
       elsif rating == 0
-        results << "fa fa-star-o"
+        results << "zmdi zmdi-star-outline"
       elsif rating == 0.5
-        results << "fa fa-star-half"
+        results << "zmdi zmdi-star-half"
         rating -= 0.5
       end
 

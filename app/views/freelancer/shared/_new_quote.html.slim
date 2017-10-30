@@ -1,0 +1,241 @@
+= simple_form_for(:message, url: freelancer_job_quotes_path(@job, @applicant), class: "freelancer-job__quote-form") do |f|
+  div style="display: none;"
+    = f.input :attachment, as: :file, label: false
+
+  .w-form.freelancer-job__quote-form
+    .common__radio-group.w-radio.width-30
+      = f.radio_button :status, "accept", class: "w-radio-input"
+      = f.label :status_accept, "Accept", class: "common__radio-field-label w-form-label"
+    .common__radio-group.w-radio.width-30
+      = f.radio_button :status, "negotiate", class: "w-radio-input"
+      = f.label :status_negotiate, "Negotiate", class: "common__radio-field-label w-form-label"
+      = f.hidden_field :override, value: ""
+    .common__radio-group.w-radio.width-30
+      = f.radio_button :status, "decline", class: "w-radio-input"
+      = f.label :status_decline, "Decline", class: "common__radio-field-label w-form-label"
+
+    .attachment.common__text-field-group
+      label.common__field-label for="name-4"
+        = "Send a message to #{n}"
+      a.common__text-field--attach-file.w-inline-block onClick="triggerFileUpload()"
+        .common__icon-attach 
+      = f.text_area :body, as: :string, placeholder: "Enter your message", label: false, maxlength: 5000, class: "w-input"
+
+    .new-message__counter
+      .attachment.common__text-field-group
+        label.common__field-label for="message_counter_type"  Choose a payment type
+        = f.select :counter_type, [["Fixed Rate", "fixed"], ["Hourly Rate", "hourly"], ["Daily Rate", "daily"]], {}, {class: "common__select-field w-select"}
+      
+      .new-message__counter--fixed
+        .common__text-field-group
+          label.common__field-label for="message_counter"  Suggested price
+          = f.input :counter, as: :string, maxlength: 256, placeholder: "Enter your suggested price", label: false, class: "w-input--important"
+    
+      .new-message__counter--hourly
+        .common__text-field-group.width-30
+          label.common__field-label Rate
+          = f.input :counter_hourly_rate, as: :integer, maxlength: 256, placeholder: "$/hr", label: false, class: "w-input--important"
+        .common__text-field-group.width-30
+          label.common__field-label  Time
+          = f.input :counter_number_of_hours, as: :integer, maxlength: 256, placeholder: "hrs", label: false, class: "w-input--important"
+        .common__text-field-group.width-30
+          label.common__field-label for="name-4" price
+          input.w-input--important data-name=("Name 3") maxlength="256" name="name-3" placeholder="$$" type="text" id="hourly-counter-price" disabled=true
+
+      .new-message__counter--daily
+        .common__text-field-group.width-30
+          label.common__field-label Rate
+          = f.input :counter_daily_rate, as: :integer, placeholder: "$/day", label: false, class: "w-input--important"
+        .common__text-field-group.width-30
+          label.common__field-label Time
+          = f.input :counter_number_of_days, as: :integer, placeholder: "days", label: false, class: "w-input--important"
+        .common__text-field-group.width-30
+          label.common__field-label for="name-4" price
+          input.w-input--important data-name=("Name 3") maxlength="256" name="name-4" placeholder="$$" type="text" id="daily-counter-price" disabled=true
+    
+    .common__form-action-cont.w-clearfix
+      div#new-message__validation-errors
+      a.btn-primary--active.w-inline-block.width-100 onclick="submitForm();"
+        div#new-message__submit
+          | Send
+
+
+javascript:
+  $("#message_counter").addClass("w-input--important");
+  $("#message_counter_hourly_rate").addClass("w-input--important");
+  $("#message_counter_number_of_hours").addClass("w-input--important");
+  $("#message_counter_daily_rate").addClass("w-input--important");
+  $("#message_counter_number_of_days").addClass("w-input--important");
+  var submitForm = function() {
+    // validate here
+    var validated = true;
+    $("#new-message__validation-errors").html("");
+    
+    var negotiate = $("#message_status_negotiate").is(":checked");
+
+    if (negotiate) {
+      var fixed = $("#message_counter_type").val() == "fixed";
+      var hourly = $("#message_counter_type").val() == "hourly";
+      var daily = $("#message_counter_type").val() == "daily";
+
+      if (fixed && $("#message_counter").val() == "") {
+        validated = false;
+      } else if (hourly && ($("#message_counter_number_of_hours").val() == "" || $("#message_counter_hourly_rate").val() == "")) {
+        validated = false;
+      } else if (daily && ($("#message_counter_number_of_days").val() == "" || $("#message_counter_daily_rate").val() == "")) {
+        validated = false;
+      }
+    }
+
+    if ($("#message_body").val() == "") {  
+      validated = false;
+    }
+
+    if (validated) {
+      $(".simple_form").submit();
+    } else {
+      $("#new-message__validation-errors").html("The message field cannot be empty. Also, if you are sending a counter-offer, the payment type and amounts must be supplied.")
+    }
+  }
+
+  var triggerFileUpload = function () {
+    $("#message_attachment").click();
+  };
+
+  $(".new-message__counter--fixed").hide();
+  $(".new-message__counter--hourly").hide();
+  $(".new-message__counter--daily").hide();
+
+  $("#message_counter_type").on('change', function() {
+    $(".new-message__counter--fixed").hide();
+    $(".new-message__counter--hourly").hide();
+    $(".new-message__counter--daily").hide();
+
+    $(".new-message__counter--"+$("#message_counter_type").val()).show();
+
+    $("#message_counter_hourly_rate").val("");
+    $("#message_counter_daily_rate").val("");
+    $("#message_counter_number_of_hours").val("");
+    $("#message_counter_number_of_days").val("");
+    $("#daily-counter-price").val("");
+    $("#hourly-counter-price").val("");
+  })
+
+  $("#message_attachment").change(function() {
+    $(".new-message__attachment-button").addClass("new-message__attachment-button--active");
+  });
+
+  $("#message_counter_hourly_rate").on("input", function() {
+    calcHourlyQuote();
+  });
+
+  $("#message_counter_number_of_hours").on("input", function() {
+    calcHourlyQuote();
+  });
+
+  var calcHourlyQuote = function( ) {
+    var rate = $("#message_counter_hourly_rate").val();
+    var num = $("#message_counter_number_of_hours").val();
+    var amt;
+
+    if (rate == "" || num == "") {
+      amt = "N/A";
+    } else {
+      amt = rate *  num;
+    }
+
+    $("#hourly-counter-price").val(amt);
+  }
+
+  $("#message_counter_daily_rate").on("input", function() {
+    calcDailyQuote();
+  });
+
+  $("#message_counter_number_of_days").on("input", function() {
+    calcDailyQuote();
+  });
+
+  var calcDailyQuote = function( ) {
+    var rate = $("#message_counter_daily_rate").val();
+    var num = $("#message_counter_number_of_days").val();
+    var amt;
+
+    if (rate == "" || num == "") {
+      amt = "N/A";
+    } else {
+      amt = rate *  num;
+    }
+
+    $("#daily-counter-price").val(amt);
+  }
+
+
+
+  var showCounterOffer = function() {
+    var input_ref = $(".new-message__input");
+    var counter_ref = $(".new-message__counter");
+    if (!input_ref.hasClass("new-message__input--counter-visible")) {
+      input_ref.addClass("new-message__input--counter-visible");
+      counter_ref.addClass("new-message__counter--visible");
+    };
+
+    $(".new-message__counter--fixed").show();
+    $(".new-message__counter--hourly").hide();
+    $(".new-message__counter--daily").hide();
+  }
+
+  var hideCounterOffer = function() {
+    var input_ref = $(".new-message__input");
+    var counter_ref = $(".new-message__counter");
+    if (input_ref.hasClass("new-message__input--counter-visible")) {
+      input_ref.removeClass("new-message__input--counter-visible");
+      counter_ref.removeClass("new-message__counter--visible");
+    };
+
+    $(".new-message__counter--fixed").hide();
+    $(".new-message__counter--hourly").hide();
+    $(".new-message__counter--daily").hide();
+  }
+
+  var makeRadiosDeselectableByName = function(name){
+    $('#' + name).click(function() {
+        if($(this).attr('previousValue') == 'true'){
+            $(this).attr('checked', false)
+            $("#new-message__submit").html("Send");
+            $("#new-message__submit").parent().removeClass("warning");
+            $("#message_body").attr("placeholder", "Enter your message");
+        } else {
+            $('#' + name).attr('previousValue', false);
+        }
+
+        if ($(this).is(':checked')) {
+          if ($(this).attr("id").indexOf("_negotiate", 0) > 0) {
+            showCounterOffer();
+            $("#new-message__submit").html("Negotiate");
+            $("#new-message__submit").parent().removeClass("warning");
+            $("#message_body").attr("placeholder", "Enter your negotiation message");
+          } else {
+            hideCounterOffer();
+            if ($(this).attr("id").indexOf("_accept", 0) > 0) {
+              $("#new-message__submit").html("Accept");
+              $("#new-message__submit").parent().removeClass("warning");
+              $("#message_body").attr("placeholder", "Enter your acceptance message");
+            } else {
+              $("#new-message__submit").html("Decline");
+              $("#new-message__submit").parent().addClass("warning");
+              $("#message_body").attr("placeholder", "Enter your declination message");
+            }
+          }
+        } else {
+          hideCounterOffer();
+          $("#new-message__submit").html("Send");
+          $("#new-message__submit").parent().removeClass("warning");
+        }
+      $(this).attr('previousValue', $(this).is(':checked'));
+    });
+  };
+
+  makeRadiosDeselectableByName("message_status_accept");
+  makeRadiosDeselectableByName("message_status_decline");
+  makeRadiosDeselectableByName("message_status_negotiate");
+

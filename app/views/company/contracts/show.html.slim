@@ -6,7 +6,7 @@
       a.result-header__link-back href=company_job_path(@job)
         span class="fa fa-long-arrow-left"
       .result-header__text
-        | Work Order
+        = "Work Order #{@job.work_order}"
     .result-content
       .row
         .col-xs-12.col-md-6
@@ -21,6 +21,9 @@
           .show_field
             label= t(:addendums, scope: [:form, :labels, :job])
             .show_value= @job.addendums || "Not Specified"
+
+        .col-xs-12.col-md-6
+          = render partial: "company/shared/contract_meta", locals: { job: @job }
 
         .col-xs-12.col-md-6
           .show_field
@@ -95,4 +98,4 @@
       - if @job.pre_contracted?
         hr
         .form-actions
-          = link_to "Edit", edit_company_job_contract_path(@job), class: "btn btn-primary"
+          = link_to "Edit", edit_company_job_work_order_path(@job), class: "btn btn-primary"

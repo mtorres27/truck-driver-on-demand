@@ -1,6 +1,6 @@
 .company-freelancers
   .result-freelancers
-    padding: 0px 20px
+    padding: 16px
     box-sizing: border-box
   .result-row
     display: block
@@ -22,7 +22,7 @@
     display: inline-block
     width: 100%
   .media-left
-    min-width: 22px
+    min-width: 85px
     position: relative
 
 .company-freelancer
@@ -48,27 +48,24 @@
 .media-tagline
   font-style: italic
 
-.freelancer-keywords
-  width: 100%
-  display: inline-block
-
-.freelancer-keyword
-  @extend %keyword-base
-
 .result-wrapper
   background-color: $white-color
-  margin: 30px 0px 30px 0px
   box-sizing: border-box
   border-radius: 4px
   width: 100%
   display: inline-block
-  -webkit-box-shadow: 0px 0px 1px 1px rgba(0,0,0,0.1)
-  -moz-box-shadow: 0px 0px 1px 1px rgba(0,0,0,0.1)
-  box-shadow: 0px 0px 1px 1px rgba(0,0,0,0.1)
+
+  @media (max-width: $breakpoint-tablet)
+    margin: -15px
+    padding: 15px
+    width: calc(100% + 30px)
+
 
 .result-content
   padding: 20px
   overflow: hidden
+  @media (max-width: $breakpoint-tablet)
+    padding: 0px
 
   &--expanded
     @extend .result-content
@@ -92,6 +89,7 @@
 
     &--hidden
       background: transparent
+      margin-top: 100px
 
   &__bg
     text-align: center
@@ -115,7 +113,7 @@
 
   &__text
     float: left
-    font-size: 30px
+    font-size: 20px
 
     &--strong
       font-weight: bold
@@ -142,39 +140,54 @@
   &__button
     float: right
 
-
 .tab-bar
-  width: 100%
+  overflow: auto
+  white-space: nowrap
+
+.tab-bar__item
   display: inline-block
-  margin-bottom: -5px
+  padding: 8px 24px
+  box-shadow: inset 0 0 0 0 #3daadf
+  -webkit-transition: box-shadow 200ms ease
+  transition: box-shadow 200ms ease
+  color: #3daadf
+  font-size: 14px
+  font-weight: 600
+  text-decoration: none
+  text-transform: uppercase
+  &:hover
+    box-shadow: inset 0 -5px 0 0 #208cc0
 
-  &__item
-    width: 150px
-    height: 50px
-    font-size: 14px
-    font-weight: bold
-    text-align: center
-    text-transform: uppercase
-    color: $freelancer-sub-nav-text-color !important
-    display: block
-    float: left
-    line-height: 4em
 
-    &:hover
-      text-decoration: none
-      color: $freelancer-sub-nav-text-color !important
-      border-bottom: 3px solid $freelancer-sub-nav-border-color !important
+.tab-item--active, .tab-bar__item--active
+  display: inline-block
+  padding: 8px 24px
+  box-shadow: inset 0 -3px 0 0 #3daadf
+  -webkit-transition: box-shadow 200ms ease
+  transition: box-shadow 200ms ease
+  color: #3daadf
+  font-size: 14px
+  font-weight: 600
+  text-decoration: none
+  text-transform: uppercase
+  &:hover
+    box-shadow: inset 0 -5px 0 0 #208cc0 
 
-    &--active
-      color: $freelancer-sub-nav-color !important
-      border-bottom: 3px solid $freelancer-sub-nav-color !important
-      &:hover
-        color: $freelancer-sub-nav-color !important
-        border-bottom: 3px solid $freelancer-sub-nav-color !important
 
-    &--inactive
-      &:hover
-        border-bottom: none !important
+.tab-item--inactive, .tab-bar__item--inactive
+  display: inline-block
+  padding: 8px 24px
+  box-shadow: none
+  border-bottom: 0px solid #000
+  -webkit-transition: box-shadow 200ms ease
+  transition: box-shadow 200ms ease
+  color: #666
+  font-size: 14px
+  font-weight: 600
+  text-decoration: none
+  text-transform: uppercase
+  &:hover
+    box-shadow: inset 0 -3px 0 0 #a7a7a7
 
 
 .freelancer-favourite
@@ -200,132 +213,7 @@
   background-color: $white-color
   padding-top: 10px
 
-.freelancer-job
-  display: table
-  &__back
-    display: table-cell
-    width: 50px
-    text-align: center
-    vertical-align: middle
 
-    &-button
-      color: $black-color
-
-  &__apply-modal
-    display: none
-    position: fixed
-    left: 0
-    top: 0
-    width: 100%
-    height: 100%
-
-
-  &__apply
-    position: fixed
-    bottom: 0
-    background-color: #ffffff
-    width: 100%
-    left: 0
-    display: inline-block
-    padding: 10px
-    border-top: 1px solid $gray-f3
-
-  &__favourite
-    float: right
-    font-size: 13px
-    margin: 5px 10px 0px 0px
-    color: $gray-300
-    border-radius: 4px
-    border: 1px solid $gray-300
-    padding: 3px 10px
-
-    &--active
-      @extend .freelancer-job__favourite
-      color: $freelancer-profile-favourite-color
-      border: 1px solid $freelancer-profile-favourite-color
-  
-  &__apply-for-job
-    background-color: $freelancer-profile-favourite-color
-    padding: 10px 10px
-    border-radius: 2px
-    margin: 3px 0px 0px 10px
-    float: left
-    color: $white-color
-    font-size: 11px
-    text-transform: uppercase
-
-    &:hover
-      text-decoration: none
-      color: $white-color
-      background-color: $link-color
-
-  &__state
-    font-size: 10px !important
-    text-transform: uppercase
-
-  &__summary
-    margin: 10px 0px
-
-  &__keywords
-    margin: 10px 0px
-    display: inline-block
-
-  &__meta
-    width: 100%
-
-    &-row
-      width: 100%
-      display: table
-      margin-bottom: 15px
-
-    &-item
-      width: 50%
-      display: table-cell
-
-      &__title
-        font-size: 10px
-        color: $gray-dark
-        margin-bottom: 5px
-        text-transform: uppercase
-        font-weight: bold
-
-
-      &__value
-        font-size: 14px
-
-
-.freelancer-job__header
-  background-color: $current-applicant-bg-color
-  padding-top: 10px
-  margin: 0px -15px
-
-.freelancer-job__top
-  &-row
-    display: table
-    width: 100%
-    padding-bottom: 10px
-
-    &:last-of-kind
-      padding-bottom: 0px
-
-    .search-result__company
-      margin-top: -4px
-
-  &-state
-    display: table-cell
-    width: 50%
-
-  &-created-at
-    display: table-cell
-    width: 50%
-    color: $gray-lightest
-    text-transform: uppercase
-    font-size: 12px
-    text-align: right
-
-  &-title
-    display: table-cell
-    width: 100%
 
 .company-info
   width: 100%

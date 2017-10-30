@@ -8,3 +8,7 @@ $(window).scroll(function() {
     $("#top-nav").removeClass("navbar-floating")
   }
 });
+
+var hide_remove_association = function (obj) {
+  $(obj).parent().parent().fadeOut()
+}

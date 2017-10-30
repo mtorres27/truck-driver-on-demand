@@ -8,34 +8,29 @@
           .new-message_amount
             .new-message__freelancer-selected
               .new-message__freelancer-selected__avatar
-                - if @job.freelancer.avatar_url.include?("missing.png")
-                  = image_tag("http://graph.facebook.com/v2.5/111#{@job.freelancer.id}/picture?height=65&height=65", size: "65x65")
-                - else
-                  = image_tag(@job.freelancer.avatar_url, size: "65x65")
+                = image_tag(@job.freelancer.avatar_url, size: "65x65")
 
               .new-message__freelancer-selected__text
                 b
                   = "Congratulations, you've selected #{@job.freelancer.name} for this job."
                 p
-                  = "The next step is to create a contract with #{@job.freelancer.name}. We've made this super simple by doing all the hard work for you. "
-                  = "Simply click the button below to proceed to createing a contract."
+                  = "The next step is to create a work order with #{@job.freelancer.name}. We've made this super simple by doing all the hard work for you. "
+                  = "Simply click the button below to proceed to creating a work order."
 
                 div
-                a.btn.btn-primary href=company_job_contract_path(@job)
-                  | view contract
+                a.btn.btn-primary href=company_job_work_order_path(@job)
+                  | view Work Order
       .applicant-messages__messages--inner class=("applicant-messages__messages--inner--inactive" if @applicant_accepted == true)
         - @harmonized_items.each do |item|
           - if item[:type] == "message"
             .media
               .media-left
                 .freelancer_avatar
-                  - if item[:payload].authorable.avatar_url.include?("missing.png")
-                    = image_tag("http://graph.facebook.com/v2.5/111#{item[:payload].authorable.id}/picture?height=40&height=40", size: "40x40")
-                  - else
-                    = image_tag(item[:payload].authorable.avatar_url, size: "40x40")
+                  = image_tag(item[:payload].authorable.avatar_url, size: "40x40")
               .media-body
                 span.authorable_name #{item[:payload].authorable.name}
-                span.authorable_date #{time_ago_in_words(item[:payload].created_at)} ago
+                - if !item[:payload].created_at.nil?
+                  span.authorable_date #{time_ago_in_words(item[:payload].created_at)} ago
                 .authorable_body= item[:payload].body
                 - if item[:payload].attachment_url
                   a.authorable_attachment href=item[:payload].attachment_url target="_blank"
@@ -75,15 +70,15 @@
           b
             | CONGRATULATIONS, YOU'VE FOUND YOUR FREELANCER.
           p
-            = "The next step is to create a contract with #{@applicant.freelancer.name}. We've made this super simple by doing all the hard work for you. "
-            | "Simply click the button below to proceed to creating a contract. If you don't have the time right now you can find this in the job details section."
+            = "The next step is to create a work order with #{@applicant.freelancer.name}. We've made this super simple by doing all the hard work for you. "
+            | "Simply click the button below to proceed to creating a work worder. If you don't have the time right now you can find this in the job details section."
           p
             em
               = "Remember, by accepting this quote of #{number_to_currency(@quotes.first.amount, precision: 0)}  #{job.currency} with #{@applicant.freelancer.name}, all other applications for this"
               = " job will automatically be declined, and receive a general notification iforming them the job has been filled. Details of who you've selected will not be shared."
         .modal__accept-quote__content__buttons
           .accept_button.btn.btn-primary
-            | Accept Quote and Create Contract
+            | Accept Quote and Create Work Order
           .cancel_button.btn.btn-tertiary
             | Cancel
 
@@ -99,7 +94,7 @@
             | YOU HAVE DECIDED TO DECLINE THIS QUOTE
 
           p
-            | More text will go here.
+            | Declining this quote will notify the freelancer of your decision. However, they still have the option to offer another quote.
 
         .modal__decline-quote__content__buttons
           .decline_button.btn.btn-primary

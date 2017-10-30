@@ -1,0 +1,9 @@
+- if !job.freelancer.nil?
+  .job-details__work-order__freelancer-meta
+    | Freelancer
+    br
+    a href="/company/freelancers/#{job.freelancer.id}"
+      = job.freelancer.name
+    
+
+

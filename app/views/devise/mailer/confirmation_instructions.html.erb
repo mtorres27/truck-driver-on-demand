@@ -1,5 +1,210 @@
-<p>Welcome <%= @email %>!</p>
-
-<p>You can confirm your account email through the link below:</p>
-
-<p><%= link_to 'Confirm my account', confirmation_url(@resource, confirmation_token: @token) %></p>
+<!doctype html>
+<html style="margin: 0; padding: 0px;">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+    <!--[if !mso]><!-- -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <!--<![endif]-->
+    <style type="text/css">
+        body{
+            margin:0;
+            padding:0;
+            line-height: 1;
+        }
+        img{
+            border:0 none;
+            height:auto;
+            line-height:100%;
+            outline:none;
+            text-decoration:none;
+            display:block;
+        }
+            a img{
+            border:0 none;
+        }
+        table, td{
+            border-collapse: collapse;
+            border-spacing: 0;
+            padding:0px;
+        }
+        #bodyTable{
+            height:100% !important;
+            margin:0;
+            padding:0;
+            width:100% !important;
+        }
+    </style>
+</head>
+<body bgcolor="#ffffff" style="padding:0px;margin:0px;">
+    <table id="bodyTable" bgcolor="#ffffff" style="width: 100%; height: 100%; background-color: #ffffff; margin: 0; padding:0;">
+        <tr>
+            <td style="text-align: center;" valign="top">
+                <table style="border-collapse:collapse;table-layout:fixed;width:640px;height:783px;margin:auto;" border="0" width="640" height="783">
+                <tr>
+                    <td style="vertical-align:top;padding:0px;width:640px;height:783px;" colspan="1" rowspan="1">
+                        <div style="display:block;background-color:#F3F3F3;color:#f3f3f3;width:640px;height:783px;">
+                            <table style="border-collapse:collapse;table-layout:fixed;width:640px;height:783px;margin:auto;" border="0" width="640" height="784">
+                                <colgroup>
+                                    <col style="width:70px;"/><col style="width:63px;"/><col style="width:55px;"/><col style="width:27px;"/><col style="width:28px;"/><col style="width:31px;"/><col style="width:31px;"/><col style="width:31px;"/><col style="width:30px;"/><col style="width:31px;"/><col style="width:29px;"/><col style="width:8px;"/><col style="width:74px;"/><col style="width:62px;"/><col style="width:70px;"/>
+                                </colgroup>
+                                <tr>
+                                    <td colspan="15" style="width:640px;height:34px">&shy;</td>
+                                </tr>
+                                <tr>
+                                    <td colspan="3" style="width:188px;height:41px">&shy;</td>
+                                    <td style="vertical-align:top;padding:0px;width:246px;height:41px;" colspan="9" rowspan="1">
+                                        <div style="display:block;width:246px;height:41px;">
+                                            <a href="http://www.avjunction.com">
+                                            	<img src="<%= image_path('email/avjunction-logo.png') %>" style="display:block;" width="246" height="41" alt="Logo"/>
+                                            </a>
+                                        </div>
+                                    </td>
+                                    <td colspan="3" style="width:206px;height:41px">&shy;</td>
+                                </tr>
+                                <tr>
+                                    <td colspan="15" style="width:640px;height:46px">&shy;</td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2" style="width:133px;height:50px">&shy;</td>
+                                    <td style="vertical-align:top;padding:0px;width:375px;height:50px;" colspan="11" rowspan="1">
+                                        <div style="display:block;font-family:ArialMT;font-size:20px;color:#333333;letter-spacing:0;line-height:25px;text-align:center;width:375px;height:50px;">
+                                            <span style="font-family:'Arial';font-size:20px;color:#333333;">Hi </span>
+                                            <span style="font-weight:700;font-family:'Arial';font-size:20px;color:#333333;"><%= @resource.name %></span>
+                                            <span style="font-family:'Arial';font-size:20px;color:#333333;">,<br/>Your AV Junction account is almost setup!</span>
+                                        </div>
+                                    </td>
+                                    <td colspan="2" style="width:132px;height:50px">&shy;</td>
+                                </tr>
+                                <tr>
+                                    <td colspan="15" style="width:640px;height:25px">&shy;</td>
+                                </tr>
+                                <tr>
+                                    <td colspan="1" style="width:70px;height:444px">&shy;</td>
+                                    <td style="vertical-align:top;padding:0px;width:500px;height:444px;" colspan="13" rowspan="1">
+                                        <div style="display:block;background-color:#FFFFFF;color:#ffffff;width:500px;height:444px;">
+                                            <table style="border-collapse:collapse;table-layout:fixed;width:500px;height:444px;margin:auto;" border="0" width="500" height="444">
+                                                <colgroup>
+                                                    <col style="width:33px;"/><col style="width:133px;"/><col style="width:168px;"/><col style="width:134px;"/><col style="width:32px;"/>
+                                                </colgroup>
+                                                <tr>
+                                                    <td colspan="5" style="width:500px;height:52px">&shy;</td>
+                                                </tr>
+                                                <tr>
+                                                    <td colspan="1" style="width:33px;height:110px">&shy;</td>
+                                                    <td style="vertical-align:top;padding:0px;width:435px;height:110px;" colspan="3" rowspan="1">
+                                                        <div style="display:block;font-family:ArialMT;font-size:16px;color:#333333;letter-spacing:0;line-height:22px;text-align:left;width:435px;height:110px;">
+                                                            <span style="font-family:'Arial';font-size:16px;color:#333333;">We are excited to have you join our network of AV Companies and Freelancers.<br/>
+First you’ll need to confirm your account by clicking the button below.</span>
+                                                        </div>
+                                                    </td>
+                                                    <td colspan="1" style="width:32px;height:110px">&shy;</td>
+                                                </tr>
+                                                <tr>
+                                                    <td colspan="5" style="width:500px;height:38px">&shy;</td>
+                                                </tr>
+                                                <tr>
+                                                    <td colspan="2" style="width:166px;height:40px">&shy;</td>
+                                                    <td style="vertical-align:top;padding:0px;width:168px;height:40px;" colspan="1" rowspan="1">
+                                                        <a href="<%=confirmation_url(@resource, confirmation_token: @token) %>" style="text-decoration:none;">
+                                                        <div style="display:block;background-color:#3DAADF;border-radius:3px;color:#3caadf;width:168px;height:40px;">
+                                                            <table style="border-collapse:collapse;table-layout:fixed;width:168px;height:40px;margin:auto;" border="0" width="168" height="40">
+                                                                <colgroup>
+                                                                    <col style="width:14px;"/><col style="width:138px;"/><col style="width:16px;"/>
+                                                                </colgroup>
+                                                                <tr>
+                                                                    <td colspan="3" style="width:168px;height:12px">&shy;</td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td colspan="1" style="width:14px;height:16px">&shy;</td>
+                                                                    <td style="vertical-align:top;padding:0px;width:138px;height:16px;" colspan="1" rowspan="1">
+                                                                        <div style="display:block;font-family:Arial-BoldMT;font-size:14px;color:#FFFFFF;letter-spacing:0;text-align:center;width:138px;height:16px;">
+                                                                            <span style="font-weight:700;font-family:'Arial';font-size:14px;color:#ffffff;">Confirm my email</span>
+                                                                        </div>
+                                                                    </td>
+                                                                    <td colspan="1" style="width:16px;height:16px">&shy;</td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td colspan="3" style="width:168px;height:12px">&shy;</td>
+                                                                </tr>
+                                                            </table>
+                                                        </div>
+                                                        </a>
+                                                    </td>
+                                                    <td colspan="2" style="width:166px;height:40px">&shy;</td>
+                                                </tr>
+                                                <tr>
+                                                    <td colspan="5" style="width:500px;height:47px">&shy;</td>
+                                                </tr>
+                                                <tr>
+                                                    <td colspan="1" style="width:33px;height:110px">&shy;</td>
+                                                    <td style="vertical-align:top;padding:0px;width:435px;height:110px;" colspan="3" rowspan="1">
+                                                        <div style="display:block;font-family:ArialMT;font-size:16px;color:#333333;letter-spacing:0;line-height:22px;text-align:left;width:435px;height:110px;">
+                                                            <span style="font-family:'Arial';font-size:16px;color:#333333;">If the link above doesn't work, you can go to this url: <a href="<%=confirmation_url(@resource, confirmation_token: @token) %>"><%=confirmation_url(@resource, confirmation_token: @token) %></a> to confirm your account.</span>
+                                                        </div>
+                                                    </td>
+                                                    <td colspan="1" style="width:32px;height:110px">&shy;</td>
+                                                </tr>
+                                                <tr>
+                                                    <td colspan="5" style="width:500px;height:47px">&shy;</td>
+                                                </tr>
+                                            </table>
+                                        </div>
+                                    </td>
+                                    <td colspan="1" style="width:70px;height:444px">&shy;</td>
+                                </tr>
+                                <tr>
+                                    <td colspan="15" style="width:640px;height:38px">&shy;</td>
+                                </tr>
+                                <tr>
+                                    <td colspan="4" style="width:215px;height:16px">&shy;</td>
+                                    <td style="vertical-align:top;padding:0px;width:211px;height:16px;" colspan="7" rowspan="1">
+                                        <div style="display:block;font-family:ArialMT;font-size:14px;color:#333333;letter-spacing:0;text-align:center;width:211px;height:16px;">
+                                            <span style="font-family:'Arial';font-size:14px;color:#333333;">Copyright © 2017 AV Junction Inc</span>
+                                        </div>
+                                    </td>
+                                    <td colspan="4" style="width:214px;height:16px">&shy;</td>
+                                </tr>
+                                <tr>
+                                    <td colspan="15" style="width:640px;height:24px">&shy;</td>
+                                </tr>
+                                <tr>
+                                    <td colspan="5" style="width:243px;height:29px">&shy;</td>
+                                    <td style="vertical-align:top;padding:0px;width:31px;height:29px;" colspan="1" rowspan="1">
+                                        <div style="display:block;color:#999999;width:31px;height:29px;">
+                                        	<a href="https://facebook.com/avjunction" target="_blank">
+                                            	<img src="<%= image_path('email/facebook.png') %>" style="display:block;" width="31" height="29" alt="Facebook"/>
+                                            </a>
+                                        </div>
+                                    </td>
+                                    <td colspan="1" style="width:31px;height:29px">&shy;</td>
+                                    <td style="vertical-align:top;padding:0px;width:31px;height:29px;" colspan="1" rowspan="1">
+                                        <div style="display:block;color:#999999;width:31px;height:29px;">
+                                        	<a href="https://twitter.com/avjunction" target="_blank">
+                                            	<img src="<%= image_path('email/twitter.png') %>" style="display:block;" width="31" height="29" alt="Twitter"/>
+                                            </a>
+                                        </div>
+                                    </td>
+                                    <td colspan="1" style="width:30px;height:29px">&shy;</td>
+                                    <td style="vertical-align:top;padding:0px;width:31px;height:29px;" colspan="1" rowspan="1">
+                                        <div style="display:block;color:#999999;width:31px;height:29px;">
+                                        	<a href="https://www.linkedin.com/company-beta/16273548/" target="_blank">
+                                            	<img src="<%= image_path('email/linkedin.png') %>" style="display:block;" width="31" height="29" alt="Linkedin"/>
+                                        	</a>
+                                        </div>
+                                    </td>
+                                    <td colspan="5" style="width:243px;height:29px">&shy;</td>
+                                </tr>
+                                <tr>
+                                    <td colspan="15" style="width:640px;height:36px">&shy;</td>
+                                </tr>
+                            </table>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+            </td>
+        </tr>
+    </table>
+</body>
+</html>

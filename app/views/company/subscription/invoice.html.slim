@@ -1,0 +1,19 @@
+h2
+  | Invoice
+.invoice
+  .id
+    | id : #{@invoice[:id]}
+  .date
+    | date : #{Time.at(@invoice[:date])}
+  .amount
+    | amount : #{pretty_amount(@invoice[:lines][:data][0][:amount])}
+  .description
+    | description : #{@invoice[:lines][:data][0][:description]}
+  .start_date
+    | From : #{Time.at(@invoice[:lines][:data][0][:period][:start])}
+  .end_date
+    | To : #{Time.at(@invoice[:lines][:data][0][:period][:end])}
+  .plan
+    | Plan : #{@invoice[:lines][:data][0][:plan][:name]}
+  .interval
+    | Interval : #{@invoice[:lines][:data][0][:plan][:interval]}

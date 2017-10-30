@@ -146,12 +146,12 @@ class Freelancer::JobsController < Freelancer::BaseController
   
   def my_jobs
     @applications = []
-    current_freelancer.applicants.each do |applicant|
+    current_freelancer.applicants.where.not({ state: "accepted" }).each do |applicant|
       @applications << applicant.job
     end
 
     @jobs = []
-    current_freelancer.jobs.each do |job|
+    current_freelancer.applicants.where({ state: "accepted" }).each do |job|
       @found = false
       @applications.each do |application|
         if job.id == application.id
@@ -160,7 +160,7 @@ class Freelancer::JobsController < Freelancer::BaseController
       end
 
       if @found == false
-        @jobs << job
+        @jobs << job.job
       end
     end
   end
@@ -168,8 +168,8 @@ class Freelancer::JobsController < Freelancer::BaseController
   
   def my_applications
     @jobs = []
-    current_freelancer.applicants.each do |applicant|
-      @jobs << applicant.job
+    current_freelancer.applicants.where.not({state: 'accepted'}).each do |applicant|
+      @jobs << { job: applicant.job, applicant: applicant }
     end
   end
   
@@ -215,7 +215,8 @@ class Freelancer::JobsController < Freelancer::BaseController
         :message,
         :attachment,
         :daily_rate,
-        :number_of_days
+        :number_of_days,
+        :body
       )
     end
 end
