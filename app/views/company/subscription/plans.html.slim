@@ -4,16 +4,17 @@ br
 - content_for :secondary do
   .result-wrapper
     .result-content
+
       ul
         - if current_company.subscription_status == "trialing" || current_company.subscription_status == "active"
           .current_plan
             | You're currently subscribed to the #{current_company.subscription_cycle}ly plan
           - if current_company.subscription_status == "trialing"
-            | but in "trial" period
+            | with XXX days left in your trial. Your first charge will appear on XXX Date.
           - if current_company.is_subscription_cancelled == true
-            | , But unfortunately you requested to cancel your subscription, it'll end at #{current_company.billing_period_ends_at}
+            | , however you have chosen to cancel your subscription. You will have full access to your account until #{current_company.billing_period_ends_at}, after which you will no longer be able to post new jobs in AV Junction.
           - else
-            | , the #{ current_company.subscription_status == "trialing" ? "trial":"subscription"} will end at #{current_company.billing_period_ends_at}
+            | , you can continue with full access to your account until YYY date. the #{ current_company.subscription_status == "trialing" ? "trial":"subscription"} will end at #{current_company.billing_period_ends_at}
           .card
             = current_company.card_brand << "-" <<  current_company.last_4_digits << "-" << current_company.exp_month << "/" << current_company.exp_year
             .update_card
@@ -30,6 +31,30 @@ br
             /       - next if current_company.stripe_plan_id == plan.id
             /       = link_to plan.name, company_subscription_change_path(plan: plan.id), :data => {:confirm => 'Are you sure?'}
         - else
+          h2.plans__header
+            | You're currently subscribed to the monthly plan, with
+            strong  89 
+            | days left in your trial. Your first charge will appear on
+            strong  January 24, 2018.
+          .plans-container
+            .plans
+              h3.plans__title Upgrade to the annual plan and save
+              .plans__subtitle Save 5% if paid for the year.
+              .plans__pricing
+                .plans__price $142.50
+                .plans__currency USD
+              a.btn-primary--active.w-inline-block.width-100 href="#" 
+                div Upgrade
+            .plans
+              h3.plans__title Cancel your subscription
+              .plans__subtitle Like we said, no strings attached.
+              .plans__pricing
+                .plans__price  
+              a.btn-ghost--active.w-inline-block.width-100 href="#" 
+                div Cancel subscription
+          
+          
+          
           h2.plans__header
             | You are currently on
             strong  Day 12 
