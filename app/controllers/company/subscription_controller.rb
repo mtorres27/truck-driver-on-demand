@@ -22,6 +22,7 @@ class Company::SubscriptionController < Company::BaseController
   def plans
     # logger.debug current_company.inspect
     @plans = StripeTool.get_plans
+    logger.debug @plans.inspect
   end
 
   def reset_company

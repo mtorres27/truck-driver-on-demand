@@ -1,38 +1,67 @@
-.plan-container{ style='margin-top: 200px;' }
-  ul
-    - if current_company.subscription_status == "trialing" || current_company.subscription_status == "active"
-      .current_plan
-        | You're currently subscribed to the #{current_company.subscription_cycle}ly plan
-      - if current_company.subscription_status == "trialing"
-        | but in "trial" period
-      - if current_company.is_subscription_cancelled == true
-        | , But unfortunately you requested to cancel your subscription, it'll end at #{current_company.billing_period_ends_at}
-      - else
-        | , the #{ current_company.subscription_status == "trialing" ? "trial":"subscription"} will end at #{current_company.billing_period_ends_at}
-      .card
-        = current_company.card_brand << "-" <<  current_company.last_4_digits << "-" << current_company.exp_month << "/" << current_company.exp_year
-        .update_card
-          = form_tag '/company/update_card_info', method: 'post' do
-            script.stripe-button  data-email=("#{current_company.email}") src="https://checkout.stripe.com/checkout.js" class="stripe-button" data-key="pk_test_Pq6cvwflOIyhEhJNcY3VpaiA" data-image="/assets/avjunction-logo_header.svg" data-name="AVJunction" data-panel-label="Update Card Details" data-label="Update Card Details" data-allow-remember-me=false data-locale="auto"
+h1 Subscriptions
+br
 
-      .actions
-        #cancel
-          = link_to 'Cancel', company_subscription_cancel_path, :data => {:confirm => 'Are you sure?'}
-        / #change
-        /   = link_to 'Change plan to', '#', :onclick => "toggleSubPlans(event)".html_safe
-        /   #change_plan.hidden
-        /     - @plans.each do |plan|
-        /       - next if current_company.stripe_plan_id == plan.id
-        /       = link_to plan.name, company_subscription_change_path(plan: plan.id), :data => {:confirm => 'Are you sure?'}
-    - else
-      - @plans.each do |plan|
-        li.plan
-          .header
-            =plan[:name]
-          .price
-            =(plan[:amount]/100)
-            | /
-            = plan[:currency]
-          = form_tag '/company/subscription_checkout', method: 'post', plan: plan  do
-            input type="hidden" name="plan_id" value=plan[:id]
-            script.stripe-button data-amount=plan[:amount] data-email=("#{current_company.email}") data-description=plan[:name]  data-key=("#{Rails.configuration.stripe[:publishable_key]}") data-locale="auto" src="https://checkout.stripe.com/checkout.js" data-currency = plan[:currency]
+- content_for :secondary do
+  .result-wrapper
+    .result-content
+      ul
+        - if current_company.subscription_status == "trialing" || current_company.subscription_status == "active"
+          .current_plan
+            | You're currently subscribed to the #{current_company.subscription_cycle}ly plan
+          - if current_company.subscription_status == "trialing"
+            | but in "trial" period
+          - if current_company.is_subscription_cancelled == true
+            | , But unfortunately you requested to cancel your subscription, it'll end at #{current_company.billing_period_ends_at}
+          - else
+            | , the #{ current_company.subscription_status == "trialing" ? "trial":"subscription"} will end at #{current_company.billing_period_ends_at}
+          .card
+            = current_company.card_brand << "-" <<  current_company.last_4_digits << "-" << current_company.exp_month << "/" << current_company.exp_year
+            .update_card
+              = form_tag '/company/update_card_info', method: 'post' do
+                script.stripe-button  data-email=("#{current_company.email}") src="https://checkout.stripe.com/checkout.js" class="stripe-button" data-key="pk_test_Pq6cvwflOIyhEhJNcY3VpaiA" data-image="/assets/avjunction-logo_header.svg" data-name="AVJunction" data-panel-label="Update Card Details" data-label="Update Card Details" data-allow-remember-me=false data-locale="auto"
+
+          .actions
+            #cancel
+              = link_to 'Cancel', company_subscription_cancel_path, :data => {:confirm => 'Are you sure?'}
+            / #change
+            /   = link_to 'Change plan to', '#', :onclick => "toggleSubPlans(event)".html_safe
+            /   #change_plan.hidden
+            /     - @plans.each do |plan|
+            /       - next if current_company.stripe_plan_id == plan.id
+            /       = link_to plan.name, company_subscription_change_path(plan: plan.id), :data => {:confirm => 'Are you sure?'}
+        - else
+          h2.plans__header
+            | You are currently on
+            strong  Day 12 
+            | of your 90 Day free trial.
+            br/
+            | Updgrade your account to continue with full access to your AV Junction account.
+          .plans-container
+            .plans
+              h3.plans__title Pay Annually
+              .plans__subtitle Save 5% if paid for the year.
+              .plans__pricing
+                .plans__price $142.50
+                .plans__currency USD
+              a.btn-primary--active.w-inline-block.width-100 href="#" 
+                div Upgrade
+            .plans
+              h3.plans__title Pay Monthly
+              .plans__subtitle Cancel anytime, no strings attached.
+              .plans__pricing
+                .plans__price $150
+                .plans__currency USD
+              a.btn-primary--active.w-inline-block.width-100 href="#" 
+                div Upgrade
+
+          - @plans.each do |plan|
+            li.plan
+              .header
+                =plan[:name]
+              .price
+                =(plan[:amount]/100)
+                | /
+                = plan[:currency]
+              = form_tag '/company/subscription_checkout', method: 'post', plan: plan  do
+                input type="hidden" name="plan_id" value=plan[:id]
+                script.stripe-button data-amount=plan[:amount] data-email=("#{current_company.email}") data-description=plan[:name]  data-key=("#{Rails.configuration.stripe[:publishable_key]}") data-locale="auto" src="https://checkout.stripe.com/checkout.js" data-currency = plan[:currency]
