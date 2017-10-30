@@ -23,6 +23,9 @@
             .show_value= @job.addendums || "Not Specified"
 
         .col-xs-12.col-md-6
+          = render partial: "company/shared/contract_meta", locals: { job: @job }
+
+        .col-xs-12.col-md-6
           .show_field
             .row
               .col-xs-12.col-lg-6
