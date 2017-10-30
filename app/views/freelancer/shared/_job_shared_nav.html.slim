@@ -5,9 +5,6 @@
   div class=(request.path == "/freelancer/jobs/#{job.id}/application" ? "tab-item--active" : "tab-item--inactive")
     a href=freelancer_job_application_index_path(job)
       | Application
-  div class=(request.path == "/freelancer/jobs/#{job.id}/work_order" ? "tab-item--active" : "tab-item--inactive")
-    a href=freelancer_job_work_order_path(job)
-      | Work Order
   div class=(request.path == "/freelancer/jobs/#{job.id}/messages" ? "tab-item--active" : "tab-item--inactive")
     - if !job.freelancer
       | Progress

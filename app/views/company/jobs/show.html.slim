@@ -55,6 +55,11 @@
             - else
               div.btn-primary.job-details__work-order__btn--disabled
                 | Create Work Order
+
+      - if !@job.freelancer.nil?
+        .job-details
+          .job-details__bar
+            = render partial: "company/shared/contract_meta", locals: { job: @job }
             
 
       .job-details
