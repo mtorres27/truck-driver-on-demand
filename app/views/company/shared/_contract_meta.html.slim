@@ -1,6 +1,6 @@
 - if !job.freelancer.nil?
   .job-details__work-order__freelancer-meta
-    a href=company_freelancer(job.freelancer)
+    a href="/company/freelancers/#{job.freelancer.id}"
       = job.freelancer.last.name
     
 
