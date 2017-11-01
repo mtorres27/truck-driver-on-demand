@@ -35,11 +35,23 @@ class Company::ContractsController < Company::BaseController
       build_payments
 
       @errors = []
+      @number_of_payments_error = false
       @job.errors.messages.each do |key, index|
-        @errors << key.to_s.underscore.humanize.titlecase
+
+        if key == :number_of_payments
+          @number_of_payments_error = true
+        else
+          @errors << key.to_s.underscore.humanize.titlecase
+        end
+      end
+
+      @combined_errors = @errors.join(",")
+
+      if @number_of_payments_error
+        @combined_errors << "Payments (At least 1 is required)"
       end
       
-      flash[:error] = "Unable to save: the following fields need to be filled out: " + @errors.join(", ") + ". If any of the fields aren't visible on the contract page, you might need to provide additional information in the job details page."
+      flash[:error] = "Unable to save: the following fields need to be filled out: " + @combined_errors + ". If any of the fields aren't visible on the contract page, you might need to provide additional information in the job details page."
       render :edit
     end
   end

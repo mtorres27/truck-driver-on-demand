@@ -119,6 +119,16 @@ class Job < ApplicationRecord
     :yen,
   ]
 
+  validate :validate_number_of_payments
+
+  def validate_number_of_payments
+    if send_contract == "true"
+      remaining_payments = payments.reject(&:marked_for_destruction?)
+      errors.add(:number_of_payments, 'A minimum of 1 payment is required') if remaining_payments.empty?
+    end
+  end
+
+
   def pre_negotiated?
     %w(created published quoted).include?(state)
   end
