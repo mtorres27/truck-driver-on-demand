@@ -30,7 +30,7 @@ br
             /     - @plans.each do |plan|
             /       - next if current_company.stripe_plan_id == plan.id
             /       = link_to plan.name, company_subscription_change_path(plan: plan.id), :data => {:confirm => 'Are you sure?'}
-        - else
+        - else        
           h2.plans__header
             | You're currently subscribed to the monthly plan, with
             strong  89 
