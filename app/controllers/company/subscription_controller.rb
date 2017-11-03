@@ -29,9 +29,10 @@ class Company::SubscriptionController < Company::BaseController
   end
 
   def plans
-    # logger.debug current_company.inspect
     @plans = StripeTool.get_plans
-    logger.debug @plans.inspect
+    @subscription = Stripe::Subscription.retrieve(current_company.stripe_subscription_id) if current_company.stripe_subscription_id
+    # logger.debug @plans.inspect
+    # logger.debug @subscription.inspect
   end
 
   def reset_company
