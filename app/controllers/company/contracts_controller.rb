@@ -1,7 +1,23 @@
 class Company::ContractsController < Company::BaseController
   before_action :set_job
 
+  def contract_pay
+    quote = @job.accepted_quote
+    charge = Stripe::Charge.create({
+      :amount => quote.amount.floor*100,
+      :currency => @job.currency,
+      :source => params[:stripeToken],
+      :transfer_group => "{WO-"+ (@job.id.to_s.rjust(5, '0')) +"}", # "WO-"+(id.to_s.rjust(5, '0'))
+    })
+    quote.paid_by_company = true
+    quote.paid_at = DateTime.now
+    quote.save
+
+    redirect_to company_job_work_order_path, job_id: @job.id
+  end
+
   def show
+    @accepted_quote = @job.accepted_quote
   end
 
   def edit
@@ -50,7 +66,7 @@ class Company::ContractsController < Company::BaseController
       if @number_of_payments_error
         @combined_errors << "Payments (At least 1 is required)"
       end
-      
+
       flash[:error] = "Unable to save: the following fields need to be filled out: " + @combined_errors + ". If any of the fields aren't visible on the contract page, you might need to provide additional information in the job details page."
       render :edit
     end

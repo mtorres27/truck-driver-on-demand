@@ -99,10 +99,12 @@ Rails.application.routes.draw do
         end
       end
       resource :contract, only: [:show, :edit, :update], as: "work_order", path: "work_order"
+        post 'contract_pay' => 'contracts#contract_pay'
       resources :messages, only: [:index, :create]
       resources :payments, controller: "job_payments", only: [:index, :show] do
         get :print, on: :member
         get :mark_as_paid, on: :member
+        post 'contract_pay' => 'contracts#contract_pay'
       end
       resource :review, only: [:show, :create]
     end

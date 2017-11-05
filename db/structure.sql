@@ -332,12 +332,6 @@ CREATE TABLE companies (
     last_sign_in_at timestamp without time zone,
     current_sign_in_ip inet,
     last_sign_in_ip inet,
-    header_color character varying DEFAULT 'FF6C38'::character varying,
-    country character varying,
-    confirmation_token character varying,
-    confirmed_at timestamp without time zone,
-    confirmation_sent_at timestamp without time zone,
-    header_source character varying DEFAULT 'color'::character varying,
     stripe_customer_id character varying,
     stripe_subscription_id character varying,
     stripe_plan_id character varying,
@@ -348,7 +342,13 @@ CREATE TABLE companies (
     last_4_digits character varying,
     card_brand character varying,
     exp_month character varying,
-    exp_year character varying
+    exp_year character varying,
+    header_color character varying DEFAULT 'FF6C38'::character varying,
+    country character varying,
+    confirmation_token character varying,
+    confirmed_at timestamp without time zone,
+    confirmation_sent_at timestamp without time zone,
+    header_source character varying DEFAULT 'color'::character varying
 );
 
 
@@ -629,7 +629,6 @@ CREATE TABLE freelancers (
     freelancer_team_size character varying,
     freelancer_type character varying,
     header_source character varying DEFAULT 'color'::character varying,
-    phone_number character varying,
     stripe_account_id character varying,
     stripe_account_status text,
     currency character varying
@@ -958,7 +957,9 @@ CREATE TABLE quotes (
     number_of_days integer,
     daily_rate integer,
     author_type character varying DEFAULT 'freelancer'::character varying,
-    accepted_by_freelancer boolean DEFAULT false
+    accepted_by_freelancer boolean DEFAULT false,
+    paid_by_company boolean DEFAULT false,
+    paid_at timestamp without time zone
 );
 
 
@@ -2017,6 +2018,6 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20171017101132'),
 ('20171020113522'),
 ('20171020123018'),
-('20171023181456');
+('20171105210413');
 
 
