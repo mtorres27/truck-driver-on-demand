@@ -14,6 +14,14 @@ class Company::JobPaymentsController < Company::BaseController
   end
 
   def mark_as_paid
+
+    transfer = Stripe::Transfer.create({
+      :amount => @payment.amount.floor*100,
+      :currency => @job.currency,
+      :destination => 'acct_1BGHo1CiF2EX0r79', #freelancer.stripe_account_id
+      :transfer_group => "{WO-"+ (@job.id.to_s.rjust(5, '0')) +"}",
+    })
+
     @payment.mark_as_paid!
 
     if @job.payments.outstanding.empty?
