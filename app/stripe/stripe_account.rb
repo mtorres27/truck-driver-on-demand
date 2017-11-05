@@ -121,4 +121,10 @@ class StripeAccount < Struct.new( :freelancer )
   def country
     COUNTRIES.find { |hash| hash[:code] == freelancer.country.upcase }
   end
+
+  def verified?
+    return false if freelancer.stripe_account_id.nil? || freelancer.stripe_account_id.empty?
+    account = Stripe::Account.retrieve(freelancer.stripe_account_id)
+    account.legal_entity.verification.status == 'verified'
+  end
 end

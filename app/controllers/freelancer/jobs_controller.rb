@@ -63,6 +63,7 @@ class Freelancer::JobsController < Freelancer::BaseController
   end
 
   def apply
+    @stripe_connector = StripeAccount.new(current_freelancer)
     @applicant = Applicant.new
     @job = Job.find(params[:id])
 
@@ -70,7 +71,9 @@ class Freelancer::JobsController < Freelancer::BaseController
     @applicant.job = @job
     @applicant.company = @job.company
 
-    if apply_params[:message].nil? or apply_params[:pay_type].nil?
+    if !@stripe_connector.verified?
+      redirect_to freelancer_job_path(@job), alert: "You need to verify your identity before applying for a job."
+    elsif apply_params[:message].nil? or apply_params[:pay_type].nil?
       redirect_to freelancer_job_path(@job), alert: "Required data not found; please ensure your message and amount have both been entered."
     else
       if @applicant.save
@@ -81,14 +84,14 @@ class Freelancer::JobsController < Freelancer::BaseController
 
         if apply_params[:pay_type] == "fixed"
           @applicant.quotes << Quote.create({
-            company: @job.company, 
+            company: @job.company,
             pay_type: apply_params[:pay_type],
             amount: apply_params[:amount],
             attachment: apply_params[:attachment]
           })
         elsif apply_params[:pay_type] == "hourly"
           @applicant.quotes << Quote.create({
-            company: @job.company, 
+            company: @job.company,
             pay_type: apply_params[:pay_type],
             hourly_rate: apply_params[:hourly_rate],
             amount: (apply_params[:hourly_rate].to_i * apply_params[:number_of_hours].to_i),
@@ -97,7 +100,7 @@ class Freelancer::JobsController < Freelancer::BaseController
           })
         elsif apply_params[:pay_type] == "daily"
           @applicant.quotes << Quote.create({
-            company: @job.company, 
+            company: @job.company,
             pay_type: apply_params[:pay_type],
             daily_rate: apply_params[:daily_rate],
             amount: (apply_params[:daily_rate].to_i * apply_params[:number_of_days].to_i),
@@ -126,7 +129,7 @@ class Freelancer::JobsController < Freelancer::BaseController
     end
 
     @favourite = current_freelancer.job_favourites.where({job_id: params[:id]}).length > 0 ? true : false
-    if params.dig(:toggle_favourite) == "true" 
+    if params.dig(:toggle_favourite) == "true"
       if @favourite == false
         current_freelancer.favourite_jobs << @job
         @favourite = true
@@ -135,15 +138,17 @@ class Freelancer::JobsController < Freelancer::BaseController
         @favourite = false
       end
     end
+
+    @connector = StripeAccount.new(current_freelancer)
   end
-  
+
 
   def my_job
     @job = Job.find(params[:id])
     render :json => { status: @job.title }
   end
 
-  
+
   def my_jobs
     @applications = []
     current_freelancer.applicants.where.not({ state: "accepted" }).each do |applicant|
@@ -164,15 +169,15 @@ class Freelancer::JobsController < Freelancer::BaseController
       end
     end
   end
-  
-  
+
+
   def my_applications
     @jobs = []
     current_freelancer.applicants.where.not({state: 'accepted'}).each do |applicant|
       @jobs << { job: applicant.job, applicant: applicant }
     end
   end
-  
+
 
   def my_application
     @applicant = Applicant.find(params[:id])
@@ -199,12 +204,12 @@ class Freelancer::JobsController < Freelancer::BaseController
         current_freelancer.favourite_companies << c.first
       end
     end
-          
+
     render json: { status: 'success', companies: params[:companies] }
   end
 
   private
-  
+
     def apply_params
       params.require(:freelancer_job_apply_path).permit(
         :pay_type,
