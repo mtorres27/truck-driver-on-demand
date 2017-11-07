@@ -16,9 +16,9 @@
       label.common__field-label for="name-4"
         = "Send a message to #{n}"
       a.common__text-field--attach-file.w-inline-block onClick="triggerFileUpload()"
-        .common__icon-attach 
+        div#attachment-indicator.common__icon-attach 
       a.common__text-field--attach-file.w-inline-block onClick="triggerCheckin()"
-        .common__icon-attach
+        .common__icon-attach.new-message__checkin
           span class="fa fa-map-marker"
       = f.text_area :body, as: :string, placeholder: "Enter your message", label: false, maxlength: 5000, class: "w-input"
 
@@ -52,7 +52,7 @@ javascript:
   }
 
   $("#message_attachment").change(function() {
-    $(".new-message__attachment-button").addClass("new-message__attachment-button--active");
+    $("#attachment-indicator").addClass("new-message__checkin--active");
   });
 
   var triggerCheckin = function() {
