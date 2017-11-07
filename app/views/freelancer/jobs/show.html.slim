@@ -4,7 +4,7 @@
     = render partial: "/freelancer/shared/job_shared_nav", locals: { job: @job }
 .section__body-content
   .container__fixed-footer
-    - if @have_applied
+    - if @have_applied and @job.freelancer and @job.freelancer.id == current_freelancer
       h3.freelancer-job__h3 Work Order
       .freelancer-job__work-order-cont.w-clearfix
         .freelancer-job__work-order-status
@@ -27,6 +27,10 @@
           - @job.keywords.each do |index, value|
             .grey.tag
               = I18n.t("enumerize.freelancer_skills.#{index}")
+
+    .freelancer-job__summary-cont
+      h3.freelancer-job__h3 Scope of Work
+      p= @job.scope_of_work
       
     .freelancer-job__summary-group
       .freelancer-job__summary-item
@@ -51,6 +55,7 @@
             = "N/A"
           - else
             = @job.starts_on
+
       .freelancer-job__summary-item
         h6.freelancer-job__h6 Duration
         div

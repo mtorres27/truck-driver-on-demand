@@ -51,11 +51,11 @@ class Freelancer::QuotesController < Freelancer::BaseController
         end
 
       elsif params[:message][:status] == "accept"
-        @q = @quotes.first
+        @q = @quotes.where({applicant_id: @applicant.id}).first
         @q.accepted_by_freelancer = true
         @q.save
       elsif params[:message][:status] == "decline"
-        @q = @quotes.first
+        @q = @quotes.where({applicant_id: @applicant.id})first
         @q.accepted_by_freelancer = false
         @q.save
       end
