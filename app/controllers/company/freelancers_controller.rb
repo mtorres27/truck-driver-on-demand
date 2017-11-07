@@ -52,7 +52,7 @@ class Company::FreelancersController < Company::BaseController
 
   def hired
     @locations = current_company.freelancers.uniq.pluck(:area)
-    @freelancers = current_company.freelancers.uniq
+    @freelancers = current_company.freelancers.distinct
 
     if params[:location] && params[:location] != ""
       @freelancers = @freelancers.where({ area: params[:location] })
