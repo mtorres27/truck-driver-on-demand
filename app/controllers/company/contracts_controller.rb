@@ -32,9 +32,13 @@ class Company::ContractsController < Company::BaseController
   def show
     @accepted_quote = @job.accepted_quote
     # Should be deleted
-    account = Stripe::Account.retrieve(@job.freelancer.stripe_account_id)
-    account.payout_schedule.interval = 'manual'
-    account.save
+    if @job.freelancer.stripe_account_id
+      account = Stripe::Account.retrieve(@job.freelancer.stripe_account_id)
+      account.payout_schedule.interval = 'manual'
+      account.save
+    else
+      flash[:error] = "The freelancer identity is not verified yet!"
+    end
   end
 
   def edit
