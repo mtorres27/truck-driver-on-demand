@@ -40,6 +40,9 @@ class StripeAccount < Struct.new( :freelancer )
         },
         legal_entity: {
           type: type,
+        },
+        payout_schedule: {
+          interval: 'manual'
         }
       )
     rescue StandardError => ex
@@ -48,7 +51,6 @@ class StripeAccount < Struct.new( :freelancer )
     end
 
     if @account
-      Rails.logger.debug @account.inspect
       freelancer.update_attributes(
         currency: @account.default_currency,
         stripe_account_id: @account.id,
@@ -78,6 +80,7 @@ class StripeAccount < Struct.new( :freelancer )
               account.legal_entity[key] = value
             end
           end
+          account.payout_schedule.interval = 'manual'
           account.save
           return [account, { success: 'true' }]
         rescue StandardError => ex

@@ -4,6 +4,12 @@ class Company::JobPaymentsController < Company::BaseController
 
   def index
     @payments = @job.payments.order(:created_at)
+    @accepted_quote = @job.accepted_quote
+
+    balance = Stripe::Balance.retrieve(
+      # :stripe_account => @job.freelancer.stripe_account_id
+    )
+    logger.debug balance.inspect
   end
 
   def show
@@ -14,20 +20,32 @@ class Company::JobPaymentsController < Company::BaseController
   end
 
   def mark_as_paid
+    quote = @job.accepted_quote
+    freelancer = @job.freelancer
+    begin
+      raise Exception.new('You didn\'t pay this work order yet!') if !quote.paid_by_company
 
-    transfer = Stripe::Transfer.create({
-      :amount => @payment.amount.floor*100,
-      :currency => @job.currency,
-      :destination => 'acct_1BGHo1CiF2EX0r79', #freelancer.stripe_account_id
-      :transfer_group => "{WO-"+ (@job.id.to_s.rjust(5, '0')) +"}",
-    })
+      total_amount = quote.amount * 100
+      platform_fees = quote.platform_fees_amount * 100
+      freelancer_amount = ((total_amount - platform_fees) * (@payment.amount * 100)) / total_amount
+      logger.debug  freelancer_amount
+      Stripe::Payout.create({
+        amount: freelancer_amount.floor,
+        currency: @job.currency
+      },{
+        stripe_account: freelancer.stripe_account_id
+      })
 
-    @payment.mark_as_paid!
+      @payment.mark_as_paid!
 
-    if @job.payments.outstanding.empty?
-      @job.update(state: :completed)
-      redirect_to company_job_review_path(@job)
-    else
+      if @job.payments.outstanding.empty?
+        @job.update(state: :completed)
+        redirect_to company_job_review_path(@job)
+      else
+        redirect_to company_job_payments_path(@job)
+      end
+    rescue Exception => e
+      flash[:error] = e.message
       redirect_to company_job_payments_path(@job)
     end
   end

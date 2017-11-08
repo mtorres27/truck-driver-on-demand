@@ -2,22 +2,39 @@ class Company::ContractsController < Company::BaseController
   before_action :set_job
 
   def contract_pay
-    quote = @job.accepted_quote
-    charge = Stripe::Charge.create({
-      :amount => quote.amount.floor*100,
-      :currency => @job.currency,
-      :source => params[:stripeToken],
-      :transfer_group => "{WO-"+ (@job.id.to_s.rjust(5, '0')) +"}", # "WO-"+(id.to_s.rjust(5, '0'))
-    })
-    quote.paid_by_company = true
-    quote.paid_at = DateTime.now
-    quote.save
+    begin
+      quote = @job.accepted_quote
+      freelancer = @job.freelancer
+
+      amount = quote.amount * 100
+      freelancer_amount = quote.amount * (1 - Rails.configuration.avj_fees) * 100
+      platform_fees = (quote.amount * 100) - freelancer_amount
+      charge = Stripe::Charge.create({
+        amount: amount.floor,
+        currency: @job.currency,
+        source: params[:stripeToken],
+        destination: {
+          amount: freelancer_amount.floor,
+          account: freelancer.stripe_account_id
+        },
+      })
+      quote.paid_by_company = true
+      quote.paid_at = DateTime.now
+      quote.platform_fees_amount = platform_fees / 100
+      quote.save
+    rescue => e
+      flash[:error] = e.message
+    end
 
     redirect_to company_job_work_order_path, job_id: @job.id
   end
 
   def show
     @accepted_quote = @job.accepted_quote
+    # Should be deleted
+    account = Stripe::Account.retrieve(@job.freelancer.stripe_account_id)
+    account.payout_schedule.interval = 'manual'
+    account.save
   end
 
   def edit

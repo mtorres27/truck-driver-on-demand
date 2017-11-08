@@ -959,7 +959,8 @@ CREATE TABLE quotes (
     author_type character varying DEFAULT 'freelancer'::character varying,
     accepted_by_freelancer boolean DEFAULT false,
     paid_by_company boolean DEFAULT false,
-    paid_at timestamp without time zone
+    paid_at timestamp without time zone,
+    platform_fees_amount numeric(10,2)
 );
 
 
