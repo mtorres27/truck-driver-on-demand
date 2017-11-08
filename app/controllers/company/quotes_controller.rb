@@ -21,7 +21,7 @@ class Company::QuotesController < Company::BaseController
 
     if @message.save
       if @status == "accept"
-        @quotes.last.accept!
+        @quotes.where({applicant_id: @applicant.id}).first.accept!
         @applicant.accept!
           
         self.send_decline_message
@@ -31,7 +31,7 @@ class Company::QuotesController < Company::BaseController
         return
       elsif @status == "decline"
         @applicant.reject!
-        @quotes.last.decline!
+        @quotes.where({applicant_id: @applicant.id}).first.decline!
       elsif @status == "negotiate"
         # not sure what goes here.
         # either add a new quote, or add a counter offer somehow. NOT SURE.
