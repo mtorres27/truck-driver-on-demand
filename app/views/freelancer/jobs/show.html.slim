@@ -87,18 +87,9 @@
           - else
             = "N/A"
 
-    - if @job.freelancer and @job.freelancer.id == current_freelancer.id
-      .freelancer-job__summary-cont
-        h3.freelancer-job__h3 Freelance Service Agreement
-        p
-          - if @job.opt_out_of_freelance_service_agreement
-            | This project has opted out of the freelance service agreement"
-          - else
-            a href="/freelance-service-agreement?job=#{@job.id}#{random_append}" target="_blank"
-              | Click here to view the Freelance Service Agreement for this project.
   - if @have_applied == false && @connector.verified?
     .freelancer-job__apply
-      a.btn-primary--active href="#" id="apply-for-job"
+      a.btn-primary--acticve href="#" id="apply-for-job"
         div
           | Apply for this job
 
