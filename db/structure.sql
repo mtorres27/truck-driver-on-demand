@@ -629,7 +629,6 @@ CREATE TABLE freelancers (
     freelancer_team_size character varying,
     freelancer_type character varying,
     header_source character varying DEFAULT 'color'::character varying,
-    phone_number character varying,
     stripe_account_id character varying,
     stripe_account_status text,
     currency character varying
@@ -958,7 +957,10 @@ CREATE TABLE quotes (
     number_of_days integer,
     daily_rate integer,
     author_type character varying DEFAULT 'freelancer'::character varying,
-    accepted_by_freelancer boolean DEFAULT false
+    accepted_by_freelancer boolean DEFAULT false,
+    paid_by_company boolean DEFAULT false,
+    paid_at timestamp without time zone,
+    platform_fees_amount numeric(10,2)
 );
 
 
@@ -2017,6 +2019,6 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20171017101132'),
 ('20171020113522'),
 ('20171020123018'),
-('20171023181456');
+('20171105210413');
 
 

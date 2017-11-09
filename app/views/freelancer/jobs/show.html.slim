@@ -31,27 +31,27 @@
     .freelancer-job__summary-cont
       h3.freelancer-job__h3 Scope of Work
       p= @job.scope_of_work
-      
+
     .freelancer-job__summary-group
       .freelancer-job__summary-item
         h6.freelancer-job__h6 Job Function
         div
-          - if @job.job_function.nil? 
+          - if @job.job_function.nil?
             = "N/A"
-          - else 
+          - else
             = t("enumerize.job.job_function.#{@job.job_function}")
       .freelancer-job__summary-item
         h6.freelancer-job__h6 Location
         div
-          - if @job.address.nil? 
+          - if @job.address.nil?
             = "N/A"
           - else
             = @job.address
-        
+
       .freelancer-job__summary-item
         h6.freelancer-job__h6 Est. Start
         div
-          - if @job.starts_on.nil? 
+          - if @job.starts_on.nil?
             = "N/A"
           - else
             = @job.starts_on
@@ -60,7 +60,7 @@
         h6.freelancer-job__h6 Duration
         div
           - if  @job.duration.nil?
-            = "N/A" 
+            = "N/A"
           - else
             = @job.duration
       .freelancer-job__summary-item
@@ -73,9 +73,9 @@
       .freelancer-job__summary-item
         h6.freelancer-job__h6 Freelancer Type
         div
-          - if @job.freelancer_type.nil? 
+          - if @job.freelancer_type.nil?
             = "N/A"
-          - else 
+          - else
             = t("enumerize.job.freelancer_type.#{@job.freelancer_type}")
       .freelancer-job__summary-item
         h6.freelancer-job__h6 Job Budget
@@ -86,7 +86,7 @@
               = @job.currency.upcase
           - else
             = "N/A"
-      
+
     - if @job.freelancer and @job.freelancer.id == current_freelancer.id
       .freelancer-job__summary-cont
         h3.freelancer-job__h3 Freelance Service Agreement
@@ -96,7 +96,7 @@
           - else
             a href="/freelance-service-agreement?job=#{@job.id}#{random_append}" target="_blank"
               | Click here to view the Freelance Service Agreement for this project.
-  - if @have_applied == false
+  - if @have_applied == false && @connector.verified?
     .freelancer-job__apply
       a.btn-primary--active href="#" id="apply-for-job"
         div
@@ -104,7 +104,7 @@
 
 = simple_form_for "freelancer_job_apply_path", html: { multipart: true } do |f|
   = f.hidden_field :job, value: @job.id
-  
+
 
   .freelancer-job__apply-modal
     .freelancer-job__apply-form.w-form
@@ -118,36 +118,36 @@
       .common__radio-group.w-radio.width-30
         = f.radio_button :pay_type, "hourly", class: "w-radio-input"
         = f.label :pay_type_hourly, "hourly", class: "common__field-label"
-      
+
       .common__text-field-group.freelancer-job__apply-modal__content-amount--fixed
         = f.label :amount, "Amount", class: "common__field-label"
         = f.input :amount, type: "text", id: "quote-amount-fixed", placeholder: "Your quote", label: false, class: "common__text-field w-input", label: false
-        
+
 
       .common__text-field-group.width-50.freelancer-job__apply-modal__content-amount--hourly
         = f.label :number_of_hours, "Number of Hours", class: "common__field-label"
         = f.input :number_of_hours, type: "text", id: "quote-amount-hourly", placeholder: "No. of Hrs", class: "common__text-field w-input", label: false
-        
+
       .common__text-field-group.width-50.freelancer-job__apply-modal__content-amount--hourly
         = f.label :hourly_rate, "Hourly Rate", class: "common__field-label"
         = f.input :hourly_rate, type: "text", id: "quote-amount-hourly-rate", placeholder: "Hourly Rate", class: "common__text-field w-input", label: false
-        
+
 
       .common__text-field-group.width-50.freelancer-job__apply-modal__content-amount--daily
         = f.label :number_of_days, "No. of Days", class: "common__field-label"
         = f.input :number_of_days, type: "text", id: "quote-amount-daily", placeholder: "No. of Days", class: "common__text-field w-input", label: false
-        
+
       .common__text-field-group.width-50.freelancer-job__apply-modal__content-amount--daily
         = f.label :daily_rate, "Daily Rate", class: "common__field-label"
         = f.input :daily_rate, type: "text", id: "quote-amount-daily-rate", placeholder: "Daily Rate", class: "common__text-field w-input", label: false
-        
+
 
       .attachment.common__text-field-group
         label.common__field-label for="name-4"
           = "Send a message to #{@job.company.name}"
         a.common__text-field--attach-file.w-inline-block id="attach_indicator" onClick="triggerFileUpload()"
           .common__icon-attach 
-        = f.file_field :attachment, as: :file, id: "message_attachment", label: false, :accept => 'document/pdf,application/pdf,application/x-pdf,image/png,image/jpg,image/jpeg,image/gif',  class: "file-input--hidden" 
+        = f.file_field :attachment, as: :file, id: "message_attachment", label: false, :accept => 'document/pdf,application/pdf,application/x-pdf,image/png,image/jpg,image/jpeg,image/gif',  class: "file-input--hidden"
         = f.text_area :message, as: :string, placeholder: "Enter your message", label: false, maxlength: 5000, class: "w-input"
 
       .freelancer-job__apply-modal__buttons
@@ -172,7 +172,7 @@ javascript:
       safe = false;
     }
 
-    if ($("#freelancer_job_apply_path_message").val() == "") {  
+    if ($("#freelancer_job_apply_path_message").val() == "") {
       safe = false;
     }
 
@@ -215,7 +215,7 @@ javascript:
     $("#freelancer_job_apply_path_hourly_rate").val("");
     $("#freelancer_job_apply_path_daily_rate").val("");
   }
-      
+
   $("#freelancer_job_apply_path_pay_type_hourly").on('click', function() {
     clearAllQuoteValues();
     $(".freelancer-job__apply-modal__content-amount--fixed").hide();

@@ -7,6 +7,13 @@
         span class="fa fa-long-arrow-left"
       .result-header__text
         = "Work Order #{@job.work_order}"
+        - if @accepted_quote && !@accepted_quote.paid_by_company
+          span.right
+            = form_tag company_job_contract_pay_path, method: 'post' do
+              input type="hidden" name="quote_id" value=@accepted_quote.id
+              script.stripe-button data-label="Send money" data-amount="#{@accepted_quote.amount.floor*100}" data-email=("#{current_company.email}") data-description="Pay for work order for job#{@job.id}" data-key=("#{Rails.configuration.stripe[:publishable_key]}") data-locale="auto" src="https://checkout.stripe.com/checkout.js" data-currency="#{@job.currency}"
+        - elsif @accepted_quote && @accepted_quote.paid_by_company
+          span.tag.tag-success<> PAID
     .result-content
       .row
         .col-xs-12.col-md-6
@@ -35,7 +42,7 @@
                     = number_to_currency(@job.accepted_quote.amount, precision: 0)
                     br
                     - if @job.currency.nil?
-                      | 
+                      |
                     - else
                       = @job.currency.upcase
                   - else
@@ -56,7 +63,7 @@
               .col-xs-12.col-lg-6
                 label= t(:ends_on, scope: [:form, :labels, :job])
                 .show_value_em= @job.ends_on ? l(@job.ends_on) : "Not Specified"
-          
+
           .show_field
             .row
               .col-xs-12.col-lg-6
@@ -75,7 +82,7 @@
                         = number_to_currency(payment.amount, precision: 0)
                         br
                         - if @job.currency.nil?
-                          | 
+                          |
                         - else
                           = @job.currency.upcase
               - else

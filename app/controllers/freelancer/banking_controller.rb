@@ -2,7 +2,6 @@ class Freelancer::BankingController < Freelancer::BaseController
   DOC_TYPES = ['image/jpeg', 'image/jpg', 'image/png', 'application/pdf']
   def index
     @connector = StripeAccount.new(current_freelancer)
-    # logger.debug @connector.account
   end
 
   def identity
@@ -51,7 +50,6 @@ class Freelancer::BankingController < Freelancer::BaseController
         flash[:error] = 'Unable to create Stripe account!'
       end
     end
-    logger.debug flash.inspect
     redirect_to freelancer_profile_stripe_banking_info_path if flash[:error].nil?
     redirect_to freelancer_profile_stripe_banking_path, flash: {data: @post_data} unless flash[:error].nil?
   end

@@ -113,17 +113,19 @@ class Company::SubscriptionController < Company::BaseController
   end
 
   def create
+    begin
     # Amount in cents
-    customer = StripeTool.create_customer(email: params[:stripeEmail],
-                                          stripe_token: params[:stripeToken])
+      customer = StripeTool.create_customer(email: params[:stripeEmail],
+                                            stripe_token: params[:stripeToken])
 
-    charge = StripeTool.create_charge(customer_id: customer.id,
-                                      amount: @amount,
-                                      description: @description)
-  redirect_to company_thanks_path
-  rescue Stripe::CardError => e
-    flash[:error] = e.message
-    redirect_to new_company_charge
+      charge = StripeTool.create_charge(customer_id: customer.id,
+                                        amount: @amount,
+                                        description: @description)
+      redirect_to company_thanks_path
+    rescue Stripe::CardError => e
+      flash[:error] = e.message
+      redirect_to new_company_charge
+    end
   end
 
   private
