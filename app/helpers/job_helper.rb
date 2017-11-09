@@ -7,7 +7,11 @@ module JobHelper
     elsif job.quoted?
       company_job_applicants_path(job) \
     elsif job.negotiated?
-      edit_company_job_work_order_path(job) \
+      if job.contract_sent != true
+        edit_company_job_work_order_path(job) \
+      else
+        company_job_path(job)
+      end
     elsif job.contracted?
       company_job_messages_path(job) \
     else
