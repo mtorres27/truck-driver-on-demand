@@ -44,10 +44,10 @@
                 - if index < @harmonized_items.count - 1
                   - next_item = @harmonized_items[index+1]
                   - if next_item[:payload].attachment_url
-                    a.authorable_attachment href=item[:payload].attachment_url target="_blank"
-                      - if is_image(item[:payload].attachment_url)
+                    a.authorable_attachment href=next_item[:payload].attachment_url target="_blank"
+                      - if is_image(next_item[:payload].attachment_url)
                         span class="authorable_attachment_icon fa fa-image"
                       - else
                         span class="authorable_attachment_icon fa fa-file-text"
                       .authorable_attachment__filename
-                        = eval(item[:payload].attachment_data)[:metadata][:filename]
+                        = eval(next_item[:payload].attachment_data)[:metadata][:filename]
