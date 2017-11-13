@@ -94,6 +94,7 @@ class Company::JobsController < Company::BaseController
         :summary,
         :scope_of_work,
         :budget,
+        :country,
         :currency,
         :job_function,
         :pay_type,

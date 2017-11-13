@@ -13,7 +13,7 @@
                   | New Project
         = f.input :title, placeholder: "Enter the job title"
         = f.input :address, placeholder: "Enter the city of the job"
-        = f.input :country, placeholder: "Enter the country of the job"
+        = f.input :country, prompt: "Select"
         span
           abbr title="required"= "*"
           = " "
@@ -99,12 +99,19 @@
               | Cancel
 
   javascript:
+    function get_currencies(country){
+      $.get( "#{company_job_country_currency_path}", { country: country})
+      .done(function( data ) {
+        var select = $('#job_currency');
+        select.empty().append(data);
+      });
+    }
+
     $(document).ready(function() {
+      if ($('#job_country').val() != ""){
+        get_currencies($('#job_country').val())
+      }
       $('#job_country').on('change', function(){
-        $.get( "#{company_job_country_currency_path}", { country: $(this).val()})
-        .done(function( data ) {
-          var select = $('#job_currency');
-          select.empty().append(data);
-        });
+        get_currencies($(this).val())
       });
     });
