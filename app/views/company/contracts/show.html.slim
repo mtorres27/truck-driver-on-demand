@@ -7,13 +7,6 @@
         span class="fa fa-long-arrow-left"
       .result-header__text
         = "Work Order #{@job.work_order}"
-        - if @accepted_quote && !@accepted_quote.paid_by_company
-          span.right
-            = form_tag company_job_contract_pay_path, method: 'post' do
-              input type="hidden" name="quote_id" value=@accepted_quote.id
-              script.stripe-button data-label="Send money" data-amount="#{@accepted_quote.amount.floor*100}" data-email=("#{current_company.email}") data-description="Pay for work order for job#{@job.id}" data-key=("#{Rails.configuration.stripe[:publishable_key]}") data-locale="auto" src="https://checkout.stripe.com/checkout.js" data-currency="#{@job.currency}"
-        - elsif @accepted_quote && @accepted_quote.paid_by_company
-          span.tag.tag-success<> PAID
     .result-content
       .row
         .col-xs-12.col-md-6

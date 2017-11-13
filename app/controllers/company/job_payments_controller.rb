@@ -6,10 +6,10 @@ class Company::JobPaymentsController < Company::BaseController
     @payments = @job.payments.order(:created_at)
     @accepted_quote = @job.accepted_quote
 
-    balance = Stripe::Balance.retrieve(
-      # :stripe_account => @job.freelancer.stripe_account_id
-    )
-    logger.debug balance.inspect
+    # balance = Stripe::Balance.retrieve(
+    #   # :stripe_account => @job.freelancer.stripe_account_id
+    # )
+    # logger.debug balance.inspect
   end
 
   def show

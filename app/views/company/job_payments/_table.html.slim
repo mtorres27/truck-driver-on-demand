@@ -1,25 +1,27 @@
-table.table
-  tr
-    th Description
-    th Amount
-    th Status
-    th Aging
-    th Date Issued
-    th Date Paid
-    th
-  - payments.each do |payment|
-    tr
-      td= payment.description
-      td= number_to_currency(payment.amount, precision: 0) + " " + payment.job.currency
-      td
+- if accepted_quote && !accepted_quote.paid_by_company
+  .payments
+    .payments__flexbox
+      .tag.tag--in-progress funds pending
+    .payments__status For this project to be started, it must be fully funded. This shows the AV Freelancer that funds are available but will not be accessible until the milestones are met and you authorize the payout.
+    = form_tag company_job_contract_pay_path, method: 'post' do
+      input type="hidden" name="quote_id" value=@accepted_quote.id
+      script.stripe-button data-label="add #{accepted_quote.amount.floor} #{job.currency.upcase} + tax in funds" data-amount="#{@accepted_quote.amount.floor*100}" data-email=("#{current_company.email}") data-description="Pay for work order for job#{@job.id}" data-key=("#{Rails.configuration.stripe[:publishable_key]}") data-locale="auto" src="https://checkout.stripe.com/checkout.js" data-currency="#{@job.currency}"
+- elsif accepted_quote && accepted_quote.paid_by_company
+  .payments
+    .payments__flexbox
+      .tag.tag--success FUNDS AVAILABLE
+      .payments__total-group
+        .payments__total-amt #{job.payments_sum_paid} #{job.currency.upcase}
+        .payments__payout-label payout BAL.
+    .payments__status You have secured funds for this project. AV Junction will hold these payments on your behalf until each of the milestones listed below are met.
+- payments.each do |payment|
+    div class="payments #{ "milestone--inactive" if !accepted_quote.paid_by_company}"
+      .payments__flexbox
+        .payments__title #{payment.description}
+        .payments__amt #{number_to_currency(payment.amount, precision: 0)} #{job.currency}
+      .payments__flexbox
         - if payment.paid_on.present?
-          span.text-success Paid
-        - else
-          | Unpaid
-      td
-        - if payment.paid_on.blank? && payment.issued_on.present? && payment.issued_on < Time.zone.now
-          = pluralize((Time.zone.now.to_date - payment.issued_on).to_i, "day")
-      td= payment.issued_on
-      td= payment.paid_on
-      td.text-right
-        = link_to (payment.paid_on.blank? ? "Make Payment" : "View Invoice"), company_job_payment_path(job, payment)
+          .payments__date Paid on #{payment.paid_on}
+        - if accepted_quote.paid_by_company
+          = link_to company_job_payment_path(job, payment), class: 'btn-primary--active top-margin w-inline-block'
+            div #{(payment.paid_on.blank? ? "Issue Payout" : "View Invoice")}

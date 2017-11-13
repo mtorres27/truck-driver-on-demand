@@ -5,61 +5,12 @@
     .result-header
       .result-header__text
         | Payments
-        - if @accepted_quote && !@accepted_quote.paid_by_company
-          span.right
-            = form_tag company_job_contract_pay_path, method: 'post' do
-              input type="hidden" name="quote_id" value=@accepted_quote.id
-              script.stripe-button data-label="Send money" data-amount="#{@accepted_quote.amount.floor*100}" data-email=("#{current_company.email}") data-description="Pay for work order for job#{@job.id}" data-key=("#{Rails.configuration.stripe[:publishable_key]}") data-locale="auto" src="https://checkout.stripe.com/checkout.js" data-currency="#{@job.currency}"
-        - elsif @accepted_quote && @accepted_quote.paid_by_company
-          span.tag.tag-success<> PAID
     .result-content
       .row
         .col-xs-12.col-sm-8
           .job_title= @job.title
-        .col-xs-12.col-sm-4
-          .job_paid
-            | Paid #{number_to_currency(@job.payments_sum_paid, precision: 0)} #{@job.currency} of #{number_to_currency(@job.payments_sum_total, precision: 0)} #{@job.currency}
+        / .col-xs-12.col-sm-4
+        /   .job_paid
+        /     | Paid #{number_to_currency(@job.payments_sum_paid, precision: 0)} #{@job.currency} of #{number_to_currency(@job.payments_sum_total, precision: 0)} #{@job.currency}
 
-      = render partial: "table", locals: { job: @job, payments: @payments }
-      .payments
-        .payments__flexbox
-          .tag.tag--in-progress funds pending
-        .payments__status For this project to be started, it must be fully funded. This shows the AV Freelancer that funds are available but will not be accessible until the milestones are met and you authorize the payout.
-        a.btn-primary--active.top-margin.w-inline-block href="#" 
-          div add $1500 + tax in funds
-      .payments
-        .payments__flexbox
-          .tag.tag--success FUNDS AVAILABLE
-          .payments__total-group
-            .payments__total-amt $1500
-            .payments__payout-label payout BAL.
-        .payments__status You have secured funds for this project. AV Junction will hold these payments on your behalf until each of the milestones listed below are met.
-      .payments
-        .payments__flexbox
-          .payments__title Project Start
-          .payments__amt $1500
-        .payments__flexbox
-          .payments__date Due November 24, 2017
-          a.btn-link href="#"  View Invoice
-        .payments__status You issued a payout for this invoice on November 14, 2017
-      .payments
-        .payments__flexbox
-          .payments__title Project Midpoint
-          .payments__amt $1500
-        .payments__flexbox
-          .payments__date Due November 24, 2017
-        a.btn-primary--active.top-margin.w-inline-block href="#" 
-          div Issue Payout
-      .payments
-        .payments__flexbox
-          .payments__title Project End
-          .payments__amt $1500
-        .payments__flexbox
-          .payments__date Due December 24, 2017
-          a.btn-link href="#"  View Invoice
-      .milestone--inactive.payments
-        .payments__flexbox
-          .payments__title Project Start
-          .payments__amt $1500
-        .payments__flexbox
-          .payments__date Due November 24, 2017      
+      = render partial: "table", locals: { job: @job, payments: @payments, accepted_quote: @accepted_quote }
