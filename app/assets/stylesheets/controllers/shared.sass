@@ -1,0 +1,116 @@
+//Buttons
+.btn-ghost--active
+  display: inline-block
+  padding: 8px
+  border: 1px solid #3daadf
+  border-radius: 4px
+  background-color: transparent
+  color: #333
+  font-size: 12px
+  font-weight: 600
+  text-align: center
+  text-decoration: none
+  text-transform: uppercase
+  &:hover
+    color: #3daadf
+  &.width-100
+    width: 100%
+
+.btn-primary--active
+  display: inline-block
+  margin-top: 4px
+  margin-right: 16px
+  margin-bottom: 4px
+  padding: 8px
+  -webkit-box-flex: 0
+  -webkit-flex: 0 auto
+  -ms-flex: 0 auto
+  flex: 0 auto
+  border: 1px solid #3daadf
+  border-radius: 4px
+  background-color: #3daadf
+  box-shadow: 1px 1px 3px 0 rgba(0, 0, 0, 0.25)
+  -webkit-transition: background-color 200ms ease
+  transition: background-color 200ms ease
+  color: #fff
+  font-size: 12px
+  font-weight: 600
+  text-align: center
+  text-decoration: none
+  text-transform: uppercase
+  &:hover
+    background-color: #208cc0
+  &.no-margin
+    margin-right: 0px
+    margin-left: 0px
+    font-size: 12px
+  &.width-100
+    width: 100%
+    float: none
+    -webkit-box-flex: 0
+    -webkit-flex: 0 auto
+    -ms-flex: 0 auto
+    flex: 0 auto
+  &.warning
+    border-color: rgba(0, 0, 0, 0.2)
+    background-color: #ff1400
+    &:hover
+      border-color: #8f1b11
+      background-color: #8f1b11
+  &.top-margin
+    margin-top: 8px    
+
+.btn-primary--disabled
+  padding: 8px
+  border-radius: 4px
+  background-color: #e2e2e2
+  color: #a8a8a8
+  font-size: 12px
+  font-weight: 600
+  text-align: center
+  text-transform: uppercase
+  &.top-margin
+    margin-top: 8px
+
+.btn-link
+  display: inline-block
+  font-size: 12px
+  font-weight: 600
+  text-transform: uppercase    
+
+.btn__icon-link
+  width: 24px
+  height: 24px
+  font-family: 'Material design iconic font', sans-serif
+  color: #333
+  font-size: 24px
+  line-height: 24px
+  &:hover
+    color: #3daadf  
+
+//Tags
+.tag
+  display: inline-block
+  padding: 8px
+  border-style: solid
+  border-width: 1px
+  border-color: rgba(0, 0, 0, 0.2)
+  border-radius: 4px
+  background-color: #fff
+  font-size: 10px
+  line-height: 10px
+  font-weight: 600
+  text-transform: uppercase
+  &.tag--grey
+    margin: 4px 8px 4px 0px
+    border-color: #a7a7a7
+    background-color: #e2e2e2
+  &.tag--in-progress
+    border-color: rgba(0, 0, 0, 0.2)
+    background-color: #fff501
+  &.tag--success
+    border-color: rgba(0, 0, 0, 0.2)
+    background-color: #8ff696
+  &.tag--active
+    background-color: #ffa400
+    color: #fff    
