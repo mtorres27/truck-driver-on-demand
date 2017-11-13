@@ -3,33 +3,32 @@ h1 Search for AV Freelancers
 
 .
 - content_for :secondary do
-  .result-wrapper
-    .result-header
-      .result-header__text
-        - if params.dig(:search, :keywords).presence || params.dig(:search, :address).presence
-          = "#{@freelancers.total_count} freelancers found for "
-        - else
-          = "#{@freelancers.total_count} freelancers found"
+  .action-bar
+    h2.heading-h2.heading-h2--action-bar
+      - if params.dig(:search, :keywords).presence || params.dig(:search, :address).presence
+        = "#{@freelancers.total_count} freelancers found for "
+      - else
+        = "#{@freelancers.total_count} freelancers found"
+      span class="result-header__text--strong"
+        = params[:search][:keywords]
+      - if params[:search][:address] > ""
+        = " near "
         span class="result-header__text--strong"
-          = params[:search][:keywords]
-        - if params[:search][:address] > ""
-          = " near "
-          span class="result-header__text--strong"
-            = params[:search][:address]
+          = params[:search][:address]
         
 
-      .result-header__distance
-        span class="result-header__distance-text"
-          | distance
-        select id="freelance_distance" class="company-freelancer__distance"
-            option value="40234" label="25 Miles" selected=("selected" if params.dig(:search, :distance) == '40234')
-            option value="80467" label="50 Miles" selected=("selected" if params.dig(:search, :distance) == '80467')
-            option value="120701" label="75 Miles" selected=("selected" if params.dig(:search, :distance) == '120701')
-            option value="160934" label="100 Miles" selected=("selected" if params.dig(:search, :distance) == '160934')
+    .action-bar__actions
+      span class="result-header__distance-text"
+        | distance
+      select id="freelance_distance" class="company-freelancer__distance"
+          option value="40234" label="25 Miles" selected=("selected" if params.dig(:search, :distance) == '40234')
+          option value="80467" label="50 Miles" selected=("selected" if params.dig(:search, :distance) == '80467')
+          option value="120701" label="75 Miles" selected=("selected" if params.dig(:search, :distance) == '120701')
+          option value="160934" label="100 Miles" selected=("selected" if params.dig(:search, :distance) == '160934')
 
-    .result-freelancers
-      - @freelancers.each do |freelancer|
-        .result-row href=company_freelancer_path(freelancer)
-          = render partial: "company/shared/freelancer_info", locals: { freelancer: freelancer }
+  .result-freelancers
+    - @freelancers.each do |freelancer|
+      .result-row href=company_freelancer_path(freelancer)
+        = render partial: "company/shared/freelancer_info", locals: { freelancer: freelancer }
 
-      = paginate @freelancers
+    = paginate @freelancers
