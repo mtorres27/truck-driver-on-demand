@@ -13,7 +13,7 @@ html
     title= yield(:title) + " – " if content_for?(:title)
 
   body class=(params[:controller]&.gsub("/", "-") || "")
-    .flex-wrap
+    .page
       = render "shared/nav"
       = render "shared/mobile_nav"
       = render "shared/preregistration_notice"
@@ -24,11 +24,10 @@ html
       - elsif params[:controller]&.gsub("/", "-") == "company-profiles"
         =yield
       - else
-        .primary
-          .container= yield
+        .page-top__container
+          .page-top= yield
 
       - if content_for(:secondary)
-        .secondary
-          .container= yield :secondary
+        .page-content= yield :secondary
 
       = render "shared/footer"
