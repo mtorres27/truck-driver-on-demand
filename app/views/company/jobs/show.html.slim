@@ -109,6 +109,7 @@
           | Scope of Work
         .show_value= @job.scope_of_work || "Not Specified"
 
+    /
       .job-details
         .job-details__title
           | Addenda
@@ -124,7 +125,7 @@
               .job-details__attachment__name
                 = attachment.title
 
-
+    / 
       .job-details
         ul
           - if @job.budget_is_public?
