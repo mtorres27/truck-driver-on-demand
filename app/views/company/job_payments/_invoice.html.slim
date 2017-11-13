@@ -64,3 +64,48 @@ br
     tr.total
       td Total Due
       td= number_to_currency(@payment.amount) + " " + @job.currency
+
+.invoice
+  .invoice__meta-1
+    .avatar.avatar--invoice
+    .invoice__meta-4
+      div Michael Green
+      div 432 Sunset Blvd
+      div Crosby, TX 73301
+  .invoice__meta-2
+    .invoice__meta-1
+      .invoice__text--right To:
+      .invoice__meta-4
+        div Peter Powlowski
+        div Colorbalanced AV Inc.
+        div 293 Rhodes DR.
+        div Orlando, FL 32003
+    .invoice__meta-1
+      .invoice__meta-3
+        .invoice__text--right Inv #:
+        .invoice__text--right Date:
+      .invoice__meta-4
+        div 101
+        div 12/03/2018
+  .invoice__meta-2
+    .invoice__meta-1
+      .invoice__text--right Job:
+      .invoice__to-name-addy
+        div 80564736-2 AV Tech Required for boardroom install in Texas
+    .invoice__meta-1
+      .invoice__text--right Phase:
+      .invoice__to-name-addy
+        div Completion of 90% of the project
+  .invoice__table
+    .invoice__table-row.invoice__table-row--header
+      .invoice__table-text.invoice__table-text--left Description
+      .invoice__table-text.invoice__table-text--right Amount
+    .invoice__table-row
+      .invoice__table-text.invoice__table-text--left Completion of 90% of the project
+      .invoice__table-text.invoice__table-text--right $500
+    .invoice__table-row
+      .invoice__table-text.invoice__table-text--left Sales Tax @ 13%
+      .invoice__table-text.invoice__table-text--right $65
+    .invoice__table-row.invoice__table-row--total
+      .invoice__table-text.invoice__table-text--left Total Payout
+      .invoice__table-text.invoice__table-text--right $565
