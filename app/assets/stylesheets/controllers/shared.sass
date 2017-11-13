@@ -64,6 +64,10 @@
   border-radius: 8px
   background-color: #fff
   box-shadow: none
+  @media (max-width: 1199px)
+    margin-top: 0px
+    margin-bottom: 0px
+    border-radius: 0px
 
 
 
@@ -78,6 +82,10 @@
   font-weight: 300
   &.heading-h2--action-bar
     margin-bottom: 0px  
+    -webkit-box-flex: 1
+    -webkit-flex: 1
+    -ms-flex: 1
+    flex: 1
 
 .heading-h3
   margin-top: 0px
@@ -241,6 +249,16 @@
   -ms-flex-align: center
   align-items: center
   background-color: #f1f1f1
+  @media (max-width: 767px)
+    -webkit-box-orient: vertical
+    -webkit-box-direction: normal
+    -webkit-flex-direction: column
+    -ms-flex-direction: column
+    flex-direction: column
+    -webkit-box-align: start
+    -webkit-align-items: flex-start
+    -ms-flex-align: start
+    align-items: flex-start
 
 .action-bar__title
   display: inline-block
