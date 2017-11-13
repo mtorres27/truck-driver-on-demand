@@ -1,151 +1,148 @@
 = render partial: "company/shared/job_nav", locals: { job: @job }
 
 - content_for :secondary do
-  .result-wrapper
-    .result-header
-      .result-header__text
-        | Job Details
-      .result-header__link
-        - if @job.pre_contracted?
-          a.btn.btn-tertiary href=edit_company_job_path(@job)
-            | Edit Details
+  .action-bar
+    h2.heading-h2.heading-h2--action-bar Job Detail
+    .action-bar__actions
+      - if @job.pre_contracted?
+        a.btn-primary--active href=edit_company_job_path(@job)
+          | Edit
 
-    .result-content.result-content--collapsed
-      .job-details
-        .job-details__right
-          .job-details__title
-            | Budget
-          .show-budget= number_to_currency(@job.budget, precision: 0) + " " + @job.currency
+  .job-details
+    .job-details__right
+      .job-details__title
+        | Budget
+      .show-budget= number_to_currency(@job.budget, precision: 0) + " " + @job.currency
 
-        .job-details__left
-          .job-details__title
-            | Project Reference
-          a.btn.btn-tertiary.job-details__link href=company_projects_path()
-            = project_reference(@job.project) 
+    .job-details__left
+      .job-details__title
+        | Project Reference
+      a.btn.btn-tertiary.job-details__link href=company_projects_path()
+        = project_reference(@job.project) 
 
-        .job-details__left
-          .job-details__title
-            | Job Title
-          .show_value_em= @job.title
+    .job-details__left
+      .job-details__title
+        | Job Title
+      .show_value_em= @job.title
 
-        .job-details__left
-          .job-details__title
-            | Address of Job
-          - if @job.address?
-            .show_value_em= @job.address
-          - else
-            .show_value_em= "Address Not Specified"
+    .job-details__left
+      .job-details__title
+        | Address of Job
+      - if @job.address?
+        .show_value_em= @job.address
+      - else
+        .show_value_em= "Address Not Specified"
 
 
-      .job-details
-        .job-details__title
-          | Work order
-        .job-details__work-order
-          .job-details__work-order__content
-            .job-details__work-order__status
-              - if !@job.freelancer
-                | Freelancer not chosen
-              - elsif @job.pre_contracted?
-                | Freelencer selected: work order pending.
-              - elsif @job.contracted?
-                | Work Order determined
-            - if @job.freelancer
-              a.btn-primary.job-details__work-order__btn href=edit_company_job_work_order_path(@job)
-                | Create Work Order
-            - else
-              div.btn-primary.job-details__work-order__btn--disabled
-                | Create Work Order
+  .job-details
+    .job-details__title
+      | Work order
+    .job-details__work-order
+      .job-details__work-order__content
+        .job-details__work-order__status
+          - if !@job.freelancer
+            | Freelancer not chosen
+          - elsif @job.pre_contracted?
+            | Freelencer selected: work order pending.
+          - elsif @job.contracted?
+            | Work Order determined
+        - if @job.freelancer
+          a.btn-primary.job-details__work-order__btn href=edit_company_job_work_order_path(@job)
+            | Create Work Order
+        - else
+          div.btn-primary.job-details__work-order__btn--disabled
+            | Create Work Order
 
-      - if !@job.freelancer.nil?
-        .job-details
-          .job-details__bar
-            = render partial: "company/shared/contract_meta", locals: { job: @job }
-            
-
-      .job-details
-        .job-details__bar
-          .job-details__title
-            | Job Function
-          .show_value_em= @job.job_function&.text
-
-        .job-details__bar
-          .job-details__title
-            | Est. Start
-          .show_value_em= l @job.starts_on
-        .job-details__bar
-          .job-details__title
-            | Duration
-          .show_value_em= @job.duration
-
-        .job-details__bar
-          .job-details__title
-            | Pay Type
-          .show_value_em= @job.pay_type&.text || "Not Specified"
-
-        .job-details__bar
-          .job-details__title
-            | Freelancer Type
-          .show_value_em= @job.freelancer_type&.text
-
-
-      .job-details
-        .job-details__title
-          | Skills
-        .show_value
-          - if !@job.keywords
-            | None Specified
-          - elsif @job.keywords and @job.keywords.kind_of?(Hash)
-            - @job.keywords.each do |index, value|
-              .grey.tag
-                = I18n.t("enumerize.freelancer_skills.#{index}")
-      
-      .job-details
-        .job-details__title
-          | Job Summary
-        .show_value= @job.summary
-
-      .job-details
-        .job-details__title
-          | Scope of Work
-        .show_value= @job.scope_of_work || "Not Specified"
-
-    /
-      .job-details
-        .job-details__title
-          | Addenda
+  - if !@job.freelancer.nil?
+    .job-details
+      .job-details__bar
+        = render partial: "company/shared/contract_meta", locals: { job: @job }
         
-        .job-details__attachments
-          - @job.attachments.each do |attachment|
-            a.job-details__attachment href=attachment.file_url target="_blank"
-              .job-details__attachment__file
-                - if is_image(attachment.file_url)
-                  img src=attachment.file_url
-                - else
-                  span class="fa fa-file-text"
-              .job-details__attachment__name
-                = attachment.title
 
-    / 
-      .job-details
-        ul
-          - if @job.budget_is_public?
-            li.show_value= t(:budget_is_public, scope: [:form, :labels, :job])
-      
-        .job-details
-          .job-details__title
-            | Freelance Service Agreement
-          p
-            - if @job.opt_out_of_freelance_service_agreement
-              | This project has opted out of the freelance service agreement
+  .job-details
+    .job-details__bar
+      .job-details__title
+        | Job Function
+      .show_value_em= @job.job_function&.text
+
+    .job-details__bar
+      .job-details__title
+        | Est. Start
+      .show_value_em= l @job.starts_on
+    .job-details__bar
+      .job-details__title
+        | Duration
+      .show_value_em= @job.duration
+
+    .job-details__bar
+      .job-details__title
+        | Pay Type
+      .show_value_em= @job.pay_type&.text || "Not Specified"
+
+    .job-details__bar
+      .job-details__title
+        | Freelancer Type
+      .show_value_em= @job.freelancer_type&.text
+
+
+  .job-details
+    .job-details__title
+      | Skills
+    .show_value
+      - if !@job.keywords
+        | None Specified
+      - elsif @job.keywords and @job.keywords.kind_of?(Hash)
+        - @job.keywords.each do |index, value|
+          .grey.tag
+            = I18n.t("enumerize.freelancer_skills.#{index}")
+  
+  .job-details
+    .job-details__title
+      | Job Summary
+    .show_value= @job.summary
+
+  .job-details
+    .job-details__title
+      | Scope of Work
+    .show_value= @job.scope_of_work || "Not Specified"
+
+/
+  .job-details
+    .job-details__title
+      | Addenda
+    
+    .job-details__attachments
+      - @job.attachments.each do |attachment|
+        a.job-details__attachment href=attachment.file_url target="_blank"
+          .job-details__attachment__file
+            - if is_image(attachment.file_url)
+              img src=attachment.file_url
             - else
-              a href="/freelance-service-agreement?job=#{@job.id}#{random_append}" target="_blank"
-                | Click here to view the Freelance Service Agreement for this project.
-        
-    .result-content__expand onclick="toggleExpandedJobDetails()"
-      .result-content__expand__gradient
-      .result-content__expand__bg
-        .btn.btn-tertiary.result-content__expand-btn
-          | expand job details
+              span class="fa fa-file-text"
+          .job-details__attachment__name
+            = attachment.title
+
+/ 
+  .job-details
+    ul
+      - if @job.budget_is_public?
+        li.show_value= t(:budget_is_public, scope: [:form, :labels, :job])
+  
+    .job-details
+      .job-details__title
+        | Freelance Service Agreement
+      p
+        - if @job.opt_out_of_freelance_service_agreement
+          | This project has opted out of the freelance service agreement
+        - else
+          a href="/freelance-service-agreement?job=#{@job.id}#{random_append}" target="_blank"
+            | Click here to view the Freelance Service Agreement for this project.
+    
+  .result-content__expand onclick="toggleExpandedJobDetails()"
+    .result-content__expand__gradient
+    .result-content__expand__bg
+      .btn.btn-tertiary.result-content__expand-btn
+        | expand job details
 
 
 javascript:

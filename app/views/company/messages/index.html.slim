@@ -1,44 +1,43 @@
 = render partial: "company/shared/job_nav", locals: { job: @job }
 
 - content_for :secondary do
-  .result-wrapper
-    .result-header
-      .result-header__text
-        | Progress
-        
-    .result-content
-      .messages-and-activity--wrapper
-        .messages-and-activity
-          .post
-            = simple_form_for(:message, url: company_job_messages_path(@job)) do |f|
-              - if @job.freelancer.nil?
-                - n = ""
-              - else
-                - n = @job.freelancer.name
-              = render partial: "company/shared/new_message", locals: { f: f, n: n, type: "message", quotes: []  }
-          - @messages.each do |message|
-            .media.new-message__item
-              .media-left
-                .freelancer_avatar
-                  = image_tag(message.authorable.avatar_url, size: "40x40")
-              .media-body
-                span class="authorable_name"
-                  = "#{message.authorable.name} "
-                span class="authorable_date"
-                  = "#{time_ago_in_words(message.created_at)} ago"
-                .authorable_body
-                  - if message.send_contract != true
-                    - if !message.checkin
-                      = message.body
-                    - else
-                      span class="new-message__checkin fa fa-map-marker"
-                      = "Checked in at job site #{message.created_at.strftime("%B %d, %Y at %l:%M %P")}:"
-                      br
-                      = message.body
+  .action-bar
+    h2.heading-h2.heading-h2--action-bar Progress
+    .action-bar__actions
+      
+  .result-content
+    .messages-and-activity--wrapper
+      .messages-and-activity
+        .post
+          = simple_form_for(:message, url: company_job_messages_path(@job)) do |f|
+            - if @job.freelancer.nil?
+              - n = ""
+            - else
+              - n = @job.freelancer.name
+            = render partial: "company/shared/new_message", locals: { f: f, n: n, type: "message", quotes: []  }
+        - @messages.each do |message|
+          .media.new-message__item
+            .media-left
+              .freelancer_avatar
+                = image_tag(message.authorable.avatar_url, size: "40x40")
+            .media-body
+              span class="authorable_name"
+                = "#{message.authorable.name} "
+              span class="authorable_date"
+                = "#{time_ago_in_words(message.created_at)} ago"
+              .authorable_body
+                - if message.send_contract != true
+                  - if !message.checkin
+                    = message.body
                   - else
-                      = message.body.html_safe
+                    span class="new-message__checkin fa fa-map-marker"
+                    = "Checked in at job site #{message.created_at.strftime("%B %d, %Y at %l:%M %P")}:"
+                    br
+                    = message.body
+                - else
+                    = message.body.html_safe
 
-                  
-                  - if message.attachment
-                    .new-message__image
-                      = attachment_image_link(message.attachment)
+                
+                - if message.attachment
+                  .new-message__image
+                    = attachment_image_link(message.attachment)
