@@ -21,7 +21,7 @@ module JobHelper
       published: :primary,
       quoted: :success,
       negotiated: :info,
-      contracted: :warning,
+      contracted: :active,
       completed: :danger,
       declined: :danger
     }
@@ -34,7 +34,7 @@ module JobHelper
       t = "declined"
     end
 
-    content_tag(:span, class: "job_state label label-#{mappings[sym]}") do
+    content_tag(:span, class: "tag tag--#{mappings[sym]}") do
       t
     end
   end

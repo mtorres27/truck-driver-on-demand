@@ -1,38 +1,43 @@
-.job_nav
-  h1
-    .job_header_top
-      = job_state_label(job)
-      - if @job.project
-        a.project_name href=company_projects_path
-          | &#8592; #{job.project&.name}
-    - if job.title
-      = job.title
-  .tab-bar
-    - if job.new_record?
-      .tab-bar__item--active
-        Job Details
-    - else
-      .tab-bar__item class=("tab-bar__item--active" if controller.controller_name == "jobs" or request.path.index(/work_order/))
-        a href=company_job_path(job)
-          | Job Details
-      .tab-bar__item class=("tab-bar__item--active" if request.path.index(/applicant/))
-        a href=company_job_applicants_path(job)
-          | Applicants
-      .tab-bar__item class=("tab-bar__item--active" if request.path.index(/message/)) class=("tab-bar__item--inactive" if job.pre_contracted?)
-        - if !job.freelancer
+.job-header
+  .job-header__meta-1
+    = job_state_label(job)
+    .job-header__budget-group
+      .job-header__budget #{job.accepted_quote.amount.floor} #{job.currency.upcase}
+      .job-header__budget-label CONTRACT PRICE
+  h4.heading-h4
+    a href=company_projects_path 
+      | #{job.project&.name}
+  .job-header__created-date #{job.created_at}
+  h2.heading-h2 #{job.title}
+  h4.heading-h4
+    | AWARDED TO
+    a<> href=company_freelancer_path(id: job.freelancer.id) #{job.freelancer.name} 
+.tab-bar
+  - if job.new_record?
+    .tab-bar__item--active
+      Job Details
+  - else
+    .tab-bar__item class=("tab-bar__item--active" if controller.controller_name == "jobs" or request.path.index(/work_order/))
+      a href=company_job_path(job)
+        | Job Details
+    .tab-bar__item class=("tab-bar__item--active" if request.path.index(/applicant/))
+      a href=company_job_applicants_path(job)
+        | Applicants
+    .tab-bar__item class=("tab-bar__item--active" if request.path.index(/message/)) class=("tab-bar__item--inactive" if job.pre_contracted?)
+      - if !job.freelancer
+        | Progress
+      - else
+        a href=company_job_messages_path(job)
           | Progress
-        - else
-          a href=company_job_messages_path(job)
-            | Progress
-      .tab-bar__item class=("tab-bar__item--active" if request.path.index(/payment/)) class=("tab-bar__item--inactive" if job.pre_contracted?)
-        - if job.pre_contracted?
+    .tab-bar__item class=("tab-bar__item--active" if request.path.index(/payment/)) class=("tab-bar__item--inactive" if job.pre_contracted?)
+      - if job.pre_contracted?
+        | Payments
+      - else
+        a href=company_job_payments_path(job)
           | Payments
-        - else
-          a href=company_job_payments_path(job)
-            | Payments
-      .tab-bar__item class=("tab-bar__item--active" if request.path.index(/review/)) class=("tab-bar__item--inactive" unless job.completed?)
-        - unless job.completed?
+    .tab-bar__item class=("tab-bar__item--active" if request.path.index(/review/)) class=("tab-bar__item--inactive" unless job.completed?)
+      - unless job.completed?
+        | Review
+      - else
+        a href=company_job_review_path(job)
           | Review
-        - else
-          a href=company_job_review_path(job)
-            | Review
