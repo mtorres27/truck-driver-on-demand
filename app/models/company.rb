@@ -54,14 +54,14 @@ class Company < ApplicationRecord
   validates_acceptance_of :accept_privacy_policy
   validates_acceptance_of :accept_code_of_conduct
 
-  enumerize :currency, in: [
-    :cad,
-    :euro,
-    :ruble,
-    :rupee,
-    :usd,
-    :yen,
-  ]
+  # enumerize :currency, in: [
+  #   :cad,
+  #   :euro,
+  #   :ruble,
+  #   :rupee,
+  #   :usd,
+  #   :yen,
+  # ]
 
   enumerize :contract_preference, in: [:prefer_fixed, :prefer_hourly, :prefer_daily]
 

@@ -51,7 +51,10 @@
                 | Work Order determined
             - if @job.freelancer
               a.btn-primary.job-details__work-order__btn href=edit_company_job_work_order_path(@job)
-                | Create Work Order
+                - if @job.contract_sent == true
+                  | Edit Work Order
+                - else
+                  | Create Work Order
             - else
               div.btn-primary.job-details__work-order__btn--disabled
                 | Create Work Order

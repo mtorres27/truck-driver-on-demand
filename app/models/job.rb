@@ -111,14 +111,14 @@ class Job < ApplicationRecord
     :completed
   ], predicates: true, scope: true
 
-  enumerize :currency, in: [
-    :cad,
-    :euro,
-    :ruble,
-    :rupee,
-    :usd,
-    :yen,
-  ]
+  # enumerize :currency, in: [
+  #   :cad,
+  #   :euro,
+  #   :ruble,
+  #   :rupee,
+  #   :usd,
+  #   :yen,
+  # ]
 
   validate :validate_number_of_payments
 

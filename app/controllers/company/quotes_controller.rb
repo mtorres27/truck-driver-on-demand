@@ -25,7 +25,7 @@ class Company::QuotesController < Company::BaseController
         @applicant.accept!
           
         self.send_decline_message
-        redirect_to company_job_work_order_path(@job)
+        redirect_to edit_company_job_work_order_path(@job)
         @job.state = "negotiated"
         @job.save
         return

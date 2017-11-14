@@ -29,7 +29,7 @@
 
       .col-sm-12.col-md-6.col-lg-5
         = f.input :budget, placeholder: "Enter a budget", input_html: { value: number_with_precision(f.object.budget, precision: 0) }
-        = f.input :currency, required: true
+        = f.input :currency, required: true, as: :select
         = f.input :job_function, prompt: "Select"
         .row
           .col-xs-12.col-md-6
@@ -84,7 +84,7 @@
             = f.input :external_project_id, placeholder: "Enter the project number"
             = f.input :budget, placeholder: "Enter a budget"
             = f.input :address, placeholder: "Enter the address"
-            = f.input :currency
+            = f.input :currency, as: :select
 
             .row
               .col-xs-12.col-md-6
