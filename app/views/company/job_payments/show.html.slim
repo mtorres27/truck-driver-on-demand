@@ -4,6 +4,16 @@
   .result-wrapper
     .result-header
       .result-header__text
-        | Applicants
+        | Payments
+      .invoice-actions
+        - unless action_name == "print"
+          a.icon href=print_company_job_payment_path(@job, @payment) target="_blank" title="Print"
+            span.glyphicon.glyphicon-print aria-hidden=true
+          a.icon href=print_company_job_payment_path(@job, @payment, format: :pdf) title="Download"
+            span.glyphicon.glyphicon-download aria-hidden=true
+          - if @payment.paid_on.blank?
+            = link_to "Mark as Paid", mark_as_paid_company_job_payment_path(@job, @payment), data: { confirm: "Mark this payment as being paid?" }, class: "btn btn-primary"
+          - else
+            .tag.tag--success Paid
     .result-content
       = render "invoice"

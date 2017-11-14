@@ -5,25 +5,38 @@
     .result-header
       .result-header__text
         | Payments
-        .payments
-          .payments__flexbox
-            .tag.tag--in-progress funds pending
-          .payments__status AV Junction recommends you only commence work when the total funds are available for this project.
-        .payments
-          .payments__flexbox
-            .tag.tag--success FUNDS AVAILABLE
-            .payments__total-group
-              .payments__total-amt $1500
-              .payments__payout-label payout BAL.
-          .payments__status Paul's AV Company has secured funds for this project. AV Junction will hold these payments on your behalf until each of the milestones listed below are met.
-        .payments
-          .payments__flexbox
-            .payments__title Project Start
-            .payments__amt $1500
-          .payments__flexbox
-            .payments__date Due November 24, 2017
-            a.btn-link href="#"  View Invoice
-          .payments__status You received a payout for this invoice on November 14, 2017
+        - if @accepted_quote && !@accepted_quote.paid_by_company
+          .payments
+            .payments__flexbox
+              .tag.tag--in-progress funds pending
+            .payments__status AV Junction recommends you only commence work when the total funds are available for this project.
+        - elsif @accepted_quote && @accepted_quote.paid_by_company
+          .payments
+            .payments__flexbox
+              .tag.tag--success FUNDS AVAILABLE
+              .payments__total-group
+                .payments__total-amt #{number_to_currency(@job.payments_sum_paid, precision: 0)}  #{@job.currency}
+                .payments__payout-label payout BAL.
+            .payments__status Paul's AV Company has secured funds for this project. AV Junction will hold these payments on your behalf until each of the milestones listed below are met.
+        - @payments.each do |payment|
+          div class="payments #{ "milestone--inactive" if !@accepted_quote.paid_by_company}"
+            .payments__flexbox
+              .payments__title #{payment.description}
+              .payments__amt #{number_to_currency(payment.amount, precision: 0)} #{@job.currency}
+            .payments__flexbox
+              .payments__date
+                - if payment.issued_on.present? || payment.paid_on.present?
+                  | #{payment.issued_on ? "Requested": "Paid"} #{payment.issued_on ? payment.issued_on : payment.paid_on}
+              a.btn-link href="#"  View Invoice
+            - if  !payment.paid_on.present?
+              = link_to freelancer_payout_request_path(payment_id: payment.id), class: 'btn-primary--active top-margin w-inline-block'
+                div request Payout
+            .payments__status
+              - if payment.paid_on.present?
+                | You received a payout for this invoice on #{payment.paid_on}
+              - elsif payment.issued_on.present?
+                | You last requested a payout for this invoice on November 24, 2017. Allow 2 business days for your client to release the funds to you. You may re-request a payout after 2 business days.
+
         .payments
           .payments__flexbox
             .payments__title Project Midpoint
@@ -31,8 +44,8 @@
           .payments__flexbox
             .payments__date Due November 24, 2017
             a.btn-link href="#"  View Invoice
-          a.btn-primary--active.top-margin.w-inline-block href="#" 
-          div request Payout
+          a.btn-primary--active.top-margin.w-inline-block href="#"
+            div request Payout
         .payments
           .payments__flexbox
             .payments__title Project Midpoint
@@ -40,8 +53,8 @@
           .payments__flexbox
             .payments__date Due November 24, 2017
             a.btn-link href="#"  View Invoice
-          a.btn-primary--disabled.top-margin.w-inline-block href="#" 
-          div request Payout
+          a.btn-primary--disabled.top-margin.w-inline-block href="#"
+            div request Payout
           .payments__status You last requested a payout for this invoice on November 24, 2017. Allow 2 business days for your client to release the funds to you. You may re-request a payout after 2 business days.
         .payments
           .payments__flexbox

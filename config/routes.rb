@@ -57,7 +57,7 @@ Rails.application.routes.draw do
     post "jobs/:id", to: "jobs#apply"
     post "job/apply", to: "jobs#apply"
     get "jobs/:id/work_order/accept", to: "contracts#accept"
-
+    get "job_payment/request", to: "job_payment#request_payout", as: "payout_request"
 
     resources :notifications
 
