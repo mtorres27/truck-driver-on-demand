@@ -12,7 +12,7 @@ h1 Editing Project
     = f.input :address
     = f.input :area
     = f.input :closed
-    = f.input :currency
+    = f.input :currency, as: :select
     
   .form-actions
     = f.button :submit, class: "btn btn-primary", prompt: "Select"

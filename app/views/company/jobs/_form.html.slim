@@ -12,7 +12,8 @@
                 button.btn.btn-default type="button" data-toggle="modal" data-target="#new_project"
                   | New Project
         = f.input :title, placeholder: "Enter the job title"
-        = f.input :address, placeholder: "Enter the city of the job"
+        = f.input :address, placeholder: "Enter the city of the job", label: "City"
+        = f.input :country, prompt: "Select"
         span
           abbr title="required"= "*"
           = " "
@@ -28,7 +29,7 @@
 
       .col-sm-12.col-md-6.col-lg-5
         = f.input :budget, placeholder: "Enter a budget", input_html: { value: number_with_precision(f.object.budget, precision: 0) }
-        = f.input :currency, required: true
+        = f.input :currency, required: true, as: :select
         = f.input :job_function, prompt: "Select"
         .row
           .col-xs-12.col-md-6
@@ -37,10 +38,10 @@
             = f.input :duration, placeholder: "Number of days"
         .row
           .col-xs-12.col-md-6
-            = f.input :pay_type, prompt: "Select"
+            = f.input :pay_type, prompt: "Select", label: "Preferred Pay Type"
           .col-xs-12.col-md-6
             = f.input :freelancer_type, prompt: "Select"
-        
+
         .freelancer-profile__item
           .freelancer-profile__title
             | Skills
@@ -83,8 +84,8 @@
             = f.input :external_project_id, placeholder: "Enter the project number"
             = f.input :budget, placeholder: "Enter a budget"
             = f.input :address, placeholder: "Enter the address"
-            = f.input :currency
-            
+            = f.input :currency, as: :select
+
             .row
               .col-xs-12.col-md-6
                 = f.input :starts_on, html5: true
@@ -96,3 +97,21 @@
             '
             a.btn.btn-default data-dismiss="modal" href="#"
               | Cancel
+
+  javascript:
+    function get_currencies(country){
+      $.get( "#{company_job_country_currency_path}", { country: country})
+      .done(function( data ) {
+        var select = $('#job_currency');
+        select.empty().append(data);
+      });
+    }
+
+    $(document).ready(function() {
+      if ($('#job_country').val() != ""){
+        get_currencies($('#job_country').val())
+      }
+      $('#job_country').on('change', function(){
+        get_currencies($(this).val())
+      });
+    });

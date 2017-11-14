@@ -74,12 +74,66 @@ class Company::FreelancersController < Company::BaseController
       per(50)
   end
 
+  def invite_to_quote
+    if params[:job_to_invite].nil? or params[:job_to_invite] == ""
+      result = 0
+    else
+      @job_id = params[:job_to_invite].to_i
+      if Job.find(@job_id).nil? or Job.find(@job_id).state != "published"
+        result = 0
+      else
+        @job = Job.find(@job_id)
+        @freelancer = Freelancer.find(params[:id])
+
+        if @job.applicants.where({ freelancer_id: params[:id] }).count > 0
+          result = 2
+        elsif @job.job_invites.where({ freelancer_id: params[:id]}).count > 0
+          result = 3
+        else
+          # freelancer is clear to be invited
+          JobInviteMailer.invite_to_quote(@freelancer, @job).deliver
+          @invite = JobInvite.new
+          @invite.freelancer_id = @freelancer.id
+          @invite.job_id = @job.id
+
+          @invite.save
+          result = 1
+        end
+      end
+    end
+
+    redirect_to "/company/freelancers/#{params[:id]}?invite_to_quote=true&result=#{result}"
+  end
+
 
   def show
     @freelancer = Freelancer.find(params[:id])
+    @jobs = []
+    @jobs_master = current_company.jobs.where({ state: "published" }).order('title ASC').distinct
+    @jobs_master.each do |job|
+      @found = false
+      job.applicants.each do |applicant|
+        p applicant.freelancer_id 
+        p @freelancer.id
+
+        if applicant.freelancer_id == @freelancer.id
+          p "FOUND"
+          @found = true
+        end
+      end
+      p "FOUND?"
+      p @found
+      if @found == false
+        @jobs << job
+      end
+    end
+
+
 
     # analytic
-    @freelancer.profile_views += 1
+    if params.dig(:toggle_favourite) != "true" and params.dig(:invite_to_quote) != "true"
+      @freelancer.profile_views += 1
+    end
     @freelancer.save
 
     @favourite = current_company.favourites.where({freelancer_id: params[:id]}).length > 0 ? true : false
@@ -93,8 +147,14 @@ class Company::FreelancersController < Company::BaseController
       end
     end
 
-    if params.dig(:invite_to_quote)
-      # TODO: Add this logic
+    if params.dig(:invite_to_quote) == "true" and params.dig(:result).to_i == 1
+      @invite_sent = true
+    elsif params.dig(:invite_to_quote) == "true" and params.dig(:result).to_i == 0
+      @invite_error = 1
+    elsif params.dig(:invite_to_quote) == "true" and params.dig(:result).to_i == 2
+      @invite_error = 2
+    elsif params.dig(:invite_to_quote) == "true" and params.dig(:result).to_i == 3
+      @invite_error = 3
     end
   end
 

@@ -75,6 +75,9 @@ Rails.application.routes.draw do
       get :favourites, on: :collection
       post :add_favourites, on: :collection
     end
+
+    get "freelancers/:id/invite_to_quote", to: "freelancers#invite_to_quote"
+
     resources :applicants
     resources :payments
     resources :projects
@@ -91,7 +94,7 @@ Rails.application.routes.draw do
       get 'invoice', to: 'subscription#invoice', as: 'invoice'
 
     resources :notifications
-
+    get 'job_country_currency', to: 'jobs#job_countries', as: 'job_country_currency'
     resources :jobs, except: [:index] do
       resources :applicants do
         get :request_quote, on: :member
@@ -111,6 +114,8 @@ Rails.application.routes.draw do
       end
       resource :review, only: [:show, :create]
     end
+
+    get "jobs/:id/publish", to: "jobs#publish"
   end
 
   namespace :admin do

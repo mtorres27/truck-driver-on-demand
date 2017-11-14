@@ -332,12 +332,6 @@ CREATE TABLE companies (
     last_sign_in_at timestamp without time zone,
     current_sign_in_ip inet,
     last_sign_in_ip inet,
-    header_color character varying DEFAULT 'FF6C38'::character varying,
-    country character varying,
-    confirmation_token character varying,
-    confirmed_at timestamp without time zone,
-    confirmation_sent_at timestamp without time zone,
-    header_source character varying DEFAULT 'color'::character varying,
     stripe_customer_id character varying,
     stripe_subscription_id character varying,
     stripe_plan_id character varying,
@@ -348,7 +342,13 @@ CREATE TABLE companies (
     last_4_digits character varying,
     card_brand character varying,
     exp_month character varying,
-    exp_year character varying
+    exp_year character varying,
+    header_color character varying DEFAULT 'FF6C38'::character varying,
+    country character varying,
+    confirmation_token character varying,
+    confirmed_at timestamp without time zone,
+    confirmation_sent_at timestamp without time zone,
+    header_source character varying DEFAULT 'color'::character varying
 );
 
 
@@ -722,6 +722,38 @@ ALTER SEQUENCE job_favourites_id_seq OWNED BY job_favourites.id;
 
 
 --
+-- Name: job_invites; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE job_invites (
+    id bigint NOT NULL,
+    job_id integer,
+    freelancer_id integer,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: job_invites_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE job_invites_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: job_invites_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE job_invites_id_seq OWNED BY job_invites.id;
+
+
+--
 -- Name: jobs; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -743,7 +775,7 @@ CREATE TABLE jobs (
     keywords text,
     invite_only boolean DEFAULT false NOT NULL,
     scope_is_public boolean DEFAULT true NOT NULL,
-    budget_is_public boolean DEFAULT true NOT NULL,
+    budget_is_public boolean DEFAULT false NOT NULL,
     working_days text[] DEFAULT '{}'::text[] NOT NULL,
     working_time character varying,
     contract_price numeric(10,2),
@@ -763,7 +795,8 @@ CREATE TABLE jobs (
     lng numeric(9,6),
     formatted_address character varying,
     contract_sent boolean DEFAULT false,
-    opt_out_of_freelance_service_agreement boolean DEFAULT false
+    opt_out_of_freelance_service_agreement boolean DEFAULT false,
+    country character varying
 );
 
 
@@ -1145,6 +1178,13 @@ ALTER TABLE ONLY job_favourites ALTER COLUMN id SET DEFAULT nextval('job_favouri
 
 
 --
+-- Name: job_invites id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY job_invites ALTER COLUMN id SET DEFAULT nextval('job_invites_id_seq'::regclass);
+
+
+--
 -- Name: jobs id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -1327,6 +1367,14 @@ ALTER TABLE ONLY identities
 
 ALTER TABLE ONLY job_favourites
     ADD CONSTRAINT job_favourites_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: job_invites job_invites_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY job_invites
+    ADD CONSTRAINT job_invites_pkey PRIMARY KEY (id);
 
 
 --
@@ -2019,6 +2067,9 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20171017101132'),
 ('20171020113522'),
 ('20171020123018'),
-('20171105210413');
+('20171105210413'),
+('20171113154821'),
+('20171114170911'),
+('20171114193831');
 
 
