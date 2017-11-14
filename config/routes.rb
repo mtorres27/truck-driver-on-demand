@@ -111,6 +111,8 @@ Rails.application.routes.draw do
       end
       resource :review, only: [:show, :create]
     end
+
+    get "jobs/:id/publish", to: "jobs#publish"
   end
 
   namespace :admin do

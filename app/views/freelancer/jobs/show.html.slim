@@ -77,15 +77,14 @@
             = "N/A"
           - else
             = t("enumerize.job.freelancer_type.#{@job.freelancer_type}")
-      .freelancer-job__summary-item
-        h6.freelancer-job__h6 Job Budget
-        div
-          - if @job.budget_is_public
+      
+      - if @job.budget_is_public
+        .freelancer-job__summary-item
+          h6.freelancer-job__h6 Job Budget
+          div
             = number_to_currency(@job.budget, precision: 0) + " "
             - if @job.currency
               = @job.currency.upcase
-          - else
-            = "N/A"
 
   - if @have_applied == false && @connector.verified?
     .freelancer-job__apply
@@ -93,7 +92,7 @@
         div
           | Apply for this job
 
-= simple_form_for "freelancer_job_apply_path", html: { multipart: true } do |f|
+= simple_form_for "freelancer_job_apply_path", html: { multipart: true }  do |f|
   = f.hidden_field :job, value: @job.id
 
 

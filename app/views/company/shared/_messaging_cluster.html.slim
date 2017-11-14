@@ -75,7 +75,7 @@
           p
             em
               = "Remember, by accepting this quote of #{number_to_currency(@quotes.where({applicant_id: @applicant.id}).first.amount, precision: 0)}  #{job.currency} with #{@applicant.freelancer.name}, all other applications for this"
-              = " job will automatically be declined, and receive a general notification iforming them the job has been filled. Details of who you've selected will not be shared."
+              = " job will automatically be declined, and receive a general notification informing them the job has been filled. Details of who you've selected will not be shared."
         .modal__accept-quote__content__buttons
           .accept_button.btn.btn-primary
             | Accept Quote and Create Work Order

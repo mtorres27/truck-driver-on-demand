@@ -12,7 +12,7 @@
                 button.btn.btn-default type="button" data-toggle="modal" data-target="#new_project"
                   | New Project
         = f.input :title, placeholder: "Enter the job title"
-        = f.input :address, placeholder: "Enter the city of the job"
+        = f.input :address, placeholder: "Enter the city of the job", label: "City"
         = f.input :country, prompt: "Select"
         span
           abbr title="required"= "*"
@@ -38,7 +38,7 @@
             = f.input :duration, placeholder: "Number of days"
         .row
           .col-xs-12.col-md-6
-            = f.input :pay_type, prompt: "Select"
+            = f.input :pay_type, prompt: "Select", label: "Preferred Pay Type"
           .col-xs-12.col-md-6
             = f.input :freelancer_type, prompt: "Select"
 

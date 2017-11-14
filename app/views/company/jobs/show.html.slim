@@ -6,6 +6,9 @@
       .result-header__text
         | Job Details
       .result-header__link
+        - if !@job.published?
+          a.btn.btn-tertiary href="/company/jobs/#{@job.id}/publish"
+            | PUBLISH
         - if @job.pre_contracted?
           a.btn.btn-tertiary href=edit_company_job_path(@job)
             | Edit Details
@@ -133,16 +136,6 @@
           - if @job.budget_is_public?
             li.show_value= t(:budget_is_public, scope: [:form, :labels, :job])
       
-        .job-details
-          .job-details__title
-            | Freelance Service Agreement
-          p
-            - if @job.opt_out_of_freelance_service_agreement
-              | This project has opted out of the freelance service agreement
-            - else
-              a href="/freelance-service-agreement?job=#{@job.id}#{random_append}" target="_blank"
-                | Click here to view the Freelance Service Agreement for this project.
-        
     .result-content__expand onclick="toggleExpandedJobDetails()"
       .result-content__expand__gradient
       .result-content__expand__bg

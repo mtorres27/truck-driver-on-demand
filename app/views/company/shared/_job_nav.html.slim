@@ -15,9 +15,12 @@
       .tab-bar__item class=("tab-bar__item--active" if controller.controller_name == "jobs" or request.path.index(/work_order/))
         a href=company_job_path(job)
           | Job Details
-      .tab-bar__item class=("tab-bar__item--active" if request.path.index(/applicant/))
-        a href=company_job_applicants_path(job)
+      .tab-bar__item class=("tab-bar__item--active" if request.path.index(/applicant/)) class=("tab-bar__item--inactive" if !job.published?)
+        - if !@job.published?
           | Applicants
+        - else 
+          a href=company_job_applicants_path(job)
+            | Applicants
       .tab-bar__item class=("tab-bar__item--active" if request.path.index(/message/)) class=("tab-bar__item--inactive" if job.pre_contracted?)
         - if !job.freelancer
           | Progress

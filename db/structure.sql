@@ -776,7 +776,7 @@ CREATE TABLE jobs (
     keywords text,
     invite_only boolean DEFAULT false NOT NULL,
     scope_is_public boolean DEFAULT true NOT NULL,
-    budget_is_public boolean DEFAULT true NOT NULL,
+    budget_is_public boolean DEFAULT false NOT NULL,
     working_days text[] DEFAULT '{}'::text[] NOT NULL,
     working_time character varying,
     contract_price numeric(10,2),
@@ -2071,6 +2071,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20171023181456'),
 ('20171105210413'),
 ('20171113154821'),
-('20171114170911');
+('20171114170911'),
+('20171114193831');
 
 

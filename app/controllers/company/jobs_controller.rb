@@ -1,5 +1,5 @@
 class Company::JobsController < Company::BaseController
-  before_action :set_job, only: [:show, :edit, :update, :destroy, :contract, :edit_contract, :update_contract]
+  before_action :set_job, only: [:show, :edit, :update, :destroy, :contract, :edit_contract, :update_contract, :publish]
 
   def job_countries
     country = params[:country]
@@ -43,6 +43,26 @@ class Company::JobsController < Company::BaseController
   end
 
   def edit
+  end
+
+  def publish
+    if @job.company.id != current_company.id
+      redirect_to company_job_path(@job)
+      return
+    end
+    if @job.errors.size > 0
+      render :edit
+      return
+    end
+
+    @job.state = "published"
+
+    if @job.save
+      flash[:notice] = "This job has been published."
+      redirect_to company_job_path(@job)
+    else
+      render :edit
+    end
   end
 
   def update
