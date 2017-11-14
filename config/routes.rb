@@ -72,6 +72,9 @@ Rails.application.routes.draw do
       get :favourites, on: :collection
       post :add_favourites, on: :collection
     end
+
+    get "freelancers/:id/invite_to_quote", to: "freelancers#invite_to_quote"
+
     resources :applicants
     resources :payments
     resources :projects

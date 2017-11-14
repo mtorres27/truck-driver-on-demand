@@ -51,6 +51,7 @@ class Job < ApplicationRecord
   has_many :attachments, dependent: :destroy
   has_one :freelancer_review, dependent: :nullify
   has_one :company_review, dependent: :nullify
+  has_many :job_invites
 
   accepts_nested_attributes_for :payments, allow_destroy: true, reject_if: :reject_payments
   accepts_nested_attributes_for :attachments, allow_destroy: true, reject_if: :reject_attachments

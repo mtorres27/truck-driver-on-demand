@@ -14,9 +14,24 @@
       - else
         .profile__block__status--busy
           | Not Available For Work
+      form action="/company/freelancers/#{params[:id]}/invite_to_quote" method="GET"
+        select name="job_to_invite" id="job_to_invite"
+          option value="" label="Select Job"
+          - @jobs.each do |job|
+            option value="#{job.id}" label="#{job.title}"
 
-      a.profile__block__invite-to-quote href="#{params[:id]}?invite_to_quote=true"
-        | Invite to Quote
+        button.profile__block__invite-to-quote 
+          | Invite to Quote
+        - if @invite_sent == true
+          p Invite Sent!
+        - elsif @invite_error != nil
+          - if @invite_error == 1
+            p We were unable to send your invite. Please try again.
+          - elsif @invite_error == 2
+            p This freelancer has already applied for this job.
+          - elsif @invite_error == 3
+            p This freelancer has already received an invitation to apply for this job.
+
 
       a.profile__block__favourite href="#{params[:id]}?toggle_favourite=true"
         - if @favourite
