@@ -75,14 +75,10 @@ class Company::FreelancersController < Company::BaseController
   end
 
   def invite_to_quote
-    p '!!!!!!!!!'
-    p params
     if params[:job_to_invite].nil? or params[:job_to_invite] == ""
       result = 0
     else
       @job_id = params[:job_to_invite].to_i
-      p "JOB ID"
-      p @job_id
       if Job.find(@job_id).nil? or Job.find(@job_id).state != "published"
         result = 0
       else
@@ -103,8 +99,6 @@ class Company::FreelancersController < Company::BaseController
           @invite.save
           result = 1
         end
-
-
       end
     end
 
@@ -115,7 +109,7 @@ class Company::FreelancersController < Company::BaseController
   def show
     @freelancer = Freelancer.find(params[:id])
 
-    @jobs = current_company.jobs.where({ state: "published" }).order('title ASC')
+    @jobs = current_company.jobs.joins(:applicants).where.not('applicants.freelancer_id = ?', @freelancer.id).where({ state: "published" }).order('title ASC')
 
     # analytic
     if params.dig(:toggle_favourite) != "true" and params.dig(:invite_to_quote) != "true"
