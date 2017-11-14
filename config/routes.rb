@@ -34,7 +34,10 @@ Rails.application.routes.draw do
       resources :application, only: [:index, :create]
       resource :contract, only: [:show, :accept], as: "work_order", path: "work_order"
       resources :messages, only: [:index, :create]
-      resources :payments, controller: "job_payments", only: [:index]
+      # resources :payments, controller: "job_payments", only: [:index]
+      resources :payments, controller: "job_payments", only: [:index, :show] do
+        get :print, on: :member
+      end
       resource :review, only: [:show, :create]
       resources :quotes, only: [:index, :create] do
         get :accept, on: :member
@@ -57,7 +60,7 @@ Rails.application.routes.draw do
     post "jobs/:id", to: "jobs#apply"
     post "job/apply", to: "jobs#apply"
     get "jobs/:id/work_order/accept", to: "contracts#accept"
-    get "job_payment/request", to: "job_payment#request_payout", as: "payout_request"
+    get "job_payment/request", to: "job_payments#request_payout", as: "payout_request"
 
     resources :notifications
 
