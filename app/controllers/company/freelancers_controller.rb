@@ -108,8 +108,27 @@ class Company::FreelancersController < Company::BaseController
 
   def show
     @freelancer = Freelancer.find(params[:id])
+    @jobs = []
+    @jobs_master = current_company.jobs.where({ state: "published" }).order('title ASC').distinct
+    @jobs_master.each do |job|
+      @found = false
+      job.applicants.each do |applicant|
+        p applicant.freelancer_id 
+        p @freelancer.id
 
-    @jobs = current_company.jobs.joins(:applicants).where.not('applicants.freelancer_id = ?', @freelancer.id).where({ state: "published" }).order('title ASC')
+        if applicant.freelancer_id == @freelancer.id
+          p "FOUND"
+          @found = true
+        end
+      end
+      p "FOUND?"
+      p @found
+      if @found == false
+        @jobs << job
+      end
+    end
+
+
 
     # analytic
     if params.dig(:toggle_favourite) != "true" and params.dig(:invite_to_quote) != "true"
