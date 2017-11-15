@@ -15,7 +15,7 @@
         .payments__payout-label payout BAL.
     .payments__status You have secured funds for this project. AV Junction will hold these payments on your behalf until each of the milestones listed below are met.
 - payments.each do |payment|
-    div class="payments #{ "milestone--inactive" if !@accepted_quote.paid_by_company}"
+    div class="payments #{ "milestone--inactive" if @accepted_quote.nil? || (@accepted_quote.present? && !@accepted_quote.paid_by_company)}"
       .payments__flexbox
         .payments__title #{payment.description}
         .payments__amt #{number_to_currency(payment.amount, precision: 0)} #{job.currency}
@@ -24,6 +24,6 @@
           .payments__date Paid on #{payment.paid_on}
         - elsif payment.issued_on.present?
           .payments__date Requested from #{job.freelancer.name} on #{payment.paid_on}
-        - if @accepted_quote.paid_by_company
+        - if @accepted_quote.present? && @accepted_quote.paid_by_company
           = link_to company_job_payment_path(job, payment), class: 'btn-primary--active top-margin w-inline-block'
             div #{(payment.paid_on.blank? ? "Issue Payout" : "View Invoice")}
