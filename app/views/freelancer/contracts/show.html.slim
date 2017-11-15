@@ -102,20 +102,32 @@
                 - else
                   a href="/freelance-service-agreement?job=#{@job.id}#{random_append}" target="_blank"
                     | Click here to view the Freelance Service Agreement for this project.
+                  br
+                  input type='checkbox' id='accept_agreement' onclick="toggleAccept()"
+                  |  I accept the Freelance Services Agreement
 
 
-          - if @job.state != :contracted
+          - if @job.state != :contracted and @job.freelancer.id == current_freelancer.id
             p
-              | If the terms of this work order are acceptable to you, click on the link below. If you want to negotiate the terms, enter a message in the 
+              | If the terms of this work order are acceptable to you, click the checkbox above and then on "Accept Work Order". If you want to negotiate the terms, enter a message in the 
               a href=freelancer_job_messages_path(@job)
                 | Progress
               |  view
-            a.btn.btn-primary href="/freelancer/jobs/#{@job.id}/work_order/accept"
+            a.btn.btn-primary href="/freelancer/jobs/#{@job.id}/work_order/accept" id="accept_work_order_button" disabled=true
               | Accept Work Order
-          - else
+          - elsif @job.state == :contracted and @job.freelancer.id == current_freelancer.id
             p
               | You have accepted the terms of this work order.
 
+javascript:
+  var toggleAccept = function() {
+    console.log("Ha");
+    if ($("#accept_agreement").is(":checked")) {
+      $("#accept_work_order_button").attr('disabled', false);
+    } else {
+      $("#accept_work_order_button").attr('disabled', 'disabled');
+    }
+  };
 
 
 
