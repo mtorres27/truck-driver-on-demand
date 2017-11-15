@@ -2,8 +2,11 @@
   div class=(request.path == "/freelancer/jobs/#{job.id}" ? "tab-item--active" : "tab-item--inactive")
     a href=freelancer_job_path(job)
       | Job Details
-  div class=(request.path == "/freelancer/jobs/#{job.id}/application" ? "tab-item--active" : "tab-item--inactive")
-    a href=freelancer_job_application_index_path(job)
+  div class=(request.path == "/freelancer/jobs/#{job.id}/application" ? "tab-item--active" : "tab-item--inactive") class=("tab-bar__item--inactive" if !job.published?)
+    - if job.published?
+      a href=freelancer_job_application_index_path(job)
+        | Application
+    - else
       | Application
   div class=(request.path == "/freelancer/jobs/#{job.id}/messages" ? "tab-item--active" : "tab-item--inactive")
     - if !job.freelancer
