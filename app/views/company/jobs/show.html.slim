@@ -42,8 +42,10 @@
         .job-details__work-order__status
           - if !@job.freelancer
             | Freelancer not chosen
-          - elsif @job.pre_contracted?
+          - elsif @job.pre_contracted? and @job.contract_sent != true
             | Freelencer selected: work order pending.
+          - elsif @job.pre_contracted and @job.contract_sent == true
+            | Work order sent to freelancer; awaiting response.
           - elsif @job.contracted?
             | Work Order determined
         - if @job.freelancer
