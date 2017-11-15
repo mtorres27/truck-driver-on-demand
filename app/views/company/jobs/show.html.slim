@@ -47,7 +47,7 @@
           - elsif @job.pre_contracted and @job.contract_sent == true
             | Work order sent to freelancer; awaiting response.
           - elsif @job.contracted?
-            | Work Order determined
+            | Work order determined
         - if @job.freelancer
           a.btn-primary.job-details__work-order__btn href=edit_company_job_work_order_path(@job)
             | Create Work Order
