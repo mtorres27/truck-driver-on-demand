@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type' />
+  </head>
+  <body>
+    <p>Hi <%= @company.name %>, </p>
+    
+    <p><%= @freelancer.name %> has requested a payout for the following job and milestone:</p>
+    <p><a href="<%= root_url %>company/jobs/<%= @job.id %>"><%= @job.title %></a></p> 
+    <p><a href="<%= root_url %>company/jobs/<%= @job.id %>/payments"><%= @job.payments.order(:created_at) %></a></p> 
+    
+    <p>Please review the progress tab to ensure the milestone has been completed. If further work is required to complete the milestone please reach out to our Freelancer using the progress tab.</p> 
+    
+    <p>To view a full breakdown of payouts specific to this job please click here.</p> 
+    
+    <p>Thanks, AV Junction</p>
+    <p>For additional information please visit our <a href="https://www.avjunction.com/payments">Knowledge Center</a></p>
+  </body>
+</html>

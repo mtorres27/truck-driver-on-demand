@@ -1,5 +1,5 @@
 class PaymentsMailer < ApplicationMailer
-  default from: 'info@avjunction.com'
+  default from: 'AV Junction <info@avjunction.com>'
 
   def request_funds_company(company, freelancer, job)
     @company = company
