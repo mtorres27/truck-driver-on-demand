@@ -13,7 +13,7 @@
         .tag.tag--success
           | Available
         a.btn-icon-link.btn-icon-link--left-margin.w-inline-block href="#" 
-          div 
+          div class="zmdi zmdi-account-add"
         .popover.popover--align-right
           form action="/company/freelancers/#{params[:id]}/invite_to_quote" method="GET"
             label.form__field-label for="field"  Invite to quote
@@ -28,10 +28,10 @@
           | Unavailable
       - if @favourite
           a.btn-icon-link.btn-icon-link--left-margin.w-inline-block href="#{params[:id]}?toggle_favourite=true" 
-            div 
+            div class="zmdi zmdi-favorite"
       - else
         a.btn-icon-link.btn-icon-link--left-margin.w-inline-block href="#{params[:id]}?toggle_favourite=true" 
-          div 
+          div class="zmdi zmdi-favorite-outline"
       
 
   .profile__meta
