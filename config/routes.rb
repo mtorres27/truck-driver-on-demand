@@ -90,8 +90,8 @@ Rails.application.routes.draw do
       post 'subscription_checkout' => 'subscription#subscription_checkout'
       post 'update_card_info' => 'subscription#update_card_info'
       post 'webhooks' => 'subscription#webhooks'
-      get 'invoices', to: 'subscription#invoices', as: 'invoices'
-      get 'invoice', to: 'subscription#invoice', as: 'invoice'
+      get 'plans/invoices', to: 'subscription#invoices', as: 'invoices'
+      get 'plan/invoice', to: 'subscription#invoice', as: 'invoice'
 
     resources :notifications
     get 'job_country_currency', to: 'jobs#job_countries', as: 'job_country_currency'
