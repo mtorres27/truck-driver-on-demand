@@ -3,7 +3,7 @@ module AvalaraTool
 
   end
 
-  def self.test
+  def self.calculate(from_address, to_address, lines)
     AvaTax.configure do |config|
       begin
         config.endpoint = credentials['endpoint']
@@ -23,22 +23,10 @@ module AvalaraTool
       date: '2017-11-15',
       customerCode: 'ABC',
       "addresses": {
-        "ShipFrom": {
-          "line1": "1040 Grant Rd #310",
-          "city": "Mountain View",
-          "region": "CA",
-          "country": "US",
-          "postalCode": "94040"
-        },
-        "ShipTo": {
-          "line1": "100 Market Street",
-          "city": "San Francisco",
-          "region": "CA",
-          "country": "US",
-          "postalCode": "94105"
-        }
+        "ShipFrom": from_address,
+        "ShipTo": to_address
       },
-      lines: [{amount: 100}]
+      lines: lines
     }
     res = @client.create_transaction(createTransactionModel)
     Rails.logger.debug res['totalTax']
