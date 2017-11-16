@@ -1,0 +1,310 @@
+//Page Structures
+.page
+  display: -webkit-box
+  display: -webkit-flex
+  display: -ms-flexbox
+  display: flex
+  min-height: calc(100vh - 70px)
+  -webkit-box-orient: vertical
+  -webkit-box-direction: normal
+  -webkit-flex-direction: column
+  -ms-flex-direction: column
+  flex-direction: column
+  -webkit-box-pack: justify
+  -webkit-justify-content: space-between
+  -ms-flex-pack: justify
+  justify-content: space-between
+  background-color: #e2e2e2
+
+.page-top__container
+  background-color: #fff
+
+.page-top
+  display: block
+  max-width: 1200px
+  min-height: 85px
+  margin-top: 24px
+  margin-right: auto
+  margin-left: auto
+  padding-right: 24px
+  padding-left: 24px
+  -webkit-box-orient: vertical
+  -webkit-box-direction: normal
+  -webkit-flex-direction: column
+  -ms-flex-direction: column
+  flex-direction: column
+  -webkit-box-pack: justify
+  -webkit-justify-content: space-between
+  -ms-flex-pack: justify
+  justify-content: space-between
+  -webkit-flex-wrap: nowrap
+  -ms-flex-wrap: nowrap
+  flex-wrap: nowrap
+  -webkit-box-align: start
+  -webkit-align-items: flex-start
+  -ms-flex-align: start
+  align-items: flex-start
+  -webkit-box-flex: 1
+  -webkit-flex: 1
+  -ms-flex: 1
+  flex: 1
+  background-color: transparent
+
+.page-content
+  display: block
+  overflow: hidden
+  width: 100%
+  max-width: 1200px
+  margin: 24px auto 40px
+  padding: 24px
+  -webkit-box-flex: 1
+  -webkit-flex: 1
+  -ms-flex: 1
+  flex: 1
+  border-radius: 8px
+  background-color: #fff
+  box-shadow: none
+  &.page-content--preview 
+    margin-top: -85px
+  @media (max-width: 1199px)
+    margin-top: 0px
+    margin-bottom: 0px
+    border-radius: 0px
+
+
+
+
+//Typography
+.heading-h1
+  margin-top: 0px
+  font-size: 36px
+  font-weight: 300
+
+.heading-h2
+  font-size: 30px
+  font-weight: 300
+  &.heading-h2--action-bar
+    margin-bottom: 0px  
+    -webkit-box-flex: 1
+    -webkit-flex: 1
+    -ms-flex: 1
+    flex: 1
+
+.heading-h3
+  margin-top: 0px
+  margin-bottom: 0px
+  -webkit-box-flex: 0
+  -webkit-flex: 0 auto
+  -ms-flex: 0 auto
+  flex: 0 auto
+  font-size: 14px
+  font-weight: 600
+  text-transform: uppercase
+
+.heading-h4
+  color: #666
+  font-size: 14px
+  font-weight: 600
+  text-transform: uppercase  
+
+.heading-h6
+  margin-top: 0px
+  margin-bottom: 2px
+  font-weight: 600
+  text-transform: uppercase  
+
+
+
+//Buttons
+.btn-ghost--active
+  display: inline-block
+  padding: 8px
+  border: 1px solid #3daadf
+  border-radius: 4px
+  background-color: transparent
+  color: #333
+  font-size: 12px
+  font-weight: 600
+  text-align: center
+  text-decoration: none
+  text-transform: uppercase
+  &:hover
+    color: #3daadf
+  &.width-100
+    width: 100%
+
+.btn-primary--active
+  display: inline-block
+  margin-top: 4px
+  margin-right: 16px
+  margin-bottom: 4px
+  padding: 8px
+  -webkit-box-flex: 0
+  -webkit-flex: 0 auto
+  -ms-flex: 0 auto
+  flex: 0 auto
+  border: 1px solid #3daadf
+  border-radius: 4px
+  background-color: #3daadf
+  box-shadow: 1px 1px 3px 0 rgba(0, 0, 0, 0.25)
+  -webkit-transition: background-color 200ms ease
+  transition: background-color 200ms ease
+  color: #fff
+  font-size: 12px
+  font-weight: 600
+  text-align: center
+  text-decoration: none
+  text-transform: uppercase
+  &:hover
+    background-color: #208cc0
+  &.no-margin
+    margin-right: 0px
+    margin-left: 0px
+    font-size: 12px
+  &.width-100
+    width: 100%
+    float: none
+    -webkit-box-flex: 0
+    -webkit-flex: 0 auto
+    -ms-flex: 0 auto
+    flex: 0 auto
+  &.warning
+    border-color: rgba(0, 0, 0, 0.2)
+    background-color: #ff1400
+    &:hover
+      border-color: #8f1b11
+      background-color: #8f1b11
+  &.top-margin
+    margin-top: 8px    
+
+.btn-primary--disabled
+  padding: 8px
+  border-radius: 4px
+  background-color: #e2e2e2
+  color: #a8a8a8
+  font-size: 12px
+  font-weight: 600
+  text-align: center
+  text-transform: uppercase
+  &.top-margin
+    margin-top: 8px
+
+.btn-link
+  display: inline-block
+  font-size: 12px
+  font-weight: 600
+  text-transform: uppercase    
+
+.btn-icon-link
+  width: 24px
+  height: 24px
+  font-family: $icon-font, sans-serif
+  color: #333
+  font-size: 24px
+  line-height: 24px
+  &.btn-icon-link--left-margin
+    margin-left: 16px
+  &:hover
+    color: #3daadf  
+
+//Tags
+.tag
+  display: inline-block
+  padding: 8px
+  border-style: solid
+  border-width: 1px
+  border-color: rgba(0, 0, 0, 0.2)
+  border-radius: 4px
+  background-color: #fff
+  font-size: 10px
+  line-height: 10px
+  font-weight: 600
+  text-transform: uppercase
+  &.tag--grey
+    margin: 4px 8px 4px 0px
+    border-color: #a7a7a7
+    background-color: #e2e2e2
+  &.tag--in-progress
+    border-color: rgba(0, 0, 0, 0.2)
+    background-color: #fff501
+  &.tag--success
+    border-color: rgba(0, 0, 0, 0.2)
+    background-color: #8ff696
+  &.tag--active
+    background-color: #ffa400
+    color: #fff    
+
+//Action Bar
+.action-bar
+  display: -webkit-box
+  display: -webkit-flex
+  display: -ms-flexbox
+  display: flex
+  max-width: 1200px
+  margin-top: -24px
+  margin-right: -24px
+  margin-left: -24px
+  padding: 24px
+  -webkit-box-pack: justify
+  -webkit-justify-content: space-between
+  -ms-flex-pack: justify
+  justify-content: space-between
+  -webkit-box-align: center
+  -webkit-align-items: center
+  -ms-flex-align: center
+  align-items: center
+  background-color: #f1f1f1
+
+.action-bar__title
+  display: inline-block
+  font-size: 24px
+  line-height: 30px
+  font-weight: 300
+
+.action-bar__actions
+  position: relative
+  display: -webkit-box
+  display: -webkit-flex
+  display: -ms-flexbox
+  display: flex
+  -webkit-box-pack: justify
+  -webkit-justify-content: space-between
+  -ms-flex-pack: justify
+  justify-content: space-between
+  -webkit-box-align: center
+  -webkit-align-items: center
+  -ms-flex-align: center
+  align-items: center
+
+//Popover
+.popover 
+  position: absolute
+  display: none
+  top: 29px
+  width: 200px
+  padding: 16px
+  border-radius: 4px
+  background-color: #fff
+  box-shadow: 1px 1px 12px 0 rgba(0, 0, 0, .2)
+  &.popover--align-right
+    right: 0px
+
+  &--blanket
+    position: fixed
+    display: none
+    width: 100%
+    height: 100%
+    top: 0
+    left: 0
+    background-color: rgba(255,255,255,0)
+  
+  &--visible
+    display: block
+  
+  &-response
+    &--error
+      color: $brand-warning
+
+    &--success
+      color: $brand-success
+

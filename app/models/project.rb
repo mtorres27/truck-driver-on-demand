@@ -31,14 +31,14 @@ class Project < ApplicationRecord
 
   audited
 
-  enumerize :currency, in: [
-    :cad,
-    :euro,
-    :ruble,
-    :rupee,
-    :usd,
-    :yen,
-  ]
+  # enumerize :currency, in: [
+  #   :cad,
+  #   :euro,
+  #   :ruble,
+  #   :rupee,
+  #   :usd,
+  #   :yen,
+  # ]
 
   def contract_value
     jobs.sum { |job| job.contract_price || 0 }

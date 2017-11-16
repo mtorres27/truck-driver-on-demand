@@ -7,7 +7,11 @@ module JobHelper
     elsif job.quoted?
       company_job_applicants_path(job) \
     elsif job.negotiated?
-      edit_company_job_work_order_path(job) \
+      if job.contract_sent != true
+        edit_company_job_work_order_path(job) \
+      else
+        company_job_path(job)
+      end
     elsif job.contracted?
       company_job_messages_path(job) \
     else
@@ -21,7 +25,7 @@ module JobHelper
       published: :primary,
       quoted: :success,
       negotiated: :info,
-      contracted: :warning,
+      contracted: :active,
       completed: :danger,
       declined: :danger
     }
@@ -34,7 +38,7 @@ module JobHelper
       t = "declined"
     end
 
-    content_tag(:span, class: "job_state label label-#{mappings[sym]}") do
+    content_tag(:span, class: "tag tag--#{mappings[sym]}") do
       t
     end
   end

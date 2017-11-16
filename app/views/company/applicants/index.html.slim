@@ -1,7 +1,6 @@
 = render partial: "company/shared/job_nav", locals: { job: @job }
 
 - content_for :secondary do
-  .result-wrapper
     = render partial: "company/shared/applicants_for_messaging", locals: { applicants: @applicants, job: @job, current_applicant_id: @current_applicant_id }
     = render partial: "company/shared/messaging_cluster", locals: { applicant_accepted: @applicant_accepted, applicants: @applicants, job: @job, current_applicant_id: @current_applicant_id,  }
 

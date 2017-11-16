@@ -1,66 +1,46 @@
-.content_card_title
-  .row
-    .col-xs-12.col-md-8
-      - if action_name == "print"
-        | Invoice
-      - else
-        - if @payment.paid_on.present?
-          | Paid on #{@payment.paid_on}
-        - elsif @payment.issued_on.present? && @payment.issued_on < Time.zone.now
-          | Unpaid, #{pluralize((Time.zone.now.to_date - @payment.issued_on).to_i, "day")} aging
-        - else
-          | Invoice
-    .col-xs-12.col-md-4.text-right
-      .invoice-actions
-        - unless action_name == "print"
-          a.icon href=print_company_job_payment_path(@job, @payment) target="_blank" title="Print"
-            span.glyphicon.glyphicon-print aria-hidden=true
-          a.icon href=print_company_job_payment_path(@job, @payment, format: :pdf) title="Download"
-            span.glyphicon.glyphicon-download aria-hidden=true
-          - if @payment.paid_on.blank?
-            = link_to "Mark as Paid", mark_as_paid_company_job_payment_path(@job, @payment), data: { confirm: "Mark this payment as being paid?" }, class: "btn btn-primary"
+/ p= @job.freelancer&.formatted_address || @job.freelancer&.address
+.invoice
+  .invoice__meta-1
+    .avatar.avatar--invoice
+      = image_tag(@job.freelancer.avatar_url, size: "65x65")
+    .invoice__meta-4
+      div= @job.freelancer&.name
+      div= @job.freelancer&.formatted_address
 
-
-.row
-  .invoice-col-1
-    = image_tag(@job.freelancer.avatar_url, size: "65x65")
-  .invoice-col-2
-    h4= @job.freelancer&.name
-    p= @job.freelancer&.formatted_address || @job.freelancer&.address
-
-br
-.row
-  .invoice-col-1
-    | To:
-  .invoice-col-2
-    = @job.company&.name
-    br
-    = @job.company&.formatted_address || @job.company&.address
-  .invoice-col-3
-    | Invoice No.:
-    br
-    | Date:
-  .invoice-col-4
-    = @payment.id
-    br
-    = @payment.issued_on
-
-br
-.row
-  .invoice-col-1
-    | Job:
-  .invoice-col-2
-    = @job.title
-
-.invoice-table-wrapper
-  table.table
-    tr
-      th Description
-      th Amount
-    tr
-      td= @payment.description
-      td= number_to_currency(@payment.amount) + " " + @job.currency
-
-    tr.total
-      td Total Due
-      td= number_to_currency(@payment.amount) + " " + @job.currency
+  .invoice__meta-2
+    .invoice__meta-1
+      .invoice__text--right Company:
+      .invoice__meta-4
+        div= current_company.name
+        div= current_company.address
+        / div 293 Rhodes DR.
+        / div Orlando, FL 32003
+    .invoice__meta-1
+      .invoice__meta-3
+        .invoice__text--right Inv #:
+        .invoice__text--right Date:
+      .invoice__meta-4
+        div= @payment.id
+        div= @payment.paid_on
+  .invoice__meta-2
+    .invoice__meta-1
+      .invoice__text--right Job:
+      .invoice__to-name-addy
+        div= @job.title
+    .invoice__meta-1
+      .invoice__text--right Phase:
+      .invoice__to-name-addy
+        div= @payment.description
+  .invoice__table
+    .invoice__table-row.invoice__table-row--header
+      .invoice__table-text.invoice__table-text--left Description
+      .invoice__table-text.invoice__table-text--right Amount
+    .invoice__table-row
+      .invoice__table-text.invoice__table-text--left= @payment.description
+      .invoice__table-text.invoice__table-text--right= number_to_currency(@payment.amount) + " " + @job.currency.upcase
+    .invoice__table-row
+      .invoice__table-text.invoice__table-text--left Sales Tax @ 13%
+      .invoice__table-text.invoice__table-text--right= number_to_currency(@payment.amount*0.13)+ " " + @job.currency.upcase
+    .invoice__table-row.invoice__table-row--total
+      .invoice__table-text.invoice__table-text--left Total Payout
+      .invoice__table-text.invoice__table-text--right= number_to_currency(@payment.amount+(@payment.amount*0.13))+ " " + @job.currency.upcase

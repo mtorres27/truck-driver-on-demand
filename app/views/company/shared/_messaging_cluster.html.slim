@@ -65,7 +65,7 @@
       .modal__accept-quote__content
         .modal__accept-quote__content__header
           .modal__accept-quote__content__header__text
-            = "Accept Quote of #{number_to_currency(@quotes.first.amount, precision: 0)}"
+            = "Accept Quote of #{number_to_currency(@quotes.where({applicant_id: @applicant.id}).first.amount, precision: 0)}"
         .modal__accept-quote__content__body
           b
             | CONGRATULATIONS, YOU'VE FOUND YOUR FREELANCER.
@@ -74,8 +74,8 @@
             | "Simply click the button below to proceed to creating a work worder. If you don't have the time right now you can find this in the job details section."
           p
             em
-              = "Remember, by accepting this quote of #{number_to_currency(@quotes.first.amount, precision: 0)}  #{job.currency} with #{@applicant.freelancer.name}, all other applications for this"
-              = " job will automatically be declined, and receive a general notification iforming them the job has been filled. Details of who you've selected will not be shared."
+              = "Remember, by accepting this quote of #{number_to_currency(@quotes.where({applicant_id: @applicant.id}).first.amount, precision: 0)}  #{job.currency} with #{@applicant.freelancer.name}, all other applications for this"
+              = " job will automatically be declined, and receive a general notification informing them the job has been filled. Details of who you've selected will not be shared."
         .modal__accept-quote__content__buttons
           .accept_button.btn.btn-primary
             | Accept Quote and Create Work Order
@@ -88,7 +88,7 @@
       .modal__decline-quote__content
         .modal__decline-quote__content__header
           .modal__decline-quote__content__header__text
-            = "Decline Quote of #{number_to_currency(@quotes.last.amount, precision: 0)}"
+            = "Decline Quote of #{number_to_currency(@quotes.where({applicant_id: @applicant.id}).first.amount, precision: 0)}"
         .modal__decline-quote__content__body
           b
             | YOU HAVE DECIDED TO DECLINE THIS QUOTE

@@ -24,6 +24,7 @@
       min-width: 100px
 
   #featured_projects
+    width: 100%
     .nested_fields
       &-title
         width: calc(100% - 30px)
@@ -272,14 +273,11 @@
 
   &__checkbox
     margin-bottom: 5px
-    width: 100%
+    width: 50%
+    float: left
 
-    @media (min-width: $breakpoint-mobile)
-      width: 50%
-      float: left
-
-    @media (min-width: $breakpoint-desktop)
-      width: 33%
+    @media (max-width: $breakpoint-tablet)
+      width: 100%
       float: left
       
     input[type=checkbox]

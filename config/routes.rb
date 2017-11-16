@@ -34,7 +34,10 @@ Rails.application.routes.draw do
       resources :application, only: [:index, :create]
       resource :contract, only: [:show, :accept], as: "work_order", path: "work_order"
       resources :messages, only: [:index, :create]
-      resources :payments, controller: "job_payments", only: [:index]
+      # resources :payments, controller: "job_payments", only: [:index]
+      resources :payments, controller: "job_payments", only: [:index, :show] do
+        get :print, on: :member
+      end
       resource :review, only: [:show, :create]
       resources :quotes, only: [:index, :create] do
         get :accept, on: :member
@@ -57,7 +60,7 @@ Rails.application.routes.draw do
     post "jobs/:id", to: "jobs#apply"
     post "job/apply", to: "jobs#apply"
     get "jobs/:id/work_order/accept", to: "contracts#accept"
-
+    get "job_payment/request", to: "job_payments#request_payout", as: "payout_request"
 
     resources :notifications
 
@@ -72,6 +75,9 @@ Rails.application.routes.draw do
       get :favourites, on: :collection
       post :add_favourites, on: :collection
     end
+
+    get "freelancers/:id/invite_to_quote", to: "freelancers#invite_to_quote"
+
     resources :applicants
     resources :payments
     resources :projects
@@ -88,7 +94,7 @@ Rails.application.routes.draw do
       get 'invoice', to: 'subscription#invoice', as: 'invoice'
 
     resources :notifications
-
+    get 'job_country_currency', to: 'jobs#job_countries', as: 'job_country_currency'
     resources :jobs, except: [:index] do
       resources :applicants do
         get :request_quote, on: :member
@@ -99,13 +105,17 @@ Rails.application.routes.draw do
         end
       end
       resource :contract, only: [:show, :edit, :update], as: "work_order", path: "work_order"
+        post 'contract_pay' => 'contracts#contract_pay'
       resources :messages, only: [:index, :create]
       resources :payments, controller: "job_payments", only: [:index, :show] do
         get :print, on: :member
         get :mark_as_paid, on: :member
+        post 'contract_pay' => 'contracts#contract_pay'
       end
       resource :review, only: [:show, :create]
     end
+
+    get "jobs/:id/publish", to: "jobs#publish"
   end
 
   namespace :admin do

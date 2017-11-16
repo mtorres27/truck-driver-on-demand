@@ -40,7 +40,7 @@ class Job < ApplicationRecord
   include Geocodable
   include PgSearch
   include EasyPostgis
-  
+
   belongs_to :company
   belongs_to :project
   has_many :applicants, -> { includes(:freelancer).order(updated_at: :desc) }, dependent: :destroy
@@ -51,6 +51,7 @@ class Job < ApplicationRecord
   has_many :attachments, dependent: :destroy
   has_one :freelancer_review, dependent: :nullify
   has_one :company_review, dependent: :nullify
+  has_many :job_invites
 
   accepts_nested_attributes_for :payments, allow_destroy: true, reject_if: :reject_payments
   accepts_nested_attributes_for :attachments, allow_destroy: true, reject_if: :reject_attachments
@@ -110,14 +111,24 @@ class Job < ApplicationRecord
     :completed
   ], predicates: true, scope: true
 
-  enumerize :currency, in: [
-    :cad,
-    :euro,
-    :ruble,
-    :rupee,
-    :usd,
-    :yen,
-  ]
+  # enumerize :currency, in: [
+  #   :cad,
+  #   :euro,
+  #   :ruble,
+  #   :rupee,
+  #   :usd,
+  #   :yen,
+  # ]
+
+  validate :validate_number_of_payments
+
+  def validate_number_of_payments
+    if send_contract == "true"
+      remaining_payments = payments.reject(&:marked_for_destruction?)
+      errors.add(:number_of_payments, 'A minimum of 1 payment is required') if remaining_payments.empty?
+    end
+  end
+
 
   def pre_negotiated?
     %w(created published quoted).include?(state)
@@ -145,12 +156,17 @@ class Job < ApplicationRecord
     :weekly
   ]
 
+  enumerize :country, in: [
+    :at, :au, :be, :ca, :ch, :de, :dk, :es, :fi, :fr, :gb, :hk, :ie, :it, :jp, :lu, :nl, :no, :nz, :pt, :se, :sg, :us
+  ]
+
   validates :budget, numericality: true, sane_price: true
   validates :job_function, inclusion: { in: job_function.values }
   validates :duration, numericality: { only_integer: true }
   validates :pay_type, inclusion: { in: pay_type.values }, allow_blank: true
   validates :freelancer_type, inclusion: { in: freelancer_type.values }
   validates_presence_of :currency
+  validates_presence_of :country
   validates_presence_of :scope_of_work
   validates_presence_of :address
   validates_presence_of :keywords
