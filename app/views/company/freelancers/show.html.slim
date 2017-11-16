@@ -1,211 +1,258 @@
-.profile__wrapper
+.page-top__container
   - if @freelancer.profile_header_url.include?("missing") or @freelancer.header_source == "color"
-    .profile__wrapper-bg style="background-color: #{ @freelancer.header_color.include?("#") ? "" : "#"}#{@freelancer.header_color}"
+    .profile__wallpaper--preview.profile__wallpaper style="background-color: #{ @freelancer.header_color.include?("#") ? "" : "#"}#{@freelancer.header_color}"
   - else
-    .profile__wrapper-bg style="background-image: url(#{@freelancer.profile_header_url.include?("missing") ? "" : @freelancer.profile_header_url});"
+    .profile__wallpaper--preview.profile__wallpaper style="background-image: url(#{@freelancer.profile_header_url.include?("missing") ? "" : @freelancer.profile_header_url});"
 
-  .profile__content
-    .profile__block
-      .profile__block__name
-        = @freelancer.name
+.page-content--preview.page-content
+  .action-bar
+    h2.heading-h2.heading-h2--action-bar
+      = @freelancer.name
+    .action-bar__actions
       - if @freelancer.available
-        .profile__block__status--available
-          | Available For Work
-        form action="/company/freelancers/#{params[:id]}/invite_to_quote" method="GET"
-          select name="job_to_invite" id="job_to_invite"
+        .tag.tag--success
+          | Available
+        div.btn-icon-link.btn-icon-link--left-margin.w-inline-block style="cursor: pointer" onclick="togglePopOver()"
+          div class="zmdi zmdi-account-add"
+        .popover--blanket onclick="hidePopOver()"
+        .popover.popover--align-right
+        
+          label.form__field-label for="field"  Invite to quote
+          select.form__select-field.w-select name="job_to_invite" id="job_to_invite"
             option value="" label="Select Job"
             - @jobs.each do |job|
               option value="#{job.id}" label="#{job.title}"
+          div.btn-primary--active.w-inline-block id="job_invite_button" style="cursor: pointer" onclick="submitInvitation()" class="btn-primary--disabled"
+            div invite
+          
+          span.popover-response--error
+          span.popover-response--success
 
-          button.profile__block__invite-to-quote 
-            | Invite to Quote
-          - if @invite_sent == true
-            p Invite Sent!
-          - elsif @invite_error != nil
-            - if @invite_error == 1
-              p We were unable to send your invite. Please try again.
-            - elsif @invite_error == 2
-              p This freelancer has already applied for this job.
-            - elsif @invite_error == 3
-              p This freelancer has already received an invitation to apply for this job.
+
       - else
-        .profile__block__status--busy
-          | Not Available For Work
+        .tag.tag--warning
+          | Unavailable
+      - if @favourite
+          a.btn-icon-link.btn-icon-link--left-margin.w-inline-block href="#{params[:id]}?toggle_favourite=true" 
+            div class="zmdi zmdi-favorite"
+      - else
+        a.btn-icon-link.btn-icon-link--left-margin.w-inline-block href="#{params[:id]}?toggle_favourite=true" 
+          div class="zmdi zmdi-favorite-outline"
       
 
+  .profile__meta
+    .profile__meta-left
+      .profile__meta-left__avatar 
+        = image_tag(@freelancer.avatar_url, size: "135x135")
 
-      a.profile__block__favourite href="#{params[:id]}?toggle_favourite=true"
-        - if @favourite
-          .span class="fa fa-heart"
+      .profile__meta-left__stars
+        - @stars = freelancer_avg_rating(@freelancer)
+          - @stars.each do |star|
+            i class=star
+
+      .profile__meta-left__number-of-reviews
+        a href="#reviews" data-turbolinks="false"
+          = freelancer_ratings_link(@freelancer)
+      - if is_favourite(@freelancer)
+        span class="freelancer-favourite fa fa-heart"
+
+    .profile__meta-center
+      .profile__meta-center__name
+        = @freelancer.name
+      .profile__meta-center__area
+        = @freelancer.area
+      .profile__meta-center__member-since
+        = "Member since #{@freelancer.created_at.strftime('%B %d, %Y')}"
+      .profile__meta-center__tagline
+        = @freelancer.tagline
+      .profile__meta-center__keywords
+        - if !@freelancer.keywords.nil? and @freelancer.keywords.kind_of?(Hash)
+          - @freelancer.keywords.first(2).each do |index, value|
+            .profile__meta-center__keyword
+              = I18n.t("enumerize.freelancer_keywords.#{index}")
+        - if !@freelancer.skills.nil? and @freelancer.skills.kind_of?(Hash)
+          - @freelancer.skills.first(2).each do |index, value|
+            .profile__meta-center__keyword
+              = I18n.t("enumerize.freelancer_skills.#{index}")
+
+
+    .profile__meta-right
+      .profile__meta-right__pay-pref
+        .profile__meta-right__pay-pref-value
+          - if !@freelancer.pay_unit_time_preference.nil?
+            = t("enumerize.job.pay_type.#{@freelancer.pay_unit_time_preference}")
+          - else
+            | N/A
+        .profile__meta-right__pay-pref-label
+          | pay pref
+      .profile__meta-right__pay-unit
+        .profile__meta-right__pay-unit-value
+          - if !@freelancer.pay_per_unit_time.nil?
+            = @freelancer.pay_per_unit_time
+          - else
+            | N/A
+        .profile__meta-right__pay-unit-label
+          | rate
+      
+  .profile__bona-fides
+    .profile__bona-fides__review
+      - if @freelancer.freelancer_reviews_count > 0
+        .profile__bona-fides__review-quote
+          span class="fa fa-quote-left"
+        .profile__bona-fides__review-data
+          .profile__bona-fides__review-text
+            = @freelancer.freelancer_reviews.first.comments
+          .profile__bona-fides__review-name
+            = "#{@freelancer.freelancer_reviews.first.company.contact_name}, #{@freelancer.freelancer_reviews.first.company.name}"
+
+    .profile__bona-fides__data--freelancer
+      .profile__bona-fides__data__years-of-experience
+        .profile__bona-fides__data__years-of-experience-value
+          = @freelancer.years_of_experience
+        .profile__bona-fides__data__years-of-experience-label
+          | Years of experience
+      .profile__bona-fides__data__profile-views
+        .profile__bona-fides__data__profile-views-value
+          = number_to_human(@freelancer.profile_views, :format => '%n%u', :precision => 3, :units => { :thousand => 'K', :million => 'M', :billion => 'B' })
+        .profile__bona-fides__data__profile-views-label
+          | Profile views
+      .profile__bona-fides__data__projects-completed
+        .profile__bona-fides__data__projects-completed-value
+          = @freelancer.jobs.where({state:"completed"}).count
+        .profile__bona-fides__data__projects-completed-label
+          | Projects Completed
+
+
+  .profile__abilities
+    .profile__abilities__bio
+      .profile__abilities__bio-label
+        | bio
+      .profile__abilities__bio-value
+        - if @freelancer.bio.nil?
+          | This freelancer has not yet added a bio.
         - else
-          .span class="fa fa-heart-o"    
-      
-
-    .profile__meta
-      .profile__meta-left
-        .profile__meta-left__avatar 
-          = image_tag(@freelancer.avatar_url, size: "135x135")
-
-        .profile__meta-left__stars
-          - @stars = freelancer_avg_rating(@freelancer)
-            - @stars.each do |star|
-              i class=star
-
-        .profile__meta-left__number-of-reviews
-          a href="#reviews" data-turbolinks="false"
-            = freelancer_ratings_link(@freelancer)
-        - if is_favourite(@freelancer)
-          span class="freelancer-favourite fa fa-heart"
-
-      .profile__meta-center
-        .profile__meta-center__name
-          = @freelancer.name
-        .profile__meta-center__area
-          = @freelancer.area
-        .profile__meta-center__member-since
-          = "Member since #{@freelancer.created_at.strftime('%B %d, %Y')}"
-        .profile__meta-center__tagline
-          = @freelancer.tagline
-        .profile__meta-center__keywords
+          = @freelancer.bio  
+    .profile__abilities__specialties   
+      .profile__abilities__specialties-label
+        | specialties
+      .profile__abilities__specialties__markets
+        .profile__abilities__specialties__markets-label
+          | markets
+        .profile__abilities__specialties__markets-value
           - if !@freelancer.keywords.nil? and @freelancer.keywords.kind_of?(Hash)
-            - @freelancer.keywords.first(2).each do |index, value|
-              .profile__meta-center__keyword
+            - @freelancer.keywords.each do |index, value|
+              .profile__abilities__specialties__market
                 = I18n.t("enumerize.freelancer_keywords.#{index}")
+          - else
+            | This freelancer has no markets listed.
+      .profile__abilities__specialties__skills
+        .profile__abilities__specialties__skills-label
+          | skills
+        .profile__abilities__specialties__skills-value
           - if !@freelancer.skills.nil? and @freelancer.skills.kind_of?(Hash)
-            - @freelancer.skills.first(2).each do |index, value|
-              .profile__meta-center__keyword
+            - @freelancer.skills.each do |index, value|
+              .profile__abilities__specialties__skill
                 = I18n.t("enumerize.freelancer_skills.#{index}")
-
-
-      .profile__meta-right
-        .profile__meta-right__pay-pref
-          .profile__meta-right__pay-pref-value
-            - if !@freelancer.pay_unit_time_preference.nil?
-              = t("enumerize.job.pay_type.#{@freelancer.pay_unit_time_preference}")
-            - else
-              | N/A
-          .profile__meta-right__pay-pref-label
-            | pay pref
-        .profile__meta-right__pay-unit
-          .profile__meta-right__pay-unit-value
-            - if !@freelancer.pay_per_unit_time.nil?
-              = @freelancer.pay_per_unit_time
-            - else
-              | N/A
-          .profile__meta-right__pay-unit-label
-            | rate
-        
-    .profile__bona-fides
-      .profile__bona-fides__review
-        - if @freelancer.freelancer_reviews_count > 0
-          .profile__bona-fides__review-quote
-            span class="fa fa-quote-left"
-          .profile__bona-fides__review-data
-            .profile__bona-fides__review-text
-              = @freelancer.freelancer_reviews.first.comments
-            .profile__bona-fides__review-name
-              = "#{@freelancer.freelancer_reviews.first.company.contact_name}, #{@freelancer.freelancer_reviews.first.company.name}"
-
-      .profile__bona-fides__data--freelancer
-        .profile__bona-fides__data__years-of-experience
-          .profile__bona-fides__data__years-of-experience-value
-            = @freelancer.years_of_experience
-          .profile__bona-fides__data__years-of-experience-label
-            | Years of experience
-        .profile__bona-fides__data__profile-views
-          .profile__bona-fides__data__profile-views-value
-            = number_to_human(@freelancer.profile_views, :format => '%n%u', :precision => 3, :units => { :thousand => 'K', :million => 'M', :billion => 'B' })
-          .profile__bona-fides__data__profile-views-label
-            | Profile views
-        .profile__bona-fides__data__projects-completed
-          .profile__bona-fides__data__projects-completed-value
-            = @freelancer.jobs.where({state:"completed"}).count
-          .profile__bona-fides__data__projects-completed-label
-            | Projects Completed
-
-
-    .profile__abilities
-      .profile__abilities__bio
-        .profile__abilities__bio-label
-          | bio
-        .profile__abilities__bio-value
-          - if @freelancer.bio.nil?
-            | This freelancer has not yet added a bio.
           - else
-            = @freelancer.bio  
-      .profile__abilities__specialties   
-        .profile__abilities__specialties-label
-          | specialties
-        .profile__abilities__specialties__markets
-          .profile__abilities__specialties__markets-label
-            | markets
-          .profile__abilities__specialties__markets-value
-            - if !@freelancer.keywords.nil? and @freelancer.keywords.kind_of?(Hash)
-              - @freelancer.keywords.each do |index, value|
-                .profile__abilities__specialties__market
-                  = I18n.t("enumerize.freelancer_keywords.#{index}")
-            - else
-              | This freelancer has no markets listed.
-        .profile__abilities__specialties__skills
-          .profile__abilities__specialties__skills-label
-            | skills
-          .profile__abilities__specialties__skills-value
-            - if !@freelancer.skills.nil? and @freelancer.skills.kind_of?(Hash)
-              - @freelancer.skills.each do |index, value|
-                .profile__abilities__specialties__skill
-                  = I18n.t("enumerize.freelancer_skills.#{index}")
-            - else
-              | This freelancer has no skills listed.
-        
-    .profile__certifications
-      .profile__certifications-label
-        | Type
-      .profile__certifications-value
-        - if @freelancer.freelancer_type.nil?
-          | N/A
+            | This freelancer has no skills listed.
+      
+  .profile__certifications
+    .profile__certifications-label
+      | Type
+    .profile__certifications-value
+      - if @freelancer.freelancer_type.nil?
+        | N/A
+      - else
+        - if @freelancer.freelancer_type == :independent
+          = @freelancer.freelancer_type.text
         - else
-          - if @freelancer.freelancer_type == :independent
-            = @freelancer.freelancer_type.text
-          - else
             = "#{@freelancer.freelancer_type.text} "
             - if @freelancer.freelancer_team_size.nil?
               = ""
             - else 
               = "(#{t("enumerize.job.freelancer_team_size.#{@freelancer.freelancer_team_size}")})"
-        br
-        br
+      br
+      br
 
-    .profile__certifications
-      .profile__certifications-label
-        | certifications
-      .profile__certifications-value
-        - if @freelancer.certifications.count == 0
-          | This freelancer has not yet added any certifications.
-        - @freelancer.certifications.each do |certification|
-          .profile__certifications__certificate
-            - url = certification.certificate_url
-            - if certification.certificate_url != "certification/missing.pdf"
-              - url = certification.certificate_url
-              a href=url target="_blank"
-                - if is_image(url)
-                  img src=url
-                - else
-                  img src="/assets/certification/certification_placeholder.png"
+  .profile__certifications
+    .profile__certifications-label
+      | certifications
+    .profile__certifications-value
+      - if @freelancer.certifications.count == 0
+        | This freelancer has not yet added any certifications.
+      - @freelancer.certifications.each do |certification|
+        .profile__certifications__certificate
+        - url = certification.certificate_url
+        - if certification.certificate_url != "certification/missing.pdf"
+          - url = certification.certificate_url
+          a href=url target="_blank"
+            - if is_image(url)
+              img src=url
+            - else
+              img src="/assets/certification/certification_placeholder.png"
 
-            .profile__certifications__certification-name
-              = certification.name
+        .profile__certifications__certification-name
+          = certification.name
 
-    .profile__reviews
-      a name="reviews"
-        .profile__reviews-label
-          | reviews
-      .profile__reviews-value
-        - if @freelancer.freelancer_reviews_count > 0
-          .profile__reviews__review
-          - @freelancer.freelancer_reviews.each do |review|
-            .profile__reviews__review-text
-              = review.comments
-            .profile__reviews__review-name
-              = "#{review.company.contact_name}, #{review.company.name}"
-        - else
-          | This freelancer doesn't have any reviews.
+  .profile__reviews
+    a name="reviews"
+      .profile__reviews-label
+        | reviews
+    .profile__reviews-value
+      - if @freelancer.freelancer_reviews_count > 0
+        .profile__reviews__review
+        - @freelancer.freelancer_reviews.each do |review|
+          .profile__reviews__review-text
+            = review.comments
+          .profile__reviews__review-name
+            = "#{review.company.contact_name}, #{review.company.name}"
+      - else
+        | This freelancer doesn't have any reviews.
+
+javascript:
+  $("#job_to_invite").change(function() {
+    var val = $("#job_to_invite").val();
+
+    if (val == "") {
+      $("#job_invite_button").addClass("btn-primary--disabled")
+    } else {
+      $("#job_invite_button").removeClass("btn-primary--disabled");
+    }
+  });
+
+  var togglePopOver = function() {
+    if ($(".popover").hasClass("popover--visible")) {
+      $(".popover").removeClass("popover--visible");
+      $(".popover--blanket").removeClass("popover--visible");
+    } else {
+      $(".popover").addClass("popover--visible");
+      $(".popover--blanket").addClass("popover--visible");
+    }
+  };
+
+  var hidePopOver = function() {
+    if ($(".popover").hasClass("popover--visible")) {
+      $(".popover").removeClass("popover--visible");
+      $(".popover--blanket").removeClass("popover--visible");
+    }
+  };
+
+  var submitInvitation = function() {
+    if ($("#job_invite_button").hasClass("btn-primary--disabled")) {
+      return;
+    }
+    
+    $.get("/company/freelancers/#{params[:id]}/invite_to_quote", { job_to_invite: $("#job_to_invite").val()})
+      .done(function( data ) {
+        $(".popover-response--error").html("");
+        $(".popover-response--success").html("");
+        if (data.success == 1) {
+          $(".popover-response--success").html(data.message);
+        } else {
+          $(".popover-response--error").html(data.message);
+        }
+
+        var select = $('#job_currency');
+        select.empty().append(data);
+      });
+  }

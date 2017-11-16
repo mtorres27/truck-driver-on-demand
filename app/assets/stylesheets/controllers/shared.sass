@@ -64,10 +64,13 @@
   border-radius: 8px
   background-color: #fff
   box-shadow: none
+  &.page-content--preview 
+    margin-top: -85px
   @media (max-width: 1199px)
     margin-top: 0px
     margin-bottom: 0px
     border-radius: 0px
+
 
 
 
@@ -192,13 +195,15 @@
   font-weight: 600
   text-transform: uppercase    
 
-.btn__icon-link
+.btn-icon-link
   width: 24px
   height: 24px
-  font-family: 'Material design iconic font', sans-serif
+  font-family: $icon-font, sans-serif
   color: #333
   font-size: 24px
   line-height: 24px
+  &.btn-icon-link--left-margin
+    margin-left: 16px
   &:hover
     color: #3daadf  
 
@@ -249,16 +254,6 @@
   -ms-flex-align: center
   align-items: center
   background-color: #f1f1f1
-  @media (max-width: 767px)
-    -webkit-box-orient: vertical
-    -webkit-box-direction: normal
-    -webkit-flex-direction: column
-    -ms-flex-direction: column
-    flex-direction: column
-    -webkit-box-align: start
-    -webkit-align-items: flex-start
-    -ms-flex-align: start
-    align-items: flex-start
 
 .action-bar__title
   display: inline-block
@@ -267,4 +262,49 @@
   font-weight: 300
 
 .action-bar__actions
-  display: inline-block
+  position: relative
+  display: -webkit-box
+  display: -webkit-flex
+  display: -ms-flexbox
+  display: flex
+  -webkit-box-pack: justify
+  -webkit-justify-content: space-between
+  -ms-flex-pack: justify
+  justify-content: space-between
+  -webkit-box-align: center
+  -webkit-align-items: center
+  -ms-flex-align: center
+  align-items: center
+
+//Popover
+.popover 
+  position: absolute
+  display: none
+  top: 29px
+  width: 200px
+  padding: 16px
+  border-radius: 4px
+  background-color: #fff
+  box-shadow: 1px 1px 12px 0 rgba(0, 0, 0, .2)
+  &.popover--align-right
+    right: 0px
+
+  &--blanket
+    position: fixed
+    display: none
+    width: 100%
+    height: 100%
+    top: 0
+    left: 0
+    background-color: rgba(255,255,255,0)
+  
+  &--visible
+    display: block
+  
+  &-response
+    &--error
+      color: $brand-warning
+
+    &--success
+      color: $brand-success
+
