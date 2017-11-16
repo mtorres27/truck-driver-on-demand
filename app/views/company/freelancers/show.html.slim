@@ -12,17 +12,23 @@
       - if @freelancer.available
         .tag.tag--success
           | Available
-        a.btn-icon-link.btn-icon-link--left-margin.w-inline-block href="#" 
+        div.btn-icon-link.btn-icon-link--left-margin.w-inline-block style="cursor: pointer" onclick="togglePopOver()"
           div class="zmdi zmdi-account-add"
+        .popover--blanket onclick="hidePopOver()"
         .popover.popover--align-right
-          form action="/company/freelancers/#{params[:id]}/invite_to_quote" method="GET"
-            label.form__field-label for="field"  Invite to quote
-            select.form__select-field.w-select name="job_to_invite" id="job_to_invite"
-              option value="" label="Select Job"
-              - @jobs.each do |job|
-                option value="#{job.id}" label="#{job.title}"
-            a.btn-primary--active.w-inline-block href="#" 
-              div invite
+        
+          label.form__field-label for="field"  Invite to quote
+          select.form__select-field.w-select name="job_to_invite" id="job_to_invite"
+            option value="" label="Select Job"
+            - @jobs.each do |job|
+              option value="#{job.id}" label="#{job.title}"
+          div.btn-primary--active.w-inline-block id="job_invite_button" style="cursor: pointer" onclick="submitInvitation()" class="btn-primary--disabled"
+            div invite
+          
+          span.popover-response--error
+          span.popover-response--success
+
+
       - else
         .tag.tag--warning
           | Unavailable
@@ -202,3 +208,51 @@
             = "#{review.company.contact_name}, #{review.company.name}"
       - else
         | This freelancer doesn't have any reviews.
+
+javascript:
+  $("#job_to_invite").change(function() {
+    var val = $("#job_to_invite").val();
+
+    if (val == "") {
+      $("#job_invite_button").addClass("btn-primary--disabled")
+    } else {
+      $("#job_invite_button").removeClass("btn-primary--disabled");
+    }
+  });
+
+  var togglePopOver = function() {
+    if ($(".popover").hasClass("popover--visible")) {
+      $(".popover").removeClass("popover--visible");
+      $(".popover--blanket").removeClass("popover--visible");
+    } else {
+      $(".popover").addClass("popover--visible");
+      $(".popover--blanket").addClass("popover--visible");
+    }
+  };
+
+  var hidePopOver = function() {
+    if ($(".popover").hasClass("popover--visible")) {
+      $(".popover").removeClass("popover--visible");
+      $(".popover--blanket").removeClass("popover--visible");
+    }
+  };
+
+  var submitInvitation = function() {
+    if ($("#job_invite_button").hasClass("btn-primary--disabled")) {
+      return;
+    }
+    
+    $.get("/company/freelancers/#{params[:id]}/invite_to_quote", { job_to_invite: $("#job_to_invite").val()})
+      .done(function( data ) {
+        $(".popover-response--error").html("");
+        $(".popover-response--success").html("");
+        if (data.success == 1) {
+          $(".popover-response--success").html(data.message);
+        } else {
+          $(".popover-response--error").html(data.message);
+        }
+
+        var select = $('#job_currency');
+        select.empty().append(data);
+      });
+  }
