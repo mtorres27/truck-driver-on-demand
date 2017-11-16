@@ -1,5 +1,5 @@
 class JobInviteMailer < ApplicationMailer
-  default from: 'info@avjunction.com'
+  default from: 'AV Junction <info@avjunction.com>'
 
   def invite_to_quote(freelancer, job)
     @freelancer = freelancer
