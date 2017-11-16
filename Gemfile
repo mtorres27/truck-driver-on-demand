@@ -55,6 +55,8 @@ gem "stackprof", "~> 0.2.10"
 
 gem "audited", "~> 4.5.0"
 
+gem 'avatax'
+
 # Use ActiveModel has_secure_password
 # gem "bcrypt", "~> 3.1.7"
 
