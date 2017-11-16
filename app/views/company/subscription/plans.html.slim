@@ -50,7 +50,7 @@ br
           - @plans.each do |plan|
             .plans
               h3.plans__title #{plan[:name]}
-              .plans__subtitle #{plan.metadata.desc ? plan.metadata.desc : plan.metadata[:statement_descriptor]}
+              .plans__subtitle #{ !plan.metadata.blank? && plan.metadata.any? ? plan.metadata.desc : plan.metadata[:statement_descriptor]}
               .plans__pricing
                 .plans__price $#{plan[:amount]/100}
                 .plans__currency USD
