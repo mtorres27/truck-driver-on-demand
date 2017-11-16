@@ -905,7 +905,9 @@ CREATE TABLE payments (
     paid_on date,
     attachment_data text,
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+    updated_at timestamp without time zone NOT NULL,
+    tax_amount numeric(10,2),
+    total_amount numeric(10,2)
 );
 
 
@@ -993,7 +995,9 @@ CREATE TABLE quotes (
     accepted_by_freelancer boolean DEFAULT false,
     paid_by_company boolean DEFAULT false,
     paid_at timestamp without time zone,
-    platform_fees_amount numeric(10,2)
+    platform_fees_amount numeric(10,2),
+    tax_amount numeric(10,2),
+    total_amount numeric(10,2)
 );
 
 
@@ -2070,6 +2074,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20171105210413'),
 ('20171113154821'),
 ('20171114170911'),
-('20171114193831');
+('20171114193831'),
+('20171116153824');
 
 
