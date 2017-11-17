@@ -103,6 +103,7 @@ class Company::ContractsController < Company::BaseController
     def job_params
       params.require(:job).permit(
         :scope_of_work,
+        :scope_file,
         :addendums,
         :contract_price,
         :send_contract,

@@ -19,6 +19,11 @@
             label= t(:scope_of_work, scope: [:form, :labels, :job])
             .show_value= @job.scope_of_work || "Not Specified"
 
+            - if !@job.scope_file_url.nil?
+            .show_value
+              a href= @job.scope_file_url
+                = @job.scope_file_data[:metadata][:filename]
+
           .show_field
             label= t(:addendums, scope: [:form, :labels, :job])
             .show_value= @job.addendums || "Not Specified"

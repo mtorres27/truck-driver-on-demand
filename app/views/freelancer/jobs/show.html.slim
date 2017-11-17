@@ -30,7 +30,13 @@
 
     .freelancer-job__summary-cont
       h3.freelancer-job__h3 Scope of Work
-      p= @job.scope_of_work
+      - if @job.scope_of_work
+        p= @job.scope_of_work
+      - if !@job.scope_file.nil?
+        p
+          | Click to download: 
+          a href=@job.scope_file_url target="_blank"
+            = @job.scope_file.original_filename
 
     .freelancer-job__summary-group
       .freelancer-job__summary-item

@@ -106,7 +106,14 @@
   .job-details
     .job-details__title
       | Scope of Work
-    .show_value= @job.scope_of_work || "Not Specified"
+    .show_value
+      - if @job.scope_of_work
+        = @job.scope_of_work
+      - if !@job.scope_file.nil?
+        div
+          | Click to download: 
+          a href=@job.scope_file_url target="_blank"
+            = @job.scope_file.original_filename
 
 /
   .job-details

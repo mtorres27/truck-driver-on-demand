@@ -17,9 +17,11 @@
           .show_field
             label= t(:scope_of_work, scope: [:form, :labels, :job])
             .show_value= @job.scope_of_work || "Not Specified"
-            - if @job.scope_file?
-              a href=@job.scope_file_url
-                = @job.scope_file_name
+            - if !@job.scope_file.nil?
+              .show_value
+                | Attachment: 
+                a href=@job.scope_file_url
+                  = @job.scope_file.original_filename
 
           .show_field
             label= t(:addendums, scope: [:form, :labels, :job])
