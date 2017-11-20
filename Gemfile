@@ -57,6 +57,8 @@ gem "audited", "~> 4.5.0"
 
 gem 'avatax'
 
+gem 'taxjar-ruby', require: 'taxjar'
+
 # Use ActiveModel has_secure_password
 # gem "bcrypt", "~> 3.1.7"
 

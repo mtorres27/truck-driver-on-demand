@@ -10,6 +10,6 @@ class TaxTool
   end
 
   def calculate_tax
-    AvalaraTool.calculate(@from_address, @to_address, @lines)
+    TaxjarTool.calculate(@from_address, @to_address, @lines)
   end
 end

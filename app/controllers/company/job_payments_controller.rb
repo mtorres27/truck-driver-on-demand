@@ -5,16 +5,16 @@ class Company::JobPaymentsController < Company::BaseController
   def index
     logger.debug "AVA-START"
     @taxes = TaxTool.new({
-      "line1": "1040 Grant Rd #310",
-      "city": "Mountain View",
-      "region": "CA",
-      "country": "US",
-      "postalCode": "94040"
-      }, {"line1": "100 Market Street",
-      "city": "San Francisco",
-      "region": "CA",
-      "country": "US",
-      "postalCode": "94105"
+      line1: "1040 Grant Rd #310",
+      city: "Mountain View",
+      state: "CA",
+      country: "US",
+      postalCode: "94040"
+      }, {line1: "100 Market Street",
+      city: "San Francisco",
+      state: "CA",
+      country: "US",
+      postalCode: "94105"
     })
     @taxes.add_line({description: 'M1', amount: 100});
     @taxes.add_line({description: 'M2', amount: 200});
@@ -46,7 +46,7 @@ class Company::JobPaymentsController < Company::BaseController
       total_amount = quote.amount * 100
       platform_fees = quote.platform_fees_amount * 100
       freelancer_amount = ((total_amount - platform_fees) * (@payment.amount * 100)) / total_amount
-      logger.debug  freelancer_amount
+      # logger.debug  freelancer_amount
       Stripe::Payout.create({
         amount: freelancer_amount.floor,
         currency: @job.currency
