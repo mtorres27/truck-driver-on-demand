@@ -1,96 +1,65 @@
-.landing-h1
-  font-family: 'Open Sans', sans-serif
-  font-weight: 300
-  text-align: center
-  margin-top: 40px
-
 .landing-container
-  display: block
-  max-width: 1200px
-  margin-right: auto
-  margin-left: auto
+  display: -webkit-box
+  display: -webkit-flex
+  display: -ms-flexbox
+  display: flex
+  padding-top: 16px
+  padding-bottom: 16px
+  -webkit-justify-content: space-around
+  -ms-flex-pack: distribute
+  justify-content: space-around
+  -webkit-flex-wrap: wrap
+  -ms-flex-wrap: wrap
+  flex-wrap: wrap
+  -webkit-box-flex: 1
+  -webkit-flex: 1
+  -ms-flex: 1
+  flex: 1
+  @media (max-width: 767px)
+    -webkit-box-orient: vertical
+    -webkit-box-direction: normal
+    -webkit-flex-direction: column
+    -ms-flex-direction: column
+    flex-direction: column
 
-.landing-account-block
+.landing__user-role
+  display: -webkit-box
+  display: -webkit-flex
+  display: -ms-flexbox
+  display: flex
   width: 45%
-  margin-right: 0px
-  margin-left: 0px
-  padding: 24px
-  border: 1px solid #a1a1a1
-  border-radius: 4px
-  background-color: #fff
-
-.landing-h3
-  font-family: 'Open Sans', sans-serif
-  font-weight: 400
-  font-size: 24px
-
-.landing-account-flex
-  display: -webkit-box
-  display: -webkit-flex
-  display: -ms-flexbox
-  display: flex
-  margin-top: 64px
-  padding-right: 24px
-  padding-left: 24px
-  -webkit-box-pack: justify
-  -webkit-justify-content: space-between
-  -ms-flex-pack: justify
-  justify-content: space-between
-
-.landing-cta-flex
-  display: -webkit-box
-  display: -webkit-flex
-  display: -ms-flexbox
-  display: flex
   margin-top: 24px
   margin-bottom: 24px
+  padding: 16px
+  -webkit-box-orient: vertical
+  -webkit-box-direction: normal
+  -webkit-flex-direction: column
+  -ms-flex-direction: column
+  flex-direction: column
   -webkit-box-pack: justify
   -webkit-justify-content: space-between
   -ms-flex-pack: justify
   justify-content: space-between
-  -webkit-box-align: start
-  -webkit-align-items: flex-start
-  -ms-flex-align: start
-  align-items: flex-start
-
-@media (max-width: 1199px)
-  .landing-cta-flex
-    -webkit-box-orient: vertical
-    -webkit-box-direction: normal
-    -webkit-flex-direction: column
-    -ms-flex-direction: column
-    flex-direction: column
-    -webkit-box-align: stretch
-    -webkit-align-items: stretch
-    -ms-flex-align: stretch
-    align-items: stretch
-    height: 80px
-
-
-@media (max-width: 991px)
-  .landing-account-block
-    width: 48%
-  
-  .landing-account-flex
-    -webkit-box-orient: vertical
-    -webkit-box-direction: normal
-    -webkit-flex-direction: column
-    -ms-flex-direction: column
-    flex-direction: column
-    -webkit-flex-wrap: wrap
-    -ms-flex-wrap: wrap
-    flex-wrap: wrap
-    -webkit-align-content: center
-    -ms-flex-line-pack: center
-    align-content: center
-
-  .landing-account-block
+  border: 1px solid #e2e2e2
+  border-radius: 8px
+  @media (max-width: 767px)
     width: 100%
-    margin-top: 16px
-    margin-right: 0px
-    margin-left: 0px
-    padding-right: 24px
-    padding-left: 24px
-  
 
-  
+.landing__subtitle
+  padding-top: 40px
+  padding-bottom: 40px
+  font-size: 20px
+  line-height: 27px
+  text-align: center
+
+.landing__sign-in-actions
+  display: -webkit-box
+  display: -webkit-flex
+  display: -ms-flexbox
+  display: flex
+  @media (max-width:479px)
+    -webkit-box-orient: vertical
+    -webkit-box-direction: normal
+    -webkit-flex-direction: column
+    -ms-flex-direction: column
+    flex-direction: column
