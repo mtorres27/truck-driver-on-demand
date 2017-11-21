@@ -1,0 +1,10 @@
+Hi <%= @freelancer.name %>, 
+
+<%= @company.name %> has released the following payout: 
+<a href="<%= root_url %>company/jobs/<%= @job.id %>"><%= @job.title %></a> 
+<a href="<%= root_url %>company/jobs/<%= @job.id %>/payments"><%= @job.payments.order(:created_at) %></a> 
+ 
+To view a full breakdown of payouts specific to this job please click <a href="<%= root_url %>company/jobs/<%= @job.id %>">here</a>.  Please allow 2 business days for the funds to appear in your bank account.  
+
+Thanks, AV Junction
+For additional information please visit our <a href="https://www.avjunction.com/payments">Knowledge Center</a>

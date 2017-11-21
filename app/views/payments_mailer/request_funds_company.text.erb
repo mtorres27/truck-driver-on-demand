@@ -3,11 +3,11 @@ Hi <%= @company.name %>,
 <%= @freelancer.name %> has accepted your work order for the following job:
 <a href="<%= root_url %>company/jobs/<%= @job.id %>"><%= @job.title %></a 
 
-To proceed further you must make the full payment of (INSERT $ AMOUNT).  Click here to fund the project now
+To proceed further you must make the full payment of (INSERT $ AMOUNT).  Click <a href="<%= root_url %>company/jobs/<%= @job.id %>">here</a> to fund the project now.
 
-These funds will be held in trust for a period of up to 90 days.  Payouts to the freelancer will be based on the milestones established in the Work Order and can be made at anytime or when requested by the freelancer upon a milestone completion. Your approval for each payout is required 
+These funds will be held in trust for a period of up to 90 days.  Payouts to the freelancer will be based on the milestones established in the Work Order and can be made at anytime or when requested by the freelancer upon a milestone completion. Your approval for each payout is required. 
 
-To view a full breakdown of payouts specific to this job please click here 
+To view a full breakdown of payouts specific to this job please click <a href="<%= root_url %>company/jobs/<%= @job.id %>">here</a>. 
 
 Thanks, AV Junctio
-For additional information please visit our <a href="https://www.avjunction.com/payments">Knowledge Center</a
+For additional information please visit our <a href="https://www.avjunction.com/payments">Knowledge Center</a>.
