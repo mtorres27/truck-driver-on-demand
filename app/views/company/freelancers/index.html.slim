@@ -10,8 +10,9 @@ h1 Search for AV Freelancers
       - else
         = "#{@freelancers.total_count} freelancers found"
       span class="result-header__text--strong"
-        = params[:search][:keywords]
-      - if params[:search][:address] > ""
+        - if params.dig(:search, :keywords).presence
+          = params[:search][:keywords]
+      - if params.dig(:search, :address).presence and params[:search][:address] > ""
         = " near "
         span class="result-header__text--strong"
           = params[:search][:address]

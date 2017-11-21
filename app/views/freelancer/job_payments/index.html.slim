@@ -34,7 +34,7 @@
               a.btn-primary--disabled.top-margin.w-inline-block href="#"
                 div request Payout
             - elsif !payment.paid_on.present?
-              = link_to freelancer_payout_request_path(payment_id: payment.id, job_id: @job.id), class: 'btn-primary--active top-margin w-inline-block'
+              = link_to freelancer_payout_request_path(id: payment.id, job_id: @job.id), class: 'btn-primary--active top-margin w-inline-block'
                 div request Payout
             .payments__status
               - if payment.paid_on.present?

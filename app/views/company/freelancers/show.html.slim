@@ -166,11 +166,11 @@
         - if @freelancer.freelancer_type == :independent
           = @freelancer.freelancer_type.text
         - else
-          = "#{@freelancer.freelancer_type.text} "
-          - if @freelancer.freelancer_team_size.nil?
-            = ""
-          - else 
-            = "(#{@freelancer.freelancer_team_size})"
+            = "#{@freelancer.freelancer_type.text} "
+            - if @freelancer.freelancer_team_size.nil?
+              = ""
+            - else 
+              = "(#{t("enumerize.job.freelancer_team_size.#{@freelancer.freelancer_team_size}")})"
       br
       br
 
@@ -182,17 +182,17 @@
         | This freelancer has not yet added any certifications.
       - @freelancer.certifications.each do |certification|
         .profile__certifications__certificate
+        - url = certification.certificate_url
+        - if certification.certificate_url != "certification/missing.pdf"
           - url = certification.certificate_url
-          - if certification.certificate_url != "certification/missing.pdf"
-            - url = certification.certificate_url
-            a href=url target="_blank"
-              - if is_image(url)
-                img src=url
-              - else
-                img src="/assets/certification/certification_placeholder.png"
+          a href=url target="_blank"
+            - if is_image(url)
+              img src=url
+            - else
+              img src="/assets/certification/certification_placeholder.png"
 
-          .profile__certifications__certification-name
-            = certification.name
+        .profile__certifications__certification-name
+          = certification.name
 
   .profile__reviews
     a name="reviews"

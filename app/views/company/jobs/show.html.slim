@@ -42,10 +42,12 @@
         .job-details__work-order__status
           - if !@job.freelancer
             | Freelancer not chosen
-          - elsif @job.pre_contracted?
+          - elsif @job.pre_contracted? and @job.contract_sent != true
             | Freelencer selected: work order pending.
+          - elsif @job.pre_contracted? and @job.contract_sent == true
+            | Work order sent to freelancer; awaiting response.
           - elsif @job.contracted?
-            | Work Order determined
+            | Work order determined
         - if @job.freelancer
           a.btn-primary.job-details__work-order__btn href=edit_company_job_work_order_path(@job)
             | Create Work Order
@@ -104,7 +106,14 @@
   .job-details
     .job-details__title
       | Scope of Work
-    .show_value= @job.scope_of_work || "Not Specified"
+    .show_value
+      - if @job.scope_of_work
+        = @job.scope_of_work
+      - if !@job.scope_file.nil?
+        div
+          | Click to download:
+          a href=@job.scope_file_url target="_blank"
+            = @job.scope_file.original_filename
 
 /
   .job-details
