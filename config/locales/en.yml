@@ -24,7 +24,7 @@ en:
       jp: "Japan"
       lu: "Luxembourg"
       nl: "Netherlands"
-      no: "Norway"
+      'no': "Norway"
       nz: "New Zealand"
       pt: "Portugal"
       se: "Sweden"
@@ -127,7 +127,7 @@ en:
       general_labor: "General Labor"
       installation: "Installation"
       rental: "Rental"
-    
+
   has_no_preference: "Has no Work Order Preference"
   prefer_fixed: "Fixed Price Work Orders"
   prefer_hourly: "Hourly Work Orders"
