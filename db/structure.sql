@@ -308,7 +308,7 @@ CREATE TABLE companies (
     hq_country character varying,
     description character varying,
     avatar_data text,
-    disabled boolean DEFAULT false NOT NULL,
+    disabled boolean DEFAULT true NOT NULL,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
     messages_count integer DEFAULT 0 NOT NULL,
@@ -604,7 +604,7 @@ CREATE TABLE freelancers (
     profile_views integer DEFAULT 0 NOT NULL,
     projects_completed integer DEFAULT 0 NOT NULL,
     available boolean DEFAULT true NOT NULL,
-    disabled boolean DEFAULT false NOT NULL,
+    disabled boolean DEFAULT true NOT NULL,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
     messages_count integer DEFAULT 0 NOT NULL,
@@ -2072,6 +2072,8 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20171113154821'),
 ('20171114170911'),
 ('20171114193831'),
-('20171117140302');
+('20171117140302'),
+('20171122143605'),
+('20171122143916');
 
 
