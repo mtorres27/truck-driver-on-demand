@@ -14,7 +14,7 @@ class MainController < ApplicationController
 
   def freelance_service_agreement
 
-    @job = Job.where({id: params[:job]})
+    @job = Job.joins(:company).where(:companies => {:disabled => false}).where({id: params[:job]})
     @months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
 
     if @job.length == 1

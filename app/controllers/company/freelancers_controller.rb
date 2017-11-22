@@ -17,9 +17,9 @@ class Company::FreelancersController < Company::BaseController
     end
 
     if sort != nil
-      @freelancers = Freelancer.order(name: sort)
+      @freelancers = Freelancer.where(disabled: false).order(name: sort)
     else
-      @freelancers = Freelancer.all
+      @freelancers = Freelancer.where(disabled: false)
     end
 
     if @address
