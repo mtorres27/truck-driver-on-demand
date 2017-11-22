@@ -64,6 +64,7 @@ class Admin::FreelancersController < Admin::BaseController
         :verified,
         :avatar,
         :pay_unit_time_preference,
+        :disabled,
         skills: [
           :flat_panel_displays,
           :video_walls,
