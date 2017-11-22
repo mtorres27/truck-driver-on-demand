@@ -308,7 +308,7 @@ CREATE TABLE companies (
     hq_country character varying,
     description character varying,
     avatar_data text,
-    disabled boolean DEFAULT false NOT NULL,
+    disabled boolean DEFAULT true NOT NULL,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
     messages_count integer DEFAULT 0 NOT NULL,
@@ -332,6 +332,12 @@ CREATE TABLE companies (
     last_sign_in_at timestamp without time zone,
     current_sign_in_ip inet,
     last_sign_in_ip inet,
+    header_color character varying DEFAULT 'FF6C38'::character varying,
+    country character varying,
+    confirmation_token character varying,
+    confirmed_at timestamp without time zone,
+    confirmation_sent_at timestamp without time zone,
+    header_source character varying DEFAULT 'color'::character varying,
     stripe_customer_id character varying,
     stripe_subscription_id character varying,
     stripe_plan_id character varying,
@@ -342,13 +348,7 @@ CREATE TABLE companies (
     last_4_digits character varying,
     card_brand character varying,
     exp_month character varying,
-    exp_year character varying,
-    header_color character varying DEFAULT 'FF6C38'::character varying,
-    country character varying,
-    confirmation_token character varying,
-    confirmed_at timestamp without time zone,
-    confirmation_sent_at timestamp without time zone,
-    header_source character varying DEFAULT 'color'::character varying
+    exp_year character varying
 );
 
 
@@ -604,7 +604,7 @@ CREATE TABLE freelancers (
     profile_views integer DEFAULT 0 NOT NULL,
     projects_completed integer DEFAULT 0 NOT NULL,
     available boolean DEFAULT true NOT NULL,
-    disabled boolean DEFAULT false NOT NULL,
+    disabled boolean DEFAULT true NOT NULL,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
     messages_count integer DEFAULT 0 NOT NULL,
@@ -796,7 +796,8 @@ CREATE TABLE jobs (
     formatted_address character varying,
     contract_sent boolean DEFAULT false,
     opt_out_of_freelance_service_agreement boolean DEFAULT false,
-    country character varying
+    country character varying,
+    scope_file_data text
 );
 
 
@@ -2076,5 +2077,8 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20171114170911'),
 ('20171114193831'),
 ('20171116153824');
+('20171117140302'),
+('20171122143605'),
+('20171122143916');
 
 

@@ -113,6 +113,7 @@ class Company::JobsController < Company::BaseController
         :title,
         :summary,
         :scope_of_work,
+        :scope_file,
         :budget,
         :country,
         :currency,

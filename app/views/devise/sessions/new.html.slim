@@ -1,8 +1,5 @@
-.full-height
-  | 
-.login__form
-  .login__title
-    | Login to AV Junction
+h1.center.heading-h1 Login to AV Junction
+- content_for :secondary do
   = simple_form_for(resource, as: resource_name, url: session_path(resource_name)) do |f|
     = f.error_notification
     .form-inputs

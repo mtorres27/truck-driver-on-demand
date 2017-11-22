@@ -28,6 +28,6 @@ class Freelancer::JobPaymentsController < Freelancer::BaseController
     end
 
     def set_payment
-      @payment = @job.payments.find(params[:payment_id])
+      @payment = @job.payments.find(params[:id])
     end
 end

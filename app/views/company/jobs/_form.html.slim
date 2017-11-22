@@ -26,6 +26,13 @@
           = f.label :summary, "Scope of Work"
         p= t('scope_of_work_description')
         = f.input :scope_of_work, label: false, placeholder: "Please enter in more details about the job to receive a better quote."
+        = f.input :scope_file, as: :file, label: "Scope of Work File"
+        - if !@job.scope_file.nil?
+          | Currently Selected: 
+          a href=@job.scope_file_url target="_blank"
+            = @job.scope_file.original_filename
+          br
+          br
 
       .col-sm-12.col-md-6.col-lg-5
         = f.input :budget, placeholder: "Enter a budget", input_html: { value: number_with_precision(f.object.budget, precision: 0) }

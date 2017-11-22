@@ -40,6 +40,7 @@ class Job < ApplicationRecord
   include Geocodable
   include PgSearch
   include EasyPostgis
+  include ScopeFileUploader[:scope_file]
 
   belongs_to :company
   belongs_to :project
@@ -167,7 +168,7 @@ class Job < ApplicationRecord
   validates :freelancer_type, inclusion: { in: freelancer_type.values }
   validates_presence_of :currency
   validates_presence_of :country
-  validates_presence_of :scope_of_work
+  validate :scope_or_file
   validates_presence_of :address
   validates_presence_of :keywords
 
@@ -193,6 +194,12 @@ class Job < ApplicationRecord
   end
 
   private
+
+    def scope_or_file
+      if scope_of_work.blank? and scope_file_url.nil?
+        errors.add(:scope_of_work, "Either a scope of work or a scope file attachment is required")
+      end
+    end
 
     def reject_payments(attrs)
       exists = attrs["id"].present?

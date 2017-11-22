@@ -1,8 +1,5 @@
-.full-height
-  | 
-.register__form
-  .register__title
-    | Register with AV Junction
+h1.center.heading-h1 Register with AV Junction
+- content_for :secondary do
 
   = simple_form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f|
     = f.error_notification
