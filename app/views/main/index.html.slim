@@ -1,18 +1,25 @@
-h1.landing-h1 Choose the type of account you'd like to continue with.
-.landing-account-flex
-  .landing-account-block
-    h3.landing-h3 AV Company
-    div I'm an AV Company looking to find great professionals to work with on my projects
-    .landing-cta-flex
-      a.btn.btn-primary href=new_company_registration_path
-        | Register as a Company
-      a.btn.btn-secondary href=new_company_session_path
-        | Login to your Account
-  .landing-account-block
-    h3.landing-h3 AV Freelancer
-    .text-block I'm an&nbsp;AV Freelancer looking to work with progressive companies
-    .landing-cta-flex
-      a.btn.btn-primary href=new_freelancer_registration_path
-        | Register as a Freelancer
-      a.btn.btn-secondary href=new_freelancer_session_path
-        | Login to your Account
+h1.center.heading-h1 Choose the type of account you'd like to continue with.
+- content_for :secondary do
+  .landing-container
+    .landing__user-role
+      h3.center.heading-h2 AV Company
+      .landing__subtitle
+        strong Sign up for FREE!
+        br/
+        | I am an AV Company looking to find great professionals to work with on my projects
+      .landing__sign-in-actions
+        a.btn-primary--active.w-inline-block.width-100 href=new_company_registration_path
+          div Register as a company
+        a.btn-ghost--active.w-inline-block.width-100 href=new_company_session_path 
+          div Login
+    .landing__user-role
+      h3.center.heading-h2 AV Freelancer
+      .landing__subtitle
+        strong Sign up for FREE!
+        br/
+        | Pay when you get hired. AV Junction charges up to an 8% fee on the total invoiced amount to the AV Company.
+      .landing__sign-in-actions
+        a.btn-primary--active.w-inline-block.width-100 href=new_freelancer_registration_path 
+          div Register as a Freelancer
+        a.btn-ghost--active.w-inline-block.width-100 href=new_freelancer_session_path 
+          div Login

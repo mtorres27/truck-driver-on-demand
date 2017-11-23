@@ -16,10 +16,12 @@ class Freelancer::CompaniesController < Freelancer::BaseController
       sort = nil
     end
 
+    # TODO: MAKE THIS ONLY SHOW JOBS WHERE COMPANY ISN'T DISABLED
+
     if sort != nil
-      @jobs = Job.where({ state: "published" }).order(name: sort)
+      @jobs = Job.joins(:company).where(:companies => {:disabled => false}).where({ state: "published" }).order(name: sort)
     else
-      @jobs = Job.where({ state: "published" }).all
+      @jobs = Job.joins(:company).where(:companies => {:disabled => false}).where({ state: "published" }).all
     end
 
     if @address

@@ -43,6 +43,7 @@ class Admin::JobsController < Admin::BaseController
           :state,
           :summary,
           :scope_of_work,
+          :scope_file,
           :budget,
           :job_function,
           :starts_on,

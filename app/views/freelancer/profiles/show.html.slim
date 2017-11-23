@@ -69,6 +69,7 @@
               | This freelancer has not yet added a bio.
             - else
               = "#{@freelancer.bio}"
+        
         .fprofile__specialties
           h3.fprofile__h3 Specialties
           h4.fprofile__h4 markets
@@ -85,6 +86,24 @@
                 = I18n.t("enumerize.freelancer_skills.#{index}")
           - else
             | This freelancer has no skills listed.
+
+      .fprofile__biography
+        h3.fprofile__h3 Type
+        p
+          - if @freelancer.freelancer_type.nil?
+            | N/A
+          - else
+            - if @freelancer.freelancer_type == :independent
+              = @freelancer.freelancer_type.text
+            - else
+              = "#{@freelancer.freelancer_type.text} "
+              - if @freelancer.freelancer_team_size.nil?
+                = ""
+              - else 
+                = "(#{t("enumerize.job.freelancer_team_size.#{@freelancer.freelancer_team_size}")})"
+        br
+        br
+
           
       .fprofile__meta__details__3
         h3.fprofile__h3 Certifications

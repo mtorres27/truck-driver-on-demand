@@ -3,6 +3,24 @@ class Company::JobPaymentsController < Company::BaseController
   before_action :set_payment, except: [:index]
 
   def index
+    logger.debug "AVA-START"
+    @taxes = TaxTool.new({
+      line1: "1040 Grant Rd #310",
+      city: "Mountain View",
+      state: "CA",
+      country: "US",
+      postalCode: "94040"
+      }, {line1: "100 Market Street",
+      city: "San Francisco",
+      state: "CA",
+      country: "US",
+      postalCode: "94105"
+    })
+    @taxes.add_line({description: 'M1', amount: 100});
+    @taxes.add_line({description: 'M2', amount: 200});
+    @taxes.add_line({description: 'M3', amount: 300});
+    logger.debug @taxes.calculate_tax.inspect
+    logger.debug "AVA-END"
     @payments = @job.payments.order(:created_at)
     @accepted_quote = @job.accepted_quote
 
@@ -28,7 +46,7 @@ class Company::JobPaymentsController < Company::BaseController
       total_amount = quote.amount * 100
       platform_fees = quote.platform_fees_amount * 100
       freelancer_amount = ((total_amount - platform_fees) * (@payment.amount * 100)) / total_amount
-      logger.debug  freelancer_amount
+      # logger.debug  freelancer_amount
       Stripe::Payout.create({
         amount: freelancer_amount.floor,
         currency: @job.currency

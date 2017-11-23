@@ -308,7 +308,7 @@ CREATE TABLE companies (
     hq_country character varying,
     description character varying,
     avatar_data text,
-    disabled boolean DEFAULT false NOT NULL,
+    disabled boolean DEFAULT true NOT NULL,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
     messages_count integer DEFAULT 0 NOT NULL,
@@ -348,7 +348,8 @@ CREATE TABLE companies (
     confirmation_token character varying,
     confirmed_at timestamp without time zone,
     confirmation_sent_at timestamp without time zone,
-    header_source character varying DEFAULT 'color'::character varying
+    header_source character varying DEFAULT 'color'::character varying,
+    province character varying
 );
 
 
@@ -604,7 +605,7 @@ CREATE TABLE freelancers (
     profile_views integer DEFAULT 0 NOT NULL,
     projects_completed integer DEFAULT 0 NOT NULL,
     available boolean DEFAULT true NOT NULL,
-    disabled boolean DEFAULT false NOT NULL,
+    disabled boolean DEFAULT true NOT NULL,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
     messages_count integer DEFAULT 0 NOT NULL,
@@ -796,7 +797,9 @@ CREATE TABLE jobs (
     formatted_address character varying,
     contract_sent boolean DEFAULT false,
     opt_out_of_freelance_service_agreement boolean DEFAULT false,
-    country character varying
+    country character varying,
+    scope_file_data text,
+    applicable_sales_tax numeric(10,2)
 );
 
 
@@ -905,7 +908,9 @@ CREATE TABLE payments (
     paid_on date,
     attachment_data text,
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+    updated_at timestamp without time zone NOT NULL,
+    tax_amount numeric(10,2),
+    total_amount numeric(10,2)
 );
 
 
@@ -993,7 +998,10 @@ CREATE TABLE quotes (
     accepted_by_freelancer boolean DEFAULT false,
     paid_by_company boolean DEFAULT false,
     paid_at timestamp without time zone,
-    platform_fees_amount numeric(10,2)
+    platform_fees_amount numeric(10,2),
+    tax_amount numeric(10,2),
+    total_amount numeric(10,2),
+    applicable_sales_tax integer
 );
 
 
@@ -2070,6 +2078,13 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20171105210413'),
 ('20171113154821'),
 ('20171114170911'),
-('20171114193831');
+('20171114193831'),
+('20171116153824'),
+('20171117140302'),
+('20171122143605'),
+('20171122143916'),
+('20171122150510'),
+('20171122202327'),
+('20171123045237');
 
 

@@ -17,9 +17,9 @@ class Company::FreelancersController < Company::BaseController
     end
 
     if sort != nil
-      @freelancers = Freelancer.order(name: sort)
+      @freelancers = Freelancer.where(disabled: false).order(name: sort)
     else
-      @freelancers = Freelancer.all
+      @freelancers = Freelancer.where(disabled: false)
     end
 
     if @address
@@ -102,7 +102,21 @@ class Company::FreelancersController < Company::BaseController
       end
     end
 
-    redirect_to "/company/freelancers/#{params[:id]}?invite_to_quote=true&result=#{result}"
+    if result == 1
+      ret = { success: 1, message: "Invite Sent!"}
+    else
+      if result == 0
+        message = "We were unable to send your invite. Please try again."
+      elsif result == 2
+        message = "This freelancer has already applied for this job."
+      elsif result == 3
+        message = "This freelancer has already received an invitation to apply for this job."
+      end
+
+      ret = { success: 0, message: message}
+    end
+
+    render json: ret
   end
 
 

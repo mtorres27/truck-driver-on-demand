@@ -19,6 +19,11 @@
             label= t(:scope_of_work, scope: [:form, :labels, :job])
             .show_value= @job.scope_of_work || "Not Specified"
 
+            - if !@job.scope_file_url.nil?
+              .show_value
+                a href= @job.scope_file_url
+                  = @job.scope_file_data[:metadata][:filename]
+
           .show_field
             label= t(:addendums, scope: [:form, :labels, :job])
             .show_value= @job.addendums || "Not Specified"
@@ -42,6 +47,15 @@
                     = "(#{@accepted_quote.number_of_hours} hours @ #{number_to_currency(@accepted_quote.hourly_rate, precision: 0)}/hour)"
                   - elsif @accepted_quote && @accepted_quote.pay_type == "daily"
                     = "(#{@accepted_quote.number_of_days} days @ #{number_to_currency(@accepted_quote.daily_rate, precision: 0)}/day)"
+
+              .col-xs-12.col-lg-6
+                label Applicable Sales Tax
+                .show_value_em #{@job.applicable_sales_tax } %
+
+              .col-xs-12.col-lg-6
+                label Total Quote
+                .show_value_em #{number_to_currency( (@accepted_quote.amount+(@accepted_quote.amount*@job.applicable_sales_tax/100)) , precision: 0) } #{@job.currency.upcase}
+
               .col-xs-12.col-lg-6
                 label= t(:pay_type, scope: [:form, :labels, :job])
                 .show_value_em= @accepted_quote ? @accepted_quote.pay_type&.text : "Not Specified"
@@ -92,7 +106,7 @@
                 li.show_value= t(:require_checkin, scope: [:form, :labels, :job])
               - if @job.require_uniform?
                 li.show_value= t(:require_uniform, scope: [:form, :labels, :job])
-          
+
           - if @job.freelancer and @job.freelancer.id == current_freelancer.id
             .freelancer-job__summary-cont
               h3.freelancer-job__h3 Freelance Service Agreement
@@ -109,7 +123,7 @@
 
           - if @job.state != :contracted and @job.freelancer.id == current_freelancer.id
             p
-              | If the terms of this work order are acceptable to you, click the checkbox above and then on "Accept Work Order". If you want to negotiate the terms, enter a message in the 
+              | If the terms of this work order are acceptable to you, click the checkbox above and then on "Accept Work Order". If you want to negotiate the terms, enter a message in the
               a href=freelancer_job_messages_path(@job)
                 | Progress
               |  view

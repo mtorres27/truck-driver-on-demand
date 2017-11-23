@@ -15,8 +15,8 @@
               .job-details__title
                 | Project Reference
               a.btn.btn-tertiary.job-details__link href=company_projects_path()
-                = project_reference(@job.project) 
-              
+                = project_reference(@job.project)
+
               .job-details__title
                 | Job Title
               a.btn.btn-tertiary.job-details__link href=company_jobs_path(@job)
@@ -43,7 +43,7 @@
             .job-details__price
               - if f.object and f.object.accepted_quote
                 = f.input :contract_price, required: true, input_html: { value: number_with_precision(f.object.accepted_quote.amount, precision: 0) }, label: false, disabled: true
-              - else 
+              - else
                 = f.input :contract_price, required: true, label: false, disabled: true
             .job-details__price-status
               = ""
@@ -51,9 +51,15 @@
           .job-details
             .job-details__date
               .job-details__title
+                | Applicable Sales Tax
+              = f.input :applicable_sales_tax, html5: true, label: false
+
+          .job-details
+            .job-details__date
+              .job-details__title
                 | Start Date (Estimated)
               = f.input :starts_on, html5: true, label: false
-            
+
             .job-details__date
               .job-details__title
                 | End date (estimated)
@@ -64,9 +70,9 @@
               | Acceptable Working Hours
             = f.input :working_time, required: true, prompt: "Select", label: false
 
-    
 
-          .job-details  
+
+          .job-details
             #payments
               .job-details__title
                 | Payment Schedule
@@ -74,7 +80,7 @@
                 = render "payment_fields", f: payment_form
               .links
                 = link_to_add_association 'Add Schedule Item', f, :payments, class: "btn btn-default"
-          
+
           .job-details
             .job-details__title
               | Reporting Requirements
@@ -85,17 +91,17 @@
 
           .job-details
             #featured_projects
-              .job-details__title 
+              .job-details__title
                 | Addenda
               = f.simple_fields_for :attachments do |attachment_form|
                 = render "attachment_fields", f: attachment_form
               .links.add-new-addendum
                 = link_to_add_association 'Add Addendum', f, :attachments, class: "btn btn-default"
-          
+
           .job-details
             .job-details__title
               | Freelancer Agreements
-            
+
             a.btn.contract-edit__btn href="/freelance-service-agreement?job=#{@job.id}#{random_append}" target="_blank"
               | Freelance Service Agreement
             br
@@ -104,7 +110,7 @@
               | AV Junction provides a template freelance service agreement for you to use at your sole discretion.  This template agreement does not bind AV Junction Inc to this work order.  This work order is between you and the hired AV freelancer.  If you would like to opt out of using this template please check the box.
               = f.input :opt_out_of_freelance_service_agreement, label: "Opt out of Freelance Service Agreement"
 
-        
+
         .form-actions
           = f.hidden_field :send_contract, value: false
           div.btn.btn-primary onclick="sendContract()"
@@ -141,7 +147,7 @@ javascript:
       var ref = $(id);
     } else {
       var ref = $(".add-new-addendum").prev('div').find(".nested_fields").find(".file-input--hidden");
-      
+
     }
 
     ref.on('change', function() {
