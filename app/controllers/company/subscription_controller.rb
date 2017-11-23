@@ -29,6 +29,11 @@ class Company::SubscriptionController < Company::BaseController
   end
 
   def plans
+    # redirect to profile edit if no province canadian company
+    if current_company.country == 'ca' && current_company.province.nil?
+      flash[:notice] = 'You must update your profile with the province!'
+      redirect_to edit_company_profile_path
+    end
     @plans = StripeTool.get_plans
     @subscription = Stripe::Subscription.retrieve(current_company.stripe_subscription_id) if current_company.stripe_subscription_id
     # logger.debug @plans.inspect
