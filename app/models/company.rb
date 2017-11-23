@@ -79,6 +79,10 @@ class Company < ApplicationRecord
     :at, :au, :be, :ca, :ch, :de, :dk, :es, :fi, :fr, :gb, :hk, :ie, :it, :jp, :lu, :nl, :no, :nz, :pt, :se, :sg, :us
   ]
 
+  enumerize :province, in: [
+    :AB, :BC, :MB, :NB, :NL, :NT, :NS, :NU, :ON, :PE, :QC, :SK, :YT
+  ]
+
   enumerize :header_source, in: [
     :color,
     :wallpaper
@@ -106,17 +110,16 @@ class Company < ApplicationRecord
   audited
 
   attr_accessor :enforce_profile_edit
-  
-    validates_presence_of :name, 
-      :email, 
-      :address, 
-      :area, 
-      :country, 
-      :country, 
-      :description, 
-      :established_in, 
-      :keywords, 
-      :skills, 
+
+    validates_presence_of :name,
+      :email,
+      :address,
+      :area,
+      :country,
+      :description,
+      :established_in,
+      :keywords,
+      :skills,
       if: :enforce_profile_edit
 
   after_create :add_to_hubspot

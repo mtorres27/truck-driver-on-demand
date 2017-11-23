@@ -13,6 +13,7 @@ class Company::ProfilesController < Company::BaseController
 
   def edit
     @company = current_company
+    logger.debug current_company.inspect
   end
 
   def update
@@ -31,6 +32,7 @@ class Company::ProfilesController < Company::BaseController
       :contact_name,
       :email,
       :country,
+      :province,
       :area,
       :address,
       :avatar,

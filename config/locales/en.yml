@@ -24,12 +24,26 @@ en:
       jp: "Japan"
       lu: "Luxembourg"
       nl: "Netherlands"
-      no: "Norway"
+      'no': "Norway"
       nz: "New Zealand"
       pt: "Portugal"
       se: "Sweden"
       sg: "Singapore"
       us: "United States"
+    province:
+      'ON': "Ontario"
+      'AB': "Alberta"
+      'BC': "British Columbia"
+      'MB': "Manitoba"
+      'NB': "New Brunswick"
+      'NS': "Nova Scotia"
+      'QC': "Quebec"
+      'SK': "Saskatchewan"
+      'NL': "Newfoundland and Labrador"
+      'NU': "Nunavut"
+      'PE': "Prince Edward Island"
+      'YT': "Yukon"
+      'NT': "Northwest Territories"
     job:
       job_function:
         av_installation_technician: "AV Installation Technician"
@@ -127,7 +141,7 @@ en:
       general_labor: "General Labor"
       installation: "Installation"
       rental: "Rental"
-    
+
   has_no_preference: "Has no Work Order Preference"
   prefer_fixed: "Fixed Price Work Orders"
   prefer_hourly: "Hourly Work Orders"
