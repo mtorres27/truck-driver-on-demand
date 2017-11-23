@@ -332,6 +332,12 @@ CREATE TABLE companies (
     last_sign_in_at timestamp without time zone,
     current_sign_in_ip inet,
     last_sign_in_ip inet,
+    header_color character varying DEFAULT 'FF6C38'::character varying,
+    country character varying,
+    confirmation_token character varying,
+    confirmed_at timestamp without time zone,
+    confirmation_sent_at timestamp without time zone,
+    header_source character varying DEFAULT 'color'::character varying,
     stripe_customer_id character varying,
     stripe_subscription_id character varying,
     stripe_plan_id character varying,
@@ -342,14 +348,7 @@ CREATE TABLE companies (
     last_4_digits character varying,
     card_brand character varying,
     exp_month character varying,
-    exp_year character varying,
-    header_color character varying DEFAULT 'FF6C38'::character varying,
-    country character varying,
-    confirmation_token character varying,
-    confirmed_at timestamp without time zone,
-    confirmation_sent_at timestamp without time zone,
-    header_source character varying DEFAULT 'color'::character varying,
-    province character varying
+    exp_year character varying
 );
 
 
@@ -2084,7 +2083,6 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20171122143605'),
 ('20171122143916'),
 ('20171122150510'),
-('20171122202327'),
 ('20171123045237');
 
 
