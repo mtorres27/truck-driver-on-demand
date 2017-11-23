@@ -348,7 +348,8 @@ CREATE TABLE companies (
     confirmation_token character varying,
     confirmed_at timestamp without time zone,
     confirmation_sent_at timestamp without time zone,
-    header_source character varying DEFAULT 'color'::character varying
+    header_source character varying DEFAULT 'color'::character varying,
+    province character varying
 );
 
 
@@ -797,7 +798,8 @@ CREATE TABLE jobs (
     contract_sent boolean DEFAULT false,
     opt_out_of_freelance_service_agreement boolean DEFAULT false,
     country character varying,
-    scope_file_data text
+    scope_file_data text,
+    applicable_sales_tax numeric(10,2)
 );
 
 
@@ -2081,6 +2083,8 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20171117140302'),
 ('20171122143605'),
 ('20171122143916'),
-('20171122150510');
+('20171122150510'),
+('20171122202327'),
+('20171123045237');
 
 

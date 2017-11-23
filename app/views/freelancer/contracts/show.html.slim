@@ -47,6 +47,15 @@
                     = "(#{@accepted_quote.number_of_hours} hours @ #{number_to_currency(@accepted_quote.hourly_rate, precision: 0)}/hour)"
                   - elsif @accepted_quote && @accepted_quote.pay_type == "daily"
                     = "(#{@accepted_quote.number_of_days} days @ #{number_to_currency(@accepted_quote.daily_rate, precision: 0)}/day)"
+
+              .col-xs-12.col-lg-6
+                label Applicable Sales Tax
+                .show_value_em #{@job.applicable_sales_tax } %
+
+              .col-xs-12.col-lg-6
+                label Total Quote
+                .show_value_em #{number_to_currency( (@accepted_quote.amount+(@accepted_quote.amount*@job.applicable_sales_tax/100)) , precision: 0) } #{@job.currency.upcase}
+
               .col-xs-12.col-lg-6
                 label= t(:pay_type, scope: [:form, :labels, :job])
                 .show_value_em= @accepted_quote ? @accepted_quote.pay_type&.text : "Not Specified"
