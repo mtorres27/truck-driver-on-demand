@@ -6,22 +6,39 @@ class Company::ContractsController < Company::BaseController
       quote = @job.accepted_quote
       freelancer = @job.freelancer
 
-      amount = quote.amount * 100
-      freelancer_amount = quote.amount * (1 - Rails.configuration.avj_fees) * 100
-      platform_fees = (quote.amount * 100) - freelancer_amount
+      amount = (quote.amount * (1 + (@job.applicable_sales_tax / 100)))
+      stripe_fees = amount * 0.029 + 0.3
+      platform_fees = ((quote.amount * Rails.configuration.avj_fees) - stripe_fees)
+      # TODO: calculate taxes on app fees
+      freelancer_amount = quote.amount * (1 - Rails.configuration.avj_fees)
+
+      logger.debug amount
+      logger.debug stripe_fees
+      logger.debug platform_fees
+      logger.debug freelancer_amount
+
+      # charge = Stripe::Charge.create({
+      #   amount: amount.floor,
+      #   currency: @job.currency,
+      #   source: params[:stripeToken],
+      #   destination: {
+      #     amount: freelancer_amount.floor,
+      #     account: freelancer.stripe_account_id
+      #   }
+      # })
       charge = Stripe::Charge.create({
-        amount: amount.floor,
+        amount: (amount * 100).floor ,
         currency: @job.currency,
         source: params[:stripeToken],
-        destination: {
-          amount: freelancer_amount.floor,
-          account: freelancer.stripe_account_id
-        },
-      })
+        application_fee: (platform_fees * 100).floor
+        }, stripe_account: freelancer.stripe_account_id)
+
       quote.paid_by_company = true
       quote.paid_at = DateTime.now
       quote.platform_fees_amount = platform_fees / 100
       quote.save
+      logger.debug charge.inspect
+
     rescue => e
       flash[:error] = e.message
     end
