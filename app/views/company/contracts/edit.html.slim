@@ -39,7 +39,7 @@
 
           .job-details
             .job-details__title
-              | Job Work Order Price
+              | Job Work Order Amount
             .job-details__price
               - if f.object and f.object.accepted_quote
                 = f.input :contract_price, required: true, input_html: { value: number_with_precision(f.object.accepted_quote.amount, precision: 0) }, label: false, disabled: true
@@ -51,7 +51,7 @@
           .job-details
             .job-details__date
               .job-details__title
-                | Applicable Sales Tax
+                | Applicable Sales Tax (%)
               = f.input :applicable_sales_tax, html5: true, label: false
 
           .job-details

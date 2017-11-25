@@ -81,6 +81,16 @@
   font-weight: 300
   &.center
     text-align: center
+  &.title
+    font-size: 56px
+    color: $brand-primary
+    font-weight: 100
+    @media (max-width: 767px)
+      font-size: 36px
+    @media (max-width: 321px)
+      font-size: 24px
+  
+
 
 .heading-h2
   font-size: 30px
@@ -315,3 +325,6 @@
     &--success
       color: $brand-success
 
+//Overrides
+.alert
+  margin-bottom: 0px

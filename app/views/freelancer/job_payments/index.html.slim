@@ -16,7 +16,7 @@
               .tag.tag--success FUNDS AVAILABLE
               .payments__total-group
                 .payments__total-amt #{number_to_currency(@job.payments_sum_paid, precision: 0)}  #{@job.currency}
-                .payments__payout-label payout BAL.
+                .payments__payout-label Balance
             .payments__status Paul's AV Company has secured funds for this project. AV Junction will hold these payments on your behalf until each of the milestones listed below are met.
         - @payments.each do |payment|
           div class="payments #{ "milestone--inactive" if !@accepted_quote.paid_by_company}"
