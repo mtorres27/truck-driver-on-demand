@@ -5,6 +5,7 @@ class Company::ContractsController < Company::BaseController
     begin
       quote = @job.accepted_quote
       freelancer = @job.freelancer
+      payments = @job.payments
 
       amount = (quote.amount * (1 + (@job.applicable_sales_tax / 100)))
       stripe_fees = amount * 0.029 + 0.3
@@ -12,20 +13,16 @@ class Company::ContractsController < Company::BaseController
       # TODO: calculate taxes on app fees
       freelancer_amount = quote.amount * (1 - Rails.configuration.avj_fees)
 
-      logger.debug amount
-      logger.debug stripe_fees
-      logger.debug platform_fees
-      logger.debug freelancer_amount
+      quote.tax_amount = (quote.amount * (@job.applicable_sales_tax / 100))
+      quote.total_amount = amount
+      quote.save
 
-      # charge = Stripe::Charge.create({
-      #   amount: amount.floor,
-      #   currency: @job.currency,
-      #   source: params[:stripeToken],
-      #   destination: {
-      #     amount: freelancer_amount.floor,
-      #     account: freelancer.stripe_account_id
-      #   }
-      # })
+      payments.each do |payment|
+        payment.tax_amount = (quote.amount * (@job.applicable_sales_tax / 100))
+        payment.total_amount = amount
+        payment.save
+      end
+
       charge = Stripe::Charge.create({
         amount: (amount * 100).floor ,
         currency: @job.currency,
