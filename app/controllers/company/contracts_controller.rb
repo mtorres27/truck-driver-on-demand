@@ -13,11 +13,15 @@ class Company::ContractsController < Company::BaseController
       # TODO: calculate taxes on app fees
       freelancer_amount = quote.amount * (1 - Rails.configuration.avj_fees)
 
+      quote.avj_fees = quote.amount * Rails.configuration.avj_fees
+      quote.stripe_fees = stripe_fees
+      quote.net_avj_fees =  platform_fees
       quote.tax_amount = (quote.amount * (@job.applicable_sales_tax / 100))
       quote.total_amount = amount
       quote.save
 
       payments.each do |payment|
+        payment.avj_fees =
         payment.tax_amount = (quote.amount * (@job.applicable_sales_tax / 100))
         payment.total_amount = amount
         payment.save
@@ -87,10 +91,13 @@ class Company::ContractsController < Company::BaseController
 
       @errors = []
       @number_of_payments_error = false
+      @total_of_payments_error = false
       @job.errors.messages.each do |key, index|
 
         if key == :number_of_payments
           @number_of_payments_error = true
+        elsif key == :total_of_payments
+          @total_of_payments_error = true
         else
           @errors << key.to_s.underscore.humanize.titlecase
         end
@@ -100,6 +107,8 @@ class Company::ContractsController < Company::BaseController
 
       if @number_of_payments_error
         @combined_errors << "Payments (At least 1 is required)"
+      elsif @total_of_payments_error
+        @combined_errors << "Wrong payments amount!"
       end
 
       flash[:error] = "Unable to save: the following fields need to be filled out: " + @combined_errors + ". If any of the fields aren't visible on the contract page, you might need to provide additional information in the job details page."

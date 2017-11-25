@@ -130,6 +130,16 @@ class Job < ApplicationRecord
     end
   end
 
+  validate :validate_payments_total
+  def validate_payments_total
+
+    if send_contract == "true"
+      total = payments.map(&:amount).inject(0, &:+)
+      Rails.logger.debug total
+      Rails.logger.debug quotes.where({state: :accepted}).first.amount
+      errors.add(:total_of_payments, 'The total amount of payments doesn\'t match with the quote') if total != quotes.where({state: :accepted}).first.amount
+    end
+  end
 
   def pre_negotiated?
     %w(created published quoted).include?(state)
