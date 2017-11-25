@@ -24,7 +24,7 @@ module JobHelper
       created: :default,
       published: :primary,
       quoted: :success,
-      negotiated: :info,
+      negotiated: :success,
       contracted: :active,
       completed: :danger,
       declined: :danger
