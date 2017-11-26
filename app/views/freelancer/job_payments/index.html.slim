@@ -30,7 +30,7 @@
               / a.btn-link href=freelancer_job_payment_path
               = link_to freelancer_job_payment_path(id: payment.id, job_id: @job.id), class: 'btn-link'
                 | View Invoice
-            - if  !payment.paid_on.present? && (payment.issued_on.present? && payment.issued_on >= 2.day.ago)
+            - if  !@accepted_quote.paid_by_company || (!payment.paid_on.present? && (payment.issued_on.present? && payment.issued_on >= 2.day.ago))
               a.btn-primary--disabled.top-margin.w-inline-block href="#"
                 div request Payout
             - elsif !payment.paid_on.present?
