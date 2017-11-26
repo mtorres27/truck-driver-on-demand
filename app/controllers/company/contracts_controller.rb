@@ -13,20 +13,6 @@ class Company::ContractsController < Company::BaseController
       # TODO: calculate taxes on app fees
       freelancer_amount = quote.amount * (1 - Rails.configuration.avj_fees)
 
-      quote.avj_fees = quote.amount * Rails.configuration.avj_fees
-      quote.stripe_fees = stripe_fees
-      quote.net_avj_fees =  platform_fees
-      quote.tax_amount = (quote.amount * (@job.applicable_sales_tax / 100))
-      quote.total_amount = amount
-      quote.save
-
-      payments.each do |payment|
-        payment.avj_fees =
-        payment.tax_amount = (quote.amount * (@job.applicable_sales_tax / 100))
-        payment.total_amount = amount
-        payment.save
-      end
-
       charge = Stripe::Charge.create({
         amount: (amount * 100).floor ,
         currency: @job.currency,
@@ -34,17 +20,30 @@ class Company::ContractsController < Company::BaseController
         application_fee: (platform_fees * 100).floor
         }, stripe_account: freelancer.stripe_account_id)
 
+      quote.avj_fees = quote.amount * Rails.configuration.avj_fees
+      quote.stripe_fees = stripe_fees
+      quote.net_avj_fees = platform_fees
+      quote.tax_amount = (quote.amount * (@job.applicable_sales_tax / 100))
+      quote.total_amount = amount
       quote.paid_by_company = true
       quote.paid_at = DateTime.now
-      quote.platform_fees_amount = platform_fees / 100
+      quote.platform_fees_amount = platform_fees
       quote.save
-      logger.debug charge.inspect
+
+      payments.each do |payment|
+        payment.avj_fees = payment.amount * Rails.configuration.avj_fees
+        payment.tax_amount = (payment.amount * (@job.applicable_sales_tax / 100))
+        payment.total_amount = payment.amount * (1 + (@job.applicable_sales_tax / 100))
+        payment.save
+        # logger.debug payment.inspect
+      end
+      # logger.debug quote.inspect
 
     rescue => e
       flash[:error] = e.message
     end
 
-    redirect_to company_job_work_order_path, job_id: @job.id
+    redirect_to company_job_payments_path, job_id: @job.id
   end
 
   def show
