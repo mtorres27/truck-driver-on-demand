@@ -39,8 +39,11 @@
       .invoice__table-text.invoice__table-text--left= @payment.description
       .invoice__table-text.invoice__table-text--right= number_to_currency(@payment.amount) + " " + @job.currency.upcase
     .invoice__table-row
-      .invoice__table-text.invoice__table-text--left Sales Tax @ 13%
-      .invoice__table-text.invoice__table-text--right= number_to_currency(@payment.amount*0.13)+ " " + @job.currency.upcase
+      .invoice__table-text.invoice__table-text--left AVJ Fees
+      .invoice__table-text.invoice__table-text--right= number_to_currency(@payment.avj_fees)+ " " + @job.currency.upcase
+    .invoice__table-row
+      .invoice__table-text.invoice__table-text--left Sales Tax @ #{@job.applicable_sales_tax}%
+      .invoice__table-text.invoice__table-text--right= number_to_currency(@payment.tax_amount)+ " " + @job.currency.upcase
     .invoice__table-row.invoice__table-row--total
       .invoice__table-text.invoice__table-text--left Total Payout
-      .invoice__table-text.invoice__table-text--right= number_to_currency(@payment.amount+(@payment.amount*0.13))+ " " + @job.currency.upcase
+      .invoice__table-text.invoice__table-text--right= number_to_currency(@payment.total_amount-(@payment.avj_fees))+ " " + @job.currency.upcase
