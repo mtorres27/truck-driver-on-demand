@@ -11,6 +11,9 @@ class Freelancer::ContractsController < Freelancer::BaseController
     @job.save
     @accepted_quote = @job.accepted_quote
 
+    # Send notice email
+    PaymentsMailer.request_funds_company(@job.company, current_freelancer, @job).deliver
+
     render :show
   end
 end

@@ -6,6 +6,7 @@ class Freelancer::JobPaymentsController < Freelancer::BaseController
     # @job = Job.find(params[:job_id])
     @payments = @job.payments.order(:created_at)
     @accepted_quote = @job.accepted_quote
+    logger.debug @job.company.inspect
   end
 
   def show
@@ -19,6 +20,8 @@ class Freelancer::JobPaymentsController < Freelancer::BaseController
     # payment = Payment.find(params[:payment_id])
     @payment.issued_on = Date.today
     @payment.save
+    # Send notice email
+    PaymentsMailer.request_payout_company(@job.company, current_freelancer, @job).deliver
     redirect_to freelancer_job_payments_path(job_id: @job.id)
   end
 

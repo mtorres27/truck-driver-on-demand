@@ -37,6 +37,9 @@ class Company::ContractsController < Company::BaseController
         payment.save
         # logger.debug payment.inspect
       end
+
+      # Send notice email
+      PaymentsMailer.notice_funds_freelancer(current_company, freelancer, @job).deliver
       # logger.debug quote.inspect
 
     rescue => e
