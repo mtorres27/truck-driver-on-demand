@@ -37,10 +37,7 @@
                   - if @accepted_quote
                     = number_to_currency(@accepted_quote.amount, precision: 0)
                     br
-                    - if @job.currency.nil?
-                      |
-                    - else
-                      = @job.currency.upcase
+                    = @job.currency.upcase if !@job.currency.nil?
                   - else
                     | Not Specified
                   - if @accepted_quote && @accepted_quote.pay_type == "hourly"
@@ -50,11 +47,11 @@
 
               .col-xs-12.col-lg-6
                 label Applicable Sales Tax
-                .show_value_em #{@job.applicable_sales_tax } %
+                .show_value_em #{ @job.applicable_sales_tax ? @job.applicable_sales_tax : 0}%
 
               .col-xs-12.col-lg-6
                 label Total Quote
-                .show_value_em #{number_to_currency( (@accepted_quote.amount+(@accepted_quote.amount*@job.applicable_sales_tax/100)) , precision: 0) } #{@job.currency.upcase}
+                .show_value_em #{@job.applicable_sales_tax.present? ? number_to_currency( (@accepted_quote.amount+(@accepted_quote.amount*@job.applicable_sales_tax/100)) , precision: 0) :  number_to_currency(@accepted_quote.amount, precision: 0) } #{@job.currency.upcase}
 
               .col-xs-12.col-lg-6
                 label= t(:pay_type, scope: [:form, :labels, :job])
