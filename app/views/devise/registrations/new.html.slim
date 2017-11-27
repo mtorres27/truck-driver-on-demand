@@ -10,7 +10,7 @@ h1.center.heading-h1 Register with AV Junction
         span
           - if resource.class.name.downcase == "freelancer"
             = radio_button_tag :user_type, "freelancer", selected: true
-          - else 
+          - else
             = radio_button_tag :user_type, "freelancer"
           = label :user_type, "freelancer"
         span
@@ -36,8 +36,16 @@ h1.center.heading-h1 Register with AV Junction
       - if resource.class.name != "Admin"
         .register__label
           | Country
-        
+
         = f.input :country, required: true, label: false, prompt: "Select Country"
+
+        - if resource.class.name == "Company"
+          .province_line.hidden
+            .register__label
+              | Province
+
+            = f.input :province, required: false, label: false, prompt: "Select Province"
+
 
       .register__label
         | Enter a Password
@@ -65,24 +73,24 @@ h1.center.heading-h1 Register with AV Junction
       span class=(terms_of_service_error == true ? "validation-error" : "")
         = f.check_box :accept_terms_of_service, required: true
         = " "
-        | I accept the 
+        | I accept the
         a href="http://www.avjunction.com/term-of-service" target="_blank"
           | Terms of Service
       br
       span class=(privacy_policy_error == true ? "validation-error" : "fine")
         = f.check_box :accept_privacy_policy, required: true
         = " "
-        | I accept the 
+        | I accept the
         a href="http://www.avjunction.com/privacy-policy" target="_blank"
           | Privacy Policy
       br
       span class=(code_of_conduct_error == true ? "validation-error" : "")
         = f.check_box :accept_code_of_conduct, required: true
         = " "
-        | I accept the 
+        | I accept the
         a href="http://www.avjunction.com/code-of-conduct" target="_blank"
           | Code of Conduct
-      
+
       br
       br
 
@@ -100,3 +108,22 @@ javascript:
   $("#user_type_company").on('click', function() {
     window.location = "/company/register";
   })
+
+  function toggle_province(country){
+    if (country == "ca"){
+      $(".province_line").removeClass('hidden');
+    }
+    else{
+      $('#company_province').val('');
+      $(".province_line").addClass('hidden');
+    }
+  }
+
+  $(document).ready(function() {
+    if ($('#company_country').val() != ""){
+      toggle_province($('#company_country').val())
+    }
+    $('#company_country').on('change', function(){
+      toggle_province($(this).val())
+    });
+  });

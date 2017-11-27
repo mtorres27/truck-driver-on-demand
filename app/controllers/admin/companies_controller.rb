@@ -51,11 +51,12 @@ class Admin::CompaniesController < Admin::BaseController
     def company_params
       # params.fetch(:company, {:name, :email})
       params.require(:company).permit(
-        :name, 
-        :email, 
+        :name,
+        :email,
         :avatar,
         :contact_name,
         :country,
+        :province,
         :currency,
         :address,
         :area,

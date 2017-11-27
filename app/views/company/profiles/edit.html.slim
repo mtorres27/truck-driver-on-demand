@@ -3,7 +3,7 @@
     .result-header
       .result-header__text
         | Edit Company Profile
-    
+
     .result-content
       = simple_form_for(@company, url: company_profile_path) do |f|
         = f.hidden_field :enforce_profile_edit, value: true
@@ -13,7 +13,7 @@
           .company-profile__image--header
             = image_tag(@company.profile_header_url, id: "company-edit-profile__header")
             .freelancer-profile__image-upload onclick="updateHeaderImage()"
-              span class="fa fa-camera" 
+              span class="fa fa-camera"
           = f.file_field :profile_header, label: false, :accept => 'image/png,image/gif,image/jpeg', class: "file-input--hidden", id: "edit-company-profile-header"
         .company-profile__item
           .company-profile__title
@@ -21,18 +21,18 @@
           .company-profile__image style="width: 135px; height: 135px;"
             =image_tag(@company.avatar_url, id: "company-edit-profile__avatar")
             .freelancer-profile__image-upload onclick="updateProfilePicture()"
-              span class="fa fa-camera" 
+              span class="fa fa-camera"
           = f.file_field :avatar, label: false, :accept => 'image/png,image/gif,image/jpeg', class: "file-input--hidden", id: "edit-company-profile-avatar"
         .company-profile__item
           .company-profile__title
             | Wallpaper Colour
-          = f.input :header_color, required: true, label: false, placeholder: "FF6C38"  
+          = f.input :header_color, required: true, label: false, placeholder: "FF6C38"
 
         .company-profile__item
           .company-profile__title
             | Header Source
           = f.input :header_source, label: false, prompt: "Select"
-        
+
         .company-profile__item
           .company-profile__title
             | Company Name
@@ -45,6 +45,10 @@
           .company-profile__title
             | Country
           = f.input :country, required: true, label: false, prompt: "Select Country"
+        .company-profile__item.province_line class="#{(@current_company.country!='ca')? 'hidden' : ''}"
+          .company-profile__title
+            | Province
+          = f.input :province, required: true, label: false, prompt: "Select Province"
         .company-profile__item
           .company-profile__title
             | Service Areas
@@ -102,7 +106,7 @@
               .company-profile__checkbox
                 = check_box_tag tag_name, "1", checked
                 = value
-          
+
         .company-profile__item
           .company-profile__title
             | Company Skills
@@ -120,7 +124,7 @@
               .company-profile__checkbox
                 = check_box_tag tag_name, "1", checked
                 = value
-        
+
         .job-details
           #company_installs
             .company-profile__title
@@ -138,14 +142,33 @@
                 = render "featured_project_fields", f: project_form
               .links.add-new-project
                 = link_to_add_association 'Add Project', f, :featured_projects, class: "btn btn-default"
-    
+
         .form-actions
           = f.button :submit, class: "btn-primary--active", label: "Update Profile"
           a.btn-ghost--active.margin-8px href=company_profile_path(@company)
             | Cancel
-          
+
 
 javascript:
+  function toggle_province(country){
+    if (country == "ca"){
+      $(".province_line").removeClass('hidden');
+    }
+    else{
+      $('#company_province').val('');
+      $(".province_line").addClass('hidden');
+    }
+  }
+
+  $(document).ready(function() {
+    if ($('#company_country').val() != ""){
+      toggle_province($('#company_country').val())
+    }
+    $('#company_country').on('change', function(){
+      toggle_province($(this).val())
+    });
+  });
+
   var updateHeaderImage = function() {
     $("#edit-company-profile-header").click();
     $("#edit-company-profile-header").on('change', function(e) {

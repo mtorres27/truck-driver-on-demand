@@ -25,7 +25,7 @@ class ApplicationController < ActionController::Base
         formatted_address = res[:results][0][:formatted_address]
         lat = res[:results][0][:geometry][:location][:lat]
         lng = res[:results][0][:geometry][:location][:lng]
-        
+
         return { address: formatted_address, lat: lat, lng: lng }
       end
     rescue Exception => e
@@ -40,14 +40,15 @@ class ApplicationController < ActionController::Base
   def configure_permitted_parameters
     devise_parameter_sanitizer.permit(:sign_up) do |user_params|
       user_params.permit(
-        :email, 
-        :password, 
-        :password_confirmation, 
-        :name, 
-        :contact_name, 
-        :country, 
-        :currency, 
-        :accept_terms_of_service, 
+        :email,
+        :password,
+        :password_confirmation,
+        :name,
+        :contact_name,
+        :country,
+        :province,
+        :currency,
+        :accept_terms_of_service,
         :accept_privacy_policy,
         :accept_code_of_conduct
       )

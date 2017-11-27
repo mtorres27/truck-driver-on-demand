@@ -1,4 +1,5 @@
 class Company::SubscriptionController < Company::BaseController
+  include TaxHelper
   before_action :amount_to_be_charged, :set_description
   protect_from_forgery except: :webhook
 
@@ -29,6 +30,11 @@ class Company::SubscriptionController < Company::BaseController
   end
 
   def plans
+    # redirect to profile edit if no province canadian company
+    if current_company.country == 'ca' && current_company.province.nil?
+      flash[:notice] = 'You must update your profile with the province!'
+      redirect_to edit_company_profile_path
+    end
     @plans = StripeTool.get_plans
     @subscription = Stripe::Subscription.retrieve(current_company.stripe_subscription_id) if current_company.stripe_subscription_id
     # logger.debug @plans.inspect
@@ -72,6 +78,7 @@ class Company::SubscriptionController < Company::BaseController
     customer = StripeTool.create_customer(email: params[:stripeEmail],
                                           stripe_token: params[:stripeToken])
     subscription = StripeTool.subscribe(customer: customer,
+                                        tax: current_company.country=='ca' ? province_tax(current_company.province)*100  : 0,
                                         plan_id: params[:plan_id],
                                         is_new: current_company.stripe_customer_id ? false : true,
                                         registered_from: ((Time.now- current_company.created_at)/1.day).floor

@@ -6,7 +6,11 @@ h2
   .date
     | date : #{Time.at(@invoice[:date])}
   .amount
-    | amount : #{pretty_amount(@invoice[:lines][:data][0][:amount])}
+    | Amount : #{pretty_amount(@invoice[:lines][:data][0][:amount])}
+  .Tax
+    | Tax (%#{@invoice[:tax_percent]}) : #{pretty_amount(@invoice[:tax])}
+  .Total
+    | Total : #{pretty_amount(@invoice[:total])}
   .description
     | description : #{@invoice[:lines][:data][0][:description]}
   .start_date

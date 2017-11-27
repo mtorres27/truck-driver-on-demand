@@ -53,8 +53,8 @@ br
               .plans__subtitle #{ !plan.metadata.blank? && plan.metadata.any? ? plan.metadata.desc : plan.metadata[:statement_descriptor]}
               .plans__pricing
                 .plans__price $#{plan[:amount]/100}
-                .plans__currency USD
+                .plans__currency USD #{ current_company.country == 'ca' ?  "+ " + (province_tax(current_company.province)*100).to_s + "% tax" : '' }
               div style="text-align: center"
                 = form_tag company_subscription_checkout_path, method: 'post', plan: plan  do
                   input type="hidden" name="plan_id" value=plan[:id]
-                  script.stripe-button.w-inline-block data-label="UPGRADE" data-amount=plan[:amount] data-email=("#{current_company.email}") data-description=plan[:name]  data-key=("#{Rails.configuration.stripe[:publishable_key]}") data-locale="auto" src="https://checkout.stripe.com/checkout.js" data-currency = plan[:currency]
+                  script.stripe-button.w-inline-block data-label="UPGRADE" data-amount=(current_company.country == 'ca' ? plan[:amount] +(plan[:amount] * province_tax(current_company.province)) : plan[:amount]) data-email=("#{current_company.email}") data-description=plan[:name]  data-key=("#{Rails.configuration.stripe[:publishable_key]}") data-locale="auto" src="https://checkout.stripe.com/checkout.js" data-currency = plan[:currency]
