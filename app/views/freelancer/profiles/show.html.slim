@@ -1,129 +1,132 @@
 = render partial: "/freelancer/shared/profile_sub_nav"
 
-.action-bar__container
+- content_for :secondary do
   .action-bar
-    a.btn-primary--active.no-margin href=edit_freelancer_profile_path
-      | Edit Profile
-    a.btn-primary--active.no-margin href="mailto:info@avjunction.com?subject=I would like my account to be verified" target="_blank"
-      | Get verified
-.fprofile__container
-  - if @freelancer.profile_header_url.include?("missing") or @freelancer.header_source == "color"
-    .fprofile__wallpaper style="background-color: #{ @freelancer.header_color.include?("#") ? "" : "#"}#{@freelancer.header_color}"
-  - else
-    .fprofile__wallpaper style="background-image: url(#{@freelancer.profile_header_url.include?("missing") ? "" : @freelancer.profile_header_url});"
-  .fprofile__content__container
-    .fprofile__header
-      h1.fprofile__h1= @freelancer.name
-      - if @freelancer.available
-        .fprofile__tag.green Available for work
-      - else
-        .fprofile__tag.red Not Available for Work
-    .fprofile__content
-      .fprofile__meta__details__1
-        .fprofile__meta__details__1-1
-          .fprofile__meta__image
-            = image_tag(@freelancer.avatar_url, size: "135x135")
-          .fprofile__meta__info
-            .fprofile__meta__name= @freelancer.name
-            .fprofile__meta__joined= "Joined #{@freelancer.created_at.strftime('%B %d, %Y')}"
-            .fprofile__meta__reviews 
-              = freelancer_ratings_link(@freelancer)
-            .fprofile__meta__rating
-              - @stars = freelancer_avg_rating(@freelancer)
-              - @stars.each do |star|
-                i class=star
-        .fprofile__meta__details__1-2
-          .fprofile__meta__tagline= @freelancer.tagline
-          .fprofile__specialties--summary
+    h2.heading-h2.heading-h2--action-bar Profile Info
+    .action-bar__actions
+      a.btn-primary--active href=edit_freelancer_profile_path
+        | Edit
+      a.btn-primary--active href="mailto:info@avjunction.com?subject=I would like my account to be verified" target="_blank"
+        | Verify
+
+  .fprofile__container
+    - if @freelancer.profile_header_url.include?("missing") or @freelancer.header_source == "color"
+      .fprofile__wallpaper style="background-color: #{ @freelancer.header_color.include?("#") ? "" : "#"}#{@freelancer.header_color}"
+    - else
+      .fprofile__wallpaper style="background-image: url(#{@freelancer.profile_header_url.include?("missing") ? "" : @freelancer.profile_header_url});"
+    .fprofile__content__container
+      .fprofile__header
+        h1.fprofile__h1= @freelancer.name
+        - if @freelancer.available
+          .fprofile__tag.green Available for work
+        - else
+          .fprofile__tag.red Not Available for Work
+      .fprofile__content
+        .fprofile__meta__details__1
+          .fprofile__meta__details__1-1
+            .fprofile__meta__image
+              = image_tag(@freelancer.avatar_url, size: "135x135")
+            .fprofile__meta__info
+              .fprofile__meta__name= @freelancer.name
+              .fprofile__meta__joined= "Joined #{@freelancer.created_at.strftime('%B %d, %Y')}"
+              .fprofile__meta__reviews 
+                = freelancer_ratings_link(@freelancer)
+              .fprofile__meta__rating
+                - @stars = freelancer_avg_rating(@freelancer)
+                - @stars.each do |star|
+                  i class=star
+          .fprofile__meta__details__1-2
+            .fprofile__meta__tagline= @freelancer.tagline
+            .fprofile__specialties--summary
+              - if !@freelancer.keywords.nil? and @freelancer.keywords.kind_of?(Hash)
+                - @freelancer.keywords.first(2).each do |index, value|
+                  .fprofile__tag.grey
+                    = I18n.t("enumerize.freelancer_keywords.#{index}")
+              - if !@freelancer.skills.nil? and @freelancer.skills.kind_of?(Hash)
+                - @freelancer.skills.first(2).each do |index, value|
+                  .fprofile__tag.grey
+                    = I18n.t("enumerize.freelancer_skills.#{index}")
+          .fprofile__meta__details__1-3
+            .fprofile__meta__details-stat
+              .fprofile__meta__stat--label Pay Pref
+              .fprofile__meta__stat--value
+                - if !@freelancer.pay_unit_time_preference.nil?
+                  = t("enumerize.job.pay_type.#{@freelancer.pay_unit_time_preference}")
+                - else
+                  | N/A
+            .fprofile__meta__details-stat
+              .fprofile__meta__stat--label rate
+              .fprofile__meta__stat--value
+                - if !@freelancer.pay_per_unit_time.nil?
+                  = @freelancer.pay_per_unit_time
+                - else
+                  | N/A
+            .fprofile__meta__details-stat
+              .fprofile__meta__stat--label EXPERIENCE
+              .fprofile__meta__stat--value= "#{@freelancer.years_of_experience} yrs"
+        .fprofile__meta__details__2
+          .fprofile__biography
+            h3.fprofile__h3 Bio
+            p
+              - if @freelancer.bio.nil? or @freelancer.bio == ""
+                | This freelancer has not yet added a bio.
+              - else
+                = "#{@freelancer.bio}"
+          
+          .fprofile__specialties
+            h3.fprofile__h3 Specialties
+            h4.fprofile__h4 markets
             - if !@freelancer.keywords.nil? and @freelancer.keywords.kind_of?(Hash)
-              - @freelancer.keywords.first(2).each do |index, value|
+              - @freelancer.keywords.each do |index, value|
                 .fprofile__tag.grey
                   = I18n.t("enumerize.freelancer_keywords.#{index}")
+            - else
+              | This freelancer has no markets listed.
+            h4.fprofile__h4 skills
             - if !@freelancer.skills.nil? and @freelancer.skills.kind_of?(Hash)
-              - @freelancer.skills.first(2).each do |index, value|
+              - @freelancer.skills.each do |index, value|
                 .fprofile__tag.grey
                   = I18n.t("enumerize.freelancer_skills.#{index}")
-        .fprofile__meta__details__1-3
-          .fprofile__meta__details-stat
-            .fprofile__meta__stat--label Pay Pref
-            .fprofile__meta__stat--value
-              - if !@freelancer.pay_unit_time_preference.nil?
-                = t("enumerize.job.pay_type.#{@freelancer.pay_unit_time_preference}")
-              - else
-                | N/A
-          .fprofile__meta__details-stat
-            .fprofile__meta__stat--label rate
-            .fprofile__meta__stat--value
-              - if !@freelancer.pay_per_unit_time.nil?
-                = @freelancer.pay_per_unit_time
-              - else
-                | N/A
-          .fprofile__meta__details-stat
-            .fprofile__meta__stat--label EXPERIENCE
-            .fprofile__meta__stat--value= "#{@freelancer.years_of_experience} yrs"
-      .fprofile__meta__details__2
+            - else
+              | This freelancer has no skills listed.
+
         .fprofile__biography
-          h3.fprofile__h3 Bio
+          h3.fprofile__h3 Type
           p
-            - if @freelancer.bio.nil? or @freelancer.bio == ""
-              | This freelancer has not yet added a bio.
+            - if @freelancer.freelancer_type.nil?
+              | N/A
             - else
-              = "#{@freelancer.bio}"
-        
-        .fprofile__specialties
-          h3.fprofile__h3 Specialties
-          h4.fprofile__h4 markets
-          - if !@freelancer.keywords.nil? and @freelancer.keywords.kind_of?(Hash)
-            - @freelancer.keywords.each do |index, value|
-              .fprofile__tag.grey
-                = I18n.t("enumerize.freelancer_keywords.#{index}")
-          - else
-            | This freelancer has no markets listed.
-          h4.fprofile__h4 skills
-          - if !@freelancer.skills.nil? and @freelancer.skills.kind_of?(Hash)
-            - @freelancer.skills.each do |index, value|
-              .fprofile__tag.grey
-                = I18n.t("enumerize.freelancer_skills.#{index}")
-          - else
-            | This freelancer has no skills listed.
+              - if @freelancer.freelancer_type == :independent
+                = @freelancer.freelancer_type.text
+              - else
+                = "#{@freelancer.freelancer_type.text} "
+                - if @freelancer.freelancer_team_size.nil?
+                  = ""
+                - else 
+                  = "(#{t("enumerize.job.freelancer_team_size.#{@freelancer.freelancer_team_size}")})"
+          br
+          br
 
-      .fprofile__biography
-        h3.fprofile__h3 Type
-        p
-          - if @freelancer.freelancer_type.nil?
-            | N/A
-          - else
-            - if @freelancer.freelancer_type == :independent
-              = @freelancer.freelancer_type.text
-            - else
-              = "#{@freelancer.freelancer_type.text} "
-              - if @freelancer.freelancer_team_size.nil?
-                = ""
-              - else 
-                = "(#{t("enumerize.job.freelancer_team_size.#{@freelancer.freelancer_team_size}")})"
-        br
-        br
-
-          
-      .fprofile__meta__details__3
-        h3.fprofile__h3 Certifications
-        .fprofile__certifications__container
-          - if @freelancer.certifications.count == 0
-            | This freelancer has not yet added any certifications.
-          - @freelancer.certifications.each do |certification|
-            .profile__certifications__certificate
-              - url = certification.certificate_url
-              - if certification.certificate_url != "certification/missing.pdf"
-                - url = certification.certificate_url
-                a href=url target="_blank"
-                  - if is_image(url)
-                    - src=url
-                  - else
-                    - src="/assets/certification/certification_placeholder.png"
-                  .fprofile__certification
-                    img.fprofile__certification__image sizes="185.96875px" src=src
-                    .fprofile__certification__label= certification.name
             
+        .fprofile__meta__details__3
+          h3.fprofile__h3 Certifications
+          .fprofile__certifications__container
+            - if @freelancer.certifications.count == 0
+              | This freelancer has not yet added any certifications.
+            - @freelancer.certifications.each do |certification|
+              .profile__certifications__certificate
+                - url = certification.certificate_url
+                - if certification.certificate_url != "certification/missing.pdf"
+                  - url = certification.certificate_url
+                  a href=url target="_blank"
+                    - if is_image(url)
+                      - src=url
+                    - else
+                      - src="/assets/certification/certification_placeholder.png"
+                    .fprofile__certification
+                      img.fprofile__certification__image sizes="185.96875px" src=src
+                      .fprofile__certification__label= certification.name
+              
 
 
 
