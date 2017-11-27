@@ -29,7 +29,7 @@
           h2 Identity Verification
           .in-progress.tag identity verification In progress
           p Your identity verification is currently in progress. Once this information has been confirmed you will be able to accept payments from AV Companies through AV Junction.
-        - else
+        - elsif @connector.account.legal_entity.verification.status == 'verified'
           h2 Identity Verification
           .success.tag identity Verified
           p Your identity has been verified by Stripe. You can now receive payments to your AV Junction account from AV Companies.
