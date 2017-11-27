@@ -28,7 +28,7 @@
         = f.input :scope_of_work, label: false, placeholder: "Please enter in more details about the job to receive a better quote."
         = f.input :scope_file, as: :file, label: "Scope of Work File"
         - if !@job.scope_file.nil?
-          | Currently Selected: 
+          | Currently Selected:
           a href=@job.scope_file_url target="_blank"
             = @job.scope_file.original_filename
           br
@@ -91,7 +91,6 @@
             = f.input :external_project_id, placeholder: "Enter the project number"
             = f.input :budget, placeholder: "Enter a budget"
             = f.input :address, placeholder: "Enter the address"
-            = f.input :currency, as: :select
 
             .row
               .col-xs-12.col-md-6
