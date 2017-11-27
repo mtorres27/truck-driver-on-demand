@@ -134,16 +134,15 @@ class Job < ApplicationRecord
   def validate_payments_total
     if send_contract == "true"
       total = payments.map(&:amount).inject(0, &:+)
-      Rails.logger.debug total
-      Rails.logger.debug quotes.where({state: :accepted}).first.amount
       errors.add(:total_of_payments, 'The total amount of payments doesn\'t match with the quote') if total != quotes.where({state: :accepted}).first.amount
     end
   end
 
   validate :validate_sales_tax
   def validate_sales_tax
-    return if send_contract == "true" && !applicable_sales_tax.nil?
-    errors.add(:applicable_sales_tax, 'You should set the applicable sales tax!')
+    if send_contract == "true"
+      errors.add(:applicable_sales_tax, 'You should set the applicable sales tax!') if applicable_sales_tax.nil?
+    end
   end
 
   def pre_negotiated?
