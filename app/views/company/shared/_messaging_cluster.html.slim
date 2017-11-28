@@ -3,7 +3,7 @@
     .applicant-messages__messages
       - if @all_quotes.where({state: "accepted"}).length == 0
         = render partial: "company/shared/new_message", locals: { f: f, n: @applicant.freelancer.name, type: "quote", quotes: @quotes }
-      - else 
+      - else
         .new-message--wrapper
           .new-message_amount
             .new-message__freelancer-selected
@@ -44,12 +44,12 @@
             .media
               .media-body
                 div.quote_amount class=("quote_amount--declined" if item[:payload].state == "declined")
-                  = number_to_currency(item[:payload].amount, precision: 0) + " " + job.currency
+                  = (item[:payload].amount).to_s + " " + job.currency
                 .quote_pay_type= item[:payload].pay_type.text
                 - if item[:payload].pay_type == "hourly"
-                  = "(#{item[:payload].number_of_hours} hours @ #{number_to_currency(item[:payload].hourly_rate, precision: 0)} #{job.currency}/hour)"
+                  = "(#{item[:payload].number_of_hours} hours @ #{item[:payload].hourly_rate} #{job.currency}/hour)"
                 - if item[:payload].pay_type == "daily"
-                  = "(#{item[:payload].number_of_days} days @ #{number_to_currency(item[:payload].daily_rate, precision: 0)} #{job.currency}/day)"
+                  = "(#{item[:payload].number_of_days} days @ #{item[:payload].daily_rate} #{job.currency}/day)"
                 - if item[:payload].fixed? && item[:payload].amount > @job.budget
                   .quote_over-budget= "Over Budget"
                 - elsif item[:payload].fixed? && item[:payload].amount < @job.budget
@@ -65,7 +65,7 @@
       .modal__accept-quote__content
         .modal__accept-quote__content__header
           .modal__accept-quote__content__header__text
-            = "Accept Quote of #{number_to_currency(@quotes.where({applicant_id: @applicant.id}).first.amount, precision: 0)}"
+            = "Accept Quote of #{@quotes.where({applicant_id: @applicant.id}).first.amount}"
         .modal__accept-quote__content__body
           b
             | CONGRATULATIONS, YOU'VE FOUND YOUR FREELANCER.
@@ -74,7 +74,7 @@
             | "Simply click the button below to proceed to creating a work worder. If you don't have the time right now you can find this in the job details section."
           p
             em
-              = "Remember, by accepting this quote of #{number_to_currency(@quotes.where({applicant_id: @applicant.id}).first.amount, precision: 0)}  #{job.currency} with #{@applicant.freelancer.name}, all other applications for this"
+              = "Remember, by accepting this quote of #{@quotes.where({applicant_id: @applicant.id}).first.amount}  #{job.currency} with #{@applicant.freelancer.name}, all other applications for this"
               = " job will automatically be declined, and receive a general notification informing them the job has been filled. Details of who you've selected will not be shared."
         .modal__accept-quote__content__buttons
           .accept_button.btn.btn-primary
@@ -88,7 +88,7 @@
       .modal__decline-quote__content
         .modal__decline-quote__content__header
           .modal__decline-quote__content__header__text
-            = "Decline Quote of #{number_to_currency(@quotes.where({applicant_id: @applicant.id}).first.amount, precision: 0)}"
+            = "Decline Quote of #{@quotes.where({applicant_id: @applicant.id}).first.amount}"
         .modal__decline-quote__content__body
           b
             | YOU HAVE DECIDED TO DECLINE THIS QUOTE

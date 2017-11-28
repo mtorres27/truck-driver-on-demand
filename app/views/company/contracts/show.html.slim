@@ -19,7 +19,7 @@
             .show_value= @job.scope_of_work || "Not Specified"
             - if !@job.scope_file.nil?
               .show_value
-                | Attachment: 
+                | Attachment:
                 a href=@job.scope_file_url
                   = @job.scope_file.original_filename
 
@@ -37,7 +37,7 @@
                 label= t(:contract_price, scope: [:form, :labels, :job])
                 .show-budget
                   - if @job.budget
-                    = number_to_currency(@job.accepted_quote.amount, precision: 0)
+                    = @job.accepted_quote.amount
                     br
                     - if @job.currency.nil?
                       |
@@ -46,9 +46,9 @@
                   - else
                     | Not Specified
                   - if @job.accepted_quote.pay_type == "hourly"
-                    = "(#{@job.accepted_quote.number_of_hours} hours @ #{number_to_currency(@job.accepted_quote.hourly_rate, precision: 0)}/hour)"
+                    = "(#{@job.accepted_quote.number_of_hours} hours @ #{@job.accepted_quote.hourly_rate}/hour)"
                   - elsif @job.accepted_quote.pay_type == "daily"
-                    = "(#{@job.accepted_quote.number_of_days} days @ #{number_to_currency(@job.accepted_quote.daily_rate, precision: 0)}/day)"
+                    = "(#{@job.accepted_quote.number_of_days} days @ #{@job.accepted_quote.daily_rate}/day)"
               .col-xs-12.col-lg-6
                 label= t(:pay_type, scope: [:form, :labels, :job])
                 .show_value_em= @job.accepted_quote.pay_type&.text || "Not Specified"
@@ -77,7 +77,7 @@
                     tr
                       td= payment.description
                       td.text-right
-                        = number_to_currency(payment.amount, precision: 0)
+                        = payment.amount
                         br
                         - if @job.currency.nil?
                           |

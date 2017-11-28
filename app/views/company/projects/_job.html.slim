@@ -3,7 +3,7 @@
     = job_state_label(job)
     .job_title= job.title
     .job_cell.job_cell_top_left
-      .job_value= number_to_currency(job.budget || 0, precision: 0)
+      .job_value= job.budget || 0
       .job_key Budget
     .job_cell.job_cell_top_right
       - if job.created?
@@ -13,7 +13,7 @@
         .job_value= job.applicants.size
         .job_key Applicants
       - else
-        .job_value= number_to_currency(job.contract_price || 0, precision: 0) + " " + job.currency
+        .job_value= job.contract_price.to_s || 0 + " " + job.currency
         .job_key Work Order
     .job_cell.job_cell_bot_left
       - if job.created?
@@ -23,7 +23,7 @@
         .job_value= job.quotes.size
         .job_key Quotes
       - else
-        .job_value= number_to_currency(job.payments_sum_paid || 0, precision: 0) + " " + job.currency
+        .job_value= job.contract_price.to_s || 0 + " " + job.currency
         .job_key Paid
     .job_cell.job_cell_bot_right
       - if job.created?
