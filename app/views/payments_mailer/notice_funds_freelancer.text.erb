@@ -1,15 +1,15 @@
-Hi <%= @freelancer.name %>, 
+Hi <%= @freelancer.name %>,
 
 <%= @company.name %> has funded the following job.:
-<a href="<%= root_url %>company/jobs/<%= @job.id %>"><%= @job.title %></a> 
+<a href="<%= root_url %>company/jobs/<%= @job.id %>"><%= @job.title %></a>
 
-The total funds of (INSERT TOTAL FUNDS) are now available and will be held in trust for a period of up to 90 days.  Now that the job has been funded by <%= @company.name %> you will receive payouts based on the completion of the milestones established in the work order. 
+The total funds of <%= @job.accepted_quote.total_amount %> are now available and will be held in trust for a period of up to 90 days.  Now that the job has been funded by <%= @company.name %> you will receive payouts based on the completion of the milestones established in the work order.
 
-Once you complete a milestone simply click the [Request Payout] button and a notification will be sent to the AV Company to review and approve the payout.  From there you can just sit back and wait for the funds to appear in your connected bank account!  
+Once you complete a milestone simply click the [Request Payout] button and a notification will be sent to the AV Company to review and approve the payout.  From there you can just sit back and wait for the funds to appear in your connected bank account!
 
-Don’t forget to update your AV Company using the progress tool.  Daily reports and pictures provide a backup of the work performed and makes it easy for <%= @company.name %> to approve your payouts faster.... Which means you get paid quicker!  
+Don’t forget to update your AV Company using the progress tool.  Daily reports and pictures provide a backup of the work performed and makes it easy for <%= @company.name %> to approve your payouts faster.... Which means you get paid quicker!
 
-To view a full breakdown of payouts specific to this job please click <a href="<%= root_url %>company/jobs/<%= @job.id %>">here</a>.
+To view a full breakdown of payouts specific to this job please click <a href="<%= root_url %>company/jobs/<%= @job.id %>/payments">here</a>.
 
 Thanks, AV Junction
 For additional information please visit our <a href="https://www.avjunction.com/payments">Knowledge Center</a>

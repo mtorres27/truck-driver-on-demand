@@ -2,8 +2,19 @@
   .job-header__meta-1
     = job_state_label(job)
     .job-header__budget-group
-      .job-header__budget #{job.accepted_quote ? job.accepted_quote.amount.floor : job.budget} #{job.currency.upcase}
-      .job-header__budget-label #{job.accepted_quote ? 'CONTRACT' : 'Budget'} PRICE
+      - if job.accepted_quote && job.applicable_sales_tax.present?
+        .job-header__budget= job.accepted_quote.amount.floor
+        span<>= job.currency.upcase if job.currency.upcase
+        .job-header__budget-label + #{job.accepted_quote.amount * (job.applicable_sales_tax/100)} TAX
+      - elsif job.accepted_quote
+        .job-header__budget= job.accepted_quote.amount.floor
+        span<>= job.currency.upcase if job.currency.upcase
+        .job-header__budget-label CONTRACT PRICE
+      - else
+        .job-header__budget= job.budget
+        span<>= job.currency.upcase if job.currency.upcase
+        .job-header__budget-label Budget PRICE
+
   h4.heading-h4
     a href=company_projects_path
       | #{job.project&.name}
@@ -22,10 +33,7 @@
       a href=company_job_path(job)
         | Job Details
     .tab-bar__item class=("tab-bar__item--active" if request.path.index(/applicant/)) class=("tab-bar__item--inactive" if !job.published?)
-      - if job.published?
-        a href=company_job_applicants_path(job)
-          | Applicants
-      - else
+      a href=company_job_applicants_path(job)
         | Applicants
     .tab-bar__item class=("tab-bar__item--active" if request.path.index(/message/)) class=("tab-bar__item--inactive" if job.pre_contracted?)
       - if !job.freelancer

@@ -66,6 +66,9 @@ class Company::ContractsController < Company::BaseController
   end
 
   def update
+
+    redirect_to company_job_path(@job), notice: "You can't edit the work order after it's accepted by the freelancer!" if @job.contracted?
+
     if params.dig(:job, :send_contract) == "true"
       @send_contract = true
     else
@@ -87,7 +90,7 @@ class Company::ContractsController < Company::BaseController
         @job.contract_sent = true
         @job.save
       end
-      redirect_to company_job_path(@job), notice: "Work Order updated."
+      redirect_to company_job_path(@job), notice: "Work Order updated." if !@job.contracted?
     else
       build_payments
 

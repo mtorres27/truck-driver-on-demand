@@ -12,7 +12,7 @@
     .job-details__right
       .job-details__title
         | Budget
-      .show-budget= number_to_currency(@job.budget, precision: 0) + " " + @job.currency
+      .show-budget= number_to_currency(@job.budget, precision: 0) + " " + @job.currency.upcase
 
     .job-details__left
       .job-details__title
