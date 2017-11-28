@@ -94,9 +94,8 @@
 
   - if @have_applied == false && @connector.verified?
     .freelancer-job__apply
-      a.btn-primary--acticve href="#" id="apply-for-job"
-        div
-          | Apply for this job
+      a.btn-primary--active href="#" id="apply-for-job"
+        | Apply for this job
 
 = simple_form_for "freelancer_job_apply_path", html: { multipart: true }  do |f|
   = f.hidden_field :job, value: @job.id

@@ -1,122 +1,115 @@
 = render partial: "company/shared/job_nav", locals: { job: @job }
 
 - content_for :secondary do
-  .result-wrapper
-    .result-header
-      .result-header__text
-        | Edit Work Order
+  .action-bar
+    h2.heading-h2.heading-h2--action-bar Edit Work Order
+    .action-bar__actions
 
-    .result-content
-      = simple_form_for(@job, url: company_job_work_order_path(@job)) do |f|
-        .job-details
-          .job-details__work-order
-            .job-details__work-order__content
-              = render partial: "company/shared/contract_meta", locals: { job: @job }
-              .job-details__title
-                | Project Reference
-              a.btn.btn-tertiary.job-details__link href=company_projects_path()
-                = project_reference(@job.project)
+  = simple_form_for(@job, url: company_job_work_order_path(@job), class: "jokers") do |f|
+    .work-order__summary
+      = render partial: "company/shared/contract_meta", locals: { job: @job }
+      h3.heading-h3
+        | Project Reference
+      p
+        a href=company_projects_path()
+          = project_reference(@job.project)
 
-              .job-details__title
-                | Job Title
-              a.btn.btn-tertiary.job-details__link href=company_jobs_path(@job)
-                = @job.title
+      h3.heading-h3
+        | Job Title
+      p
+        a href=company_jobs_path(@job)
+          = @job.title
 
-              #contract-extra-data.job-details--collapsed
-                .job-details__title
-                  | Summary
-                p
-                  p= @job.summary
+      #contract-extra-data.job-details--collapsed
+        h3.heading-h3
+          | Summary
+        p= @job.summary
 
-              .job-details__expand onclick="toggleExpandedJobDetails()"
-                .btn.btn-tertiary.job-details__expand-btn
-                  | expand job details
+      .job-details__expand onclick="toggleExpandedJobDetails()"
+        .btn.btn-tertiary.job-details__expand-btn
+          | expand job details
 
-          .job-details
-            .job-details__title
-              | Project Type
-            = f.input :pay_type, required: true, prompt: "Select", label: false
+    .form__text-field-group
+      .form__field-label
+        | Project Type
+      = f.input :pay_type, required: true, prompt: "Select", label: false, input_html: { class: 'form__select-field' }
 
-          .job-details
-            .job-details__title
-              | Job Work Order Amount
-            .job-details__price
-              - if f.object and f.object.accepted_quote
-                = f.input :contract_price, required: true, input_html: { value: number_with_precision(f.object.accepted_quote.amount, precision: 0) }, label: false, disabled: true
-              - else
-                = f.input :contract_price, required: true, label: false, disabled: true
-            .job-details__price-status
-              = ""
+    .form__text-field-group
+      .form__field-label
+        | Job Work Order Amount
+      - if f.object and f.object.accepted_quote
+        = f.input :contract_price, required: true, input_html: { value: number_with_precision(f.object.accepted_quote.amount, precision: 0, class: 'form__text-field') }, label: false, disabled: true
+      - else
+        = f.input :contract_price, required: true, label: false, disabled: true, input_html: { class: 'form__text-field' }
+      .job-details__price-status
+        = ""
 
-          .job-details
-            .job-details__date
-              .job-details__title
-                | Applicable Sales Tax (%)
-              = f.input :applicable_sales_tax, html5: true, label: false
+    .form__text-field-group
+      .form__field-label
+        | Applicable Sales Tax (%)
+      = f.input :applicable_sales_tax, html5: true, label: false, input_html: { class: 'form__text-field'}
+      .form__field-helper-text
+        | If the freelancer collects sales tax, be sure to ask them what amount of tax this is. The rate of tax entered here will be reflected in your invoices. 
 
-          .job-details
-            .job-details__date
-              .job-details__title
-                | Start Date (Estimated)
-              = f.input :starts_on, html5: true, label: false
+    .form__text-field-multi
+      .form__text-field-group
+        .form__field-label
+          | Start Date (Estimated)
+        = f.input :starts_on, html5: true, label: false, input_html: { class: 'form__text-field'}
+      .form__text-field-group
+        .form__field-label
+          | End date (estimated)
+        = f.input :ends_on, html5: true, required: true, label: false, input_html: { class: 'form__text-field'}
 
-            .job-details__date
-              .job-details__title
-                | End date (estimated)
-              = f.input :ends_on, html5: true, required: true, label: false
-
-          .job-details
-            .job-details__title
-              | Acceptable Working Hours
-            = f.input :working_time, required: true, prompt: "Select", label: false
+    .form__text-field-group
+      .form__field-label
+        | Acceptable Working Hours
+      = f.input :working_time, required: true, prompt: "Select", label: false
 
 
 
-          .job-details
-            #payments
-              .job-details__title
-                | Payment Schedule
-              = f.simple_fields_for :payments do |payment_form|
-                = render "payment_fields", f: payment_form
-              .links
-                = link_to_add_association 'Add Schedule Item', f, :payments, class: "btn btn-default"
+    .form__text-field-group
+      #payments
+        .form__field-label
+          | Payment Schedule
+        = f.simple_fields_for :payments do |payment_form|
+          = render "payment_fields", f: payment_form
+        .links
+          = link_to_add_association 'Add Schedule Item', f, :payments, class: "btn btn-default"
 
-          .job-details
-            .job-details__title
-              | Reporting Requirements
-            = f.input :reporting_frequency, as: :radio_buttons, item_wrapper_class: "inline", label: false
-            = f.input :require_photos_on_updates
-            = f.input :require_checkin
-            = f.input :require_uniform
+    .form__text-field-group
+      .form__field-label
+        | Reporting Requirements
+      = f.input :reporting_frequency, as: :radio_buttons, item_wrapper_class: "inline", label: false
+      = f.input :require_photos_on_updates
+      = f.input :require_checkin
+      = f.input :require_uniform
 
-          .job-details
-            #featured_projects
-              .job-details__title
-                | Addenda
-              = f.simple_fields_for :attachments do |attachment_form|
-                = render "attachment_fields", f: attachment_form
-              .links.add-new-addendum
-                = link_to_add_association 'Add Addendum', f, :attachments, class: "btn btn-default"
+    .job-details
+      #featured_projects
+        .form__field-label
+          | Addenda
+        = f.simple_fields_for :attachments do |attachment_form|
+          = render "attachment_fields", f: attachment_form
+        .links.add-new-addendum
+          = link_to_add_association 'Add Addendum', f, :attachments, class: "btn btn-default"
 
-          .job-details
-            .job-details__title
-              | Freelancer Agreements
+    .form__field-label
+      | Freelancer Agreements
+    p
+      a href="/freelance-service-agreement?job=#{@job.id}#{random_append}" target="_blank"
+        | Freelance Service Agreement
+    p
+      | AV Junction provides a template freelance service agreement for you to use at your sole discretion.  This template agreement does not bind AV Junction Inc to this work order.  This work order is between you and the hired AV freelancer.  If you would like to opt out of using this template please check the box.
+      = f.input :opt_out_of_freelance_service_agreement, label: "Opt out of Freelance Service Agreement"
 
-            a.btn.contract-edit__btn href="/freelance-service-agreement?job=#{@job.id}#{random_append}" target="_blank"
-              | Freelance Service Agreement
-            br
-
-            p
-              | AV Junction provides a template freelance service agreement for you to use at your sole discretion.  This template agreement does not bind AV Junction Inc to this work order.  This work order is between you and the hired AV freelancer.  If you would like to opt out of using this template please check the box.
-              = f.input :opt_out_of_freelance_service_agreement, label: "Opt out of Freelance Service Agreement"
-
-        - if !@job.contracted?
-          .form-actions
-            = f.hidden_field :send_contract, value: false
-            div.btn.btn-primary onclick="sendContract()"
-              | Send Work Order
-            div.btn.btn-secondary onclick="saveDraft()"
-              | Save Draft
+    - if @job.contracted?
+      .form-actions
+        = f.hidden_field :send_contract, value: false
+        .btn-primary--active onclick="sendContract()"
+          | Send Work Order
+        .btn-ghost--active onclick="saveDraft()"
+          | Save Draft
 
 
 javascript:
