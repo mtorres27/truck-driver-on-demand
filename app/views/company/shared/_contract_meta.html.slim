@@ -1,9 +1,9 @@
 - if !job.freelancer.nil?
-  .job-details__work-order__freelancer-meta
+  h3.heading-h3
     | Freelancer
-    br
-    a href="/company/freelancers/#{job.freelancer.id}"
-      = job.freelancer.name
+    p
+      a href="/company/freelancers/#{job.freelancer.id}"
+        = job.freelancer.name
     
 
 
