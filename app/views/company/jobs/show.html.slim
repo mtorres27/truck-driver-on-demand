@@ -48,9 +48,12 @@
             | Work order sent to freelancer; awaiting response.
           - elsif @job.contracted?
             | Work order determined
-        - if @job.freelancer
+        - if @job.freelancer && @job.pre_contracted?
           a.btn-primary.job-details__work-order__btn href=edit_company_job_work_order_path(@job)
             | Create Work Order
+        - elsif @job.freelancer && @job.contracted?
+          a.btn-primary.job-details__work-order__btn href=company_job_work_order_path(@job)
+            | View Work Order
         - else
           div.btn-primary.job-details__work-order__btn--disabled
             | Create Work Order
