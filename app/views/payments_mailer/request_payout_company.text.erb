@@ -1,12 +1,12 @@
-Hi <%= @company.name %>, 
+Hi <%= @company.name %>,
 
 <%= @freelancer.name %> has requested a payout for the following job and milestone:
-<a href="<%= root_url %>company/jobs/<%= @job.id %>"><%= @job.title %></a> 
-<a href="<%= root_url %>company/jobs/<%= @job.id %>/payments"><%= @job.payments.order(:created_at) %></a> 
+<a href="<%= root_url %>company/jobs/<%= @job.id %>"><%= @job.title %></a>
+<a href="<%= root_url %>company/jobs/<%= @job.id %>/payments"><%= @payment.description %></a>
 
-Please review the progress tab to ensure the milestone has been completed. If further work is required to complete the milestone please reach out to our Freelancer using the progress tab. 
+Please review the progress tab to ensure the milestone has been completed. If further work is required to complete the milestone please reach out to our Freelancer using the progress tab.
 
-To view a full breakdown of payouts specific to this job please click here. 
+To view a full breakdown of payouts specific to this job please click here.
 
 Thanks, AV Junction
 For additional information please visit our <a href="https://www.avjunction.com/payments">Knowledge Center</a>.

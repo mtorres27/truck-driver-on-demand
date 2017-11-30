@@ -35,6 +35,7 @@ class Company::ProfilesController < Company::BaseController
       :province,
       :area,
       :address,
+      :sales_tax_number,
       :avatar,
       :header_color,
       :profile_header,

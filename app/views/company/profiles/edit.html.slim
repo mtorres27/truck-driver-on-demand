@@ -39,6 +39,10 @@
           = f.input :name, required: true, label: false, placeholder: "Enter a Company Name."
         .company-profile__item
           .company-profile__title
+            | Salex Tax No.
+          = f.input :sales_tax_number, required: false, label: false, placeholder: "Enter the company tax number."
+        .company-profile__item
+          .company-profile__title
             | Contact Name
           = f.input :contact_name, required: true, label: false, placeholder: "Enter your preferred Company Contact Name."
         .company-profile__item

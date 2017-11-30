@@ -32,10 +32,13 @@
     .tab-bar__item class=("tab-bar__item--active" if controller.controller_name == "jobs" or request.path.index(/work_order/))
       a href=company_job_path(job)
         | Job Details
-    .tab-bar__item class=("tab-bar__item--active" if request.path.index(/applicant/)) class=("tab-bar__item--inactive" if !job.published?)
-      a href=company_job_applicants_path(job)
+    .tab-bar__item class=("tab-bar__item--active" if request.path.index(/applicant/)) class=("tab-bar__item--inactive" if job.applicants_count == 0 )
+      - if job.applicants_count > 0
+        a href=company_job_applicants_path(job)
+          | Applicants
+      - else
         | Applicants
-    .tab-bar__item class=("tab-bar__item--active" if request.path.index(/message/)) class=("tab-bar__item--inactive" if job.pre_contracted?)
+    .tab-bar__item class=("tab-bar__item--active" if request.path.index(/message/)) class=("tab-bar__item--inactive" if !job.freelancer )
       - if !job.freelancer
         | Progress
       - else

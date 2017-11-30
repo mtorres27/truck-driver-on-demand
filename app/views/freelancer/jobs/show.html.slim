@@ -34,7 +34,7 @@
         p= @job.scope_of_work
       - if !@job.scope_file.nil?
         p
-          | Click to download: 
+          | Click to download:
           a href=@job.scope_file_url target="_blank"
             = @job.scope_file.original_filename
 
@@ -83,7 +83,7 @@
             = "N/A"
           - else
             = t("enumerize.job.freelancer_type.#{@job.freelancer_type}")
-      
+
       - if @job.budget_is_public
         .freelancer-job__summary-item
           h6.freelancer-job__h6 Job Budget
