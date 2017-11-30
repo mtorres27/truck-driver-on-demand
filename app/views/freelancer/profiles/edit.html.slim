@@ -5,7 +5,7 @@
     .result-header
       .result-header__text
         | Edit Freelancer Profile
-    
+
     .result-content
       = simple_form_for(@freelancer, url: freelancer_profile_path) do |f|
         = f.hidden_field :enforce_profile_edit, value: true
@@ -24,8 +24,8 @@
         .freelancer-profile__item
           .freelancer-profile__title
             | Wallpaper Colour
-          = f.input :header_color, required: true, label: false, placeholder: "FF6C38" 
-        
+          = f.input :header_color, required: true, label: false, placeholder: "FF6C38"
+
         .freelancer-profile__item
           .freelancer-profile__title
             | Header Source
@@ -37,7 +37,7 @@
           .freelancer-profile__image style="width: 135px; height: 135px; margin: auto"
             = image_tag(@freelancer.avatar_url, id: "freelancer-edit-profile__avatar")
             .freelancer-profile__image-upload onclick="updateProfilePicture()"
-              span class="fa fa-camera" 
+              span class="fa fa-camera"
           = f.file_field :avatar, label: false, :accept => 'image/png,image/gif,image/jpeg', id: "edit-freelancer-profile-avatar", class: "file-input--hidden"
 
 
@@ -59,12 +59,18 @@
         .freelancer-profile__item
           .freelancer-profile__title
             | City
-          = f.input :area, as: :string, required: true, label: false, placeholder: "City"        
+          = f.input :area, as: :string, required: true, label: false, placeholder: "City"
 
         .freelancer-profile__item
           .freelancer-profile__title
             | Country
           = f.input :country, required: true, label: false, prompt: "Select Country"
+
+        .freelancer-profile__item
+          .freelancer-profile__title
+            | Sales Tax No.
+          = f.input :sales_tax_number, required: false, label: false, placeholder: "Sales Tax No."
+
 
         .freelancer-profile__item
           .freelancer-profile__title
@@ -85,7 +91,7 @@
           .freelancer-profile__title
             | Biography
           = f.input :bio, label: false, placeholder: "Write a bio"
-        
+
         .freelancer-profile__item
           .freelancer-profile__title
             | Specialties - Markets
@@ -103,7 +109,7 @@
               .freelancer-profile__checkbox
                 = check_box_tag tag_name, "1", checked
                 = " #{value}"
-        
+
         .freelancer-profile__item
           .freelancer-profile__title
             | Specialties - Skills
@@ -130,7 +136,7 @@
         .freelancer-profile__item
           .freelancer-profile__title
             | Availability
-          
+
           = f.radio_button(:available, true)
           | I am available for work
           br
@@ -156,7 +162,7 @@
           .links.add-new-certificate
             = link_to_add_association 'Add Another', f, :certifications, class: "btn btn-default"
 
-        
+
         p style="height: 20px;"
 
         .form-actions
@@ -239,4 +245,3 @@ javascript:
     ref.click();
   }
 
-  

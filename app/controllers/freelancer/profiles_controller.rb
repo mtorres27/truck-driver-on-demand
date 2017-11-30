@@ -28,14 +28,15 @@ class Freelancer::ProfilesController < Freelancer::BaseController
 
   def freelancer_params
     params.require(:freelancer).permit(
-      :name, 
-      :email, 
+      :name,
+      :email,
       :country,
       :verified,
       :address,
       :area,
       :tagline,
       :bio,
+      :sales_tax_number,
       :years_of_experience,
       :available,
       :verified,

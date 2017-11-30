@@ -11,14 +11,14 @@
     .payments__flexbox
       .tag.tag--success #{(job.payments_sum_paid == job.payments_sum_total) ? 'Job Done' : 'FUNDS AVAILABLE'}
       .payments__total-group
-        .payments__total-amt #{job.gpayments_sum_paid} #{job.currency.upcase}
+        .payments__total-amt #{number_with_precision(job.gpayments_sum_paid, precision: 2)} #{job.currency.upcase}
         .payments__payout-label Total Payouts
     .payments__status You have secured funds for this project. AV Junction will hold these payments on your behalf until each of the milestones listed below are met.
 - payments.each do |payment|
     div class="payments #{ "milestone--inactive" if @accepted_quote.nil? || (@accepted_quote.present? && !@accepted_quote.paid_by_company)}"
       .payments__flexbox
         .payments__title #{payment.description}
-        .payments__amt #{payment.total_amount.present? ? payment.total_amount : payment.amount} #{job.currency ? job.currency.upcase : ''}
+        .payments__amt #{payment.total_amount.present? ? number_with_precision(payment.total_amount, precision: 2) : number_with_precision(payment.amount, precision: 2)} #{job.currency ? job.currency.upcase : ''}
       .payments__flexbox
         - if payment.paid_on.present?
           .payments__date Paid on #{payment.paid_on}

@@ -6,13 +6,15 @@
     .invoice__meta-4
       div= @job.freelancer&.name
       div= @job.freelancer&.formatted_address
+      div= @job.freelancer&.sales_tax_number
 
   .invoice__meta-2
     .invoice__meta-1
       .invoice__text--right Company:
       .invoice__meta-4
-        / div= current_company.name
-        / div= current_company.address
+        div= @job.company.name
+        div= @job.company.address
+        div= @job.company.sales_tax_number
         / div 293 Rhodes DR.
         / div Orlando, FL 32003
     .invoice__meta-1
@@ -39,7 +41,7 @@
       .invoice__table-text.invoice__table-text--left= @payment.description
       .invoice__table-text.invoice__table-text--right= (@payment.amount).to_s + " " + @job.currency.upcase
     .invoice__table-row
-      .invoice__table-text.invoice__table-text--left AVJ Fees
+      .invoice__table-text.invoice__table-text--left AVJ Fees (#{Rails.configuration.avj_sales_tax_number})
       .invoice__table-text.invoice__table-text--right= (@payment.avj_fees).to_s + " " + @job.currency.upcase
     .invoice__table-row
       .invoice__table-text.invoice__table-text--left Sales Tax @ #{@job.applicable_sales_tax}%

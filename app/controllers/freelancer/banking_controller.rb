@@ -2,7 +2,7 @@ class Freelancer::BankingController < Freelancer::BaseController
   DOC_TYPES = ['image/jpeg', 'image/jpg', 'image/png', 'application/pdf']
   def index
     @connector = StripeAccount.new(current_freelancer)
-    # logger.debug @connector.account.inspect
+    logger.debug @connector.account.inspect
     # logger.debug 321
   end
 

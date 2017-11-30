@@ -36,7 +36,7 @@ class Company::JobPaymentsController < Company::BaseController
       @payment.mark_as_paid!
 
       # Send notice email
-      PaymentsMailer.notice_payout_freelancer(current_company, freelancer, @job).deliver
+      PaymentsMailer.notice_payout_freelancer(current_company, freelancer, @job, @payment).deliver
 
       if @job.payments.outstanding.empty?
         @job.update(state: :completed)
