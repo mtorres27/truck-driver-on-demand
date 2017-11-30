@@ -92,6 +92,8 @@ Rails.application.configure do
   # AVJ fees
   config.avj_fees = 0.08
 
+  config.avj_sales_tax_number = 987654321
+
   # Use a different logger for distributed setups.
   # require 'syslog/logger'
   # config.logger = ActiveSupport::TaggedLogging.new(Syslog::Logger.new 'app-name')

@@ -50,6 +50,8 @@ Rails.application.configure do
   # AVJ fees
   config.avj_fees = 0.08
 
+  config.avj_sales_tax_number = 987654321
+
   # Raises error for missing translations
   # config.action_view.raise_on_missing_translations = true
 
