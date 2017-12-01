@@ -124,7 +124,6 @@ class Company < ApplicationRecord
 
   after_create :add_to_hubspot
 
-
   def add_to_hubspot
     api_key = "5c7ad391-2bfe-4d11-9ba3-82b5622212ba"
     url = "https://api.hubapi.com/contacts/v1/contact/createOrUpdate/email/#{email}/?hapikey=#{api_key}"
@@ -163,6 +162,13 @@ class Company < ApplicationRecord
 
     req.body = data.to_json
     res = http.start { |http| http.request req }
+  end
+
+  before_create :start_trial
+
+  def start_trial
+    self.subscription_status = "trialing"
+    self.billing_period_ends_at = (Time.now + 3.months).to_datetime
   end
 
   pg_search_scope :search, against: {
