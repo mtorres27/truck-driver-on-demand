@@ -1,7 +1,7 @@
 .row
   .col-sm-8.col-xs-12
     h1 Job Postings
-  - if current_company.stripe_customer_id.present? && ['trialing', 'active'].include?(current_company.subscription_status)
+  - if ['trialing', 'active'].include?(current_company.subscription_status)
     .col-sm-4.col-xs-12.text-right.post_new_job
       = link_to "Post a New Job", new_company_job_path, class: "btn btn-primary", role: "button"
 
