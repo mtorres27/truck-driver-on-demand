@@ -39,10 +39,10 @@
       .invoice__table-text.invoice__table-text--right Amount
     .invoice__table-row
       .invoice__table-text.invoice__table-text--left= @payment.description
-      .invoice__table-text.invoice__table-text--right= (@payment.amount).to_s + " " + @job.currency.upcase
+      .invoice__table-text.invoice__table-text--right= number_with_precision(@payment.amount, precision: 2).to_s + " " + @job.currency.upcase
     .invoice__table-row
       .invoice__table-text.invoice__table-text--left Sales Tax @ #{@job.applicable_sales_tax}%
-      .invoice__table-text.invoice__table-text--right= (@payment.tax_amount).to_s + " " + @job.currency.upcase
+      .invoice__table-text.invoice__table-text--right= number_with_precision(@payment.tax_amount, precision: 2).to_s + " " + @job.currency.upcase
     .invoice__table-row.invoice__table-row--total
       .invoice__table-text.invoice__table-text--left Total Payout
-      .invoice__table-text.invoice__table-text--right= (@payment.total_amount).to_s + " " + @job.currency.upcase
+      .invoice__table-text.invoice__table-text--right= number_with_precision(@payment.total_amount, precision: 2).to_s + " " + @job.currency.upcase
