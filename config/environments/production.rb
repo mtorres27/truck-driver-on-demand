@@ -92,7 +92,7 @@ Rails.application.configure do
   # AVJ fees
   config.avj_fees = 0.08
 
-  config.avj_sales_tax_number = 987654321
+  config.avj_sales_tax_number = "72393 3693 RC0001"
 
   # Use a different logger for distributed setups.
   # require 'syslog/logger'
