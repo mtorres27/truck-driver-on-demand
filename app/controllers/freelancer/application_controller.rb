@@ -27,7 +27,7 @@ class Freelancer::ApplicationController < Freelancer::BaseController
     @harmonized_items = []
     @harmonized_indices = []
 
-    if @applicant and @applicant.job.applicants.where({state: "accepted"}).first == @applicant
+    if @applicant and @applicant.job.applicants.where({state: "accepted"}).first.id == @applicant.id
       @applicant_accepted = true
     else
       @applicant_accepted = false
