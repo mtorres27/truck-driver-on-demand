@@ -3,7 +3,7 @@
     a href=freelancer_job_path(job)
       | Job Details
   div class=(request.path == "/freelancer/jobs/#{job.id}/application" ? "tab-item--active" : "tab-item--inactive") class=("tab-bar__item--inactive" if !job.published?)
-    - if job.accepted_quote && job.freelancer == @current_freelancer
+    - if job.published?
       a href=freelancer_job_application_index_path(job)
         | Application
     - else
