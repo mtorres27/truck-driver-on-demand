@@ -13,7 +13,7 @@ html
     title= yield(:title) + " – " if content_for?(:title)
 
   body class=(params[:controller]&.gsub("/", "-") || "")
-    .page
+    .page-parent
       = render "shared/nav"
       = render "shared/mobile_nav"
       = render "shared/onboarding"
