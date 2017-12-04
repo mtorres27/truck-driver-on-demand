@@ -17,7 +17,7 @@
                   div
                     a.btn.btn-primary href=freelancer_job_work_order_path(@job)
                       = "view work order #{@job.work_order}"
-                - elsif !@job.contracted?
+                - elsif @job.contracted?
                   p
                     | Unfortunately, you haven't been selected for this job.
 
