@@ -2,7 +2,7 @@
   .freelancer-job__detail-cont
     .freelancer-job__quote-cont
       h3.freelancer-job__h3 What would you like to do?
-      - if @all_quotes.where({state: "accepted"}).length == 0 and @all_quotes.where({state: "declined"}).length == 0
+      - if @all_quotes.where({state: "accepted"}).length == 0
         = render partial: "freelancer/shared/new_quote", locals: { n: @applicant.company.name, type: "quote", quotes: @quotes }
       - else
         .new-message--wrapper
@@ -17,7 +17,7 @@
                   div
                     a.btn.btn-primary href=freelancer_job_work_order_path(@job)
                       = "view work order #{@job.work_order}"
-                - elsif @job.contracted?
+                - else
                   p
                     | Unfortunately, you haven't been selected for this job.
 
