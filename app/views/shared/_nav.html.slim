@@ -1,5 +1,8 @@
 nav#top-nav.navbar.navbar-fixed-top
   .container
+    -if request.path.index('freelancer') == 1
+      .beta-message While in beta, AV Junction is optimized for mobile devices. We are working on making all features desktop friendly as soon as possible.
+  .container
     .navbar-header
       button.navbar-toggle.collapsed type="button" data-toggle="collapse" data-target="#navbar-lg" aria-expanded="false" aria-controls="navbar-lg"
         span.sr-only Toggle navigation
@@ -64,9 +67,6 @@ nav#top-nav.navbar.navbar-fixed-top
             li
               a.mobile-nav__menu__item href=av_companies_freelancer_companies_path data-turbolinks="false"
                 | av companies
-            li
-              a.mobile-nav__menu__item
-                | payments
             li
               a.mobile-nav__menu__item href=freelancer_profile_path data-turbolinks="false"
                 | my profile
