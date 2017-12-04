@@ -21,6 +21,10 @@ class Company::JobsController < Company::BaseController
   end
 
   def create
+    if (!['trialing', 'active'].include?(current_company.subscription_status))
+      flash[:notice] = "You need to subscribe to be able to post new jobs."
+      redirect_to company_projects_path
+    end
     @job = Job.new(job_params)
     @job.company = current_company
 

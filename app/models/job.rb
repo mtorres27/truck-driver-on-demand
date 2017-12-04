@@ -208,15 +208,15 @@ class Job < ApplicationRecord
   end
 
   def gpayments_sum_paid
-    payments_sum_paid * (1 + (applicable_sales_tax / 100))
+    payments_sum_paid * (1 + ((applicable_sales_tax||0) / 100))
   end
 
   def gpayments_sum_outstanding
-    payments_sum_outstanding (1 + (applicable_sales_tax / 100))
+    payments_sum_outstanding * (1 + ((applicable_sales_tax||0) / 100))
   end
 
   def gpayments_sum_total
-    payments_sum_total (1 + (applicable_sales_tax / 100))
+    payments_sum_total * (1 + ((applicable_sales_tax||0) / 100))
   end
 
   private

@@ -56,6 +56,18 @@ class Project < ApplicationRecord
     jobs.sum { |job| job.payments_sum_total || 0 }
   end
 
+  def gpayments_sum_paid
+    jobs.sum { |job| job.gpayments_sum_paid || 0 }
+  end
+
+  def gpayments_sum_oustanding
+    jobs.sum { |job| job.gpayments_sum_outstanding || 0 }
+  end
+
+  def gpayments_sum_total
+    jobs.sum { |job| job.gpayments_sum_total || 0 }
+  end
+
   scope :open, -> { where(closed: false) }
   scope :closed, -> { where(closed: true) }
 end

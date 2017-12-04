@@ -3,15 +3,15 @@
     = job_state_label(job)
     .job-header__budget-group
       - if job.accepted_quote && job.applicable_sales_tax.present?
-        .job-header__budget= job.accepted_quote.amount.floor
+        .job-header__budget= number_with_precision(job.accepted_quote.amount, precision: 2)
         span<>= job.currency.upcase if job.currency.upcase
-        .job-header__budget-label + #{job.accepted_quote.amount * (job.applicable_sales_tax/100)} TAX
+        .job-header__budget-label + #{number_with_precision(job.accepted_quote.amount * (job.applicable_sales_tax/100), precision: 2)} TAX
       - elsif job.accepted_quote
-        .job-header__budget= job.accepted_quote.amount.floor
+        .job-header__budget= number_with_precision(job.accepted_quote.amount, precision: 2)
         span<>= job.currency.upcase if job.currency.upcase
         .job-header__budget-label CONTRACT PRICE
       - else
-        .job-header__budget= job.budget
+        .job-header__budget= number_with_precision(job.budget, precision: 2)
         span<>= job.currency.upcase if job.currency.upcase
         .job-header__budget-label Budget PRICE
 
