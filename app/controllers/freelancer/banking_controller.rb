@@ -64,15 +64,16 @@ class Freelancer::BankingController < Freelancer::BaseController
           value.each do |akey, avalue|
             next if avalue.blank?
             if akey['document']
+              file_ext = File.extname(avalue.original_filename)
               filename = Digest::SHA1.hexdigest(Time.now.to_s)
-              file_path = Rails.root.join('public', 'uploads/stripe', filename)
+              file_path = Rails.root.join('public', 'uploads/stripe', filename+file_ext)
               File.open(file_path, 'wb') do |file|
                 file.write(avalue.read)
               end
               unless `file --b --mime-type #{file_path}`.strip.in?(DOC_TYPES)
                 raise StandardError.new("Wrong file type, accepted file types are [#{DOC_TYPES.join(", ")}]")
               end
-              stripe_upload = stripe_upload(filename)
+              stripe_upload = stripe_upload(filename+file_ext)
               account.legal_entity[key] ||= {}
               account.legal_entity[key][akey] = stripe_upload.id
             else
