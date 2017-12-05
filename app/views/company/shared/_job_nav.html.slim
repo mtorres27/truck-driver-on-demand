@@ -12,7 +12,7 @@
         .job-header__budget-label CONTRACT PRICE
       - else
         .job-header__budget= number_with_precision(job.budget, precision: 2)
-        span<>= job.currency.upcase if job.currency.upcase
+        span<>= job.currency.upcase if job.currency
         .job-header__budget-label Budget PRICE
 
   h4.heading-h4
