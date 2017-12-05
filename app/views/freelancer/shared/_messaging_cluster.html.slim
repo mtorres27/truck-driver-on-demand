@@ -35,13 +35,13 @@
                     - if next_item[:payload].pay_type == "daily"
                       = "(#{nextitem[:payload].number_of_days} days @ #{next_item[:payload].daily_rate} #{@job.currency}/day)"
                     - if next_item[:payload].amount <= @job.budget and next_item[:payload].state != "declined"
-                      .freelancer-job__msg-price= number_to_currency(next_item[:payload].amount, precision: 0)
+                      .freelancer-job__msg-price= number_to_currency(next_item[:payload].amount, precision: 0) + " " + @job.currency
                     - elsif next_item[:payload].amount <= @job.budget and next_item[:payload].state == "declined"
-                      .freelancer-job__msg-price.rejected= number_to_currency(next_item[:payload].amount, precision: 0)
+                      .freelancer-job__msg-price.rejected= number_to_currency(next_item[:payload].amount, precision: 0) + " " + @job.currency
                     - elsif next_item[:payload].amount > @job.budget and next_item[:payload].state != "declined"
-                      .freelancer-job__msg-price.overbudget2= number_to_currency(next_item[:payload].amount, precision: 0)
+                      .freelancer-job__msg-price.overbudget2= number_to_currency(next_item[:payload].amount, precision: 0) + " " + @job.currency
                     - elsif next_item[:payload].amount > @job.budget and next_item[:payload].state == "declined"
-                      .freelancer-job__msg-price.overbudget2.rejected= number_to_currency(next_item[:payload].amount, precision: 0) + " " + job.currency
+                      .freelancer-job__msg-price.overbudget2.rejected= number_to_currency(next_item[:payload].amount, precision: 0) + " " + @job.currency
                 .freelancer-job__msg-user-name= item[:payload].authorable.name
                 .freelancer-job__msg-created-at= "#{time_ago_in_words(item[:payload].created_at)} ago"
                 p.freelancer-job__msg-text= item[:payload].body
