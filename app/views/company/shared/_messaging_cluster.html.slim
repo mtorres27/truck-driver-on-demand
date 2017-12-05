@@ -59,6 +59,10 @@
                     .quote_over-budget= "Over Budget"
                   - elsif item[:payload].fixed? && item[:payload].amount < @job.budget
                     .quote_under-budget= "Under Budget"
+                  - elsif item[:payload].amount < @job.budget
+                    .quote_under-budget= "Under Budget"
+                  - elsif item[:payload].amount < @job.budget
+                    .quote_over-budget= "Over Budget"
 
   - if @quotes.length > 0
     .modal__accept-quote
