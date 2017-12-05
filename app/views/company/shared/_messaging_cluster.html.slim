@@ -44,7 +44,7 @@
             .media
               .media-body
                 div.quote_amount class=("quote_amount--declined" if item[:payload].state == "declined")
-                  = (item[:payload].amount).to_s + " " + job.currency
+                  = number_to_currency(item[:payload].amount, precision: 2).to_s + " " + job.currency
                 .quote_pay_type= item[:payload].pay_type.text
                 - if item[:payload].pay_type == "hourly"
                   = "(#{item[:payload].number_of_hours} hours @ #{item[:payload].hourly_rate} #{job.currency}/hour)"
