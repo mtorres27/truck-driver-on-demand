@@ -2,5 +2,5 @@ div
   .form__text-field-multi
     = f.input :description, label: false, placeholder: "Description"
     = f.hidden_field :company_id, value: @job.company.id
-    = f.input :amount, label: false, placeholder: "Amount", input_html: { value: number_with_precision(f.object.amount, precision: 0) }
+    = f.input :amount, label: false, placeholder: "Amount", input_html: { value: number_with_precision(f.object.amount, precision: 2) }
     = link_to_remove_association "<span class='zmdi zmdi-close-circle zmdi-hc-lg'>".html_safe, f, { onClick: "hide_remove_association(this)"}, class: "btn btn-default"

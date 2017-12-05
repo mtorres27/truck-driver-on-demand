@@ -88,7 +88,7 @@
         .freelancer-job__summary-item
           h6.freelancer-job__h6 Job Budget
           div
-            = number_to_currency(@job.budget, precision: 0) + " "
+            = number_to_currency(@job.budget, precision: 2) + " "
             - if @job.currency
               = @job.currency.upcase
 

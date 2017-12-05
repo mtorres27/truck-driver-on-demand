@@ -4,7 +4,7 @@ h2
   = link_to @project.company.name, admin_company_path(@project.company)
 
 p= "External Project ID: #{@project.external_project_id}"
-p= "Budget #{number_to_currency(@project.budget, precision: 0)}"
+p= "Budget #{number_to_currency(@project.budget, precision: 2)}"
 p= "Starts On: #{@project.starts_on}"
 p= "Duration: #{@project.duration}"
 p= "Address: #{@project.address}"
