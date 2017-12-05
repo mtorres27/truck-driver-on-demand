@@ -28,7 +28,7 @@ class Company::JobPaymentsController < Company::BaseController
       # logger.debug (@payment.total_amount - @payment.avj_fees)
       money = @payment.total_amount - @payment.avj_fees
       Stripe::Payout.create({
-        amount: money * 100,
+        amount: (money * 100).floor,
         currency: @job.currency
       },{
         stripe_account: freelancer.stripe_account_id
