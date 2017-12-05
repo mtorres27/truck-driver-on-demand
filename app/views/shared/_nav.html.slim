@@ -2,6 +2,8 @@ nav#top-nav.navbar.navbar-fixed-top
   .container
     -if request.path.index('freelancer') == 1
       .beta-message While in beta, AV Junction is optimized for mobile devices. We are working on making all features desktop friendly as soon as possible.
+    -if request.path.index('company') == 1
+      .beta-message While in beta, AV Junction is optimized for desktop devices. We are working on making all features mobile friendly as soon as possible.
   .container
     .navbar-header
       button.navbar-toggle.collapsed type="button" data-toggle="collapse" data-target="#navbar-lg" aria-expanded="false" aria-controls="navbar-lg"
