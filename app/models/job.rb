@@ -149,6 +149,10 @@ class Job < ApplicationRecord
     %w(created published quoted).include?(state)
   end
 
+  def is_published?
+    state != :created
+  end
+
   def pre_contracted?
     pre_negotiated? || negotiated?
   end

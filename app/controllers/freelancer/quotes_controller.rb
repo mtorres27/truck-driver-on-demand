@@ -22,12 +22,7 @@ class Freelancer::QuotesController < Freelancer::BaseController
           quote.save
         end
 
-        if @quotes.count > 0
-          @new_quote = @quotes.last.dup
-        else
-          @new_quote = Quote.new
-        end
-        
+        @new_quote = Quote.new
         @new_quote.author_type = "freelancer"
         
         if params[:message][:counter_type] == "fixed"
@@ -43,6 +38,7 @@ class Freelancer::QuotesController < Freelancer::BaseController
         end
 
         @new_quote.pay_type = params[:message][:counter_type]
+        @new_quote.attachment = params[:message][:attachment]
         @new_quote.state = "pending"
         @new_quote.save
         
