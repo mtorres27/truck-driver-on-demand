@@ -38,7 +38,7 @@
       .form__field-label
         | Job Work Order Amount
       - if f.object and f.object.accepted_quote
-        = f.input :contract_price, required: true, input_html: { value: number_with_precision(f.object.accepted_quote.amount, precision: 0, class: 'form__text-field') }, label: false, disabled: true
+        = f.input :contract_price, required: true, input_html: { value: number_with_precision(f.object.accepted_quote.amount, precision: 2, class: 'form__text-field') }, label: false, disabled: true
       - else
         = f.input :contract_price, required: true, label: false, disabled: true, input_html: { class: 'form__text-field' }
       .job-details__price-status
