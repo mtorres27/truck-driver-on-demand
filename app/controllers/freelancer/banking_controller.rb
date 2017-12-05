@@ -21,7 +21,9 @@ class Freelancer::BankingController < Freelancer::BaseController
       params[:account][type][:legal_entity].each do |key, value|
         if [ :address, :dob, :personal_address, :verification ].include? key.to_sym
           value.each do |akey, avalue|
-            flash[:error] = 'Please fill all the fields' if avalue.nil? || (!akey['document'] && avalue.empty?)
+            flash[:error] = 'Please fill all the fields' if avalue.nil? || avalue.empty?
+            logger.debug akey + "="
+            logger.debug avalue.inspect
             @post_data['legal_entity.'+key+'.'+akey] ||= {}
             @post_data['legal_entity.'+key+'.'+akey] = avalue unless akey['document']
           end
