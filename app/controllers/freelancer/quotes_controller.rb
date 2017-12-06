@@ -22,7 +22,7 @@ class Freelancer::QuotesController < Freelancer::BaseController
           quote.save
         end
 
-        @new_quote = Quote.new
+        @new_quote = Quote.new(quote_params)
         @new_quote.author_type = "freelancer"
         
         if params[:message][:counter_type] == "fixed"
@@ -137,5 +137,9 @@ class Freelancer::QuotesController < Freelancer::BaseController
 
     def message_params
       params.require(:message).permit(:body, :attachment)
+    end
+
+    def quote_params
+      params.require(:message).permit(:attachment)
     end
 end
