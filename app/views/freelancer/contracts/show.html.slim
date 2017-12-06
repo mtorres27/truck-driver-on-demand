@@ -22,7 +22,7 @@
             - if !@job.scope_file_url.nil?
               .show_value
                 a href= @job.scope_file_url
-                  = @job.scope_file_data[:metadata][:filename]
+                  = @job.scope_file.original_filename
 
           .show_field
             label= t(:addendums, scope: [:form, :labels, :job])
