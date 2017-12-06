@@ -42,7 +42,7 @@ class Company::QuotesController < Company::BaseController
           quote.save
         end
 
-        @new_quote = Quote.new(quote_params)
+        @new_quote = Quote.new
         @new_quote.author_type = "company"
         
         if params[:message][:counter_type] == "fixed"
