@@ -35,7 +35,7 @@
           br
 
       .col-sm-12.col-md-6.col-lg-5
-        = f.input :budget, placeholder: "Enter a budget", input_html: { value: number_with_precision(f.object.budget, precision: 0) }
+        = f.input :budget, placeholder: "Enter a budget", input_html: { value: number_with_precision(f.object.budget, precision: 2) }
         = f.input :currency, required: true, as: :select
         = f.input :job_function, prompt: "Select"
         .row

@@ -17,9 +17,6 @@
         = "Send a message to #{n}"
       a.common__text-field--attach-file.w-inline-block onClick="triggerFileUpload()"
         div#attachment-indicator.common__icon-attach 
-      a.common__text-field--attach-file.w-inline-block onClick="triggerCheckin()"
-        .common__icon-attach.new-message__checkin
-          span class="fa fa-map-marker"
       = f.text_area :body, as: :string, placeholder: "Enter your message", label: false, maxlength: 5000, class: "w-input"
 
     .common__form-action-cont.w-clearfix

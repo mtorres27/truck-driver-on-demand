@@ -1,9 +1,9 @@
 .col-xs-12.col-sm-6.col-md-4.col-lg-3
   a.card.job href=stateful_company_job_path(job)
     = job_state_label(job)
-    .job_title= job.title
+    .job_title= job.title.length > 30 ? "#{job.title[0...30]}..." : job.title
     .job_cell.job_cell_top_left
-      .job_value= job.budget || 0
+      .job_value= number_with_precision(job.budget, precision: 2) || 0
       .job_key Budget
     .job_cell.job_cell_top_right
       - if job.created?
@@ -13,7 +13,7 @@
         .job_value= job.applicants.size
         .job_key Applicants
       - else
-        .job_value= job.contract_price.to_s || 0 + " " + job.currency
+        .job_value= number_with_precision(job.contract_price, precision: 2).to_s || 0 + " " + job.currency
         .job_key Work Order
     .job_cell.job_cell_bot_left
       - if job.created?
@@ -23,7 +23,7 @@
         .job_value= job.quotes.size
         .job_key Quotes
       - else
-        .job_value= job.contract_price.to_s || 0 + " " + job.currency
+        .job_value= number_with_precision(job.gpayments_sum_paid, precision: 2).to_s || 0 + " " + job.currency
         .job_key Paid
     .job_cell.job_cell_bot_right
       - if job.created?

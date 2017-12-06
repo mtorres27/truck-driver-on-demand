@@ -26,8 +26,9 @@ class Company::JobPaymentsController < Company::BaseController
     begin
       raise Exception.new('You didn\'t pay this work order yet!') if !quote.paid_by_company
       # logger.debug (@payment.total_amount - @payment.avj_fees)
+      money = @payment.total_amount - @payment.avj_fees
       Stripe::Payout.create({
-        amount: (@payment.total_amount - @payment.avj_fees).floor,
+        amount: (money * 100).floor,
         currency: @job.currency
       },{
         stripe_account: freelancer.stripe_account_id

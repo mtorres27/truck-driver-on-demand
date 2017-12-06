@@ -17,6 +17,7 @@ class Company::ContractsController < Company::BaseController
         amount: (amount * 100).floor ,
         currency: @job.currency,
         source: params[:stripeToken],
+        statement_descriptor: "AV Junction - (stripe)",
         application_fee: (platform_fees * 100).floor
         }, stripe_account: freelancer.stripe_account_id)
 
