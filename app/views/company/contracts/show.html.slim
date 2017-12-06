@@ -1,106 +1,105 @@
 = render partial: "company/shared/job_nav", locals: { job: @job }
 
 - content_for :secondary do
-  .result-wrapper
-    .result-header
-      a.result-header__link-back href=company_job_path(@job)
+  .action-bar
+    h2.heading-h2.heading-h2--action-bar
+      a href=company_job_path(@job) 
         span class="zmdi zmdi-long-arrow-left"
-      .result-header__text
-        = "Work Order #{@job.work_order}"
-    .result-content
-      .row
-        .col-xs-12.col-md-6
-          .show_field
-            label= t(:summary, scope: [:form, :labels, :job])
-            .show_value= @job.summary
+      = "Work Order #{@job.work_order}"
+  .result-content
+    .row
+      .col-xs-12.col-md-6
+        .show_field
+          label= t(:summary, scope: [:form, :labels, :job])
+          .show_value= @job.summary
 
-          .show_field
-            label= t(:scope_of_work, scope: [:form, :labels, :job])
-            .show_value= @job.scope_of_work || "Not Specified"
-            - if !@job.scope_file.nil?
-              .show_value
-                | Attachment:
-                a href=@job.scope_file_url
-                  = @job.scope_file.original_filename
-
-          .show_field
-            label= t(:addendums, scope: [:form, :labels, :job])
-            .show_value= @job.addendums || "Not Specified"
-
-        .col-xs-12.col-md-6
-          = render partial: "company/shared/contract_meta", locals: { job: @job }
-
-        .col-xs-12.col-md-6
-          .show_field
-            .row
-              .col-xs-12.col-lg-6
-                label= t(:contract_price, scope: [:form, :labels, :job])
-                .show-budget
-                  - if @job.budget
-                    = @job.accepted_quote.amount
-                    br
-                    - if @job.currency.nil?
-                      |
-                    - else
-                      = @job.currency.upcase
-                  - else
-                    | Not Specified
-                  - if @job.accepted_quote.pay_type == "hourly"
-                    = "(#{@job.accepted_quote.number_of_hours} hours @ #{@job.accepted_quote.hourly_rate}/hour)"
-                  - elsif @job.accepted_quote.pay_type == "daily"
-                    = "(#{@job.accepted_quote.number_of_days} days @ #{@job.accepted_quote.daily_rate}/day)"
-              .col-xs-12.col-lg-6
-                label= t(:pay_type, scope: [:form, :labels, :job])
-                .show_value_em= @job.accepted_quote.pay_type&.text || "Not Specified"
-
-          .show_field
-            .row
-              .col-xs-12.col-lg-6
-                label= t(:starts_on, scope: [:form, :labels, :job])
-                .show_value_em= l @job.starts_on
-              .col-xs-12.col-lg-6
-                label= t(:ends_on, scope: [:form, :labels, :job])
-                .show_value_em= @job.ends_on ? l(@job.ends_on) : "Not Specified"
-
-          .show_field
-            .row
-              .col-xs-12.col-lg-6
-                label= t(:working_time, scope: [:form, :labels, :job])
-                .show_value_em= @job.working_time ? t(@job.working_time) : "Not Specified"
-
-          .show_field
-            label Payment Schedule
+        .show_field
+          label= t(:scope_of_work, scope: [:form, :labels, :job])
+          .show_value= @job.scope_of_work || "Not Specified"
+          - if !@job.scope_file.nil?
             .show_value
-              - if @job.payments.any?
-                table.table
-                  - @job.payments.each do |payment|
-                    tr
-                      td= payment.description
-                      td.text-right
-                        = payment.amount
-                        br
-                        - if @job.currency.nil?
-                          |
-                        - else
-                          = @job.currency.upcase
-              - else
-                | None Specified
+              | Attachment:
+              a href=@job.scope_file_url
+                = @job.scope_file.original_filename
 
-          .show_field
-            label= t(:reporting_frequency, scope: [:form, :labels, :job])
-            .show_value= @job.reporting_frequency&.text || "None Specified"
+        .show_field
+          label= t(:addendums, scope: [:form, :labels, :job])
+          .show_value= @job.addendums || "Not Specified"
 
-          .show_field
-            label Reporting Requirements
-            ul
-              - if @job.require_photos_on_updates?
-                li.show_value= t(:require_photos_on_updates, scope: [:form, :labels, :job])
-              - if @job.require_checkin?
-                li.show_value= t(:require_checkin, scope: [:form, :labels, :job])
-              - if @job.require_uniform?
-                li.show_value= t(:require_uniform, scope: [:form, :labels, :job])
+      .col-xs-12.col-md-6
+        = render partial: "company/shared/contract_meta", locals: { job: @job }
 
-      - if @job.pre_contracted?
-        hr
-        .form-actions
-          = link_to "Edit", edit_company_job_work_order_path(@job), class: "btn btn-primary"
+      .col-xs-12.col-md-6
+        .show_field
+          .row
+            .col-xs-12.col-lg-6
+              label= t(:contract_price, scope: [:form, :labels, :job])
+              .show-budget
+                - if @job.budget
+                  = @job.accepted_quote.amount
+                  br
+                  - if @job.currency.nil?
+                    |
+                  - else
+                    = @job.currency.upcase
+                - else
+                  | Not Specified
+                - if @job.accepted_quote.pay_type == "hourly"
+                  = "(#{@job.accepted_quote.number_of_hours} hours @ #{@job.accepted_quote.hourly_rate}/hour)"
+                - elsif @job.accepted_quote.pay_type == "daily"
+                  = "(#{@job.accepted_quote.number_of_days} days @ #{@job.accepted_quote.daily_rate}/day)"
+            .col-xs-12.col-lg-6
+              label= t(:pay_type, scope: [:form, :labels, :job])
+              .show_value_em= @job.accepted_quote.pay_type&.text || "Not Specified"
+
+        .show_field
+          .row
+            .col-xs-12.col-lg-6
+              label= t(:starts_on, scope: [:form, :labels, :job])
+              .show_value_em= l @job.starts_on
+            .col-xs-12.col-lg-6
+              label= t(:ends_on, scope: [:form, :labels, :job])
+              .show_value_em= @job.ends_on ? l(@job.ends_on) : "Not Specified"
+
+        .show_field
+          .row
+            .col-xs-12.col-lg-6
+              label= t(:working_time, scope: [:form, :labels, :job])
+              .show_value_em= @job.working_time ? t(@job.working_time) : "Not Specified"
+
+        .show_field
+          label Payment Schedule
+          .show_value
+            - if @job.payments.any?
+              table.table
+                - @job.payments.each do |payment|
+                  tr
+                    td= payment.description
+                    td.text-right
+                      = payment.amount
+                      br
+                      - if @job.currency.nil?
+                        |
+                      - else
+                        = @job.currency.upcase
+            - else
+              | None Specified
+
+        .show_field
+          label= t(:reporting_frequency, scope: [:form, :labels, :job])
+          .show_value= @job.reporting_frequency&.text || "None Specified"
+
+        .show_field
+          label Reporting Requirements
+          ul
+            - if @job.require_photos_on_updates?
+              li.show_value= t(:require_photos_on_updates, scope: [:form, :labels, :job])
+            - if @job.require_checkin?
+              li.show_value= t(:require_checkin, scope: [:form, :labels, :job])
+            - if @job.require_uniform?
+              li.show_value= t(:require_uniform, scope: [:form, :labels, :job])
+
+    - if @job.pre_contracted?
+      hr
+      .form-actions
+        = link_to "Edit", edit_company_job_work_order_path(@job), class: "btn btn-primary"
