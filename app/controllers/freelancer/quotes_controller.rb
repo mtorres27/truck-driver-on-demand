@@ -40,12 +40,8 @@ class Freelancer::QuotesController < Freelancer::BaseController
         @new_quote.pay_type = params[:message][:counter_type]
         @new_quote.attachment = params[:message][:attachment]
         @new_quote.state = "pending"
-        @new_quote.save
-        
-        if @quotes.count == 0
-          @applicant.quotes << @new_quote
-        end
-
+        @new_quote.applicant = @applicant
+        @new_quote.save        
       elsif params[:message][:status] == "accept"
         @q = @quotes.where({applicant_id: @applicant.id}).first
         @q.accepted_by_freelancer = true
