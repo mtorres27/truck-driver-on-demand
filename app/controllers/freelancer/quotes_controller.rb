@@ -38,7 +38,6 @@ class Freelancer::QuotesController < Freelancer::BaseController
         end
 
         @new_quote.pay_type = params[:message][:counter_type]
-        @new_quote.attachment = params[:message][:attachment]
         @new_quote.state = "pending"
         @new_quote.applicant = @applicant
         @new_quote.save        
