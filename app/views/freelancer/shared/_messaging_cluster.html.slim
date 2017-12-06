@@ -31,10 +31,10 @@
                 br
                 = @harmonized_items.count
                 br
-                = @harmonized_items
-                - if index < @harmonized_items.count - 1
+                - if index <= @harmonized_items.count - 1
                   - next_item = @harmonized_items[index+1]
-                  = next_item[:type]
+                  - if next_item.nil?
+                    - next_item = @harmonized_items[index-1]
                   br
                   - if next_item[:type] == "quote"
                     - if next_item[:payload].pay_type == "hourly"
