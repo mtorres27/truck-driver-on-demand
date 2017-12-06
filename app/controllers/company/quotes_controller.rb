@@ -42,7 +42,11 @@ class Company::QuotesController < Company::BaseController
           quote.save
         end
 
-        @new_quote = Quote.new
+        if @quotes.count > 0
+          @new_quote = @quotes.last.dup
+        else
+          @new_quote = Quote.new
+        end
         
         @new_quote.author_type = "company"
         
@@ -61,9 +65,8 @@ class Company::QuotesController < Company::BaseController
 
         @new_quote.pay_type = params[:message][:counter_type]
         @new_quote.state = "pending"
-        @new_quote.attachment = params[:message][:attachment]
         @new_quote.save
-        
+
         if @quotes.count == 0
           @applicant.quotes << @new_quote
         end
@@ -177,5 +180,9 @@ class Company::QuotesController < Company::BaseController
 
     def message_params
       params.require(:message).permit(:body, :attachment)
+    end
+
+    def quote_params
+      params.require(:message).permit(:attachment)
     end
 end

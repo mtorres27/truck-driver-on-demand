@@ -27,13 +27,18 @@
             .freelancer-job__quote-msg
               .common__user-avatar style="background-image: url(#{item[:payload].authorable.avatar_url})"
               .freelancer-job__msg-cont.w-clearfix
-                - if index < @harmonized_items.count - 1
+                - if index <= @harmonized_items.count - 1
                   - next_item = @harmonized_items[index+1]
+                  - if next_item.nil? or next_item[:type] == "message"
+                    - next_item = @harmonized_items[index-1]
+
+
                   - if next_item[:type] == "quote"
                     - if next_item[:payload].pay_type == "hourly"
                       = "(#{next_item[:payload].number_of_hours} hours @ #{next_item[:payload].hourly_rate} #{@job.currency}/hour)"
                     - if next_item[:payload].pay_type == "daily"
-                      = "(#{nextitem[:payload].number_of_days} days @ #{next_item[:payload].daily_rate} #{@job.currency}/day)"
+                      = "(#{next_item[:payload].number_of_days} days @ #{next_item[:payload].daily_rate} #{@job.currency}/day)"
+                    = "..."
                     - if next_item[:payload].amount <= @job.budget and next_item[:payload].state != "declined"
                       .freelancer-job__msg-price= number_to_currency(next_item[:payload].amount, precision: 2) + " " + @job.currency
                     - elsif next_item[:payload].amount <= @job.budget and next_item[:payload].state == "declined"
@@ -45,16 +50,6 @@
                 .freelancer-job__msg-user-name= item[:payload].authorable.name
                 .freelancer-job__msg-created-at= "#{time_ago_in_words(item[:payload].created_at)} ago"
                 p.freelancer-job__msg-text= item[:payload].body
-                - if index < @harmonized_items.count - 1
-                  - next_item = @harmonized_items[index+1]
-                  - if next_item[:payload].attachment_url
-                    a.authorable_attachment href=next_item[:payload].attachment_url target="_blank"
-                      - if is_image(next_item[:payload].attachment_url)
-                        span class="authorable_attachment_icon fa fa-image"
-                      - else
-                        span class="authorable_attachment_icon fa fa-file-text"
-                      .authorable_attachment__filename
-                        = eval(next_item[:payload].attachment_data)[:metadata][:filename]
                 - if item[:payload].attachment_url
                   a.authorable_attachment href=item[:payload].attachment_url target="_blank"
                     - if is_image(item[:payload].attachment_url)
