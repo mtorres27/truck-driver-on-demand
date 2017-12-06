@@ -21,8 +21,13 @@ class Freelancer::QuotesController < Freelancer::BaseController
           quote.state = "declined"
           quote.save
         end
+        
+        if @quotes.count > 0
+          @new_quote = @quotes.last.dup
+        else
+          @new_quote = Quote.new
+        end
 
-        @new_quote = Quote.new
         @new_quote.author_type = "freelancer"
         
         if params[:message][:counter_type] == "fixed"
@@ -39,8 +44,13 @@ class Freelancer::QuotesController < Freelancer::BaseController
 
         @new_quote.pay_type = params[:message][:counter_type]
         @new_quote.state = "pending"
-        @new_quote.applicant = @applicant
+        
         @new_quote.save        
+
+        if @quotes.count == 0
+          @applicant.quotes << @new_quote
+        end
+        
       elsif params[:message][:status] == "accept"
         @q = @quotes.where({applicant_id: @applicant.id}).first
         @q.accepted_by_freelancer = true
