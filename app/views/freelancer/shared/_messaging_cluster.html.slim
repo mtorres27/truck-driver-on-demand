@@ -27,13 +27,9 @@
             .freelancer-job__quote-msg
               .common__user-avatar style="background-image: url(#{item[:payload].authorable.avatar_url})"
               .freelancer-job__msg-cont.w-clearfix
-                = index
-                br
                 = @harmonized_items.count
-                - if index < @harmonized_items.count - 1
+                - if index <= @harmonized_items.count - 1
                   - next_item = @harmonized_items[index+1]
-                  = next_item[:type]
-                  br
                   - if next_item[:type] == "quote"
                     - if next_item[:payload].pay_type == "hourly"
                       = "(#{next_item[:payload].number_of_hours} hours @ #{next_item[:payload].hourly_rate} #{@job.currency}/hour)"
