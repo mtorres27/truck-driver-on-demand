@@ -22,6 +22,7 @@ class Company::ContractsController < Company::BaseController
         }, stripe_account: freelancer.stripe_account_id)
 
       @job.stripe_charge_id = charge[:id]
+      @job.stripe_balance_transaction_id = charge[:balance_transaction]
       @job.save
 
       quote.avj_fees = quote.amount * Rails.configuration.avj_fees

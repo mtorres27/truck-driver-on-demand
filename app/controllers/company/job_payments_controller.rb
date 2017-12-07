@@ -6,11 +6,14 @@ class Company::JobPaymentsController < Company::BaseController
     # logger.debug @job.inspect
     @payments = @job.payments.order(:created_at)
     @accepted_quote = @job.accepted_quote
-
-    balance = Stripe::Balance.retrieve(
-      # :stripe_account => @job.freelancer.stripe_account_id
-    )
-    logger.debug balance.inspect
+    unless @job.funds_available
+      @balance_transaction = Stripe::BalanceTransaction.retrieve(@job.stripe_balance_transaction_id)
+      if @balance_transaction[:status] == 'pending'
+        @job.funds_available_on = @balance_transaction[:status]
+      else
+        @job.funds_available = true
+      end
+    end
   end
 
   def show
@@ -25,8 +28,9 @@ class Company::JobPaymentsController < Company::BaseController
     freelancer = @job.freelancer
     begin
       raise Exception.new('You didn\'t pay this work order yet!') if !quote.paid_by_company
-      # logger.debug (@payment.total_amount - @payment.avj_fees)
       money = @payment.total_amount - @payment.avj_fees
+
+
       Stripe::Payout.create({
         amount: (money * 100).floor,
         currency: @job.currency
