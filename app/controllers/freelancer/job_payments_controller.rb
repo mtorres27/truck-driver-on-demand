@@ -6,7 +6,6 @@ class Freelancer::JobPaymentsController < Freelancer::BaseController
     # @job = Job.find(params[:job_id])
     @payments = @job.payments.order(:created_at)
     @accepted_quote = @job.accepted_quote
-    logger.debug @job.company.inspect
   end
 
   def show
