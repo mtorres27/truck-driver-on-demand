@@ -21,6 +21,9 @@ class Company::ContractsController < Company::BaseController
         application_fee: (platform_fees * 100).floor
         }, stripe_account: freelancer.stripe_account_id)
 
+      @job.stripe_charge_id = charge[:id]
+      @job.save
+
       quote.avj_fees = quote.amount * Rails.configuration.avj_fees
       quote.stripe_fees = stripe_fees
       quote.net_avj_fees = platform_fees
