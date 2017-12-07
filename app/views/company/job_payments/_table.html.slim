@@ -11,7 +11,7 @@
     .payments__flexbox
       .tag.tag--in-progress funds pending
       .payments__total-group
-        .payments__total-amt #{number_with_precision(job.gpayments_sum_paid, precision: 2)} #{job.currency.upcase}
+        .payments__total-amt #{number_with_precision(job.gpayments_sum_total, precision: 2)} #{job.currency.upcase}
         .payments__payout-label Funded
     .payments__status Thanks for funding this project. These funds will be available to the freelancer on #{Time.at(@job.funds_available_on).to_date}. After which you will be able to release payouts.
 - elsif @accepted_quote && @accepted_quote.paid_by_company && @job.funds_available
