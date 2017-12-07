@@ -13,7 +13,7 @@
       .payments__total-group
         .payments__total-amt #{number_with_precision(job.gpayments_sum_total, precision: 2)} #{job.currency.upcase}
         .payments__payout-label Funded
-    .payments__status Thanks for funding this project. These funds will be available to the freelancer on #{@job.funds_available_on ? Time.at(@job.funds_available_on).to_date : '7-10 days'}. After which you will be able to release payouts.
+    .payments__status Thanks for funding this project. These funds will be available to the freelancer #{@job.funds_available_on ? "on " + Time.at(@job.funds_available_on).to_date.to_s : 'in 7-10 days'}. After which you will be able to release payouts.
 - elsif @accepted_quote && @accepted_quote.paid_by_company && @job.funds_available
   .payments
     .payments__flexbox

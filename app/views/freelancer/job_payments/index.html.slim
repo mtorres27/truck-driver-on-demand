@@ -16,7 +16,7 @@
         .payments__total-group
           .payments__total-amt #{number_with_precision(@job.gpayments_sum_total, precision: 2)}  #{@job.currency ? @job.currency.upcase : ''}
           .payments__payout-label funds pending
-      .payments__status #{@job.company.name} has secured funds for this project however they will only be available to be paid out on #{@job.funds_available_on ? Time.at(@job.funds_available_on).to_date : '7-10 days'}.
+      .payments__status #{@job.company.name} has secured funds for this project however they will only be available to be paid out #{@job.funds_available_on ? "on " + Time.at(@job.funds_available_on).to_date.to_s : 'in 7-10 days'}.
   - elsif @accepted_quote && @accepted_quote.paid_by_company
     .payments
       .payments__flexbox
