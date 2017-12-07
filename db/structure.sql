@@ -802,7 +802,10 @@ CREATE TABLE jobs (
     country character varying,
     scope_file_data text,
     applicable_sales_tax numeric(10,2),
-    stripe_charge_id character varying
+    stripe_charge_id character varying,
+    stripe_balance_transaction_id character varying,
+    funds_available_on integer,
+    funds_available boolean DEFAULT false
 );
 
 
