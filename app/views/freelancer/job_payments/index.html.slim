@@ -1,84 +1,50 @@
 = render partial: "/freelancer/shared/job_meta"
 = render partial: "/freelancer/shared/job_shared_nav", locals: { job: @job }
 - content_for :secondary do
-  .result-mobile
-    .result-header
-      .result-header__text
-        | Payments
-        - if @accepted_quote && !@accepted_quote.paid_by_company
-          .payments
-            .payments__flexbox
-              .tag.tag--in-progress funds pending
-            .payments__status AV Junction recommends you only commence work when the total funds are available for this project.
-        - elsif @accepted_quote && @accepted_quote.paid_by_company && !@job.funds_available
-          .payments
-            .payments__flexbox
-              .tag.tag--in-progress funds pending
-              .payments__total-group
-                .payments__total-amt #{number_with_precision(@job.gpayments_sum_total, precision: 2)}  #{@job.currency ? @job.currency.upcase : ''}
-                .payments__payout-label funds pending
-            .payments__status #{@job.company.name} has secured funds for this project however they will only be available to be paid out on #{@job.funds_available_on ? Time.at(@job.funds_available_on).to_date : '3-7 days'}.
-        - elsif @accepted_quote && @accepted_quote.paid_by_company
-          .payments
-            .payments__flexbox
-              .tag.tag--success #{(@job.payments_sum_paid == @job.payments_sum_total) ? 'Job Done' : 'FUNDS AVAILABLE'}
-              .payments__total-group
-                .payments__total-amt #{number_with_precision(@job.gpayments_sum_paid, precision: 2)}  #{@job.currency ? @job.currency.upcase : ''}
-                .payments__payout-label Balance
-            .payments__status #{@job.company.name}  has secured funds for this project. AV Junction will hold these payments on your behalf until each of the milestones listed below are met.
-        - @payments.each do |payment|
-          div class="payments #{ "milestone--inactive" if !@accepted_quote.paid_by_company}"
-            .payments__flexbox
-              .payments__title #{payment.description}
-              .payments__amt #{payment.total_amount.present? ? number_with_precision(payment.total_amount, precision: 2) : number_with_precision(payment.amount, precision: 2)} #{@job.currency ? @job.currency.upcase : ''}
-            .payments__flexbox
-              .payments__date
-                - if payment.issued_on.present? || payment.paid_on.present?
-                  | #{payment.paid_on ? "Paid": "Requested"} #{payment.issued_on ? payment.issued_on : payment.paid_on}
-              / a.btn-link href=freelancer_job_payment_path
-              = link_to freelancer_job_payment_path(id: payment.id, job_id: @job.id), class: 'btn-link'
-                | View Invoice
-            - if  !@accepted_quote.paid_by_company || (!payment.paid_on.present? && (payment.issued_on.present? && payment.issued_on >= 2.day.ago))
-              a.btn-primary--disabled.top-margin.w-inline-block href="#"
-                div request Payout
-            - elsif !payment.paid_on.present?
-              = link_to freelancer_payout_request_path(id: payment.id, job_id: @job.id), class: 'btn-primary--active top-margin w-inline-block'
-                div request Payout
-            .payments__status
-              - if payment.paid_on.present?
-                | You received a payout for this invoice on #{payment.paid_on}
-              - elsif payment.issued_on.present? && payment.issued_on >= 2.day.ago
-                | You last requested a payout for this invoice on #{payment.issued_on}. Allow 2 business days for your client to release the funds to you. You may re-request a payout after 2 business days.
+  .action-bar
+    h2.heading-h2.heading-h2--action-bar Payments
 
-        / .payments
-        /   .payments__flexbox
-        /     .payments__title Project Midpoint
-        /     .payments__amt $1500
-        /   .payments__flexbox
-        /     .payments__date Due November 24, 2017
-        /     a.btn-link href="#"  View Invoice
-        /   a.btn-primary--active.top-margin.w-inline-block href="#"
-        /     div request Payout
-        / .payments
-        /   .payments__flexbox
-        /     .payments__title Project Midpoint
-        /     .payments__amt $1500
-        /   .payments__flexbox
-        /     .payments__date Due November 24, 2017
-        /     a.btn-link href="#"  View Invoice
-        /   a.btn-primary--disabled.top-margin.w-inline-block href="#"
-        /     div request Payout
-        /   .payments__status You last requested a payout for this invoice on November 24, 2017. Allow 2 business days for your client to release the funds to you. You may re-request a payout after 2 business days.
-        / .payments
-        /   .payments__flexbox
-        /     .payments__title Project End
-        /     .payments__amt $1500
-        /   .payments__flexbox
-        /     .payments__date Due December 24, 2017
-        /     a.btn-link href="#"  View Invoice
-        / .milestone--inactive.payments
-        /   .payments__flexbox
-        /     .payments__title Project Start
-        /     .payments__amt $1500
-        /   .payments__flexbox
-        /     .payments__date Due November 24, 2017
+  - if @accepted_quote && !@accepted_quote.paid_by_company
+    .payments
+      .payments__flexbox
+        .tag.tag--in-progress funds pending
+      .payments__status AV Junction recommends you only commence work when the total funds are available for this project.
+  - elsif @accepted_quote && @accepted_quote.paid_by_company && !@job.funds_available
+    .payments
+      .payments__flexbox
+        .tag.tag--in-progress funds pending
+        .payments__total-group
+          .payments__total-amt #{number_with_precision(@job.gpayments_sum_total, precision: 2)}  #{@job.currency ? @job.currency.upcase : ''}
+          .payments__payout-label funds pending
+      .payments__status #{@job.company.name} has secured funds for this project however they will only be available to be paid out on #{@job.funds_available_on ? Time.at(@job.funds_available_on).to_date : '7-10 days'}.
+  - elsif @accepted_quote && @accepted_quote.paid_by_company
+    .payments
+      .payments__flexbox
+        .tag.tag--success #{(@job.payments_sum_paid == @job.payments_sum_total) ? 'Job Done' : 'FUNDS AVAILABLE'}
+        .payments__total-group
+          .payments__total-amt #{number_with_precision(@job.gpayments_sum_paid, precision: 2)}  #{@job.currency ? @job.currency.upcase : ''}
+          .payments__payout-label Balance
+      .payments__status #{@job.company.name}  has secured funds for this project. AV Junction will hold these payments on your behalf until each of the milestones listed below are met.
+  - @payments.each do |payment|
+    div class="payments #{ "milestone--inactive" if !@accepted_quote.paid_by_company}"
+      .payments__flexbox
+        .payments__title #{payment.description}
+        .payments__amt #{payment.total_amount.present? ? number_with_precision(payment.total_amount, precision: 2) : number_with_precision(payment.amount, precision: 2)} #{@job.currency ? @job.currency.upcase : ''}
+      .payments__flexbox
+        .payments__date
+          - if payment.issued_on.present? || payment.paid_on.present?
+            | #{payment.paid_on ? "Paid": "Requested"} #{payment.issued_on ? payment.issued_on : payment.paid_on}
+        / a.btn-link href=freelancer_job_payment_path
+        = link_to freelancer_job_payment_path(id: payment.id, job_id: @job.id), class: 'btn-link'
+          | View Invoice
+      - if !@job.funds_available || !@accepted_quote.paid_by_company || (!payment.paid_on.present? && (payment.issued_on.present? && payment.issued_on >= 2.day.ago))
+        .btn-primary--disabled.top-margin.w-inline-block
+          div request Payout
+      - elsif !payment.paid_on.present?
+        = link_to freelancer_payout_request_path(id: payment.id, job_id: @job.id), class: 'btn-primary--active top-margin w-inline-block'
+          div request Payout
+      .payments__status
+        - if payment.paid_on.present?
+          | You received a payout for this invoice on #{payment.paid_on}
+        - elsif payment.issued_on.present? && payment.issued_on >= 2.day.ago
+          | You last requested a payout for this invoice on #{payment.issued_on}. Allow 2 business days for your client to release the funds to you. You may re-request a payout after 2 business days.

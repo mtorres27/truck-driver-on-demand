@@ -6,6 +6,16 @@ class Freelancer::JobPaymentsController < Freelancer::BaseController
     # @job = Job.find(params[:job_id])
     @payments = @job.payments.order(:created_at)
     @accepted_quote = @job.accepted_quote
+
+    if @accepted_quote.paid_by_company && !@job.funds_available && @job.stripe_balance_transaction_id.present?
+      balance_transaction = Stripe::BalanceTransaction.retrieve(@job.stripe_balance_transaction_id, stripe_account: @job.freelancer.stripe_account_id)
+      if balance_transaction[:status] == 'pending'
+        @job.funds_available_on = balance_transaction[:available_on]
+      else
+        @job.funds_available = true
+      end
+      @job.save
+    end
   end
 
   def show
