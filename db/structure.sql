@@ -332,12 +332,6 @@ CREATE TABLE companies (
     last_sign_in_at timestamp without time zone,
     current_sign_in_ip inet,
     last_sign_in_ip inet,
-    header_color character varying DEFAULT 'FF6C38'::character varying,
-    country character varying,
-    confirmation_token character varying,
-    confirmed_at timestamp without time zone,
-    confirmation_sent_at timestamp without time zone,
-    header_source character varying DEFAULT 'color'::character varying,
     stripe_customer_id character varying,
     stripe_subscription_id character varying,
     stripe_plan_id character varying,
@@ -349,6 +343,12 @@ CREATE TABLE companies (
     card_brand character varying,
     exp_month character varying,
     exp_year character varying,
+    header_color character varying DEFAULT 'FF6C38'::character varying,
+    country character varying,
+    confirmation_token character varying,
+    confirmed_at timestamp without time zone,
+    confirmation_sent_at timestamp without time zone,
+    header_source character varying DEFAULT 'color'::character varying,
     province character varying,
     sales_tax_number character varying
 );
@@ -634,7 +634,6 @@ CREATE TABLE freelancers (
     stripe_account_id character varying,
     stripe_account_status text,
     currency character varying,
-    phone_number character varying,
     sales_tax_number character varying
 );
 
@@ -802,7 +801,8 @@ CREATE TABLE jobs (
     opt_out_of_freelance_service_agreement boolean DEFAULT false,
     country character varying,
     scope_file_data text,
-    applicable_sales_tax numeric(10,2)
+    applicable_sales_tax numeric(10,2),
+    stripe_charge_id character varying
 );
 
 
@@ -2082,7 +2082,6 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20171017101132'),
 ('20171020113522'),
 ('20171020123018'),
-('20171023181456'),
 ('20171105210413'),
 ('20171113154821'),
 ('20171114170911'),
@@ -2095,6 +2094,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20171122202327'),
 ('20171123045237'),
 ('20171125181227'),
-('20171129231733');
+('20171129231733'),
+('20171207014259');
 
 
