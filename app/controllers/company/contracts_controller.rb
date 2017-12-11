@@ -157,7 +157,7 @@ class Company::ContractsController < Company::BaseController
     end
 
     def build_payments
-      payments_to_build = [(@job.payments.size), 1].max
+      payments_to_build = [(3 - @job.payments.size), 1].max
       payments_to_build.times do
         @job.payments.build
       end

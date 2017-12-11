@@ -133,7 +133,7 @@ class Job < ApplicationRecord
   validate :validate_payments_total
   def validate_payments_total
     if send_contract == "true"
-      total = payments.map(&:amount).inject(0, &:+)
+      total = payments.inject(0) { |sum, e| sum + e.amount if e.amount.present? }
       errors.add(:total_of_payments, 'The total amount of payments doesn\'t match with the quote') if total != quotes.where({state: :accepted}).first.amount
     end
   end
