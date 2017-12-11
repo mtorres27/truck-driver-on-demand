@@ -631,10 +631,10 @@ CREATE TABLE freelancers (
     freelancer_team_size character varying,
     freelancer_type character varying,
     header_source character varying DEFAULT 'color'::character varying,
+    phone_number character varying,
     stripe_account_id character varying,
     stripe_account_status text,
     currency character varying,
-    phone_number character varying,
     sales_tax_number character varying
 );
 
