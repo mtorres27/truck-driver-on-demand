@@ -9,7 +9,6 @@ $(window).scroll(function() {
   }
 });
 
-var hide_remove_association = function (obj, hard = false) {
+var hide_remove_association = function (obj) {
   $(obj).parent().parent().fadeOut()
-  if (hard) $(obj).parent().parent().remove()
 }
