@@ -50,6 +50,7 @@ Rails.application.routes.draw do
       resource :settings, only: [:index, :edit, :update]
 
     end
+    resources :payments, only: [:index]
 
     get "profile/bank_info", to: "banking#index", as: "profile_stripe_banking_info"
     get "profile/identity", to: "banking#identity", as: "profile_stripe_banking"
