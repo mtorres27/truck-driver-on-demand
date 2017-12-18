@@ -61,6 +61,9 @@ class Freelancer < ApplicationRecord
 
   validates :years_of_experience, numericality: { only_integer: true }
 
+  validates_presence_of :country, :on => :create
+  validates_presence_of :area, :on => :create
+
   audited
 
   def connected?; !stripe_account_id.nil?; end

@@ -54,6 +54,9 @@ class Company < ApplicationRecord
   validates_acceptance_of :accept_privacy_policy
   validates_acceptance_of :accept_code_of_conduct
 
+  validates_presence_of :country, :on => :create
+  validates_presence_of :city, :on => :create
+
   # enumerize :currency, in: [
   #   :cad,
   #   :euro,
