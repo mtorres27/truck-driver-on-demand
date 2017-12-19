@@ -12,6 +12,7 @@
       tr
         th Name
         th Email
+        th Disabled?
         th.text-right Actions
 
     tbody
@@ -19,6 +20,7 @@
         tr
           td= link_to freelancer.name, admin_freelancer_path(freelancer)
           td= mail_to freelancer.email
+          td= freelancer.disabled
           td.text-right
             = link_to 'Edit', edit_admin_freelancer_path(freelancer)
             '  |

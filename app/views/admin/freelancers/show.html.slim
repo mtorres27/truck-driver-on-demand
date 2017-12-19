@@ -1,6 +1,6 @@
 .action-bar__container
   .action-bar
-    a.btn-primary--active.no-margin href=admin_freelancers_path 
+    a.btn-primary--active.no-margin href=admin_freelancers_path
       | Back
     a.btn-primary--active.no-margin href=edit_admin_freelancer_path(@freelancer)
       | Edit
@@ -24,7 +24,7 @@
           .fprofile__meta__info
             .fprofile__meta__name= @freelancer.name
             .fprofile__meta__joined= "Joined #{@freelancer.created_at.strftime('%B %d, %Y')}"
-            .fprofile__meta__reviews 
+            .fprofile__meta__reviews
               = freelancer_ratings_link(@freelancer)
             .fprofile__meta__rating
               - @stars = freelancer_avg_rating(@freelancer)
@@ -59,6 +59,11 @@
           .fprofile__meta__details-stat
             .fprofile__meta__stat--label EXPERIENCE
             .fprofile__meta__stat--value= "#{@freelancer.years_of_experience} yrs"
+      - if @freelancer.confirmed_at.nil? && @freelancer.confirmation_token.present?
+        .confirmation_link
+          .confirmation_label
+          strong<> Confirmation Link:
+          = confirmation_url(@freelancer, confirmation_token: @freelancer.confirmation_token)
       .fprofile__meta__details__2
         .fprofile__biography
           h3.fprofile__h3 Bio
@@ -83,7 +88,7 @@
                 = I18n.t("enumerize.freelancer_skills.#{index}")
           - else
             | This freelancer has no skills listed.
-          
+
       .fprofile__meta__details__3
         h3.fprofile__h3 Certifications
         .fprofile__certifications__container
@@ -102,11 +107,6 @@
                   .fprofile__certification
                     img.fprofile__certification__image sizes="185.96875px" src=src
                     .fprofile__certification__label= certification.name
-            
-
-
-
-
 
 = link_to 'Edit', edit_admin_freelancer_path(@freelancer)
 '  |
