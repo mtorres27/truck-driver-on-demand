@@ -48,7 +48,7 @@ class Company::FreelancersController < Company::BaseController
       end
     end
 
-    if !@keywords and !@address
+    if (!@keywords and !@address) or (@keywords == "" and @address == "")
     else
       @freelancers = @freelancers.search(@keywords)
     end
