@@ -117,7 +117,6 @@ class Company < ApplicationRecord
     validates_presence_of :name,
       :email,
       :address,
-      :line2,
       :city,
       :postal_code,
       :area,

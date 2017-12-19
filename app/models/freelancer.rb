@@ -81,7 +81,6 @@ class Freelancer < ApplicationRecord
     validates_presence_of :name,
       :email,
       :address,
-      :line2,
       :state,
       :postal_code,
       :area,
