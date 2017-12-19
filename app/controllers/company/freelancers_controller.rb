@@ -48,10 +48,11 @@ class Company::FreelancersController < Company::BaseController
       end
     end
 
-    if @keywords
+    if params.has_key?(:search) and !@keywords and !@address
+    else
       @freelancers = @freelancers.search(@keywords)
     end
-
+    
     @freelancers = @freelancers.page(params[:page]).per(50)
   end
 
