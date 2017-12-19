@@ -2,8 +2,7 @@ class Company::FreelancersController < Company::BaseController
   include FreelancerHelper
 
   def index
-
-    if params.has_key?(:search) && params[:search][:keywords].blank? && params[:search][:address].blank?
+    if params[:search][:keywords].blank? && params[:search][:address].blank?
       flash[:error] = "You'll need to add some search criteria to narrow your search results!"
       redirect_to company_freelancers_path
     end
