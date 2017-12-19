@@ -3,7 +3,7 @@ class Freelancer::JobsController < Freelancer::BaseController
 
   def index
     if params[:search][:keywords].blank? && params[:search][:address].blank?
-      flash[:notice] = "Please put some criteria to narrow your search results!"
+      flash[:error] = "Please put some criteria to narrow your search results!"
       redirect_to freelancer_root_path
     end
 
