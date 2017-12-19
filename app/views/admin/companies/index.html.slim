@@ -12,6 +12,7 @@
       tr
         th Name
         th Email
+        th Disabled?
         th.text-right Actions
 
     tbody
@@ -19,6 +20,7 @@
         tr
           td= link_to company.name, admin_company_path(company)
           td= mail_to company.email
+          td= company.disabled
           td.text-right
             = link_to 'Edit', edit_admin_company_path(company)
             '  |
