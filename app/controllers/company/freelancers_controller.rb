@@ -49,10 +49,8 @@ class Company::FreelancersController < Company::BaseController
     end
 
     if (!@keywords and !@address) or (@keywords.blank? and @address.blank?)
-      flash[:error] = "Empty"
       @freelancers = Freelancer.none
     else
-      flash[:error] = "not empty"
       @freelancers = @freelancers.search(@keywords)
     end
 
