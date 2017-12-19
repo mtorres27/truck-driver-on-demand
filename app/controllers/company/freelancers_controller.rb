@@ -5,11 +5,11 @@ class Company::FreelancersController < Company::BaseController
     @keywords = params.dig(:search, :keywords).presence
     @address = params.dig(:search, :address).presence
     
-    if !@keywords and !@address
+    if params.has_key?(:search) and !@keywords and !@address
       flash[:error] = "You'll need to add some search criteria to narrow your search results!"
       redirect_to company_freelancers_path
     end
-    
+
     @sort = params.dig(:search, :sort).presence
     @distance = params.dig(:search, :distance).presence
 
