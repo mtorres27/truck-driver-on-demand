@@ -2,6 +2,12 @@ class Company::FreelancersController < Company::BaseController
   include FreelancerHelper
 
   def index
+
+    if params.has_key?(:search) && params[:search][:keywords].blank? && params[:search][:address].blank?
+      flash[:error] = "You'll need to add some search criteria to narrow your search results!"
+      redirect_to company_freelancers_path
+    end
+
     @keywords = params.dig(:search, :keywords).presence
     @address = params.dig(:search, :address).presence
 
@@ -57,7 +63,7 @@ class Company::FreelancersController < Company::BaseController
     if params[:location] && params[:location] != ""
       @freelancers = @freelancers.where({ area: params[:location] })
     end
-    
+
     @freelancers = @freelancers.page(params[:page]).
       per(50)
   end
@@ -127,7 +133,7 @@ class Company::FreelancersController < Company::BaseController
     @jobs_master.each do |job|
       @found = false
       job.applicants.each do |applicant|
-        p applicant.freelancer_id 
+        p applicant.freelancer_id
         p @freelancer.id
 
         if applicant.freelancer_id == @freelancer.id
@@ -186,7 +192,7 @@ class Company::FreelancersController < Company::BaseController
         current_company.favourite_freelancers << f.first
       end
     end
-          
+
     render json: { status: 'success', freelancers: params[:freelancers] }
 
   end
