@@ -51,7 +51,10 @@ class Company::FreelancersController < Company::BaseController
     if (!@keywords and !@address) or (@keywords.blank? and @address.blank?)
       @freelancers = Freelancer.none
     else
-      @freelancers = @freelancers.search(@keywords)
+      if !@keywords.blank?
+        @freelancers = @freelancers.search(@keywords)
+      else
+      end
     end
 
     @freelancers = @freelancers.page(params[:page]).per(50)
