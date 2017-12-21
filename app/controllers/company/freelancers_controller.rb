@@ -2,11 +2,10 @@ class Company::FreelancersController < Company::BaseController
   include FreelancerHelper
 
   def index
-
     @keywords = params.dig(:search, :keywords).presence
     @address = params.dig(:search, :address).presence
-
-    if !@keywords and !@address
+    
+    if params.has_key?(:search) and !@keywords and !@address
       flash[:error] = "You'll need to add some search criteria to narrow your search results!"
       redirect_to company_freelancers_path
     end
@@ -49,7 +48,9 @@ class Company::FreelancersController < Company::BaseController
       end
     end
 
-    if @keywords
+    if (!@keywords and !@address) or (@keywords.blank? and @address.blank?)
+      @freelancers = Freelancer.none
+    else
       @freelancers = @freelancers.search(@keywords)
     end
 

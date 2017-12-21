@@ -19,18 +19,44 @@ module Geocodable
     end
   end
 
+  def compile_address
+    address = ""
+
+    if self.address
+      address += self.address + " "
+    end
+
+    if self.line2
+      address += self.line2 + " "
+    end
+
+    if self.area
+      address += self.area + " "
+    end
+
+    if self.state
+      address += self.state + " "
+    end
+    
+    if self.country
+      address += I18n.t('enumerize.country.'+ self.country)
+    end
+
+    return address
+  end
+
   def do_geocode
-    url = "https://maps.googleapis.com/maps/api/geocode/json?address=#{url_encode(address)}&key=#{Rails.application.secrets.google_maps_api_key}"
+    url = "https://maps.googleapis.com/maps/api/geocode/json?address=#{url_encode(compile_address)}&key=#{Rails.application.secrets.google_maps_api_key}"
     # Make the API request
     begin
       res = JSON.parse(Net::HTTP.get(URI.parse(url)), symbolize_names: true)
       if res[:status] == "OK"
-        # puts "Formatted address: #{res[:results][0][:formatted_address]}"
-        # puts "Point: #{res[:results][0][:geometry][:location]}"
+        puts "Formatted address: #{res[:results][0][:formatted_address]}"
+        puts "Point: #{res[:results][0][:geometry][:location]}"
         self.formatted_address = res[:results][0][:formatted_address]
         self.lat = res[:results][0][:geometry][:location][:lat]
         self.lng = res[:results][0][:geometry][:location][:lng]
-        # puts "Stored: #{lat}, #{lng}"
+        puts "Stored: #{lat}, #{lng}"
         return true
       end
     rescue Exception => e

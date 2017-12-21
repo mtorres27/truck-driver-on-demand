@@ -230,6 +230,15 @@ class Company < ApplicationRecord
       !exists and empty
     end
 
+    def self.do_all_geocodes
+      Company.all.each do |f|
+        p "Doing geocode for " + f.id.to_s + "(#{f.compile_address})"
+        f.do_geocode
+  
+        sleep 1
+      end
+    end
+
   # This SQL needs to stay exactly in sync with it's related index (index_on_companies_location)
   # otherwise the index won't be used. (don't even add whitespace!)
   # https://github.com/pairshaped/postgis-on-rails-example

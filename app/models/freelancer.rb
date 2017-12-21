@@ -199,4 +199,13 @@ class Freelancer < ApplicationRecord
     empty = attrs["certificate"].blank? and attrs["name"].blank?
     !exists and empty
   end
+
+  def self.do_all_geocodes
+    Freelancer.all.each do |f|
+      p "Doing geocode for " + f.id.to_s + "(#{f.compile_address})"
+      f.do_geocode
+
+      sleep 1
+    end
+  end
 end
