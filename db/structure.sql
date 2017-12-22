@@ -332,12 +332,6 @@ CREATE TABLE companies (
     last_sign_in_at timestamp without time zone,
     current_sign_in_ip inet,
     last_sign_in_ip inet,
-    header_color character varying DEFAULT 'FF6C38'::character varying,
-    country character varying,
-    confirmation_token character varying,
-    confirmed_at timestamp without time zone,
-    confirmation_sent_at timestamp without time zone,
-    header_source character varying DEFAULT 'color'::character varying,
     stripe_customer_id character varying,
     stripe_subscription_id character varying,
     stripe_plan_id character varying,
@@ -349,6 +343,12 @@ CREATE TABLE companies (
     card_brand character varying,
     exp_month character varying,
     exp_year character varying,
+    header_color character varying DEFAULT 'FF6C38'::character varying,
+    country character varying,
+    confirmation_token character varying,
+    confirmed_at timestamp without time zone,
+    confirmation_sent_at timestamp without time zone,
+    header_source character varying DEFAULT 'color'::character varying,
     province character varying,
     sales_tax_number character varying,
     line2 character varying,
@@ -635,7 +635,6 @@ CREATE TABLE freelancers (
     freelancer_team_size character varying,
     freelancer_type character varying,
     header_source character varying DEFAULT 'color'::character varying,
-    phone_number character varying,
     stripe_account_id character varying,
     stripe_account_status text,
     currency character varying,
@@ -643,7 +642,8 @@ CREATE TABLE freelancers (
     line2 character varying,
     state character varying,
     postal_code character varying,
-    service_areas character varying
+    service_areas character varying,
+    city character varying
 );
 
 
@@ -2094,7 +2094,6 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20171017101132'),
 ('20171020113522'),
 ('20171020123018'),
-('20171023181456'),
 ('20171105210413'),
 ('20171113154821'),
 ('20171114170911'),
@@ -2110,6 +2109,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20171129231733'),
 ('20171207014259'),
 ('20171218020642'),
-('20171218023711');
+('20171218023711'),
+('20171222051331');
 
 
