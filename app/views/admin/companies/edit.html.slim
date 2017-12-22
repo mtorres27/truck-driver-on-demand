@@ -12,9 +12,13 @@ h1 Editing Company
     = f.input :avatar, as: :file, accept: 'image/gif, image/jpg, image/jpeg, image/png'
     = f.input :contact_name
     = f.input :address, as: :string
-    = f.input :area
+    = f.input :line2, as: :string
+    = f.input :city, as: :string
+    = f.input :state, as: :string
+    = f.input :postal_code, as: :string
     = f.input :country
     = f.input :description
+    = f.input :area
     = f.input :contract_preference
     .freelancer-profile__item
       .freelancer-profile__title
