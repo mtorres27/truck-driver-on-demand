@@ -34,6 +34,7 @@ class Freelancer::ProfilesController < Freelancer::BaseController
       :verified,
       :address,
       :line2,
+      :city,
       :state,
       :postal_code,
       :area,

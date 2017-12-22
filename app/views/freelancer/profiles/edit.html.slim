@@ -64,7 +64,7 @@
         .freelancer-profile__item
           .freelancer-profile__title
             | City
-          = f.input :area, as: :string, required: true, label: false, placeholder: "City"
+          = f.input :city, as: :string, required: true, label: false, placeholder: "City"
 
         .freelancer-profile__item
           .freelancer-profile__title
@@ -91,6 +91,11 @@
           .freelancer-profile__title
             | Tagline
           = f.input :tagline, required: true, label: false, placeholder: "Tagline"
+
+        .freelancer-profile__item
+          .freelancer-profile__title
+            | Areas
+          = f.input :area, as: :string, required: true, label: false, placeholder: "Area"
 
         .freelancer-profile__item
           .freelancer-profile__title

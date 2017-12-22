@@ -62,7 +62,7 @@ class Freelancer < ApplicationRecord
   validates :years_of_experience, numericality: { only_integer: true }
 
   validates_presence_of :country, :on => :create
-  validates_presence_of :area, :on => :create
+  validates_presence_of :city, :on => :create
 
   audited
 
@@ -81,6 +81,7 @@ class Freelancer < ApplicationRecord
     validates_presence_of :name,
       :email,
       :address,
+      :city,
       :state,
       :postal_code,
       :area,
