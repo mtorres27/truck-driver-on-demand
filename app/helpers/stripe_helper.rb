@@ -27,6 +27,6 @@ module StripeHelper
   end
 
   def field_helper? (field)
-    FIELDS[field].key?('helpertext')
+    FIELDS[field].present? && FIELDS[field].key?('helpertext')
   end
 end

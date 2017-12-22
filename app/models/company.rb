@@ -234,6 +234,7 @@ class Company < ApplicationRecord
       Company.all.each do |f|
         p "Doing geocode for " + f.id.to_s + "(#{f.compile_address})"
         f.do_geocode
+        f.save
   
         sleep 1
       end
