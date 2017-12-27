@@ -26,18 +26,18 @@ module Geocodable
       address += self.address + " "
     end
 
-    if self.line2
+    if self.has_attribute?(:line2) && self.line2
       address += self.line2 + " "
     end
 
-    if self.area
+    if self.has_attribute?(:area) && self.area
       address += self.area + " "
     end
 
-    if self.state
+    if self.has_attribute?(:state) && self.state
       address += self.state + " "
     end
-    
+
     if self.country
       address += I18n.t('enumerize.country.'+ self.country)
     end
@@ -52,11 +52,14 @@ module Geocodable
       res = JSON.parse(Net::HTTP.get(URI.parse(url)), symbolize_names: true)
       if res[:status] == "OK"
         puts "Formatted address: #{res[:results][0][:formatted_address]}"
+        Rails.logger.debug "Formatted address: #{res[:results][0][:formatted_address]}"
         puts "Point: #{res[:results][0][:geometry][:location]}"
+        Rails.logger.debug "Point: #{res[:results][0][:geometry][:location]}"
         self.formatted_address = res[:results][0][:formatted_address]
         self.lat = res[:results][0][:geometry][:location][:lat]
         self.lng = res[:results][0][:geometry][:location][:lng]
         puts "Stored: #{lat}, #{lng}"
+        Rails.logger.debug "Stored: #{lat}, #{lng}"
         return true
       end
     rescue Exception => e
