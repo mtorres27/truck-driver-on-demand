@@ -3,7 +3,7 @@
 - content_for :secondary do
   .action-bar
     h2.heading-h2.heading-h2--action-bar
-      a href=company_job_path(@job) 
+      a href=company_job_path(@job)
         span class="zmdi zmdi-long-arrow-left"
       = "Work Order #{@job.work_order}"
   .result-content
@@ -36,7 +36,7 @@
               label= t(:contract_price, scope: [:form, :labels, :job])
               .show-budget
                 - if @job.budget
-                  = @job.accepted_quote.amount
+                  = number_with_precision(@job.accepted_quote.amount, precision: 2)
                   br
                   - if @job.currency.nil?
                     |
@@ -76,7 +76,7 @@
                   tr
                     td= payment.description
                     td.text-right
-                      = payment.amount
+                      = number_with_precision(payment.amount, precision: 2)
                       br
                       - if @job.currency.nil?
                         |
