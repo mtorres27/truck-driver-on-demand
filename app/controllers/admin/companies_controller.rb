@@ -56,6 +56,7 @@ class Admin::CompaniesController < Admin::BaseController
         :avatar,
         :contact_name,
         :country,
+        :sales_tax_number,
         :province,
         :line2,
         :state,
