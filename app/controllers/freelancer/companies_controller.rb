@@ -95,7 +95,7 @@ class Freelancer::CompaniesController < Freelancer::BaseController
     @companies = []
 
     if params[:location] && params[:location] != ""
-      current_freelancer.applicants.where({ state: "accepted" }).where({ area: params[:location] }).each do |job|
+      current_freelancer.applicants.where({ state: "accepted" }).where({ city: params[:location] }).each do |job|
         @locations << job.company.area
         @companies << job.company
       end
@@ -110,7 +110,7 @@ class Freelancer::CompaniesController < Freelancer::BaseController
 
     @locations = @locations.uniq
     @companies = @companies.uniq
-    
+
   end
 
 
@@ -132,7 +132,7 @@ class Freelancer::CompaniesController < Freelancer::BaseController
         current_freelancer.favourite_companies << c.first
       end
     end
-          
+
     render json: { status: 'success', companies: params[:companies] }
 
   end

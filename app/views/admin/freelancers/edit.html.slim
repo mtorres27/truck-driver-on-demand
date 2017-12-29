@@ -4,22 +4,25 @@ h1 Editing Freelancer
   = f.error_notification
 
   .form-inputs
-    = f.input :name
     - if @freelancer.avatar&.exists?
       img src=@freelancer.avatar_url
     = f.hidden_field :avatar, value: @freelancer.cached_avatar_data
     = f.input :avatar, as: :file, accept: 'image/gif, image/jpg, image/jpeg, image/png'
+    = f.input :name
     = f.input :email, as: :string
-    = f.input :freelancer_type
-    = f.input :freelancer_team_size
     = f.input :address, as: :string
     = f.input :line2, as: :string
-    = f.input :area, label: 'City', as: :string
+    = f.input :city, label: 'City', as: :string
     = f.input :state, as: :string
     = f.input :postal_code, as: :string
     = f.input :country
+
+    = f.input :sales_tax_number
     = f.input :tagline
+    = f.input :freelancer_type
+    = f.input :freelancer_team_size
     = f.input :bio
+    = f.input :service_areas, label: 'Service Areas', as: :string
 
     .freelancer-profile__item
       .freelancer-profile__title
@@ -49,11 +52,11 @@ h1 Editing Freelancer
             = check_box_tag tag_name, "1", checked
             = " #{value}"
 
-
     = f.input :years_of_experience
+    = f.input :pay_unit_time_preference
     = f.input :available
     = f.input :verified
-    = f.input :pay_unit_time_preference
+
     = f.input :disabled
 
   .form-actions

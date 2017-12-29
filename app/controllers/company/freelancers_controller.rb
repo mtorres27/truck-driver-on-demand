@@ -4,7 +4,7 @@ class Company::FreelancersController < Company::BaseController
   def index
     @keywords = params.dig(:search, :keywords).presence
     @address = params.dig(:search, :address).presence
-    
+
     if params.has_key?(:search) and !@keywords and !@address
       flash[:error] = "You'll need to add some search criteria to narrow your search results!"
       redirect_to company_freelancers_path
@@ -61,11 +61,11 @@ class Company::FreelancersController < Company::BaseController
   end
 
   def hired
-    @locations = current_company.freelancers.uniq.pluck(:area)
+    @locations = current_company.freelancers.uniq.pluck(:city)
     @freelancers = current_company.freelancers.distinct
 
     if params[:location] && params[:location] != ""
-      @freelancers = @freelancers.where({ area: params[:location] })
+      @freelancers = @freelancers.where({ city: params[:location] })
     end
 
     @freelancers = @freelancers.page(params[:page]).
@@ -73,11 +73,11 @@ class Company::FreelancersController < Company::BaseController
   end
 
   def favourites
-    @locations = current_company.favourite_freelancers.uniq.pluck(:area)
+    @locations = current_company.favourite_freelancers.uniq.pluck(:city)
     @freelancers = current_company.favourite_freelancers
 
     if params[:location] && params[:location] != ""
-      @freelancers = @freelancers.where({ area: params[:location] })
+      @freelancers = @freelancers.where({ city: params[:location] })
     end
 
     @freelancers = @freelancers.page(params[:page]).

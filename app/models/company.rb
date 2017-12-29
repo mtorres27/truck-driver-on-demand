@@ -117,6 +117,7 @@ class Company < ApplicationRecord
     validates_presence_of :name,
       :email,
       :address,
+      :line2,
       :city,
       :postal_code,
       :area,
@@ -175,6 +176,11 @@ class Company < ApplicationRecord
     self.subscription_status = "trialing"
     self.billing_period_ends_at = (Time.now + 3.months).to_datetime
   end
+
+  # def province=(value)
+  #   write_attribute(:state, value)
+  #   super(value)
+  # end
 
   pg_search_scope :search, against: {
     name: "A",
@@ -235,7 +241,7 @@ class Company < ApplicationRecord
         p "Doing geocode for " + f.id.to_s + "(#{f.compile_address})"
         f.do_geocode
         f.save
-  
+
         sleep 1
       end
     end

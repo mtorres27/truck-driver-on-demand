@@ -3,7 +3,7 @@
     .action-bar__actions
       .messaging-filter
         .messaging-filter__text
-          | Filter 
+          | Filter
         .messaging-filter__select
           select id="messaging-filter"
             option value="" label="All Applicants"
@@ -24,9 +24,9 @@
               .freelancer_name= freelancer.name
               - distance = calc_distance_from(freelancer)
               - if distance == "N/A"
-                .freelancer_distance= "#{freelancer.area}"
+                .freelancer_distance= "#{freelancer.city}"
               - else
-                .freelancer_distance= "#{freelancer.area}, #{distance} miles away"
+                .freelancer_distance= "#{freelancer.city}, #{distance} miles away"
             = applicant_state_label(applicant)
 
 javascript:

@@ -37,7 +37,6 @@ class Freelancer::ProfilesController < Freelancer::BaseController
       :city,
       :state,
       :postal_code,
-      :area,
       :tagline,
       :bio,
       :service_areas,

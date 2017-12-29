@@ -29,8 +29,8 @@ module Geocodable
       address += self.line2 + " "
     end
 
-    if self.class.name != "Job" && self.area
-      address += self.area + " "
+    if self.class.name != "Job" && self.postal_code
+      address += self.postal_code + " "
     end
 
     if self.class.name != "Job" && self.state

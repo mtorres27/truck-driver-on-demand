@@ -84,7 +84,6 @@ class Freelancer < ApplicationRecord
       :city,
       :state,
       :postal_code,
-      :area,
       :country,
       :freelancer_type,
       :country,

@@ -71,16 +71,16 @@
             | State/Province
           = f.input :state, as: :string, required: true, label: false, placeholder: "State/Province"
 
+        .freelancer-profile__item
+          .freelancer-profile__title
+            | ZIP/Postal Code
+          = f.input :postal_code, required: true, label: false, prompt: "ZIP/Postal Code"
 
         .freelancer-profile__item
           .freelancer-profile__title
             | Country
           = f.input :country, required: true, label: false, prompt: "Select Country"
 
-        .freelancer-profile__item
-          .freelancer-profile__title
-            | ZIP/Postal Code
-          = f.input :postal_code, required: true, label: false, prompt: "ZIP/Postal Code"
 
         .freelancer-profile__item
           .freelancer-profile__title
@@ -91,11 +91,6 @@
           .freelancer-profile__title
             | Tagline
           = f.input :tagline, required: true, label: false, placeholder: "Tagline"
-
-        .freelancer-profile__item
-          .freelancer-profile__title
-            | Areas
-          = f.input :area, as: :string, required: true, label: false, placeholder: "Area"
 
         .freelancer-profile__item
           .freelancer-profile__title
