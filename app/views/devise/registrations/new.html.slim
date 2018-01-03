@@ -35,6 +35,10 @@ h1.center.heading-h1 Register with AV Junction
 
       - if resource.class.name != "Admin"
         .register__label
+          | City
+        = f.input :city, required: true, label: false, placeholder: "Enter your city"
+
+        .register__label
           | Country
 
         = f.input :country, required: true, label: false, prompt: "Select Country"

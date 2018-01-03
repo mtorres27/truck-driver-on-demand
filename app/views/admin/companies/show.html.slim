@@ -37,6 +37,11 @@
               = @company.name
           - else
             = @company.name
+        - if @company.confirmed_at.nil? && @company.confirmation_token.present?
+          .confirmation_link
+            .confirmation_label
+            strong<> Confirmation Link:
+            = confirmation_url(@company, confirmation_token: @company.confirmation_token)
         .profile__meta-center__area
           b
             = @company.contact_name
@@ -44,18 +49,18 @@
           = @company.area
         - if @company.email?
           .profile__meta-center__area
-            | Email: 
+            | Email:
             a href="mailto:#{@company.email}" target="_blank"
               = @company.email
         - if @company.website?
           .profile__meta-center__area
-            | URL: 
+            | URL:
             a href=proper_website_link(@company.website) target="_blank"
               = @company.website
         - if @company.phone_number?
           .profile__meta-center__area
             = "Phone: #{@company.phone_number}"
-          
+
 
         .profile__meta-center__member-since
           = "Member since #{@company.created_at.strftime('%B %d, %Y')}"
@@ -73,7 +78,7 @@
             - @company.skills.first(2).each do |index, value|
               .profile__meta-center__keyword
                 = I18n.t("enumerize.freelancer_skills.#{index}")
-        
+
     .profile__bona-fides
       .profile__bona-fides__review
         - if @company.company_reviews_count > 0
@@ -94,7 +99,7 @@
               | N/A
           .profile__bona-fides__data__years-of-experience-label
             | Number of Offices
-        
+
         .profile__bona-fides__data__projects-completed
           .profile__bona-fides__data__projects-completed-value
             = @company.established_in ? Time.now.year - @company.established_in : "N/A"
@@ -123,7 +128,7 @@
           - if @company.description.nil?
             | This company has not yet added a description.
           - else
-            = @company.description  
+            = @company.description
         .profile__abilities__specialties__markets-label
           | Stats
         .profile__abilities__specialties__markets-value--italic
@@ -131,7 +136,7 @@
 
         .profile__abilities__specialties__markets-value--italic
           = @company.number_of_employees ? "#{t(@company.number_of_employees)} employees" : "N/A"
-      .profile__abilities__specialties   
+      .profile__abilities__specialties
         .profile__abilities__specialties-label
           | specialties
         .profile__abilities__specialties__markets
@@ -154,7 +159,7 @@
                   = I18n.t("enumerize.freelancer_skills.#{index}")
             - else
               | This company has no skills listed.
-        
+
     .profile__projects
       .profile__projects-label
         | Installs
@@ -166,7 +171,7 @@
                 = "#{installation.year}: "
               em
                 = number_with_delimiter(installation.installs, :delimiter => ',')
-        - else 
+        - else
           | This company has no information about installs by year
 
     .profile__projects
@@ -179,7 +184,7 @@
               .profile__projects__project__image style="background-image: url(#{project.file_url.include?('missing') ? '/assets/' : ''} #{project.file_url})"
               .profile__projects__project__name
                 = project.name
-        - else 
+        - else
           | This company has no featured projects.
 
     .profile__reviews
@@ -214,6 +219,4 @@
                   td= link_to project.name, admin_project_path(project)
                   td.text-right= link_to 'Edit', edit_admin_project_path(project)
               end
-
-
 

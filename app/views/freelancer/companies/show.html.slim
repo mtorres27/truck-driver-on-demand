@@ -5,8 +5,8 @@
         .span class="fa fa-heart"
     - else
       a.freelancer-job__favourite href="#{params[:id]}?toggle_favourite=true"
-        .span class="fa fa-heart"   
-      
+        .span class="fa fa-heart"
+
   .search-header
     .company-mobile__row
       .company-mobile__avatar
@@ -19,12 +19,12 @@
       - if @company.website?
         a href=proper_website_link(@company.website) target="_blank"
           = @company.name
-          |   
+          |
           span class="fa fa-external-link"
-        
+
   .company-mobile__row
-    .company-mobile__area
-      = @company.area
+    .company-mobile__city
+      = @company.city
 
     .company-mobile__consumer-satisfaction
       span.company-mobile__rating
@@ -97,7 +97,7 @@
       - if @company.description.nil?
         | This company has not yet added a description.
       - else
-        = @company.description  
+        = @company.description
 
   .company-mobile__row
     .profile__abilities__specialties__skills-label.company-mobile__label
@@ -125,9 +125,9 @@
               = "#{installation.year}: "
             em
               = number_with_delimiter(installation.installs, :delimiter => ',')
-      - else 
+      - else
         | This company has no information about installs by year
-      
+
   .company-mobile__row--margin-top
     .profile__abilities__specialties__skills-label.company-mobile__label
       | CASE STUDIES
@@ -136,8 +136,7 @@
         - @company.featured_projects.each do |project|
           a.profile__projects__project href="#{project.file_url.include?('missing') ? '/assets/' : ''} #{project.file_url}" target="_blank"
             .profile__projects__project__image style="background-image: url(#{project.file_url.include?('missing') ? '/assets/' : ''} #{project.file_url})"
-      - else 
+      - else
         .company-mobile__review-content--empty
           | This company has no featured case studies.
 
- 

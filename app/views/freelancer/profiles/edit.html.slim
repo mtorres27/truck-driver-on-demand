@@ -58,19 +58,34 @@
 
         .freelancer-profile__item
           .freelancer-profile__title
+            | Address Line 2
+          = f.input :line2, required: false, label: false, placeholder: "Address Line 2, Unit/Apt #"
+
+        .freelancer-profile__item
+          .freelancer-profile__title
             | City
-          = f.input :area, as: :string, required: true, label: false, placeholder: "City"
+          = f.input :city, as: :string, required: true, label: false, placeholder: "City"
+
+        .freelancer-profile__item
+          .freelancer-profile__title
+            | State/Province
+          = f.input :state, as: :string, required: true, label: false, placeholder: "State/Province"
+
+        .freelancer-profile__item
+          .freelancer-profile__title
+            | ZIP/Postal Code
+          = f.input :postal_code, required: true, label: false, prompt: "ZIP/Postal Code"
 
         .freelancer-profile__item
           .freelancer-profile__title
             | Country
           = f.input :country, required: true, label: false, prompt: "Select Country"
 
+
         .freelancer-profile__item
           .freelancer-profile__title
             | Sales Tax No.
           = f.input :sales_tax_number, required: false, label: false, placeholder: "Sales Tax No."
-
 
         .freelancer-profile__item
           .freelancer-profile__title
@@ -91,6 +106,11 @@
           .freelancer-profile__title
             | Biography
           = f.input :bio, label: false, placeholder: "Write a bio"
+
+        .freelancer-profile__item
+          .freelancer-profile__title
+            | Service Areas
+          = f.input :service_areas, required: true, label: false, placeholder: "Service Areas"
 
         .freelancer-profile__item
           .freelancer-profile__title

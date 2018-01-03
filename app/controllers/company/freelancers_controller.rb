@@ -5,6 +5,11 @@ class Company::FreelancersController < Company::BaseController
     @keywords = params.dig(:search, :keywords).presence
     @address = params.dig(:search, :address).presence
 
+    if params.has_key?(:search) and !@keywords and !@address
+      flash[:error] = "You'll need to add some search criteria to narrow your search results!"
+      redirect_to company_freelancers_path
+    end
+
     @sort = params.dig(:search, :sort).presence
     @distance = params.dig(:search, :distance).presence
 
@@ -43,31 +48,36 @@ class Company::FreelancersController < Company::BaseController
       end
     end
 
-    if @keywords
-      @freelancers = @freelancers.search(@keywords)
+    if (!@keywords and !@address) or (@keywords.blank? and @address.blank?)
+      @freelancers = Freelancer.none
+    else
+      if !@keywords.blank?
+        @freelancers = @freelancers.search(@keywords)
+      else
+      end
     end
 
     @freelancers = @freelancers.page(params[:page]).per(50)
   end
 
   def hired
-    @locations = current_company.freelancers.uniq.pluck(:area)
+    @locations = current_company.freelancers.uniq.pluck(:city)
     @freelancers = current_company.freelancers.distinct
 
     if params[:location] && params[:location] != ""
-      @freelancers = @freelancers.where({ area: params[:location] })
+      @freelancers = @freelancers.where({ city: params[:location] })
     end
-    
+
     @freelancers = @freelancers.page(params[:page]).
       per(50)
   end
 
   def favourites
-    @locations = current_company.favourite_freelancers.uniq.pluck(:area)
+    @locations = current_company.favourite_freelancers.uniq.pluck(:city)
     @freelancers = current_company.favourite_freelancers
 
     if params[:location] && params[:location] != ""
-      @freelancers = @freelancers.where({ area: params[:location] })
+      @freelancers = @freelancers.where({ city: params[:location] })
     end
 
     @freelancers = @freelancers.page(params[:page]).
@@ -127,7 +137,7 @@ class Company::FreelancersController < Company::BaseController
     @jobs_master.each do |job|
       @found = false
       job.applicants.each do |applicant|
-        p applicant.freelancer_id 
+        p applicant.freelancer_id
         p @freelancer.id
 
         if applicant.freelancer_id == @freelancer.id
@@ -186,7 +196,7 @@ class Company::FreelancersController < Company::BaseController
         current_company.favourite_freelancers << f.first
       end
     end
-          
+
     render json: { status: 'success', freelancers: params[:freelancers] }
 
   end

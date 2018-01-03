@@ -11,7 +11,7 @@
         = freelancer_ratings_link(freelancer)
     - if is_favourite(freelancer)
       span class="freelancer-favourite fa fa-heart"
-    
+
   .media-body
     a href="/company/freelancers/#{freelancer.id}"
       h4.media-heading
@@ -19,13 +19,13 @@
         | &nbsp;
         - if is_verified(freelancer)
           .span class="freelancer__verified fa fa-check-circle"
-        
+
       - if params.dig(:search, :address) == nil
-        p= "#{freelancer.area}"
+        p= "#{freelancer.city}"
       - elsif params.dig(:search, :address) == ''
-        p= "#{freelancer.area}"
+        p= "#{freelancer.city}"
       - else
-        p= "#{freelancer.area}, #{distance_from(freelancer)} miles away"
+        p= "#{freelancer.city}, #{distance_from(freelancer)} miles away"
     p.media-tagline
       = freelancer.tagline
     div

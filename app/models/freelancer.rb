@@ -61,6 +61,9 @@ class Freelancer < ApplicationRecord
 
   validates :years_of_experience, numericality: { only_integer: true }
 
+  validates_presence_of :country, :on => :create
+  validates_presence_of :city, :on => :create
+
   audited
 
   def connected?; !stripe_account_id.nil?; end
@@ -74,19 +77,22 @@ class Freelancer < ApplicationRecord
   validates_acceptance_of :accept_code_of_conduct
 
   attr_accessor :enforce_profile_edit
-  
-    validates_presence_of :name, 
-      :email, 
-      :address, 
-      :area, 
-      :country, 
-      :freelancer_type, 
-      :country, 
-      :bio, 
-      :years_of_experience, 
-      :keywords, 
-      :skills, 
-      :pay_unit_time_preference, 
+
+    validates_presence_of :name,
+      :email,
+      :address,
+      :city,
+      :state,
+      :postal_code,
+      :country,
+      :freelancer_type,
+      :country,
+      :service_areas,
+      :bio,
+      :years_of_experience,
+      :keywords,
+      :skills,
+      :pay_unit_time_preference,
       if: :enforce_profile_edit
 
   after_create :add_to_hubspot
@@ -192,5 +198,15 @@ class Freelancer < ApplicationRecord
     exists = attrs["id"].present?
     empty = attrs["certificate"].blank? and attrs["name"].blank?
     !exists and empty
+  end
+
+  def self.do_all_geocodes
+    Freelancer.all.each do |f|
+      p "Doing geocode for " + f.id.to_s + "(#{f.compile_address})"
+      f.do_geocode
+      f.save
+
+      sleep 1
+    end
   end
 end

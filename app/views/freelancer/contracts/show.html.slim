@@ -112,9 +112,10 @@
                 - else
                   a href="/freelance-service-agreement?job=#{@job.id}#{random_append}" target="_blank"
                     | Click here to view the Freelance Service Agreement for this project.
-                  br
-                  input type='checkbox' id='accept_agreement' onclick="toggleAccept()"
-                  |  I accept the Freelance Services Agreement
+                  - if @job.state != :contracted and @job.freelancer.id == current_freelancer.id
+                    br
+                    input type='checkbox' id='accept_agreement' onclick="toggleAccept()"
+                    |  I accept the Freelance Services Agreement
 
 
           - if @job.state != :contracted and @job.freelancer.id == current_freelancer.id
@@ -123,7 +124,7 @@
               a href=freelancer_job_messages_path(@job)
                 | Progress
               |  view
-            a.btn.btn-primary href="/freelancer/jobs/#{@job.id}/work_order/accept" id="accept_work_order_button" disabled=true
+            a.btn.btn-primary href="#" data-link="/freelancer/jobs/#{@job.id}/work_order/accept" id="accept_work_order_button" disabled=true
               | Accept Work Order
           - elsif @job.state == :contracted and @job.freelancer.id == current_freelancer.id
             p
@@ -131,13 +132,19 @@
 
 javascript:
   var toggleAccept = function() {
-    console.log("Ha");
     if ($("#accept_agreement").is(":checked")) {
       $("#accept_work_order_button").attr('disabled', false);
     } else {
       $("#accept_work_order_button").attr('disabled', 'disabled');
     }
   };
+
+  $("#accept_work_order_button").on('click', function(e) {
+    if ($("#accept_work_order_button").attr('disabled') != 'disabled') {
+      window.location = $(this).data('link');
+    }
+    e.preventDefault();
+  })
 
 
 

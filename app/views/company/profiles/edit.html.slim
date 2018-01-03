@@ -39,32 +39,51 @@
           = f.input :name, required: true, label: false, placeholder: "Enter a Company Name."
         .company-profile__item
           .company-profile__title
-            | Salex Tax No.
-          = f.input :sales_tax_number, required: false, label: false, placeholder: "Enter the company tax number."
-        .company-profile__item
-          .company-profile__title
             | Contact Name
           = f.input :contact_name, required: true, label: false, placeholder: "Enter your preferred Company Contact Name."
         .company-profile__item
           .company-profile__title
-            | Country
-          = f.input :country, required: true, label: false, prompt: "Select Country"
-        .company-profile__item.province_line class="#{(@current_company.country!='ca')? 'hidden' : ''}"
-          .company-profile__title
-            | Province
-          = f.input :province, required: true, label: false, prompt: "Select Province"
+            | Contact Email
+          = f.input :email, required: true, as: :string, label: false, placeholder: "Enter your preferred Email Address."
         .company-profile__item
           .company-profile__title
-            | Service Areas
-          = f.input :area, as: :string, label: false, placeholder: "Enter the areas your company services (separate multiple areas with commas)."
+            | Sales Tax No.
+          = f.input :sales_tax_number, required: false, label: false, placeholder: "Enter the company tax number."
         .company-profile__item
           .company-profile__title
             | HQ Company Address
           = f.input :address, as: :string, label: false, placeholder: "Enter the address of your company's Headquarters."
         .company-profile__item
           .company-profile__title
-            | Contact Email
-          = f.input :email, required: true, as: :string, label: false, placeholder: "Enter your preferred Email Address."
+            | Address Line 2
+          = f.input :line2, as: :string, label: false, placeholder: "Enter line 2 address of your company's Headquarters."
+        .company-profile__item
+          .company-profile__title
+            | City
+          = f.input :city, as: :string, label: false, placeholder: "Enter the city of your company's Headquarters."
+        .company-profile__item.state_line  class="#{(@current_company.country=='ca')? 'hidden' : ''}"
+          .company-profile__title
+            | State
+          = f.input :state, as: :string, label: false, placeholder: "Enter the state of your company's Headquarters."
+        .company-profile__item.province_line class="#{(@current_company.country!='ca')? 'hidden' : ''}"
+          .company-profile__title
+            | Province
+          = f.input :province, required: true, label: false, prompt: "Select Province"
+        .company-profile__item
+          .company-profile__title
+            | ZIP/Postal Code
+          = f.input :postal_code, as: :string, label: false, placeholder: "Enter the zip / postal code of your company's Headquarters."
+        .company-profile__item
+          .company-profile__title
+            | Country
+          = f.input :country, required: true, label: false, prompt: "Select Country"
+
+        .company-profile__item
+          .company-profile__title
+            | Service Areas
+          = f.input :area, as: :string, label: false, placeholder: "Enter the areas your company services (separate multiple areas with commas)."
+
+
         .company-profile__item
           .company-profile__title
             | Website
@@ -157,10 +176,12 @@ javascript:
   function toggle_province(country){
     if (country == "ca"){
       $(".province_line").removeClass('hidden');
+      $(".state_line").addClass('hidden');
     }
     else{
       $('#company_province').val('');
       $(".province_line").addClass('hidden');
+      $(".state_line").removeClass('hidden');
     }
   }
 

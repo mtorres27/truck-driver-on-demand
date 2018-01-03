@@ -46,6 +46,7 @@ class ApplicationController < ActionController::Base
         :name,
         :contact_name,
         :country,
+        :city,
         :province,
         :currency,
         :accept_terms_of_service,

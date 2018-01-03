@@ -10,12 +10,12 @@
       = image_tag "avjunction-logo_header.svg"
 
   .mobile-nav__blocker
-    |  
+    |
   .mobile-nav__menu
-    - if request.path.index('freelancer') == 1 
+    - if request.path.index('freelancer') == 1
       - if current_freelancer.nil?
         a.mobile-nav__menu__item href=new_freelancer_session_path data-turbolinks="false"
-          | Login 
+          | Login
         a.mobile-nav__menu__item href=new_freelancer_registration_path data-turbolinks="false"
           | Register
       - else
@@ -25,7 +25,7 @@
           | my jobs
         a.mobile-nav__menu__item href=av_companies_freelancer_companies_path data-turbolinks="false"
           | av companies
-        a.mobile-nav__menu__item
+        a.mobile-nav__menu__item href=freelancer_payments_path
           | payments
         a.mobile-nav__menu__item href=freelancer_profile_path data-turbolinks="false"
           = image_tag current_freelancer.avatar_url
@@ -34,7 +34,7 @@
     - elsif request.path.index('company') == 1
       - if current_company.nil?
         a.mobile-nav__menu__item href=new_company_session_path data-turbolinks="false"
-          | Login 
+          | Login
         a.mobile-nav__menu__item href=new_company_registration_path data-turbolinks="false"
           | Register
       - else

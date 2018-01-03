@@ -16,7 +16,7 @@
           div class="zmdi zmdi-account-add"
         .popover--blanket onclick="hidePopOver()"
         .popover.popover--align-right
-        
+
           label.form__field-label for="field"  Invite to quote
           select.form__select-field.w-select name="job_to_invite" id="job_to_invite"
             option value="" label="Select Job"
@@ -24,7 +24,7 @@
               option value="#{job.id}" label="#{job.title}"
           div.btn-primary--active.w-inline-block id="job_invite_button" style="cursor: pointer" onclick="submitInvitation()" class="btn-primary--disabled"
             div invite
-          
+
           span.popover-response--error
           span.popover-response--success
 
@@ -33,16 +33,16 @@
         .tag.tag--warning
           | Unavailable
       - if @favourite
-          a.btn-icon-link.btn-icon-link--left-margin.w-inline-block href="#{params[:id]}?toggle_favourite=true" 
+          a.btn-icon-link.btn-icon-link--left-margin.w-inline-block href="#{params[:id]}?toggle_favourite=true"
             div class="zmdi zmdi-favorite"
       - else
-        a.btn-icon-link.btn-icon-link--left-margin.w-inline-block href="#{params[:id]}?toggle_favourite=true" 
+        a.btn-icon-link.btn-icon-link--left-margin.w-inline-block href="#{params[:id]}?toggle_favourite=true"
           div class="zmdi zmdi-favorite-outline"
-      
+
 
   .profile__meta
     .profile__meta-left
-      .profile__meta-left__avatar 
+      .profile__meta-left__avatar
         = image_tag(@freelancer.avatar_url, size: "135x135")
 
       .profile__meta-left__stars
@@ -59,8 +59,8 @@
     .profile__meta-center
       .profile__meta-center__name
         = @freelancer.name
-      .profile__meta-center__area
-        = @freelancer.area
+      .profile__meta-center__city
+        = @freelancer.city
       .profile__meta-center__member-since
         = "Member since #{@freelancer.created_at.strftime('%B %d, %Y')}"
       .profile__meta-center__tagline
@@ -93,7 +93,7 @@
             | N/A
         .profile__meta-right__pay-unit-label
           | rate
-      
+
   .profile__bona-fides
     .profile__bona-fides__review
       - if @freelancer.freelancer_reviews_count > 0
@@ -131,8 +131,8 @@
         - if @freelancer.bio.nil?
           | This freelancer has not yet added a bio.
         - else
-          = @freelancer.bio  
-    .profile__abilities__specialties   
+          = @freelancer.bio
+    .profile__abilities__specialties
       .profile__abilities__specialties-label
         | specialties
       .profile__abilities__specialties__markets
@@ -155,7 +155,7 @@
                 = I18n.t("enumerize.freelancer_skills.#{index}")
           - else
             | This freelancer has no skills listed.
-      
+
   .profile__certifications
     .profile__certifications-label
       | Type
@@ -169,7 +169,7 @@
             = "#{@freelancer.freelancer_type.text} "
             - if @freelancer.freelancer_team_size.nil?
               = ""
-            - else 
+            - else
               = "(#{t("enumerize.job.freelancer_team_size.#{@freelancer.freelancer_team_size}")})"
       br
       br
@@ -241,7 +241,7 @@ javascript:
     if ($("#job_invite_button").hasClass("btn-primary--disabled")) {
       return;
     }
-    
+
     $.get("/company/freelancers/#{params[:id]}/invite_to_quote", { job_to_invite: $("#job_to_invite").val()})
       .done(function( data ) {
         $(".popover-response--error").html("");

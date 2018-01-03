@@ -4,21 +4,34 @@ h1 Editing Company
   = f.error_notification
 
   .form-inputs
-    = f.input :name
-    = f.input :email, as: :string
     - if @company.avatar&.exists?
       img src=@company.avatar_url
     = f.hidden_field :avatar, value: @company.cached_avatar_data
     = f.input :avatar, as: :file, accept: 'image/gif, image/jpg, image/jpeg, image/png'
+    = f.input :name, label: 'Company Name'
+
     = f.input :contact_name
-    = f.input :address, as: :string
-    = f.input :area
+    = f.input :email, as: :string, label: 'Contact Email'
+    = f.input :sales_tax_number, as: :string, label: 'Sales Tax No.'
+    = f.input :address, as: :string, label: 'HQ Company Address'
+    = f.input :line2, as: :string, label: 'Address Line 2'
+    = f.input :city, as: :string
+    = f.input :state, as: :string
+    = f.input :province, as: :string
+    = f.input :postal_code, as: :string, label: 'Zip/Postal Code'
     = f.input :country
-    = f.input :description
-    = f.input :contract_preference
+    = f.input :area, label: 'Service Areas'
+    = f.input :website
+    = f.input :phone_number
+    = f.input :contract_preference, label: 'Work Order Type Preference'
+    = f.input :number_of_offices
+    = f.input :description, label: 'About the Company'
+    = f.input :established_in, label: 'Year Company was Established'
+    = f.input :number_of_employees
+
     .freelancer-profile__item
       .freelancer-profile__title
-        | Markets
+        | Company Markets
       .freelancer-profile__checkboxes
         - I18n.t('enumerize.freelancer_keywords').each do |index, value|
           - tag_name = "company[keywords][#{index.to_s}]"
@@ -32,7 +45,7 @@ h1 Editing Company
 
     .freelancer-profile__item
       .freelancer-profile__title
-        | Skills
+        | Company Skills
       .freelancer-profile__checkboxes
         - I18n.t('enumerize.freelancer_skills').each do |index, value|
           - tag_name = "company[skills][#{index.to_s}]"
@@ -44,11 +57,6 @@ h1 Editing Company
             = check_box_tag tag_name, "1", checked
             = value
 
-    = f.input :website
-    = f.input :phone_number
-    = f.input :number_of_offices
-    = f.input :number_of_employees
-    = f.input :established_in
     = f.input :disabled
 
   .form-actions

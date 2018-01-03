@@ -54,6 +54,9 @@ class Company < ApplicationRecord
   validates_acceptance_of :accept_privacy_policy
   validates_acceptance_of :accept_code_of_conduct
 
+  validates_presence_of :country, :on => :create
+  validates_presence_of :city, :on => :create
+
   # enumerize :currency, in: [
   #   :cad,
   #   :euro,
@@ -114,6 +117,9 @@ class Company < ApplicationRecord
     validates_presence_of :name,
       :email,
       :address,
+      :line2,
+      :city,
+      :postal_code,
       :area,
       :country,
       :description,
@@ -171,6 +177,11 @@ class Company < ApplicationRecord
     self.billing_period_ends_at = (Time.now + 3.months).to_datetime
   end
 
+  # def province=(value)
+  #   write_attribute(:state, value)
+  #   super(value)
+  # end
+
   pg_search_scope :search, against: {
     name: "A",
     email: "A",
@@ -223,6 +234,16 @@ class Company < ApplicationRecord
       exists = attrs["id"].present?
       empty = attrs["year"].blank? and attrs["installs"].blank
       !exists and empty
+    end
+
+    def self.do_all_geocodes
+      Company.all.each do |f|
+        p "Doing geocode for " + f.id.to_s + "(#{f.compile_address})"
+        f.do_geocode
+        f.save
+
+        sleep 1
+      end
     end
 
   # This SQL needs to stay exactly in sync with it's related index (index_on_companies_location)
