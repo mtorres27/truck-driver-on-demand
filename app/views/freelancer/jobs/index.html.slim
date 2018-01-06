@@ -4,6 +4,28 @@
 
 .
 - content_for :secondary do
+  .action-bar
+    h2.heading-h2.heading-h2--action-bar
+      - if params.dig(:search, :keywords).presence || params.dig(:search, :address).presence
+        = "#{@jobs.total_count} jobs found for "
+      - else
+        = "#{@jobs.total_count} jobs found"
+      span class="result-header__text--strong"
+        = params[:search][:keywords]
+      - if params[:search][:address] > ""
+        = " near "
+        span class="result-header__text--strong"
+          = params[:search][:address]
+
+
+    .action-bar__actions
+      span class="result-header__distance-text"
+        | distance
+      select id="job_distance" class="company-freelancer__distance"
+          option value="160934" label="100 Miles" selected=("selected" if params.dig(:search, :distance) == '160934')
+          option value="241402" label="150 Miles" selected=("selected" if params.dig(:search, :distance) == '241402')
+          option value="321869" label="200 Miles" selected=("selected" if params.dig(:search, :distance) == '321869')
+          option value="402336" label="250 Miles" selected=("selected" if params.dig(:search, :distance) == '402336')
   .result-mobile
     .result-freelancers
       - if !@jobs.any?
@@ -14,3 +36,12 @@
           = render partial: "/freelancer/shared/job_info", locals: { job: job }
 
       = paginate @jobs
+
+javascript:
+  $(document).ready(function() {
+    $("#job_distance").on('change', function() {
+      var val = this.value;
+      $("#distance").val(val);
+      $("#company_search_form").submit();
+    });
+  });

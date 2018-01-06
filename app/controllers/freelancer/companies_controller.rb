@@ -45,7 +45,7 @@ class Freelancer::CompaniesController < Freelancer::BaseController
       end
     end
 
-    if @keywords and !@keywords.blank
+    if @keywords and !@keywords.blank?
       @jobs = @jobs.search(@keywords)
     end
 

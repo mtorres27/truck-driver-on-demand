@@ -2,7 +2,7 @@ $(document).on("turbolinks:load", function () {
   if ($(".company-freelancers").length == 0) {
     return;
   }
-  
+
   $("#freelance_distance").on('change', function() {
     var val = this.value;
     $("#distance").val(val);
