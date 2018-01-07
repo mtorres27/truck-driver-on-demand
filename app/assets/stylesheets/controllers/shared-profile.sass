@@ -7,6 +7,9 @@
   background-size: cover
   background-repeat: repeat-x
   background-attachment: scroll
+  @media (max-width: $breakpoint-tablet)
+    margin-right: -16px
+    margin-left: -16px
   &.profile__wallpaper--freelancer
     margin-top: -24px
 
@@ -73,8 +76,8 @@
   align-items: stretch
 
 .fprofile__meta__image
-  width: 135px
-  height: 135px
+  width: 75px
+  height: 75px
   -webkit-box-flex: 0
   -webkit-flex: 0 0 auto
   -ms-flex: 0 0 auto
