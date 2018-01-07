@@ -60,6 +60,18 @@
     -webkit-flex: 0 auto
     -ms-flex: 0 auto
     flex: 0 auto
+  &--75
+    width: 75%
+    -webkit-box-flex: 0
+    -webkit-flex: 0 auto
+    -ms-flex: 0 auto
+    flex: 0 auto
+  &--67
+    width: 67%
+    -webkit-box-flex: 0
+    -webkit-flex: 0 auto
+    -ms-flex: 0 auto
+    flex: 0 auto
   &--50
     width: 50%
     -webkit-box-flex: 0
@@ -72,24 +84,13 @@
     -webkit-flex: 0 auto
     -ms-flex: 0 auto
     flex: 0 auto
-  &--67
-    width: 67%
-    -webkit-box-flex: 0
-    -webkit-flex: 0 auto
-    -ms-flex: 0 auto
-    flex: 0 auto
   &--25
     width: 25%
     -webkit-box-flex: 0
     -webkit-flex: 0 auto
     -ms-flex: 0 auto
     flex: 0 auto
-  &--75
-    width: 75%
-    -webkit-box-flex: 0
-    -webkit-flex: 0 auto
-    -ms-flex: 0 auto
-    flex: 0 auto
+
   &--vshrink
     -webkit-box-flex: 0
     -webkit-flex: 0 auto
@@ -97,13 +98,21 @@
     flex: 0 auto
 
 
-@media (max-width: 767px)
+@media (max-width: $breakpoint-tablet)
   .grid-h
     -webkit-box-orient: vertical
     -webkit-box-direction: normal
     -webkit-flex-direction: column
     -ms-flex-direction: column
     flex-direction: column
+    margin-top: -16px
+    margin-bottom: 16px
+    margin-left: -16px
+  .grid-v
+    margin-top: -16px
+    margin-left:  -16px
   .grid-cell
     &--33, &--67, &--50, &--25
       width: 100%
+      padding-top: 16px
+      padding-left: 16px

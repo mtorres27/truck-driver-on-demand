@@ -1,35 +1,79 @@
-.media
-  .media-left
-    a href="/company/freelancers/#{freelancer.id}"
-      = image_tag(freelancer.avatar_url, size: "75x75")
-    .reviews
-      - @stars = freelancer_avg_rating(freelancer)
-      - @stars.each do |star|
-        i class=star
-    - if freelancer.freelancer_reviews_count > 0
-      a class="reviews__counter" href="/company/freelancers/#{freelancer.id}#reviews" data-turbolinks="false"
-        = freelancer_ratings_link(freelancer)
+/ .media
+/   .media-left
+/     a href="/company/freelancers/#{freelancer.id}"
+/       = image_tag(freelancer.avatar_url, size: "75x75")
+/     .reviews
+/       - @stars = freelancer_avg_rating(freelancer)
+/       - @stars.each do |star|
+/         i class=star
+/     - if freelancer.freelancer_reviews_count > 0
+/       a class="reviews__counter" href="/company/freelancers/#{freelancer.id}#reviews" data-turbolinks="false"
+/         = freelancer_ratings_link(freelancer)
+/     - if is_favourite(freelancer)
+/       span class="freelancer-favourite fa fa-heart"
+
+/   .media-body
+/     a href="/company/freelancers/#{freelancer.id}"
+/       h4.media-heading
+/         = freelancer.name
+/         | &nbsp;
+/         - if is_verified(freelancer)
+/           .span class="freelancer__verified fa fa-check-circle"
+
+/       - if params.dig(:search, :address) == nil
+/         p= "#{freelancer.city}"
+/       - elsif params.dig(:search, :address) == ''
+/         p= "#{freelancer.city}"
+/       - else
+/         p= "#{freelancer.city}, #{distance_from(freelancer)} miles away"
+/     p.media-tagline
+/       = freelancer.tagline
+/     div
+/       - if !freelancer.keywords.nil? and freelancer.keywords.kind_of?(Hash)
+/         - freelancer.keywords.first(4).each do |index, value|
+/           .tag.grey
+/             = I18n.t("enumerize.freelancer_keywords.#{index}")
+
+a.list-item.list-item--freelancer href="/company/freelancers/#{freelancer.id}" 
+  
+  .list__img
     - if is_favourite(freelancer)
-      span class="freelancer-favourite fa fa-heart"
-
-  .media-body
-    a href="/company/freelancers/#{freelancer.id}"
-      h4.media-heading
-        = freelancer.name
-        | &nbsp;
-        - if is_verified(freelancer)
-          .span class="freelancer__verified fa fa-check-circle"
-
+      .list__fav
+        span.zmdi.zmdi-favorite
+    .list__img-overlay
+    - if freelancer.avatar_url
+      = image_tag(freelancer.avatar_url, size: "75x75")
+    - else
+      img src="/assets/avatar/missing.png" 
+    
+    
+  .list__group
+    .list__title
+      = "#{freelancer.name} "
+      - if is_verified(freelancer)
+        span.list__verified.zmdi.zmdi-check-circle
+    
+    .list__city  
       - if params.dig(:search, :address) == nil
-        p= "#{freelancer.city}"
+        = " #{freelancer.city}"
       - elsif params.dig(:search, :address) == ''
-        p= "#{freelancer.city}"
+        = " #{freelancer.city}"
       - else
-        p= "#{freelancer.city}, #{distance_from(freelancer)} miles away"
-    p.media-tagline
+        = " #{freelancer.city}, #{distance_from(freelancer)} miles away"
+    
+    .list__rating 
+    - @stars = freelancer_avg_rating(freelancer)
+    - @stars.each do |star|
+      i class=star
+    / - if freelancer.freelancer_reviews_count > 0
+    /   a class="reviews__counter" href="/company/freelancers/#{freelancer.id}#reviews" data-turbolinks="false"
+    /     = freelancer_ratings_link(freelancer)
+
+    .list__desc 
       = freelancer.tagline
-    div
+    
+    .tags
       - if !freelancer.keywords.nil? and freelancer.keywords.kind_of?(Hash)
         - freelancer.keywords.first(4).each do |index, value|
-          .tag.grey
-            = I18n.t("enumerize.freelancer_keywords.#{index}")
+          .tag.tag--grey
+            = I18n.t("enumerize.freelancer_keywords.#{index}")          

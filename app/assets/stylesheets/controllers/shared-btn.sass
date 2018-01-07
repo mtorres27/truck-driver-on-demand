@@ -1,0 +1,38 @@
+.btn
+  display: -webkit-box
+  display: -webkit-flex
+  display: -ms-flexbox
+  display: flex
+  height: 40px
+  margin-right: 16px
+  padding-right: 16px
+  padding-left: 16px
+  -webkit-box-pack: center
+  -webkit-justify-content: center
+  -ms-flex-pack: center
+  justify-content: center
+  -webkit-box-align: center
+  -webkit-align-items: center
+  -ms-flex-align: center
+  align-items: center
+  border-radius: 2px
+  background-color: #000
+  color: #fff
+  text-transform: uppercase
+  &:last-child
+    margin-right: 0px
+  &--primary
+    border: 1px solid #3daadf
+    background-color: #3daadf
+    -webkit-transition: background-color 200ms ease
+    transition: background-color 200ms ease
+    &:hover
+      background-color: #208cc0
+      color: white
+  &--secondary
+    border: 1px solid #3daadf
+    background-color: transparent
+    color: #3daadf
+    &:hover
+      background-color: white
+      color: $brand-primary
