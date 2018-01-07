@@ -1,7 +1,6 @@
 .grid-cell.grid-cell--25
   a.job-box href=stateful_company_job_path(job)
     = job_state_label(job)
-    / h4.heading-h4.heading-h4--job-box= job.title.length > 30 ? "#{job.title[0...30]}..." : job.title
     h4.heading-h4.heading-h4--job-box= job.title
     .job-box__stats
       .job-box__stat

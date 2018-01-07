@@ -68,7 +68,7 @@
   &--header
     width: 100%
     max-width: none
-    padding-top: 24px
+    padding-top: 0px
     padding-right: 24px
     padding-left: 24px
     border-bottom: 1px solid rgba(0, 0, 0, 0.15)
@@ -81,6 +81,12 @@
       padding-left: 16px
       padding-right: 16px
       padding-top: 16px
+  &--profile
+    margin-top: -180px
+    @media (max-width: $breakpoint-tablet)
+      padding-left: 0px
+      padding-right: 0px
+      padding-top: 0px
 
 .frame
   overflow: hidden
@@ -107,3 +113,4 @@
     box-shadow: none
     padding: 16px
     margin-bottom: 16px
+ 

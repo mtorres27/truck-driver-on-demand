@@ -29,8 +29,8 @@ h1.heading-h1 Search for Jobs
   - if !@jobs.any?
     h2.heading-h2
       | No job postings match your input, please try other keywords to find what you're looking for.
-  - @jobs.each do |job|
-    .list
+  .list
+    - @jobs.each do |job|
       = render partial: "/freelancer/shared/job_info", locals: { job: job }
 
   = paginate @jobs

@@ -1,0 +1,147 @@
+.grid-h
+  .grid-cell.grid-cell--50
+    .fprofile__meta__details__1-1
+      .fprofile__meta__image
+        = image_tag(@company.avatar_url, size: "135x135")
+      .fprofile__meta__info
+        h2.heading-h2
+          - if @company.website?
+            a href=proper_website_link(@company.website) target="_blank"
+              = @company.name
+          - else
+            = @company.name         
+        h3.heading-h3
+          = @company.contact_name          
+        h4.heading-h4
+          | Email: 
+          a href="mailto:#{@company.email}" target="_blank"
+            = @company.email          
+        h4.heading-h4
+          i
+            = "Member since #{@company.created_at.strftime('%B %d, %Y')}"          
+        h4.heading-h4
+          - if @company.contract_preference == :no_preference or @company.contract_preference.nil?
+            = t(:has_no_preference)
+          - else
+            = "#{t(:prefers)} #{t(@company.contract_preference)}"
+        
+        h4.heading-h4 
+          a href="#reviews" data-turbolinks="false"
+            = company_ratings_link(@company)
+        .fprofile__meta__rating
+          - @stars = company_avg_rating(@company)
+            - @stars.each do |star|
+              i class=star
+        - if @company.website?
+          .h4.heading-h4
+            a href=proper_website_link(@company.website) target="_blank"
+              = @company.website
+        - if @company.phone_number?
+          h4.heading-h4
+            a href="tel:#{@company.phone_number}"
+              = "#{@company.phone_number}"
+
+
+  .grid-cell.grid-cell--50
+    .profile__stats-box
+      .profile__stats
+        h1.heading-h1
+          - if !@company.number_of_offices.nil?
+            = @company.number_of_offices
+          - else
+            | N/A
+        h4.heading-h4
+          | Offices
+      
+      .profile__stats
+        h1.heading-h1
+          = @company.established_in ? Time.now.year - @company.established_in : "N/A"
+        h4.heading-h4
+          | Years in Business
+
+      .profile__stats
+        h1.heading-h1
+          - if !@company.rating.nil?
+            = @company.rating
+          - else
+            | N/A
+        h4.heading-h4
+          | Rating
+
+      .profile__stats
+        h1.heading-h1
+          = number_to_human(@company.profile_views, :format => '%n%u', :precision => 3, :units => { :thousand => 'K', :million => 'M', :billion => 'B' })
+        h4.heading-h4
+          | Views
+
+  .grid-cell.grid-cell--50
+    h3.heading-h3 About
+    p
+      - if @company.description.nil?
+        | This company has not yet added a description.
+      - else
+        = @company.description
+
+    h3.heading-h3 Stats
+    p
+      = @company.established_in ? "#{Time.now.year - @company.established_in} years in business" : "N/A"
+
+    h3.heading-h3 Employees
+    p
+      = @company.number_of_employees ? "#{t(@company.number_of_employees)} employees" : "N/A"
+
+    h3.heading-h3 Installs
+    p
+      - if @company.company_installs.length > 0
+        - @company.company_installs.order('year ASC').each do |installation|
+          .profile__projects__project
+            strong
+              = "#{installation.year}: "
+            em
+              = number_with_delimiter(installation.installs, :delimiter => ',')
+      - else
+        | This company has no information about installs by year
+
+    h3.heading-h3 Projects
+    p
+      - if @company.featured_projects.length > 0
+        - @company.featured_projects.each do |project|
+          a.profile__projects__project href="#{project.file_url.include?('missing') ? '/assets/' : ''} #{project.file_url}" target="_blank"
+            .profile__projects__project__image style="background-image: url(#{project.file_url.include?('missing') ? '/assets/' : ''} #{project.file_url})"
+            .profile__projects__project__name
+              = project.name
+      - else
+        | This company has no featured projects.
+
+    h3.heading-h3 Reviews
+    a name="reviews"
+    .profile__reviews-value
+      - if @company.company_reviews_count > 0
+        .profile__reviews__review
+        - @company.company_reviews.each do |review|
+          .profile__reviews__review-text
+            = review.comments
+          .profile__reviews__review-name
+            = review.freelancer.name
+      - else
+        p This company doesn't have any reviews.
+  
+  .grid-cell.grid-cell--50
+    h3.heading-h3 Specialties
+    h4.heading-h4 Markets
+    div
+      - if !@company.keywords.nil? and @company.keywords.kind_of?(Hash)
+        - @company.keywords.each do |index, value|
+          .tag.tag--grey
+            = I18n.t("enumerize.freelancer_keywords.#{index}")
+      - else
+        | This company has no markets listed.
+
+    h4.heading-h4 Skills
+    div
+      - if !@company.skills.nil? and @company.skills.kind_of?(Hash)
+        - @company.skills.each do |index, value|
+          .tag.tag--grey
+            = I18n.t("enumerize.freelancer_skills.#{index}")
+      - else
+        | This company has no skills listed.

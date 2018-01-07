@@ -1,142 +1,157 @@
-- content_for :secondary do
-  .freelancer-job__apply
-    - if is_favourite_company(@company)
-      a.freelancer-job__favourite--active href="#{params[:id]}?toggle_favourite=true"
-        .span class="fa fa-heart"
-    - else
-      a.freelancer-job__favourite href="#{params[:id]}?toggle_favourite=true"
-        .span class="fa fa-heart"
+.container.container--header
+  - if @company.profile_header_url.include?("missing") or @company.header_source == "color"
+    .profile__wallpaper.profile__wallpaper--freelancer style="background-color: #{ @company.header_color.include?("#") ? "" : "#"}#{@company.header_color}"
+  - else
+    .profile__wallpaper.profile__wallpaper--freelancer style="background-image: url(#{@company.profile_header_url.include?("missing") ? "" : @company.profile_header_url});"
 
-  .search-header
-    .company-mobile__row
-      .company-mobile__avatar
-        = image_tag(@company.avatar_url, size: "50x50")
-      .company-mobile__name
+.container.container--profile
+  .frame
+    .action-bar
+      h2.heading-h2.heading-h2--action-bar
         = @company.name
 
-  .company-mobile__row
-    .company-mobile__link
-      - if @company.website?
-        a href=proper_website_link(@company.website) target="_blank"
-          = @company.name
-          |
-          span class="fa fa-external-link"
+    = render "shared/profile-company"
 
-  .company-mobile__row
-    .company-mobile__city
-      = @company.city
 
-    .company-mobile__consumer-satisfaction
-      span.company-mobile__rating
-        - @stars = company_avg_rating(@company)
-          - @stars.each do |star|
-            i class=star
+/ - content_for :secondary do
+/   .freelancer-job__apply
+/     - if is_favourite_company(@company)
+/       a.freelancer-job__favourite--active href="#{params[:id]}?toggle_favourite=true"
+/         .span class="fa fa-heart"
+/     - else
+/       a.freelancer-job__favourite href="#{params[:id]}?toggle_favourite=true"
+/         .span class="fa fa-heart"
 
-      span.company-mobile__reviews
-        a href="#reviews" data-turbolinks="false"
-          = company_ratings_link(@company)
+  / .search-header
+  /   .company-mobile__row
+  /     .company-mobile__avatar
+  /       = image_tag(@company.avatar_url, size: "50x50")
+  /     .company-mobile__name
+  /       = @company.name
 
-  .company-mobile__member-since
-    = "Member since #{@company.created_at.strftime('%B %d, %Y')}"
+  / .company-mobile__row
+  /   .company-mobile__link
+  /     - if @company.website?
+  /       a href=proper_website_link(@company.website) target="_blank"
+  /         = @company.name
+  /         |
+  /         span class="fa fa-external-link"
 
-  .company-mobile__contract-preference
-    - if @company.contract_preference == :no_preference or @company.contract_preference.nil?
-      = t(:has_no_preference)
-    - else
-      = "#{t(:prefers)} #{t(@company.contract_preference)}"
+  / .company-mobile__row
+  /   .company-mobile__city
+  /     = @company.city
 
-  .company-mobile__row--margin-top
-      .company-mobile__meta__item
-        .company-mobile__meta__item-value
-          - if !@company.rating.nil?
-            = @company.rating
-          - else
-            | N/A
-        .company-mobile__meta__item-label
-          | Star Rating
+  /   .company-mobile__consumer-satisfaction
+  /     span.company-mobile__rating
+  /       - @stars = company_avg_rating(@company)
+  /         - @stars.each do |star|
+  /           i class=star
 
-      .company-mobile__meta__item
-        .company-mobile__meta__item-value
-          = number_to_human(@company.profile_views, :format => '%n%u', :precision => 3, :units => { :thousand => 'K', :million => 'M', :billion => 'B' })
-        .company-mobile__meta__item-label
-          | Profile Views
+  /     span.company-mobile__reviews
+  /       a href="#reviews" data-turbolinks="false"
+  /         = company_ratings_link(@company)
 
-      .company-mobile__meta__item
-        .company-mobile__meta__item-value
-          = @company.jobs.where({ state: "completed" }).count
-        .company-mobile__meta__item-label
-          | Projects Completed
+  / .company-mobile__member-since
+  /   = "Member since #{@company.created_at.strftime('%B %d, %Y')}"
 
-  .company-mobile__row--margin-bottom
-    .profile__abilities__specialties__skills
-      .profile__abilities__specialties__skills-label.company-mobile__label
-        | skill job tags
-      .profile__abilities__specialties__skills-value
-        - if !@company.skills.nil? and @company.skills.kind_of?(Hash)
-          - @company.skills.each do |index, value|
-            .profile__abilities__specialties__skill
-              = I18n.t("enumerize.freelancer_skills.#{index}")
-        - else
-          | This company has no skills listed.
-    p= " "
-    .profile__abilities__specialties__markets
-      .profile__abilities__specialties__markets-label.company-mobile__label
-        | markets
-      .profile__abilities__specialties__markets-value
-        - if !@company.keywords.nil? and @company.keywords.kind_of?(Hash)
-          - @company.keywords.each do |index, value|
-            .profile__abilities__specialties__market
-              = I18n.t("enumerize.freelancer_keywords.#{index}")
-        - else
-          | This company has no markets listed.
+  / .company-mobile__contract-preference
+  /   - if @company.contract_preference == :no_preference or @company.contract_preference.nil?
+  /     = t(:has_no_preference)
+  /   - else
+  /     = "#{t(:prefers)} #{t(@company.contract_preference)}"
 
-  .company-mobile__row--margin-bottom
-    .profile__abilities__specialties__skills-label.company-mobile__label
-      | Company Info
-    .company-mobile__text
-      - if @company.description.nil?
-        | This company has not yet added a description.
-      - else
-        = @company.description
+  / .company-mobile__row--margin-top
+  /     .company-mobile__meta__item
+  /       .company-mobile__meta__item-value
+  /         - if !@company.rating.nil?
+  /           = @company.rating
+  /         - else
+  /           | N/A
+  /       .company-mobile__meta__item-label
+  /         | Star Rating
 
-  .company-mobile__row
-    .profile__abilities__specialties__skills-label.company-mobile__label
-      | Reviews
-    .company-mobile__review-content
-      - if @company.company_reviews_count > 0
-        .profile__reviews__review
-        - @company.company_reviews.each do |review|
-          .profile__reviews__review-text
-            = review.comments
-          .profile__reviews__review-name
-            = review.freelancer.name
-      - else
-        .company-mobile__review-content--empty
-          | This company doesn't have any reviews.
+  /     .company-mobile__meta__item
+  /       .company-mobile__meta__item-value
+  /         = number_to_human(@company.profile_views, :format => '%n%u', :precision => 3, :units => { :thousand => 'K', :million => 'M', :billion => 'B' })
+  /       .company-mobile__meta__item-label
+  /         | Profile Views
 
-  .company-mobile__row
-    .profile__abilities__specialties__skills-label.company-mobile__label
-      | Installations
-    .profile__projects-value--installations
-      - if @company.company_installs.length > 0
-        - @company.company_installs.order('year ASC').each do |installation|
-          .profile__projects__project
-            strong
-              = "#{installation.year}: "
-            em
-              = number_with_delimiter(installation.installs, :delimiter => ',')
-      - else
-        | This company has no information about installs by year
+  /     .company-mobile__meta__item
+  /       .company-mobile__meta__item-value
+  /         = @company.jobs.where({ state: "completed" }).count
+  /       .company-mobile__meta__item-label
+  /         | Projects Completed
 
-  .company-mobile__row--margin-top
-    .profile__abilities__specialties__skills-label.company-mobile__label
-      | CASE STUDIES
-    .profile__projects-value
-      - if @company.featured_projects.length > 0
-        - @company.featured_projects.each do |project|
-          a.profile__projects__project href="#{project.file_url.include?('missing') ? '/assets/' : ''} #{project.file_url}" target="_blank"
-            .profile__projects__project__image style="background-image: url(#{project.file_url.include?('missing') ? '/assets/' : ''} #{project.file_url})"
-      - else
-        .company-mobile__review-content--empty
-          | This company has no featured case studies.
+  / .company-mobile__row--margin-bottom
+  /   .profile__abilities__specialties__skills
+  /     .profile__abilities__specialties__skills-label.company-mobile__label
+  /       | skill job tags
+  /     .profile__abilities__specialties__skills-value
+  /       - if !@company.skills.nil? and @company.skills.kind_of?(Hash)
+  /         - @company.skills.each do |index, value|
+  /           .profile__abilities__specialties__skill
+  /             = I18n.t("enumerize.freelancer_skills.#{index}")
+  /       - else
+  /         | This company has no skills listed.
+  /   p= " "
+  /   .profile__abilities__specialties__markets
+  /     .profile__abilities__specialties__markets-label.company-mobile__label
+  /       | markets
+  /     .profile__abilities__specialties__markets-value
+  /       - if !@company.keywords.nil? and @company.keywords.kind_of?(Hash)
+  /         - @company.keywords.each do |index, value|
+  /           .profile__abilities__specialties__market
+  /             = I18n.t("enumerize.freelancer_keywords.#{index}")
+  /       - else
+  /         | This company has no markets listed.
+
+  / .company-mobile__row--margin-bottom
+  /   .profile__abilities__specialties__skills-label.company-mobile__label
+  /     | Company Info
+  /   .company-mobile__text
+  /     - if @company.description.nil?
+  /       | This company has not yet added a description.
+  /     - else
+  /       = @company.description
+
+  / .company-mobile__row
+  /   .profile__abilities__specialties__skills-label.company-mobile__label
+  /     | Reviews
+  /   .company-mobile__review-content
+  /     - if @company.company_reviews_count > 0
+  /       .profile__reviews__review
+  /       - @company.company_reviews.each do |review|
+  /         .profile__reviews__review-text
+  /           = review.comments
+  /         .profile__reviews__review-name
+  /           = review.freelancer.name
+  /     - else
+  /       .company-mobile__review-content--empty
+  /         | This company doesn't have any reviews.
+
+  / .company-mobile__row
+  /   .profile__abilities__specialties__skills-label.company-mobile__label
+  /     | Installations
+  /   .profile__projects-value--installations
+  /     - if @company.company_installs.length > 0
+  /       - @company.company_installs.order('year ASC').each do |installation|
+  /         .profile__projects__project
+  /           strong
+  /             = "#{installation.year}: "
+  /           em
+  /             = number_with_delimiter(installation.installs, :delimiter => ',')
+  /     - else
+  /       | This company has no information about installs by year
+
+  / .company-mobile__row--margin-top
+  /   .profile__abilities__specialties__skills-label.company-mobile__label
+  /     | CASE STUDIES
+  /   .profile__projects-value
+  /     - if @company.featured_projects.length > 0
+  /       - @company.featured_projects.each do |project|
+  /         a.profile__projects__project href="#{project.file_url.include?('missing') ? '/assets/' : ''} #{project.file_url}" target="_blank"
+  /           .profile__projects__project__image style="background-image: url(#{project.file_url.include?('missing') ? '/assets/' : ''} #{project.file_url})"
+  /     - else
+  /       .company-mobile__review-content--empty
+  /         | This company has no featured case studies.
 

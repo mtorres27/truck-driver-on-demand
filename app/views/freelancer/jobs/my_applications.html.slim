@@ -5,6 +5,6 @@
   - if @jobs.count == 0
     h3.heading-h3
       | You haven't applied to any jobs yet.
-  - @jobs.each do |job|
-    .list
+  .list
+    - @jobs.each do |job|
       = render partial: "/freelancer/shared/my_job_info", locals: { job: job[:job], type: "applicant", applicant: job[:applicant]  }

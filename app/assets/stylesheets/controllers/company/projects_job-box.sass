@@ -35,6 +35,7 @@
   border-width: 1px
   border-color: rgba(0, 0, 0, 0.25)
   border-radius: 4px
+  width: 100%
   -webkit-transition: background-color 200ms ease
   transition: background-color 200ms ease
   &:hover
@@ -53,11 +54,14 @@
   -ms-flex: 0 auto
   flex: 0 auto
   color: black
+  width: 100%
 
 .job-box__stat
   width: 50%
   padding-right: 8px
   padding-bottom: 8px
+  @media (max-width: $breakpoint-tablet)
+    width: 25%
 
 .job-box__value
   font-size: 20px

@@ -29,6 +29,18 @@
     &:hover
       background-color: #208cc0
       color: white
+    &--disabled
+      background-color: #e2e2e2
+      border: 1px solid #e2e2e2
+      color: #a8a8a8
+      cursor: not-allowed
+      &:hover
+        background-color: #e2e2e2
+        border: 1px solid #e2e2e2
+        color: #a8a8a8
+        cursor: not-allowed
+  &.top-margin
+    margin-top: 8px  
   &--secondary
     border: 1px solid #3daadf
     background-color: transparent
@@ -36,3 +48,22 @@
     &:hover
       background-color: white
       color: $brand-primary
+
+
+.btn-link
+  display: inline-block
+  font-size: 12px
+  font-weight: 600
+  text-transform: uppercase    
+
+.btn-icon-link
+  width: 24px
+  height: 24px
+  font-family: $icon-font, sans-serif
+  color: #333
+  font-size: 24px
+  line-height: 24px
+  margin: 0 8px
+  cursor: pointer
+  &:hover
+    color: #3daadf 

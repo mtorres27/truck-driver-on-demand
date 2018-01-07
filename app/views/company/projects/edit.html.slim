@@ -5,10 +5,8 @@
     | Closed Projects
     
 - content_for :secondary do
-  .result-wrapper
-    .result-header
-      .result-header__text
+  .action-bar
+    h2.heading-h2.heading-h2--action-bar
         | Edit Project
-
-    .result-content
-      = render partial: "form", locals: { project: @project }
+  
+  = render partial: "form", locals: { project: @project }

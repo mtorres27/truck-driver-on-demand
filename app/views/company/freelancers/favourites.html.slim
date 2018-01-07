@@ -16,9 +16,8 @@ h1.heading-h1 My Freelancers
         option value="" label="All" selected=("selected" if params.dig(:location) == "" || !params.dig(:location).presence)
         - @locations.each do |location|
           option value="#{location}" label="#{location}" selected=("selected" if params.dig(:location) == location)
-
-  - @freelancers.each do |freelancer|
-    .list
+  .list
+    - @freelancers.each do |freelancer|
       = render partial: "company/shared/freelancer_info", locals: { freelancer: freelancer }
 
     = paginate @freelancers
