@@ -6,12 +6,11 @@
       a.btn.btn--primary href=edit_company_profile_path
         | Edit
 
-  .grid-h
-    .grid-cell.grid-cell--100
-      - if @company.profile_header_url.include?("missing") or @company.header_source == "color"
-        .profile__wallpaper.profile__wallpaper--freelancer style="background-color: #{ @company.header_color.include?("#") ? "" : "#"}#{@company.header_color}"
-      - else
-        .profile__wallpaper.profile__wallpaper--freelancer style="background-image: url(#{@company.profile_header_url.include?("missing") ? "" : @company.profile_header_url});"
+
+  - if @company.profile_header_url.include?("missing") or @company.header_source == "color"
+    .profile__wallpaper style="background-color: #{ @company.header_color.include?("#") ? "" : "#"}#{@company.header_color}"
+  - else
+    .profile__wallpaper style="background-image: url(#{@company.profile_header_url.include?("missing") ? "" : @company.profile_header_url});"
 
 
   = render "shared/profile-company"

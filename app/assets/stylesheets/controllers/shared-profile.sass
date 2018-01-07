@@ -1,17 +1,15 @@
 .profile__wallpaper
   height: 35vh
-  margin-right: -24px
-  margin-left: -24px
+  margin: -24px -24px 24px -24px
   background-color: violet
   background-position: 50% 50%
   background-size: cover
   background-repeat: repeat-x
   background-attachment: scroll
+  &.profile__wallpaper--wide
+    margin: -24px -24px 0px -24px
   @media (max-width: $breakpoint-tablet)
-    margin-right: -16px
-    margin-left: -16px
-  &.profile__wallpaper--freelancer
-    margin-top: -24px
+    height: 25vh
 
 .profile__stats-box
   display: flex

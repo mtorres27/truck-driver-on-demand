@@ -1,8 +1,8 @@
 .container.container--header
   - if @freelancer.profile_header_url.include?("missing") or @freelancer.header_source == "color"
-    .profile__wallpaper style="background-color: #{ @freelancer.header_color.include?("#") ? "" : "#"}#{@freelancer.header_color}"
+    .profile__wallpaper.profile__wallpaper--wide style="background-color: #{ @freelancer.header_color.include?("#") ? "" : "#"}#{@freelancer.header_color}"
   - else
-    .profile__wallpaper style="background-image: url(#{@freelancer.profile_header_url.include?("missing") ? "" : @freelancer.profile_header_url});"
+    .profile__wallpaper.profile__wallpaper--wide style="background-image: url(#{@freelancer.profile_header_url.include?("missing") ? "" : @freelancer.profile_header_url});"
 
 
 .container.container--profile
