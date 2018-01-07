@@ -35,20 +35,20 @@
   /             - project.jobs.each do |job|
   /               = render partial: "job", locals: { project: project, job: job }
 
-  .grid-h
-    .grid-cell.grid-cell--100
-      - @projects.each do |project|
+  .grid-h  
+    - @projects.each do |project|
+      .grid-cell.grid-cell--100
         .header-bar
-          h2.heading-h2
-            = "#{project.name} - #{project.external_project_id || project.id}"
+          h3.heading-h3
+            = "#{project.name} - #{project.external_project_id || project.id} "
             = link_to content_tag(:span, "", class:"fa fa-pencil"), edit_company_project_path(project), class: "project_edit_link"
           .btn.btn--secondary data-toggle="collapse" data-target="#jobsFor#{project.id}" type="button" aria-expanded="false" aria-controls="jobsFor#{project.id}"
             | #{project.jobs.size} Jobs
-        .collapse.jobs( id="jobsFor#{project.id}" )
-          .grid-cell.grid-cell--100
-            .grid-h
-              - project.jobs.each do |job|
-               = render partial: "job", locals: { project: project, job: job }
+      .grid-cell.grid-cell--100
+        .collapse.jobs( id="jobsFor#{project.id}" ) 
+          .grid-h
+            - project.jobs.each do |job|
+              = render partial: "job", locals: { project: project, job: job }
 
     = paginate @projects
 
