@@ -8,11 +8,15 @@
     .payments
       .payments__flexbox
         .tag.tag--in-progress funds pending
+        - if !@connector.account.external_accounts.data.any?
+          .tag.tag--in-progress Freelancer has no bank account
       .payments__status AV Junction recommends you only commence work when the total funds are available for this project.
   - elsif @accepted_quote && @accepted_quote.paid_by_company && !@job.funds_available
     .payments
       .payments__flexbox
         .tag.tag--in-progress funds pending
+        - if !@connector.account.external_accounts.data.any?
+          .tag.tag--in-progress Freelancer has no bank account
         .payments__total-group
           .payments__total-amt #{number_with_precision(@job.gpayments_sum_total, precision: 2)}  #{@job.currency ? @job.currency.upcase : ''}
           .payments__payout-label funds pending
@@ -21,6 +25,8 @@
     .payments
       .payments__flexbox
         .tag.tag--success #{(@job.payments_sum_paid == @job.payments_sum_total) ? 'Job Done' : 'FUNDS AVAILABLE'}
+        - if !@connector.account.external_accounts.data.any?
+          .tag.tag--in-progress Freelancer has no bank account
         .payments__total-group
           .payments__total-amt #{number_with_precision(@job.gpayments_sum_paid, precision: 2)}  #{@job.currency ? @job.currency.upcase : ''}
           .payments__payout-label Balance
@@ -37,7 +43,7 @@
         / a.btn-link href=freelancer_job_payment_path
         = link_to freelancer_job_payment_path(id: payment.id, job_id: @job.id), class: 'btn-link'
           | View Invoice
-      - if !@job.funds_available || !@accepted_quote.paid_by_company || (!payment.paid_on.present? && (payment.issued_on.present? && payment.issued_on >= 2.day.ago))
+      - if !@connector.account.external_accounts.data.any? || !@job.funds_available || !@accepted_quote.paid_by_company || (!payment.paid_on.present? && (payment.issued_on.present? && payment.issued_on >= 2.day.ago))
         .btn-primary--disabled.top-margin.w-inline-block
           div request Payout
       - elsif !payment.paid_on.present?
