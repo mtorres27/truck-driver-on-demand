@@ -36,11 +36,13 @@ html
         = render "shared/flash"
       
       .section.section--body 
-        - if params[:controller]&.gsub("/", "-") == "company-freelancers"
+        / - if params[:controller]&.gsub("/", "-") == "company-freelancers"
+        /   = yield
+        - if params[:controller]&.gsub("/", "-") == "company-profiles"
           = yield
-        - elsif params[:controller]&.gsub("/", "-") == "company-profiles"
-          = yield
-        - elsif params[:controller]&.gsub("/", "-") == "freelancer-companies"
+        / - elsif params[:controller]&.gsub("/", "-") == "freelancer-companies"
+        /   = yield
+        - elsif params[:controller]&.gsub("/", "-") == "freelancer-companies-av_companies"
           = yield
         - else
           .container.container--header
