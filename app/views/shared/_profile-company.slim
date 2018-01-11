@@ -1,9 +1,9 @@
 .grid-h
   .grid-cell.grid-cell--50
-    .fprofile__meta__details__1-1
-      .fprofile__meta__image
+    .profile__meta__details__1-1
+      .profile__meta__image
         = image_tag(@company.avatar_url, size: "75x75")
-      .fprofile__meta__info
+      .profile__meta__info
         h2.heading-h2
           - if @company.website?
             a href=proper_website_link(@company.website) target="_blank"
@@ -28,7 +28,7 @@
         h4.heading-h4 
           a href="#reviews" data-turbolinks="false"
             = company_ratings_link(@company)
-        .fprofile__meta__rating
+        .profile__meta__rating
           - @stars = company_avg_rating(@company)
             - @stars.each do |star|
               i class=star
@@ -42,10 +42,10 @@
               = "#{@company.phone_number}"
 
 
-  .grid-cell.grid-cell--50
+  .grid-cell.grid-cell--50.grid-cell--shrink
     .profile__stats-box
-      .profile__stats
-        h1.heading-h1
+      .profile__stats.profile__stats--33
+        h2.heading-h2.heading-h2--profile-stats
           - if !@company.number_of_offices.nil?
             = @company.number_of_offices
           - else
@@ -53,23 +53,23 @@
         h4.heading-h4
           | Offices
       
-      .profile__stats
-        h1.heading-h1
+      .profile__stats.profile__stats--33
+        h2.heading-h2.heading-h2--profile-stats
           = @company.established_in ? Time.now.year - @company.established_in : "N/A"
         h4.heading-h4
-          | Years in Business
+          | Exp (yrs)
 
-      .profile__stats
-        h1.heading-h1
-          - if !@company.rating.nil?
-            = @company.rating
-          - else
-            | N/A
-        h4.heading-h4
-          | Rating
+      / .profile__stats.profile__stats--50
+      /   h2.heading-h2.heading-h2--profile-stats
+      /     - if !@company.rating.nil?
+      /       = @company.rating
+      /     - else
+      /       | N/A
+      /   h4.heading-h4
+      /     | Rating
 
-      .profile__stats
-        h1.heading-h1
+      .profile__stats.profile__stats--33
+        h2.heading-h2.heading-h2--profile-stats
           = number_to_human(@company.profile_views, :format => '%n%u', :precision => 3, :units => { :thousand => 'K', :million => 'M', :billion => 'B' })
         h4.heading-h4
           | Views

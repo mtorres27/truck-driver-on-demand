@@ -2,10 +2,34 @@
   = render partial: "/freelancer/shared/job_meta"
   - if @have_applied
     = render partial: "/freelancer/shared/job_shared_nav", locals: { job: @job }
-.section__body-content
+
+- content_for :secondary do
+  .action-bar
+    h2.heading-h2.heading-h2--action-bar Job Detail
+    .action-bar__actions
+      - if @have_applied == false && @connector.verified?
+        .freelancer-job__apply
+          a.btn.btn--primary href="#" id="apply-for-job"
+            | Apply for this job
+  
+  - if @have_applied and @job.freelancer and @job.freelancer.id == current_freelancer
+    h3.heading-h3 Work Order
+    .billboard
+      p 
+        - if @job.contract_sent == false
+            = "Your work order #{@job.work_order} is still being created."
+        - else
+          - if !@job.negotiated?
+            = "Your work order #{@job.work_order} is awaiting your acceptance."
+          - elsif @job.contracted?
+            = "You have accepted the work order #{@job.work_order}."
+      - if @job.contract_sent == true
+        a.btn.btn--primary href="#"
+          div View Work Order
+    
   .container__fixed-footer
     - if @have_applied and @job.freelancer and @job.freelancer.id == current_freelancer
-      h3.freelancer-job__h3 Work Order
+      h3.heading-h3 Work Order
       .freelancer-job__work-order-cont.w-clearfix
         .freelancer-job__work-order-status
           - if @job.contract_sent == false
@@ -19,83 +43,84 @@
           .freelancer-job__work-order-action-cont
             a.btn-primary--active.no-margin.w-inline-block href=freelancer_job_work_order_path(@job)
               div View Work Order
-    .freelancer-job__summary-cont
-      h3.freelancer-job__h3 Job Summary
-      p= @job.summary
+  
+  .freelancer-job__summary-cont
+    h3.heading-h3 Job Summary
+    p= @job.summary
+    div
+      - if !@job.keywords.nil? and @job.keywords.kind_of?(Hash)
+        - @job.keywords.each do |index, value|
+          .grey.tag
+            = I18n.t("enumerize.freelancer_skills.#{index}")
+
+  .freelancer-job__summary-cont
+    h3.heading-h3 Scope of Work
+    - if @job.scope_of_work
+      p= @job.scope_of_work
+    - if !@job.scope_file.nil?
+      p
+        | Click to download:
+        a href=@job.scope_file_url target="_blank"
+          = @job.scope_file.original_filename
+
+  .freelancer-job__summary-group
+    .freelancer-job__summary-item
+      h4.heading-h4 Job Function
       div
-        - if !@job.keywords.nil? and @job.keywords.kind_of?(Hash)
-          - @job.keywords.each do |index, value|
-            .grey.tag
-              = I18n.t("enumerize.freelancer_skills.#{index}")
+        - if @job.job_function.nil?
+          = "N/A"
+        - else
+          = t("enumerize.job.job_function.#{@job.job_function}")
+    .freelancer-job__summary-item
+      h4.heading-h4 Location
+      div
+        - if @job.address.nil?
+          = "N/A"
+        - else
+          = @job.address
 
-    .freelancer-job__summary-cont
-      h3.freelancer-job__h3 Scope of Work
-      - if @job.scope_of_work
-        p= @job.scope_of_work
-      - if !@job.scope_file.nil?
-        p
-          | Click to download:
-          a href=@job.scope_file_url target="_blank"
-            = @job.scope_file.original_filename
+    .freelancer-job__summary-item
+      h4.heading-h4 Est. Start
+      div
+        - if @job.starts_on.nil?
+          = "N/A"
+        - else
+          = @job.starts_on
 
-    .freelancer-job__summary-group
-      .freelancer-job__summary-item
-        h6.freelancer-job__h6 Job Function
-        div
-          - if @job.job_function.nil?
-            = "N/A"
-          - else
-            = t("enumerize.job.job_function.#{@job.job_function}")
-      .freelancer-job__summary-item
-        h6.freelancer-job__h6 Location
-        div
-          - if @job.address.nil?
-            = "N/A"
-          - else
-            = @job.address
+    .freelancer-job__summary-item
+      h4.heading-h4 Duration
+      div
+        - if  @job.duration.nil?
+          = "N/A"
+        - else
+          = @job.duration
+    .freelancer-job__summary-item
+      h4.heading-h4 Preferred pay type
+      div
+        - if @job.pay_type.nil?
+          = "N/A"
+        - else
+          = t("enumerize.job.pay_type.#{@job.pay_type}")
+    .freelancer-job__summary-item
+      h4.heading-h4 Freelancer Type
+      div
+        - if @job.freelancer_type.nil?
+          = "N/A"
+        - else
+          = t("enumerize.job.freelancer_type.#{@job.freelancer_type}")
 
+    - if @job.budget_is_public
       .freelancer-job__summary-item
-        h6.freelancer-job__h6 Est. Start
+        h4.heading-h4 Job Budget
         div
-          - if @job.starts_on.nil?
-            = "N/A"
-          - else
-            = @job.starts_on
+          = number_to_currency(@job.budget, precision: 2) + " "
+          - if @job.currency
+            = @job.currency.upcase
 
-      .freelancer-job__summary-item
-        h6.freelancer-job__h6 Duration
-        div
-          - if  @job.duration.nil?
-            = "N/A"
-          - else
-            = @job.duration
-      .freelancer-job__summary-item
-        h6.freelancer-job__h6 Preferred pay type
-        div
-          - if @job.pay_type.nil?
-            = "N/A"
-          - else
-            = t("enumerize.job.pay_type.#{@job.pay_type}")
-      .freelancer-job__summary-item
-        h6.freelancer-job__h6 Freelancer Type
-        div
-          - if @job.freelancer_type.nil?
-            = "N/A"
-          - else
-            = t("enumerize.job.freelancer_type.#{@job.freelancer_type}")
-
-      - if @job.budget_is_public
-        .freelancer-job__summary-item
-          h6.freelancer-job__h6 Job Budget
-          div
-            = number_to_currency(@job.budget, precision: 2) + " "
-            - if @job.currency
-              = @job.currency.upcase
-
-  - if @have_applied == false && @connector.verified?
-    .freelancer-job__apply
-      a.btn-primary--active href="#" id="apply-for-job"
-        | Apply for this job
+- if @have_applied == false && @connector.verified?
+  .freelancer-job__apply
+    a.btn-primary--active href="#" id="apply-for-job"
+      | Apply for this job
 
 = simple_form_for "freelancer_job_apply_path", html: { multipart: true }  do |f|
   = f.hidden_field :job, value: @job.id

@@ -1,24 +1,24 @@
 .grid-h
-  .grid-cell.grid-cell-33
-    .fprofile__meta__details__1-1
-      .fprofile__meta__image
+  .grid-cell.grid-cell--33
+    .profile__meta__details__1-1
+      .profile__meta__image
         = image_tag(@freelancer.avatar_url, size: "75x75")
-      .fprofile__meta__info
+      .profile__meta__info
         h2.heading-h2
           = @freelancer.name
         h4.heading-h4
           = "Joined #{@freelancer.created_at.strftime('%B %d, %Y')}"
         h4.heading-h4 
           = freelancer_ratings_link(@freelancer)
-        .fprofile__meta__rating
+        .profile__meta__rating
           - @stars = freelancer_avg_rating(@freelancer)
             - @stars.each do |star|
               i class=star
-  .grid-cell.grid-cell-33
-    .fprofile__meta__details__1-2
+  .grid-cell.grid-cell--33
+    .profile__meta__details__1-2
       h3.heading-h3
         = @freelancer.tagline
-      .fprofile__specialties--summary
+      .profile__specialties--summary
         - if !@freelancer.keywords.nil? and @freelancer.keywords.kind_of?(Hash)
           - @freelancer.keywords.first(2).each do |index, value|
             .tag.tag--grey
@@ -27,25 +27,32 @@
           - @freelancer.skills.first(2).each do |index, value|
             .tag.tag--grey
               = I18n.t("enumerize.freelancer_skills.#{index}")
-  .grid-cell.grid-cell-33
-    .fprofile__meta__details__1-3
-      .fprofile__meta__details-stat
-        .fprofile__meta__stat--label Pay Pref
-        .fprofile__meta__stat--value
+  .grid-cell.grid-cell--33
+    .profile__stats-box
+      .profile__stats.profile__stats--33
+        h2.heading-h2.heading-h2--profile-stats
           - if !@freelancer.pay_unit_time_preference.nil?
             = t("enumerize.job.pay_type.#{@freelancer.pay_unit_time_preference}")
           - else
             | N/A
-      .fprofile__meta__details-stat
-        .fprofile__meta__stat--label rate
-        .fprofile__meta__stat--value
+        h4.heading-h4
+          | Pay Pref
+      
+      .profile__stats.profile__stats--33
+        h2.heading-h2.heading-h2--profile-stats
           - if !@freelancer.pay_per_unit_time.nil?
             = @freelancer.pay_per_unit_time
           - else
             | N/A
-      .fprofile__meta__details-stat
-        .fprofile__meta__stat--label EXPERIENCE
-        .fprofile__meta__stat--value= "#{@freelancer.years_of_experience} yrs"      
+        h4.heading-h4
+          | Rate
+
+      .profile__stats.profile__stats--33
+        h2.heading-h2.heading-h2--profile-stats
+          ="#{@freelancer.years_of_experience} yrs"
+        h4.heading-h4
+          | Exp
+     
 
   .grid-cell.grid-cell--50
     h3.heading-h3 Bio
@@ -91,7 +98,7 @@
 
   .grid-cell.grid-cell--100
     h3.heading-h3 Certifications
-    .fprofile__certifications__container
+    .profile__certifications__container
       - if @freelancer.certifications.count == 0
         | This freelancer has not yet added any certifications.
       - @freelancer.certifications.each do |certification|
@@ -104,9 +111,9 @@
                 - src=url
               - else
                 - src="/assets/certification/certification_placeholder.png"
-              .fprofile__certification
-                img.fprofile__certification__image sizes="185.96875px" src=src
-                .fprofile__certification__label= certification.name
+              .profile__certification
+                img.profile__certification__image sizes="185.96875px" src=src
+                .profile__certification__label= certification.name
 
   .grid-cell.grid-cell--100
     a name="reviews"

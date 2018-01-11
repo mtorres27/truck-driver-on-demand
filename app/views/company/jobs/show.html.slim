@@ -5,7 +5,7 @@
     h2.heading-h2.heading-h2--action-bar Job Detail
     .action-bar__actions
       - if @job.pre_contracted?
-        a.btn-primary--active href=edit_company_job_path(@job)
+        a.btn.btn--primary href=edit_company_job_path(@job)
           | Edit
 
   .job-details
@@ -17,7 +17,7 @@
     .job-details__left
       .job-details__title
         | Project Reference
-      a.btn.btn-tertiary.job-details__link href=company_projects_path()
+      a href=company_projects_path()
         = project_reference(@job.project)
 
     .job-details__left
