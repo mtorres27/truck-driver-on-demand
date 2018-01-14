@@ -8,187 +8,161 @@
     h2.heading-h2.heading-h2--action-bar Job Detail
     .action-bar__actions
       - if @have_applied == false && @connector.verified?
-        .freelancer-job__apply
-          a.btn.btn--primary href="#" id="apply-for-job"
-            | Apply for this job
-  
-  - if @have_applied and @job.freelancer and @job.freelancer.id == current_freelancer
-    h3.heading-h3 Work Order
-    .billboard
-      p 
-        - if @job.contract_sent == false
-            = "Your work order #{@job.work_order} is still being created."
-        - else
-          - if !@job.negotiated?
-            = "Your work order #{@job.work_order} is awaiting your acceptance."
-          - elsif @job.contracted?
-            = "You have accepted the work order #{@job.work_order}."
-      - if @job.contract_sent == true
-        a.btn.btn--primary href="#"
-          div View Work Order
-    
-  .container__fixed-footer
-    - if @have_applied and @job.freelancer and @job.freelancer.id == current_freelancer
-      h3.heading-h3 Work Order
-      .freelancer-job__work-order-cont.w-clearfix
-        .freelancer-job__work-order-status
-          - if @job.contract_sent == false
-            = "Your work order #{@job.work_order} is still being created."
-          - else
-            - if !@job.negotiated?
-              = "Your work order #{@job.work_order} is awaiting your acceptance."
-            - elsif @job.contracted?
-              = "You have accepted the work order #{@job.work_order}."
-        - if @job.contract_sent == true
-          .freelancer-job__work-order-action-cont
-            a.btn-primary--active.no-margin.w-inline-block href=freelancer_job_work_order_path(@job)
-              div View Work Order
-  
-  .freelancer-job__summary-cont
-    h3.heading-h3 Job Summary
-    p= @job.summary
-    div
-      - if !@job.keywords.nil? and @job.keywords.kind_of?(Hash)
-        - @job.keywords.each do |index, value|
-          .grey.tag
-            = I18n.t("enumerize.freelancer_skills.#{index}")
+          a.btn.btn--primary href="#" type="button" data-toggle="modal" data-target="#apply-for-job"
+            | Apply Now
+      - else
+        a href="/freelancer/profile/bank_info"
+          | Verify your account to apply.
 
-  .freelancer-job__summary-cont
-    h3.heading-h3 Scope of Work
-    - if @job.scope_of_work
-      p= @job.scope_of_work
-    - if !@job.scope_file.nil?
-      p
-        | Click to download:
-        a href=@job.scope_file_url target="_blank"
-          = @job.scope_file.original_filename
-
-  .freelancer-job__summary-group
-    .freelancer-job__summary-item
-      h4.heading-h4 Job Function
+  
+  .grid-h
+    .grid-cell.grid-cell--33.grid-cell--span33
+      h3.heading-h3 Job Function
       div
         - if @job.job_function.nil?
           = "N/A"
         - else
           = t("enumerize.job.job_function.#{@job.job_function}")
-    .freelancer-job__summary-item
-      h4.heading-h4 Location
+    .grid-cell.grid-cell--33.grid-cell--span33
+      h3.heading-h3 Location
       div
         - if @job.address.nil?
           = "N/A"
         - else
           = @job.address
-
-    .freelancer-job__summary-item
-      h4.heading-h4 Est. Start
+    .grid-cell.grid-cell--33.grid-cell--span33
+      h3.heading-h3 Est. Start
       div
         - if @job.starts_on.nil?
           = "N/A"
         - else
           = @job.starts_on
-
-    .freelancer-job__summary-item
-      h4.heading-h4 Duration
+    .grid-cell.grid-cell--33.grid-cell--span33
+      h3.heading-h3 Duration
       div
         - if  @job.duration.nil?
           = "N/A"
         - else
           = @job.duration
-    .freelancer-job__summary-item
-      h4.heading-h4 Preferred pay type
+    .grid-cell.grid-cell--33.grid-cell--span33
+      h3.heading-h3 Preferred pay type
       div
         - if @job.pay_type.nil?
           = "N/A"
         - else
           = t("enumerize.job.pay_type.#{@job.pay_type}")
-    .freelancer-job__summary-item
-      h4.heading-h4 Freelancer Type
+    .grid-cell.grid-cell--33.grid-cell--span33
+      h3.heading-h3 Freelancer Type
       div
         - if @job.freelancer_type.nil?
           = "N/A"
         - else
           = t("enumerize.job.freelancer_type.#{@job.freelancer_type}")
-
+    
     - if @job.budget_is_public
-      .freelancer-job__summary-item
-        h4.heading-h4 Job Budget
+      .grid-cell.grid-cell--33.grid-cell--span33
+        h3.heading-h3 Job Budget
         div
           = number_to_currency(@job.budget, precision: 2) + " "
           - if @job.currency
             = @job.currency.upcase
 
-- if @have_applied == false && @connector.verified?
-  .freelancer-job__apply
-    a.btn-primary--active href="#" id="apply-for-job"
-      | Apply for this job
-
-= simple_form_for "freelancer_job_apply_path", html: { multipart: true }  do |f|
-  = f.hidden_field :job, value: @job.id
 
 
-  .freelancer-job__apply-modal
-    .freelancer-job__apply-form.w-form
-      h2.common__h2-modal= @job.title
-      .common__radio-group.w-radio.width-30
-        = f.radio_button :pay_type, "daily", class: "w-radio-input"
-        = f.label :pay_type_daily, "daily", class: "common__field-label"
-      .common__radio-group.w-radio.width-30
-        = f.radio_button :pay_type, "fixed", checked: true, class: "w-radio-input"
-        = f.label :pay_type_fixed, "fixed", class: "common__field-label"
-      .common__radio-group.w-radio.width-30
-        = f.radio_button :pay_type, "hourly", class: "w-radio-input"
-        = f.label :pay_type_hourly, "hourly", class: "common__field-label"
+    - if @have_applied and @job.freelancer and @job.freelancer.id == current_freelancer
+      .grid-cell.grid-cell--100
+        h3.heading-h3 Work Order
+        .billboard
+          p 
+            - if @job.contract_sent == false
+                = "Your work order #{@job.work_order} is still being created."
+            - else
+              - if !@job.negotiated?
+                = "Your work order #{@job.work_order} is awaiting your acceptance."
+              - elsif @job.contracted?
+                = "You have accepted the work order #{@job.work_order}."
+          - if @job.contract_sent == true
+            a.btn.btn--primary href="#"
+              div View Work Order
 
-      .common__text-field-group.freelancer-job__apply-modal__content-amount--fixed
-        = f.label :amount, "Amount", class: "common__field-label"
-        = f.input :amount, type: "text", id: "quote-amount-fixed", placeholder: "Your quote", label: false, class: "common__text-field w-input", label: false
+    .grid-cell.grid-cell--50
+      h3.heading-h3 Job Summary
+      p= @job.summary
+      div
+        - if !@job.keywords.nil? and @job.keywords.kind_of?(Hash)
+          - @job.keywords.each do |index, value|
+            .grey.tag
+              = I18n.t("enumerize.freelancer_skills.#{index}")
+
+    .grid-cell.grid-cell--50
+      h3.heading-h3 Scope of Work
+      - if @job.scope_of_work
+        p= @job.scope_of_work
+      - if !@job.scope_file.nil?
+        h4.heading-h4 Download Attachements
+        p  
+          a href=@job.scope_file_url target="_blank"
+            = @job.scope_file.original_filename
+    
+.modal#apply-for-job role="dialog" tabindex="-1"
+  .modal-dialog role="document"
+    .modal-content
+      = simple_form_for "freelancer_job_apply_path", html: { multipart: true }  do |f|
+        = f.hidden_field :job, value: @job.id
+        .modal-header
+          h2.common__h2-modal= @job.title
+        .modal-body
+
+          .common__select-field.freelancer-job__apply-pay_type
+            = f.label :pay_type, "Pay Type", class: "common__field-label"
+            = f.input :pay_type, collection: ['fixed', 'daily', 'hourly'] , prompt: "Select", label: false
+
+          .common__text-field-group.freelancer-job__apply-modal__content-amount--fixed
+            = f.label :amount, "Amount", class: "common__field-label"
+            = f.input :amount, type: "text", id: "quote-amount-fixed", placeholder: "Your quote", label: false, class: "common__text-field w-input", label: false
+          
+          .common__text-field-group.freelancer-job__apply-modal__content-amount--hourly
+            = f.label :number_of_hours, "Number of Hours", class: "common__field-label"
+            = f.input :number_of_hours, type: "text", id: "quote-amount-hourly", placeholder: "No. of Hrs", class: "common__text-field w-input", label: false
+
+          .common__text-field-group.freelancer-job__apply-modal__content-amount--hourly
+            = f.label :hourly_rate, "Hourly Rate", class: "common__field-label"
+            = f.input :hourly_rate, type: "text", id: "quote-amount-hourly-rate", placeholder: "Hourly Rate", class: "common__text-field w-input", label: false
+
+          .common__text-field-group.freelancer-job__apply-modal__content-amount--daily
+            = f.label :number_of_days, "No. of Days", class: "common__field-label"
+            = f.input :number_of_days, type: "text", id: "quote-amount-daily", placeholder: "No. of Days", class: "common__text-field w-input", label: false
+
+          .common__text-field-group.freelancer-job__apply-modal__content-amount--daily
+            = f.label :daily_rate, "Daily Rate", class: "common__field-label"
+            = f.input :daily_rate, type: "text", id: "quote-amount-daily-rate", placeholder: "Daily Rate", class: "common__text-field w-input", label: false
 
 
-      .common__text-field-group.width-50.freelancer-job__apply-modal__content-amount--hourly
-        = f.label :number_of_hours, "Number of Hours", class: "common__field-label"
-        = f.input :number_of_hours, type: "text", id: "quote-amount-hourly", placeholder: "No. of Hrs", class: "common__text-field w-input", label: false
+          .attachment.common__text-field-group
+            label.common__field-label
+              = "Send a message to #{@job.company.name}"
+            a.common__text-field--attach-file.w-inline-block id="attach_indicator" onClick="triggerFileUpload()"
+              .common__icon-attach 
+            = f.file_field :attachment, as: :file, id: "message_attachment", label: false, :accept => 'document/pdf,application/pdf,application/x-pdf,image/png,image/jpg,image/jpeg,image/gif',  class: "file-input--hidden"
+            = f.text_area :message, as: :string, placeholder: "Enter your message", label: false, maxlength: 5000, class: "w-input"
 
-      .common__text-field-group.width-50.freelancer-job__apply-modal__content-amount--hourly
-        = f.label :hourly_rate, "Hourly Rate", class: "common__field-label"
-        = f.input :hourly_rate, type: "text", id: "quote-amount-hourly-rate", placeholder: "Hourly Rate", class: "common__text-field w-input", label: false
-
-
-      .common__text-field-group.width-50.freelancer-job__apply-modal__content-amount--daily
-        = f.label :number_of_days, "No. of Days", class: "common__field-label"
-        = f.input :number_of_days, type: "text", id: "quote-amount-daily", placeholder: "No. of Days", class: "common__text-field w-input", label: false
-
-      .common__text-field-group.width-50.freelancer-job__apply-modal__content-amount--daily
-        = f.label :daily_rate, "Daily Rate", class: "common__field-label"
-        = f.input :daily_rate, type: "text", id: "quote-amount-daily-rate", placeholder: "Daily Rate", class: "common__text-field w-input", label: false
-
-
-      .attachment.common__text-field-group
-        label.common__field-label for="name-4"
-          = "Send a message to #{@job.company.name}"
-        a.common__text-field--attach-file.w-inline-block id="attach_indicator" onClick="triggerFileUpload()"
-          .common__icon-attach 
-        = f.file_field :attachment, as: :file, id: "message_attachment", label: false, :accept => 'document/pdf,application/pdf,application/x-pdf,image/png,image/jpg,image/jpeg,image/gif',  class: "file-input--hidden"
-        = f.text_area :message, as: :string, placeholder: "Enter your message", label: false, maxlength: 5000, class: "w-input"
-
-      .freelancer-job__apply-modal__buttons
-        .freelancer-job__apply-modal__errors
-        = f.button :submit, prompt: "Submit Quote", value: "Submit Quote", data: { disable_with: "Submitting..." }, class: "btn btn-primary", onClick: "return validateQuote()"
-        .btn.btn-secondary id="close-modal-2"
-          | cancel
+          .buttons
+            = f.button :submit, prompt: "Submit Quote", value: "Submit Quote", data: { disable_with: "Submitting..." }, class: "btn btn--primary", onClick: "return validateQuote()"
+            .btn.btn--secondary data-dismiss="modal" href="#"
+              | cancel
+            .freelancer-job__apply-modal__errors
 
 javascript:
 
   var validateQuote = function( ){
     $(".freelancer-job__apply-modal__errors").html("");
-    var fixed = $("#freelancer_job_apply_path_pay_type_fixed").is(":checked");
-    var hourly = $("#freelancer_job_apply_path_pay_type_hourly").is(":checked");
-    var daily = $("#freelancer_job_apply_path_pay_type_daily").is(":checked");
+    var type = $('#freelancer_job_apply_path_pay_type').val();
     var safe = true;
-    if (fixed && $("#freelancer_job_apply_path_amount").val() == "") {
+    if (type == 'fixed' && $("#freelancer_job_apply_path_amount").val() == "") {
       safe = false;
-    } else if (hourly && ($("#freelancer_job_apply_path_number_of_hours").val() == "" || $("#freelancer_job_apply_path_hourly_rate").val() == "")) {
+    } else if (type == 'hourly' && ($("#freelancer_job_apply_path_number_of_hours").val() == "" || $("#freelancer_job_apply_path_hourly_rate").val() == "")) {
       safe = false;
-    } else if (daily && ($("#freelancer_job_apply_path_number_of_days").val() == "" || $("#freelancer_job_apply_path_daily_rate").val() == "")) {
+    } else if (type == 'daily' && ($("#freelancer_job_apply_path_number_of_days").val() == "" || $("#freelancer_job_apply_path_daily_rate").val() == "")) {
       safe = false;
     }
 
@@ -236,26 +210,27 @@ javascript:
     $("#freelancer_job_apply_path_daily_rate").val("");
   }
 
-  $("#freelancer_job_apply_path_pay_type_hourly").on('click', function() {
+  $('#freelancer_job_apply_path_pay_type').on('change', function (){
+    var type = $(this).val();
     clearAllQuoteValues();
-    $(".freelancer-job__apply-modal__content-amount--fixed").hide();
-    $(".freelancer-job__apply-modal__content-amount--hourly").show();
-    $(".freelancer-job__apply-modal__content-amount--daily").hide();
+    if (type == "fixed"){
+      $(".freelancer-job__apply-modal__content-amount--fixed").show();
+      $(".freelancer-job__apply-modal__content-amount--hourly").hide();
+      $(".freelancer-job__apply-modal__content-amount--daily").hide();
+    }
+    else if (type == "hourly"){
+      $(".freelancer-job__apply-modal__content-amount--fixed").hide();
+      $(".freelancer-job__apply-modal__content-amount--hourly").show();
+      $(".freelancer-job__apply-modal__content-amount--daily").hide();
+    }
+    else if (type == "daily"){
+      $(".freelancer-job__apply-modal__content-amount--fixed").hide();
+      $(".freelancer-job__apply-modal__content-amount--hourly").hide();
+      $(".freelancer-job__apply-modal__content-amount--daily").show();
+    }
   });
 
-  $("#freelancer_job_apply_path_pay_type_daily").on('click', function() {
-    clearAllQuoteValues();
-    $(".freelancer-job__apply-modal__content-amount--fixed").hide();
-    $(".freelancer-job__apply-modal__content-amount--hourly").hide();
-    $(".freelancer-job__apply-modal__content-amount--daily").show();
-  });
-
-  $("#freelancer_job_apply_path_pay_type_fixed").on('click', function() {
-    clearAllQuoteValues();
-    $(".freelancer-job__apply-modal__content-amount--fixed").show();
-    $(".freelancer-job__apply-modal__content-amount--hourly").hide();
-    $(".freelancer-job__apply-modal__content-amount--daily").hide();
-  });
+  
 
   $(".freelancer-job__apply-modal__content-amount--hourly").hide();
   $(".freelancer-job__apply-modal__content-amount--daily").hide();

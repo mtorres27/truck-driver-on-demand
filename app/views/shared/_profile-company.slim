@@ -45,7 +45,7 @@
   .grid-cell.grid-cell--50.grid-cell--shrink
     .profile__stats-box
       .profile__stats.profile__stats--33
-        h2.heading-h2.heading-h2--profile-stats
+        h2.heading-h2.heading-h2--no-margin
           - if !@company.number_of_offices.nil?
             = @company.number_of_offices
           - else
@@ -54,13 +54,13 @@
           | Offices
       
       .profile__stats.profile__stats--33
-        h2.heading-h2.heading-h2--profile-stats
+        h2.heading-h2.heading-h2--no-margin
           = @company.established_in ? Time.now.year - @company.established_in : "N/A"
         h4.heading-h4
           | Exp (yrs)
 
       / .profile__stats.profile__stats--50
-      /   h2.heading-h2.heading-h2--profile-stats
+      /   h2.heading-h2.heading-h2--no-margin
       /     - if !@company.rating.nil?
       /       = @company.rating
       /     - else
@@ -69,7 +69,7 @@
       /     | Rating
 
       .profile__stats.profile__stats--33
-        h2.heading-h2.heading-h2--profile-stats
+        h2.heading-h2.heading-h2--no-margin
           = number_to_human(@company.profile_views, :format => '%n%u', :precision => 3, :units => { :thousand => 'K', :million => 'M', :billion => 'B' })
         h4.heading-h4
           | Views

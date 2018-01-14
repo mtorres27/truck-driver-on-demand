@@ -79,9 +79,10 @@
             = f.button :button, "Publish", name: "job[state]", value: "published", class: "btn btn--primary"
             = f.button :submit, "Save as Draft", class: "btn btn--secondary"
         - else
-            = f.button :submit, "Save", class: "btn-primary--active"
+            = f.button :submit, "Save", class: "btn btn--primary"
         - unless @job.new_record?
-            = link_to "Delete Job", company_job_path(@job), data: { confirm: "Are you sure?" }, method: :delete
+          .btn.btn--secondary 
+            = link_to "Delete Job", company_job_path(@job), data: { confirm: "Are you sure you want to permanently delete this job posting?", class: "btn btn--secondary" }, method: :delete
 
 
 .modal#new_project role="dialog" tabindex="-1"

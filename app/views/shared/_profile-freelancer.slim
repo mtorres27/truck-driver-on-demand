@@ -30,7 +30,7 @@
   .grid-cell.grid-cell--33
     .profile__stats-box
       .profile__stats.profile__stats--33
-        h2.heading-h2.heading-h2--profile-stats
+        h2.heading-h2.heading-h2--no-margin
           - if !@freelancer.pay_unit_time_preference.nil?
             = t("enumerize.job.pay_type.#{@freelancer.pay_unit_time_preference}")
           - else
@@ -39,7 +39,7 @@
           | Pay Pref
       
       .profile__stats.profile__stats--33
-        h2.heading-h2.heading-h2--profile-stats
+        h2.heading-h2.heading-h2--no-margin
           - if !@freelancer.pay_per_unit_time.nil?
             = @freelancer.pay_per_unit_time
           - else
@@ -48,7 +48,7 @@
           | Rate
 
       .profile__stats.profile__stats--33
-        h2.heading-h2.heading-h2--profile-stats
+        h2.heading-h2.heading-h2--no-margin
           ="#{@freelancer.years_of_experience} yrs"
         h4.heading-h4
           | Exp

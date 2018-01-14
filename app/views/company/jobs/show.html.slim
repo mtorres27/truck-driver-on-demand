@@ -8,120 +8,98 @@
         a.btn.btn--primary href=edit_company_job_path(@job)
           | Edit
 
-  .job-details
-    .job-details__right
-      .job-details__title
-        | Budget
-      .show-budget= number_with_precision(@job.budget, precision: 2).to_s + " " + @job.currency.upcase
+  .grid-h
+    .grid-cell.grid-cell--50
+      h3.heading-h3 Budget
+      h1.heading-h1.heading-h1--no-margin = number_with_precision(@job.budget, precision: 0).to_s + " " + @job.currency.upcase
 
-    .job-details__left
-      .job-details__title
-        | Project Reference
-      a href=company_projects_path()
-        = project_reference(@job.project)
-
-    .job-details__left
-      .job-details__title
-        | Job Title
-      .show_value_em= @job.title
-
-    .job-details__left
-      .job-details__title
-        | Address of Job
-      - if @job.address?
-        .show_value_em= @job.address
-      - else
-        .show_value_em= "Address Not Specified"
-
-
-  .job-details
-    .job-details__title
-      | Work order
-    .job-details__work-order
-      .job-details__work-order__content
-        .job-details__work-order__status
+    .grid-cell.grid-cell--50
+      h3.heading-h3 Project Reference
+      h2.heading-h2 
+        a href=company_projects_path()
+          = project_reference(@job.project)
+    
+    .grid-cell.grid-cell--50
+      h3.heading-h3 Job Title
+      p = @job.title
+    
+    .grid-cell.grid-cell--50
+      h3.heading-h3 Location of Job
+      p
+        - if @job.address?
+          = @job.address
+        - else
+          = "Location Not Specified"
+    
+    .grid-cell.grid-cell--100
+      h3.heading-h3 Work Order
+      .billboard.billboard--no-margin
+        p
           - if !@job.freelancer
-            | Freelancer not chosen
+            | A Freelancer has not been selected for this job.
           - elsif @job.pre_contracted? and @job.contract_sent != true
-            | Freelencer selected: work order pending.
+            | Congrats a Freelencer has been selected! Work order pending.
           - elsif @job.pre_contracted? and @job.contract_sent == true
-            | Work order sent to freelancer; awaiting response.
+            | Work order sent to Freelancer. Awaiting response.
           - elsif @job.contracted?
-            | Work order accepted by freelancer.
+            | Work order accepted by Freelancer.
         - if @job.freelancer && @job.pre_contracted?
-          a.btn-primary.job-details__work-order__btn href=edit_company_job_work_order_path(@job)
+          a.btn.btn--primary href=edit_company_job_work_order_path(@job)
             | Create Work Order
         - elsif @job.freelancer && @job.contracted?
-          a.btn-primary.job-details__work-order__btn href=company_job_work_order_path(@job)
+          a.btn.btn--primary href=company_job_work_order_path(@job)
             | View Work Order
         - else
-          div.btn-primary.job-details__work-order__btn--disabled
+          div.btn.btn--primary.btn--primary--disabled
             | Create Work Order
-
-  - if !@job.freelancer.nil?
-    .job-details
-      .job-details__bar
+    
+    
+        
+    - if !@job.freelancer.nil?
+      .grid-cell.grid-cell--100
         = render partial: "company/shared/contract_meta", locals: { job: @job }
 
+    .grid-cell.grid-cell--33
+      h3.heading-h3 Job Function
+      p = @job.job_function&.text
+    .grid-cell.grid-cell--expand
+      h3.heading-h3 Start
+      p = l @job.starts_on
+    .grid-cell.grid-cell--expand
+      h3.heading-h3 Duration
+      p = @job.duration
+    .grid-cell.grid-cell--expand
+      h3.heading-h3 Pay Type
+      p = @job.pay_type&.text || "Not Specified"
+    .grid-cell.grid-cell--expand
+      h3.heading-h3 Freelancer Type
+      p = @job.freelancer_type&.text
 
-  .job-details
-    .job-details__bar
-      .job-details__title
-        | Job Function
-      .show_value_em= @job.job_function&.text
+    .grid-cell.grid-cell--100
+      h3.heading-h3 Skills
+      div
+        - if !@job.keywords
+          | None Specified
+        - elsif @job.keywords and @job.keywords.kind_of?(Hash)
+          - @job.keywords.each do |index, value|
+            .tag.tag--grey
+              = I18n.t("enumerize.freelancer_skills.#{index}")
 
-    .job-details__bar
-      .job-details__title
-        | Est. Start
-      .show_value_em= l @job.starts_on
-    .job-details__bar
-      .job-details__title
-        | Duration
-      .show_value_em= @job.duration
+    .grid-cell.grid-cell--50
+      h3.heading-h3 Job Summary
+      p
+        = @job.summary
+    .grid-cell.grid-cell--50
+      h3.heading-h3 Scope of Work
+      p
+        - if @job.scope_of_work
+          = @job.scope_of_work
+        - if !@job.scope_file.nil?
+          h4.heading-h4 Download SOW attachments 
+          p  
+            a href=@job.scope_file_url target="_blank"
+              = @job.scope_file.original_filename
 
-    .job-details__bar
-      .job-details__title
-        | Pay Type
-      .show_value_em= @job.pay_type&.text || "Not Specified"
-
-    .job-details__bar
-      .job-details__title
-        | Freelancer Type
-      .show_value_em= @job.freelancer_type&.text
-
-
-  .job-details
-    .job-details__title
-      | Skills
-    .show_value
-      - if !@job.keywords
-        | None Specified
-      - elsif @job.keywords and @job.keywords.kind_of?(Hash)
-        - @job.keywords.each do |index, value|
-          .grey.tag
-            = I18n.t("enumerize.freelancer_skills.#{index}")
-
-  .job-details
-    .job-details__title
-      | Job Summary
-    .show_value= @job.summary
-
-  .job-details
-    .job-details__title
-      | Scope of Work
-    .show_value
-      - if @job.scope_of_work
-        = @job.scope_of_work
-      - if !@job.scope_file.nil?
-        div
-          | Click to download:
-          a href=@job.scope_file_url target="_blank"
-            = @job.scope_file.original_filename
-
-/
-  .job-details
-    .job-details__title
-      | Addenda
 
     .job-details__attachments
       - @job.attachments.each do |attachment|
@@ -134,11 +112,6 @@
           .job-details__attachment__name
             = attachment.title
 
-/
-  .job-details
-    ul
-      - if @job.budget_is_public?
-        li.show_value= t(:budget_is_public, scope: [:form, :labels, :job])
 
     .job-details
       .job-details__title
@@ -149,25 +122,3 @@
         - else
           a href="/freelance-service-agreement?job=#{@job.id}#{random_append}" target="_blank"
             | Click here to view the Freelance Service Agreement for this project.
-
-  .result-content__expand onclick="toggleExpandedJobDetails()"
-    .result-content__expand__gradient
-    .result-content__expand__bg
-      .btn.btn-tertiary.result-content__expand-btn
-        | expand job details
-
-
-javascript:
-  var toggleExpandedJobDetails = function() {
-    var collapsed = "result-content--collapsed";
-    if ($(".result-content").hasClass(collapsed)) {
-      $(".result-content").removeClass(collapsed);
-      $(".result-content__expand__gradient").addClass("result-content__expand__gradient--hidden");
-      $(".result-content__expand-btn").html("collapse job details");
-    } else {
-      $(".result-content").addClass(collapsed);
-      $(".result-content__expand__gradient").removeClass("result-content__expand__gradient--hidden");
-      $(".result-content__expand-btn").html("expand job details");
-    }
-
-  }

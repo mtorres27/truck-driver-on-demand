@@ -27,7 +27,7 @@ class Quote < ApplicationRecord
 
   audited
 
-  enumerize :pay_type, in: [ :fixed, :hourly, :daily ], predicates: true
+  enumerize :pay_type, in: [ :fixed, :hourly, :daily ]
   enumerize :state, in: [ :pending, :declined, :accepted ], predicates: true
 
   def accept!
