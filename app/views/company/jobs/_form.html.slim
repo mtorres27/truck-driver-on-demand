@@ -91,7 +91,7 @@
       = simple_form_for([:company, current_company.projects.new], remote: true) do |f|
         .modal-header
           h2 Create a New Project
-        .modal-body
+        .container
           .grid-h
             .grid-cell.grid-cell--100
               = f.input :name, placeholder: "Enter the project name"
