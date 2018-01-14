@@ -10,8 +10,12 @@ nav#top-nav.navbar
       span.icon-bar
       span.icon-bar
       span.icon-bar
-    a.navbar-brand href=root_path title="AV Junction"
-      = image_tag("avjunction-logo_header.svg", class: "header-logo", alt: "AV Junction")
+    - if request.path.index('company') == 1
+      a.navbar-brand href="/company" title="AV Junction"
+        = image_tag("avjunction-logo_header.svg", class: "header-logo", alt: "AV Junction")
+    - elsif request.path.index('freelancer') == 1
+      a.navbar-brand href="/freelancer" title="AV Junction"
+        = image_tag("avjunction-logo_header.svg", class: "header-logo", alt: "AV Junction")
   #navbar-lg.collapse.navbar-collapse
     ul.nav.navbar-nav.navbar-right
       - if request.path.index('company') == 1
