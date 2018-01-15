@@ -87,6 +87,14 @@
       padding-left: 0px
       padding-right: 0px
       padding-top: 0px
+  &--popup
+    flex: 0 auto
+    max-width: 600px
+    min-height: 50vh
+    @media (max-width: $breakpoint-tablet)
+      max-width: 100%
+      height: 100vh
+
 
 .frame
   overflow: hidden
@@ -114,3 +122,27 @@
     padding: 16px
     margin-bottom: 16px
  
+// Popup
+.popup
+  height: 100vh
+  width: 100%
+  z-index: 1000
+  position: fixed
+  left: 0
+  top: 0
+  background-color: rgba(0,0,0,0.3) 
+  display: flex
+  flex-direction: column
+  justify-content: center
+
+.popup__title-bar
+  display: flex
+  max-width: 600px
+  margin-top: -24px
+  margin-right: -24px
+  margin-left: -24px
+  margin-bottom: 24px
+  padding: 24px
+  justify-content: space-between
+  align-items: center
+  background-color: #f1f1f1  
