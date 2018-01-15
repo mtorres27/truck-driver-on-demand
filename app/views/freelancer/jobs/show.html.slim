@@ -106,8 +106,6 @@
     
 = simple_form_for "freelancer_job_apply_path", html: { multipart: true }  do |f|
   = f.hidden_field :job, value: @job.id
-
-
   .freelancer-job__apply-modal
     .freelancer-job__apply-form.w-form
       h2.common__h2-modal= @job.title
