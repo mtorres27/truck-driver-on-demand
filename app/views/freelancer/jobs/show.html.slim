@@ -196,24 +196,25 @@ javascript:
     $("#message_attachment").click();
   };
 
-  $("#message_attachment").change(function() {
-    $("#attach_indicator").find(".common__icon-attach").addClass("common__icon-attach--active");
-  });
+  $(document).ready(function(){
+    $("#message_attachment").change(function() {
+      $("#attach_indicator").find(".common__icon-attach").addClass("common__icon-attach--active");
+    });
 
-  $("#apply-for-job").on('click', function(e) {
-    e.preventDefault();
-    alert ("what the hell")
-    $(".popup").show();
-  });
+    $("#apply-for-job").on('click', function(e) {
+      e.preventDefault();
+      $(".popup").css('display','flex');
+    });
 
-  $("#close-modal").on('click', function(e) {
-    e.preventDefault();
-    $(".popup").hide();
-  });
+    $("#close-modal").on('click', function(e) {
+      e.preventDefault();
+      $(".popup").hide();
+    });
 
-  $("#close-modal-2").on('click', function(e) {
-    e.preventDefault();
-    $(".popup").hide();
+    $("#close-modal-2").on('click', function(e) {
+      e.preventDefault();
+      $(".popup").hide();
+    });
   });
 
   var clearAllQuoteValues = function () {
