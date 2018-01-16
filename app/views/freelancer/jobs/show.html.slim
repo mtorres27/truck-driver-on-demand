@@ -110,7 +110,7 @@
       .popup__title-bar
         h2.heading-h2 Apply for this job
         .buttons
-          a.btn-icon-link href="#"
+          a.btn-icon-link href="#" id="close-modal"
             span.zmdi.zmdi-close
 
       = simple_form_for "freelancer_job_apply_path", html: { multipart: true }  do |f|
@@ -202,17 +202,18 @@ javascript:
 
   $("#apply-for-job").on('click', function(e) {
     e.preventDefault();
-    $(".freelancer-job__apply-modal").show();
+    alert ("what the hell")
+    $(".popup").show();
   });
 
   $("#close-modal").on('click', function(e) {
     e.preventDefault();
-    $(".freelancer-job__apply-modal").hide();
+    $(".popup").hide();
   });
 
   $("#close-modal-2").on('click', function(e) {
     e.preventDefault();
-    $(".freelancer-job__apply-modal").hide();
+    $(".popup").hide();
   });
 
   var clearAllQuoteValues = function () {
