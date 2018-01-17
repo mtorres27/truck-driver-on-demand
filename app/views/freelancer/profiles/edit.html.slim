@@ -53,6 +53,11 @@
 
         .freelancer-profile__item
           .freelancer-profile__title
+            | Phone Number
+          = f.input :phone_number, as: :string, required: true, label: false, placeholder: "Phone Number"
+
+        .freelancer-profile__item
+          .freelancer-profile__title
             | Address
           = f.input :address, required: true, label: false, placeholder: "Address"
 
