@@ -64,6 +64,8 @@ class Freelancer < ApplicationRecord
   validates_presence_of :country, :on => :create
   validates_presence_of :city, :on => :create
 
+  validates :phone_number, length: { minimum: 7 }, allow_blank: true
+
   audited
 
   def connected?; !stripe_account_id.nil?; end
