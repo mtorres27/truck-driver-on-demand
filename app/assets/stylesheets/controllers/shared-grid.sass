@@ -117,32 +117,27 @@
       padding-left: 24px
 
 @media (max-width: $breakpoint-tablet)
-  // .grid-h
-  //   -webkit-box-orient: vertical
-  //   -webkit-box-direction: normal
-  //   -webkit-flex-direction: column
-  //   -ms-flex-direction: column
-  //   flex-direction: column
-  //   margin-top: -16px
-  //   margin-bottom: 16px
-  //   margin-left: -16px
-  .grid-v
+  .grid-h
+    // -webkit-box-orient: vertical
+    // -webkit-box-direction: normal
+    // -webkit-flex-direction: column
+    // -ms-flex-direction: column
+    // flex-direction: column
     margin-top: -16px
-    margin-left:  -16px
+    margin-bottom: 16px
+    margin-left: -16px
+  .grid-v
   .grid-cell
     &--33, &--67, &--50, &--25, &--75, &--100
       width: 100%
       padding-top: 16px
       padding-left: 16px
-
-@media (max-width: $breakpoint-tablet)
-  .grid-cell
     &--span75
       width: 75%
       padding-top: 16px
       padding-left: 16px
     &--span50
-      width: 50%
+      width: 100%
       padding-top: 16px
       padding-left: 16px
     &--span33
