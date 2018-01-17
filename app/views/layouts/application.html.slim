@@ -10,7 +10,10 @@ html
     = csrf_meta_tags
     = stylesheet_link_tag "application", media: "all", "data-turbolinks-track": "reload"
     = javascript_include_tag "application", "data-turbolinks-track": "reload"
-    title= yield(:title) + " – " if content_for?(:title)
+    - if content_for?(:title)
+      title= yield(:title)
+    - else
+      title= "AVJunction"
 
     javascript:
       !function(f,b,e,v,n,t,s)
