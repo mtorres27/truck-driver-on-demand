@@ -1,22 +1,42 @@
 .authorable_attachment__item
-  div
+  .profile__meta__details__1-1
     .freelancer-profile__image.float-left
       - if !f.object.certificate_url.include?('missing.pdf')
         - url = is_image(f.object.certificate_url) ? f.object.certificate_url : "/assets/certification/certification_placeholder.png"
         a.authorable_attachment--full href=f.object.certificate_url target="_blank"
           img src=url
         .freelancer-profile__image-upload onclick="uploadCertificate(#{f.index})"
-          span class="fa fa-camera" 
+          span class="zmdi zmdi-upload" 
       - else
         .authorable_attachment--full
           img src=""
         .freelancer-profile__image-upload onclick="uploadCertificate()"
-          span class="fa fa-camera" 
+          span class="zmdi zmdi-upload" 
     
-  .nested_fields
-    .nested_fields-title
-      | Certificate Name
+    .profile__meta__info
+      = f.file_field :certificate, :accept => 'image/gif,image/jpg,image/jpeg,image/png,document/pdf,application/pdf,application/x-pdf', label: false, class: "file-input--hidden" 
+      = f.input :name, as: :string, placeholder: "Enter the certificate's name", label: "Certificate Name"
+    a.btn-icon-link onclick="hide_remove_association(this)"
+      span.zmdi.zmdi-close-circle
 
-    = f.file_field :certificate, :accept => 'image/gif,image/jpg,image/jpeg,image/png,document/pdf,application/pdf,application/x-pdf', label: false, class: "file-input--hidden" 
-    = f.input :name, as: :string, placeholder: "Enter the certificate's name", label: false
-    = link_to_remove_association "X", f, { onClick: "hide_remove_association(this)"}
+/ .authorable_attachment__item
+/   .profile__meta__details__1-1
+/     .freelancer-profile__image.float-left
+/       - if !f.object.certificate_url.include?('missing.pdf')
+/         - url = is_image(f.object.certificate_url) ? f.object.certificate_url : "/assets/certification/certification_placeholder.png"
+/         a.authorable_attachment--full href=f.object.certificate_url target="_blank"
+/           img src=url
+/         .freelancer-profile__image-upload onclick="uploadCertificate(#{f.index})"
+/           span class="zmdi zmdi-upload" 
+/       - else
+/         .authorable_attachment--full
+/           img src=""
+/         .freelancer-profile__image-upload onclick="uploadCertificate()"
+/           span class="zmdi zmdi-upload" 
+    
+/     .profile__meta__info
+/       = f.file_field :certificate, :accept => 'image/gif,image/jpg,image/jpeg,image/png,document/pdf,application/pdf,application/x-pdf', label: false, class: "file-input--hidden" 
+/       = f.input :name, as: :string, placeholder: "Enter the certificate's name", label: "Certificate Name", class: "form__text-field"
+/     / = link_to_remove_association "X", f, { onClick: "hide_remove_association(this)"}
+/     a.btn-icon-link onclick="hide_remove_association(this)"
+/       span.zmdi.zmdi-close-circle
