@@ -9,27 +9,31 @@
 
     .grid-h
       .grid-cell.grid-cell--33
-        .form__field-label A profile pic says a 1000 words.
-        br
-        .company-profile__image style="width: 135px; height: 135px;"
-          =image_tag(@company.avatar_url, id: "company-edit-profile__avatar")
-          .freelancer-profile__image-upload onclick="updateProfilePicture()"
-            span class="fa fa-camera"
-        = f.file_field :avatar, label: false, :accept => 'image/png,image/gif,image/jpeg', class: "file-input--hidden", id: "edit-company-profile-avatar"
-      .grid-cell.grid-cell--67  
+        h2.heading-h2 A profile pic says a 1000 words.        
+      .grid-cell.grid-cell--67
         .grid-h.grid-h--no-margin
-          .grid-cell.grid-cell--100
-            = f.input :name, required: true, label: "Company Name", placeholder: "Enter a Company Name."
-          .grid-cell.grid-cell--100
-            = f.input :contact_name, required: true, label: "Contact Name", placeholder: "Enter your preferred Company Contact Name."
-          .grid-cell.grid-cell--50
-            = f.input :phone_number, as: :string, label: "Phone Number", placeholder: "Your Contact's Phone Number"
-          .grid-cell.grid-cell--50
-            = f.input :email, required: true, as: :string, label: "Email Address", placeholder: "Enter your preferred Email Address."
+          .grid-cell.grid-cell--33
+            .company-profile__image style="width: 200px; height: 200px; margin: auto"
+              =image_tag(@company.avatar_url, id: "company-edit-profile__avatar")
+              .freelancer-profile__image-upload onclick="updateProfilePicture()"
+                span class="zmdi zmdi-camera-add"
+            = f.file_field :avatar, label: false, :accept => 'image/png,image/gif,image/jpeg', class: "file-input--hidden", id: "edit-company-profile-avatar"
+
+          .grid-cell.grid-cell--67
+            .grid-h.grid-h--no-margin
+              .grid-cell.grid-cell--100
+                = f.input :name, required: true, label: "Company Name", placeholder: "Enter a Company Name."
+              .grid-cell.grid-cell--100
+                = f.input :contact_name, required: true, label: "Contact Name", placeholder: "Enter your preferred Company Contact Name."
+              .grid-cell.grid-cell--100
+                = f.input :phone_number, as: :string, label: "Phone Number", placeholder: "Your Contact's Phone Number"
+              .grid-cell.grid-cell--100
+                = f.input :email, required: true, as: :string, label: "Email Address", placeholder: "Enter your preferred Email Address."
+          
       .grid-cell.grid-cell--100
         hr/
       .grid-cell.grid-cell--33
-        h2.heading-h2 Enter your address so we can find you the closest jobs.
+        h2.heading-h2 Enter your address so we can find you the closest freelancers.
       .grid-cell.grid-cell--67  
         .grid-h.grid-h--no-margin
           .grid-cell.grid-cell--100
@@ -107,7 +111,27 @@
       .grid-cell.grid-cell--100
         hr/
       .grid-cell.grid-cell--33
-        h2.heading-h2 Give your profile some personality with a custom background
+        h2.heading-h2 A portfolio of successful projects gives your company credibility with freelancers
+      .grid-cell.grid-cell--67  
+        .grid-h.grid-h--no-margin
+          .grid-cell.grid-cell--50
+            #company_installs
+              h3.heading-h3 # of AV Projects Completed
+              = f.simple_fields_for :company_installs do |install_form|
+                = render "company_install_fields", f: install_form
+            .buttons
+              = link_to_add_association 'Add # of Projects', f, :company_installs, class: "btn btn--secondary"
+          .grid-cell.grid-cell--50
+            #featured_projects
+              h3.heading-h3 Featured AV Projects
+              = f.simple_fields_for :featured_projects do |project_form|
+                = render "featured_project_fields", f: project_form
+            .buttons
+              = link_to_add_association 'Add Project', f, :featured_projects, class: "btn btn--secondary"
+      .grid-cell.grid-cell--100
+        hr/
+      .grid-cell.grid-cell--33
+        h2.heading-h2 Give your company profile some personality with a custom background
       .grid-cell.grid-cell--67  
         .grid-h.grid-h--no-margin
           .grid-cell.grid-cell--100
@@ -122,26 +146,7 @@
           .grid-cell.grid-cell--50  
             = f.input :header_source, label: "Display color/wallpaper in header", prompt: "Select"
       
-      .grid-cell.grid-cell--100
-        hr/
-      .grid-cell.grid-cell--33
-        h2.heading-h2 Installs
-      .grid-cell.grid-cell--67  
-        .grid-h.grid-h--no-margin
-          .grid-cell.grid-cell--100
-            #company_installs
-              h3.heading-h3 Company Installs (by year)
-              = f.simple_fields_for :company_installs do |install_form|
-                = render "company_install_fields", f: install_form
-              .buttons
-                = link_to_add_association 'Add Install', f, :company_installs, class: "btn btn--primary"
-          .grid-cell.grid-cell--100
-            #featured_projects
-              h3.heading-h3 Featured Projects
-              = f.simple_fields_for :featured_projects do |project_form|
-                = render "featured_project_fields", f: project_form
-              .buttons
-                = link_to_add_association 'Add Project', f, :featured_projects, class: "btn btn--primary"
+      
 
       .grid-cell.grid-cell--100
         hr/

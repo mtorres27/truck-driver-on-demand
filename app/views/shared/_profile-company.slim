@@ -90,7 +90,7 @@
     p
       = @company.number_of_employees ? "#{t(@company.number_of_employees)} employees" : "N/A"
 
-    h3.heading-h3 Installs
+    h3.heading-h3 AV Projects Completed
     p
       - if @company.company_installs.length > 0
         - @company.company_installs.order('year ASC').each do |installation|

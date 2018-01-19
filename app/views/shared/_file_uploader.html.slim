@@ -1,14 +1,14 @@
 .uploader
   .uploader__image-cont
     img.uploader__image 
-    .uploader__upload
-      a.btn-icon-link href="#" 
+    a.uploader__upload href=""
+      .btn-icon-link 
         span class="zmdi zmdi-upload"
   .uploader__info
     .form__field-label Add the field below this
     /= f.input :name, as: :string, placeholder: "Enter the certificate's name", label: "Certificate Name"
-  .uploader__close
-    a.btn-icon-link href=""
+  .uploader__close 
+    a.btn-icon-link href="" 
       span.zmdi.zmdi-close-circle
     / = link_to_remove_association "", f, { onClick: "hide_remove_association(this)", class: "btn-icon-link"}
 

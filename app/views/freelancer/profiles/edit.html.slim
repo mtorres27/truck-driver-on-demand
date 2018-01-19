@@ -12,20 +12,24 @@
     
     .grid-h
       .grid-cell.grid-cell--33
-        .form__field-label A profile pic says a 1000 words.
-        .freelancer-profile__image style="width: 200px; height: 200px; margin: auto"
-          = image_tag(@freelancer.avatar_url, id: "freelancer-edit-profile__avatar")
-          .freelancer-profile__image-upload onclick="updateProfilePicture()"
-            span class="zmdi zmdi-camera-add"
-        = f.file_field :avatar, label: false, :accept => 'image/png,image/gif,image/jpeg', id: "edit-freelancer-profile-avatar", class: "file-input--hidden"
-      .grid-cell.grid-cell--67  
+        h2.heading-h2 Did you know? A profile pic says a 1000 words.
+      .grid-cell.grid-cell--67
         .grid-h.grid-h--no-margin
-          .grid-cell.grid-cell--100
-            = f.input :name, required: true, label: "Full Name", placeholder: "Enter your Name."
-          .grid-cell.grid-cell--100
-            = f.input :email, as: :string, required: true, label: "Email Address", placeholder: "Email"
-          .grid-cell.grid-cell--100
-            = f.input :phone_number, as: :string, required: true, label: "Phone Number", placeholder: "Phone Number"
+          .grid-cell.grid-cell--33
+            .freelancer-profile__image style="width: 200px; height: 200px; margin: auto"
+              = image_tag(@freelancer.avatar_url, id: "freelancer-edit-profile__avatar")
+              .freelancer-profile__image-upload onclick="updateProfilePicture()"
+                span class="zmdi zmdi-camera-add"
+            = f.file_field :avatar, label: false, :accept => 'image/png,image/gif,image/jpeg', id: "edit-freelancer-profile-avatar", class: "file-input--hidden"
+
+          .grid-cell.grid-cell--67
+            .grid-h.grid-h--no-margin
+              .grid-cell.grid-cell--100
+                = f.input :name, required: true, label: "Full Name", placeholder: "Enter your Name."
+              .grid-cell.grid-cell--100
+                = f.input :email, as: :string, required: true, label: "Email Address", placeholder: "Email"
+              .grid-cell.grid-cell--100
+                = f.input :phone_number, as: :string, required: true, label: "Phone Number", placeholder: "Phone Number"
       .grid-cell.grid-cell--100
         hr/
       .grid-cell.grid-cell--33
@@ -142,6 +146,8 @@
         .grid-v
           .grid-cell.grid-cell--100
             .form__field-label Upload component
+            = render "shared/file_uploader"
+            = render "shared/file_uploader"
             = render "shared/file_uploader"
             .buttons
               = link_to_add_association 'Add Another', f, :certifications, class: "btn btn--secondary"

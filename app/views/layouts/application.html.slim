@@ -44,7 +44,7 @@ html
         - no_header_controllers << { controller: "freelancer/companies" }
         - no_header_controllers << { controller: "company/freelancers", action: "show" }
         - no_header_controllers << { controller: "company/profiles" }
-        - no_header_controllers << { controller: "freelancer/companies/av_companies" }
+        - no_header_controllers << { controller: "freelancer/companies", action: "av_companies" }
       
         - show_header = true
         - no_header_controllers.each do |controller|
