@@ -100,25 +100,23 @@
             a href=@job.scope_file_url target="_blank"
               = @job.scope_file.original_filename
 
+    .grid-cell.grid-cell--50   
+      - @job.attachments.each do |attachment|
+        a.job-details__attachment href=attachment.file_url target="_blank"
+          .job-details__attachment__file
+            - if is_image(attachment.file_url)
+              img src=attachment.file_url
+            - else
+              span class="fa fa-file-text"
+          .job-details__attachment__name
+            = attachment.title
 
-    / .job-details__attachments
-    /   - @job.attachments.each do |attachment|
-    /     a.job-details__attachment href=attachment.file_url target="_blank"
-    /       .job-details__attachment__file
-    /         - if is_image(attachment.file_url)
-    /           img src=attachment.file_url
-    /         - else
-    /           span class="fa fa-file-text"
-    /       .job-details__attachment__name
-    /         = attachment.title
 
-
-    / .job-details
-    /   .job-details__title
-    /     | Freelance Service Agreement
-    /   p
-    /     - if @job.opt_out_of_freelance_service_agreement
-    /       | This project has opted out of the freelance service agreement
-    /     - else
-    /       a href="/freelance-service-agreement?job=#{@job.id}#{random_append}" target="_blank"
-    /         | Click here to view the Freelance Service Agreement for this project.
+    .grid-cell.grid-cell--50
+      h3.heading-h3 Freelance Service Agreement
+      p
+        - if @job.opt_out_of_freelance_service_agreement
+          | This project has opted out of the freelance service agreement
+        - else
+          a href="/freelance-service-agreement?job=#{@job.id}#{random_append}" target="_blank"
+            | Click here to view the Freelance Service Agreement for this project.
