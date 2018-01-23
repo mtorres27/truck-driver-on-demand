@@ -1,134 +1,150 @@
 = render partial: "/freelancer/shared/job_meta"
 = render partial: "/freelancer/shared/job_shared_nav", locals: { job: @job }
 - content_for :secondary do
-  .result-mobile
-    .result-header
-      .result-header__text
-        = "Work Order #{@job.work_order}"
-    .result-content
-      - if @job.contract_sent == false
-        | Can't show the work order yet, it hasn't been set.
-      - else
-        .row
-        .col-xs-12.col-md-6
-          .show_field
-            label= t(:summary, scope: [:form, :labels, :job])
-            .show_value= @job.summary
+  .action-bar
+    h2.heading-h2.heading-h2--action-bar = "Work Order #{@job.work_order}"
 
-          .show_field
-            label= t(:scope_of_work, scope: [:form, :labels, :job])
-            .show_value= @job.scope_of_work || "Not Specified"
+  - if @job.contract_sent == false
+    | Can't show the work order yet, it hasn't been set.
+  - else
+    .grid-h
+         
 
-            - if !@job.scope_file_url.nil?
-              .show_value
-                a href= @job.scope_file_url
-                  = @job.scope_file.original_filename
 
-          .show_field
-            label= t(:addendums, scope: [:form, :labels, :job])
-            .show_value= @job.addendums || "Not Specified"
+      .grid-cell.grid-cell--33
+        h3.heading-h3 
+          = t(:contract_price, scope: [:form, :labels, :job])
+        p
+          - if @accepted_quote
+            = number_with_precision(@accepted_quote.amount, precision: 2)
+            span<>= @job.currency.upcase if !@job.currency.nil?
+          - else
+            | Not Specified
+          - if @accepted_quote && @accepted_quote.pay_type == "hourly"
+            = "(#{@accepted_quote.number_of_hours} hours @ #{number_to_currency(@accepted_quote.hourly_rate, precision: 2)}/hour)"
+          - elsif @accepted_quote && @accepted_quote.pay_type == "daily"
+            = "(#{@accepted_quote.number_of_days} days @ #{number_to_currency(@accepted_quote.daily_rate, precision: 2)}/day)"
 
-        .col-xs-12.col-md-6
-          .show_field
-            .row
-              .col-xs-12.col-lg-6
-                label= t(:contract_price, scope: [:form, :labels, :job])
-                .show-budget
-                  - if @accepted_quote
-                    = number_with_precision(@accepted_quote.amount, precision: 2)
-                    span<>= @job.currency.upcase if !@job.currency.nil?
-                  - else
-                    | Not Specified
-                  - if @accepted_quote && @accepted_quote.pay_type == "hourly"
-                    = "(#{@accepted_quote.number_of_hours} hours @ #{number_to_currency(@accepted_quote.hourly_rate, precision: 2)}/hour)"
-                  - elsif @accepted_quote && @accepted_quote.pay_type == "daily"
-                    = "(#{@accepted_quote.number_of_days} days @ #{number_to_currency(@accepted_quote.daily_rate, precision: 2)}/day)"
+      .grid-cell.grid-cell--33
+        h3.heading-h3
+          | Applicable Sales Tax
+        p #{@job.applicable_sales_tax ? @job.applicable_sales_tax : 0}%
 
-              .col-xs-12.col-lg-6
-                label Applicable Sales Tax
-                .show_value_em #{ @job.applicable_sales_tax ? @job.applicable_sales_tax : 0}%
+      
+      
+      .grid-cell.grid-cell--expand
+        h3.heading-h3
+          | Total Quote
+        p #{@job.applicable_sales_tax.present? ? number_with_precision( (@accepted_quote.amount+(@accepted_quote.amount*@job.applicable_sales_tax/100)) , precision: 2) :  number_with_precision(@accepted_quote.amount, precision: 2) } #{@job.currency.upcase}
 
-              .col-xs-12.col-lg-6
-                label Total Quote
-                .show_value_em #{@job.applicable_sales_tax.present? ? number_with_precision( (@accepted_quote.amount+(@accepted_quote.amount*@job.applicable_sales_tax/100)) , precision: 2) :  number_with_precision(@accepted_quote.amount, precision: 2) } #{@job.currency.upcase}
+      .grid-cell.grid-cell--33
+        h3.heading-h3
+          = t(:pay_type, scope: [:form, :labels, :job])
+        p 
+          = @accepted_quote ? @accepted_quote.pay_type&.text : "Not Specified"
+      .grid-cell.grid-cell--33
+        h3.heading-h3
+          = t(:working_time, scope: [:form, :labels, :job])
+        p
+          = @job.working_time ? t(@job.working_time) : "Not Specified"
+      
+      .grid-cell.grid-cell--33
+        h3.heading-h3
+          | Start-End Date
+          / = t(:starts_on, scope: [:form, :labels, :job])
+        p 
+          = l @job.starts_on
+          |  - 
+          = @job.ends_on ? l(@job.ends_on) : "Not Specified"
 
-              .col-xs-12.col-lg-6
-                label= t(:pay_type, scope: [:form, :labels, :job])
-                .show_value_em= @accepted_quote ? @accepted_quote.pay_type&.text : "Not Specified"
+      
+      .grid-cell.grid-cell--50
+        h3.heading-h3 
+          = t(:summary, scope: [:form, :labels, :job])         
+        p 
+          = @job.summary
+      .grid-cell.grid-cell--50
+        h3.heading-h3 
+          = t(:scope_of_work, scope: [:form, :labels, :job])           
+        p 
+          = @job.scope_of_work || "Not Specified"   
+          - if !@job.scope_file_url.nil?
+            p
+              a href= @job.scope_file_url
+                = @job.scope_file.original_filename
 
-          .show_field
-            .row
-              .col-xs-12.col-lg-6
-                label= t(:starts_on, scope: [:form, :labels, :job])
-                .show_value_em= l @job.starts_on
-              .col-xs-12.col-lg-6
-                label= t(:ends_on, scope: [:form, :labels, :job])
-                .show_value_em= @job.ends_on ? l(@job.ends_on) : "Not Specified"
-
-          .show_field
-            .row
-              .col-xs-12.col-lg-6
-                label= t(:working_time, scope: [:form, :labels, :job])
-                .show_value_em= @job.working_time ? t(@job.working_time) : "Not Specified"
-
-          .show_field
-            label Payment Schedule
-            .show_value
-              - if @job.payments.any?
-                table.table
-                  - @job.payments.each do |payment|
-                    tr
-                      td= payment.description
-                      td.text-right
-                        = number_with_precision(payment.amount, precision: 2)
-                        br
-                        - if @job.currency.nil?
-                          |
-                        - else
-                          = @job.currency.upcase
-              - else
-                | None Specified
-
-          .show_field
-            label= t(:reporting_frequency, scope: [:form, :labels, :job])
-            .show_value= @job.reporting_frequency&.text || "None Specified"
-
-          .show_field
-            label Reporting Requirements
-            ul
-              - if @job.require_photos_on_updates?
-                li.show_value= t(:require_photos_on_updates, scope: [:form, :labels, :job])
-              - if @job.require_checkin?
-                li.show_value= t(:require_checkin, scope: [:form, :labels, :job])
-              - if @job.require_uniform?
-                li.show_value= t(:require_uniform, scope: [:form, :labels, :job])
-
-          - if @job.freelancer and @job.freelancer.id == current_freelancer.id
-            .freelancer-job__summary-cont
-              h3.freelancer-job__h3 Freelance Service Agreement
-              p
-                - if @job.opt_out_of_freelance_service_agreement
-                  | This project has opted out of the freelance service agreement"
-                - else
-                  a href="/freelance-service-agreement?job=#{@job.id}#{random_append}" target="_blank"
-                    | Click here to view the Freelance Service Agreement for this project.
-                  - if @job.state != :contracted and @job.freelancer.id == current_freelancer.id
+      .grid-cell.grid-cell--100
+        h3.heading-h3
+          | Payment Schedule
+        p
+          - if @job.payments.any?
+            table.table
+              - @job.payments.each do |payment|
+                tr
+                  td= payment.description
+                  td.text-right
+                    = number_with_precision(payment.amount, precision: 2)
                     br
-                    input type='checkbox' id='accept_agreement' onclick="toggleAccept()"
-                    |  I accept the Freelance Services Agreement
+                    - if @job.currency.nil?
+                      |
+                    - else
+                      = @job.currency.upcase
+          - else
+            | None Specified
+
+      .grid-cell.grid-cell--50
+        h3.heading-h3
+          = t(:reporting_frequency, scope: [:form, :labels, :job])
+        p
+          = @job.reporting_frequency&.text || "None Specified"
+
+      .grid-cell.grid-cell--50
+        h3.heading-h3
+          | Reporting Requirements
+        - if @job.require_photos_on_updates?
+          p = t(:require_photos_on_updates, scope: [:form, :labels, :job])
+        - if @job.require_checkin?
+          p = t(:require_checkin, scope: [:form, :labels, :job])
+        - if @job.require_uniform?
+          p = t(:require_uniform, scope: [:form, :labels, :job])
+        - else 
+          p None Specified
+
+      .grid-cell.grid-cell--100
+        h3.heading-h3 
+          = t(:addendums, scope: [:form, :labels, :job])           
+        p 
+          = @job.addendums || "Not Specified"
+
+      .grid-cell.grid-cell--100
+        - if @job.freelancer and @job.freelancer.id == current_freelancer.id
+          h3.heading-h3
+            | Freelance Service Agreement
+          p
+            - if @job.opt_out_of_freelance_service_agreement
+              | This project has opted out of the freelance service agreement"
+            - else
+              a href="/freelance-service-agreement?job=#{@job.id}#{random_append}" target="_blank"
+                | Click here to view the Freelance Service Agreement for this project.
+              - if @job.state != :contracted and @job.freelancer.id == current_freelancer.id
+                br
+                input type='checkbox' id='accept_agreement' onclick="toggleAccept()"
+                |  I accept the Freelance Services Agreement
 
 
-          - if @job.state != :contracted and @job.freelancer.id == current_freelancer.id
-            p
-              | If the terms of this work order are acceptable to you, click the checkbox above and then on "Accept Work Order". If you want to negotiate the terms, enter a message in the
-              a href=freelancer_job_messages_path(@job)
-                | Progress
-              |  view
-            a.btn.btn-primary href="#" data-link="/freelancer/jobs/#{@job.id}/work_order/accept" id="accept_work_order_button" disabled=true
+        - if @job.state != :contracted and @job.freelancer.id == current_freelancer.id
+          .buttons
+            a.btn.btn--primary href="#" data-link="/freelancer/jobs/#{@job.id}/work_order/accept" id="accept_work_order_button" disabled=true
               | Accept Work Order
-          - elsif @job.state == :contracted and @job.freelancer.id == current_freelancer.id
-            p
-              | You have accepted the terms of this work order.
+          p
+          p  
+            | If the terms of this work order are acceptable to you, click the checkbox above and then on "Accept Work Order". If you want to negotiate the terms, enter a message in the 
+            a href=freelancer_job_messages_path(@job)
+              | Progress 
+            |  view
+        - elsif @job.state == :contracted and @job.freelancer.id == current_freelancer.id
+          p
+            | You have accepted the terms of this work order.
 
 javascript:
   var toggleAccept = function() {

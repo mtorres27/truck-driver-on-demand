@@ -1,133 +1,125 @@
+
 - content_for :secondary do
-  .result-wrapper
-    - if current_company
-      .result-header
-        .result-header__text
-          | Freelance Service Agreement
-    - else
-      h3
-        | Freelance Service Agreement
+  .action-bar
+    h2.heading-h2.heading-h2--action-bar Freelance Service Agreement
 
+  - if @job.nil?
+    p
+      | This Freelance Service Agreement is unavilable for viewing, either because the freelancer hasn't been selected, the Job specified doesn't exist, or you don't have the rights to view it.
+  - else
+    p
+      = "This Freelance Services Agreement (this “Agreement”) is made effective as of the #{@job_start_day} day of #{@job_start_month}, #{@job_start_year} (the “Effective Date”), between #{@job.freelancer.name}, an individual residing at #{@job.freelancer.address} (“Freelancer”) and #{@job.company.name}, a company having a place of business at #{@job.company.address} (“AV Company”)."
+    p
+      | 1. Definitions. The following terms shall have the following meanings: (a) “Deliverable(s)” means any [documents, reports, publications, mock-ups, brochures, designs, plans, drawings, audio/video content, sign-off documents, testing checklists domain names, websites, applications, software, code, social media accounts, and/or other materials] prepared by Freelancer for AV Company as a standard Service or as a custom Service described in an SOW;
+      br
+      | (b) “Platform” means the AV Junction platform made available by AV Junction Inc.
+      br
+      | (c) “Project Page” means the webpage published on the Platform by an AV Company setting out the details of a A/V project and related job postings.
+      br
+      | (d) “Services” means the audio/visual installation, programing, live event production and related services to be provided by Freelancer to an AV Company or the development of Deliverables to be done by Freelancer for an AV Company, all as described in an SOW; and
+      br
+      | (e) “SOW” or “Statement of Work” means a statement of work for Services and/or Deliverables made in the form of a Project Page on the Platform and executed by the parties.
+    p
+      | 2. Orders.
 
-    - if @job.nil?
-      .result-content
-        p
-          | This Freelance Service Agreement is unavilable for viewing, either because the freelancer hasn't been selected, the Job specified doesn't exist, or you don't have the rights to view it.
-    - else
-      .result-content
-        p
-          = "This Freelance Services Agreement (this “Agreement”) is made effective as of the #{@job_start_day} day of #{@job_start_month}, #{@job_start_year} (the “Effective Date”), between #{@job.freelancer.name}, an individual residing at #{@job.freelancer.address} (“Freelancer”) and #{@job.company.name}, a company having a place of business at #{@job.company.address} (“AV Company”)."
-        p
-          | 1. Definitions. The following terms shall have the following meanings: (a) “Deliverable(s)” means any [documents, reports, publications, mock-ups, brochures, designs, plans, drawings, audio/video content, sign-off documents, testing checklists domain names, websites, applications, software, code, social media accounts, and/or other materials] prepared by Freelancer for AV Company as a standard Service or as a custom Service described in an SOW;
-          br
-          | (b) “Platform” means the AV Junction platform made available by AV Junction Inc.
-          br
-          | (c) “Project Page” means the webpage published on the Platform by an AV Company setting out the details of a A/V project and related job postings.
-          br
-          | (d) “Services” means the audio/visual installation, programing, live event production and related services to be provided by Freelancer to an AV Company or the development of Deliverables to be done by Freelancer for an AV Company, all as described in an SOW; and
-          br
-          | (e) “SOW” or “Statement of Work” means a statement of work for Services and/or Deliverables made in the form of a Project Page on the Platform and executed by the parties.
-        p
-          | 2. Orders.
+    p
+      | 2.1 The AV Company will publish one or more job postings on the Platform. Freelancer can apply for the job posting by providing a quote to perform the services in the job posting. The AV Company and Freelancer may enter into a SOW based on the information in the Project Page. Each SOW executed by the parties for Services shall be subject to the terms and conditions of this Agreement.
+      br
+      | 2.2 The AV Company may propose changes to a Statement of Work, by providing a written engineering change notice to Freelancer (a “Change Order”). Upon receipt of a Change Order, Freelancer shall use all reasonable efforts to provide a response within five (5) business days of receipt or such other longer time period as the parties may mutually agree. Freelancer will prepare a response regarding the estimated impact of implementing a Change Order and will provide an estimate of any changes to any schedule included in the applicable Statement of Work and will also provide an estimate of the costs to implement the Change Order. If the AV Company accepts the response from Freelancer, then the parties will amend the Statement of Work to reflect the modifications to the Services and Deliverables to be provided, the cost and delivery schedule for such Services and Deliverables, and any other relevant terms. Upon execution of the amended Statement of Work, Freelancer will provide Services and Deliverables in accordance with the amended Statement of Work.
 
-        p
-          | 2.1 The AV Company will publish one or more job postings on the Platform. Freelancer can apply for the job posting by providing a quote to perform the services in the job posting. The AV Company and Freelancer may enter into a SOW based on the information in the Project Page. Each SOW executed by the parties for Services shall be subject to the terms and conditions of this Agreement.
-          br
-          | 2.2 The AV Company may propose changes to a Statement of Work, by providing a written engineering change notice to Freelancer (a “Change Order”). Upon receipt of a Change Order, Freelancer shall use all reasonable efforts to provide a response within five (5) business days of receipt or such other longer time period as the parties may mutually agree. Freelancer will prepare a response regarding the estimated impact of implementing a Change Order and will provide an estimate of any changes to any schedule included in the applicable Statement of Work and will also provide an estimate of the costs to implement the Change Order. If the AV Company accepts the response from Freelancer, then the parties will amend the Statement of Work to reflect the modifications to the Services and Deliverables to be provided, the cost and delivery schedule for such Services and Deliverables, and any other relevant terms. Upon execution of the amended Statement of Work, Freelancer will provide Services and Deliverables in accordance with the amended Statement of Work.
+    p
+      | 3. AV Company Obligations.
+    
+    p
+      | 3.1 AV Company acknowledges and agrees that the performance of the Services and development of Deliverables is heavily dependent on cooperation from The AV Company. Accordingly, in addition to any specific responsibilities set out in an SOW, The AV Company shall: 
+      br
+      | (i) provide the appropriate and necessary resources, and timely and accurate information and documentation, as reasonably required by Freelancer, to allow Freelancer to perform the Services and develop the Deliverables;
+      br
+      | (ii) carry out reviews and respond to requests for approval and information on a timely basis;
+      br
+      | and
+      br
+      | (iii) ensure that Freelancer has available to them personnel familiar with The AV Companies requirements and with the expertise necessary to permit Freelancer to undertake and complete the Services and Deliverables development.
+      br
+      | 3.2 The AV Company acknowledges that any delay on its part in the performance of its obligations may have an impact on Freelancer’s performance of its activities under this Agreement or under any SOW and Freelancer shall not be liable for any delay to the extent caused by the AV Companies failure to fulfill any of its obligations or requirements under the Agreement and/or any SOW. If Services are performed on the AV Companies premises or if Freelancer needs to attend at the AV Companies premises for the development of the Deliverables, the AV company shall provide to Freelancer such workspace, computers, equipment and software as is reasonably required by Freelancer for the performance of the Services and the development of the Deliverables. The AV company shall designate a project management contact for the purposes of communication with Freelancer. The project management contact shall be the primary point of contact for the AV company with Freelancer for matters relating to the provision of Services and development of Deliverables.
+    p
+      | 4. Fees and Payment.
+    p
+      | 4.1 The AV company shall pay Freelancer the fees set forth in the applicable SOW in accordance with the payment schedule set forth in the SOW (the “Fees”). The AV company shall reimburse Freelancer for all reasonable out of pocket expenses (including travel, lodging and related expenses) incurred by Freelancer in the performance of any Services or development of any Deliverables, provided that such expenses are approved in advance in writing by the AV company.
+      br
+      | 4.2 The fees for Services and development of Deliverables shall exclude all applicable taxes. Late payments will incur interest at a rate equal to 1.5% per month or the highest rate permitted by applicable law, whichever is lower. Freelancer shall invoice the AV company for fees for Services and development of Deliverables in accordance with the payment schedule. All such Fees shall be paid within thirty (30) days of the date of the Freelancer invoice.
+    p
+      | 5. Staffing and Conduct.
 
-        p
-          | 3. AV Company Obligations.
-        
-        p
-          | 3.1 AV Company acknowledges and agrees that the performance of the Services and development of Deliverables is heavily dependent on cooperation from The AV Company. Accordingly, in addition to any specific responsibilities set out in an SOW, The AV Company shall: 
-          br
-          | (i) provide the appropriate and necessary resources, and timely and accurate information and documentation, as reasonably required by Freelancer, to allow Freelancer to perform the Services and develop the Deliverables;
-          br
-          | (ii) carry out reviews and respond to requests for approval and information on a timely basis;
-          br
-          | and
-          br
-          | (iii) ensure that Freelancer has available to them personnel familiar with The AV Companies requirements and with the expertise necessary to permit Freelancer to undertake and complete the Services and Deliverables development.
-          br
-          | 3.2 The AV Company acknowledges that any delay on its part in the performance of its obligations may have an impact on Freelancer’s performance of its activities under this Agreement or under any SOW and Freelancer shall not be liable for any delay to the extent caused by the AV Companies failure to fulfill any of its obligations or requirements under the Agreement and/or any SOW. If Services are performed on the AV Companies premises or if Freelancer needs to attend at the AV Companies premises for the development of the Deliverables, the AV company shall provide to Freelancer such workspace, computers, equipment and software as is reasonably required by Freelancer for the performance of the Services and the development of the Deliverables. The AV company shall designate a project management contact for the purposes of communication with Freelancer. The project management contact shall be the primary point of contact for the AV company with Freelancer for matters relating to the provision of Services and development of Deliverables.
-        p
-          | 4. Fees and Payment.
-        p
-          | 4.1 The AV company shall pay Freelancer the fees set forth in the applicable SOW in accordance with the payment schedule set forth in the SOW (the “Fees”). The AV company shall reimburse Freelancer for all reasonable out of pocket expenses (including travel, lodging and related expenses) incurred by Freelancer in the performance of any Services or development of any Deliverables, provided that such expenses are approved in advance in writing by the AV company.
-          br
-          | 4.2 The fees for Services and development of Deliverables shall exclude all applicable taxes. Late payments will incur interest at a rate equal to 1.5% per month or the highest rate permitted by applicable law, whichever is lower. Freelancer shall invoice the AV company for fees for Services and development of Deliverables in accordance with the payment schedule. All such Fees shall be paid within thirty (30) days of the date of the Freelancer invoice.
-        p
-          | 5. Staffing and Conduct.
+    p
+      | 5.1 Freelancer shall be entitled, in its sole discretion, to determine the method and means for performing the Services and developing the Deliverables. Freelancer shall have the right to determine which of its employees shall be assigned to perform the Services and develop the Deliverables, and to replace or reassign such employees during the term hereof.
+      br
+      | 5.2 The AV company acknowledges and agrees that Freelancer may retain the services of independent Freelancers from time to time to perform, or to assist Freelancer in performing, Services and developing Deliverables. Freelancer personnel and/or subcontractors shall remain under the direction and control of Freelancer. Freelancer shall in the performance of any Services and development of any Deliverables use reasonable efforts to comply with all The AV company policies, procedures and rules that have been communicated to Freelancer in writing.
+    
+    p
+      | 6. Confidentiality.
+    
+    p
+      | 6.1 Each party (the “Recipient”) acknowledges that, from time to time, it may be exposed to certain business, technical, marketing and financial information and data that is clearly marked with a restrictive legend of the disclosing party (“Discloser”) or that by its nature, through the exercise of reasonable business judgment and in consideration of the circumstances of disclosure would reasonably be considered to be confidential and that is not generally known to the public, including, but not limited to a party’s corporate and business strategies, product plans, data, measurements, personnel information, financial information, and The AV company information (collectively, “Confidential Information”).
+      br
+      | 6.2 Recipient agrees that it will take appropriate steps to protect the Discloser’s Confidential Information from unauthorized disclosure, that it will not disclose such Confidential Information to any third party, and that it will not use such Confidential Information (other than as authorized by this Agreement) without the prior written consent of Discloser. Recipient’s obligations with respect to the Discloser’s Confidential Information shall continue for the shorter of three (3) years from the date of termination or expiration of this Agreement or until such information becomes publicly known other than by breach of this Agreement by Recipient.
+      br
+      | 6.3 Disclosure of Confidential Information by Recipient to the extent required pursuant to any law, rule, regulation or court order binding on such Recipient will not constitute a breach of this section, provided that the Recipient has given the Discloser prompt written notice of any requirement or demand for disclosure of Discloser’s Confidential Information any cooperates to assist Discloser in seeking protective measures.
+    p
+      | 7. Intellectual Property.
+    p
+      | 7.1 “Freelancer Materials” shall mean any of Freelancer’s or its licensor’s proprietary confidential information, documents, templates, designs, and any other materials, whether in written, electric, audio/visual or other format.
+      br
+      | 7.2 Except for any Freelancer Materials used in the Deliverables, as between The AV company and Freelancer, the AV company shall own all right, title and interest (including all intellectual property rights) in any Deliverables created by Freelancer pursuant to this Agreement or any SOW, unless otherwise set out in an applicable SOW. Freelancer hereby assigns all right, title and interest in any Deliverables to Project Owner, including but not limited to all inventions, patents, copyrights, design rights, trademarks, service marks and logos. The AV company grants to Freelancer a non-exclusive, non-transferable, license to use, reproduce, display, modify and sublicense the Deliverables for Freelancer’s business purposes.
+      br
+      | 7.3 Notwithstanding the foregoing, Freelancer and/or its licensors shall retain all right, title and interest (including all intellectual property rights) in any Freelancer Materials developed or used by Freelancer in the provision of Services or the development of Deliverables. Except as expressly set forth in this Section 7, no other rights are granted whether by implication, estoppel or otherwise.
+    p
+      | 8. Warranties and Disclaimers.
+    p 
+      | 8.1 Freelancer warrants that (i) all Services performed under this Agreement will be performed in a professional manner and in accordance with the terms of this Agreement, and (ii) all Deliverables will be substantially in accordance with the specifications set forth in the applicable SOW or Freelancer’s documentation in any.
+      br
+      | 8.2 Each party represents and warrants that it has the legal power to enter into this Agreement.
+      br
+      | 8.3 EXCEPT AS EXPRESSLY PROVIDED HEREIN, FREELANCER MAKES NO REPRESENTATIONS AND GIVES NO WARRANTIES OR CONDITIONS OF ANY KIND, WHETHER EXPRESS, IMPLIED, STATUTORY, BY USAGE OF TRADE, CUSTOM OF DEALING, OR OTHERWISE, AND SPECIFICALLY DISCLAIMS ALL IMPLIED REPRESENTATIONS, WARRANTIES AND/OR CONDITIONS WITH RESPECT TO THE SERVICES INCLUDING ANY REPRESENTATIONS, WARRANTIES AND/OR CONDITIONS OF MERCHANTABILITY, MERCHANTABLE QUALITY, DURABILITY, TITLE, NON-INFRINGEMENT, SATISFACTORY QUALITY OR FITNESS FOR A PARTICULAR PURPOSE.
+    p
+      | 9. LIMITATION OF LIABILITY.
+    p
+      | FREELANCER’S TOTAL LIABILITY TO THE AV COMPANY FOR DAMAGES OF ANY KIND, WHETHER BASED ON BREACH OF CONTRACT, TORT (INCLUDING NEGLIGENCE) OR OTHERWISE UNDER THIS AGREEMENT WILL BE LIMITED TO AN AMOUNT EQUAL TO THE CUMULATIVE FEES PAID TO FREELANCER UNDER THIS AGREEMENT FOR THE SIX (6) MONTHS PRECEDING ANY CLAIM FOR THE SERVICES AND/OR DELIVERABLES THAT GAVE RISE TO THE CLAIM. IN NO EVENT WILL FREELANCER BE LIABLE TO THE AV COMPANY OR ANYONE ELSE FOR ANY LOST PROFITS OR SAVINGS, LOST BUSINESS, LOSS OF THE AV COMPANY DATA OR ANY INCIDENTAL, SPECIAL, INDIRECT, OR CONSEQUENTIAL DAMAGES, WHETHER BASED ON BREACH OF CONTRACT, TORT (INCLUDING NEGLIGENCE) OR OTHERWISE AND WHETHER OR NOT FREELANCER HAS BEEN ADVISED OF THE POSSIBILITY OF SUCH OCCURRENCE OR DAMAGE. THE PARTIES AGREE THAT THE FOREGOING REPRESENTS A FAIR ALLOCATION OF RISK HEREUNDER.
+    p 
+      | 10. Indemnity Each party (an “Indemnitor”) hereby agrees to, at its own expense, indemnify, defend and hold harmless the other party (“Indemnitee”) from all third-party claims, losses, expenses, fees (including reasonable legal fees), costs, and judgments made against the Indemnitee by a court of competent jurisdiction arising from Indemnitor’s (i) negligence, (ii) willful misconduct, (iii) breach of any representation, warranty and/or covenant in this Agreement.
+    p  
+      | 11. Term and Termination
+    p
+      | 11.1 Term of Agreement. This Agreement shall commence as of the Effective Date and shall continue in effect until the expiry of all SOWs, including payment of all fees owed under any SOWs, unless otherwise terminated herein.
+      br
+      | 11.2 Termination. Either party may terminate this Agreement, without prejudice to any other remedies available to that party, if the other party is in material breach of any of its representations, obligations or responsibilities under this Agreement (including, without limitation, payment obligations) and if such breach continues uncured for a period of fifteen (15) days following written notice of the breach. This Agreement will automatically terminate: (a) if The AV company experiences financial difficulties (including but not limited to chronic late or failed invoice payments) such that Freelancer can reasonably assume that the AV company can no longer meet its obligations under the Agreement; or (b) one (1) day before the AV company becomes bankrupt or insolvent, or a receiving order is made against the AV company, or an assignment is made for the benefit of creditors, or an order is made or resolution passed for the winding up of the AV company, or the AV company takes the benefit of any statute relating to bankrupt or insolvent debtors.
+      br
+      | 11.3 Surviving Provisions. The following provisions shall survive any termination or expiration of this Agreement: Sections 2, 4, 6, 7, 9, 10, and 11.2.
 
-        p
-          | 5.1 Freelancer shall be entitled, in its sole discretion, to determine the method and means for performing the Services and developing the Deliverables. Freelancer shall have the right to determine which of its employees shall be assigned to perform the Services and develop the Deliverables, and to replace or reassign such employees during the term hereof.
-          br
-          | 5.2 The AV company acknowledges and agrees that Freelancer may retain the services of independent Freelancers from time to time to perform, or to assist Freelancer in performing, Services and developing Deliverables. Freelancer personnel and/or subcontractors shall remain under the direction and control of Freelancer. Freelancer shall in the performance of any Services and development of any Deliverables use reasonable efforts to comply with all The AV company policies, procedures and rules that have been communicated to Freelancer in writing.
-        
-        p
-          | 6. Confidentiality.
-        
-        p
-          | 6.1 Each party (the “Recipient”) acknowledges that, from time to time, it may be exposed to certain business, technical, marketing and financial information and data that is clearly marked with a restrictive legend of the disclosing party (“Discloser”) or that by its nature, through the exercise of reasonable business judgment and in consideration of the circumstances of disclosure would reasonably be considered to be confidential and that is not generally known to the public, including, but not limited to a party’s corporate and business strategies, product plans, data, measurements, personnel information, financial information, and The AV company information (collectively, “Confidential Information”).
-          br
-          | 6.2 Recipient agrees that it will take appropriate steps to protect the Discloser’s Confidential Information from unauthorized disclosure, that it will not disclose such Confidential Information to any third party, and that it will not use such Confidential Information (other than as authorized by this Agreement) without the prior written consent of Discloser. Recipient’s obligations with respect to the Discloser’s Confidential Information shall continue for the shorter of three (3) years from the date of termination or expiration of this Agreement or until such information becomes publicly known other than by breach of this Agreement by Recipient.
-          br
-          | 6.3 Disclosure of Confidential Information by Recipient to the extent required pursuant to any law, rule, regulation or court order binding on such Recipient will not constitute a breach of this section, provided that the Recipient has given the Discloser prompt written notice of any requirement or demand for disclosure of Discloser’s Confidential Information any cooperates to assist Discloser in seeking protective measures.
-        p
-          | 7. Intellectual Property.
-        p
-          | 7.1 “Freelancer Materials” shall mean any of Freelancer’s or its licensor’s proprietary confidential information, documents, templates, designs, and any other materials, whether in written, electric, audio/visual or other format.
-          br
-          | 7.2 Except for any Freelancer Materials used in the Deliverables, as between The AV company and Freelancer, the AV company shall own all right, title and interest (including all intellectual property rights) in any Deliverables created by Freelancer pursuant to this Agreement or any SOW, unless otherwise set out in an applicable SOW. Freelancer hereby assigns all right, title and interest in any Deliverables to Project Owner, including but not limited to all inventions, patents, copyrights, design rights, trademarks, service marks and logos. The AV company grants to Freelancer a non-exclusive, non-transferable, license to use, reproduce, display, modify and sublicense the Deliverables for Freelancer’s business purposes.
-          br
-          | 7.3 Notwithstanding the foregoing, Freelancer and/or its licensors shall retain all right, title and interest (including all intellectual property rights) in any Freelancer Materials developed or used by Freelancer in the provision of Services or the development of Deliverables. Except as expressly set forth in this Section 7, no other rights are granted whether by implication, estoppel or otherwise.
-        p
-          | 8. Warranties and Disclaimers.
-        p 
-          | 8.1 Freelancer warrants that (i) all Services performed under this Agreement will be performed in a professional manner and in accordance with the terms of this Agreement, and (ii) all Deliverables will be substantially in accordance with the specifications set forth in the applicable SOW or Freelancer’s documentation in any.
-          br
-          | 8.2 Each party represents and warrants that it has the legal power to enter into this Agreement.
-          br
-          | 8.3 EXCEPT AS EXPRESSLY PROVIDED HEREIN, FREELANCER MAKES NO REPRESENTATIONS AND GIVES NO WARRANTIES OR CONDITIONS OF ANY KIND, WHETHER EXPRESS, IMPLIED, STATUTORY, BY USAGE OF TRADE, CUSTOM OF DEALING, OR OTHERWISE, AND SPECIFICALLY DISCLAIMS ALL IMPLIED REPRESENTATIONS, WARRANTIES AND/OR CONDITIONS WITH RESPECT TO THE SERVICES INCLUDING ANY REPRESENTATIONS, WARRANTIES AND/OR CONDITIONS OF MERCHANTABILITY, MERCHANTABLE QUALITY, DURABILITY, TITLE, NON-INFRINGEMENT, SATISFACTORY QUALITY OR FITNESS FOR A PARTICULAR PURPOSE.
-        p
-          | 9. LIMITATION OF LIABILITY.
-        p
-          | FREELANCER’S TOTAL LIABILITY TO THE AV COMPANY FOR DAMAGES OF ANY KIND, WHETHER BASED ON BREACH OF CONTRACT, TORT (INCLUDING NEGLIGENCE) OR OTHERWISE UNDER THIS AGREEMENT WILL BE LIMITED TO AN AMOUNT EQUAL TO THE CUMULATIVE FEES PAID TO FREELANCER UNDER THIS AGREEMENT FOR THE SIX (6) MONTHS PRECEDING ANY CLAIM FOR THE SERVICES AND/OR DELIVERABLES THAT GAVE RISE TO THE CLAIM. IN NO EVENT WILL FREELANCER BE LIABLE TO THE AV COMPANY OR ANYONE ELSE FOR ANY LOST PROFITS OR SAVINGS, LOST BUSINESS, LOSS OF THE AV COMPANY DATA OR ANY INCIDENTAL, SPECIAL, INDIRECT, OR CONSEQUENTIAL DAMAGES, WHETHER BASED ON BREACH OF CONTRACT, TORT (INCLUDING NEGLIGENCE) OR OTHERWISE AND WHETHER OR NOT FREELANCER HAS BEEN ADVISED OF THE POSSIBILITY OF SUCH OCCURRENCE OR DAMAGE. THE PARTIES AGREE THAT THE FOREGOING REPRESENTS A FAIR ALLOCATION OF RISK HEREUNDER.
-        p 
-          | 10. Indemnity Each party (an “Indemnitor”) hereby agrees to, at its own expense, indemnify, defend and hold harmless the other party (“Indemnitee”) from all third-party claims, losses, expenses, fees (including reasonable legal fees), costs, and judgments made against the Indemnitee by a court of competent jurisdiction arising from Indemnitor’s (i) negligence, (ii) willful misconduct, (iii) breach of any representation, warranty and/or covenant in this Agreement.
-        p  
-          | 11. Term and Termination
-        p
-          | 11.1 Term of Agreement. This Agreement shall commence as of the Effective Date and shall continue in effect until the expiry of all SOWs, including payment of all fees owed under any SOWs, unless otherwise terminated herein.
-          br
-          | 11.2 Termination. Either party may terminate this Agreement, without prejudice to any other remedies available to that party, if the other party is in material breach of any of its representations, obligations or responsibilities under this Agreement (including, without limitation, payment obligations) and if such breach continues uncured for a period of fifteen (15) days following written notice of the breach. This Agreement will automatically terminate: (a) if The AV company experiences financial difficulties (including but not limited to chronic late or failed invoice payments) such that Freelancer can reasonably assume that the AV company can no longer meet its obligations under the Agreement; or (b) one (1) day before the AV company becomes bankrupt or insolvent, or a receiving order is made against the AV company, or an assignment is made for the benefit of creditors, or an order is made or resolution passed for the winding up of the AV company, or the AV company takes the benefit of any statute relating to bankrupt or insolvent debtors.
-          br
-          | 11.3 Surviving Provisions. The following provisions shall survive any termination or expiration of this Agreement: Sections 2, 4, 6, 7, 9, 10, and 11.2.
+    p
+      | 12. Relationship. This Agreement is made with the Freelancer as a non-exclusive independent contractor and not as an employee of the AV company. The parties to this Agreement are independent contractors. No relationship of principal to agent, master to servant, employer to employee or franchisor to franchisee is established between the parties.
 
-        p
-          | 12. Relationship. This Agreement is made with the Freelancer as a non-exclusive independent contractor and not as an employee of the AV company. The parties to this Agreement are independent contractors. No relationship of principal to agent, master to servant, employer to employee or franchisor to franchisee is established between the parties.
+    p
+      | 13. General. This Agreement is the entire agreement between Freelancer and The AV company in respect to the subject matter hereof, superseding any other agreements or discussions, oral or written, and may not be changed except by a written amendment signed by authorized representatives of each party. Neither party may assign this Agreement without prior written consent of the other party. The failure of a party to claim a breach of any term of this Agreement shall not constitute a waiver of such breach or the right of such party to enforce any subsequent breach of such term. If any provision of this Agreement is held to be unenforceable or illegal, such decision shall not affect the validity or enforceability of such provisions under other circumstances or the remaining provisions of this Agreement and such provision shall be reformed only to the extent necessary to make it enforceable under such circumstances. Neither party shall be responsible for its failure to perform to the extent due to unforeseen circumstances or causes beyond its reasonable control, including but not limited to acts of God, wars, terrorism, riots, embargoes, acts of civil or military authorities, fires, floods, accidents, or strikes, labor problems (other than those involving the employees of the affected party), or delays involving hardware, software or power systems not within a party’s possession or reasonable control, provided that such party gives the other party prompt written notice of the failure to perform and the reason therefore. This Agreement shall be governed by the laws of the Province of Ontario, Canada and the laws of Canada applicable therein. No choice or conflict of laws rules of any jurisdiction shall apply to this Agreement. The provincial and federal courts located in Toronto, Ontario shall have exclusive jurisdiction to adjudicate any dispute arising out of or relating to this Agreement. Each party hereby consents to the exclusive jurisdiction of such courts. Notwithstanding the foregoing, each party shall be entitled to seek injunctive or other equitable relief in any jurisdiction with a reasonable connection to the subject matter of this Agreement. The AV company acknowledges and agrees that the Deliverables may be subject to export and import controls under the regulations of the United States, Canada and other countries, and the AV company shall comply with all export and import control regulations of such countries. The application of the United Nations Convention on Contracts for the International Sale of Goods to this Agreement is expressly excluded.
 
-        p
-          | 13. General. This Agreement is the entire agreement between Freelancer and The AV company in respect to the subject matter hereof, superseding any other agreements or discussions, oral or written, and may not be changed except by a written amendment signed by authorized representatives of each party. Neither party may assign this Agreement without prior written consent of the other party. The failure of a party to claim a breach of any term of this Agreement shall not constitute a waiver of such breach or the right of such party to enforce any subsequent breach of such term. If any provision of this Agreement is held to be unenforceable or illegal, such decision shall not affect the validity or enforceability of such provisions under other circumstances or the remaining provisions of this Agreement and such provision shall be reformed only to the extent necessary to make it enforceable under such circumstances. Neither party shall be responsible for its failure to perform to the extent due to unforeseen circumstances or causes beyond its reasonable control, including but not limited to acts of God, wars, terrorism, riots, embargoes, acts of civil or military authorities, fires, floods, accidents, or strikes, labor problems (other than those involving the employees of the affected party), or delays involving hardware, software or power systems not within a party’s possession or reasonable control, provided that such party gives the other party prompt written notice of the failure to perform and the reason therefore. This Agreement shall be governed by the laws of the Province of Ontario, Canada and the laws of Canada applicable therein. No choice or conflict of laws rules of any jurisdiction shall apply to this Agreement. The provincial and federal courts located in Toronto, Ontario shall have exclusive jurisdiction to adjudicate any dispute arising out of or relating to this Agreement. Each party hereby consents to the exclusive jurisdiction of such courts. Notwithstanding the foregoing, each party shall be entitled to seek injunctive or other equitable relief in any jurisdiction with a reasonable connection to the subject matter of this Agreement. The AV company acknowledges and agrees that the Deliverables may be subject to export and import controls under the regulations of the United States, Canada and other countries, and the AV company shall comply with all export and import control regulations of such countries. The application of the United Nations Convention on Contracts for the International Sale of Goods to this Agreement is expressly excluded.
+    p [Remainder of Page Intentionally Left Blank]
 
-        p [Remainder of Page Intentionally Left Blank]
+    p IN WITNESS WHEREOF, the parties have caused this Agreement to be executed by their duly authorized representatives as of the Effective Date.
 
-        p IN WITNESS WHEREOF, the parties have caused this Agreement to be executed by their duly authorized representatives as of the Effective Date.
+    p
+      = @job.freelancer.name
+      br
+      | By: ______________________
+      br
+      | Name:
+      br
+      | Title: 
 
-        p
-          = @job.freelancer.name
-          br
-          | By: ______________________
-          br
-          | Name:
-          br
-          | Title: 
-
-        p
-          = @job.company.name
-          br
-          | By: ______________________
-          br
-          | Name:
-          br
-          | Title: 
+    p
+      = @job.company.name
+      br
+      | By: ______________________
+      br
+      | Name:
+      br
+      | Title: 

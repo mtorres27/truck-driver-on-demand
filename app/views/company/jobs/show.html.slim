@@ -100,8 +100,7 @@
             a href=@job.scope_file_url target="_blank"
               = @job.scope_file.original_filename
 
-
-    .job-details__attachments
+    .grid-cell.grid-cell--50   
       - @job.attachments.each do |attachment|
         a.job-details__attachment href=attachment.file_url target="_blank"
           .job-details__attachment__file
@@ -113,9 +112,8 @@
             = attachment.title
 
 
-    .job-details
-      .job-details__title
-        | Freelance Service Agreement
+    .grid-cell.grid-cell--50
+      h3.heading-h3 Freelance Service Agreement
       p
         - if @job.opt_out_of_freelance_service_agreement
           | This project has opted out of the freelance service agreement

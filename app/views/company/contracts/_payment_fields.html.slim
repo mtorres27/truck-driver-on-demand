@@ -1,6 +1,8 @@
-div
-  .form__text-field-multi
+.grid-h
+  .grid-cell.grid-cell--33
     = f.input :description, label: false, placeholder: "Description"
     = f.hidden_field :company_id, value: @job.company.id
+  .grid-cell.grid-cell--33
     = f.input :amount, label: false, placeholder: "Amount", input_html: { value: number_with_precision(f.object.amount, precision: 2) }
+  .grid-cell.grid-cell--expand
     = link_to_remove_association "<span class='zmdi zmdi-close-circle zmdi-hc-lg'>".html_safe, f, { onClick: "hide_remove_association(this, true)"}, class: "btn btn-default"

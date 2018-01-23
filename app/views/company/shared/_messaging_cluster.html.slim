@@ -141,11 +141,11 @@
             em
               = "Remember, by accepting this quote of #{number_with_precision(@quotes.where({applicant_id: @applicant.id}).first.amount, precision: 2)} #{(job.currency ? job.currency.upcase : "")}  with #{@applicant.freelancer.name}, all other applications for this"
               = " job will automatically be declined, and receive a general notification informing them the job has been filled. Details of who you've selected will not be shared."
-        .modal__accept-quote__content__buttons
-          .accept_button.btn.btn--primary
-            | Accept & Create Work Order
-          .cancel_button.btn.btn--secondary
-            | Cancel
+          .buttons
+            .accept_button.btn.btn--primary
+              | Accept
+            .cancel_button.btn.btn--secondary
+              | Cancel
 
 
 
@@ -161,11 +161,11 @@
           p
             | Declining this quote will notify the freelancer of your decision. However, they still have the option to offer another quote.
 
-        .modal__decline-quote__content__buttons
-          .decline_button.btn.btn--primary
-            | Decline Quote
-          .cancel_button.btn.btn--secondary
-            | Cancel
+          .buttons
+            .decline_button.btn.btn--primary
+              | Decline Quote
+            .cancel_button.btn.btn--secondary
+              | Cancel
 
   javascript:
     $(".accept_button").on('click', function() {
