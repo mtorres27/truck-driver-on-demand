@@ -10,5 +10,8 @@
       = f.file_field :file, as: :file, label: false, :accept => 'document/pdf,application/pdf,application/x-pdf,image/png,image/jpg,image/jpeg,image/gif'
       - if !f.object.file_url.include?('missing')
         a.authorable_attachment--full href=f.object.file_url target="_blank"
-          = f.object.file.original_filename
+          - if is_image(url)
+            img src= f.object.file.file_url
+          - else
+            = f.object.file.original_filename
     
