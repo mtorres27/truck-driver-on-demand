@@ -1,7 +1,4 @@
 = simple_form_for(:message, url: freelancer_job_quotes_path(@job, @applicant), class: "freelancer-job__quote-form") do |f|
-  div style="display: none;"
-    = f.input :attachment, as: :file, label: false
-
   .w-form.freelancer-job__quote-form
     .common__radio-group.w-radio.width-30
       = f.radio_button :status, "accept", class: "w-radio-input"
@@ -17,9 +14,10 @@
     .attachment.common__text-field-group
       label.common__field-label for="name-4"
         = "Send a message to #{n}"
-      a.common__text-field--attach-file.w-inline-block onClick="triggerFileUpload()"
-        .common__icon-attach 
       = f.text_area :body, as: :string, placeholder: "Enter your message", label: false, maxlength: 5000, class: "w-input"
+
+    .attachment.common__text-field-group
+      = f.input :attachment, as: :file, label: false
 
     .new-message__counter
       .attachment.common__text-field-group
@@ -98,9 +96,6 @@ javascript:
     }
   }
 
-  var triggerFileUpload = function () {
-    $("#message_attachment").click();
-  };
 
   $(".new-message__counter--fixed").hide();
   $(".new-message__counter--hourly").hide();
@@ -120,10 +115,6 @@ javascript:
     $("#daily-counter-price").val("");
     $("#hourly-counter-price").val("");
   })
-
-  $("#message_attachment").change(function() {
-    $(".common__text-field--attach-file").addClass("new-message__checkin--active");
-  });
 
   $("#message_counter_hourly_rate").on("input", function() {
     calcHourlyQuote();
