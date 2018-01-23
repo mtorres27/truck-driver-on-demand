@@ -114,7 +114,8 @@
       h3.heading-h3 
         = t(:addendums, scope: [:form, :labels, :job])           
       p 
-        = @job.addendums || "Not Specified"
+        / = @job.addendums || "Not Specified"
+        = @job.attachments || "Not Specified"
 
 
   
