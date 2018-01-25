@@ -158,8 +158,6 @@
             .attachment.common__text-field-group
               label.common__field-label for="name-4"
                 = "Send a message to #{@job.company.name}"
-              a.common__text-field--attach-file.w-inline-block id="attach_indicator" onClick="triggerFileUpload()"
-                .common__icon-attach 
               = f.file_field :attachment, as: :file, id: "message_attachment", label: false, :accept => 'document/pdf,application/pdf,application/x-pdf,image/png,image/jpg,image/jpeg,image/gif',  class: "file-input--hidden"
               = f.text_area :message, as: :string, placeholder: "Enter your message", label: false, maxlength: 5000, class: "w-input"
           .grid-cell.grid-cell--100  

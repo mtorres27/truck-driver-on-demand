@@ -72,6 +72,15 @@
                       - elsif next_item[:payload].amount < @job.budget
                         .quote_over-budget= "Over Budget"
 
+                    - if next_item[:payload].attachment_url
+                      a.authorable_attachment href=next_item[:payload].attachment_url target="_blank"
+                        - if is_image(next_item[:payload].attachment_url)
+                          span class="authorable_attachment_icon fa fa-image"
+                        - else
+                          span class="authorable_attachment_icon fa fa-file-text"
+                        .authorable_attachment__filename
+                          = eval(next_item[:payload].attachment_data)[:metadata][:filename]
+
               / - @harmonized_items.each_with_index do |item, index|
               / - if item[:type] == "message"
               /   .freelancer-job__quote-msg
