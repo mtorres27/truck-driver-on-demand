@@ -35,7 +35,7 @@
 
 
     .new-message__submit
-      = f.submit "Post Message", class: "btn btn-primary", id: "new-message__submit", onclick: "return validateMessage();"
+      = f.submit "Post Message", class: "btn btn--primary", id: "new-message__submit", onclick: "return validateMessage();"
     .new-message__attachment
       = f.input :attachment, as: :file, label: false
     div#new-message__validation-errors

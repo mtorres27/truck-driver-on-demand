@@ -1,34 +1,35 @@
-.col-xs-12.col-sm-6.col-md-4.col-lg-3
-  a.card.job href=stateful_company_job_path(job)
+.grid-cell.grid-cell--50
+  a.job-box href=stateful_company_job_path(job)
     = job_state_label(job)
-    .job_title= job.title.length > 30 ? "#{job.title[0...30]}..." : job.title
-    .job_cell.job_cell_top_left
-      .job_value= number_with_precision(job.budget, precision: 2) || 0
-      .job_key Budget
-    .job_cell.job_cell_top_right
-      - if job.created?
-        .job_value -
-        .job_key &nbsp;
-      - elsif job.published? || job.quoted?
-        .job_value= job.applicants.size
-        .job_key Applicants
-      - else
-        .job_value= number_with_precision(job.contract_price, precision: 2).to_s || 0 + " " + job.currency
-        .job_key Work Order
-    .job_cell.job_cell_bot_left
-      - if job.created?
-        .job_value -
-        .job_key &nbsp;
-      - elsif job.published? || job.quoted?
-        .job_value= job.quotes.size
-        .job_key Quotes
-      - else
-        .job_value= number_with_precision(job.gpayments_sum_paid, precision: 2).to_s || 0 + " " + job.currency
-        .job_key Paid
-    .job_cell.job_cell_bot_right
-      - if job.created?
-        .job_value -
-        .job_key &nbsp;
-      - else
-        .job_value= job.messages.size
-        .job_key Messages
+    h4.heading-h4.heading-h4--job-box= job.title
+    .job-box__stats
+      .job-box__stat
+        .job-box__value= number_with_precision(job.budget, precision: 0) || 0
+        .job-box__key Budget
+      .job-box__stat
+        - if job.created?
+          .job-box__value -
+          .job-box__key &nbsp;
+        - elsif job.published? || job.quoted?
+          .job-box__value= job.applicants.size
+          .job-box__key Applicants
+        - else
+          .job-box__value= number_with_precision(job.contract_price, precision: 0).to_s || 0 + " " + job.currency
+          .job-box__key Work Order
+      .job-box__stat
+        - if job.created?
+          .job-box__value -
+          .job-box__key &nbsp;
+        - elsif job.published? || job.quoted?
+          .job-box__value= job.quotes.size
+          .job-box__key Quotes
+        - else
+          .job-box__value= number_with_precision(job.gpayments_sum_paid, precision: 0).to_s || 0 + " " + job.currency
+          .job-box__key Paid
+      .job-box__stat
+        - if job.created?
+          .job-box__value -
+          .job-box__key &nbsp;
+        - else
+          .job-box__value= job.messages.size
+          .job-box__key Messages

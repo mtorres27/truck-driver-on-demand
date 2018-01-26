@@ -10,7 +10,10 @@ html
     = csrf_meta_tags
     = stylesheet_link_tag "application", media: "all", "data-turbolinks-track": "reload"
     = javascript_include_tag "application", "data-turbolinks-track": "reload"
-    title= yield(:title) + " – " if content_for?(:title)
+    - if content_for?(:title)
+      title= yield(:title)
+    - else
+      title= "AVJunction"
 
     javascript:
       !function(f,b,e,v,n,t,s)
@@ -27,21 +30,44 @@ html
       img height="1", width="1", src="https://www.facebook.com/tr?id=372487999888650&ev=PageView&noscript=1"
 
 
-  body class=(params[:controller]&.gsub("/", "-") || "")
-    .page-parent
-      = render "shared/nav"
-      = render "shared/mobile_nav"
-      = render "shared/onboarding"
-      = render "shared/flash"
-      - if params[:controller]&.gsub("/", "-") == "company-freelancers" && params[:id]
-        = yield
-      - elsif params[:controller]&.gsub("/", "-") == "company-profiles"
-        =yield
-      - else
-        .page-top__container
-          .page-top= yield
+  body
+    .wrap
+      .section.section--header
+        = render "shared/nav"
+        = render "shared/mobile_nav"
+        = render "shared/onboarding"
+        = render "shared/flash"
+      
+      .section.section--body 
+        - no_header_controllers = []
+        - no_header_controllers << { controller: "freelancer/companies" }
+        - no_header_controllers << { controller: "company/freelancers", action: "show" }
+        - no_header_controllers << { controller: "company/profiles" }
 
-      - if content_for(:secondary)
-        .page-content= yield :secondary
+        - header_controllers = []
+        - header_controllers << { controller: "freelancer/companies", action: "av_companies" }
+        - header_controllers << { controller: "freelancer/companies", action: "favourites" }
+      
+        - show_header = true
+        - no_header_controllers.each do |controller|
+          - if params[:controller] == controller[:controller]
+            - if (!controller[:action].nil? and controller[:action] == params[:action]) or !controller[:action]
+              - show_header = false
 
-      = render "shared/footer"
+        - header_controllers.each do |controller|
+          - if params[:controller] == controller[:controller]
+            - if (!controller[:action].nil? and controller[:action] == params[:action]) or !controller[:action]
+              - show_header = true
+
+        - if show_header
+          .container.container--header
+            .container= yield
+        - else
+          = yield
+
+        - if content_for(:secondary)
+          .container
+            .frame= yield :secondary
+      
+      .section.section--footer 
+        = render "shared/footer"

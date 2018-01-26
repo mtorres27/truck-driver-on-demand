@@ -1,0 +1,130 @@
+.grid-h
+  .grid-cell.grid-cell--33
+    .profile__meta__details__1-1
+      .profile__meta__image
+        = image_tag(@freelancer.avatar_url, size: "75x75")
+      .profile__meta__info
+        h2.heading-h2
+          = @freelancer.name
+        h4.heading-h4
+          = "Joined #{@freelancer.created_at.strftime('%B %d, %Y')}"
+        h4.heading-h4 
+          = freelancer_ratings_link(@freelancer)
+        .profile__meta__rating
+          - @stars = freelancer_avg_rating(@freelancer)
+            - @stars.each do |star|
+              i class=star
+  .grid-cell.grid-cell--33
+    .profile__meta__details__1-2
+      h3.heading-h3
+        = @freelancer.tagline
+      .profile__specialties--summary
+        - if !@freelancer.keywords.nil? and @freelancer.keywords.kind_of?(Hash)
+          - @freelancer.keywords.first(2).each do |index, value|
+            .tag.tag--grey
+              = I18n.t("enumerize.freelancer_keywords.#{index}")
+        - if !@freelancer.skills.nil? and @freelancer.skills.kind_of?(Hash)
+          - @freelancer.skills.first(2).each do |index, value|
+            .tag.tag--grey
+              = I18n.t("enumerize.freelancer_skills.#{index}")
+  .grid-cell.grid-cell--33
+    .profile__stats-box
+      .profile__stats.profile__stats--33
+        h2.heading-h2.heading-h2--no-margin
+          - if !@freelancer.pay_unit_time_preference.nil?
+            = t("enumerize.job.pay_type.#{@freelancer.pay_unit_time_preference}")
+          - else
+            | N/A
+        h4.heading-h4
+          | Pay Pref
+      
+      .profile__stats.profile__stats--33
+        h2.heading-h2.heading-h2--no-margin
+          - if !@freelancer.pay_per_unit_time.nil?
+            = @freelancer.pay_per_unit_time
+          - else
+            | N/A
+        h4.heading-h4
+          | Rate
+
+      .profile__stats.profile__stats--33
+        h2.heading-h2.heading-h2--no-margin
+          ="#{@freelancer.years_of_experience} yrs"
+        h4.heading-h4
+          | Exp
+     
+
+  .grid-cell.grid-cell--50
+    h3.heading-h3 Bio
+    p
+      - if @freelancer.bio.nil? or @freelancer.bio == ""
+        | This freelancer has not yet added a bio.
+      - else
+        = "#{@freelancer.bio}"
+  .grid-cell.grid-cell--50
+    .grid-v
+      .grid-cell
+        div
+          h3.heading-h3 Specialties
+          h4.heading-h4 Markets
+          - if !@freelancer.keywords.nil? and @freelancer.keywords.kind_of?(Hash)
+            - @freelancer.keywords.each do |index, value|
+              .tag.tag--grey
+                = I18n.t("enumerize.freelancer_keywords.#{index}")
+          - else
+            | This freelancer has no markets listed.
+          h4.heading-h4 Skills
+          - if !@freelancer.skills.nil? and @freelancer.skills.kind_of?(Hash)
+            - @freelancer.skills.each do |index, value|
+              .tag.tag--grey
+                = I18n.t("enumerize.freelancer_skills.#{index}")
+          - else
+            | This freelancer has no skills listed.
+
+      .grid-cell.grid-cell--vshrink
+        h3.heading-h3 Type
+        p
+          - if @freelancer.freelancer_type.nil?
+            | N/A
+          - else
+            - if @freelancer.freelancer_type == :independent
+              = @freelancer.freelancer_type.text
+            - else
+              = "#{@freelancer.freelancer_type.text} "
+              - if @freelancer.freelancer_team_size.nil?
+                = ""
+              - else 
+                = "(#{t("enumerize.job.freelancer_team_size.#{@freelancer.freelancer_team_size}")})"
+
+  .grid-cell.grid-cell--100
+    h3.heading-h3 Certifications
+    .profile__certifications__container
+      - if @freelancer.certifications.count == 0
+        | This freelancer has not yet added any certifications.
+      - @freelancer.certifications.each do |certification|
+        .profile__certifications__certificate
+          - url = certification.certificate_url
+          - if certification.certificate_url != "certification/missing.pdf"
+            - url = certification.certificate_url
+            a href=url target="_blank"
+              - if is_image(url)
+                - src=url
+              - else
+                - src="/assets/certification/certification_placeholder.png"
+              .profile__certification
+                img.profile__certification__image sizes="185.96875px" src=src
+                .profile__certification__label= certification.name
+
+  .grid-cell.grid-cell--100
+    a name="reviews"
+      h3.heading-h3 Reviews
+    .profile__reviews-value
+      - if @freelancer.freelancer_reviews_count > 0
+        .profile__reviews__review
+        - @freelancer.freelancer_reviews.each do |review|
+          .profile__reviews__review-text
+            = review.comments
+          .profile__reviews__review-name
+            = "#{review.company.contact_name}, #{review.company.name}"
+      - else
+        p This freelancer doesn't have any reviews.

@@ -1,8 +1,7 @@
-.search-header
-  h1 Search for Jobs
-  = render "freelancer/shared/company_search_form"
 
-.
+h1.heading-h1 Search for Jobs
+= render "freelancer/shared/company_search_form"
+
 - content_for :secondary do
   .action-bar
     h2.heading-h2.heading-h2--action-bar
@@ -26,16 +25,15 @@
           option value="241402" label="150 Miles" selected=("selected" if params.dig(:search, :distance) == '241402')
           option value="321869" label="200 Miles" selected=("selected" if params.dig(:search, :distance) == '321869')
           option value="402336" label="250 Miles" selected=("selected" if params.dig(:search, :distance) == '402336')
-  .result-mobile
-    .result-freelancers
-      - if !@jobs.any?
-        h1.heading-h1.title.center
-          | No job postings match your input, please try other keywords to find what you're looking for.
-      - @jobs.each do |job|
-        .result-row href=freelancer_jobs_path(job)
-          = render partial: "/freelancer/shared/job_info", locals: { job: job }
 
-      = paginate @jobs
+  - if !@jobs.any?
+    h2.heading-h2
+      | No job postings match your input, please try other keywords to find what you're looking for.
+  .list
+    - @jobs.each do |job|
+      = render partial: "/freelancer/shared/job_info", locals: { job: job }
+
+  = paginate @jobs
 
 javascript:
   $(document).ready(function() {

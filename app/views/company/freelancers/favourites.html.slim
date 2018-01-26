@@ -4,21 +4,20 @@ h1.heading-h1 My Freelancers
   a.tab-bar__item href="/company/freelancers/hired" class=("tab-bar__item--active" if request.path == "/company/freelancers/hired")
     | Hired
   a.tab-bar__item href="/company/freelancers/favourites" class=("tab-bar__item--active" if request.path == "/company/freelancers/favourites")
-    | Favourites
+    | Favorites
+
 - content_for :secondary do
-  .result-wrapper
-    .result-header
-      .result-header__distance
-        span class="result-header__distance-text"
-          | filter by location
-        select id="freelancer_favourites_location" class="company-freelancer__distance"
-          option value="" label="All" selected=("selected" if params.dig(:location) == "" || !params.dig(:location).presence)
-          - @locations.each do |location|
-            option value="#{location}" label="#{location}" selected=("selected" if params.dig(:location) == location)
+  .action-bar
+    h2.heading-h2.heading-h2--action-bar Favorites
+    .action-bar__actions
+      span class="result-header__distance-text"
+        | filter by location
+      select id="freelancer_favourites_location" class="company-freelancer__distance"
+        option value="" label="All" selected=("selected" if params.dig(:location) == "" || !params.dig(:location).presence)
+        - @locations.each do |location|
+          option value="#{location}" label="#{location}" selected=("selected" if params.dig(:location) == location)
+  .list
+    - @freelancers.each do |freelancer|
+      = render partial: "company/shared/freelancer_info", locals: { freelancer: freelancer }
 
-    .result-freelancers
-      - @freelancers.each do |freelancer|
-        a href=company_freelancer_path(freelancer)
-          = render partial: "company/shared/freelancer_info", locals: { freelancer: freelancer }
-
-      = paginate @freelancers
+    = paginate @freelancers

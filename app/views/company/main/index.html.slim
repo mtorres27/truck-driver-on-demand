@@ -1,7 +1,56 @@
-h1 Search for AV Freelancers
-= render "company/shared/freelancer_search_form"
+/ h1.heading-h1 Search for Freelancers
+/ = render "company/shared/freelancer_search_form"
+
+/ - content_for :secondary do
+/   h1.heading-title
+/     | With our growing network of AV Professionals, your next hire is just a search away.
+
+h1.heading-title With our growing network of AV Professionals, your next hire is just a search away.
 
 - content_for :secondary do
-  .page-content
-    h1.heading-h1.title.center
-      | With our growing network of AV Professionals, your next hire is just a search away.
+    .grid-h
+      .grid-cell.grid-cell--50
+          h2.heading-h2 Find freelancers matching your criteria
+          = simple_form_for :search, url: company_freelancers_path, method: :get, html: { id: "freelancer_search_form", class:"grid-h"} do |f|
+            input type="hidden" value="#{params.dig(:search, :sort)}" id="sort" name="search[sort]"
+            input type="hidden" value="#{params.dig(:search, :distance)}" id="distance" name="search[distance]"
+            .grid-cell.grid-cell--100= f.input :keywords, label: false, placeholder: "Search by job function, skills, etc.", input_html: { value: @keywords }
+            .grid-cell.grid-cell--100= f.input :address, label: false, placeholder: "Enter Location", input_html: { value: @address }
+            .grid-cell.grid-cell--25= f.submit "Search", class: "btn btn--primary"
+      .grid-cell.grid-cell--50
+          .grid-h
+            .grid-cell.grid-cell--100
+              h3.heading-h3 Have an AV Project that needs a Freelancer?
+              p Start by posting a job and publishing it to our database. Browse our freelancers and invite to quote or wait for the quotes to come in!
+              .buttons
+                a.btn.btn--primary href="/company/projects/new" Post a job
+            .grid-cell.grid-cell--100  
+              h3.heading-h3 Already working on a Job Posting or have a job in progress? Go to your project dashboard
+              p Start by posting a job and publishing it to our database. Browse our freelancers and invite to quote or wait for the quotes to come in!
+              .buttons
+                a.btn.btn--primary href="/company/projects" View Jobs
+      .grid-cell.grid-cell--50
+        h2.heading-h2 Featured Freelancers
+        .list
+          / - @freelancers.each do |freelancer|
+          /   = render partial: "company/shared/freelancer_info", locals: { freelancer: freelancer }
+      .grid-cell.grid-cell--50
+        h2.heading-h2 How it works
+        h3.heading-h3 Post a Job
+        h3.heading-h3 Find AV Freelancers
+        h3.heading-h3 Select & Build a Work Order
+        h3.heading-h3 Set Milestone & Payment Updates
+        h3.heading-h3 Receive Progress Updates
+        h3.heading-h3 Pay for Completed Work
+      .grid-cell.grid-cell--50
+        h2.heading-h2 Need help?
+        p 
+          | Contact Us @ 
+          a href="mailto:info@avjuntion.com"
+            | info@avjunction.com   
+        p 
+          | Call us @ 
+          a href="tel:18446022000"
+            | 1 844 602 2000 
+      .grid-cell.grid-cell--50
+        h2.heading-h2 FAQ
