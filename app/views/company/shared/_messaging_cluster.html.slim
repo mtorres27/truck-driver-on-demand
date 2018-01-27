@@ -49,7 +49,7 @@
                 - @quote = Quote.find(item[:payload].quote_id)
                 .list__info
                   div.quote_amount class=("quote_amount--declined" if @quote.state == "declined")
-                    = number_with_precision(item[:payload].amount, precision: 0).to_s + " " + (job.currency ? job.currency.upcase : "")
+                    = number_with_precision(@quote.amount, precision: 0).to_s + " " + (job.currency ? job.currency.upcase : "")
                   .quote_pay_type= @quote.pay_type.text
                   - if @quote.pay_type == "hourly"
                     = "(#{@quote.number_of_hours} hours @ #{@quote.hourly_rate} #{job.currency ? job.currency.upcase : ""}/hour)"
