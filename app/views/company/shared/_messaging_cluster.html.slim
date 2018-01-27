@@ -53,7 +53,7 @@
                   .quote_pay_type= @quote.pay_type.text
                   - if @quote.pay_type == "hourly"
                     = "(#{@quote.number_of_hours} hours @ #{@quote.hourly_rate} #{job.currency ? job.currency.upcase : ""}/hour)"
-                  - if @quotet.pay_type == "daily"
+                  - if @quote.pay_type == "daily"
                     = "(#{@quote.number_of_days} days @ #{@quote.daily_rate} #{job.currency ? job.currency.upcase : ""}/day)"
                   - if @quote.fixed? && @quote.amount > @job.budget
                     .quote_over-budget= "Over Budget"
