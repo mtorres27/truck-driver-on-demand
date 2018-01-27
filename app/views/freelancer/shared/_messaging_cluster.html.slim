@@ -41,10 +41,11 @@
           - if item[:type] == "quote"
             .freelancer-job__msg-quote
               - if item[:payload].pay_type == "hourly"
-                = "(#{item[:payload].number_of_hours} hours @ #{item[:payload].hourly_rate} #{@job.currency}/hour)"
+                .freelancer-job__msg-price-breakdown
+                  = "(#{item[:payload].number_of_hours} hours @ #{item[:payload].hourly_rate} #{@job.currency}/hour)"
               - if item[:payload].pay_type == "daily"
-                = "(#{item[:payload].number_of_days} days @ #{item[:payload].daily_rate} #{@job.currency}/day)"
-              = "..."
+                .freelancer-job__msg-price-breakdown
+                  = "(#{item[:payload].number_of_days} days @ #{item[:payload].daily_rate} #{@job.currency}/day)"
               - if item[:payload].amount <= @job.budget and item[:payload].state != "declined"
                 .freelancer-job__msg-price= number_with_precision(item[:payload].amount, precision: 2) + " " + @job.currency
               - elsif item[:payload].amount <= @job.budget and item[:payload].state == "declined"
