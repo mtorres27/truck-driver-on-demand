@@ -67,6 +67,9 @@ class Company::QuotesController < Company::BaseController
         @new_quote.state = "pending"
         @new_quote.save
 
+        @message.quote_id = @new_quote.id
+        @message.save
+
         if @quotes.count == 0
           @applicant.quotes << @new_quote
         end

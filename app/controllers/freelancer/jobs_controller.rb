@@ -100,6 +100,10 @@ class Freelancer::JobsController < Freelancer::BaseController
             amount: apply_params[:amount],
             attachment: apply_params[:attachment]
           })
+          
+          @message = @applicant.messages.last
+          @message.quote_id = @applicant.quotes.last.id
+          @message.save
         elsif apply_params[:pay_type] == "hourly"
           @applicant.quotes << Quote.create({
             company: @job.company,
@@ -109,6 +113,10 @@ class Freelancer::JobsController < Freelancer::BaseController
             number_of_hours: apply_params[:number_of_hours],
             attachment: apply_params[:attachment]
           })
+
+          @message = @applicant.messages.last
+          @message.quote_id = @applicant.quotes.last.id
+          @message.save
         elsif apply_params[:pay_type] == "daily"
           @applicant.quotes << Quote.create({
             company: @job.company,
@@ -118,6 +126,10 @@ class Freelancer::JobsController < Freelancer::BaseController
             number_of_days: apply_params[:number_of_days],
             attachment: apply_params[:attachment]
           })
+
+          @message = @applicant.messages.last
+          @message.quote_id = @applicant.quotes.last.id
+          @message.save
         end
 
         # add quote
