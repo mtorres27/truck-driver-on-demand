@@ -40,18 +40,20 @@
 
           - if item[:type] == "quote"
             .freelancer-job__msg-quote
-              - if item[:payload].pay_type == "hourly"
-                .freelancer-job__msg-price-breakdown
-                  = "(#{item[:payload].number_of_hours} hours @ #{item[:payload].hourly_rate} #{@job.currency}/hour)"
-              - if item[:payload].pay_type == "daily"
-                .freelancer-job__msg-price-breakdown
-                  = "(#{item[:payload].number_of_days} days @ #{item[:payload].daily_rate} #{@job.currency}/day)"
-              - if item[:payload].amount <= @job.budget and item[:payload].state != "declined"
-                .freelancer-job__msg-price= number_with_precision(item[:payload].amount, precision: 2) + " " + @job.currency
-              - elsif item[:payload].amount <= @job.budget and item[:payload].state == "declined"
-                .freelancer-job__msg-price.rejected= number_with_precision(item[:payload].amount, precision: 2) + " " + @job.currency
-              - elsif item[:payload].amount > @job.budget and item[:payload].state != "declined"
-                .freelancer-job__msg-price.overbudget2= number_with_precision(item[:payload].amount, precision: 2) + " " + @job.currency
-              - elsif item[:payload].amount > @job.budget and item[:payload].state == "declined"
-                .freelancer-job__msg-price.overbudget2.rejected= number_with_precision(item[:payload].amount, precision: 2) + " " + @job.currency   
+              .freelancer-job__msg-price
+                - if item[:payload].amount <= @job.budget and item[:payload].state != "declined"
+                  = number_with_precision(item[:payload].amount, precision: 2) + " " + @job.currency
+                - elsif item[:payload].amount <= @job.budget and item[:payload].state == "declined"
+                  .rejected= number_with_precision(item[:payload].amount, precision: 2) + " " + @job.currency
+                - elsif item[:payload].amount > @job.budget and item[:payload].state != "declined"
+                  .overbudget2= number_with_precision(item[:payload].amount, precision: 2) + " " + @job.currency
+                - elsif item[:payload].amount > @job.budget and item[:payload].state == "declined"
+                  .overbudget2.rejected= number_with_precision(item[:payload].amount, precision: 2) + " " + @job.currency
+                - if item[:payload].pay_type == "hourly"
+                  .freelancer-job__msg-price-breakdown
+                    = "(#{item[:payload].number_of_hours} hours @ #{item[:payload].hourly_rate} #{@job.currency}/hour)"
+                - if item[:payload].pay_type == "daily"
+                  .freelancer-job__msg-price-breakdown
+                    = "(#{item[:payload].number_of_days} days @ #{item[:payload].daily_rate} #{@job.currency}/day)"
+              
   
