@@ -19,8 +19,6 @@ class Message < ApplicationRecord
   belongs_to :authorable, polymorphic: true, counter_cache: true
   belongs_to :receivable, polymorphic: true, counter_cache: true
 
-  has_one :quote
-
   validate :must_have_body_or_attachment
 
   attr_accessor :status, 
