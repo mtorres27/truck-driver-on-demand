@@ -23,7 +23,7 @@
       .applicant-messages__messages--inner class=("applicant-messages__messages--inner--inactive" if @applicant_accepted == true)
         - @harmonized_items.each_with_index do |item, index|
           - if item[:type] == "message"
-            .list-item.list-item--message
+            .list-item.list-item--message class=(".list-item.list-item--message.list-item--message-has-quote" if item[:payload].has_quote == true)
               .list__info
                 = image_tag(item[:payload].authorable.avatar_url, size: "40x40")
               .list__info.list__info--expand.list__info--with-padding
@@ -33,6 +33,7 @@
                   - if !item[:payload].created_at.nil?
                     h5.heading-h5 #{time_ago_in_words(item[:payload].created_at)} ago
                 p
+
                   = item[:payload].body
                   - if item[:payload].attachment_url
                     .list__info.list__info--with-padding

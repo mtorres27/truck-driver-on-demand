@@ -23,7 +23,7 @@
       .freelancer-job__message-history
         - @harmonized_items.each_with_index do |item, index|
           - if item[:type] == "message"
-            .freelancer-job__quote-msg
+            .freelancer-job__quote-msg class=(".freelancer-job_quote-msg.freelance-job__quote-msg-has-quote" if item[:payload].has_quote == true)
               .common__user-avatar style="background-image: url(#{item[:payload].authorable.avatar_url})"
               .freelancer-job__msg-cont.w-clearfix
                 .freelancer-job__msg-user-name= item[:payload].authorable.name

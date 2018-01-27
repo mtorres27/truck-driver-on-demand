@@ -16,7 +16,7 @@ class Company::QuotesController < Company::BaseController
       @status = ""
     end
 
-    @message = @applicant.messages.new({ body: params[:message][:body], attachment: params[:message][:attachment] })
+    @message = @applicant.messages.new({ body: params[:message][:body], attachment: params[:message][:attachment], has_quote: true })
     @message.authorable = current_company
 
     if @message.save

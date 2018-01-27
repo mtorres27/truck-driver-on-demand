@@ -854,7 +854,8 @@ CREATE TABLE messages (
     updated_at timestamp without time zone NOT NULL,
     checkin boolean DEFAULT false,
     send_contract boolean DEFAULT false,
-    unread boolean DEFAULT true
+    unread boolean DEFAULT true,
+    has_quote boolean DEFAULT false
 );
 
 
@@ -2113,6 +2114,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20171218020642'),
 ('20171218023711'),
 ('20171222051331'),
-('20180119214528');
+('20180119214528'),
+('20180127120826');
 
 
