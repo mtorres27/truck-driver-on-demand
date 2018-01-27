@@ -45,7 +45,7 @@
                             span class="zmdi zmdi-file-text"
                           |  
                           = eval(item[:payload].attachment_data)[:metadata][:filename]   
-              - if item[:payload].has_quote == trueand !item[:payload].quote_id.nil?
+              - if item[:payload].has_quote == true and !item[:payload].quote_id.nil?
                 - @quote = Quote.find(item[:payload].quote_id)
                 .list__info
                   div.quote_amount class=("quote_amount--declined" if @quote.state == "declined")
