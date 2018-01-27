@@ -44,70 +44,37 @@
                             span class="zmdi zmdi-file-text"
                           |  
                           = eval(item[:payload].attachment_data)[:metadata][:filename]   
-              .list__info
-                - if index > 0
-                  - next_item = @harmonized_items[index-1] 
-                  - if next_item.nil? or next_item[:type] == "message"
-                    - next_item = @harmonized_items[index+1] 
-                  - if !next_item.nil? and next_item[:type] == "quote"
+          - if item[:type] == "quote"
+            .list__info
+              div.quote_amount class=("quote_amount--declined" if item[:payload].state == "declined")
+                = number_with_precision(item[:payload].amount, precision: 0).to_s + " " + (job.currency ? job.currency.upcase : "")
+              .quote_pay_type= item[:payload].pay_type.text
+              - if item[:payload].pay_type == "hourly"
+                = "(#{item[:payload].number_of_hours} hours @ #{item[:payload].hourly_rate} #{job.currency ? job.currency.upcase : ""}/hour)"
+              - if item[:payload].pay_type == "daily"
+                = "(#{item[:payload].number_of_days} days @ #{item[:payload].daily_rate} #{job.currency ? job.currency.upcase : ""}/day)"
+              - if item[:payload].fixed? && item[:payload].amount > @job.budget
+                .quote_over-budget= "Over Budget"
+              - elsif item[:payload].fixed? && item[:payload].amount < @job.budget
+                .quote_under-budget= "Under Budget"
+              - elsif item[:payload].pending?
+                - if item[:payload].fixed? && item[:payload].amount > @job.budget
+                  .quote_over-budget= "Over Budget"
+                - elsif item[:payload].fixed? && item[:payload].amount < @job.budget
+                  .quote_under-budget= "Under Budget"
+                - elsif item[:payload].amount < @job.budget
+                  .quote_under-budget= "Under Budget"
+                - elsif item[:payload].amount < @job.budget
+                  .quote_over-budget= "Over Budget"
 
-                    div.quote_amount class=("quote_amount--declined" if next_item[:payload].state == "declined")
-                      = number_with_precision(next_item[:payload].amount, precision: 0).to_s + " " + (job.currency ? job.currency.upcase : "")
-                    .quote_pay_type= next_item[:payload].pay_type.text
-                    - if next_item[:payload].pay_type == "hourly"
-                      = "(#{next_item[:payload].number_of_hours} hours @ #{next_item[:payload].hourly_rate} #{job.currency ? job.currency.upcase : ""}/hour)"
-                    - if next_item[:payload].pay_type == "daily"
-                      = "(#{next_item[:payload].number_of_days} days @ #{next_item[:payload].daily_rate} #{job.currency ? job.currency.upcase : ""}/day)"
-                    - if next_item[:payload].fixed? && next_item[:payload].amount > @job.budget
-                      .quote_over-budget= "Over Budget"
-                    - elsif next_item[:payload].fixed? && next_item[:payload].amount < @job.budget
-                      .quote_under-budget= "Under Budget"
-                    - elsif next_item[:payload].pending?
-                      - if next_item[:payload].fixed? && next_item[:payload].amount > @job.budget
-                        .quote_over-budget= "Over Budget"
-                      - elsif next_item[:payload].fixed? && next_item[:payload].amount < @job.budget
-                        .quote_under-budget= "Under Budget"
-                      - elsif next_item[:payload].amount < @job.budget
-                        .quote_under-budget= "Under Budget"
-                      - elsif next_item[:payload].amount < @job.budget
-                        .quote_over-budget= "Over Budget"
-
-                    - if next_item[:payload].attachment_url
-                      a.authorable_attachment href=next_item[:payload].attachment_url target="_blank"
-                        - if is_image(next_item[:payload].attachment_url)
-                          span class="authorable_attachment_icon fa fa-image"
-                        - else
-                          span class="authorable_attachment_icon fa fa-file-text"
-                        .authorable_attachment__filename
-                          = eval(next_item[:payload].attachment_data)[:metadata][:filename]
-
-              / - @harmonized_items.each_with_index do |item, index|
-              / - if item[:type] == "message"
-              /   .freelancer-job__quote-msg
-              /     .common__user-avatar style="background-image: url(#{item[:payload].authorable.avatar_url})"
-              /     .freelancer-job__msg-cont.w-clearfix
-              /       - if index <= @harmonized_items.count - 1
-              /         - next_item = @harmonized_items[index+1]  
-              /         - if next_item.nil? or next_item[:type] == "message"
-              /           - next_item = @harmonized_items[index-1]   
-
-            / .media
-            /   .media-left
-            /     .freelancer_avatar
-            /       = image_tag(item[:payload].authorable.avatar_url, size: "40x40")
-            /   .media-body
-            /     span.authorable_name #{item[:payload].authorable.name}
-            /     - if !item[:payload].created_at.nil?
-            /       span.authorable_date #{time_ago_in_words(item[:payload].created_at)} ago
-            /     .authorable_body= item[:payload].body
-            /     - if item[:payload].attachment_url
-            /       a.authorable_attachment href=item[:payload].attachment_url target="_blank"
-            /         - if is_image(item[:payload].attachment_url)
-            /           span class="authorable_attachment_icon fa fa-image"
-            /         - else
-            /           span class="authorable_attachment_icon fa fa-file-text"
-            /         .authorable_attachment__filename
-            /           = eval(item[:payload].attachment_data)[:metadata][:filename]
+              - if item[:payload].attachment_url
+                a.authorable_attachment href=item[:payload].attachment_url target="_blank"
+                  - if is_image(item[:payload].attachment_url)
+                    span class="authorable_attachment_icon fa fa-image"
+                  - else
+                    span class="authorable_attachment_icon fa fa-file-text"
+                  .authorable_attachment__filename
+                    = eval(item[:payload].attachment_data)[:metadata][:filename]
 
           / - if item[:type] == "quote"
           /   .media
