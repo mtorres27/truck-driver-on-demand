@@ -38,7 +38,7 @@
                     .authorable_attachment__filename
                       = eval(item[:payload].attachment_data)[:metadata][:filename]
 
-              - if item[:payload].has_quote == true
+              - if item[:payload].has_quote == true and !item[:payload].quote_id.nil?
                 - @quote = Quote.find(item[:payload].quote_id)
                 .freelancer-job__msg-quote
                   .freelancer-job__msg-price
