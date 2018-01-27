@@ -45,62 +45,39 @@
                             span class="zmdi zmdi-file-text"
                           |  
                           = eval(item[:payload].attachment_data)[:metadata][:filename]   
-          - if item[:type] == "quote"
-            .list__info
-              div.quote_amount class=("quote_amount--declined" if item[:payload].state == "declined")
-                = number_with_precision(item[:payload].amount, precision: 0).to_s + " " + (job.currency ? job.currency.upcase : "")
-              .quote_pay_type= item[:payload].pay_type.text
-              - if item[:payload].pay_type == "hourly"
-                = "(#{item[:payload].number_of_hours} hours @ #{item[:payload].hourly_rate} #{job.currency ? job.currency.upcase : ""}/hour)"
-              - if item[:payload].pay_type == "daily"
-                = "(#{item[:payload].number_of_days} days @ #{item[:payload].daily_rate} #{job.currency ? job.currency.upcase : ""}/day)"
-              - if item[:payload].fixed? && item[:payload].amount > @job.budget
-                .quote_over-budget= "Over Budget"
-              - elsif item[:payload].fixed? && item[:payload].amount < @job.budget
-                .quote_under-budget= "Under Budget"
-              - elsif item[:payload].pending?
-                - if item[:payload].fixed? && item[:payload].amount > @job.budget
-                  .quote_over-budget= "Over Budget"
-                - elsif item[:payload].fixed? && item[:payload].amount < @job.budget
-                  .quote_under-budget= "Under Budget"
-                - elsif item[:payload].amount < @job.budget
-                  .quote_under-budget= "Under Budget"
-                - elsif item[:payload].amount < @job.budget
-                  .quote_over-budget= "Over Budget"
+              - if item[:payload].has_quote == trueand !item[:payload].quote_id.nil?
+                - @quote = Quote.find(item[:payload].quote_id)
+                .list__info
+                  div.quote_amount class=("quote_amount--declined" if @quote.state == "declined")
+                    = number_with_precision(item[:payload].amount, precision: 0).to_s + " " + (job.currency ? job.currency.upcase : "")
+                  .quote_pay_type= @quote.pay_type.text
+                  - if @quote.pay_type == "hourly"
+                    = "(#{@quote.number_of_hours} hours @ #{@quote.hourly_rate} #{job.currency ? job.currency.upcase : ""}/hour)"
+                  - if @quote__content.pay_type == "daily"
+                    = "(#{@quote.number_of_days} days @ #{@quote.daily_rate} #{job.currency ? job.currency.upcase : ""}/day)"
+                  - if @quote.fixed? && @quote.amount > @job.budget
+                    .quote_over-budget= "Over Budget"
+                  - elsif @quote.fixed? && @quote.amount < @job.budget
+                    .quote_under-budget= "Under Budget"
+                  - elsif @quote.pending?
+                    - if @quote.fixed? && @quote.amount > @job.budget
+                      .quote_over-budget= "Over Budget"
+                    - elsif @quote.fixed? && @quote.amount < @job.budget
+                      .quote_under-budget= "Under Budget"
+                    - elsif @quote.amount < @job.budget
+                      .quote_under-budget= "Under Budget"
+                    - elsif @quote.amount < @job.budget
+                      .quote_over-budget= "Over Budget"
 
-              - if item[:payload].attachment_url
-                a.authorable_attachment href=item[:payload].attachment_url target="_blank"
-                  - if is_image(item[:payload].attachment_url)
-                    span class="authorable_attachment_icon fa fa-image"
-                  - else
-                    span class="authorable_attachment_icon fa fa-file-text"
-                  .authorable_attachment__filename
-                    = eval(item[:payload].attachment_data)[:metadata][:filename]
+                  - if @quote.attachment_url
+                    a.authorable_attachment href=@quote.attachment_url target="_blank"
+                      - if is_image(@quote.attachment_url)
+                        span class="authorable_attachment_icon fa fa-image"
+                      - else
+                        span class="authorable_attachment_icon fa fa-file-text"
+                      .authorable_attachment__filename
+                        = eval(@quote.attachment_data)[:metadata][:filename]
 
-          / - if item[:type] == "quote"
-          /   .media
-          /     | QUOTE
-          /     .media-body
-          /       div.quote_amount class=("quote_amount--declined" if item[:payload].state == "declined")
-          /         = number_with_precision(item[:payload].amount, precision: 2).to_s + " " + (job.currency ? job.currency.upcase : "")
-          /       .quote_pay_type= item[:payload].pay_type.text
-          /       - if item[:payload].pay_type == "hourly"
-          /         = "(#{item[:payload].number_of_hours} hours @ #{item[:payload].hourly_rate} #{job.currency ? job.currency.upcase : ""}/hour)"
-          /       - if item[:payload].pay_type == "daily"
-          /         = "(#{item[:payload].number_of_days} days @ #{item[:payload].daily_rate} #{job.currency ? job.currency.upcase : ""}/day)"
-          /       - if item[:payload].fixed? && item[:payload].amount > @job.budget
-          /         .quote_over-budget= "Over Budget"
-          /       - elsif item[:payload].fixed? && item[:payload].amount < @job.budget
-          /         .quote_under-budget= "Under Budget"
-          /       - elsif item[:payload].pending?
-          /         - if item[:payload].fixed? && item[:payload].amount > @job.budget
-          /           .quote_over-budget= "Over Budget"
-          /         - elsif item[:payload].fixed? && item[:payload].amount < @job.budget
-          /           .quote_under-budget= "Under Budget"
-          /         - elsif item[:payload].amount < @job.budget
-          /           .quote_under-budget= "Under Budget"
-          /         - elsif item[:payload].amount < @job.budget
-          /           .quote_over-budget= "Over Budget"
 
   - if @quotes.length > 0
     .modal__accept-quote
