@@ -7,9 +7,6 @@ h1.center.heading-h1 Login to AV Junction
         .login__account-selector
           .login__label
             | Choose your account type:
-          p
-            b
-              = resource.class.name.downcase
           span
             - if resource.class.name.downcase == "freelancer"
               input type="radio" name="user_type" id="user_type_freelancer" value="freelancer" checked="checked"
@@ -51,3 +48,14 @@ javascript:
     console.log("click company");
     window.location = "/company/login";
   })
+
+  $('input[type=radio][name=user_type]').on('change', function() {
+    switch($(this).val()) {
+      case 'company':
+        window.location = "/company/login";
+        break;
+      case 'freelancer':
+        window.location = "/freelancer/login";
+        break;
+    }
+});
