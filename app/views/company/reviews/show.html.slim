@@ -8,7 +8,12 @@
     .result-content
       - if @review.new_record?
         .review__title
+          = @review
+          = "!"
+          br
           = @review.freelancer
+          = "!"
+          br
           = "Please take a minute to provide feedback on your experience with #{@review.freelancer ? @review.freelancer.name : "N/A"}"
         = simple_form_for(@review, url: company_job_review_path(@job)) do |f|
           = f.error_notification
