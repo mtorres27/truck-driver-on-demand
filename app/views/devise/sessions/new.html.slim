@@ -20,7 +20,7 @@ h1.center.heading-h1 Login to AV Junction
             - if resource.class.name.downcase == "company"
               = radio_button_tag :user_type, "company", selected: true
             - else
-              = radio_button_tag :user_type, "company", , id: "user_type_company"
+              = radio_button_tag :user_type, "company", id: "user_type_company"
             = label :user_type, "company"
       = f.input :email, as: :string, label: false, required: true, autofocus: true, placeholder: "Enter your Email Address"
       = f.input :password, required: true, label: false, placeholder: "Enter your Password"
