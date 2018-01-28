@@ -12,17 +12,15 @@ h1.center.heading-h1 Login to AV Junction
               = resource.class.name.downcase
           span
             - if resource.class.name.downcase == "freelancer"
-              = resource.class.name.downcase
-              = radio_button_tag :user_type, "freelancer", selected: true, id: "user_type_freelancer"
+              input type="radio" name="user_type" id="user_type_freelancer" value="freelancer" checked="checked"
             - else 
-              = radio_button_tag :user_type, "freelancer", id: "user_type_freelancer"
+              input type="radio" name="user_type" id="user_type_freelancer" value="freelancer"
             = label :user_type, "freelancer"
           span
             - if resource.class.name.downcase == "company"
-              = resource.class.name.downcase
-              = radio_button_tag :user_type, "company", selected: true, id: "user_type_company"
+              input type="radio" name="user_type" id="user_type_company" value="company" checked="checked"
             - else
-              = radio_button_tag :user_type, "company", id: "user_type_company"
+              input type="radio" name="user_type" id="user_type_company" value="company"
             = label :user_type, "company"
       = f.input :email, as: :string, label: false, required: true, autofocus: true, placeholder: "Enter your Email Address"
       = f.input :password, required: true, label: false, placeholder: "Enter your Password"
@@ -44,12 +42,12 @@ h1.center.heading-h1 Login to AV Junction
   = render "devise/shared/links"
 
 javascript:
-  $("#user_type_freelancer").on('click', function() {
+  $("#user_type_freelancer").click(function() {
     console.log("click freelancer");
     window.location = "/freelancer/login";
   })
 
-  $("#user_type_company").on('click', function() {
+  $("#user_type_company").click(function() {
     console.log("click company");
     window.location = "/company/login";
   })
