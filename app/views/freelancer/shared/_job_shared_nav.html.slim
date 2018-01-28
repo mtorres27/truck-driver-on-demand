@@ -27,7 +27,8 @@
         | Payments
   div href=freelancer_job_review_path(job) class=(request.path == "/freelancer/jobs/#{job.id}/review" ? "tab-item--active" : "tab-item--inactive")
     - unless job.completed?
-      | Review
+      a href=freelancer_job_review_path(job)
+        | Review
     - else
       - if job.freelancer and job.freelancer.id == current_freelancer.id
         a href=freelancer_job_review_path(job)
