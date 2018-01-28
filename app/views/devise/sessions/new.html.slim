@@ -50,6 +50,8 @@ javascript:
   })
 
   $('input[type=radio][name=user_type]').on('change', function() {
+    console.log("Triggering user_type click");
+    console.log($(this).val())
     switch($(this).val()) {
       case 'company':
         window.location = "/company/login";
