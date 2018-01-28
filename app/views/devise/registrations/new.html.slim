@@ -11,13 +11,13 @@ h1.center.heading-h1 Register with AV Junction
           - if resource.class.name.downcase == "freelancer"
             = radio_button_tag :user_type, "freelancer", selected: true
           - else
-            = radio_button_tag :user_type, "freelancer"
+            = radio_button_tag :user_type, "freelancer", id: "user_type_freelancer"
           = label :user_type, "freelancer"
         span
           - if resource.class.name.downcase == "company"
             = radio_button_tag :user_type, "company", selected: true
           - else
-            = radio_button_tag :user_type, "company"
+            = radio_button_tag :user_type, "company", id: "user_type_company"
           = label :user_type, "company"
       .register__label
         - if resource.class.name.downcase == "company"
