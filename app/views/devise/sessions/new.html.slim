@@ -12,13 +12,13 @@ h1.center.heading-h1 Login to AV Junction
               = resource.class.name.downcase
           span
             - if resource.class.name.downcase == "freelancer"
-              = radio_button_tag :user_type, "freelancer", selected: true
+              = radio_button_tag :user_type, "freelancer", selected: true, id: "user_type_freelancer"
             - else 
               = radio_button_tag :user_type, "freelancer", id: "user_type_freelancer"
             = label :user_type, "freelancer"
           span
             - if resource.class.name.downcase == "company"
-              = radio_button_tag :user_type, "company", selected: true
+              = radio_button_tag :user_type, "company", selected: true, id: "user_type_company"
             - else
               = radio_button_tag :user_type, "company", id: "user_type_company"
             = label :user_type, "company"
@@ -43,9 +43,11 @@ h1.center.heading-h1 Login to AV Junction
 
 javascript:
   $("#user_type_freelancer").on('click', function() {
+    console.log("click freelancer");
     window.location = "/freelancer/login";
   })
 
   $("#user_type_company").on('click', function() {
+    console.log("click company");
     window.location = "/company/login";
   })
