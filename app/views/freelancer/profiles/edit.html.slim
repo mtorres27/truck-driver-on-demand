@@ -159,6 +159,18 @@
       .grid-cell.grid-cell--100
         hr/
       .grid-cell.grid-cell--33
+        h2.heading-h2 Add references
+      .grid-cell.grid-cell--67
+        .grid-v
+          .grid-cell.grid-cell--100
+            .form__field-label Reference
+            = f.simple_fields_for :freelancer_references do |freelancer_reference_form|
+              = render "freelancer_reference_fields", f: freelancer_reference_form
+            .links.add-new-certificate
+              = link_to_add_association 'Add Another', f, :freelancer_references, class: "btn btn--secondary"
+      .grid-cell.grid-cell--100
+        hr/
+      .grid-cell.grid-cell--33
         h2.heading-h2 Make it personal with a background image that captures you best.
       .grid-cell.grid-cell--67
         .grid-h.grid-h--no-margin
