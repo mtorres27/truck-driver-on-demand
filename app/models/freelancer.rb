@@ -63,7 +63,7 @@ class Freelancer < ApplicationRecord
 
   validates_presence_of :country, :on => :create
   validates_presence_of :city, :on => :create
-  
+
   validates :phone_number, length: { minimum: 7 }, allow_blank: true
 
   validates :phone_number, length: { minimum: 7 }, allow_blank: true
@@ -180,6 +180,16 @@ class Freelancer < ApplicationRecord
     else
       return nil
     end
+  end
+
+  def score
+    score = 0
+    score += 1 if self.name.present?
+    score += 3 if self.email.present?
+    score += 3 if self.phone_number.present?
+    score += 3 if self.bio.present?
+    score += 5 * self.certifications.count
+    score
   end
 
   def self.avg_rating(freelancer)
