@@ -602,7 +602,7 @@ CREATE TABLE freelancers (
     lat numeric(9,6),
     lng numeric(9,6),
     pay_unit_time_preference character varying,
-    pay_per_unit_time integer,
+    pay_per_unit_time character varying,
     tagline character varying,
     bio text,
     keywords citext,
@@ -2225,6 +2225,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20180117114408'),
 ('20180117114800'),
 ('20180119214528'),
-('20180130000647');
+('20180130000647'),
+('20180130013756');
 
 
