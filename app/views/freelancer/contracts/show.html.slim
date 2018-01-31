@@ -114,7 +114,18 @@
         h3.heading-h3 
           = t(:addendums, scope: [:form, :labels, :job])           
         p 
-          = @job.addendums || "Not Specified"
+          - if !@job.attachments || @job.attachments.count == 0
+            = "Not Specified"
+          - else
+            - @job.attachments.each do |attachment|
+              a.job-details__attachment href=attachment.file_url target="_blank"
+                .job-details__attachment__file
+                  - if is_image(attachment.file_url)
+                    img src=attachment.file_url
+                  - else
+                    span class="fa fa-file-text"
+                .job-details__attachment__name
+                  = attachment.title
 
       .grid-cell.grid-cell--100
         - if @job.freelancer and @job.freelancer.id == current_freelancer.id

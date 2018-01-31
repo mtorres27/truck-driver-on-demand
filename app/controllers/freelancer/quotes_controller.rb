@@ -9,6 +9,7 @@ class Freelancer::QuotesController < Freelancer::BaseController
     set_collections
 
     @message = @applicant.messages.new(message_params)
+    @message.has_quote = true
     @message.authorable = current_freelancer
     
     if @message.save
@@ -50,6 +51,9 @@ class Freelancer::QuotesController < Freelancer::BaseController
         if @quotes.count == 0
           @applicant.quotes << @new_quote
         end
+
+        @message.quote_id = @new_quote.id
+        @message.save
         
       elsif params[:message][:status] == "accept"
         @q = @quotes.where({applicant_id: @applicant.id}).first

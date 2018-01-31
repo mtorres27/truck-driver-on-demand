@@ -16,7 +16,7 @@ class Company::QuotesController < Company::BaseController
       @status = ""
     end
 
-    @message = @applicant.messages.new({ body: params[:message][:body], attachment: params[:message][:attachment] })
+    @message = @applicant.messages.new({ body: params[:message][:body], attachment: params[:message][:attachment], has_quote: true })
     @message.authorable = current_company
 
     if @message.save
@@ -66,6 +66,9 @@ class Company::QuotesController < Company::BaseController
         @new_quote.pay_type = params[:message][:counter_type]
         @new_quote.state = "pending"
         @new_quote.save
+
+        @message.quote_id = @new_quote.id
+        @message.save
 
         if @quotes.count == 0
           @applicant.quotes << @new_quote

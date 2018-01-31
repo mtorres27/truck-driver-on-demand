@@ -23,29 +23,9 @@
       .freelancer-job__message-history
         - @harmonized_items.each_with_index do |item, index|
           - if item[:type] == "message"
-            .freelancer-job__quote-msg
+            .freelancer-job__quote-msg class=(".freelancer-job_quote-msg.freelance-job__quote-msg-has-quote" if item[:payload].has_quote == true)
               .common__user-avatar style="background-image: url(#{item[:payload].authorable.avatar_url})"
               .freelancer-job__msg-cont.w-clearfix
-                - if index <= @harmonized_items.count - 1
-                  - next_item = @harmonized_items[index+1]
-                  - if next_item.nil? or next_item[:type] == "message"
-                    - next_item = @harmonized_items[index-1] 
-
-
-                  - if next_item[:type] == "quote"
-                    - if next_item[:payload].pay_type == "hourly"
-                      = "(#{next_item[:payload].number_of_hours} hours @ #{next_item[:payload].hourly_rate} #{@job.currency}/hour)"
-                    - if next_item[:payload].pay_type == "daily"
-                      = "(#{next_item[:payload].number_of_days} days @ #{next_item[:payload].daily_rate} #{@job.currency}/day)"
-                    = "..."
-                    - if next_item[:payload].amount <= @job.budget and next_item[:payload].state != "declined"
-                      .freelancer-job__msg-price= number_with_precision(next_item[:payload].amount, precision: 2) + " " + @job.currency
-                    - elsif next_item[:payload].amount <= @job.budget and next_item[:payload].state == "declined"
-                      .freelancer-job__msg-price.rejected= number_with_precision(next_item[:payload].amount, precision: 2) + " " + @job.currency
-                    - elsif next_item[:payload].amount > @job.budget and next_item[:payload].state != "declined"
-                      .freelancer-job__msg-price.overbudget2= number_with_precision(next_item[:payload].amount, precision: 2) + " " + @job.currency
-                    - elsif next_item[:payload].amount > @job.budget and next_item[:payload].state == "declined"
-                      .freelancer-job__msg-price.overbudget2.rejected= number_with_precision(next_item[:payload].amount, precision: 2) + " " + @job.currency
                 .freelancer-job__msg-user-name= item[:payload].authorable.name
                 .freelancer-job__msg-created-at= "#{time_ago_in_words(item[:payload].created_at)} ago"
                 p.freelancer-job__msg-text= item[:payload].body
@@ -57,3 +37,24 @@
                       span class="authorable_attachment_icon fa fa-file-text"
                     .authorable_attachment__filename
                       = eval(item[:payload].attachment_data)[:metadata][:filename]
+
+              - if item[:payload].has_quote == true and !item[:payload].quote_id.nil?
+                - @quote = Quote.find(item[:payload].quote_id)
+                .freelancer-job__msg-quote
+                  .freelancer-job__msg-price
+                    - if @quote.amount <= @job.budget and @quote.state != "declined"
+                      = number_with_precision(@quote.amount, precision: 2) + " " + @job.currency
+                    - elsif @quote.amount <= @job.budget and @quote.state == "declined"
+                      .rejected= number_with_precision(@quote.amount, precision: 2) + " " + @job.currency
+                    - elsif @quote.amount > @job.budget and @quote.state != "declined"
+                      .overbudget2= number_with_precision(@quote.amount, precision: 2) + " " + @job.currency
+                    - elsif @quote.amount > @job.budget and @quote.state == "declined"
+                      .overbudget2.rejected= number_with_precision(@quote.amount, precision: 2) + " " + @job.currency
+                    - if @quote.pay_type == "hourly"
+                      .freelancer-job__msg-price-breakdown
+                        = "(#{@quote.number_of_hours} hours @ #{@quote.hourly_rate} #{@job.currency}/hour)"
+                    - if @quote.pay_type == "daily"
+                      .freelancer-job__msg-price-breakdown
+                        = "(#{@quote.number_of_days} days @ #{@quote.daily_rate} #{@job.currency}/day)"
+                  
+  
