@@ -33,10 +33,12 @@ html
   body
     .wrap
       .section.section--header
-        = render "shared/nav"
-        = render "shared/mobile_nav"
-        = render "shared/onboarding"
-        = render "shared/flash"
+        .container.container--header
+          .container
+            = render "shared/nav"
+            = render "shared/mobile_nav"
+            = render "shared/onboarding"
+            = render "shared/flash"
       
       .section.section--body 
         = @test
