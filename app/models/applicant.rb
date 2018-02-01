@@ -75,7 +75,7 @@ class Applicant < ApplicationRecord
     Applicant.all.each do |applicant|
       applicant.messages.where({has_quote: false}).each do |message|
         applicant.quotes.each do |quote|
-          if (message.created_at - quote.created_at).abs < 4
+          if (message.created_at - quote.created_at).abs < 1
             message.has_quote = true
             message.quote_id = quote.id
             message.save
@@ -86,7 +86,6 @@ class Applicant < ApplicationRecord
     Message.where({has_quote: false}).find_each do |message|
       @message_date = message.created_at
       Quote.where()
-
     end
   end
 end
