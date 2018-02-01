@@ -5,6 +5,9 @@ class Company::ReviewsController < Company::BaseController
     @review =
       @job.freelancer_review ||
       @job.build_freelancer_review
+
+    @review.freelancer = @job.freelancer
+    @review.company = current_company
   end
 
   def create

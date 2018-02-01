@@ -10,7 +10,7 @@ class FeaturedProjectUploader < Shrine
   plugin :remove_invalid
 
   process(:store) do |io, context|
-    if :image?
+    if self::image?(io)
       resize_to_limit!(io.download, 600, 600)
     end
   end

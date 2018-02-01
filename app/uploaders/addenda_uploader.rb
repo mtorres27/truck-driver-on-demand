@@ -8,7 +8,7 @@ class AddendaUploader < Shrine
   plugin :default_url
 
   process(:store) do |io, context|
-    if :image?
+    if self::image?(io)
       resize_to_limit!(io.download, 300, 300)
     end
   end
