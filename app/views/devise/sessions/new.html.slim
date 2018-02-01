@@ -34,7 +34,7 @@ h1.center.heading-h1 Login to AV Junction
 
       .login__buttons-right
         - if devise_mapping.recoverable? && controller_name != 'passwords' && controller_name != 'registrations'
-          a.btn.btn-tertiary href=new_password_path(resource_name)
+          a.btn.btn--secondary href=new_password_path(resource_name)
             | Forgot your password?
           br
 

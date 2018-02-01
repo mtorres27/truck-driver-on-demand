@@ -16,6 +16,9 @@ nav#top-nav.navbar
     - elsif request.path.index('freelancer') == 1
       a.navbar-brand href="/freelancer" title="AV Junction"
         = image_tag("avjunction-logo_header.svg", class: "header-logo", alt: "AV Junction")
+    - else
+      a.navbar-brand href="/" title="AV Junction"
+        = image_tag("avjunction-logo_header.svg", class: "header-logo", alt: "AV Junction")
   #navbar-lg.collapse.navbar-collapse
     ul.nav.navbar-nav.navbar-right
       - if request.path.index('company') == 1
