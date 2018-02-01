@@ -1,0 +1,75 @@
+.header-bar
+  display: -webkit-box
+  display: -webkit-flex
+  display: -ms-flexbox
+  display: flex
+  -webkit-box-pack: justify
+  -webkit-justify-content: space-between
+  -ms-flex-pack: justify
+  justify-content: space-between
+  -webkit-box-align: start
+  -webkit-align-items: flex-start
+  -ms-flex-align: start
+  align-items: flex-start
+
+.billboard
+  display: -webkit-box
+  display: -webkit-flex
+  display: -ms-flexbox
+  display: flex
+  max-width: 1200px
+  margin-bottom: 24px
+  padding: 24px
+  -webkit-box-pack: justify
+  -webkit-justify-content: space-between
+  -ms-flex-pack: justify
+  justify-content: space-between
+  -webkit-box-align: center
+  -webkit-align-items: center
+  -ms-flex-align: center
+  align-items: center
+  background-color: #f1f1f1
+  &--no-margin
+    margin-bottom: 0px
+
+//Popover
+.popover 
+  position: absolute
+  display: none
+  top: 32px
+  width: 200px
+  padding: 16px
+  border-radius: 4px
+  background-color: #fff
+  box-shadow: 1px 1px 12px 0 rgba(0, 0, 0, .2)
+  right: 0px
+  @media (max-width: $breakpoint-tablet)
+    right: -50px
+
+  &--blanket
+    position: fixed
+    display: none
+    width: 100%
+    height: 100%
+    top: 0
+    left: 0
+    background-color: rgba(255,255,255,0)
+  
+  &--visible
+    display: block
+  
+  &-response
+    &--error
+      color: $brand-warning
+
+    &--success
+      color: $brand-success
+
+//Overrides
+.alert
+  margin-bottom: 0px
+
+//Rating
+.rating
+  display: inline-block  
+  

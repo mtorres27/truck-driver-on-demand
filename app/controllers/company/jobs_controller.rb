@@ -131,7 +131,7 @@ class Company::JobsController < Company::BaseController
         :budget_is_public,
         :state,
         :address,
-        attachments_attributes: [:id, :file, :_destroy],
+        attachments_attributes: [:id, :file, :title, :_destroy],
         keywords: [
           :flat_panel_displays,
           :video_walls,

@@ -15,17 +15,16 @@
     .attachment.common__text-field-group
       label.common__field-label for="name-4"
         = "Send a message to #{n}"
-      a.common__text-field--attach-file.w-inline-block onClick="triggerFileUpload()"
-        div#attachment-indicator.common__icon-attach 
       = f.text_area :body, as: :string, placeholder: "Enter your message", label: false, maxlength: 5000, class: "w-input"
+
+    .new-message__attachment
+      = f.input :attachment, as: :file, label: false
 
     .common__form-action-cont.w-clearfix
       div#new-message__validation-errors
       a.btn-primary--active.w-inline-block.width-100 onclick="submitForm();"
         div#new-message__submit
           | Send
-    .new-message__attachment
-      = f.input :attachment, as: :file, label: false
 
 
 javascript:

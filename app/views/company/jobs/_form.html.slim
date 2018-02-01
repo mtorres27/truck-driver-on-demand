@@ -1,57 +1,46 @@
+.action-bar
+  h2.heading-h2.heading-h2--action-bar Post a new Job
+  .action-bar__actions
+
 = simple_form_for([:company, @job]) do |f|
-  .form-inputs
-    .row
-      .col-sm-12.col-md-6.col-lg-7
-        .row
-          .col-xs-8
-            = f.association :project, collection: current_company.projects.open, prompt: "Select"
-          .col-xs-4
-            .form-group
-              label.control-label &nbsp;
+  .grid-h
+    .grid-cell.grid-cell--67
+      .grid-v
+        .grid-cell.grid-cell--100
+          .grid-h.grid-h--no-margin
+            .grid-cell.grid-cell--75
+              = f.association :project, collection: current_company.projects.open, prompt: "Select"
+            .grid-cell.grid-cell--25.grid-cell--span25
+              br
               .form-button
-                button.btn.btn-default type="button" data-toggle="modal" data-target="#new_project"
+                .btn.btn--secondary type="button" data-toggle="modal" data-target="#new_project" 
                   | New Project
-        = f.input :title, placeholder: "Enter the job title"
-        = f.input :address, placeholder: "Enter the city of the job", label: "City"
-        = f.input :country, prompt: "Select"
-        span
-          abbr title="required"= "*"
-          = " "
-          = f.label :summary, "Summary"
-        p= t('summary_description')
-        = f.input :summary, label: false, placeholder: "Enter the job summary"
-        span
-          abbr title="required"= "*"
-          = " "
-          = f.label :summary, "Scope of Work"
-        p= t('scope_of_work_description')
-        = f.input :scope_of_work, label: false, placeholder: "Please enter in more details about the job to receive a better quote."
-        = f.input :scope_file, as: :file, label: "Scope of Work File"
-        - if !@job.scope_file.nil?
-          | Currently Selected:
-          a href=@job.scope_file_url target="_blank"
-            = @job.scope_file.original_filename
-          br
-          br
-
-      .col-sm-12.col-md-6.col-lg-5
-        = f.input :budget, placeholder: "Enter a budget", input_html: { value: number_with_precision(f.object.budget, precision: 2) }
-        = f.input :currency, required: true, as: :select
-        = f.input :job_function, prompt: "Select"
-        .row
-          .col-xs-12.col-md-6
-            = f.input :starts_on, html5: true
-          .col-xs-12.col-md-6
-            = f.input :duration, placeholder: "Number of days"
-        .row
-          .col-xs-12.col-md-6
-            = f.input :pay_type, prompt: "Select", label: "Preferred Pay Type"
-          .col-xs-12.col-md-6
-            = f.input :freelancer_type, prompt: "Select"
-
-        .freelancer-profile__item
-          .freelancer-profile__title
-            | Skills
+        .grid-cell.grid-cell--100
+          = f.input :title, placeholder: "Enter the job title"
+        .grid-cell.grid-cell--100
+          = f.input :address, placeholder: "Enter the city of the job", label: "City"
+        .grid-cell.grid-cell--100
+          = f.input :country, prompt: "Select"
+        .grid-cell.grid-cell--100 
+          span
+            abbr title="required"= "*"
+            = " " 
+            = f.label :summary, "Summary"
+          = f.input :summary, label: false, placeholder: "Enter the job summary"
+        .grid-cell.grid-cell--100   
+          span
+            abbr title="required"= "*"
+            = " "
+            = f.label :summary, "Scope of Work"
+          = f.input :scope_of_work, label: false, placeholder: "Please enter in more details about the job to receive a better quote."
+        .grid-cell.grid-cell--100
+          = f.input :scope_file, as: :file, label: "Scope of Work File"
+          - if !@job.scope_file.nil?
+            | Currently Selected:
+            a href=@job.scope_file_url target="_blank"
+              = @job.scope_file.original_filename
+        .grid-cell.grid-cell--100
+          = f.label :summary, "Skills required for this job"
           - if @job.errors.full_messages.include?("Keywords can't be blank")
             .has-error
               .help-block
@@ -66,18 +55,35 @@
               .freelancer-profile__checkbox
                 = check_box_tag tag_name, "1", checked
                 = " #{value}"
-
-        = f.input :budget_is_public
-  .form-actions
-    .row
-      .col-sm-12.col-md-6.col-lg-5
+    .grid-cell.grid-cell--33
+      .grid-v
+        .grid-cell.grid-cell--100
+          = f.input :budget, placeholder: "Enter a budget", input_html: { value: number_with_precision(f.object.budget, precision: 2) }
+        .grid-cell.grid-cell--100
+          = f.input :budget_is_public
+        .grid-cell.grid-cell--100
+          = f.input :currency, required: true, as: :select
+        .grid-cell.grid-cell--100
+          = f.input :job_function, prompt: "Select"
+        .grid-cell.grid-cell--100
+          = f.input :starts_on, html5: true
+        .grid-cell.grid-cell--100
+          = f.input :duration, placeholder: "Number of days"
+        .grid-cell.grid-cell--100
+          = f.input :pay_type, prompt: "Select", label: "Preferred Pay Type"
+        .grid-cell.grid-cell--100
+          = f.input :freelancer_type, prompt: "Select" 
+    .grid-cell.grid-cell--100
+      .buttons
         - if @job.created?
-            = f.button :button, "Publish", name: "job[state]", value: "published", class: "btn-primary--active"
-            = f.button :submit, "Save as Draft", class: "btn-ghost--active margin-8px"
+            = f.button :button, "Publish", name: "job[state]", value: "published", class: "btn btn--primary"
+            = f.button :submit, "Save as Draft", class: "btn btn--secondary"
         - else
-            = f.button :submit, "Save", class: "btn-primary--active"
+            = f.button :submit, "Save", class: "btn btn--primary"
         - unless @job.new_record?
-            = link_to "Delete Job", company_job_path(@job), data: { confirm: "Are you sure?" }, method: :delete
+          .btn.btn--secondary 
+            = link_to "Delete Job", company_job_path(@job), data: { confirm: "Are you sure you want to permanently delete this job posting?", class: "btn btn--secondary" }, method: :delete
+
 
 .modal#new_project role="dialog" tabindex="-1"
   .modal-dialog role="document"
@@ -85,24 +91,25 @@
       = simple_form_for([:company, current_company.projects.new], remote: true) do |f|
         .modal-header
           h2 Create a New Project
-        .modal-body
-          .form-inputs
-            = f.input :name, placeholder: "Enter the project name"
-            = f.input :external_project_id, placeholder: "Enter the project number"
-            = f.input :budget, placeholder: "Enter a budget"
-            = f.input :address, placeholder: "Enter the address"
-
-            .row
-              .col-xs-12.col-md-6
-                = f.input :starts_on, html5: true
-              .col-xs-12.col-md-6
-                = f.input :duration, placeholder: "Number of days"
-        .modal-footer
-          .form-actions
-            = f.button :submit, class: "btn-primary--active"
-            '
-            a.btn.btn-default data-dismiss="modal" href="#"
-              | Cancel
+        .container
+          .grid-h
+            .grid-cell.grid-cell--100
+              = f.input :name, placeholder: "Enter the project name"
+            .grid-cell.grid-cell--100
+              = f.input :external_project_id, placeholder: "Enter the project number"
+            .grid-cell.grid-cell--100
+              = f.input :budget, placeholder: "Enter a budget"
+            .grid-cell.grid-cell--100  
+              = f.input :address, placeholder: "Enter the address"
+            .grid-cell.grid-cell--50
+              = f.input :starts_on, html5: true
+            .grid-cell.grid-cell--50
+              = f.input :duration, placeholder: "Number of days"
+            .grid-cell.grid-cell--100
+              .buttons
+                = f.button :submit, class: "btn btn--primary"
+                a.btn.btn--secondary data-dismiss="modal" href="#"
+                  | Cancel
 
   javascript:
     function get_currencies(country){

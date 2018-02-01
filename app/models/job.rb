@@ -240,8 +240,9 @@ class Job < ApplicationRecord
 
     def reject_attachments(attrs)
       exists = attrs["id"].present?
-      empty = attrs["file"].blank?
-      exists
+      empty = attrs["file"].blank? && attrs["title"].blank?
+      attrs.merge!({ _destroy: 1 }) if exists && empty
+      !exists and empty
     end
 
     after_save :check_if_should_do_geocode

@@ -1,25 +1,24 @@
 = simple_form_for([:company, project], remote: true) do |f|
-  .form-inputs
-    = f.input :name, placeholder: "Enter the project name booya"
-    .row
-      .col-xs-12.col-sm-6
-        = f.input :external_project_id, placeholder: "Enter the project number"
-      .col-xs-12.col-sm-6
-        = f.input :budget, placeholder: "Enter a budget", input_html: { value: number_with_precision(f.object.budget, precision: 2) }
-      .col-xs-12.col-sm-6
-        = f.select :currency, @currencies
-    = f.input :address, placeholder: "Enter the address"
-    .row
-      .col-xs-12.col-md-6
-        = f.input :starts_on, html5: true
-      .col-xs-12.col-md-6
-        = f.input :duration, placeholder: "Number of days"
-  hr
-  .form-actions
-    = f.button :submit, class: "btn-primary"
-    '
-    a.btn.btn-default data-dismiss="modal" href=company_projects_path
-      | Cancel
-    - unless project.new_record?
-      '
-      = link_to "Delete", company_project_path(project), class: "btn btn-danger", data: { confirm: "Are you sure?" }, method: :delete
+  .grid-h
+    .grid-cell.grid-cell--50
+      = f.input :name, placeholder: "Enter the project name booya"
+    .grid-cell.grid-cell--50
+      = f.input :external_project_id, placeholder: "Enter the project number"
+    .grid-cell.grid-cell--50
+      = f.input :budget, placeholder: "Enter a budget", input_html: { value: number_with_precision(f.object.budget, precision: 2) }
+    / .grid-cell.grid-cell--50
+    /   = f.select :currency, @currencies
+    .grid-cell.grid-cell--50
+      = f.input :address, placeholder: "Enter the address"
+    .grid-cell.grid-cell--50
+      = f.input :starts_on, html5: true
+    .grid-cell.grid-cell--50
+      = f.input :duration, placeholder: "Number of days"
+    .grid-cell.grid-cell--100
+      .buttons
+        = f.button :submit, "Update", class: "btn btn--primary"
+        a.btn.btn--secondary data-dismiss="modal" href=company_projects_path
+          | Cancel
+        - unless project.new_record?
+          '
+          = link_to "Delete", company_project_path(project), class: "btn btn--danger", data: { confirm: "Are you sure?" }, method: :delete

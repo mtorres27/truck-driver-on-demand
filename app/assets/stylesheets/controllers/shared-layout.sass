@@ -1,0 +1,153 @@
+.wrap
+  display: -webkit-box
+  display: -webkit-flex
+  display: -ms-flexbox
+  display: flex
+  min-height: 100vh
+  -webkit-box-orient: vertical
+  -webkit-box-direction: normal
+  -webkit-flex-direction: column
+  -ms-flex-direction: column
+  flex-direction: column
+  -webkit-box-pack: justify
+  -webkit-justify-content: space-between
+  -ms-flex-pack: justify
+  justify-content: space-between
+  background-color: #e2e2e2
+  @media (max-width: $breakpoint-tablet)
+    background-color: white
+
+.section
+  display: -webkit-box
+  display: -webkit-flex
+  display: -ms-flexbox
+  display: flex
+  -webkit-box-orient: vertical
+  -webkit-box-direction: normal
+  -webkit-flex-direction: column
+  -ms-flex-direction: column
+  flex-direction: column
+  -webkit-box-pack: start
+  -webkit-justify-content: flex-start
+  -ms-flex-pack: start
+  justify-content: flex-start
+  &--body 
+    -webkit-box-flex: 1
+    -webkit-flex: 1
+    -ms-flex: 1
+    flex: 1
+    @media (max-width: $breakpoint-tablet)
+      margin-top: 50px
+
+
+.container
+  display: -webkit-box
+  display: -webkit-flex
+  display: -ms-flexbox
+  display: flex
+  width: 100%
+  max-width: 1200px
+  margin-right: auto
+  margin-left: auto
+  padding-left: 24px
+  padding-right: 24px
+  padding-top: 24px
+  -webkit-box-orient: vertical
+  -webkit-box-direction: normal
+  -webkit-flex-direction: column
+  -ms-flex-direction: column
+  flex-direction: column
+  -webkit-box-flex: 1
+  -webkit-flex: 1
+  -ms-flex: 1
+  flex: 1
+  @media (max-width: $breakpoint-tablet)
+    padding-left: 0px
+    padding-right: 0px
+    padding-top: 0px
+  &--header
+    width: 100%
+    max-width: none
+    padding-top: 0px
+    padding-right: 24px
+    padding-left: 24px
+    border-bottom: 1px solid rgba(0, 0, 0, 0.15)
+    background-color: #fff
+    -webkit-box-flex: 0
+    -webkit-flex: 0 auto
+    -ms-flex: 0 auto
+    flex: 0 auto
+    @media (max-width: $breakpoint-tablet)
+      padding-left: 16px
+      padding-right: 16px
+      padding-top: 16px
+  &--profile
+    margin-top: -180px
+    @media (max-width: $breakpoint-tablet)
+      padding-left: 0px
+      padding-right: 0px
+      padding-top: 0px
+  &--popup
+    flex: 0 auto
+    max-width: 600px
+    min-height: 50vh
+    @media (max-width: $breakpoint-tablet)
+      max-width: 100%
+      height: 100vh
+  &--nav
+    padding-top: 0px
+
+
+  &--profile--company
+    @extend .container--profile
+
+.frame
+  overflow: hidden
+  padding: 24px
+  margin-bottom: 24px
+  border-radius: 4px
+  background-color: #fff
+  box-shadow: 0 5px 5px 0 rgba(0, 0, 0, 0.15)
+  display: -webkit-box
+  display: -webkit-flex
+  display: -ms-flexbox
+  display: flex
+  -webkit-box-orient: vertical
+  -webkit-box-direction: normal
+  -webkit-flex-direction: column
+  -ms-flex-direction: column
+  flex-direction: column
+  -webkit-box-flex: 1
+  -webkit-flex: 1
+  -ms-flex: 1
+  flex: 1
+  @media (max-width: $breakpoint-tablet)
+    border-radius: 0px
+    box-shadow: none
+    padding: 16px
+    margin-bottom: 16px
+ 
+// Popup
+.popup
+  height: 100vh
+  width: 100%
+  z-index: 1000
+  position: fixed
+  left: 0
+  top: 0
+  background-color: rgba(0,0,0,0.3) 
+  flex-direction: column
+  justify-content: center
+  display: none
+
+.popup__title-bar
+  display: flex
+  max-width: 600px
+  margin-top: -24px
+  margin-right: -24px
+  margin-left: -24px
+  margin-bottom: 24px
+  padding: 24px
+  justify-content: space-between
+  align-items: center
+  background-color: #f1f1f1  

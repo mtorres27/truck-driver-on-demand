@@ -5,111 +5,94 @@
     h2.heading-h2.heading-h2--action-bar Edit Work Order
     .action-bar__actions
 
-  = simple_form_for(@job, url: company_job_work_order_path(@job), class: "jokers") do |f|
-    .work-order__summary
-      = render partial: "company/shared/contract_meta", locals: { job: @job }
-      h3.heading-h3
-        | Project Reference
-      p
-        a href=company_projects_path()
-          = project_reference(@job.project)
+  = simple_form_for(@job, url: company_job_work_order_path(@job)) do |f|
+    .grid-h
+      .grid-cell.grid-cell--33
+        = render partial: "company/shared/contract_meta", locals: { job: @job }
+      
+      .grid-cell.grid-cell--33
+        h3.heading-h3 Project Reference
+        p
+          a href=company_projects_path()
+            = project_reference(@job.project)
+      .grid-cell.grid-cell--expand
+        h3.heading-h3 Job Title
+        p
+          a href=company_jobs_path(@job)
+            = @job.title
 
-      h3.heading-h3
-        | Job Title
-      p
-        a href=company_jobs_path(@job)
-          = @job.title
+    .grid-h
+      .grid-cell.grid-cell--33
+        = f.input :pay_type, required: true, prompt: "Select", label: "Project Type", input_html: { class: 'form__select-field' }
 
-      #contract-extra-data.job-details--collapsed
-        h3.heading-h3
-          | Summary
-        p= @job.summary
+      .grid-cell.grid-cell--33
+        - if f.object and f.object.accepted_quote
+          = f.input :contract_price, required: true, input_html: { value: number_with_precision(f.object.accepted_quote.amount, precision: 2, class: 'form__text-field') }, label: "Job Work Order Amount", disabled: true
+        - else
+          = f.input :contract_price, required: true, label: "Job Work Order Amount", disabled: true, input_html: { class: 'form__text-field' }
+        .job-details__price-status
+          = ""
 
-      .job-details__expand onclick="toggleExpandedJobDetails()"
-        .btn.btn-tertiary.job-details__expand-btn
-          | expand job details
+      .grid-cell.grid-cell--33
+        = f.input :applicable_sales_tax, html5: true, label: "Applicable Sales Tax (%)", input_html: { class: 'form__text-field'}
+        .form__field-helper-text
+          | If the freelancer collects sales tax, be sure to ask them what amount of tax this is. The rate of tax entered here will be reflected in your invoices.
+      
+      .grid-cell.grid-cell--33
+        = f.input :starts_on, html5: true, label: "Start Date (Estimated)", input_html: { class: 'form__text-field'}
 
-    .form__text-field-group
-      .form__field-label
-        | Project Type
-      = f.input :pay_type, required: true, prompt: "Select", label: false, input_html: { class: 'form__select-field' }
+      .grid-cell.grid-cell--33  
+        = f.input :ends_on, html5: true, required: true, label: "End date (estimated)", input_html: { class: 'form__text-field'}
+      
+      .grid-cell.grid-cell--33
+        = f.input :working_time, required: true, prompt: "Select", label: "Acceptable Working Hours"
 
-    .form__text-field-group
-      .form__field-label
-        | Job Work Order Amount
-      - if f.object and f.object.accepted_quote
-        = f.input :contract_price, required: true, input_html: { value: number_with_precision(f.object.accepted_quote.amount, precision: 2, class: 'form__text-field') }, label: false, disabled: true
-      - else
-        = f.input :contract_price, required: true, label: false, disabled: true, input_html: { class: 'form__text-field' }
-      .job-details__price-status
-        = ""
 
-    .form__text-field-group
-      .form__field-label
-        | Applicable Sales Tax (%)
-      = f.input :applicable_sales_tax, html5: true, label: false, input_html: { class: 'form__text-field'}
-      .form__field-helper-text
-        | If the freelancer collects sales tax, be sure to ask them what amount of tax this is. The rate of tax entered here will be reflected in your invoices.
 
-    .form__text-field-multi
-      .form__text-field-group
+      .grid-cell.grid-cell--100
+        #payments
+          .form__field-label
+            | Payment Schedule
+          = f.simple_fields_for :payments do |payment_form|
+            = render "payment_fields", f: payment_form
+          .buttons
+            = link_to_add_association 'Add Schedule Item', f, :payments, class: "btn btn--primary"
+
+      .grid-cell.grid-cell--100
         .form__field-label
-          | Start Date (Estimated)
-        = f.input :starts_on, html5: true, label: false, input_html: { class: 'form__text-field'}
-      .form__text-field-group
+          | Reporting Requirements
+        = f.input :reporting_frequency, as: :radio_buttons, item_wrapper_class: "inline", label: false
+        = f.input :require_photos_on_updates
+        = f.input :require_checkin
+        = f.input :require_uniform
+
+      .grid-cell.grid-cell--100.job-details
+        #featured_projects
+          .form__field-label
+            | Addenda
+          = f.simple_fields_for :attachments do |attachment_form|
+            = render "attachment_fields", f: attachment_form
+          .buttons.add-new-addendum
+            = link_to_add_association 'Add Addendum', f, :attachments, class: "btn btn--primary"
+
+      .grid-cell.grid-cell--100
         .form__field-label
-          | End date (estimated)
-        = f.input :ends_on, html5: true, required: true, label: false, input_html: { class: 'form__text-field'}
+          | Freelancer Agreements
+        p
+          a href="/freelance-service-agreement?job=#{@job.id}#{random_append}" target="_blank"
+            | Freelance Service Agreement
+        p
+          | AV Junction provides a template freelance service agreement for you to use at your sole discretion.  This template agreement does not bind AV Junction Inc to this work order.  This work order is between you and the hired AV freelancer.  If you would like to opt out of using this template please check the box.
+          = f.input :opt_out_of_freelance_service_agreement, label: "Opt out of Freelance Service Agreement"
 
-    .form__text-field-group
-      .form__field-label
-        | Acceptable Working Hours
-      = f.input :working_time, required: true, prompt: "Select", label: false
-
-
-
-    .form__text-field-group
-      #payments
-        .form__field-label
-          | Payment Schedule
-        = f.simple_fields_for :payments do |payment_form|
-          = render "payment_fields", f: payment_form
-        .links
-          = link_to_add_association 'Add Schedule Item', f, :payments, class: "btn btn-default"
-
-    .form__text-field-group
-      .form__field-label
-        | Reporting Requirements
-      = f.input :reporting_frequency, as: :radio_buttons, item_wrapper_class: "inline", label: false
-      = f.input :require_photos_on_updates
-      = f.input :require_checkin
-      = f.input :require_uniform
-
-    .job-details
-      #featured_projects
-        .form__field-label
-          | Addenda
-        = f.simple_fields_for :attachments do |attachment_form|
-          = render "attachment_fields", f: attachment_form
-        .links.add-new-addendum
-          = link_to_add_association 'Add Addendum', f, :attachments, class: "btn btn-default"
-
-    .form__field-label
-      | Freelancer Agreements
-    p
-      a href="/freelance-service-agreement?job=#{@job.id}#{random_append}" target="_blank"
-        | Freelance Service Agreement
-    p
-      | AV Junction provides a template freelance service agreement for you to use at your sole discretion.  This template agreement does not bind AV Junction Inc to this work order.  This work order is between you and the hired AV freelancer.  If you would like to opt out of using this template please check the box.
-      = f.input :opt_out_of_freelance_service_agreement, label: "Opt out of Freelance Service Agreement"
-
-    - if @job.pre_contracted?
-      .form-actions
-        = f.hidden_field :send_contract, value: false
-        .btn-primary--active onclick="sendContract()"
-          | Send Work Order
-        .btn-ghost--active onclick="saveDraft()"
-          | Save Draft
+      .grid-cell.grid-cell--100  
+        - if @job.pre_contracted?
+          .buttons
+            = f.hidden_field :send_contract, value: false
+            .btn.btn--primary onclick="sendContract()"
+              | Send Work Order
+            .btn.btn--secondary onclick="saveDraft()"
+              | Save Draft
 
 
 javascript:
