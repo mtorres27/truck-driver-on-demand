@@ -105,7 +105,10 @@
         a.job-details__attachment href=attachment.file_url target="_blank"
           .job-details__attachment__file
             - if is_image(attachment.file_url)
-              img src=attachment.file_url
+              - if attachment.file_url.include?("missing")
+                img src='/assets/file/missing.png'
+              - else
+                img src=attachment.file_url
             - else
               span class="fa fa-file-text"
           .job-details__attachment__name
