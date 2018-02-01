@@ -17,9 +17,8 @@ h1.heading-h1 My Techs
           - @locations.each do |location|
             option value="#{location}" label="#{location}" selected=("selected" if params.dig(:location) == location)
 
-  .result-freelancers
+  .list
     - @freelancers.each do |freelancer|
-      a.result-row href=company_freelancer_path(freelancer)
-        = render partial: "company/shared/freelancer_info", locals: { freelancer: freelancer }
+      = render partial: "company/shared/freelancer_info", locals: { freelancer: freelancer }
 
-    = paginate @freelancers
+  = paginate @freelancers

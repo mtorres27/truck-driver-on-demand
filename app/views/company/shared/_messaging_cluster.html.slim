@@ -18,51 +18,66 @@
                   = "Simply click the button below to proceed to creating a work order."
 
                 div
-                a.btn.btn-primary href=company_job_work_order_path(@job)
+                a.btn.btn--primary href=company_job_work_order_path(@job)
                   | view Work Order
       .applicant-messages__messages--inner class=("applicant-messages__messages--inner--inactive" if @applicant_accepted == true)
-        - @harmonized_items.each do |item|
+        - @harmonized_items.each_with_index do |item, index|
           - if item[:type] == "message"
-            .media
-              .media-left
-                .freelancer_avatar
-                  = image_tag(item[:payload].authorable.avatar_url, size: "40x40")
-              .media-body
-                span.authorable_name #{item[:payload].authorable.name}
-                - if !item[:payload].created_at.nil?
-                  span.authorable_date #{time_ago_in_words(item[:payload].created_at)} ago
-                .authorable_body= item[:payload].body
-                - if item[:payload].attachment_url
-                  a.authorable_attachment href=item[:payload].attachment_url target="_blank"
-                    - if is_image(item[:payload].attachment_url)
-                      span class="authorable_attachment_icon fa fa-image"
-                    - else
-                      span class="authorable_attachment_icon fa fa-file-text"
-                    .authorable_attachment__filename
-                      = eval(item[:payload].attachment_data)[:metadata][:filename]
-          - elsif item[:type] == "quote"
-            .media
-              .media-body
-                div.quote_amount class=("quote_amount--declined" if item[:payload].state == "declined")
-                  = number_with_precision(item[:payload].amount, precision: 2).to_s + " " + (job.currency ? job.currency.upcase : "")
-                .quote_pay_type= item[:payload].pay_type.text
-                - if item[:payload].pay_type == "hourly"
-                  = "(#{item[:payload].number_of_hours} hours @ #{item[:payload].hourly_rate} #{job.currency ? job.currency.upcase : ""}/hour)"
-                - if item[:payload].pay_type == "daily"
-                  = "(#{item[:payload].number_of_days} days @ #{item[:payload].daily_rate} #{job.currency ? job.currency.upcase : ""}/day)"
-                - if item[:payload].fixed? && item[:payload].amount > @job.budget
-                  .quote_over-budget= "Over Budget"
-                - elsif item[:payload].fixed? && item[:payload].amount < @job.budget
-                  .quote_under-budget= "Under Budget"
-                - elsif item[:payload].pending?
-                  - if item[:payload].fixed? && item[:payload].amount > @job.budget
+            .list-item.list-item--message class=(".list-item.list-item--message.list-item--message-has-quote" if item[:payload].has_quote == true)
+              .list__info
+                = image_tag(item[:payload].authorable.avatar_url, size: "40x40")
+              .list__info.list__info--expand.list__info--with-padding
+                .list-bar.list-bar--left
+                  h4.heading-h4.heading-h4--no-margin #{item[:payload].authorable.name}
+                  | &nbsp;
+                  - if !item[:payload].created_at.nil?
+                    h5.heading-h5 #{time_ago_in_words(item[:payload].created_at)} ago
+                p
+
+                  = item[:payload].body
+                  - if item[:payload].attachment_url
+                    .list__info.list__info--with-padding
+                      - if item[:payload].attachment_url
+                        a href=item[:payload].attachment_url target="_blank"
+                          - if is_image(item[:payload].attachment_url)
+                            span class="zmdi zmdi-image"
+                          - else
+                            span class="zmdi zmdi-file-text"
+                          |  
+                          = eval(item[:payload].attachment_data)[:metadata][:filename]   
+              - if item[:payload].has_quote == true and !item[:payload].quote_id.nil?
+                - @quote = Quote.find(item[:payload].quote_id)
+                .list__info
+                  div.quote_amount class=("quote_amount--declined" if @quote.state == "declined")
+                    = number_with_precision(@quote.amount, precision: 0).to_s + " " + (job.currency ? job.currency.upcase : "")
+                  .quote_pay_type= @quote.pay_type.text
+                  - if @quote.pay_type == "hourly"
+                    = "(#{@quote.number_of_hours} hours @ #{@quote.hourly_rate} #{job.currency ? job.currency.upcase : ""}/hour)"
+                  - if @quote.pay_type == "daily"
+                    = "(#{@quote.number_of_days} days @ #{@quote.daily_rate} #{job.currency ? job.currency.upcase : ""}/day)"
+                  - if @quote.fixed? && @quote.amount > @job.budget
                     .quote_over-budget= "Over Budget"
-                  - elsif item[:payload].fixed? && item[:payload].amount < @job.budget
+                  - elsif @quote.fixed? && @quote.amount < @job.budget
                     .quote_under-budget= "Under Budget"
-                  - elsif item[:payload].amount < @job.budget
-                    .quote_under-budget= "Under Budget"
-                  - elsif item[:payload].amount < @job.budget
-                    .quote_over-budget= "Over Budget"
+                  - elsif @quote.pending?
+                    - if @quote.fixed? && @quote.amount > @job.budget
+                      .quote_over-budget= "Over Budget"
+                    - elsif @quote.fixed? && @quote.amount < @job.budget
+                      .quote_under-budget= "Under Budget"
+                    - elsif @quote.amount < @job.budget
+                      .quote_under-budget= "Under Budget"
+                    - elsif @quote.amount < @job.budget
+                      .quote_over-budget= "Over Budget"
+
+                  - if @quote.attachment_url
+                    a.authorable_attachment href=@quote.attachment_url target="_blank"
+                      - if is_image(@quote.attachment_url)
+                        span class="authorable_attachment_icon fa fa-image"
+                      - else
+                        span class="authorable_attachment_icon fa fa-file-text"
+                      .authorable_attachment__filename
+                        = eval(@quote.attachment_data)[:metadata][:filename]
+
 
   - if @quotes.length > 0
     .modal__accept-quote
@@ -80,11 +95,11 @@
             em
               = "Remember, by accepting this quote of #{number_with_precision(@quotes.where({applicant_id: @applicant.id}).first.amount, precision: 2)} #{(job.currency ? job.currency.upcase : "")}  with #{@applicant.freelancer.name}, all other applications for this"
               = " job will automatically be declined, and receive a general notification informing them the job has been filled. Details of who you've selected will not be shared."
-        .modal__accept-quote__content__buttons
-          .accept_button.btn.btn-primary
-            | Accept & Create Work Order
-          .cancel_button.btn.btn-tertiary
-            | Cancel
+          .buttons
+            .accept_button.btn.btn--primary
+              | Accept
+            .cancel_button.btn.btn--secondary
+              | Cancel
 
 
 
@@ -100,11 +115,11 @@
           p
             | Declining this quote will notify the freelancer of your decision. However, they still have the option to offer another quote.
 
-        .modal__decline-quote__content__buttons
-          .decline_button.btn.btn-primary
-            | Decline Quote
-          .cancel_button.btn.btn-tertiary
-            | Cancel
+          .buttons
+            .decline_button.btn.btn--primary
+              | Decline Quote
+            .cancel_button.btn.btn--secondary
+              | Cancel
 
   javascript:
     $(".accept_button").on('click', function() {

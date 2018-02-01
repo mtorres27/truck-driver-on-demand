@@ -1,10 +1,13 @@
 .navbar
-  height: 94px
+  padding: 0
+  //padding: 0 8px 0 8px
+  height: 60px
   font-size: 16px
   text-transform: uppercase
   background-color: white
   font-family: $default-font
   font-weight: 600
+  margin-bottom: 0px
   @media (max-width: $breakpoint-tablet)
     display: none
 
@@ -16,7 +19,7 @@
 .navbar-nav
   > li
     > a
-      padding: 22px 15px
+      padding: 16px 15px
       color: $gray-dark
       background-color: $white-color !important
       &:hover
@@ -41,7 +44,7 @@
 .mobile-nav
   width: 100%
   position: fixed
-  z-index: 10000
+  z-index: 1000
   top: 0
   left: 0
   border-bottom: 1px solid rgba(0,0,0,0.15)

@@ -7,23 +7,27 @@
         span<>= job.currency.upcase if job.currency.upcase
         .job-header__budget-label + #{number_with_precision(job.accepted_quote.amount * (job.applicable_sales_tax/100), precision: 2)} TAX
       - elsif job.accepted_quote
-        .job-header__budget= number_with_precision(job.accepted_quote.amount, precision: 2)
+        .job-header__budget= number_with_precision(job.accepted_quote.amount, precision: 0)
         span<>= job.currency.upcase if job.currency.upcase
-        .job-header__budget-label CONTRACT PRICE
+        .job-header__budget-label CONTRACT value
       - else
-        .job-header__budget= number_with_precision(job.budget, precision: 2)
+        .job-header__budget= number_with_precision(job.budget, precision: 0)
         span<>= job.currency.upcase if job.currency
-        .job-header__budget-label Budget PRICE
+        .job-header__budget-label Budget
 
   h4.heading-h4
     a href=company_projects_path
       | #{job.project&.name}
-  .job-header__created-date #{job.created_at}
+  h5.heading-h5 #{job.created_at}
   h2.heading-h2 #{job.title}
   - if job.freelancer
     h4.heading-h4
       | AWARDED TO
       a<> href=company_freelancer_path(id: job.freelancer.id) #{job.freelancer.name}
+
+
+
+
 .tab-bar
   - if job.new_record?
     .tab-bar__item--active

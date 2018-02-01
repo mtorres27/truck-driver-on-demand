@@ -1,5 +1,5 @@
 div
   .nested_fields
     = f.number_field :year, placeholder: "Year"
-    = f.number_field :installs, placeholder: "Number of Installs"
-    = link_to_remove_association "X", f, { onClick: "hide_remove_association(this)"}
+    = f.number_field :installs, placeholder: "# of Installs"
+    = link_to_remove_association "", f, { onClick: "hide_remove_association(this)", class: "btn-icon-link"}

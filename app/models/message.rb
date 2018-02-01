@@ -35,5 +35,5 @@ class Message < ApplicationRecord
     if body.blank? && attachment_data.blank?
       errors.add(:base, "A body or an attachment is required")
     end
-  end
+  end  
 end

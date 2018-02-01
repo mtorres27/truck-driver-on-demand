@@ -13,7 +13,7 @@ module StripeHelper
     'legal_entity.personal_id_number' => {'title' => 'Personal ID' , 'placeholder' => 'Enter your PID', 'helpertext'=>'Your Personal ID Number is a government issued ID such as a SIN or SSN. Please note this information is used by Stripe—our payments gateway—to verify your identity. To understand how this data is used please read Stripe\'s Privacy Policy found here stripe.com/ca/privacy'},
     'legal_entity.business_name' => {'title' => 'Registered Business Name' , 'placeholder' => 'Enter your Business Name'},
     'legal_entity.business_tax_id' => {'title' => 'Business Tax ID' , 'placeholder' => 'Business Tax ID'},
-    'legal_entity.verification.document' => {'title' => 'Verification Document' , 'placeholder' => 'Business Tax ID', 'helpertext'=>'The Verification Document is any government issued document that identifies you, such as a Passport, Permanent Resident Card or Drivers License. Upload a .jpg or .pdf version of this document.'},
+    'legal_entity.verification.document' => {'title' => 'Verification Document' , 'placeholder' => 'Business Tax ID', 'helpertext'=>'The Verification Document is any government issued document that identifies you, such as a Passport, Permanent Resident Card or Drivers License. Upload a .jpg or .png version of this document.'},
     'legal_entity.personal_address.city' => {'title' => 'Home City' , 'placeholder' => 'Enter your City'},
     'legal_entity.personal_address.line1' => {'title' => 'Home Address' , 'placeholder' => 'Enter your Address'},
     'legal_entity.personal_address.postal_code' => {'title' => 'Postal/ZIP Code' , 'placeholder' => 'Enter your Postal/ZIP Code'},

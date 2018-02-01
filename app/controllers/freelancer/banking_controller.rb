@@ -1,9 +1,8 @@
 class Freelancer::BankingController < Freelancer::BaseController
-  DOC_TYPES = ['image/jpeg', 'image/jpg', 'image/png', 'application/pdf']
+  DOC_TYPES = ['image/jpeg', 'image/jpg', 'image/png']
   def index
     @connector = StripeAccount.new(current_freelancer)
-    logger.debug @connector.account.inspect
-    # logger.debug 321
+    # logger.debug @connector.account.inspect
   end
 
   def identity
@@ -47,10 +46,10 @@ class Freelancer::BankingController < Freelancer::BaseController
       end
       if account
         account_info, result = prepare_info(account, params[:account][type])
-        flash[:error] = "Unable to create  account!#{result[:error]}" if result[:error]
-        flash[:notice] = 'Your account is Updated!' unless result[:error]
+        flash[:error] = "Unable to create  account! #{result[:error]}" if result[:error]
+        flash[:notice] = 'Your account is Updated! ' unless result[:error]
       else
-        flash[:error] = 'Unable to create Stripe account!'
+        flash[:error] = 'Unable to create Stripe account! '
       end
     end
     redirect_to freelancer_profile_stripe_banking_info_path if flash[:error].nil?
@@ -72,7 +71,7 @@ class Freelancer::BankingController < Freelancer::BaseController
                 file.write(avalue.read)
               end
               unless `file --b --mime-type #{file_path}`.strip.in?(DOC_TYPES)
-                raise StandardError.new("Wrong file type, accepted file types are [#{DOC_TYPES.join(", ")}]")
+                raise StandardError.new(" Wrong file type, accepted file types are [#{DOC_TYPES.join(", ")}]")
               end
               stripe_upload = stripe_upload(filename+file_ext)
               account.legal_entity[key] ||= {}

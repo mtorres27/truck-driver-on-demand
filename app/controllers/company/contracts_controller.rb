@@ -151,7 +151,7 @@ class Company::ContractsController < Company::BaseController
         :require_checkin,
         :require_uniform,
         :opt_out_of_freelance_service_agreement,
-        attachments_attributes: [:id, :file, :_destroy],
+        attachments_attributes: [:id, :file, :title, :_destroy],
         payments_attributes: [:id, :description, :company_id, :amount, :_destroy]
       )
     end

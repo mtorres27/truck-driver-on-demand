@@ -1,41 +1,38 @@
 .footer
   .container
-    .footer__column--small
-      .footer__column__title
-        | Company
-      a.footer__link href="http://www.avjunction.com/about" target="_blank"
-        | About
-      a.footer__link href="http://www.avjunction.com/blog" target="_blank"
-        | Blog
-      a.footer__link href="http://www.avjunction.com/contact" target="_blank"
-        | Support
-      a.footer__link href="http://www.avjunction.com/feedback" target="_blank"
-        | Feedback
+    .grid-h
+      .grid-cell.grid-cell--25
+        .footer__column__title
+          | Company
+        a.footer__link href="http://www.avjunction.com/about" target="_blank"
+          | About
+        a.footer__link href="http://www.avjunction.com/blog" target="_blank"
+          | Blog
+        a.footer__link href="http://www.avjunction.com/contact" target="_blank"
+          | Support
+        a.footer__link href="http://www.avjunction.com/feedback" target="_blank"
+          | Feedback
+      .grid-cell.grid-cell--25
+        .footer__column__title
+          | Legal
+        a.footer__link href="http://www.avjunction.com/term-of-service" target="_blank"
+          | Terms of Service
+        a.footer__link href="http://www.avjunction.com/privacy-policy" target="_blank"
+          | Privacy Policy
+        a.footer__link href="http://www.avjunction.com/code-of-conduct" target="_blank"
+          | Code of Conduct
 
-
-    .footer__column--small
-      .footer__column__title
-        | Legal
-      a.footer__link href="http://www.avjunction.com/term-of-service" target="_blank"
-        | Terms of Service
-      a.footer__link href="http://www.avjunction.com/privacy-policy" target="_blank"
-        | Privacy Policy
-      a.footer__link href="http://www.avjunction.com/code-of-conduct" target="_blank"
-        | Code of Conduct
-
-    .footer__column--small
-      .footer__column__title
-        | Connect
-      a.footer__link href="https://facebook.com/avjunction" target="_blank"
-        | Facebook
-      a.footer__link href="https://twitter.com/avjunction" target="_blank"
-        | Twitter
-      a.footer__link href="https://www.linkedin.com/company-beta/16273548/" target="_blank"
-        | LinkedIn
-
-    .footer__column--large
-      .footer__column__logo
+      .grid-cell.grid-cell--25
+        .footer__column__title
+          | Connect
+        a.footer__link href="https://facebook.com/avjunction" target="_blank"
+          | Facebook
+        a.footer__link href="https://twitter.com/avjunction" target="_blank"
+          | Twitter
+        a.footer__link href="https://www.linkedin.com/company-beta/16273548/" target="_blank"
+          | LinkedIn
+      .grid-cell.grid-cell--25
+        .footer__column__logo
         = image_tag "avjunction-logo_header.svg"
-
-      .footer__column__copyright
-        | &copy; 2017 AV Junction Inc. All rights reserved.
+        .footer__column__copyright
+          | &copy; 2017 AV Junction Inc. All rights reserved.
