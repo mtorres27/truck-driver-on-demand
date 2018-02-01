@@ -5,6 +5,7 @@
   - if @jobs.count == 0
     h3.heading-h3
       | You haven't done any work for any AV companies yet.
+  - else  
     .list
       - @jobs.each do |job|
         = render partial: "/freelancer/shared/my_job_info", locals: { job: job, type: "job" }
