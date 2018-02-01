@@ -11,8 +11,7 @@ document.addEventListener("turbolinks:load", function(){
             searching: true,
             info: false,
             columnDefs: [ {
-                targets: [6],
-                targets: [5, 6],
+                targets: [6, 7],
                 orderable: false
             }
             ]
@@ -22,13 +21,13 @@ document.addEventListener("turbolinks:load", function(){
 
     $('#filter-by-disabled-select').on('change', function(){
         if (this.value == 'all'){
-            companies_table.fnFilter('', 5);
+            companies_table.fnFilter('', 6);
         }
         else if (this.value == 'enabled') {
-            companies_table.fnFilter('false', 5);
+            companies_table.fnFilter('false', 6);
         }
         else if (this.value == 'disabled') {
-            companies_table.fnFilter('true', 5);
+            companies_table.fnFilter('true', 6);
         }
     })
 });
