@@ -53,6 +53,9 @@ class Freelancer < ApplicationRecord
   has_many :freelancer_references
   accepts_nested_attributes_for :freelancer_references, :reject_if => :all_blank, :allow_destroy => true
 
+  has_many :freelancer_affiliationes
+  accepts_nested_attributes_for :freelancer_affiliationes, :reject_if => :all_blank, :allow_destroy => true
+
   has_many :job_favourites
   has_many :favourite_jobs, through: :job_favourites, source: :job
 
@@ -193,6 +196,7 @@ class Freelancer < ApplicationRecord
     score += 3 if self.bio.present?
     score += 5 * self.certifications.count
     score += 2 * self.freelancer_references.count
+    score += 2 * self.freelancer_affiliations.count
     score
   end
 

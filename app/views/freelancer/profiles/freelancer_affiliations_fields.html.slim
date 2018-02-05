@@ -1,0 +1,19 @@
+.authorable_attachment__item
+  .profile__meta__details__1-1
+    .freelancer-profile__image.float-left
+      - if !f.object.affiliate.include?('missing.pdf')
+        - url = is_image(f.object.afiliate_url) ? f.object.afiliate_url : "/assets/affiliations/affiliations_placeholder.png"
+        a.authorable_attachment--full href=f.object.afiliate_url target="_blank"
+          img src=url
+        .freelancer-profile__image-upload onclick="uploadAffiliateImage(#{f.index})"
+          span class="zmdi zmdi-upload"
+      - else
+        .authorable_attachment--full
+          img src=""
+        .freelancer-profile__image-upload onclick="uploadAffiliateImage()"
+          span class="zmdi zmdi-upload"
+
+    .profile__meta__info
+      = f.file_field :certificate, :accept => 'image/gif,image/jpg,image/jpeg,image/png,document/pdf,application/pdf,application/x-pdf', label: false, class: "file-input--hidden"
+      = f.input :name, as: :string, placeholder: "Enter the affiliate name", label: "Affiliate Name"
+    = link_to_remove_association "", f, { onClick: "hide_remove_association(this)", class: "btn-icon-link"}
