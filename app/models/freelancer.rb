@@ -72,7 +72,7 @@ class Freelancer < ApplicationRecord
 
   validates :phone_number, length: { minimum: 7 }, allow_blank: true
 
-  validates :phone_number, length: { minimum: 7 }, allow_blank: true
+  validates :phone_number, length: { minimum: 7 }, on: :update
 
   audited
 

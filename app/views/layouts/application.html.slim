@@ -33,10 +33,12 @@ html
   body
     .wrap
       .section.section--header
-        = render "shared/nav"
-        = render "shared/mobile_nav"
-        = render "shared/onboarding"
-        = render "shared/flash"
+        .container.container--header
+          .container.container--nav
+            = render "shared/nav"
+            = render "shared/mobile_nav"
+            = render "shared/onboarding"
+            = render "shared/flash"
       
       .section.section--body 
         - no_header_controllers = []
@@ -71,3 +73,6 @@ html
       
       .section.section--footer 
         = render "shared/footer"
+      /! Start of HubSpot Embed Code
+      script#hs-script-loader async="" defer="" src="//js.hs-scripts.com/3224021.js" type="text/javascript" 
+      /! End of HubSpot Embed Code

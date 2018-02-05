@@ -1,5 +1,5 @@
 = render partial: "/freelancer/shared/profile_sub_nav"
-
+- content_for :title, "Edit Profile"
 - content_for :secondary do
   = simple_form_for(@freelancer, url: freelancer_profile_path) do |f|
     = f.hidden_field :enforce_profile_edit, value: true
