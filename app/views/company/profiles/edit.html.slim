@@ -39,7 +39,7 @@
           .grid-cell.grid-cell--100
             = f.input :address, as: :string, label: "HQ Address", placeholder: "Enter the address of your company's Headquarters."
           .grid-cell.grid-cell--100
-            = f.input :line2, as: :string, label: "Address Line 2", placeholder: "Enter line 2 address of your company's Headquarters."
+            = f.input :line2, as: :string, required: false, label: "Address Line 2", placeholder: "Enter line 2 address of your company's Headquarters."
           .grid-cell.grid-cell--50
             = f.input :city, as: :string, label: "City", placeholder: "Enter the city of your company's Headquarters."
           .grid-cell.grid-cell--50
