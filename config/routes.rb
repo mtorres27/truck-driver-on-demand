@@ -152,5 +152,7 @@ Rails.application.routes.draw do
 
     resources :pages, only: [:index, :edit, :update]
     resources :audits, only: [:index]
+
+    resources :new_registrants, only: [:index]
   end
 end
