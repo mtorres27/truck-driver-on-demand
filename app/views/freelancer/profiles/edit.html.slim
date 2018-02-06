@@ -183,6 +183,18 @@
       .grid-cell.grid-cell--100
         hr/
       .grid-cell.grid-cell--33
+        h2.heading-h2 Add Insurance
+      .grid-cell.grid-cell--67
+        .grid-v
+          .grid-cell.grid-cell--100
+            .form__field-label Insurance
+            = f.simple_fields_for :freelancer_insurances do |freelancer_insurance_form|
+              = render "freelancer_insurance_fields", f: freelancer_insurance_form
+            .links.add-new-certificate
+              = link_to_add_association 'Add Another', f, :freelancer_insurances, class: "btn btn--secondary"
+      .grid-cell.grid-cell--100
+        hr/
+      .grid-cell.grid-cell--33
         h2.heading-h2 Make it personal with a background image that captures you best.
       .grid-cell.grid-cell--67
         .grid-h.grid-h--no-margin

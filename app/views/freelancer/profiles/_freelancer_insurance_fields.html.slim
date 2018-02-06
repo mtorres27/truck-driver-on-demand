@@ -1,0 +1,7 @@
+.authorable_attachment__item
+  .profile__meta__details__1-1
+    .profile__meta__info
+      = f.input :name, as: :string, placeholder: "Enter the insurance name", label: "Insurance Name"
+    .profile__meta__info
+      = f.input :description, label: "Tell something about this insurance", placeholder: "Insurance description", :input_html => { :class => 'form__profile-bio-textarea' }
+    = link_to_remove_association "", f, { onClick: "hide_remove_association(this)", class: "btn-icon-link"}
