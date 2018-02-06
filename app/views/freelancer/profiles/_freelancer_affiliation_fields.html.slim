@@ -1,9 +1,9 @@
 .authorable_attachment__item
   .profile__meta__details__1-1
     .freelancer-profile__image.float-left
-      - if !f.object.affiliate.include?('missing.pdf')
-        - url = is_image(f.object.afiliate_url) ? f.object.afiliate_url : "/assets/affiliations/affiliations_placeholder.png"
-        a.authorable_attachment--full href=f.object.afiliate_url target="_blank"
+      - if !f.object.image.include?('missing.pdf')
+        - url = is_image(f.object.image_url) ? f.object.image_url : "/assets/certification/certification_placeholder.png"
+        a.authorable_attachment--full href=f.object.image_url target="_blank"
           img src=url
         .freelancer-profile__image-upload onclick="uploadAffiliateImage(#{f.index})"
           span class="zmdi zmdi-upload"

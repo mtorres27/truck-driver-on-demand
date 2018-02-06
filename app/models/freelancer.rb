@@ -53,8 +53,8 @@ class Freelancer < ApplicationRecord
   has_many :freelancer_references
   accepts_nested_attributes_for :freelancer_references, :reject_if => :all_blank, :allow_destroy => true
 
-  has_many :freelancer_affiliationes
-  accepts_nested_attributes_for :freelancer_affiliationes, :reject_if => :all_blank, :allow_destroy => true
+  has_many :freelancer_affiliations
+  accepts_nested_attributes_for :freelancer_affiliations, :reject_if => :all_blank, :allow_destroy => true
 
   has_many :job_favourites
   has_many :favourite_jobs, through: :job_favourites, source: :job
@@ -219,6 +219,12 @@ class Freelancer < ApplicationRecord
   def reject_certification(attrs)
     exists = attrs["id"].present?
     empty = attrs["certificate"].blank? and attrs["name"].blank?
+    !exists and empty
+  end
+
+  def reject_freelancer_affiliation(attrs)
+    exists = attrs["id"].present?
+    empty = attrs["image"].blank? and attrs["name"].blank?
     !exists and empty
   end
 
