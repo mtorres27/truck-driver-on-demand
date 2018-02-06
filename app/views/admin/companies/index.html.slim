@@ -23,7 +23,7 @@
           td= link_to company.name, admin_company_path(company)
           td= mail_to company.email
           td= company.state
-          td= company.country.upcase
+          td= company.country.try(:upcase)
           td= company.disabled
           td.text-right
             = link_to 'Edit', edit_admin_company_path(company)

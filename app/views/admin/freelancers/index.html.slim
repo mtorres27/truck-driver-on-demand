@@ -23,7 +23,7 @@
           td= link_to freelancer.name, admin_freelancer_path(freelancer)
           td= mail_to freelancer.email
           td= freelancer.state
-          td= freelancer.country.upcase
+          td= freelancer.country.try(:upcase)
           td= freelancer.disabled
           td.text-right
             = link_to 'Edit', edit_admin_freelancer_path(freelancer)
