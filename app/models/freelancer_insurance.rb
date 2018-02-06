@@ -1,0 +1,2 @@
+class FreelancerInsurance < ApplicationRecord
+end
