@@ -12,7 +12,7 @@
     display: none
 
 .navbar-brand
-  padding: 15px 0 20px 15px
+  padding: 15px 0 20px 0
   .header-logo
     height: 25px
 
@@ -24,14 +24,18 @@
       background-color: $white-color !important
       &:hover
         color: $brand-primary
+      &:last-child
+        padding-right: 0px
 
   > li.active
     > a
       background-color: $white-color !important
       color: $brand-primary
+      &:last-child
+        padding-right: 0px
 
 .navbar-floating
-  box-shadow: 0 0 10px rgba(0,0,0,0.4)
+  //box-shadow: 0 0 10px rgba(0,0,0,0.4)
 
 .dropdown-avatar
   width: 35px
