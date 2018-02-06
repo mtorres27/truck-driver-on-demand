@@ -50,6 +50,16 @@ class Freelancer < ApplicationRecord
   has_many :certifications, -> { order(updated_at: :desc) }, dependent: :destroy
   accepts_nested_attributes_for :certifications, allow_destroy: true, reject_if: :reject_certification
 
+  has_many :freelancer_references
+  accepts_nested_attributes_for :freelancer_references, :reject_if => :all_blank, :allow_destroy => true
+
+  has_many :freelancer_affiliations
+  accepts_nested_attributes_for :freelancer_affiliations, :reject_if => :all_blank, :allow_destroy => true
+
+  has_many :freelancer_insurances
+  accepts_nested_attributes_for :freelancer_insurances, :reject_if => :all_blank, :allow_destroy => true
+
+
   has_many :job_favourites
   has_many :favourite_jobs, through: :job_favourites, source: :job
 
@@ -63,7 +73,7 @@ class Freelancer < ApplicationRecord
 
   validates_presence_of :country, :on => :create
   validates_presence_of :city, :on => :create
-  
+
   validates :phone_number, length: { minimum: 7 }, allow_blank: true
 
   validates :phone_number, length: { minimum: 7 }, on: :update, allow_blank: true
@@ -182,6 +192,19 @@ class Freelancer < ApplicationRecord
     end
   end
 
+  def score
+    score = 0
+    score += 1 if self.name.present?
+    score += 3 if self.email.present?
+    score += 3 if self.phone_number.present?
+    score += 3 if self.bio.present?
+    score += 5 * self.certifications.count
+    score += 2 * self.freelancer_references.count
+    score += 2 * self.freelancer_affiliations.count
+    score += 1 * self.freelancer_insurances.count
+    score
+  end
+
   def self.avg_rating(freelancer)
     if freelancer.freelancer_reviews_count == 0
       return nil
@@ -201,6 +224,12 @@ class Freelancer < ApplicationRecord
   def reject_certification(attrs)
     exists = attrs["id"].present?
     empty = attrs["certificate"].blank? and attrs["name"].blank?
+    !exists and empty
+  end
+
+  def reject_freelancer_affiliation(attrs)
+    exists = attrs["id"].present?
+    empty = attrs["image"].blank? and attrs["name"].blank?
     !exists and empty
   end
 

@@ -39,6 +39,9 @@ class Freelancer::ProfilesController < Freelancer::BaseController
       :postal_code,
       :tagline,
       :bio,
+      :company_name,
+      :own_tools,
+      :valid_driver,
       :service_areas,
       :sales_tax_number,
       :years_of_experience,
@@ -91,6 +94,9 @@ class Freelancer::ProfilesController < Freelancer::BaseController
         :hospitality
       ],
       certifications_attributes: [:id, :certificate, :name, :_destroy],
+      freelancer_references_attributes: [:id, :title, :description, :phone, :name, :_destroy],
+      # freelancer_affiliations: [:id, :name, :image, :_destroy],
+      freelancer_insurances_attributes: [:id, :name, :description, :_destroy],
     )
   end
 end
