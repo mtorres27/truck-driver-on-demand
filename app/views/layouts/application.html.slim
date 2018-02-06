@@ -38,9 +38,9 @@ html
             = render "shared/nav"
             = render "shared/mobile_nav"
             = render "shared/onboarding"
-            = render "shared/flash"
       
       .section.section--body 
+        = render "shared/flash"
         - no_header_controllers = []
         - no_header_controllers << { controller: "freelancer/companies" }
         - no_header_controllers << { controller: "company/freelancers", action: "show" }
