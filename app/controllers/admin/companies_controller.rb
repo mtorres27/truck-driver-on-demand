@@ -20,7 +20,8 @@ class Admin::CompaniesController < Admin::BaseController
   end
 
   def update
-    if @company.update(company_params)
+    @company.attributes = company_params
+    if @company.save(validate: false)
       redirect_to admin_company_path(@company), notice: "Company updated."
     else
       render :edit
