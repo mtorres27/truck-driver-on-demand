@@ -1,12 +1,14 @@
+freelancers_table = null;
+
 document.addEventListener("turbolinks:load", function(){
 
     $.fn.dataTable.moment('MMM D, Y');
     $.fn.dataTable.moment('MMM D, YYYY');
 
     if ($('#admin-freelancers-table_wrapper').length == 0) {
-        $('#admin-freelancers-table').dataTable({
+        freelancers_table = $('#admin-freelancers-table').dataTable({
             order: [],
-            searching: false,
+            searching: true,
             info: false,
             columnDefs: [ {
                 targets: [6],
@@ -14,5 +16,18 @@ document.addEventListener("turbolinks:load", function(){
             }
             ]
         });
+        $('#admin-freelancers-table_filter').hide();
     }
+
+    $('#filter-by-disabled-select').on('change', function(){
+        if (this.value == 'all'){
+            freelancers_table.fnFilter('', 5);
+        }
+        else if (this.value == 'enabled') {
+            freelancers_table.fnFilter('false', 5);
+        }
+        else if (this.value == 'disabled') {
+            freelancers_table.fnFilter('true', 5);
+        }
+    })
 });
