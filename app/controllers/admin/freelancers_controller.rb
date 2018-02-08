@@ -6,7 +6,7 @@ class Admin::FreelancersController < Admin::BaseController
   def index
     @keywords = params.dig(:search, :keywords).presence
 
-    @freelancers = Freelancer.order(:name)
+    @freelancers = Freelancer.order('created_at DESC')
     if @keywords
       @freelancers = @freelancers.search(@keywords)
     end

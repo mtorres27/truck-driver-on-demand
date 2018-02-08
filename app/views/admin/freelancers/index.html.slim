@@ -14,6 +14,7 @@
         th Email
         th State/Province
         th Country
+        th Date Created
         th Disabled?
         th.text-right Actions
 
@@ -24,6 +25,7 @@
           td= mail_to freelancer.email
           td= freelancer.state
           td= freelancer.country.try(:upcase)
+          td= freelancer.created_at
           td= freelancer.disabled
           td.text-right
             = link_to 'Edit', edit_admin_freelancer_path(freelancer)
