@@ -7,11 +7,13 @@
         = f.input :keywords, label: false, placeholder: "Search", input_html: { value: @keywords }
 
 .table-responsive
-  table.table.table-striped
+  table.table.table-striped#admin-freelancers-table
     thead
       tr
         th Name
         th Email
+        th State/Province
+        th Country
         th Disabled?
         th.text-right Actions
 
@@ -20,6 +22,8 @@
         tr
           td= link_to freelancer.name, admin_freelancer_path(freelancer)
           td= mail_to freelancer.email
+          td= freelancer.state
+          td= freelancer.country.try(:upcase)
           td= freelancer.disabled
           td.text-right
             = link_to 'Edit', edit_admin_freelancer_path(freelancer)
@@ -31,4 +35,3 @@
             - else
               = link_to 'Disable', disable_admin_freelancer_path(freelancer)
 
-= paginate @freelancers

@@ -7,11 +7,13 @@
         = f.input :keywords, label: false, placeholder: "Search", input_html: { value: @keywords }
 
 .table-responsive
-  table.table.table-striped
+  table.table.table-striped#admin-companies-table
     thead
       tr
         th Name
         th Email
+        th State/Province
+        th Country
         th Disabled?
         th.text-right Actions
 
@@ -20,6 +22,8 @@
         tr
           td= link_to company.name, admin_company_path(company)
           td= mail_to company.email
+          td= company.state
+          td= company.country.try(:upcase)
           td= company.disabled
           td.text-right
             = link_to 'Edit', edit_admin_company_path(company)
@@ -30,5 +34,3 @@
               = link_to 'Delete', admin_company_path(company), data: { confirm: "Are you sure?" }, method: :delete
             - else
               = link_to 'Disable', disable_admin_company_path(company)
-
-= paginate @companies

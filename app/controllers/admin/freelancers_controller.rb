@@ -10,7 +10,6 @@ class Admin::FreelancersController < Admin::BaseController
     if @keywords
       @freelancers = @freelancers.search(@keywords)
     end
-    @freelancers = @freelancers.page(params[:page])
   end
 
   def show

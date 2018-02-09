@@ -10,7 +10,6 @@ class Admin::CompaniesController < Admin::BaseController
     if @keywords
       @companies = @companies.search(@keywords)
     end
-    @companies = @companies.page(params[:page])
   end
 
   def show
