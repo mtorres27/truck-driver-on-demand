@@ -11,7 +11,7 @@ document.addEventListener("turbolinks:load", function(){
             searching: true,
             info: false,
             columnDefs: [ {
-                targets: [6],
+                targets: [5, 6],
                 orderable: false
             }
             ]
