@@ -25,7 +25,7 @@
           td= mail_to freelancer.email
           td= freelancer.state
           td= freelancer.country.try(:upcase)
-          td= freelancer.created_at
+          td= freelancer.created_at.strftime('%b %-d, %Y')
           td= freelancer.disabled
           td.text-right
             = link_to 'Edit', edit_admin_freelancer_path(freelancer)

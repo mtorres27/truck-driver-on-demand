@@ -1,4 +1,8 @@
 document.addEventListener("turbolinks:load", function(){
+
+    $.fn.dataTable.moment('MMM D, Y');
+    $.fn.dataTable.moment('MMM D, YYYY');
+
     if ($('#admin-freelancers-table_wrapper').length == 0) {
         $('#admin-freelancers-table').dataTable({
             order: [],
