@@ -52,9 +52,9 @@ class Admin::CompaniesController < Admin::BaseController
 
     def create_csv
       @csv_file = CSV.generate({}) do |csv|
-        csv << ['Comany Name', 'Contact Name', 'Email', 'State/Province', 'Country', 'Date Created', 'Disabled?']
+        csv << @companies.first.attributes.keys unless @companies.first.nil?
         @companies.each do |c|
-          csv << [c.name, c.contact_name, c.email, c.state, c.country.try(:upcase), c.created_at, c.disabled]
+          csv << c.attributes.values
         end
       end
     end
