@@ -5,6 +5,9 @@
     .search-form
       = simple_form_for :search, url: admin_companies_path, method: :get do |f|
         = f.input :keywords, label: false, placeholder: "Search", input_html: { value: @keywords }
+  .col-xs-12.col-sm-3
+    a.btn.btn--primary.btn-download-csv href=download_csv_admin_company_path
+      | Export to CSV
 
 .table-responsive
   table.table.table-striped#admin-companies-table

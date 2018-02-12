@@ -136,6 +136,10 @@ Rails.application.routes.draw do
       get :enable, on: :member
     end
 
+    resource :company do
+      get :download_csv
+    end
+
     resources :projects, except: [:new, :create] do
       get :disable, on: :member
       get :enable, on: :member
