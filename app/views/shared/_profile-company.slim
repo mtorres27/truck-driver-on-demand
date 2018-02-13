@@ -9,23 +9,23 @@
             a href=proper_website_link(@company.website) target="_blank"
               = @company.name
           - else
-            = @company.name         
+            = @company.name
         h3.heading-h3
-          = @company.contact_name          
+          = @company.contact_name
         h4.heading-h4
-          | Email: 
+          | Email:
           a href="mailto:#{@company.email}" target="_blank"
-            = @company.email          
+            = @company.email
         h4.heading-h4
           i
-            = "Member since #{@company.created_at.strftime('%B %d, %Y')}"          
+            = "Member since #{@company.created_at.strftime('%B %d, %Y')}"
         h4.heading-h4
           - if @company.contract_preference == :no_preference or @company.contract_preference.nil?
             = t(:has_no_preference)
           - else
             = "#{t(:prefers)} #{t(@company.contract_preference)}"
-        
-        h4.heading-h4 
+
+        h4.heading-h4
           a href="#reviews" data-turbolinks="false"
             = company_ratings_link(@company)
         .profile__meta__rating
@@ -52,7 +52,7 @@
             | N/A
         h4.heading-h4
           | Offices
-      
+
       .profile__stats.profile__stats--33
         h2.heading-h2.heading-h2--no-margin
           = @company.established_in ? Time.now.year - @company.established_in : "N/A"
@@ -125,7 +125,7 @@
             = review.freelancer.name
       - else
         p This company doesn't have any reviews.
-  
+
   .grid-cell.grid-cell--50
     h3.heading-h3 Specialties
     h4.heading-h4 Markets
@@ -145,3 +145,11 @@
             = I18n.t("enumerize.freelancer_skills.#{index}")
       - else
         | This company has no skills listed.
+
+  - if current_admin.present?
+    - if @company.confirmed_at.nil? && @company.confirmation_token.present?
+      .grid-cell.grid-cell--100
+        .confirmation_link
+          .confirmation_label
+          strong<> Confirmation Link:
+          = confirmation_url(@company, confirmation_token: @company.confirmation_token)

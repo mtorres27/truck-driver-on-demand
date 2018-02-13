@@ -8,7 +8,7 @@
           = @freelancer.name
         h4.heading-h4
           = "Joined #{@freelancer.created_at.strftime('%B %d, %Y')}"
-        h4.heading-h4 
+        h4.heading-h4
           = freelancer_ratings_link(@freelancer)
         .profile__meta__rating
           - @stars = freelancer_avg_rating(@freelancer)
@@ -37,7 +37,7 @@
             | N/A
         h4.heading-h4
           | Pay Pref
-      
+
       .profile__stats.profile__stats--33
         h2.heading-h2.heading-h2--no-margin
           - if !@freelancer.pay_per_unit_time.nil?
@@ -52,7 +52,7 @@
           ="#{@freelancer.years_of_experience} yrs"
         h4.heading-h4
           | Exp
-     
+
 
   .grid-cell.grid-cell--50
     h3.heading-h3 Bio
@@ -93,7 +93,7 @@
               = "#{@freelancer.freelancer_type.text} "
               - if @freelancer.freelancer_team_size.nil?
                 = ""
-              - else 
+              - else
                 = "(#{t("enumerize.job.freelancer_team_size.#{@freelancer.freelancer_team_size}")})"
 
   .grid-cell.grid-cell--100
@@ -128,3 +128,11 @@
             = "#{review.company.contact_name}, #{review.company.name}"
       - else
         p This freelancer doesn't have any reviews.
+
+  - if current_admin.present?
+    - if @freelancer.confirmed_at.nil? && @freelancer.confirmation_token.present?
+      .grid-cell.grid-cell--100
+        .confirmation_link
+          .confirmation_label
+          strong<> Confirmation Link:
+          = confirmation_url(@freelancer, confirmation_token: @freelancer.confirmation_token)
