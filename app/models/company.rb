@@ -96,6 +96,8 @@ class Company < ApplicationRecord
   accepts_nested_attributes_for :featured_projects, allow_destroy: true, reject_if: :reject_featured_projects
   accepts_nested_attributes_for :company_installs, allow_destroy: true, reject_if: :reject_company_installs
 
+  scope :new_registrants, -> { where(disabled: true) }
+
   def freelancers
     Freelancer.
     joins(applicants: :job).
