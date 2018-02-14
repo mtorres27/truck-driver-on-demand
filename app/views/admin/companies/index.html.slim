@@ -17,6 +17,7 @@
         th Email
         th State/Province
         th Country
+        th Date Created
         th Disabled?
         th.text-right Actions
 
@@ -27,6 +28,7 @@
           td= mail_to company.email
           td= company.state
           td= company.country.try(:upcase)
+          td= company.created_at.strftime('%b %-d, %Y')
           td= company.disabled
           td.text-right
             = link_to 'Edit', edit_admin_company_path(company)

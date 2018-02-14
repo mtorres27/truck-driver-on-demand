@@ -6,7 +6,7 @@ class Admin::CompaniesController < Admin::BaseController
   def index
     @keywords = params.dig(:search, :keywords).presence
 
-    @companies = Company.order(:name)
+    @companies = Company.order('created_at DESC')
     if @keywords
       @companies = @companies.search(@keywords)
     end

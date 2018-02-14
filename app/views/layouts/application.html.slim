@@ -11,6 +11,8 @@ html
     = csrf_meta_tags
     = stylesheet_link_tag "application", media: "all", "data-turbolinks-track": "reload"
     = javascript_include_tag "application", "data-turbolinks-track": "reload"
+    = javascript_include_tag "//cdnjs.cloudflare.com/ajax/libs/moment.js/2.8.4/moment.min.js", "data-turbolinks-track": "reload"
+    = javascript_include_tag "//cdn.datatables.net/plug-ins/1.10.16/sorting/datetime-moment.js", "data-turbolinks-track": "reload"
     - if content_for?(:title)
       title= yield(:title)
     - else
