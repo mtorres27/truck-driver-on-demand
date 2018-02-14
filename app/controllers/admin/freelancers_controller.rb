@@ -42,7 +42,22 @@ class Admin::FreelancersController < Admin::BaseController
     redirect_to admin_freelancers_path, notice: "Freelancer disabled."
   end
 
+  def download_csv
+    @freelancers = Freelancer.order('created_at DESC')
+    create_csv
+    send_data @csv_file, :type => 'text/csv; charset=iso-8859-1; header=present', :disposition => 'attachment; filename=freelancers.csv'
+  end
+
   private
+
+    def create_csv
+      @csv_file = CSV.generate({}) do |csv|
+        csv << @freelancers.first.attributes.keys unless @freelancers.first.nil?
+        @freelancers.each do |f|
+          csv << f.attributes.values
+        end
+      end
+    end
 
     def set_freelancer
       @freelancer = Freelancer.find(params[:id])

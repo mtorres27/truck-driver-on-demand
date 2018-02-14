@@ -42,7 +42,22 @@ class Admin::CompaniesController < Admin::BaseController
     redirect_to admin_companies_path, notice: "Company disabled."
   end
 
+  def download_csv
+    @companies = Company.order('created_at DESC')
+    create_csv
+    send_data @csv_file, :type => 'text/csv; charset=iso-8859-1; header=present', :disposition => 'attachment; filename=companies.csv'
+  end
+
   private
+
+    def create_csv
+      @csv_file = CSV.generate({}) do |csv|
+        csv << @companies.first.attributes.keys unless @companies.first.nil?
+        @companies.each do |c|
+          csv << c.attributes.values
+        end
+      end
+    end
 
     def set_company
       @company = Company.find(params[:id])
