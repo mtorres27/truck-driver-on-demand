@@ -7,6 +7,10 @@
         h2.heading-h2
           = @freelancer.name
         h4.heading-h4
+          | Email:
+          a href="mailto:#{@freelancer.email}" target="_blank"
+            = @freelancer.email
+        h4.heading-h4
           = "Joined #{@freelancer.created_at.strftime('%B %d, %Y')}"
         h4.heading-h4
           = freelancer_ratings_link(@freelancer)
@@ -107,7 +111,7 @@
           - if certification.certificate_url != "certification/missing.pdf"
             - url = certification.certificate_url
             a href=url target="_blank"
-              - if is_image(url)
+              - if is_i
                 - src=url
               - else
                 - src="/assets/certification/certification_placeholder.png"
