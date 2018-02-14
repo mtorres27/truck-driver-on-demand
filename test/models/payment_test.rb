@@ -12,6 +12,9 @@
 #  attachment_data :text
 #  created_at      :datetime         not null
 #  updated_at      :datetime         not null
+#  tax_amount      :decimal(10, 2)
+#  total_amount    :decimal(10, 2)
+#  avj_fees        :decimal(10, 2)
 #
 
 require 'test_helper'
