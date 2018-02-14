@@ -26,6 +26,7 @@
         th State/Province
         th Country
         th Date Created
+        th Account confirmed?
         th Disabled?
         th.text-right Actions
 
@@ -37,6 +38,7 @@
           td= freelancer.state
           td= freelancer.country.try(:upcase)
           td= freelancer.created_at.strftime('%b %-d, %Y')
+          td= !freelancer.confirmed_at.nil?
           td= freelancer.disabled
           td.text-right
             = link_to 'Edit', edit_admin_freelancer_path(freelancer)

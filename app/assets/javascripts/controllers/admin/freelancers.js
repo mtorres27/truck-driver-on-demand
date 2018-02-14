@@ -11,7 +11,7 @@ document.addEventListener("turbolinks:load", function(){
             searching: true,
             info: false,
             columnDefs: [ {
-                targets: [5, 6],
+                targets: [6, 7],
                 orderable: false
             }
             ]
@@ -21,13 +21,13 @@ document.addEventListener("turbolinks:load", function(){
 
     $('#filter-by-disabled-select').on('change', function(){
         if (this.value == 'all'){
-            freelancers_table.fnFilter('', 5);
+            freelancers_table.fnFilter('', 6);
         }
         else if (this.value == 'enabled') {
-            freelancers_table.fnFilter('false', 5);
+            freelancers_table.fnFilter('false', 6);
         }
         else if (this.value == 'disabled') {
-            freelancers_table.fnFilter('true', 5);
+            freelancers_table.fnFilter('true', 6);
         }
     })
 });
