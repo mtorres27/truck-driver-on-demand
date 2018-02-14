@@ -3,12 +3,15 @@
     h2 New Registrants
 
 .table-responsive
-  table.table.table-striped
+  table.table.table-striped#admin-new-registrants-table
     thead
       tr
         th Name
         th User Type
         th Email
+        th State/Province
+        th Country
+        th Date Created
         th.text-right Actions
 
     tbody
@@ -18,6 +21,9 @@
             td= link_to registrant.name, admin_freelancer_path(registrant)
             td Freelancer
             td= mail_to registrant.email
+            td= registrant.state
+            td= registrant.country.try(:upcase)
+            td= registrant.created_at.strftime('%b %-d, %Y')
             td.text-right
               = link_to 'Edit', edit_admin_freelancer_path(registrant)
               '  |
@@ -29,6 +35,9 @@
             td= link_to registrant.name, admin_company_path(registrant)
             td Company
             td= mail_to registrant.email
+            td= registrant.state
+            td= registrant.country.try(:upcase)
+            td= registrant.created_at.strftime('%b %-d, %Y')
             td.text-right
               = link_to 'Edit', edit_admin_company_path(registrant)
               '  |
