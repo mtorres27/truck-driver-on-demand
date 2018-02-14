@@ -10,14 +10,6 @@
           | Email:
           a href="mailto:#{@freelancer.email}" target="_blank"
             = @freelancer.email
-        - if @freelancer.phone_number?
-          h4.heading-h4
-            | Phone:
-            = " #{@freelancer.phone_number}"
-        - if @freelancer.address?
-          h4.heading-h4
-            | Address:
-            = " #{@freelancer.address}#{@freelancer.line2? ? ", #{@freelancer.line2}" : "" }, #{@freelancer.city}, #{@freelancer.state}, #{@freelancer.country.try(:upcase)}, #{@freelancer.postal_code}"
         h4.heading-h4
           = "Joined #{@freelancer.created_at.strftime('%B %d, %Y')}"
         h4.heading-h4
@@ -119,7 +111,7 @@
           - if certification.certificate_url != "certification/missing.pdf"
             - url = certification.certificate_url
             a href=url target="_blank"
-              - if is_image(url)
+              - if is_i
                 - src=url
               - else
                 - src="/assets/certification/certification_placeholder.png"

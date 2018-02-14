@@ -13,7 +13,14 @@ h1.headin-h1 Freelancer Profile
     .profile__wallpaper style="background-color: #{ @freelancer.header_color.include?("#") ? "" : "#"}#{@freelancer.header_color}"
   - else
     .profile__wallpaper style="background-image: url(#{@freelancer.profile_header_url.include?("missing") ? "" : @freelancer.profile_header_url});"
-
+  - if @freelancer.phone_number?
+    h4.heading-h4
+      | Phone:
+      = " #{@freelancer.phone_number}"
+      - if @freelancer.address?
+    h4.heading-h4
+      | Address:
+      = " #{@freelancer.address}#{@freelancer.line2? ? ", #{@freelancer.line2}" : "" }, #{@freelancer.city}, #{@freelancer.state}, #{@freelancer.country.try(:upcase)}, #{@freelancer.postal_code}"
   = render "shared/profile-freelancer"
 
 

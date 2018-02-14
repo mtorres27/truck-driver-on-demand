@@ -16,14 +16,6 @@
           | Email:
           a href="mailto:#{@company.email}" target="_blank"
             = @company.email
-        - if @company.phone_number?
-          h4.heading-h4
-            | Phone:
-            = " #{@company.phone_number}"
-        - if @company.address?
-          h4.heading-h4
-            | Address:
-            = " #{@company.address}#{@company.line2? ? ", #{@company.line2}" : "" }, #{@company.city}, #{@company.state}, #{@company.country.try(:upcase)}, #{@company.postal_code}"
         h4.heading-h4
           i
             = "Member since #{@company.created_at.strftime('%B %d, %Y')}"
