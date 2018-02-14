@@ -8,6 +8,14 @@
   .col-xs-12.col-sm-3
     a.btn.btn--primary.btn-download-csv href=download_csv_admin_company_path
       | Export to CSV
+  .col-xs-12.col-sm-12 style="padding-bottom:5px; margin-bottom:5px;"
+    select#filter-by-disabled-select
+      option value= 'all'
+        | All records
+      option value= 'enabled'
+        | Enabled only
+      option value= 'disabled'
+        | Disabled only
 
 .table-responsive
   table.table.table-striped#admin-companies-table
