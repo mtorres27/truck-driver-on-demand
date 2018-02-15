@@ -16,7 +16,7 @@
 #  pay_per_unit_time        :integer
 #  tagline                  :string
 #  bio                      :text
-#  keywords                 :citext
+#  job_markets              :citext
 #  years_of_experience      :integer          default(0), not null
 #  profile_views            :integer          default(0), not null
 #  projects_completed       :integer          default(0), not null
@@ -26,7 +26,7 @@
 #  updated_at               :datetime         not null
 #  messages_count           :integer          default(0), not null
 #  freelancer_reviews_count :integer          default(0), not null
-#  skills                   :citext
+#  technical_skills         :citext
 #  profile_header_data      :text
 #  verified                 :boolean          default(FALSE)
 #  encrypted_password       :string           default(""), not null
@@ -57,6 +57,9 @@
 #  city                     :string
 #  phone_number             :string
 #  special_avj_fees         :decimal(10, 2)
+#  job_type                 :string
+#  job_functions            :citext
+#  manufacturer_tags        :citext
 #
 
 require "test_helper"
