@@ -557,7 +557,8 @@ CREATE TABLE freelancer_affiliations (
     image character varying,
     freelancer_id integer,
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+    updated_at timestamp without time zone NOT NULL,
+    image_data text
 );
 
 
@@ -2272,6 +2273,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20180130013756'),
 ('20180130022656'),
 ('20180205194146'),
-('20180206182339');
+('20180206182339'),
+('20180212001020');
 
 
