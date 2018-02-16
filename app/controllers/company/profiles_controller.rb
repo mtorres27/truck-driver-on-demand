@@ -21,6 +21,7 @@ class Company::ProfilesController < Company::BaseController
     if @company.update(company_params)
       redirect_to company_profile_path(@company), notice: "Company profile updated."
     else
+      flash[:error] = 'There are errors with the form, please review and resubmit.'
       render :edit
     end
   end

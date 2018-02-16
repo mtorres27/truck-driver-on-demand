@@ -20,6 +20,7 @@ class Freelancer::ProfilesController < Freelancer::BaseController
     if @freelancer.update(freelancer_params)
       redirect_to freelancer_profile_path(@freelancer), notice: "Freelancer profile updated."
     else
+      flash[:error] = 'There are errors with the form, please review and resubmit.'
       render :edit
     end
   end
