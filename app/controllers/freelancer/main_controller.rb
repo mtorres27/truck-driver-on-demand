@@ -4,7 +4,7 @@ class Freelancer::MainController < Freelancer::BaseController
     # @companies = Company.find([67, 13, 64, 59]);
     @companies ||= []
     begin
-      @companies = Company.find([335, 229, 320, 393]);
+      @companies = Company.find([67, 13, 64, 59]);
     rescue Exception
 
     end
