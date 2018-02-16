@@ -57,7 +57,7 @@
           .grid-cell.grid-cell--100
             = f.input :tagline, required: true, label: "Describe yourself in one sentence, your \"tagline\"", placeholder: "Tagline"
           .grid-cell.grid-cell--100.grid-cell--expand
-            = f.input :bio, label: "Close the deal with a killer biography", placeholder: "Write a bio", :input_html => { :class => 'form__profile-bio-textarea' }
+            = f.input :bio, required: true, label: "Close the deal with a killer biography", placeholder: "Write a bio", :input_html => { :class => 'form__profile-bio-textarea' }
       .grid-cell.grid-cell--100
         hr/
       .grid-cell.grid-cell--33
