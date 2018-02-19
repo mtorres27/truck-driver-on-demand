@@ -3,7 +3,7 @@ class AddSkillsFieldsToFreelancers < ActiveRecord::Migration[5.1]
     add_column :freelancers, :job_type, :string
     add_column :freelancers, :job_functions, :citext, index: true
     rename_column :freelancers, :keywords, :job_markets
-    rename_column :freelancers, :skills, :technical_skills
+    rename_column :freelancers, :skills, :technical_skill_tags
     add_column :freelancers, :manufacturer_tags, :citext, index: true
   end
 end

@@ -23,12 +23,12 @@
       h3.heading-h3
         = @freelancer.tagline
       .profile__specialties--summary
-        - if !@freelancer.keywords.nil? and @freelancer.keywords.kind_of?(Hash)
-          - @freelancer.keywords.first(2).each do |index, value|
+        - if !@freelancer.technical_skills.nil? and @freelancer.technical_skills.kind_of?(Hash)
+          - @freelancer.technical_skills.first(2).each do |index, value|
             .tag.tag--grey
               = I18n.t("enumerize.freelancer_keywords.#{index}")
-        - if !@freelancer.skills.nil? and @freelancer.skills.kind_of?(Hash)
-          - @freelancer.skills.first(2).each do |index, value|
+        - if !@freelancer.job_markets.nil? and @freelancer.job_markets.kind_of?(Hash)
+          - @freelancer.job_markets.first(2).each do |index, value|
             .tag.tag--grey
               = I18n.t("enumerize.freelancer_skills.#{index}")
   .grid-cell.grid-cell--33
@@ -71,15 +71,15 @@
         div
           h3.heading-h3 Specialties
           h4.heading-h4 Markets
-          - if !@freelancer.keywords.nil? and @freelancer.keywords.kind_of?(Hash)
-            - @freelancer.keywords.each do |index, value|
+          - if !@freelancer.technical_skills.nil? and @freelancer.technical_skills.kind_of?(Hash)
+            - @freelancer.technical_skills.each do |index, value|
               .tag.tag--grey
                 = I18n.t("enumerize.freelancer_keywords.#{index}")
           - else
             | This freelancer has no markets listed.
           h4.heading-h4 Skills
-          - if !@freelancer.skills.nil? and @freelancer.skills.kind_of?(Hash)
-            - @freelancer.skills.each do |index, value|
+          - if !@freelancer.job_markets.nil? and @freelancer.job_markets.kind_of?(Hash)
+            - @freelancer.job_markets.each do |index, value|
               .tag.tag--grey
                 = I18n.t("enumerize.freelancer_skills.#{index}")
           - else

@@ -26,7 +26,7 @@
 #  updated_at               :datetime         not null
 #  messages_count           :integer          default(0), not null
 #  freelancer_reviews_count :integer          default(0), not null
-#  technical_skills         :citext
+#  technical_skill_tags     :citext
 #  profile_header_data      :text
 #  verified                 :boolean          default(FALSE)
 #  encrypted_password       :string           default(""), not null
