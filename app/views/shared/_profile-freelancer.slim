@@ -71,7 +71,7 @@
         div
           h3.heading-h3 Job Type
           .tag.tag--grey
-            = @freelancer.job_type
+            = I18n.t("enumerize.freelancer_job_types.#{@freelancer.job_type}")
           h3.heading-h3 Job Markets
           - if !@freelancer.job_markets.nil? and @freelancer.job_markets.kind_of?(Hash)
             - @freelancer.job_markets.each do |index, value|
