@@ -93,7 +93,7 @@ class Freelancer < ApplicationRecord
   has_many :favourite_companies, through: :company_favourites, source: :company
 
   serialize :job_markets
-  serialize :technical_skills
+  serialize :technical_skill_tags
   serialize :job_functions
   serialize :manufacturer_tags
 
@@ -132,8 +132,6 @@ class Freelancer < ApplicationRecord
       :service_areas,
       :bio,
       :years_of_experience,
-      :keywords,
-      :skills,
       :pay_unit_time_preference,
       if: :enforce_profile_edit
 
@@ -212,6 +210,8 @@ class Freelancer < ApplicationRecord
     :at, :au, :be, :ca, :ch, :de, :dk, :es, :fi, :fr, :gb, :hk, :ie, :it, :jp, :lu, :nl, :no, :nz, :pt, :se, :sg, :us
   ]
 
+  enumerize :job_type, in: I18n.t('enumerize.freelancer_job_types').keys
+
   attr_accessor :user_type
 
   def rating
@@ -252,5 +252,13 @@ class Freelancer < ApplicationRecord
 
       sleep 1
     end
+  end
+
+  def self.all_job_markets
+    I18n.t('enumerize.freelancer_live_events_staging_and_rental_job_markets').merge(I18n.t('enumerize.freelancer_system_integration_job_markets')).sort.to_h
+  end
+
+  def self.all_job_functions
+    I18n.t('enumerize.freelancer_live_events_staging_and_rental_job_functions').merge(I18n.t('enumerize.freelancer_system_integration_job_functions')).sort.to_h
   end
 end
