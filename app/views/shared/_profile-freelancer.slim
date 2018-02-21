@@ -72,24 +72,24 @@
                 = I18n.t("enumerize.freelancer_job_types.#{index}")
           - if !@freelancer.job_markets.nil? and @freelancer.job_markets.kind_of?(Hash)
             h3.heading-h3 Job Markets
-            - if !@freelancer.job_markets_for_job_type("system_integration").empty? and @freelancer.job_types.any? and @freelancer.job_types.include?("system_integration")
+            - if !@freelancer.job_markets_for_job_type("system_integration").empty? and !@freelancer.job_types.nil? and @freelancer.job_types.include?("system_integration")
               h4.heading-h4 System Integration
               - @freelancer.job_markets_for_job_type("system_integration").each do |value|
                 .tag.tag--grey
                   = value
-            - if !@freelancer.job_markets_for_job_type("live_events_staging_and_rental").empty? and @freelancer.job_types.any? and @freelancer.job_types.include?("live_events_staging_and_rental")
+            - if !@freelancer.job_markets_for_job_type("live_events_staging_and_rental").empty? and !@freelancer.job_types.nil? and @freelancer.job_types.include?("live_events_staging_and_rental")
               h4.heading-h4 Live Events Staging & Rental
               - @freelancer.job_markets_for_job_type("live_events_staging_and_rental").each do |value|
                 .tag.tag--grey
                   = value
           - if !@freelancer.job_functions.nil? and @freelancer.job_functions.kind_of?(Hash)
             h3.heading-h3 Job Functions
-            - if !@freelancer.job_functions_for_job_type("system_integration").empty? and @freelancer.job_types.any? and @freelancer.job_types.include?("system_integration")
+            - if !@freelancer.job_functions_for_job_type("system_integration").empty? and !@freelancer.job_types.nil? and @freelancer.job_types.include?("system_integration")
               h4.heading-h4 System Integration
               - @freelancer.job_functions_for_job_type("system_integration").each do |value|
                 .tag.tag--grey
                   = value
-            - if !@freelancer.job_functions_for_job_type("live_events_staging_and_rental").empty? and @freelancer.job_types.any? and @freelancer.job_types.include?("live_events_staging_and_rental")
+            - if !@freelancer.job_functions_for_job_type("live_events_staging_and_rental").empty? and !@freelancer.job_types.nil? and @freelancer.job_types.include?("live_events_staging_and_rental")
               h4.heading-h4 Live Events Staging & Rental
               - @freelancer.job_functions_for_job_type("live_events_staging_and_rental").each do |value|
                 .tag.tag--grey
