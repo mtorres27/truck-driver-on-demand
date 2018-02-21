@@ -85,7 +85,7 @@ class Admin::FreelancersController < Admin::BaseController
         :pay_unit_time_preference,
         :disabled,
         :verified,
-        :job_type,
+        job_types: I18n.t("enumerize.freelancer_job_types").keys,
         job_markets: (I18n.t("enumerize.freelancer_live_events_staging_and_rental_job_markets").keys + I18n.t("enumerize.freelancer_system_integration_job_markets").keys).uniq,
         job_functions: (I18n.t("enumerize.freelancer_system_integration_job_functions").keys + I18n.t("enumerize.freelancer_live_events_staging_and_rental_job_functions").keys).uniq,
         technical_skill_tags:  I18n.t("enumerize.freelancer_technical_skill_tags").keys,

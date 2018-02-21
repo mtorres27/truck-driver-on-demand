@@ -57,7 +57,7 @@
 #  city                     :string
 #  phone_number             :string
 #  special_avj_fees         :decimal(10, 2)
-#  job_type                 :string
+#  job_types                :citext
 #  job_functions            :citext
 #  manufacturer_tags        :citext
 #
@@ -92,6 +92,7 @@ class Freelancer < ApplicationRecord
   has_many :company_favourites
   has_many :favourite_companies, through: :company_favourites, source: :company
 
+  serialize :job_types
   serialize :job_markets
   serialize :technical_skill_tags
   serialize :job_functions
@@ -210,8 +211,6 @@ class Freelancer < ApplicationRecord
     :at, :au, :be, :ca, :ch, :de, :dk, :es, :fi, :fr, :gb, :hk, :ie, :it, :jp, :lu, :nl, :no, :nz, :pt, :se, :sg, :us
   ]
 
-  enumerize :job_type, in: I18n.t('enumerize.freelancer_job_types').keys
-
   attr_accessor :user_type
 
   def rating
@@ -220,6 +219,30 @@ class Freelancer < ApplicationRecord
     else
       return nil
     end
+  end
+
+  def job_markets_for_job_type(job_type)
+    all_job_markets = I18n.t("enumerize.freelancer_#{job_type}_job_markets")
+    return [] unless all_job_markets.kind_of?(Hash)
+    freelancer_job_markets = []
+    job_markets.each do |index, value|
+      if all_job_markets[index.to_sym]
+        freelancer_job_markets << all_job_markets[index.to_sym]
+      end
+    end
+    freelancer_job_markets
+  end
+
+  def job_functions_for_job_type(job_type)
+    all_job_functions = I18n.t("enumerize.freelancer_#{job_type}_job_functions")
+    return [] unless all_job_functions.kind_of?(Hash)
+    freelancer_job_functions = []
+    job_functions.each do |index, value|
+      if all_job_functions[index.to_sym]
+        freelancer_job_functions << all_job_functions[index.to_sym]
+      end
+    end
+    freelancer_job_functions
   end
 
   def self.avg_rating(freelancer)
@@ -252,13 +275,5 @@ class Freelancer < ApplicationRecord
 
       sleep 1
     end
-  end
-
-  def self.all_job_markets
-    I18n.t('enumerize.freelancer_live_events_staging_and_rental_job_markets').merge(I18n.t('enumerize.freelancer_system_integration_job_markets')).sort.to_h
-  end
-
-  def self.all_job_functions
-    I18n.t('enumerize.freelancer_live_events_staging_and_rental_job_functions').merge(I18n.t('enumerize.freelancer_system_integration_job_functions')).sort.to_h
   end
 end

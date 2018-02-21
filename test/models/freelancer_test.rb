@@ -57,7 +57,7 @@
 #  city                     :string
 #  phone_number             :string
 #  special_avj_fees         :decimal(10, 2)
-#  job_type                 :string
+#  job_types                :citext
 #  job_functions            :citext
 #  manufacturer_tags        :citext
 #

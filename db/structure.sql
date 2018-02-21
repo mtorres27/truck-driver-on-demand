@@ -646,7 +646,7 @@ CREATE TABLE freelancers (
     city character varying,
     phone_number character varying,
     special_avj_fees numeric(10,2),
-    job_type character varying,
+    job_types citext,
     job_functions citext,
     manufacturer_tags citext
 );

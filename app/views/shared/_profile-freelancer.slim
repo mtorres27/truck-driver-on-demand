@@ -23,14 +23,10 @@
       h3.heading-h3
         = @freelancer.tagline
       .profile__specialties--summary
-        - if !@freelancer.job_markets.nil? and @freelancer.job_markets.kind_of?(Hash)
-          - @freelancer.job_markets.first(2).each do |index, value|
+        - if !@freelancer.technical_skill_tags.nil? and @freelancer.technical_skill_tags.kind_of?(Hash)
+          - @freelancer.technical_skill_tags.first(4).each do |index, value|
             .tag.tag--grey
-              = Freelancer.all_job_markets[index.to_sym]
-        - if !@freelancer.job_functions.nil? and @freelancer.job_functions.kind_of?(Hash)
-          - @freelancer.job_functions.first(2).each do |index, value|
-            .tag.tag--grey
-              = Freelancer.all_job_functions[index.to_sym]
+              = I18n.t("enumerize.freelancer_technical_skill_tags.#{index}")
   .grid-cell.grid-cell--33
     .profile__stats-box
       .profile__stats.profile__stats--33
@@ -69,37 +65,45 @@
     .grid-v
       .grid-cell
         div
-          h3.heading-h3 Job Type
-          .tag.tag--grey
-            = I18n.t("enumerize.freelancer_job_types.#{@freelancer.job_type}")
-          h3.heading-h3 Job Markets
+          - if !@freelancer.job_types.nil? and @freelancer.job_types.kind_of?(Hash)
+            h3.heading-h3 Job Types
+            - @freelancer.job_types.each do |index, value|
+              .tag.tag--grey
+                = I18n.t("enumerize.freelancer_job_types.#{index}")
           - if !@freelancer.job_markets.nil? and @freelancer.job_markets.kind_of?(Hash)
-            - @freelancer.job_markets.each do |index, value|
-              .tag.tag--grey
-                = Freelancer.all_job_markets[index.to_sym]
-          - else
-            | This freelancer has no job markets listed.
-          h3.heading-h3 Job Functions
+            h3.heading-h3 Job Markets
+            - if !@freelancer.job_markets_for_job_type("system_integration").empty? and @freelancer.job_types.include?("system_integration")
+              h4.heading-h4 System Integration
+              - @freelancer.job_markets_for_job_type("system_integration").each do |value|
+                .tag.tag--grey
+                  = value
+            - if !@freelancer.job_markets_for_job_type("live_events_staging_and_rental").empty? and @freelancer.job_types.include?("live_events_staging_and_rental")
+              h4.heading-h4 Live Events Staging & Rental
+              - @freelancer.job_markets_for_job_type("live_events_staging_and_rental").each do |value|
+                .tag.tag--grey
+                  = value
           - if !@freelancer.job_functions.nil? and @freelancer.job_functions.kind_of?(Hash)
-            - @freelancer.job_functions.each do |index, value|
-              .tag.tag--grey
-                = Freelancer.all_job_functions[index.to_sym]
-          - else
-            | This freelancer has no job functions listed.
-          h4.heading-h4 Technical Skill Tags
+            h3.heading-h3 Job Functions
+            - if !@freelancer.job_functions_for_job_type("system_integration").empty? and @freelancer.job_types.include?("system_integration")
+              h4.heading-h4 System Integration
+              - @freelancer.job_functions_for_job_type("system_integration").each do |value|
+                .tag.tag--grey
+                  = value
+            - if !@freelancer.job_functions_for_job_type("live_events_staging_and_rental").empty? and @freelancer.job_types.include?("live_events_staging_and_rental")
+              h4.heading-h4 Live Events Staging & Rental
+              - @freelancer.job_functions_for_job_type("live_events_staging_and_rental").each do |value|
+                .tag.tag--grey
+                  = value
           - if !@freelancer.technical_skill_tags.nil? and @freelancer.technical_skill_tags.kind_of?(Hash)
+            h3.heading-h3 Technical Skill Tags
             - @freelancer.technical_skill_tags.each do |index, value|
               .tag.tag--grey
                 = I18n.t("enumerize.freelancer_technical_skill_tags.#{index}")
-          - else
-            | This freelancer has no technical skill tags listed.
-          h4.heading-h4 Manufacturer Tags
           - if !@freelancer.manufacturer_tags.nil? and @freelancer.manufacturer_tags.kind_of?(Hash)
+            h3.heading-h3 Manufacturer Tags
             - @freelancer.manufacturer_tags.each do |index, value|
               .tag.tag--grey
                 = I18n.t("enumerize.freelancer_manufacturer_tags.#{index}")
-          - else
-            | This freelancer has no manufacturer tags listed.
 
       .grid-cell.grid-cell--vshrink
         h3.heading-h3 Type

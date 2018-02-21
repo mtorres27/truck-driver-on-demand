@@ -95,64 +95,6 @@
       .grid-cell.grid-cell--67
         .grid-v
           .grid-cell.grid-cell--100
-            = f.input :job_type, placeholder: "Sales Tax No."
-          .grid-cell.grid-cell--100
-            .form__field-label Job Markets
-            - if @freelancer.errors.full_messages.include?("Job markets can't be blank")
-              .has-error
-                .help-block
-                  | One market must be selected.
-            .freelancer-profile__checkboxes.freelancer_please_select_job_type_message
-              | Please select a Job type
-            .freelancer_system_integration_checkboxes.freelancer-profile__checkboxes
-              - I18n.t('enumerize.freelancer_system_integration_job_markets').each do |index, value|
-                - tag_name = "freelancer[job_markets][#{index.to_s}]"
-                - if @freelancer.job_markets and @freelancer.job_markets.include?(index.to_s)
-                  - checked = true
-                - else
-                  - checked = false
-                .freelancer-profile__checkbox
-                  = check_box_tag tag_name, "1", checked, class: 'freelancer_system_integration_check_box'
-                  = " #{value}"
-            .freelancer_live_events_staging_and_rental_checkboxes.freelancer-profile__checkboxes
-              - I18n.t('enumerize.freelancer_live_events_staging_and_rental_job_markets').each do |index, value|
-                - tag_name = "freelancer[job_markets][#{index.to_s}]"
-                - if @freelancer.job_markets and @freelancer.job_markets.include?(index.to_s)
-                  - checked = true
-                - else
-                  - checked = false
-                .freelancer-profile__checkbox
-                  = check_box_tag tag_name, "1", checked, class: 'freelancer_live_events_staging_and_rental_check_box'
-                  = " #{value}"
-          .grid-cell.grid-cell--100
-            .form__field-label Job Functions
-            - if @freelancer.errors.full_messages.include?("Job functions can't be blank")
-              .has-error
-                .help-block
-                  | One function must be selected.
-            .freelancer-profile__checkboxes.freelancer_please_select_job_type_message
-              | Please select a Job type
-            .freelancer_system_integration_checkboxes.freelancer-profile__checkboxes
-              - I18n.t('enumerize.freelancer_system_integration_job_functions').each do |index, value|
-                - tag_name = "freelancer[job_functions][#{index.to_s}]"
-                - if @freelancer.job_functions and @freelancer.job_functions.include?(index.to_s)
-                  - checked = true
-                - else
-                  - checked = false
-                .freelancer-profile__checkbox
-                  = check_box_tag tag_name, "1", checked, class: 'freelancer_system_integration_check_box'
-                  = " #{value}"
-            .freelancer_live_events_staging_and_rental_checkboxes.freelancer-profile__checkboxes
-              - I18n.t('enumerize.freelancer_live_events_staging_and_rental_job_functions').each do |index, value|
-                - tag_name = "freelancer[job_functions][#{index.to_s}]"
-                - if @freelancer.job_functions and @freelancer.job_functions.include?(index.to_s)
-                  - checked = true
-                - else
-                  - checked = false
-                .freelancer-profile__checkbox
-                  = check_box_tag tag_name, "1", checked, class: 'freelancer_live_events_staging_and_rental_check_box'
-                  = " #{value}"
-          .grid-cell.grid-cell--100
             .form__field-label Technical Skill Tags
             - if @freelancer.errors.full_messages.include?("Technical skill tags can't be blank")
               .has-error
@@ -184,7 +126,77 @@
                 .freelancer-profile__checkbox
                   = check_box_tag tag_name, "1", checked
                   = " #{value}"
-
+      .grid-cell.grid-cell--100
+        hr/
+      .grid-cell.grid-cell--33
+        h2.heading-h2 You've got skills! Check all that apply.
+      .grid-cell.grid-cell--67
+        .grid-v
+          .grid-cell.grid-cell--100
+            .form__field-label Job Types
+            - if @freelancer.errors.full_messages.include?("Job types can't be blank")
+              .has-error
+                .help-block
+                  | One job type must be selected.
+            .freelancer-profile__checkboxes
+              - I18n.t('enumerize.freelancer_job_types').each do |index, value|
+                - tag_name = "freelancer[job_types][#{index.to_s}]"
+                - if @freelancer.job_types and @freelancer.job_types.include?(index.to_s)
+                  - checked = true
+                - else
+                  - checked = false
+                .freelancer-profile__checkbox
+                  = check_box_tag tag_name, "1", checked
+                  = " #{value}"
+          .grid-cell.grid-cell--100
+            .freelancer-profile__checkboxes.freelancer_please_select_job_type_message
+              | Please select a Job type
+          .grid-cell.grid-cell--100
+            .form__field-label.freelancer_system_integration_checkboxes Job Markets / System Integration
+            .freelancer_system_integration_checkboxes.freelancer-profile__checkboxes
+              - I18n.t('enumerize.freelancer_system_integration_job_markets').each do |index, value|
+                - tag_name = "freelancer[job_markets][#{index.to_s}]"
+                - if @freelancer.job_markets and @freelancer.job_markets.include?(index.to_s) and @freelancer.job_types.include?('system_integration')
+                  - checked = true
+                - else
+                  - checked = false
+                .freelancer-profile__checkbox
+                  = check_box_tag tag_name, "1", checked, class: 'freelancer_system_integration_check_box'
+                  = " #{value}"
+            .form__field-label.freelancer_live_events_staging_and_rental_checkboxes Job Markets / Live Events Staging & Rental
+            .freelancer_live_events_staging_and_rental_checkboxes.freelancer-profile__checkboxes
+              - I18n.t('enumerize.freelancer_live_events_staging_and_rental_job_markets').each do |index, value|
+                - tag_name = "freelancer[job_markets][#{index.to_s}]"
+                - if @freelancer.job_markets and @freelancer.job_markets.include?(index.to_s) and @freelancer.job_types.include?('live_events_staging_and_rental')
+                  - checked = true
+                - else
+                  - checked = false
+                .freelancer-profile__checkbox
+                  = check_box_tag tag_name, "1", checked, class: 'freelancer_live_events_staging_and_rental_check_box'
+                  = " #{value}"
+          .grid-cell.grid-cell--100
+            .form__field-label.freelancer_system_integration_checkboxes Job Functions / System Integration
+            .freelancer_system_integration_checkboxes.freelancer-profile__checkboxes
+              - I18n.t('enumerize.freelancer_system_integration_job_functions').each do |index, value|
+                - tag_name = "freelancer[job_functions][#{index.to_s}]"
+                - if @freelancer.job_functions and @freelancer.job_functions.include?(index.to_s) and @freelancer.job_types.include?('system_integration')
+                  - checked = true
+                - else
+                  - checked = false
+                .freelancer-profile__checkbox
+                  = check_box_tag tag_name, "1", checked, class: 'freelancer_system_integration_check_box'
+                  = " #{value}"
+            .form__field-label.freelancer_live_events_staging_and_rental_checkboxes Job Functions / Live Events Staging & Rental
+            .freelancer_live_events_staging_and_rental_checkboxes.freelancer-profile__checkboxes
+              - I18n.t('enumerize.freelancer_live_events_staging_and_rental_job_functions').each do |index, value|
+                - tag_name = "freelancer[job_functions][#{index.to_s}]"
+                - if @freelancer.job_functions and @freelancer.job_functions.include?(index.to_s) and @freelancer.job_types.include?('live_events_staging_and_rental')
+                  - checked = true
+                - else
+                  - checked = false
+                .freelancer-profile__checkbox
+                  = check_box_tag tag_name, "1", checked, class: 'freelancer_live_events_staging_and_rental_check_box'
+                  = " #{value}"
       .grid-cell.grid-cell--100
         hr/
       .grid-cell.grid-cell--33
