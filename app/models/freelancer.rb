@@ -16,50 +16,14 @@
 #  pay_per_unit_time        :integer
 #  tagline                  :string
 #  bio                      :text
-#  job_markets              :citext
+#  keywords                 :citext
 #  years_of_experience      :integer          default(0), not null
 #  profile_views            :integer          default(0), not null
 #  projects_completed       :integer          default(0), not null
 #  available                :boolean          default(TRUE), not null
-#  disabled                 :boolean          default(TRUE), not null
+#  disabled                 :boolean          default(FALSE), not null
 #  created_at               :datetime         not null
 #  updated_at               :datetime         not null
-#  messages_count           :integer          default(0), not null
-#  freelancer_reviews_count :integer          default(0), not null
-#  technical_skill_tags     :citext
-#  profile_header_data      :text
-#  verified                 :boolean          default(FALSE)
-#  encrypted_password       :string           default(""), not null
-#  reset_password_token     :string
-#  reset_password_sent_at   :datetime
-#  remember_created_at      :datetime
-#  sign_in_count            :integer          default(0), not null
-#  current_sign_in_at       :datetime
-#  last_sign_in_at          :datetime
-#  current_sign_in_ip       :inet
-#  last_sign_in_ip          :inet
-#  header_color             :string           default("FF6C38")
-#  country                  :string
-#  confirmation_token       :string
-#  confirmed_at             :datetime
-#  confirmation_sent_at     :datetime
-#  freelancer_team_size     :string
-#  freelancer_type          :string
-#  header_source            :string           default("color")
-#  stripe_account_id        :string
-#  stripe_account_status    :text
-#  currency                 :string
-#  sales_tax_number         :string
-#  line2                    :string
-#  state                    :string
-#  postal_code              :string
-#  service_areas            :string
-#  city                     :string
-#  phone_number             :string
-#  special_avj_fees         :decimal(10, 2)
-#  job_types                :citext
-#  job_functions            :citext
-#  manufacturer_tags        :citext
 #
 
 require 'net/http'
@@ -92,11 +56,8 @@ class Freelancer < ApplicationRecord
   has_many :company_favourites
   has_many :favourite_companies, through: :company_favourites, source: :company
 
-  serialize :job_types
-  serialize :job_markets
-  serialize :technical_skill_tags
-  serialize :job_functions
-  serialize :manufacturer_tags
+  serialize :keywords
+  serialize :skills
 
   validates :years_of_experience, numericality: { only_integer: true }
 
@@ -133,6 +94,8 @@ class Freelancer < ApplicationRecord
       :service_areas,
       :bio,
       :years_of_experience,
+      :keywords,
+      :skills,
       :pay_unit_time_preference,
       if: :enforce_profile_edit
 
@@ -219,30 +182,6 @@ class Freelancer < ApplicationRecord
     else
       return nil
     end
-  end
-
-  def job_markets_for_job_type(job_type)
-    all_job_markets = I18n.t("enumerize.freelancer_#{job_type}_job_markets")
-    return [] unless all_job_markets.kind_of?(Hash)
-    freelancer_job_markets = []
-    job_markets.each do |index, value|
-      if all_job_markets[index.to_sym]
-        freelancer_job_markets << all_job_markets[index.to_sym]
-      end
-    end
-    freelancer_job_markets
-  end
-
-  def job_functions_for_job_type(job_type)
-    all_job_functions = I18n.t("enumerize.freelancer_#{job_type}_job_functions")
-    return [] unless all_job_functions.kind_of?(Hash)
-    freelancer_job_functions = []
-    job_functions.each do |index, value|
-      if all_job_functions[index.to_sym]
-        freelancer_job_functions << all_job_functions[index.to_sym]
-      end
-    end
-    freelancer_job_functions
   end
 
   def self.avg_rating(freelancer)

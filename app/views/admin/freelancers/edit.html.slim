@@ -22,81 +22,14 @@ h1 Editing Freelancer
     = f.input :freelancer_team_size, label: 'Team Size'
     = f.input :bio, label: 'Biography'
     = f.input :service_areas, label: 'Service Areas', as: :string
-    .freelancer-profile__item
-      .freelancer-profile__title
-        | Job Types
-      .freelancer-profile__checkboxes
-        - I18n.t('enumerize.freelancer_job_types').each do |index, value|
-          - tag_name = "freelancer[job_types][#{index.to_s}]"
-          - if !@freelancer.job_types.nil? and @freelancer.job_types.include?(index.to_s)
-            - checked = true
-          - else
-            - checked = false
-          .freelancer-profile__checkbox
-            = check_box_tag tag_name, "1", checked
-            = " #{value}"
-    .freelancer-profile__item
-      .freelancer-profile__checkboxes.freelancer_please_select_job_type_message
-        | Please select a Job type
-    .freelancer-profile__item
-      .freelancer-profile__title.freelancer_system_integration_checkboxes
-        | Job Markets / System Integration
-      .freelancer_system_integration_checkboxes.freelancer-profile__checkboxes
-        - I18n.t('enumerize.freelancer_system_integration_job_markets').each do |index, value|
-          - tag_name = "freelancer[job_markets][#{index.to_s}]"
-          - if !@freelancer.job_markets.nil? and @freelancer.job_markets.include?(index.to_s) and !@freelancer.job_types.nil? and @freelancer.job_types.include?('system_integration')
-            - checked = true
-          - else
-            - checked = false
-          .freelancer-profile__checkbox
-            = check_box_tag tag_name, "1", checked, class: 'freelancer_system_integration_check_box'
-            = " #{value}"
-      .freelancer-profile__title.freelancer_live_events_staging_and_rental_checkboxes
-        | Job Markets / Live Events Staging & Rental
-      .freelancer_live_events_staging_and_rental_checkboxes.freelancer-profile__checkboxes
-        - I18n.t('enumerize.freelancer_live_events_staging_and_rental_job_markets').each do |index, value|
-          - tag_name = "freelancer[job_markets][#{index.to_s}]"
-          - if !@freelancer.job_markets.nil? and @freelancer.job_markets.include?(index.to_s) and !@freelancer.job_types.nil? and @freelancer.job_types.include?('live_events_staging_and_rental')
-            - checked = true
-          - else
-            - checked = false
-          .freelancer-profile__checkbox
-            = check_box_tag tag_name, "1", checked, class: 'freelancer_live_events_staging_and_rental_check_box'
-            = " #{value}"
-
-    .freelancer-profile__item
-      .freelancer-profile__title.freelancer_system_integration_checkboxes
-        | Job Functions / System Integration
-      .freelancer_system_integration_checkboxes.freelancer-profile__checkboxes
-        - I18n.t('enumerize.freelancer_system_integration_job_functions').each do |index, value|
-          - tag_name = "freelancer[job_functions][#{index.to_s}]"
-          - if !@freelancer.job_functions.nil? and @freelancer.job_functions.include?(index.to_s) and !@freelancer.job_types.nil? and @freelancer.job_types.include?('system_integration')
-            - checked = true
-          - else
-            - checked = false
-          .freelancer-profile__checkbox
-            = check_box_tag tag_name, "1", checked, class: 'freelancer_system_integration_check_box'
-            = " #{value}"
-      .freelancer-profile__title.freelancer_live_events_staging_and_rental_checkboxes
-        | Job Functions / Live Events Staging & Rental
-      .freelancer_live_events_staging_and_rental_checkboxes.freelancer-profile__checkboxes
-        - I18n.t('enumerize.freelancer_live_events_staging_and_rental_job_functions').each do |index, value|
-          - tag_name = "freelancer[job_functions][#{index.to_s}]"
-          - if !@freelancer.job_functions.nil? and @freelancer.job_functions.include?(index.to_s) and !@freelancer.job_types.nil? and @freelancer.job_types.include?('live_events_staging_and_rental')
-            - checked = true
-          - else
-            - checked = false
-          .freelancer-profile__checkbox
-            = check_box_tag tag_name, "1", checked, class: 'freelancer_live_events_staging_and_rental_check_box'
-            = " #{value}"
 
     .freelancer-profile__item
       .freelancer-profile__title
-        | Technical Skill Tags
+        | Specialties - Markets
       .freelancer-profile__checkboxes
-        - I18n.t('enumerize.freelancer_technical_skill_tags').each do |index, value|
-          - tag_name = "freelancer[technical_skill_tags][#{index.to_s}]"
-          - if !@freelancer.technical_skill_tags.nil? and @freelancer.technical_skill_tags.include?(index.to_s)
+        - I18n.t('enumerize.freelancer_keywords').each do |index, value|
+          - tag_name = "freelancer[keywords][#{index.to_s}]"
+          - if @freelancer.keywords and @freelancer.keywords.include?(index.to_s)
             - checked = true
           - else
             - checked = false
@@ -106,11 +39,11 @@ h1 Editing Freelancer
 
     .freelancer-profile__item
       .freelancer-profile__title
-        | Manufacturer Tags
+        | Specialties - Skills
       .freelancer-profile__checkboxes
-        - I18n.t('enumerize.freelancer_manufacturer_tags').each do |index, value|
-          - tag_name = "freelancer[manufacturer_tags][#{index.to_s}]"
-          - if !@freelancer.manufacturer_tags.nil? and @freelancer.manufacturer_tags.include?(index.to_s)
+        - I18n.t('enumerize.freelancer_skills').each do |index, value|
+          - tag_name = "freelancer[skills][#{index.to_s}]"
+          - if @freelancer.skills and @freelancer.skills.include?(index.to_s)
             - checked = true
           - else
             - checked = false
