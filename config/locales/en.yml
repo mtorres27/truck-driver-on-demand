@@ -106,42 +106,203 @@ en:
       rupee: "Rupee"
       usd: "US Dollars"
       yen: "Yen"
-
-    freelancer_keywords:
-      corporate: "Corporate"
-      government: "Government"
-      broadcast: "Broadcast"
-      retail: "Retail"
-      house_of_worship: "House of Worship"
-      higher_education: "Higher Education"
-      k12_education: "K12 Education"
-      residential: "Residential"
-      commercial_av: "Commercial AV"
-      live_events_and_staging: "Live Events & Staging"
-      rental: "Rental"
-      hospitality: "Hospitality"
-    freelancer_skills:
-      flat_panel_displays: "Flat Panel Displays"
-      video_walls: "Video Walls"
-      structured_cabling: "Structured Cabling"
-      rack_work: "Rack Work"
-      cable_pull: "Cable Pull"
-      cable_termination: "Cable Termination"
-      projectors: "Projectors"
-      troubleshooting: "Troubleshooting"
-      service_and_repair: "Service and Repair"
-      av_programming: "AV Programming"
-      interactive_displays: "Interactive Displays"
-      audio: "Audio"
-      video_conferencing: "Video Conferencing"
-      video_processors: "Video Processors"
-      stagehand: "Stagehand"
-      lighting: "Lighting"
-      camera: "Camera"
-      general_labor: "General Labor"
-      installation: "Installation"
-      rental: "Rental"
-
+    freelancer_job_types:
+      system_integration: 'System Integration'
+      live_events_staging_and_rental: 'Live Events Staging & Rental'
+    freelancer_system_integration_job_markets:
+      broadcast: 'Broadcast'
+      commercial_installation: 'Commercial Installation'
+      corporate_installation: 'Corporate Installation'
+      government_installation: 'Government Installation'
+      higher_education: 'Higher Education'
+      hospitality: 'Hospitality'
+      house_of_worship_system_integration: 'House of Worship'
+      k12_education: 'K12 Education'
+      residential_installation: 'Residential Installation'
+      retail_installation: 'Retail Installation'
+    freelancer_system_integration_job_functions:
+      audio_technician: 'Audio Technician'
+      cabling_specialist_system_integration: 'Cabling Specialist'
+      content_designer: 'Content Designer'
+      design_engineer: 'Design Engineer'
+      drafter: 'Drafter'
+      driver: 'Driver'
+      graphic_designer_system_integration: 'Graphic Designer'
+      installation_technician: 'Installation Technician'
+      junior_programmer: 'Junior Programmer'
+      loader_system_integration: 'Loader'
+      master_electrician_system_integration: 'Master Electrician'
+      onsite_project_manager: 'Onsite Project Manager'
+      project_manager_system_integration: 'Project Manager'
+      rack_specialist_system_integration: 'Rack Specialist'
+      remote_programmer: 'Remote Programmer'
+      senior_programmer: 'Senior Programmer'
+      technician_assist: 'Technician Assist'
+      video_technician: 'Video Technician'
+      warehouse_hand: 'Warehouse Hand'
+    freelancer_live_events_staging_and_rental_job_markets:
+      concerts: 'Concerts'
+      corporate_meetings: 'Corporate Meetings'
+      government_meetings: 'Government Meetings'
+      house_of_worship: 'House of Worship'
+      special_events: 'Special Events'
+      sporting_events: 'Sporting Events'
+      theatres: 'Theatres'
+      trade_shows: 'Trade Shows'
+    freelancer_live_events_staging_and_rental_job_functions:
+      av_set_strike_technician: 'A/V Set/Strike Technician'
+      a1_head_of_sound: 'A1 - Head of Sound'
+      a2_sound_assist: 'A2 - Sound Assist'
+      assistant_stage_manager: 'Assistant Stage Manager'
+      audio_editor: 'Audio Editor'
+      audio_playback_engineer: 'Audio Playback Engineer'
+      audio_recording_engineer: 'Audio Recording Engineer'
+      backline_technician: 'Backline Technician'
+      breakout_producer: 'Breakout Producer'
+      breakout_room_coordinator: 'Breakout Room Coordinator'
+      breakout_room_floater: 'Breakout Room Floater'
+      breakout_room_operator: 'Breakout Room Operator'
+      cabling_specialist: 'Cabling Specialist'
+      camera: 'Camera'
+      camera_shader: 'Camera Shader'
+      camera_long_lens: 'Camera, Long Lens'
+      camera_shoulder: 'Camera, Shoulder'
+      carpenter: 'Carpenter'
+      down_rigger: 'Down Rigger'
+      festival_audio_specialist: 'Festival Audio Specialist'
+      foh_audio_engineer_bands_music: 'FOH Audio Engineer - Bands/Music'
+      foh_audio_engineer_corporate: 'FOH Audio Engineer - Corporate'
+      foh_audio_engineer_musical_theatre: 'FOH Audio Engineer - Musical Theatre'
+      foh_audio_engineer_theatre: 'FOH Audio Engineer - Theatre'
+      follow_spot_operator: 'Follow Spot Operator'
+      general_laborer: 'General Laborer'
+      general_session_producer: 'General Session Producer'
+      graphic_designer: 'Graphic Designer'
+      graphics_operator: 'Graphics Operator'
+      greenroom_coordinator: 'Greenroom Coordinator'
+      head_carpenter: 'Head Carpenter'
+      high_rigger: 'High Rigger'
+      hospitality_coordinator: 'Hospitality Coordinator'
+      intercom_specialist: 'Intercom Specialist'
+      l1_head_of_lighting: 'L1 - Head of Lighting'
+      l2_lighting_assist: 'L2 - Lighting Assist'
+      light_board_operator: 'Light Board Operator'
+      light_board_programmer: 'Light Board Programmer'
+      lighting_designer: 'Lighting Designer'
+      lighting_technician: 'Lighting Technician'
+      loader: 'Loader'
+      master_electrician: 'Master Electrician'
+      monitor_audio_engineer: 'Monitor Audio Engineer'
+      moving_light_technician: 'Moving Light Technician'
+      power_point_operator: 'PowerPoint Operator'
+      production_manager: 'Production Manager'
+      programmer: 'Programmer'
+      project_manager: 'Project Manager'
+      rack_specialist: 'Rack Specialist'
+      rental_staging_technician: 'Rental & Staging Technician'
+      rf_coordinator: 'RF Coordinator'
+      robotic_camera_operator: 'Robotic Camera Operator'
+      runner: 'Runner'
+      show_caller_director: 'Show Caller/Director'
+      sound_designer: 'Sound Designer'
+      sound_technician: 'Sound Technician'
+      speaker_ready_room_technician: 'Speaker Ready Room Technician'
+      stage_manager: 'Stage Manager'
+      tape_op_video_playback: 'Tape Op/Video Playback'
+      technical_director: 'Technical Director'
+      teleprompter_operator: 'Teleprompter Operator'
+      touring_stagehand: 'Touring Stagehand'
+      truss_spot_operator: 'Truss Spot Operator'
+      v1_head_of_video: 'V1 - Head of Video'
+      v2_video_assist: 'V2 - Video Assist'
+      video_director: 'Video Director'
+      video_editor: 'Video Editor'
+      video_engineer_switcher_operator: 'Video Engineer/Switcher Operator'
+      video_recording_engineer: 'Video Recording Engineer'
+      video_streaming_engineer: 'Video Streaming Engineer'
+      video_wall_content_creation: 'Video Wall Content Creation'
+    freelancer_technical_skill_tags:
+      audio: 'Audio'
+      auto_cad: 'Auto Cad'
+      cable_pull: 'Cable Pull'
+      cable_termination: 'Cable Termination'
+      camera: 'Camera'
+      digital_content: 'Digital Content'
+      digital_signage: 'Digital Signage'
+      drafting: 'Drafting'
+      flat_panel_displays: 'Flat Panel Displays'
+      general_laborer: 'General Laborer'
+      graphics: 'Graphics'
+      interactive_displays: 'Interactive Displays'
+      led: 'LED'
+      lighting: 'Lighting'
+      programming: 'Programming'
+      projectors: 'Projectors'
+      rack_work: 'Rack Work'
+      rigging: 'Rigging'
+      satellite: 'Satellite'
+      service_and_repair: 'Service & Repair'
+      structure_cabling: 'Stuctured Cabling'
+      troubleshooting: 'Troubleshooting'
+      video_conferencing: 'Video Conferencing'
+      video_processors: 'Video Processors'
+      video_walls: 'Video Walls'
+      visio: 'Visio'
+    freelancer_manufacturer_tags:
+      absen: 'Absen'
+      amx: 'AMX'
+      atlas: 'Atlas'
+      avenview: 'Avenview'
+      avocor: 'Avocor'
+      barco: 'Barco'
+      biamp: 'Biamp'
+      brightsign: 'Brightsign'
+      casio: 'Casio'
+      chief: 'Chief'
+      christie: 'Christie'
+      cisco: 'Cisco'
+      clear_one: 'ClearOne'
+      control_4: 'Control 4'
+      crestron: 'Crestron'
+      da_lite: 'Da-Lite'
+      draper: 'Draper'
+      eiki: 'Eiki'
+      elmo: 'Elmo'
+      epson: 'Epson'
+      evertz: 'Evertz'
+      extron: 'Extron'
+      front_row: 'Front Row'
+      green_hippo: 'Green Hippo'
+      haivision: 'Haivision'
+      hitachi: 'Hitachi'
+      in_focus: 'InFocus'
+      jbl: 'JBL'
+      just_add_power: 'Just Add Power'
+      klipsch: 'Klipsch'
+      kramer: 'Kramer'
+      legrand: 'Legrand'
+      leyard: 'Leyard'
+      lg: 'LG'
+      logitech: 'Logitech'
+      lumens: 'Lumens'
+      middle_atlantic: 'Middle Atlantic'
+      mitsubishi: 'Mitsubishi'
+      nanolumens: 'Nanolumens'
+      nec: 'NEC'
+      optoma: 'Optoma'
+      orion: 'Orion'
+      panasonic: 'Panasonic'
+      peerless: 'Peerless'
+      planar: 'Planar'
+      promethean: 'Promethean'
+      prysm: 'Prysm'
+      revolabs: 'Revolabs'
+      sharp: 'Sharp'
+      shure: 'Shure'
+      smart_technologies: 'SMART Technologies'
+      sony: 'Sony'
+      toa: 'TOA'
+      vaddio: 'Vaddio'
   has_no_preference: "Has no Work Order Preference"
   prefer_fixed: "Fixed Price Work Orders"
   prefer_hourly: "Hourly Work Orders"
