@@ -232,7 +232,8 @@ CREATE TABLE certifications (
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
     thumbnail text,
-    certificate_data text
+    certificate_data text,
+    cert_type character varying
 );
 
 
@@ -2499,6 +2500,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20180212001020'),
 ('20180214212732'),
 ('20180301165221'),
-('20180301181649');
+('20180301181649'),
+('20180301194139');
 
 

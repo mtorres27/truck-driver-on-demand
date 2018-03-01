@@ -6,14 +6,18 @@
         a.authorable_attachment--full href=f.object.certificate_url target="_blank"
           img src=url
         .freelancer-profile__image-upload onclick="uploadCertificate(#{f.index})"
-          span class="zmdi zmdi-upload" 
+          span class="zmdi zmdi-upload"
       - else
         .authorable_attachment--full
           img src=""
         .freelancer-profile__image-upload onclick="uploadCertificate()"
-          span class="zmdi zmdi-upload" 
-    
+          span class="zmdi zmdi-upload"
+
     .profile__meta__info
-      = f.file_field :certificate, :accept => 'image/gif,image/jpg,image/jpeg,image/png,document/pdf,application/pdf,application/x-pdf', label: false, class: "file-input--hidden" 
+      = f.file_field :certificate, :accept => 'image/gif,image/jpg,image/jpeg,image/png,document/pdf,application/pdf,application/x-pdf', label: false, class: "file-input--hidden"
       = f.input :name, as: :string, placeholder: "Enter the certificate's name", label: "Certificate Name"
+      = f.radio_button :cert_type, "skill"
+      = f.label :cert_type_onsite, "Skill Certificate"
+      = f.radio_button :cert_type, "onsite"
+      = f.label :cert_type_onsite, "Onsite Certificate"
     = link_to_remove_association "", f, { onClick: "hide_remove_association(this)", class: "btn-icon-link"}
