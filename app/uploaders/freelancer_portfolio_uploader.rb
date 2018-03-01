@@ -1,7 +1,7 @@
 require "image_processing/mini_magick"
 include ImageProcessing::MiniMagick
 
-class FreelancerClearanceUploader < Shrine
+class FreelancerPortfolioUploader < Shrine
   plugin :store_dimensions
   plugin :processing
   plugin :default_url

@@ -272,6 +272,18 @@
       .grid-cell.grid-cell--100
         hr/
       .grid-cell.grid-cell--33
+        h2.heading-h2 Portfolio
+      .grid-cell.grid-cell--67
+        .grid-v
+          .grid-cell.grid-cell--100
+            .form__field-label Gallery
+            = f.simple_fields_for :freelancer_portfolios do |freelancer_portfolio_form|
+              = render "freelancer_portfolio_fields", f: freelancer_portfolio_form
+            .links.add-new-portfolio
+              = link_to_add_association 'Add Another', f, :freelancer_portfolios, class: "btn btn--secondary"
+      .grid-cell.grid-cell--100
+        hr/
+      .grid-cell.grid-cell--33
         h2.heading-h2 Add Insurance
       .grid-cell.grid-cell--67
         .grid-v
@@ -415,6 +427,36 @@ javascript:
       var ref = $("#freelancer_freelancer_clearances_attributes_"+index+"_image");
     } else {
       var ref = $(".add-new-clearance").prev('div').find(".profile__meta__info").find(".file-input--hidden");
+    }
+
+    ref.on('change', function() {
+      var imgPath = $(this)[0].value;
+      var extn = imgPath.substring(imgPath.lastIndexOf('.') + 1).toLowerCase();
+      var image_holder = $(this).parent().parent().find(".freelancer-profile__image").find(".authorable_attachment--full").find("img");
+      if (extn == "gif" || extn == "png" || extn == "jpg" || extn == "jpeg") {
+        if (typeof (FileReader) != "undefined") {
+          var reader = new FileReader();
+          reader.onload = function (e) {
+            image_holder.attr('src', e.target.result)
+          }
+
+          reader.readAsDataURL($(this)[0].files[0]);
+        }
+      } else if (extn == "pdf") {
+        image_holder.attr('src', "/assets/certification/certification_placeholder.png")
+      } else {
+        alert("Only images/pdfs can be selected.");
+      }
+    });
+
+    ref.click();
+  }
+
+  function uploadPortfolioImage (index) {
+    if (index != undefined) {
+      var ref = $("#freelancer_freelancer_portfolios_attributes_"+index+"_image");
+    } else {
+      var ref = $(".add-new-portfolio").prev('div').find(".profile__meta__info").find(".file-input--hidden");
     }
 
     ref.on('change', function() {
