@@ -1,6 +1,6 @@
 = simple_form_for :search, url: freelancer_jobs_path, method: :get, html: { id: "company_search_form", class:"grid-h" } do |f|
   input type="hidden" value="#{params.dig(:search, :sort)}" id="sort" name="search[sort]"
   input type="hidden" value="#{params.dig(:search, :distance)}" id="distance" name="search[distance]"
-  .grid-cell.grid-cell--50= f.input :keywords, label: false, placeholder: "Search by job function, skills etc", input_html: { value: @keywords }
-  .grid-cell.grid-cell--25= f.input :address, label: false, placeholder: "Enter Location", input_html: { value: @address }
-  .grid-cell.grid-cell--25= f.submit "Search jobs", class: "btn btn--primary"
+  .grid-cell.grid-cell--100= f.input :keywords, label: false, placeholder: "Search by job function, skills etc", input_html: { value: @keywords }
+  .grid-cell.grid-cell--67= f.input :address, label: false, placeholder: "Enter City, Province", input_html: { value: @address }
+  .grid-cell.grid-cell--33= f.submit "Search jobs", class: "btn btn--primary"

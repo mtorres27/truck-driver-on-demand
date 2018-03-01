@@ -5,13 +5,28 @@
     .search-form
       = simple_form_for :search, url: admin_freelancers_path, method: :get do |f|
         = f.input :keywords, label: false, placeholder: "Search", input_html: { value: @keywords }
+  .col-xs-12.col-sm-3
+    a.btn.btn--primary.btn-download-csv href=download_csv_admin_freelancer_path
+      | Export to CSV
+  .col-xs-12.col-sm-12 style="padding-bottom:5px; margin-bottom:5px;"
+    select#filter-by-disabled-select
+      option value= 'all'
+        | All records
+      option value= 'enabled'
+        | Enabled only
+      option value= 'disabled'
+        | Disabled only
 
 .table-responsive
-  table.table.table-striped
+  table.table.table-striped#admin-freelancers-table
     thead
       tr
         th Name
         th Email
+        th State/Province
+        th Country
+        th Date Created
+        th Account confirmed?
         th Disabled?
         th.text-right Actions
 
@@ -20,6 +35,10 @@
         tr
           td= link_to freelancer.name, admin_freelancer_path(freelancer)
           td= mail_to freelancer.email
+          td= freelancer.state
+          td= freelancer.country.try(:upcase)
+          td= freelancer.created_at.strftime('%b %-d, %Y')
+          td= !freelancer.confirmed_at.nil?
           td= freelancer.disabled
           td.text-right
             = link_to 'Edit', edit_admin_freelancer_path(freelancer)
@@ -31,4 +50,3 @@
             - else
               = link_to 'Disable', disable_admin_freelancer_path(freelancer)
 
-= paginate @freelancers

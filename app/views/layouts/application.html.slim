@@ -3,6 +3,7 @@ html
   head
     meta charset="utf-8"
     meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    meta name="turbolinks-cache-control" content="no-cache"
     link href="/stylesheets/webflow.css" rel="stylesheet" type="text/css"
     link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet"
     link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/material-design-iconic-font/2.2.0/css/material-design-iconic-font.min.css"
@@ -10,6 +11,8 @@ html
     = csrf_meta_tags
     = stylesheet_link_tag "application", media: "all", "data-turbolinks-track": "reload"
     = javascript_include_tag "application", "data-turbolinks-track": "reload"
+    = javascript_include_tag "//cdnjs.cloudflare.com/ajax/libs/moment.js/2.8.4/moment.min.js", "data-turbolinks-track": "reload"
+    = javascript_include_tag "//cdn.datatables.net/plug-ins/1.10.16/sorting/datetime-moment.js", "data-turbolinks-track": "reload"
     - if content_for?(:title)
       title= yield(:title)
     - else
@@ -38,9 +41,9 @@ html
             = render "shared/nav"
             = render "shared/mobile_nav"
             = render "shared/onboarding"
-            = render "shared/flash"
       
       .section.section--body 
+        = render "shared/flash"
         - no_header_controllers = []
         - no_header_controllers << { controller: "freelancer/companies" }
         - no_header_controllers << { controller: "company/freelancers", action: "show" }

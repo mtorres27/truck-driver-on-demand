@@ -1,54 +1,112 @@
-h1.heading-h1 Search for Freelancers
-= render "company/shared/freelancer_search_form"
-
-- content_for :secondary do
-  h1.heading-title
-    | With our growing network of AV Professionals, your next hire is just a search away.
+/ h1.heading-h1 Search for Freelancers
+/ = render "company/shared/freelancer_search_form"
 
 / - content_for :secondary do
-/     .grid-h
-/       .grid-cell.grid-cell--50
-/           h2.heading-h2 Find freelancers matching your criteria
-/           = simple_form_for :search, url: company_freelancers_path, method: :get, html: { id: "freelancer_search_form", class:"grid-h"} do |f|
-/             input type="hidden" value="#{params.dig(:search, :sort)}" id="sort" name="search[sort]"
-/             input type="hidden" value="#{params.dig(:search, :distance)}" id="distance" name="search[distance]"
-/             .grid-cell.grid-cell--100= f.input :keywords, label: false, placeholder: "Search by job function, skills, etc.", input_html: { value: @keywords }
-/             .grid-cell.grid-cell--100= f.input :address, label: false, placeholder: "Enter Location", input_html: { value: @address }
-/             .grid-cell.grid-cell--25= f.submit "Search", class: "btn btn--primary"
-/       .grid-cell.grid-cell--50
-/           .grid-h
-/             .grid-cell.grid-cell--100
-/               h3.heading-h3 Have an AV Project that needs a Freelancer?
-/               p Start by posting a job and publishing it to our database. Browse our freelancers and invite to quote or wait for the quotes to come in!
-/               .buttons
-/                 a.btn.btn--primary href="/company/projects/new" Post a job
-/             .grid-cell.grid-cell--100  
-/               h3.heading-h3 Already working on a Job Posting or have a job in progress? Go to your project dashboard
-/               p Start by posting a job and publishing it to our database. Browse our freelancers and invite to quote or wait for the quotes to come in!
-/               .buttons
-/                 a.btn.btn--primary href="/company/projects" View Jobs
-/       .grid-cell.grid-cell--50
-/         h2.heading-h2 Featured Freelancers
-/         .list
-/           / - @freelancers.each do |freelancer|
-/           /   = render partial: "company/shared/freelancer_info", locals: { freelancer: freelancer }
-/       .grid-cell.grid-cell--50
-/         h2.heading-h2 How it works
-/         h3.heading-h3 Post a Job
-/         h3.heading-h3 Find AV Freelancers
-/         h3.heading-h3 Select & Build a Work Order
-/         h3.heading-h3 Set Milestone & Payment Updates
-/         h3.heading-h3 Receive Progress Updates
-/         h3.heading-h3 Pay for Completed Work
-/       .grid-cell.grid-cell--50
-/         h2.heading-h2 Need help?
-/         p 
-/           | Contact Us @ 
-/           a href="mailto:info@avjuntion.com"
-/             | info@avjunction.com   
-/         p 
-/           | Call us @ 
-/           a href="tel:18446022000"
-/             | 1 844 602 2000 
-/       .grid-cell.grid-cell--50
-/         h2.heading-h2 FAQ
+/   h1.heading-title
+/     | With our growing network of AV Professionals, your next hire is just a search away.
+
+h1.heading-h1 
+  | Hi #{current_company.name}, welcome to AV Junction
+
+- content_for :secondary do
+  .grid-h.grid-h--no-margin
+    .grid-cell.grid-cell--67
+      .grid-h
+        .grid-cell.grid-cell--100
+          h1.heading-h1 Search for Freelancers
+          = render "company/shared/freelancer_search_form"
+        .grid-cell.grid-cell--50
+          .callout
+            h2.heading-h2 Need an AV Freelancer?
+            p Create a job and publish it to our database to receive quotes or browse our database and invite them to quote.
+            .buttons
+              a.btn.btn--secondary href=new_company_job_path
+                | Go there now
+        .grid-cell.grid-cell--50
+          .callout
+            h2.heading-h2 Do you have a job in progress?
+            p Access your job postings and in progress jobs through your dashboard.
+            .buttons
+              a.btn.btn--secondary href=company_projects_path
+                | Go there now
+        .grid-cell.grid-cell--100
+          h2.heading-h2 Freelancers recently added on AV Junction
+          .container
+            .grid-h
+              - @freelancers.each do |freelancer|
+                .grid-cell.grid-cell--25
+                  a.homepage__avatar href=company_freelancer_path(freelancer)
+                    = image_tag(freelancer.avatar_url, size: "75x75")
+                  h4.heading-h4
+                    = freelancer.name 
+                    //= freelancer.id
+                                   
+                  
+        .grid-cell.grid-cell--100
+          .callout
+            h2.heading-h2 FAQ
+            h3.heading-h3 How much does it cost?
+            p We charge a flat fee starting at $90 USD per hire depending on the size of the job and subscription plan.
+
+            h3.heading-h3 How does payment work?
+            p You and the freelancer agree a price for the job. The total price is divided into milestone payments.  You fund the total job and AV Junction holds those funds until you approve payout on completed milestones.  
+
+            h3.heading-h3 How do I get started? 
+            p Creating a job posting is the first step.  You can invite freelancers to quote or receive quotes automatically from freelancers who find your job through our search tool. 
+
+            h3.heading-h3 Need Help?
+            p 
+              | Contact us at 
+              a href="mailto:info@avjunction.com"
+                | info@avjunction.com 
+            p 
+              | Call us at 
+              a href="tel:1-844-602-2000"
+                | 1-844-602-2000
+
+            a.btn-link href="https://www.avjunction.com/faq" target="_blank" 
+              | More FAQ’s…
+
+           
+
+    .grid-cell.grid-cell--33
+      .homepage__sidebar 
+        .grid-v
+          .grid-cell
+            h2.heading-h2 How it Works
+          .grid-cell
+            h3.heading-h3 Post a Job
+            p 
+              | Enter in a job summary, the location and type of freelancer you are looking for.  
+            .buttons
+              a.btn-link href="https://www.avjunction.com/how-to-guide-av-company" target="_blank"
+                | Learn more 
+          .grid-cell
+            h3.heading-h3 Find Quality AV Freelancers
+            p 
+              | Browse our database, review profiles and invite to quote.
+            a.btn-link href="https://www.avjunction.com/how-to-guide-av-company" target="_blank"
+                | Learn more
+          .grid-cell
+            h3.heading-h3 Hire and Work Together
+            p 
+              | Negotiate quotes, build a work order, fund job and set payment milestones.
+            a.btn-link href="https://www.avjunction.com/how-to-guide-av-company" target="_blank"
+                | Learn more
+          .grid-cell
+            h3.heading-h3 Receive Progress Updates
+            p
+              | Get daily reports, pictures and share documents in a central location.
+            a.btn-link href="https://www.avjunction.com/how-to-guide-av-company " target="_blank"
+                | Learn more
+          .grid-cell
+            h3.heading-h3 Approve Payments & Rate Experience
+            p 
+              | Approve payments on completed milestones.  Rate your experience with your hire.
+            a.btn-link href="https://www.avjunction.com/how-to-guide-av-company" target="_blank"
+                | Learn more
+          .grid-cell  
+            h3.heading-h3 Visit the Knowledge Center for more
+            p  
+              a.btn-link href="https://www.avjunction.com/how-to-guide-av-company " target="_blank"
+                | To the Knowledge Center 
