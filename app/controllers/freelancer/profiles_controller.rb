@@ -67,6 +67,7 @@ class Freelancer::ProfilesController < Freelancer::BaseController
       freelancer_references_attributes: [:id, :title, :description, :phone, :name, :_destroy],
       freelancer_affiliations_attributes: [:id, :name, :image, :_destroy],
       freelancer_insurances_attributes: [:id, :name, :description, :_destroy],
+      freelancer_clearances_attributes: [:id, :description, :image, :_destroy],
     )
   end
 end

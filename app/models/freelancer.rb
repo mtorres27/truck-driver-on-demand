@@ -92,6 +92,9 @@ class Freelancer < ApplicationRecord
   has_many :freelancer_affiliations
   accepts_nested_attributes_for :freelancer_affiliations, :reject_if => :all_blank, :allow_destroy => true
 
+  has_many :freelancer_clearances
+  accepts_nested_attributes_for :freelancer_clearances, :reject_if => :all_blank, :allow_destroy => true
+
   has_many :freelancer_insurances
   accepts_nested_attributes_for :freelancer_insurances, :reject_if => :all_blank, :allow_destroy => true
 
@@ -264,6 +267,7 @@ class Freelancer < ApplicationRecord
     score += 5 * self.certifications.count
     score += 2 * self.freelancer_references.count
     score += 2 * self.freelancer_affiliations.count
+    score += 2 * self.freelancer_clearances.count
     score += 1 * self.freelancer_insurances.count
     score
   end
@@ -293,6 +297,12 @@ class Freelancer < ApplicationRecord
   def reject_freelancer_affiliation(attrs)
     exists = attrs["id"].present?
     empty = attrs["image"].blank? and attrs["name"].blank?
+    !exists and empty
+  end
+
+  def reject_freelancer_clearance(attrs)
+    exists = attrs["id"].present?
+    empty = attrs["image"].blank? and attrs["description"].blank?
     !exists and empty
   end
 
