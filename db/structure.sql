@@ -557,7 +557,8 @@ CREATE TABLE freelancer_affiliations (
     image character varying,
     freelancer_id integer,
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+    updated_at timestamp without time zone NOT NULL,
+    image_data text
 );
 
 
@@ -746,14 +747,13 @@ CREATE TABLE freelancers (
     service_areas character varying,
     city character varying,
     phone_number character varying,
-    special_avj_fees numeric(10,2),
-    job_types citext,
-    job_functions citext,
-    manufacturer_tags citext
     profile_score smallint,
     valid_driver boolean,
     own_tools boolean,
-    company_name character varying
+    company_name character varying,
+    job_types citext,
+    job_functions citext,
+    manufacturer_tags citext
 );
 
 
@@ -2393,15 +2393,12 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20180119214528'),
 ('20180127120826'),
 ('20180127123843'),
-<<<<<<< HEAD
-('20180201201033'),
-('20180214212732');
-=======
 ('20180130000647'),
 ('20180130013756'),
 ('20180130022656'),
 ('20180205194146'),
-('20180206182339');
->>>>>>> staging
+('20180206182339'),
+('20180212001020'),
+('20180214212732');
 
 
