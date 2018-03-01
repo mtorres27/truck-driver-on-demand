@@ -55,6 +55,8 @@ gem "stackprof", "~> 0.2.10"
 
 gem "audited", "~> 4.5.0"
 
+gem "carrierwave", "~> 1.0.0"
+
 gem 'avatax'
 
 gem 'taxjar-ruby', require: 'taxjar'

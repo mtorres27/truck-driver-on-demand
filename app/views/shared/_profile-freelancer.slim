@@ -61,6 +61,17 @@
         | This freelancer has not yet added a bio.
       - else
         = "#{@freelancer.bio}"
+  - if @freelancer.company_name.present?
+    .grid-cell.grid-cell--50
+      h3.heading-h3 Company Name
+      p
+        = @freelancer.company_name
+  - if @freelancer.valid_driver
+    .grid-cell.grid-cell--50
+      h3.heading-h3 I've a valid driver license
+  - if @freelancer.own_tools
+    .grid-cell.grid-cell--50
+      h3.heading-h3 I've my own tools
   .grid-cell.grid-cell--50
     .grid-v
       .grid-cell
@@ -139,6 +150,34 @@
                 img.profile__certification__image sizes="185.96875px" src=src
                 .profile__certification__label= certification.name
 
+  .grid-cell.grid-cell--100
+    h3.heading-h3 References
+    .profile__certifications__container
+      - if @freelancer.freelancer_references.count == 0
+        | This freelancer has not yet added any references.
+      - @freelancer.freelancer_references.each do |reference|
+        .profile__certifications__certificate
+          | Name:
+          = reference.name
+        .profile__certifications__certificate
+          | Phone
+          = reference.phone
+        .profile__certifications__certificate
+          | Description
+          = reference.description
+
+  .grid-cell.grid-cell--100
+    h3.heading-h3 Insurances
+    .profile__certifications__container
+      - if @freelancer.freelancer_insurances.count == 0
+        | This freelancer has not yet added any references.
+      - @freelancer.freelancer_insurances.each do |insurance|
+        .profile__certifications__certificate
+          | Name:
+          = insurance.name
+        .profile__certifications__certificate
+          | Description
+          = insurance.description
   .grid-cell.grid-cell--100
     a name="reviews"
       h3.heading-h3 Reviews

@@ -58,6 +58,16 @@
             = f.input :tagline, required: true, label: "Describe yourself in one sentence, your \"tagline\"", placeholder: "Tagline"
           .grid-cell.grid-cell--100.grid-cell--expand
             = f.input :bio, required: true, label: "Close the deal with a killer biography", placeholder: "Write a bio", :input_html => { :class => 'form__profile-bio-textarea' }
+          .grid-cell.grid-cell--100
+            = f.input :company_name, required: false, label: "Are you working with a company?", placeholder: "Company Name"
+          .grid-cell.grid-cell--100
+            .form__field-label Do you have a valid drivers license?
+            .form__radio-group
+              = f.radio_button(:valid_driver, true)
+              | Yes
+            .form__radio-group
+              = f.radio_button(:valid_driver, false)
+              | No
       .grid-cell.grid-cell--100
         hr/
       .grid-cell.grid-cell--33
@@ -83,11 +93,19 @@
             = f.input :years_of_experience, label: "Years of Experience"
 
           .grid-cell.grid-cell--50
-            = f.input :pay_per_unit_time, label: "Hourly Rate", placeholder: "Enter your rate"
+            = f.input :pay_per_unit_time, label: "Hourly Rate Range", placeholder: "Enter your rate range, for ex 25-35"
           .grid-cell.grid-cell--50
             = f.input :pay_unit_time_preference, label: "Pay Preference", prompt: "Select"
           .grid-cell.grid-cell--50
             = f.input :sales_tax_number, required: false, label: "Sales tax number", placeholder: "Sales Tax No."
+          .grid-cell.grid-cell--50
+            .form__field-label Do you have you own tools?
+            .form__radio-group
+              = f.radio_button(:own_tools, true)
+              | Yes
+            .form__radio-group
+              = f.radio_button(:own_tools, false)
+              | No
       .grid-cell.grid-cell--100
         hr/
       .grid-cell.grid-cell--33
@@ -215,6 +233,42 @@
               = render "certification_fields", f: certification_form
             .links.add-new-certificate
               = link_to_add_association 'Add Another', f, :certifications, class: "btn btn--secondary"
+      .grid-cell.grid-cell--100
+        hr/
+      .grid-cell.grid-cell--33
+        h2.heading-h2 Add references
+      .grid-cell.grid-cell--67
+        .grid-v
+          .grid-cell.grid-cell--100
+            .form__field-label Reference
+            = f.simple_fields_for :freelancer_references do |freelancer_reference_form|
+              = render "freelancer_reference_fields", f: freelancer_reference_form
+            .links.add-new-certificate
+              = link_to_add_association 'Add Another', f, :freelancer_references, class: "btn btn--secondary"
+      / .grid-cell.grid-cell--100
+      /   hr/
+      / .grid-cell.grid-cell--33
+      /   h2.heading-h2 Add Affiliate
+      / .grid-cell.grid-cell--67
+      /   .grid-v
+      /     .grid-cell.grid-cell--100
+      /       .form__field-label Affilate
+      /       = f.simple_fields_for :freelancer_affiliations do |freelancer_affiliation_form|
+      /         = render "freelancer_affiliation_fields", f: freelancer_affiliation_form
+      /       .links.add-new-certificate
+      /         = link_to_add_association 'Add Another', f, :freelancer_affiliations, class: "btn btn--secondary"
+      .grid-cell.grid-cell--100
+        hr/
+      .grid-cell.grid-cell--33
+        h2.heading-h2 Add Insurance
+      .grid-cell.grid-cell--67
+        .grid-v
+          .grid-cell.grid-cell--100
+            .form__field-label Insurance
+            = f.simple_fields_for :freelancer_insurances do |freelancer_insurance_form|
+              = render "freelancer_insurance_fields", f: freelancer_insurance_form
+            .links.add-new-certificate
+              = link_to_add_association 'Add Another', f, :freelancer_insurances, class: "btn btn--secondary"
       .grid-cell.grid-cell--100
         hr/
       .grid-cell.grid-cell--33
