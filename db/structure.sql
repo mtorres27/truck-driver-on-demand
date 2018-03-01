@@ -582,6 +582,40 @@ ALTER SEQUENCE freelancer_affiliations_id_seq OWNED BY freelancer_affiliations.i
 
 
 --
+-- Name: freelancer_clearances; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE freelancer_clearances (
+    id bigint NOT NULL,
+    description text,
+    image character varying,
+    image_data text,
+    freelancer_id integer,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: freelancer_clearances_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE freelancer_clearances_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: freelancer_clearances_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE freelancer_clearances_id_seq OWNED BY freelancer_clearances.id;
+
+
+--
 -- Name: freelancer_insurances; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -1368,6 +1402,13 @@ ALTER TABLE ONLY freelancer_affiliations ALTER COLUMN id SET DEFAULT nextval('fr
 
 
 --
+-- Name: freelancer_clearances id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY freelancer_clearances ALTER COLUMN id SET DEFAULT nextval('freelancer_clearances_id_seq'::regclass);
+
+
+--
 -- Name: freelancer_insurances id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -1589,6 +1630,14 @@ ALTER TABLE ONLY featured_projects
 
 ALTER TABLE ONLY freelancer_affiliations
     ADD CONSTRAINT freelancer_affiliations_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: freelancer_clearances freelancer_clearances_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY freelancer_clearances
+    ADD CONSTRAINT freelancer_clearances_pkey PRIMARY KEY (id);
 
 
 --
@@ -2399,6 +2448,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20180205194146'),
 ('20180206182339'),
 ('20180212001020'),
-('20180214212732');
+('20180214212732'),
+('20180301165221');
 
 

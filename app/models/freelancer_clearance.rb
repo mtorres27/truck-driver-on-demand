@@ -1,0 +1,2 @@
+class FreelancerClearance < ApplicationRecord
+end
