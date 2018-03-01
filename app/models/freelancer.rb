@@ -253,6 +253,8 @@ class Freelancer < ApplicationRecord
       end
     end
     freelancer_job_functions
+  end
+
   def score
     score = 0
     score += 1 if self.name.present?
