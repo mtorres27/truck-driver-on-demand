@@ -218,7 +218,7 @@
           .grid-cell.grid-cell--100
             .form__field-label Accreditation
             = f.simple_fields_for :certifications do |certification_form|
-              / = render partial: "/freelancer/profiles/certification_fields", f: certification_form
+              = render "/freelancer/profiles/certification_fields", f: certification_form
             .links.add-new-certificate
               = link_to_add_association 'Add Another', f, :certifications, partial: '/freelancer/profiles/certification_fields', class: "btn btn--secondary"
       .grid-cell.grid-cell--100
