@@ -3,128 +3,7 @@ h1 Editing Freelancer
 = simple_form_for([:admin, @freelancer]) do |f|
   = f.error_notification
 
-  .form-inputs
-    - if @freelancer.avatar&.exists?
-      img src=@freelancer.avatar_url
-    = f.hidden_field :avatar, value: @freelancer.cached_avatar_data
-    = f.input :avatar, as: :file, accept: 'image/gif, image/jpg, image/jpeg, image/png'
-    = f.input :name
-    = f.input :email, as: :string
-    = f.input :address, as: :string
-    = f.input :line2, label: 'Address Line 2', as: :string
-    = f.input :city, label: 'City', as: :string
-    = f.input :state, label: 'State/Province', as: :string
-    = f.input :postal_code, label: 'Zip/Postal Code', as: :string
-    = f.input :country
-    = f.input :sales_tax_number, label: 'Sales Tax No.'
-    = f.input :tagline
-    = f.input :freelancer_type, label: 'Type'
-    = f.input :freelancer_team_size, label: 'Team Size'
-    = f.input :bio, label: 'Biography'
-    = f.input :service_areas, label: 'Service Areas', as: :string
-    .freelancer-profile__item
-      .freelancer-profile__title
-        | Job Types
-      .freelancer-profile__checkboxes
-        - I18n.t('enumerize.freelancer_job_types').each do |index, value|
-          - tag_name = "freelancer[job_types][#{index.to_s}]"
-          - if !@freelancer.job_types.nil? and @freelancer.job_types.include?(index.to_s)
-            - checked = true
-          - else
-            - checked = false
-          .freelancer-profile__checkbox
-            = check_box_tag tag_name, "1", checked
-            = " #{value}"
-    .freelancer-profile__item
-      .freelancer-profile__checkboxes.freelancer_please_select_job_type_message
-        | Please select a Job type
-    .freelancer-profile__item
-      .freelancer-profile__title.freelancer_system_integration_checkboxes
-        | Job Markets / System Integration
-      .freelancer_system_integration_checkboxes.freelancer-profile__checkboxes
-        - I18n.t('enumerize.freelancer_system_integration_job_markets').each do |index, value|
-          - tag_name = "freelancer[job_markets][#{index.to_s}]"
-          - if !@freelancer.job_markets.nil? and @freelancer.job_markets.include?(index.to_s) and !@freelancer.job_types.nil? and @freelancer.job_types.include?('system_integration')
-            - checked = true
-          - else
-            - checked = false
-          .freelancer-profile__checkbox
-            = check_box_tag tag_name, "1", checked, class: 'freelancer_system_integration_check_box'
-            = " #{value}"
-      .freelancer-profile__title.freelancer_live_events_staging_and_rental_checkboxes
-        | Job Markets / Live Events Staging & Rental
-      .freelancer_live_events_staging_and_rental_checkboxes.freelancer-profile__checkboxes
-        - I18n.t('enumerize.freelancer_live_events_staging_and_rental_job_markets').each do |index, value|
-          - tag_name = "freelancer[job_markets][#{index.to_s}]"
-          - if !@freelancer.job_markets.nil? and @freelancer.job_markets.include?(index.to_s) and !@freelancer.job_types.nil? and @freelancer.job_types.include?('live_events_staging_and_rental')
-            - checked = true
-          - else
-            - checked = false
-          .freelancer-profile__checkbox
-            = check_box_tag tag_name, "1", checked, class: 'freelancer_live_events_staging_and_rental_check_box'
-            = " #{value}"
-
-    .freelancer-profile__item
-      .freelancer-profile__title.freelancer_system_integration_checkboxes
-        | Job Functions / System Integration
-      .freelancer_system_integration_checkboxes.freelancer-profile__checkboxes
-        - I18n.t('enumerize.freelancer_system_integration_job_functions').each do |index, value|
-          - tag_name = "freelancer[job_functions][#{index.to_s}]"
-          - if !@freelancer.job_functions.nil? and @freelancer.job_functions.include?(index.to_s) and !@freelancer.job_types.nil? and @freelancer.job_types.include?('system_integration')
-            - checked = true
-          - else
-            - checked = false
-          .freelancer-profile__checkbox
-            = check_box_tag tag_name, "1", checked, class: 'freelancer_system_integration_check_box'
-            = " #{value}"
-      .freelancer-profile__title.freelancer_live_events_staging_and_rental_checkboxes
-        | Job Functions / Live Events Staging & Rental
-      .freelancer_live_events_staging_and_rental_checkboxes.freelancer-profile__checkboxes
-        - I18n.t('enumerize.freelancer_live_events_staging_and_rental_job_functions').each do |index, value|
-          - tag_name = "freelancer[job_functions][#{index.to_s}]"
-          - if !@freelancer.job_functions.nil? and @freelancer.job_functions.include?(index.to_s) and !@freelancer.job_types.nil? and @freelancer.job_types.include?('live_events_staging_and_rental')
-            - checked = true
-          - else
-            - checked = false
-          .freelancer-profile__checkbox
-            = check_box_tag tag_name, "1", checked, class: 'freelancer_live_events_staging_and_rental_check_box'
-            = " #{value}"
-
-    .freelancer-profile__item
-      .freelancer-profile__title
-        | Technical Skill Tags
-      .freelancer-profile__checkboxes
-        - I18n.t('enumerize.freelancer_technical_skill_tags').each do |index, value|
-          - tag_name = "freelancer[technical_skill_tags][#{index.to_s}]"
-          - if !@freelancer.technical_skill_tags.nil? and @freelancer.technical_skill_tags.include?(index.to_s)
-            - checked = true
-          - else
-            - checked = false
-          .freelancer-profile__checkbox
-            = check_box_tag tag_name, "1", checked
-            = " #{value}"
-
-    .freelancer-profile__item
-      .freelancer-profile__title
-        | Manufacturer Tags
-      .freelancer-profile__checkboxes
-        - I18n.t('enumerize.freelancer_manufacturer_tags').each do |index, value|
-          - tag_name = "freelancer[manufacturer_tags][#{index.to_s}]"
-          - if !@freelancer.manufacturer_tags.nil? and @freelancer.manufacturer_tags.include?(index.to_s)
-            - checked = true
-          - else
-            - checked = false
-          .freelancer-profile__checkbox
-            = check_box_tag tag_name, "1", checked
-            = " #{value}"
-
-    = f.input :years_of_experience
-    = f.input :available, label: 'Availability'
-    = f.input :pay_per_unit_time, label: 'Rate'
-    = f.input :pay_unit_time_preference, label: 'Pay Preference'
-
-    = f.input :verified
-    = f.input :disabled
+  = render "/freelancer/profiles/edit_freelancer_profile", f: f
 
   .form-actions
     = f.button :submit, class: "btn btn--primary", prompt: "Select"
@@ -134,3 +13,168 @@ hr
 '  |
 = link_to 'Back', admin_freelancers_path
 
+javascript:
+  var updateHeaderImage = function() {
+    $("#edit-freelancer-profile-header").click();
+    $("#edit-freelancer-profile-header").on('change', function() {
+      var imgPath = $(this)[0].value;
+      var extn = imgPath.substring(imgPath.lastIndexOf('.') + 1).toLowerCase();
+      var image_holder = $("#freelancer-edit-profile__header");
+
+      if (extn == "gif" || extn == "png" || extn == "jpg" || extn == "jpeg") {
+        if (typeof (FileReader) != "undefined") {
+          var reader = new FileReader();
+          reader.onload = function (e) {
+            image_holder.attr('src', e.target.result)
+          }
+
+          reader.readAsDataURL($(this)[0].files[0]);
+        }
+      } else {
+        alert("Only images can be selected.");
+      }
+    });
+  }
+
+  var updateProfilePicture = function() {
+    $("#edit-freelancer-profile-avatar").click();
+    $("#edit-freelancer-profile-avatar").on('change', function() {
+      var imgPath = $(this)[0].value;
+      var extn = imgPath.substring(imgPath.lastIndexOf('.') + 1).toLowerCase();
+      var image_holder = $("#freelancer-edit-profile__avatar");
+
+      if (extn == "gif" || extn == "png" || extn == "jpg" || extn == "jpeg") {
+        if (typeof (FileReader) != "undefined") {
+          var reader = new FileReader();
+          reader.onload = function (e) {
+            image_holder.attr('src', e.target.result)
+          }
+
+          reader.readAsDataURL($(this)[0].files[0]);
+        }
+      } else {
+        alert("Only images can be selected.");
+      }
+    });
+  }
+
+
+  function uploadCertificate (index) {
+    if (index != undefined) {
+      var ref = $("#freelancer_certifications_attributes_"+index+"_certificate");
+    } else {
+      var ref = $(".add-new-certificate").prev('div').find(".profile__meta__info").find(".file-input--hidden");
+    }
+
+    ref.on('change', function() {
+      var imgPath = $(this)[0].value;
+      var extn = imgPath.substring(imgPath.lastIndexOf('.') + 1).toLowerCase();
+      var image_holder = $(this).parent().parent().find(".freelancer-profile__image").find(".authorable_attachment--full").find("img");
+      if (extn == "gif" || extn == "png" || extn == "jpg" || extn == "jpeg") {
+        if (typeof (FileReader) != "undefined") {
+          var reader = new FileReader();
+          reader.onload = function (e) {
+            image_holder.attr('src', e.target.result)
+          }
+
+          reader.readAsDataURL($(this)[0].files[0]);
+        }
+      } else if (extn == "pdf") {
+        image_holder.attr('src', "/assets/certification/certification_placeholder.png")
+      } else {
+        alert("Only images can be selected.");
+      }
+    });
+
+    ref.click();
+  }
+
+  function uploadAffiliateImage (index) {
+    if (index != undefined) {
+      var ref = $("#freelancer_freelancer_affiliations_attributes_"+index+"_image");
+    } else {
+      var ref = $(".add-new-affiliation").prev('div').find(".profile__meta__info").find(".file-input--hidden");
+    }
+
+    ref.on('change', function() {
+      var imgPath = $(this)[0].value;
+      var extn = imgPath.substring(imgPath.lastIndexOf('.') + 1).toLowerCase();
+      var image_holder = $(this).parent().parent().find(".freelancer-profile__image").find(".authorable_attachment--full").find("img");
+      if (extn == "gif" || extn == "png" || extn == "jpg" || extn == "jpeg") {
+        if (typeof (FileReader) != "undefined") {
+          var reader = new FileReader();
+          reader.onload = function (e) {
+            image_holder.attr('src', e.target.result)
+          }
+
+          reader.readAsDataURL($(this)[0].files[0]);
+        }
+      } else if (extn == "pdf") {
+        image_holder.attr('src', "/assets/certification/certification_placeholder.png")
+      } else {
+        alert("Only images/pdfs can be selected.");
+      }
+    });
+
+    ref.click();
+  }
+
+  function uploadClearanceImage (index) {
+    if (index != undefined) {
+      var ref = $("#freelancer_freelancer_clearances_attributes_"+index+"_image");
+    } else {
+      var ref = $(".add-new-clearance").prev('div').find(".profile__meta__info").find(".file-input--hidden");
+    }
+
+    ref.on('change', function() {
+      var imgPath = $(this)[0].value;
+      var extn = imgPath.substring(imgPath.lastIndexOf('.') + 1).toLowerCase();
+      var image_holder = $(this).parent().parent().find(".freelancer-profile__image").find(".authorable_attachment--full").find("img");
+      if (extn == "gif" || extn == "png" || extn == "jpg" || extn == "jpeg") {
+        if (typeof (FileReader) != "undefined") {
+          var reader = new FileReader();
+          reader.onload = function (e) {
+            image_holder.attr('src', e.target.result)
+          }
+
+          reader.readAsDataURL($(this)[0].files[0]);
+        }
+      } else if (extn == "pdf") {
+        image_holder.attr('src', "/assets/certification/certification_placeholder.png")
+      } else {
+        alert("Only images/pdfs can be selected.");
+      }
+    });
+
+    ref.click();
+  }
+
+  function uploadPortfolioImage (index) {
+    if (index != undefined) {
+      var ref = $("#freelancer_freelancer_portfolios_attributes_"+index+"_image");
+    } else {
+      var ref = $(".add-new-portfolio").prev('div').find(".profile__meta__info").find(".file-input--hidden");
+    }
+
+    ref.on('change', function() {
+      var imgPath = $(this)[0].value;
+      var extn = imgPath.substring(imgPath.lastIndexOf('.') + 1).toLowerCase();
+      var image_holder = $(this).parent().parent().find(".freelancer-profile__image").find(".authorable_attachment--full").find("img");
+      if (extn == "gif" || extn == "png" || extn == "jpg" || extn == "jpeg") {
+        if (typeof (FileReader) != "undefined") {
+          var reader = new FileReader();
+          reader.onload = function (e) {
+            image_holder.attr('src', e.target.result)
+          }
+
+          reader.readAsDataURL($(this)[0].files[0]);
+        }
+      } else if (extn == "pdf") {
+        image_holder.attr('src', "/assets/certification/certification_placeholder.png")
+      } else {
+        alert("Only images/pdfs can be selected.");
+      }
+    });
+
+    ref.click();
+  }

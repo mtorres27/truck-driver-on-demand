@@ -218,9 +218,9 @@
           .grid-cell.grid-cell--100
             .form__field-label Accreditation
             = f.simple_fields_for :certifications do |certification_form|
-              = render "certification_fields", f: certification_form
+              / = render partial: "/freelancer/profiles/certification_fields", f: certification_form
             .links.add-new-certificate
-              = link_to_add_association 'Add Another', f, :certifications, class: "btn btn--secondary"
+              = link_to_add_association 'Add Another', f, :certifications, partial: '/freelancer/profiles/certification_fields', class: "btn btn--secondary"
       .grid-cell.grid-cell--100
         hr/
       .grid-cell.grid-cell--33
@@ -230,9 +230,9 @@
           .grid-cell.grid-cell--100
             .form__field-label Reference
             = f.simple_fields_for :freelancer_references do |freelancer_reference_form|
-              = render "freelancer_reference_fields", f: freelancer_reference_form
+              = render "/freelancer/profiles/freelancer_reference_fields", f: freelancer_reference_form
             .links.add-new-reference
-              = link_to_add_association 'Add Another', f, :freelancer_references, class: "btn btn--secondary"
+              = link_to_add_association 'Add Another', f, :freelancer_references, partial: '/freelancer/profiles/freelancer_reference_fields',class: "btn btn--secondary"
       .grid-cell.grid-cell--100
         hr/
       .grid-cell.grid-cell--33
@@ -242,9 +242,9 @@
           .grid-cell.grid-cell--100
             .form__field-label Affilate
             = f.simple_fields_for :freelancer_affiliations do |freelancer_affiliation_form|
-              = render "freelancer_affiliation_fields", f: freelancer_affiliation_form
+              = render "/freelancer/profiles/freelancer_affiliation_fields", f: freelancer_affiliation_form
             .links.add-new-affiliation
-              = link_to_add_association 'Add Another', f, :freelancer_affiliations, class: "btn btn--secondary"
+              = link_to_add_association 'Add Another', f, :freelancer_affiliations, partial: '/freelancer/profiles/freelancer_affiliation_fields',class: "btn btn--secondary"
       .grid-cell.grid-cell--100
         hr/
       .grid-cell.grid-cell--33
@@ -254,9 +254,9 @@
           .grid-cell.grid-cell--100
             .form__field-label Security Clearance
             = f.simple_fields_for :freelancer_clearances do |freelancer_clearance_form|
-              = render "freelancer_clearance_fields", f: freelancer_clearance_form
+              = render "/freelancer/profiles/freelancer_clearance_fields", f: freelancer_clearance_form
             .links.add-new-clearance
-              = link_to_add_association 'Add Another', f, :freelancer_clearances, class: "btn btn--secondary"
+              = link_to_add_association 'Add Another', f, :freelancer_clearances, partial: '/freelancer/profiles/freelancer_clearance_fields',class: "btn btn--secondary"
       .grid-cell.grid-cell--100
         hr/
       .grid-cell.grid-cell--33
@@ -266,9 +266,9 @@
           .grid-cell.grid-cell--100
             .form__field-label Gallery
             = f.simple_fields_for :freelancer_portfolios do |freelancer_portfolio_form|
-              = render "freelancer_portfolio_fields", f: freelancer_portfolio_form
+              = render "/freelancer/profiles/freelancer_portfolio_fields", f: freelancer_portfolio_form
             .links.add-new-portfolio
-              = link_to_add_association 'Add Another', f, :freelancer_portfolios, class: "btn btn--secondary"
+              = link_to_add_association 'Add Another', f, :freelancer_portfolios, partial: '/freelancer/profiles/freelancer_portfolio_fields',class: "btn btn--secondary"
       .grid-cell.grid-cell--100
         hr/
       .grid-cell.grid-cell--33
@@ -278,9 +278,9 @@
           .grid-cell.grid-cell--100
             .form__field-label Insurance
             = f.simple_fields_for :freelancer_insurances do |freelancer_insurance_form|
-              = render "freelancer_insurance_fields", f: freelancer_insurance_form
+              = render "/freelancer/profiles/freelancer_insurance_fields", f: freelancer_insurance_form
             .links.add-new-insurance
-              = link_to_add_association 'Add Another', f, :freelancer_insurances, class: "btn btn--secondary"
+              = link_to_add_association 'Add Another', f, :freelancer_insurances, partial: '/freelancer/profiles/freelancer_insurance_fields',class: "btn btn--secondary"
       .grid-cell.grid-cell--100
         hr/
       .grid-cell.grid-cell--33
