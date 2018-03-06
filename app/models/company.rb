@@ -120,8 +120,10 @@ class Company < ApplicationRecord
     :more_than_one_thousand
   ]
 
-  serialize :keywords
-  serialize :skills
+  serialize :job_types
+  serialize :job_markets
+  serialize :technical_skill_tags
+  serialize :manufacturer_tags
 
   enumerize :country, in: [
     :at, :au, :be, :ca, :ch, :de, :dk, :es, :fi, :fr, :gb, :hk, :ie, :it, :jp, :lu, :nl, :no, :nz, :pt, :se, :sg, :us
@@ -170,8 +172,6 @@ class Company < ApplicationRecord
       :country,
       :description,
       :established_in,
-      :keywords,
-      :skills,
       if: :enforce_profile_edit
 
   after_create :add_to_hubspot
@@ -233,11 +233,16 @@ class Company < ApplicationRecord
     email: "A",
     contact_name: "B",
     area: "B",
+    job_types: "B",
+    job_markets: "B",
+    technical_skill_tags: "B",
+    manufacturer_tags: "B",
     formatted_address: "C",
     description: "C"
     }, using: {
       tsearch: { prefix: true }
     }
+
 
     attr_accessor :user_type
     # We want to populate both name and contact_name on sign up
@@ -280,6 +285,18 @@ class Company < ApplicationRecord
       exists = attrs["id"].present?
       empty = attrs["year"].blank? and attrs["installs"].blank
       !exists and empty
+    end
+
+    def job_markets_for_job_type(job_type)
+      all_job_markets = I18n.t("enumerize.#{job_type}_job_markets")
+      return [] unless all_job_markets.kind_of?(Hash)
+      freelancer_job_markets = []
+      job_markets.each do |index, value|
+        if all_job_markets[index.to_sym]
+          freelancer_job_markets << all_job_markets[index.to_sym]
+        end
+      end
+      freelancer_job_markets
     end
 
     def self.do_all_geocodes

@@ -37,7 +37,7 @@ a.list-item.list-item--freelancer href="/company/freelancers/#{freelancer.id}"
       = freelancer.tagline
     
     .tags
-      - if !freelancer.keywords.nil? and freelancer.keywords.kind_of?(Hash)
-        - freelancer.keywords.first(4).each do |index, value|
+      - if !freelancer.technical_skill_tags.nil? and freelancer.technical_skill_tags.kind_of?(Hash)
+        - freelancer.technical_skill_tags.first(4).each do |index, value|
           .tag.tag--grey
-            = I18n.t("enumerize.freelancer_keywords.#{index}")          
+            = I18n.t("enumerize.technical_skill_tags.#{index}")

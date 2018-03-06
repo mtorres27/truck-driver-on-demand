@@ -26,7 +26,7 @@ h1 Editing Freelancer
       .freelancer-profile__title
         | Job Types
       .freelancer-profile__checkboxes
-        - I18n.t('enumerize.freelancer_job_types').each do |index, value|
+        - I18n.t('enumerize.job_types').each do |index, value|
           - tag_name = "freelancer[job_types][#{index.to_s}]"
           - if !@freelancer.job_types.nil? and @freelancer.job_types.include?(index.to_s)
             - checked = true
@@ -42,7 +42,7 @@ h1 Editing Freelancer
       .freelancer-profile__title.freelancer_system_integration_checkboxes
         | Job Markets / System Integration
       .freelancer_system_integration_checkboxes.freelancer-profile__checkboxes
-        - I18n.t('enumerize.freelancer_system_integration_job_markets').each do |index, value|
+        - I18n.t('enumerize.system_integration_job_markets').each do |index, value|
           - tag_name = "freelancer[job_markets][#{index.to_s}]"
           - if !@freelancer.job_markets.nil? and @freelancer.job_markets.include?(index.to_s) and !@freelancer.job_types.nil? and @freelancer.job_types.include?('system_integration')
             - checked = true
@@ -54,7 +54,7 @@ h1 Editing Freelancer
       .freelancer-profile__title.freelancer_live_events_staging_and_rental_checkboxes
         | Job Markets / Live Events Staging & Rental
       .freelancer_live_events_staging_and_rental_checkboxes.freelancer-profile__checkboxes
-        - I18n.t('enumerize.freelancer_live_events_staging_and_rental_job_markets').each do |index, value|
+        - I18n.t('enumerize.live_events_staging_and_rental_job_markets').each do |index, value|
           - tag_name = "freelancer[job_markets][#{index.to_s}]"
           - if !@freelancer.job_markets.nil? and @freelancer.job_markets.include?(index.to_s) and !@freelancer.job_types.nil? and @freelancer.job_types.include?('live_events_staging_and_rental')
             - checked = true
@@ -68,7 +68,7 @@ h1 Editing Freelancer
       .freelancer-profile__title.freelancer_system_integration_checkboxes
         | Job Functions / System Integration
       .freelancer_system_integration_checkboxes.freelancer-profile__checkboxes
-        - I18n.t('enumerize.freelancer_system_integration_job_functions').each do |index, value|
+        - I18n.t('enumerize.system_integration_job_functions').each do |index, value|
           - tag_name = "freelancer[job_functions][#{index.to_s}]"
           - if !@freelancer.job_functions.nil? and @freelancer.job_functions.include?(index.to_s) and !@freelancer.job_types.nil? and @freelancer.job_types.include?('system_integration')
             - checked = true
@@ -80,7 +80,7 @@ h1 Editing Freelancer
       .freelancer-profile__title.freelancer_live_events_staging_and_rental_checkboxes
         | Job Functions / Live Events Staging & Rental
       .freelancer_live_events_staging_and_rental_checkboxes.freelancer-profile__checkboxes
-        - I18n.t('enumerize.freelancer_live_events_staging_and_rental_job_functions').each do |index, value|
+        - I18n.t('enumerize.live_events_staging_and_rental_job_functions').each do |index, value|
           - tag_name = "freelancer[job_functions][#{index.to_s}]"
           - if !@freelancer.job_functions.nil? and @freelancer.job_functions.include?(index.to_s) and !@freelancer.job_types.nil? and @freelancer.job_types.include?('live_events_staging_and_rental')
             - checked = true
@@ -94,7 +94,7 @@ h1 Editing Freelancer
       .freelancer-profile__title
         | Technical Skill Tags
       .freelancer-profile__checkboxes
-        - I18n.t('enumerize.freelancer_technical_skill_tags').each do |index, value|
+        - I18n.t('enumerize.technical_skill_tags').each do |index, value|
           - tag_name = "freelancer[technical_skill_tags][#{index.to_s}]"
           - if !@freelancer.technical_skill_tags.nil? and @freelancer.technical_skill_tags.include?(index.to_s)
             - checked = true
@@ -108,7 +108,7 @@ h1 Editing Freelancer
       .freelancer-profile__title
         | Manufacturer Tags
       .freelancer-profile__checkboxes
-        - I18n.t('enumerize.freelancer_manufacturer_tags').each do |index, value|
+        - I18n.t('enumerize.manufacturer_tags').each do |index, value|
           - tag_name = "freelancer[manufacturer_tags][#{index.to_s}]"
           - if !@freelancer.manufacturer_tags.nil? and @freelancer.manufacturer_tags.include?(index.to_s)
             - checked = true

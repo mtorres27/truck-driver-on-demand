@@ -8,8 +8,30 @@ p= "State: #{@job.state}"
 p= "Summary: #{@job.summary}"
 p= "Budget #{number_to_currency(@job.budget)}"
 p
+  | Job Type:
+  = t("enumerize.job_types.#{@job.job_type}")
+p
   | Job Function: 
-  = t("enumerize.job.job_function.#{@job.job_function}")
+  = Job.all_job_functions[@job.job_function.to_sym]
+p
+  | Job Market:
+  = Job.all_job_markets[@job.job_market.to_sym]
+p
+  = "Technical Skill Tags:"
+  - if @job.technical_skill_tags.nil?
+    | None Specified
+  - elsif !@job.technical_skill_tags.nil? and @job.technical_skill_tags.kind_of?(Hash)
+    - @job.technical_skill_tags.each do |index, value|
+      .grey.tag
+        = I18n.t("enumerize.technical_skill_tags.#{index}")
+p
+  = "Manufacturer Tags:"
+  - if @job.manufacturer_tags.nil?
+    | None Specified
+  - elsif !@job.manufacturer_tags.nil? and @job.manufacturer_tags.kind_of?(Hash)
+    - @job.manufacturer_tags.each do |index, value|
+      .grey.tag
+        = I18n.t("enumerize.manufacturer_tags.#{index}")
 p= "Starts On: #{@job.starts_on}"
 p= "Ends On: #{@job.ends_on}"
 p= "Duration: #{@job.duration}"
@@ -19,14 +41,6 @@ p
 p
   | Freelancer Type: 
   = t("enumerize.job.freelancer_type.#{@job.freelancer_type}")
-p
-  = "Keywords:"
-  - if !@job.keywords
-    | None Specified
-  - elsif @job.keywords and @job.keywords.kind_of?(Hash)
-    - @job.keywords.each do |index, value|
-      .grey.tag
-        = I18n.t("enumerize.freelancer_skills.#{index}")
 p= "Budget is Public: #{@job.budget_is_public}"
 p= "Work Order Price: #{@job.contract_price}"
 p= "Payment Schedule: #{@job.payment_schedule}"
