@@ -188,8 +188,11 @@ class Freelancer < ApplicationRecord
 
   pg_search_scope :search, against: {
     name: "A",
-    keywords: "B",
-    skills: "B",
+    job_types: "B",
+    job_markets: "B",
+    technical_skill_tags: "B",
+    manufacturer_tags: "B",
+    job_functions: "B",
     tagline: "C",
     bio: "C"
   }, using: {
@@ -232,7 +235,7 @@ class Freelancer < ApplicationRecord
   end
 
   def job_markets_for_job_type(job_type)
-    all_job_markets = I18n.t("enumerize.freelancer_#{job_type}_job_markets")
+    all_job_markets = I18n.t("enumerize.#{job_type}_job_markets")
     return [] unless all_job_markets.kind_of?(Hash)
     freelancer_job_markets = []
     job_markets.each do |index, value|
@@ -244,7 +247,7 @@ class Freelancer < ApplicationRecord
   end
 
   def job_functions_for_job_type(job_type)
-    all_job_functions = I18n.t("enumerize.freelancer_#{job_type}_job_functions")
+    all_job_functions = I18n.t("enumerize.#{job_type}_job_functions")
     return [] unless all_job_functions.kind_of?(Hash)
     freelancer_job_functions = []
     job_functions.each do |index, value|

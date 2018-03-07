@@ -315,8 +315,8 @@ CREATE TABLE companies (
     company_reviews_count integer DEFAULT 0 NOT NULL,
     profile_header_data text,
     contract_preference character varying DEFAULT 'no_preference'::character varying,
-    keywords citext,
-    skills citext,
+    job_markets citext,
+    technical_skill_tags citext,
     profile_views integer DEFAULT 0 NOT NULL,
     website character varying,
     phone_number character varying,
@@ -354,7 +354,9 @@ CREATE TABLE companies (
     line2 character varying,
     city character varying,
     state character varying,
-    postal_code character varying
+    postal_code character varying,
+    job_types citext,
+    manufacturer_tags citext
 );
 
 
@@ -894,7 +896,7 @@ CREATE TABLE jobs (
     duration integer NOT NULL,
     pay_type character varying,
     freelancer_type character varying NOT NULL,
-    keywords text,
+    technical_skill_tags text,
     invite_only boolean DEFAULT false NOT NULL,
     scope_is_public boolean DEFAULT true NOT NULL,
     budget_is_public boolean DEFAULT false NOT NULL,
@@ -924,7 +926,10 @@ CREATE TABLE jobs (
     stripe_charge_id character varying,
     stripe_balance_transaction_id character varying,
     funds_available_on integer,
-    funds_available boolean DEFAULT false
+    funds_available boolean DEFAULT false,
+    job_type citext,
+    job_market citext,
+    manufacturer_tags citext
 );
 
 
@@ -1062,41 +1067,6 @@ ALTER SEQUENCE payments_id_seq OWNED BY payments.id;
 
 
 --
--- Name: plans; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE plans (
-    id bigint NOT NULL,
-    name character varying NOT NULL,
-    code character varying NOT NULL,
-    trial_period integer,
-    subscription_fees numeric(10,2),
-    fee_schema json,
-    created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
-);
-
-
---
--- Name: plans_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE plans_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: plans_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE plans_id_seq OWNED BY plans.id;
-
-
---
 -- Name: projects; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -1197,43 +1167,6 @@ ALTER SEQUENCE quotes_id_seq OWNED BY quotes.id;
 CREATE TABLE schema_migrations (
     version character varying NOT NULL
 );
-
-
---
--- Name: subscriptions; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE subscriptions (
-    id bigint NOT NULL,
-    company_id integer,
-    plan_id integer,
-    stripe_subscription_id character varying,
-    is_active boolean DEFAULT false,
-    ends_at date,
-    billing_perios_ends_at date,
-    amount numeric,
-    created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
-);
-
-
---
--- Name: subscriptions_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE subscriptions_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: subscriptions_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE subscriptions_id_seq OWNED BY subscriptions.id;
 
 
 --
@@ -1445,13 +1378,6 @@ ALTER TABLE ONLY payments ALTER COLUMN id SET DEFAULT nextval('payments_id_seq':
 
 
 --
--- Name: plans id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY plans ALTER COLUMN id SET DEFAULT nextval('plans_id_seq'::regclass);
-
-
---
 -- Name: projects id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -1463,13 +1389,6 @@ ALTER TABLE ONLY projects ALTER COLUMN id SET DEFAULT nextval('projects_id_seq':
 --
 
 ALTER TABLE ONLY quotes ALTER COLUMN id SET DEFAULT nextval('quotes_id_seq'::regclass);
-
-
---
--- Name: subscriptions id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY subscriptions ALTER COLUMN id SET DEFAULT nextval('subscriptions_id_seq'::regclass);
 
 
 --
@@ -1680,14 +1599,6 @@ ALTER TABLE ONLY payments
 
 
 --
--- Name: plans plans_pkey; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY plans
-    ADD CONSTRAINT plans_pkey PRIMARY KEY (id);
-
-
---
 -- Name: projects projects_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -1709,14 +1620,6 @@ ALTER TABLE ONLY quotes
 
 ALTER TABLE ONLY schema_migrations
     ADD CONSTRAINT schema_migrations_pkey PRIMARY KEY (version);
-
-
---
--- Name: subscriptions subscriptions_pkey; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY subscriptions
-    ADD CONSTRAINT subscriptions_pkey PRIMARY KEY (id);
 
 
 --
@@ -1826,10 +1729,17 @@ CREATE UNIQUE INDEX index_companies_on_email ON companies USING btree (email);
 
 
 --
--- Name: index_companies_on_keywords; Type: INDEX; Schema: public; Owner: -
+-- Name: index_companies_on_job_markets; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_companies_on_keywords ON companies USING btree (keywords);
+CREATE INDEX index_companies_on_job_markets ON companies USING btree (job_markets);
+
+
+--
+-- Name: index_companies_on_manufacturer_tags; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_companies_on_manufacturer_tags ON companies USING btree (manufacturer_tags);
 
 
 --
@@ -1847,10 +1757,10 @@ CREATE UNIQUE INDEX index_companies_on_reset_password_token ON companies USING b
 
 
 --
--- Name: index_companies_on_skills; Type: INDEX; Schema: public; Owner: -
+-- Name: index_companies_on_technical_skill_tags; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_companies_on_skills ON companies USING btree (skills);
+CREATE INDEX index_companies_on_technical_skill_tags ON companies USING btree (technical_skill_tags);
 
 
 --
@@ -1991,6 +1901,13 @@ CREATE UNIQUE INDEX index_identities_on_loginable_type_and_provider_and_uid ON i
 --
 
 CREATE INDEX index_jobs_on_company_id ON jobs USING btree (company_id);
+
+
+--
+-- Name: index_jobs_on_manufacturer_tags; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_jobs_on_manufacturer_tags ON jobs USING btree (manufacturer_tags);
 
 
 --
@@ -2384,12 +2301,6 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20171218020642'),
 ('20171218023711'),
 ('20171222051331'),
-('20180114213233'),
-('20180114214827'),
-('20180114215226'),
-('20180114220148'),
-('20180117114408'),
-('20180117114800'),
 ('20180119214528'),
 ('20180127120826'),
 ('20180127123843'),
@@ -2399,6 +2310,8 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20180205194146'),
 ('20180206182339'),
 ('20180212001020'),
-('20180214212732');
+('20180214212732'),
+('20180305202451'),
+('20180305202656');
 
 

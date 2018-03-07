@@ -45,22 +45,6 @@ en:
       'YT': "Yukon"
       'NT': "Northwest Territories"
     job:
-      job_function:
-        av_installation_technician: "AV Installation Technician"
-        av_rental_and_staging_technician: "AV Rental & Staging Technician"
-        av_programmer: "AV Programmer"
-        general_laborer: "General Laborer"
-        camera_operator: "Camera Operator"
-        projectionist: "Projectionist"
-        project_manager: "Project Manager"
-        drafter: "Drafter"
-        a1_audio_engineer: "A1 - Audio Engineer"
-        a2_audio_assist: "A2 - Audio Assist"
-        l1_lighting_engineer: "L1 - Lighting Engineer"
-        l2_lighting_assist: "L2 - Lighting Assist"
-        me_master_electrician: "ME - Master Electriction"
-        v1_video_engineer: "V1 - Video Engineer"
-        v2_video_assist: "V2 - Video Assist"
       freelancer_type:
         independent: "Independent"
         team: "Team"
@@ -106,10 +90,10 @@ en:
       rupee: "Rupee"
       usd: "US Dollars"
       yen: "Yen"
-    freelancer_job_types:
+    job_types:
       system_integration: 'System Integration'
       live_events_staging_and_rental: 'Live Events Staging & Rental'
-    freelancer_system_integration_job_markets:
+    system_integration_job_markets:
       broadcast: 'Broadcast'
       commercial_installation: 'Commercial Installation'
       corporate_installation: 'Corporate Installation'
@@ -120,7 +104,7 @@ en:
       k12_education: 'K12 Education'
       residential_installation: 'Residential Installation'
       retail_installation: 'Retail Installation'
-    freelancer_system_integration_job_functions:
+    system_integration_job_functions:
       audio_technician: 'Audio Technician'
       cabling_specialist_system_integration: 'Cabling Specialist'
       content_designer: 'Content Designer'
@@ -140,7 +124,7 @@ en:
       technician_assist: 'Technician Assist'
       video_technician: 'Video Technician'
       warehouse_hand: 'Warehouse Hand'
-    freelancer_live_events_staging_and_rental_job_markets:
+    live_events_staging_and_rental_job_markets:
       concerts: 'Concerts'
       corporate_meetings: 'Corporate Meetings'
       government_meetings: 'Government Meetings'
@@ -149,7 +133,7 @@ en:
       sporting_events: 'Sporting Events'
       theatres: 'Theatres'
       trade_shows: 'Trade Shows'
-    freelancer_live_events_staging_and_rental_job_functions:
+    live_events_staging_and_rental_job_functions:
       av_set_strike_technician: 'A/V Set/Strike Technician'
       a1_head_of_sound: 'A1 - Head of Sound'
       a2_sound_assist: 'A2 - Sound Assist'
@@ -221,7 +205,7 @@ en:
       video_recording_engineer: 'Video Recording Engineer'
       video_streaming_engineer: 'Video Streaming Engineer'
       video_wall_content_creation: 'Video Wall Content Creation'
-    freelancer_technical_skill_tags:
+    technical_skill_tags:
       audio: 'Audio'
       auto_cad: 'Auto Cad'
       cable_pull: 'Cable Pull'
@@ -248,7 +232,7 @@ en:
       video_processors: 'Video Processors'
       video_walls: 'Video Walls'
       visio: 'Visio'
-    freelancer_manufacturer_tags:
+    manufacturer_tags:
       absen: 'Absen'
       amx: 'AMX'
       atlas: 'Atlas'

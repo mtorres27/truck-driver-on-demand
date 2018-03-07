@@ -26,7 +26,7 @@
         - if !@freelancer.technical_skill_tags.nil? and @freelancer.technical_skill_tags.kind_of?(Hash)
           - @freelancer.technical_skill_tags.first(4).each do |index, value|
             .tag.tag--grey
-              = I18n.t("enumerize.freelancer_technical_skill_tags.#{index}")
+              = I18n.t("enumerize.technical_skill_tags.#{index}")
   .grid-cell.grid-cell--33
     .profile__stats-box
       .profile__stats.profile__stats--33
@@ -80,7 +80,7 @@
             h3.heading-h3 Job Types
             - @freelancer.job_types.each do |index, value|
               .tag.tag--grey
-                = I18n.t("enumerize.freelancer_job_types.#{index}")
+                = I18n.t("enumerize.job_types.#{index}")
           - if !@freelancer.job_markets.nil? and @freelancer.job_markets.kind_of?(Hash)
             h3.heading-h3 Job Markets
             - if !@freelancer.job_markets_for_job_type("system_integration").empty? and !@freelancer.job_types.nil? and @freelancer.job_types.include?("system_integration")
@@ -109,12 +109,12 @@
             h3.heading-h3 Technical Skill Tags
             - @freelancer.technical_skill_tags.each do |index, value|
               .tag.tag--grey
-                = I18n.t("enumerize.freelancer_technical_skill_tags.#{index}")
+                = I18n.t("enumerize.technical_skill_tags.#{index}")
           - if !@freelancer.manufacturer_tags.nil? and @freelancer.manufacturer_tags.kind_of?(Hash)
             h3.heading-h3 Manufacturer Tags
             - @freelancer.manufacturer_tags.each do |index, value|
               .tag.tag--grey
-                = I18n.t("enumerize.freelancer_manufacturer_tags.#{index}")
+                = I18n.t("enumerize.manufacturer_tags.#{index}")
 
       .grid-cell.grid-cell--vshrink
         h3.heading-h3 Type

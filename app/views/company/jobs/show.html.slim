@@ -59,9 +59,15 @@
       .grid-cell.grid-cell--100
         = render partial: "company/shared/contract_meta", locals: { job: @job }
 
-    .grid-cell.grid-cell--33
+    .grid-cell.grid-cell--expand
+      h3.heading-h3 Job Type
+      p = I18n.t("enumerize.job_types")[@job.job_type.to_sym]
+    .grid-cell.grid-cell--expand
+      h3.heading-h3 Job Market
+      p = Job.all_job_markets[@job.job_market.to_sym]
+    .grid-cell.grid-cell--expand
       h3.heading-h3 Job Function
-      p = @job.job_function&.text
+      p = Job.all_job_functions[@job.job_function.to_sym]
     .grid-cell.grid-cell--expand
       h3.heading-h3 Start
       p = l @job.starts_on
@@ -74,17 +80,24 @@
     .grid-cell.grid-cell--expand
       h3.heading-h3 Freelancer Type
       p = @job.freelancer_type&.text
-
     .grid-cell.grid-cell--100
-      h3.heading-h3 Skills
+      h3.heading-h3 Technical Skill Tags
       div
-        - if !@job.keywords
+        - if @job.technical_skill_tags.nil?
           | None Specified
-        - elsif @job.keywords and @job.keywords.kind_of?(Hash)
-          - @job.keywords.each do |index, value|
+        - elsif @job.technical_skill_tags.kind_of?(Hash)
+          - @job.technical_skill_tags.each do |index, value|
             .tag.tag--grey
-              = I18n.t("enumerize.freelancer_skills.#{index}")
-
+              = I18n.t("enumerize.technical_skill_tags.#{index}")
+    .grid-cell.grid-cell--100
+      h3.heading-h3 Manufacturer Tags
+      div
+        - if @job.manufacturer_tags.nil?
+          | None Specified
+        - elsif @job.manufacturer_tags.kind_of?(Hash)
+          - @job.manufacturer_tags.each do |index, value|
+            .tag.tag--grey
+              = I18n.t("enumerize.manufacturer_tags.#{index}")
     .grid-cell.grid-cell--50
       h3.heading-h3 Job Summary
       p
