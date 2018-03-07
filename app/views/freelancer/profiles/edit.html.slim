@@ -9,8 +9,12 @@
         = f.button :submit, "Update", class: "btn btn--primary"
         a.btn.btn--secondary href=freelancer_profile_path Cancel
 
-
     = render "/freelancer/profiles/edit_freelancer_profile", f: f
+    .grid-cell.grid-cell--67
+      .buttons
+        = f.button :submit, "Update", class: "btn btn--primary"
+        a.btn.btn--secondary href=freelancer_profile_path Cancel
+
 javascript:
   var updateHeaderImage = function() {
     $("#edit-freelancer-profile-header").click();

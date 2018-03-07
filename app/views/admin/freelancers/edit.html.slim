@@ -4,7 +4,8 @@ h1 Editing Freelancer
   = f.error_notification
 
   = render "/freelancer/profiles/edit_freelancer_profile", f: f
-
+  = f.input :verified
+  = f.input :disabled
   .form-actions
     = f.button :submit, class: "btn btn--primary", prompt: "Select"
 

@@ -316,8 +316,8 @@ CREATE TABLE companies (
     company_reviews_count integer DEFAULT 0 NOT NULL,
     profile_header_data text,
     contract_preference character varying DEFAULT 'no_preference'::character varying,
-    keywords citext,
-    skills citext,
+    job_markets citext,
+    technical_skill_tags citext,
     profile_views integer DEFAULT 0 NOT NULL,
     website character varying,
     phone_number character varying,
@@ -355,7 +355,9 @@ CREATE TABLE companies (
     line2 character varying,
     city character varying,
     state character varying,
-    postal_code character varying
+    postal_code character varying,
+    job_types citext,
+    manufacturer_tags citext
 );
 
 
@@ -963,7 +965,7 @@ CREATE TABLE jobs (
     duration integer NOT NULL,
     pay_type character varying,
     freelancer_type character varying NOT NULL,
-    keywords text,
+    technical_skill_tags text,
     invite_only boolean DEFAULT false NOT NULL,
     scope_is_public boolean DEFAULT true NOT NULL,
     budget_is_public boolean DEFAULT false NOT NULL,
@@ -993,7 +995,10 @@ CREATE TABLE jobs (
     stripe_charge_id character varying,
     stripe_balance_transaction_id character varying,
     funds_available_on integer,
-    funds_available boolean DEFAULT false
+    funds_available boolean DEFAULT false,
+    job_type citext,
+    job_market citext,
+    manufacturer_tags citext
 );
 
 
@@ -1925,10 +1930,17 @@ CREATE UNIQUE INDEX index_companies_on_email ON companies USING btree (email);
 
 
 --
--- Name: index_companies_on_keywords; Type: INDEX; Schema: public; Owner: -
+-- Name: index_companies_on_job_markets; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_companies_on_keywords ON companies USING btree (keywords);
+CREATE INDEX index_companies_on_job_markets ON companies USING btree (job_markets);
+
+
+--
+-- Name: index_companies_on_manufacturer_tags; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_companies_on_manufacturer_tags ON companies USING btree (manufacturer_tags);
 
 
 --
@@ -1946,10 +1958,10 @@ CREATE UNIQUE INDEX index_companies_on_reset_password_token ON companies USING b
 
 
 --
--- Name: index_companies_on_skills; Type: INDEX; Schema: public; Owner: -
+-- Name: index_companies_on_technical_skill_tags; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_companies_on_skills ON companies USING btree (skills);
+CREATE INDEX index_companies_on_technical_skill_tags ON companies USING btree (technical_skill_tags);
 
 
 --
@@ -2090,6 +2102,13 @@ CREATE UNIQUE INDEX index_identities_on_loginable_type_and_provider_and_uid ON i
 --
 
 CREATE INDEX index_jobs_on_company_id ON jobs USING btree (company_id);
+
+
+--
+-- Name: index_jobs_on_manufacturer_tags; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_jobs_on_manufacturer_tags ON jobs USING btree (manufacturer_tags);
 
 
 --
@@ -2501,6 +2520,8 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20180214212732'),
 ('20180301165221'),
 ('20180301181649'),
-('20180301194139');
+('20180301194139'),
+('20180305202451'),
+('20180305202656');
 
 

@@ -85,17 +85,17 @@ class Admin::FreelancersController < Admin::BaseController
         :pay_unit_time_preference,
         :disabled,
         :verified,
-        job_types: I18n.t("enumerize.freelancer_job_types").keys,
-        job_markets: (I18n.t("enumerize.freelancer_live_events_staging_and_rental_job_markets").keys + I18n.t("enumerize.freelancer_system_integration_job_markets").keys).uniq,
-        job_functions: (I18n.t("enumerize.freelancer_system_integration_job_functions").keys + I18n.t("enumerize.freelancer_live_events_staging_and_rental_job_functions").keys).uniq,
-        technical_skill_tags:  I18n.t("enumerize.freelancer_technical_skill_tags").keys,
-        manufacturer_tags:  I18n.t("enumerize.freelancer_manufacturer_tags").keys,
+        job_types: I18n.t("enumerize.job_types").keys,
+        job_markets: (I18n.t("enumerize.live_events_staging_and_rental_job_markets").keys + I18n.t("enumerize.system_integration_job_markets").keys).uniq,
+        job_functions: (I18n.t("enumerize.system_integration_job_functions").keys + I18n.t("enumerize.live_events_staging_and_rental_job_functions").keys).uniq,
+        technical_skill_tags:  I18n.t("enumerize.technical_skill_tags").keys,
+        manufacturer_tags:  I18n.t("enumerize.manufacturer_tags").keys,
         certifications_attributes: [:id, :certificate, :cert_type, :name, :_destroy],
         freelancer_references_attributes: [:id, :title, :description, :phone, :name, :_destroy],
         freelancer_affiliations_attributes: [:id, :name, :image, :_destroy],
         freelancer_insurances_attributes: [:id, :name, :description, :_destroy],
         freelancer_clearances_attributes: [:id, :description, :image, :_destroy],
-        freelancer_portfolios_attributes: [:id, :name, :image, :_destroy],
+        freelancer_portfolios_attributes: [:id, :name, :image, :_destroy]
       )
 
     end
