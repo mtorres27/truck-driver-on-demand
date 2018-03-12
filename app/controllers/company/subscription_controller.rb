@@ -45,8 +45,9 @@ class Company::SubscriptionController < Company::BaseController
     end
 
 
-    # logger.debug @plans.inspect
-    # logger.debug @subscription.inspect
+    logger.debug current_company.inspect
+    logger.debug Stripe::Plan.all.inspect
+    logger.debug @subscription.inspect
   end
 
   def reset_company
@@ -62,6 +63,8 @@ class Company::SubscriptionController < Company::BaseController
     current_company.card_brand                = nil
     current_company.exp_month                 = nil
     current_company.exp_year                  = nil
+    current_company.plan_id                   = nil
+    current_company.is_subscription_cancelled = true
     current_company.save
     flash[:notice] = "Your just reset your company Successfully"
     redirect_to company_plans_path
