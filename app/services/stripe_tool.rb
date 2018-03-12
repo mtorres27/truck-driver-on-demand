@@ -1,17 +1,18 @@
 module StripeTool
-  def self.update_company_info_with_subscription(company: company, customer: customer, subscription: subscription)
+  def self.update_company_info_with_subscription(company: company, customer: customer, subscription: subscription, plan: plan)
     company.billing_period_ends_at    = Time.at(subscription.current_period_end).to_datetime
     company.stripe_customer_id        = customer.id
     company.stripe_subscription_id    = subscription.id
     company.stripe_plan_id            = subscription.plan.id
+    company.current_plan_id           = plan[:id]
     company.subscription_cycle        = subscription.plan.interval
     company.subscription_status       = subscription.status
     company.is_subscription_cancelled = false
+    company.is_trial_applicable       = false if plan[:trial_period] > 0
     company.last_4_digits             = customer.sources.data[0].last4
     company.card_brand                = customer.sources.data[0].brand
     company.exp_month                 = customer.sources.data[0].exp_month
     company.exp_year                  = customer.sources.data[0].exp_year
-    # company.currency                  = 'cad' if company.currency == nil
     company.save
   end
 
@@ -43,10 +44,10 @@ module StripeTool
     )
   end
 
-  def self.subscribe(customer: customer, tax: tax, plan_id: plan_id, is_new: is_new, registered_from: registered_from)
+  def self.subscribe(customer: customer, tax: tax, plan: plan, is_new: is_new)
     customer.subscriptions.create(
-      plan: plan_id,
-      trial_period_days: (90-registered_from > 0 && is_new) ? 90-registered_from : 0,
+      plan: plan[:code],
+      trial_period_days: (is_new) ? plan[:trial_period] : 0,
       tax_percent: tax
     )
   end
