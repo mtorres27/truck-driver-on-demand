@@ -1000,7 +1000,8 @@ CREATE TABLE jobs (
     funds_available boolean DEFAULT false,
     job_type citext,
     job_market citext,
-    manufacturer_tags citext
+    manufacturer_tags citext,
+    avj_fees integer
 );
 
 
@@ -1537,6 +1538,13 @@ ALTER TABLE ONLY payments ALTER COLUMN id SET DEFAULT nextval('payments_id_seq':
 
 
 --
+-- Name: plans id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY plans ALTER COLUMN id SET DEFAULT nextval('plans_id_seq'::regclass);
+
+
+--
 -- Name: projects id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -1548,6 +1556,13 @@ ALTER TABLE ONLY projects ALTER COLUMN id SET DEFAULT nextval('projects_id_seq':
 --
 
 ALTER TABLE ONLY quotes ALTER COLUMN id SET DEFAULT nextval('quotes_id_seq'::regclass);
+
+
+--
+-- Name: subscriptions id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY subscriptions ALTER COLUMN id SET DEFAULT nextval('subscriptions_id_seq'::regclass);
 
 
 --
@@ -1774,6 +1789,14 @@ ALTER TABLE ONLY payments
 
 
 --
+-- Name: plans plans_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY plans
+    ADD CONSTRAINT plans_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: projects projects_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -1795,6 +1818,14 @@ ALTER TABLE ONLY quotes
 
 ALTER TABLE ONLY schema_migrations
     ADD CONSTRAINT schema_migrations_pkey PRIMARY KEY (version);
+
+
+--
+-- Name: subscriptions subscriptions_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY subscriptions
+    ADD CONSTRAINT subscriptions_pkey PRIMARY KEY (id);
 
 
 --
@@ -2491,6 +2522,12 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20171218020642'),
 ('20171218023711'),
 ('20171222051331'),
+('20180114213233'),
+('20180114214827'),
+('20180114215226'),
+('20180114220148'),
+('20180117114408'),
+('20180117114800'),
 ('20180119214528'),
 ('20180127120826'),
 ('20180127123843'),
@@ -2510,6 +2547,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20180311184319'),
 ('20180311185453'),
 ('20180311194837'),
-('20180312143559');
+('20180312143559'),
+('20180312192616');
 
 
