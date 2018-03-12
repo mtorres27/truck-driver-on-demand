@@ -5,15 +5,15 @@
         - url = is_image(f.object.image_url) ? f.object.image_url : "/assets/certification/certification_placeholder.png"
         a.authorable_attachment--full href=f.object.image_url target="_blank"
           img src=url
-        .freelancer-profile__image-upload onclick="uploadAffiliateImage(#{f.index})"
+        .freelancer-profile__image-upload onclick="uploadClearanceImage(#{f.index})"
           span class="zmdi zmdi-upload"
       - else
         .authorable_attachment--full
           img src=""
-        .freelancer-profile__image-upload onclick="uploadAffiliateImage()"
+        .freelancer-profile__image-upload onclick="uploadClearanceImage()"
           span class="zmdi zmdi-upload"
 
     .profile__meta__info
       = f.file_field :image, :accept => 'image/gif,image/jpg,image/jpeg,image/png,document/pdf,application/pdf,application/x-pdf', label: false, class: "file-input--hidden"
-      = f.input :name, as: :string, placeholder: "Enter the affiliate name", label: "Affiliate Name"
+      = f.input :description, as: :string, placeholder: "Enter the clearance description", label: "clearance description"
     = link_to_remove_association "", f, { onClick: "hide_remove_association(this)", class: "btn-icon-link"}

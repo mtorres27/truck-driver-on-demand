@@ -1,8 +1,8 @@
 require "image_processing/mini_magick"
 include ImageProcessing::MiniMagick
 
-class FreelancerAffiliation < ApplicationRecord
-  include FreelancerAffiliationUploader[:image]
+class FreelancerPortfolio < ApplicationRecord
+  include FreelancerPortfolioUploader[:image]
   belongs_to :freelancer
 
   after_save :generate_thumbnail
@@ -18,7 +18,7 @@ class FreelancerAffiliation < ApplicationRecord
     page_index_path = self.image_data + "[0]" # first page in PDF
     pdf_page = MiniMagick::Image.read( page_index_path ).first # first item in Magick::ImageList
     filename = "#{id}.pdf"
-    pdf_page.write( "/uploads/freelancer_affiliations/#{filename}" )
+    pdf_page.write( "/uploads/freelancer_portfolios/#{filename}" )
 
     update_column(:thumbnail, filename)
   end
