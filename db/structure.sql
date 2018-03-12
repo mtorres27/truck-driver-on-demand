@@ -1050,7 +1050,7 @@ CREATE TABLE jobs (
     job_type citext,
     job_market citext,
     manufacturer_tags citext,
-    avj_fees integer
+    avj_fees integer DEFAULT 0
 );
 
 
