@@ -357,7 +357,9 @@ CREATE TABLE companies (
     state character varying,
     postal_code character varying,
     job_types citext,
-    manufacturer_tags citext
+    manufacturer_tags citext,
+    current_plan_id integer,
+    is_trial_applicable boolean DEFAULT true
 );
 
 
@@ -2577,7 +2579,12 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20180311184145'),
 ('20180311184319'),
 ('20180311185453'),
+<<<<<<< HEAD
 ('20180311194837');
 >>>>>>> Create plans and subscription modules
+=======
+('20180311194837'),
+('20180312143559');
+>>>>>>> Add subscription fields to company
 
 
