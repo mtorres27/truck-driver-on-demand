@@ -6,11 +6,10 @@ class Admin::FreelancersController < Admin::BaseController
   def index
     @keywords = params.dig(:search, :keywords).presence
 
-    @freelancers = Freelancer.order(:name)
+    @freelancers = Freelancer.order('created_at DESC')
     if @keywords
       @freelancers = @freelancers.search(@keywords)
     end
-    @freelancers = @freelancers.page(params[:page])
   end
 
   def show
@@ -20,7 +19,8 @@ class Admin::FreelancersController < Admin::BaseController
   end
 
   def update
-    if @freelancer.update(freelancer_params)
+    @freelancer.attributes = freelancer_params
+    if @freelancer.save(validate: false)
       redirect_to admin_freelancer_path(@freelancer), notice: "Freelancer updated."
     else
       render :edit
@@ -42,7 +42,22 @@ class Admin::FreelancersController < Admin::BaseController
     redirect_to admin_freelancers_path, notice: "Freelancer disabled."
   end
 
+  def download_csv
+    @freelancers = Freelancer.order('created_at DESC')
+    create_csv
+    send_data @csv_file, :type => 'text/csv; charset=iso-8859-1; header=present', :disposition => 'attachment; filename=freelancers.csv'
+  end
+
   private
+
+    def create_csv
+      @csv_file = CSV.generate({}) do |csv|
+        csv << @freelancers.first.attributes.keys unless @freelancers.first.nil?
+        @freelancers.each do |f|
+          csv << f.attributes.values
+        end
+      end
+    end
 
     def set_freelancer
       @freelancer = Freelancer.find(params[:id])
@@ -70,42 +85,17 @@ class Admin::FreelancersController < Admin::BaseController
         :pay_unit_time_preference,
         :disabled,
         :verified,
-        skills: [
-          :flat_panel_displays,
-          :video_walls,
-          :structured_cabling,
-          :rack_work,
-          :cable_pull,
-          :cable_termination,
-          :projectors,
-          :troubleshooting,
-          :service_and_repair,
-          :av_programming,
-          :interactive_displays,
-          :audio,
-          :video_conferencing,
-          :video_processors,
-          :stagehand,
-          :lighting,
-          :camera,
-          :general_labor,
-          :installation,
-          :rental
-        ],
-        keywords: [
-          :corporate,
-          :government,
-          :broadcast,
-          :retail,
-          :house_of_worship,
-          :higher_education,
-          :k12_education,
-          :residential,
-          :commercial_av,
-          :live_events_and_staging,
-          :rental,
-          :hospitality
-        ],
+        job_types: I18n.t("enumerize.job_types").keys,
+        job_markets: (I18n.t("enumerize.live_events_staging_and_rental_job_markets").keys + I18n.t("enumerize.system_integration_job_markets").keys).uniq,
+        job_functions: (I18n.t("enumerize.system_integration_job_functions").keys + I18n.t("enumerize.live_events_staging_and_rental_job_functions").keys).uniq,
+        technical_skill_tags:  I18n.t("enumerize.technical_skill_tags").keys,
+        manufacturer_tags:  I18n.t("enumerize.manufacturer_tags").keys,
+        certifications_attributes: [:id, :certificate, :cert_type, :name, :_destroy],
+        freelancer_references_attributes: [:id, :title, :description, :phone, :name, :_destroy],
+        freelancer_affiliations_attributes: [:id, :name, :image, :_destroy],
+        freelancer_insurances_attributes: [:id, :name, :description, :_destroy],
+        freelancer_clearances_attributes: [:id, :description, :image, :_destroy],
+        freelancer_portfolios_attributes: [:id, :name, :image, :_destroy]
       )
 
     end

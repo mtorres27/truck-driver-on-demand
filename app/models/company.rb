@@ -2,23 +2,66 @@
 #
 # Table name: companies
 #
-#  id                :integer          not null, primary key
-#  token             :string
-#  email             :citext           not null
-#  name              :string           not null
-#  contact_name      :string           not null
-#  currency          :string           default("CAD"), not null
-#  address           :string
-#  formatted_address :string
-#  area              :string
-#  lat               :decimal(9, 6)
-#  lng               :decimal(9, 6)
-#  hq_country        :string
-#  description       :string
-#  avatar_data       :text
-#  disabled          :boolean          default(FALSE), not null
-#  created_at        :datetime         not null
-#  updated_at        :datetime         not null
+#  id                        :integer          not null, primary key
+#  token                     :string
+#  email                     :citext           not null
+#  name                      :string           not null
+#  contact_name              :string           not null
+#  address                   :string
+#  formatted_address         :string
+#  area                      :string
+#  lat                       :decimal(9, 6)
+#  lng                       :decimal(9, 6)
+#  hq_country                :string
+#  description               :string
+#  avatar_data               :text
+#  disabled                  :boolean          default(TRUE), not null
+#  created_at                :datetime         not null
+#  updated_at                :datetime         not null
+#  messages_count            :integer          default(0), not null
+#  company_reviews_count     :integer          default(0), not null
+#  profile_header_data       :text
+#  contract_preference       :string           default(NULL)
+#  keywords                  :citext
+#  skills                    :citext
+#  profile_views             :integer          default(0), not null
+#  website                   :string
+#  phone_number              :string
+#  number_of_offices         :integer          default(0)
+#  number_of_employees       :string
+#  established_in            :integer
+#  encrypted_password        :string           default(""), not null
+#  reset_password_token      :string
+#  reset_password_sent_at    :datetime
+#  remember_created_at       :datetime
+#  sign_in_count             :integer          default(0), not null
+#  current_sign_in_at        :datetime
+#  last_sign_in_at           :datetime
+#  current_sign_in_ip        :inet
+#  last_sign_in_ip           :inet
+#  stripe_customer_id        :string
+#  stripe_subscription_id    :string
+#  stripe_plan_id            :string
+#  subscription_cycle        :string
+#  is_subscription_cancelled :boolean          default(FALSE)
+#  subscription_status       :string
+#  billing_period_ends_at    :datetime
+#  last_4_digits             :string
+#  card_brand                :string
+#  exp_month                 :string
+#  exp_year                  :string
+#  header_color              :string           default("FF6C38")
+#  country                   :string
+#  confirmation_token        :string
+#  confirmed_at              :datetime
+#  confirmation_sent_at      :datetime
+#  header_source             :string           default("color")
+#  province                  :string
+#  sales_tax_number          :string
+#  line2                     :string
+#  city                      :string
+#  state                     :string
+#  postal_code               :string
 #
 
 class Company < ApplicationRecord
@@ -77,8 +120,10 @@ class Company < ApplicationRecord
     :more_than_one_thousand
   ]
 
-  serialize :keywords
-  serialize :skills
+  serialize :job_types
+  serialize :job_markets
+  serialize :technical_skill_tags
+  serialize :manufacturer_tags
 
   enumerize :country, in: [
     :at, :au, :be, :ca, :ch, :de, :dk, :es, :fi, :fr, :gb, :hk, :ie, :it, :jp, :lu, :nl, :no, :nz, :pt, :se, :sg, :us
@@ -95,6 +140,8 @@ class Company < ApplicationRecord
 
   accepts_nested_attributes_for :featured_projects, allow_destroy: true, reject_if: :reject_featured_projects
   accepts_nested_attributes_for :company_installs, allow_destroy: true, reject_if: :reject_company_installs
+
+  scope :new_registrants, -> { where(disabled: true) }
 
   def freelancers
     Freelancer.
@@ -125,8 +172,6 @@ class Company < ApplicationRecord
       :country,
       :description,
       :established_in,
-      :keywords,
-      :skills,
       if: :enforce_profile_edit
 
   after_create :add_to_hubspot
@@ -188,11 +233,16 @@ class Company < ApplicationRecord
     email: "A",
     contact_name: "B",
     area: "B",
+    job_types: "B",
+    job_markets: "B",
+    technical_skill_tags: "B",
+    manufacturer_tags: "B",
     formatted_address: "C",
     description: "C"
     }, using: {
       tsearch: { prefix: true }
     }
+
 
     attr_accessor :user_type
     # We want to populate both name and contact_name on sign up
@@ -235,6 +285,18 @@ class Company < ApplicationRecord
       exists = attrs["id"].present?
       empty = attrs["year"].blank? and attrs["installs"].blank
       !exists and empty
+    end
+
+    def job_markets_for_job_type(job_type)
+      all_job_markets = I18n.t("enumerize.#{job_type}_job_markets")
+      return [] unless all_job_markets.kind_of?(Hash)
+      freelancer_job_markets = []
+      job_markets.each do |index, value|
+        if all_job_markets[index.to_sym]
+          freelancer_job_markets << all_job_markets[index.to_sym]
+        end
+      end
+      freelancer_job_markets
     end
 
     def self.do_all_geocodes

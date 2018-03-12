@@ -1,12 +1,18 @@
 h2 Dashboard
 
 .row
-  - %w(Company Freelancer Project Job Applicant Quote Message Payment).each do |klass|
+  - ['New Registrant', 'Company', 'Freelancer', 'Project', 'Job', 'Applicant', 'Quote', 'Message', 'Payment'].each do |klass|
     - if %w(Company Freelancer Project Job).include?(klass)
       a href="/admin/#{klass.downcase.pluralize}"
         .col-xs-12.col-sm-6.col-md-4.col-lg-3
           .bs-callout.bs-callout-primary
             h2= number_to_human(klass.constantize.count)
+            p= klass.pluralize
+    - elsif klass == 'New Registrant'
+      a href="/admin/new_registrants"
+        .col-xs-12.col-sm-6.col-md-4.col-lg-3
+          .bs-callout.bs-callout-primary
+            h2= Company.new_registrants.count + Freelancer.new_registrants.count
             p= klass.pluralize
     - else
       .col-xs-12.col-sm-6.col-md-4.col-lg-3

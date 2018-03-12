@@ -16,14 +16,50 @@
 #  pay_per_unit_time        :integer
 #  tagline                  :string
 #  bio                      :text
-#  keywords                 :citext
+#  job_markets              :citext
 #  years_of_experience      :integer          default(0), not null
 #  profile_views            :integer          default(0), not null
 #  projects_completed       :integer          default(0), not null
 #  available                :boolean          default(TRUE), not null
-#  disabled                 :boolean          default(FALSE), not null
+#  disabled                 :boolean          default(TRUE), not null
 #  created_at               :datetime         not null
 #  updated_at               :datetime         not null
+#  messages_count           :integer          default(0), not null
+#  freelancer_reviews_count :integer          default(0), not null
+#  technical_skill_tags     :citext
+#  profile_header_data      :text
+#  verified                 :boolean          default(FALSE)
+#  encrypted_password       :string           default(""), not null
+#  reset_password_token     :string
+#  reset_password_sent_at   :datetime
+#  remember_created_at      :datetime
+#  sign_in_count            :integer          default(0), not null
+#  current_sign_in_at       :datetime
+#  last_sign_in_at          :datetime
+#  current_sign_in_ip       :inet
+#  last_sign_in_ip          :inet
+#  header_color             :string           default("FF6C38")
+#  country                  :string
+#  confirmation_token       :string
+#  confirmed_at             :datetime
+#  confirmation_sent_at     :datetime
+#  freelancer_team_size     :string
+#  freelancer_type          :string
+#  header_source            :string           default("color")
+#  stripe_account_id        :string
+#  stripe_account_status    :text
+#  currency                 :string
+#  sales_tax_number         :string
+#  line2                    :string
+#  state                    :string
+#  postal_code              :string
+#  service_areas            :string
+#  city                     :string
+#  phone_number             :string
+#  special_avj_fees         :decimal(10, 2)
+#  job_types                :citext
+#  job_functions            :citext
+#  manufacturer_tags        :citext
 #
 
 require 'net/http'
@@ -56,6 +92,12 @@ class Freelancer < ApplicationRecord
   has_many :freelancer_affiliations
   accepts_nested_attributes_for :freelancer_affiliations, :reject_if => :all_blank, :allow_destroy => true
 
+  has_many :freelancer_clearances
+  accepts_nested_attributes_for :freelancer_clearances, :reject_if => :all_blank, :allow_destroy => true
+
+  has_many :freelancer_portfolios
+  accepts_nested_attributes_for :freelancer_portfolios, :reject_if => :all_blank, :allow_destroy => true
+
   has_many :freelancer_insurances
   accepts_nested_attributes_for :freelancer_insurances, :reject_if => :all_blank, :allow_destroy => true
 
@@ -66,8 +108,11 @@ class Freelancer < ApplicationRecord
   has_many :company_favourites
   has_many :favourite_companies, through: :company_favourites, source: :company
 
-  serialize :keywords
-  serialize :skills
+  serialize :job_types
+  serialize :job_markets
+  serialize :technical_skill_tags
+  serialize :job_functions
+  serialize :manufacturer_tags
 
   validates :years_of_experience, numericality: { only_integer: true }
 
@@ -104,12 +149,12 @@ class Freelancer < ApplicationRecord
       :service_areas,
       :bio,
       :years_of_experience,
-      :keywords,
-      :skills,
       :pay_unit_time_preference,
       if: :enforce_profile_edit
 
   after_create :add_to_hubspot
+
+  scope :new_registrants, -> { where(disabled: true) }
 
   def add_to_hubspot
     api_key = "5c7ad391-2bfe-4d11-9ba3-82b5622212ba"
@@ -149,8 +194,11 @@ class Freelancer < ApplicationRecord
 
   pg_search_scope :search, against: {
     name: "A",
-    keywords: "B",
-    skills: "B",
+    job_types: "B",
+    job_markets: "B",
+    technical_skill_tags: "B",
+    manufacturer_tags: "B",
+    job_functions: "B",
     tagline: "C",
     bio: "C"
   }, using: {
@@ -192,6 +240,30 @@ class Freelancer < ApplicationRecord
     end
   end
 
+  def job_markets_for_job_type(job_type)
+    all_job_markets = I18n.t("enumerize.#{job_type}_job_markets")
+    return [] unless all_job_markets.kind_of?(Hash)
+    freelancer_job_markets = []
+    job_markets.each do |index, value|
+      if all_job_markets[index.to_sym]
+        freelancer_job_markets << all_job_markets[index.to_sym]
+      end
+    end
+    freelancer_job_markets
+  end
+
+  def job_functions_for_job_type(job_type)
+    all_job_functions = I18n.t("enumerize.#{job_type}_job_functions")
+    return [] unless all_job_functions.kind_of?(Hash)
+    freelancer_job_functions = []
+    job_functions.each do |index, value|
+      if all_job_functions[index.to_sym]
+        freelancer_job_functions << all_job_functions[index.to_sym]
+      end
+    end
+    freelancer_job_functions
+  end
+
   def score
     score = 0
     score += 1 if self.name.present?
@@ -201,7 +273,9 @@ class Freelancer < ApplicationRecord
     score += 5 * self.certifications.count
     score += 2 * self.freelancer_references.count
     score += 2 * self.freelancer_affiliations.count
+    score += 2 * self.freelancer_clearances.count
     score += 1 * self.freelancer_insurances.count
+    score += 1 * self.freelancer_portfolios.count
     score
   end
 
@@ -230,6 +304,18 @@ class Freelancer < ApplicationRecord
   def reject_freelancer_affiliation(attrs)
     exists = attrs["id"].present?
     empty = attrs["image"].blank? and attrs["name"].blank?
+    !exists and empty
+  end
+
+  def reject_freelancer_clearance(attrs)
+    exists = attrs["id"].present?
+    empty = attrs["image"].blank? and attrs["description"].blank?
+    !exists and empty
+  end
+
+  def reject_freelancer_portfolio(attrs)
+    exists = attrs["id"].present?
+    empty = attrs["image"].blank? and attrs["description"].blank?
     !exists and empty
   end
 

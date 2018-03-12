@@ -5,13 +5,28 @@
     .search-form
       = simple_form_for :search, url: admin_companies_path, method: :get do |f|
         = f.input :keywords, label: false, placeholder: "Search", input_html: { value: @keywords }
+  .col-xs-12.col-sm-3
+    a.btn.btn--primary.btn-download-csv href=download_csv_admin_company_path
+      | Export to CSV
+  .col-xs-12.col-sm-12 style="padding-bottom:5px; margin-bottom:5px;"
+    select#filter-by-disabled-select
+      option value= 'all'
+        | All records
+      option value= 'enabled'
+        | Enabled only
+      option value= 'disabled'
+        | Disabled only
 
 .table-responsive
-  table.table.table-striped
+  table.table.table-striped#admin-companies-table
     thead
       tr
         th Name
         th Email
+        th State/Province
+        th Country
+        th Date Created
+        th Account confirmed?
         th Disabled?
         th.text-right Actions
 
@@ -20,6 +35,10 @@
         tr
           td= link_to company.name, admin_company_path(company)
           td= mail_to company.email
+          td= company.state
+          td= company.country.try(:upcase)
+          td= company.created_at.strftime('%b %-d, %Y')
+          td= !company.confirmed_at.nil?
           td= company.disabled
           td.text-right
             = link_to 'Edit', edit_admin_company_path(company)
@@ -30,5 +49,3 @@
               = link_to 'Delete', admin_company_path(company), data: { confirm: "Are you sure?" }, method: :delete
             - else
               = link_to 'Disable', disable_admin_company_path(company)
-
-= paginate @companies

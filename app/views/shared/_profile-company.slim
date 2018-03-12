@@ -128,23 +128,40 @@
 
   .grid-cell.grid-cell--50
     h3.heading-h3 Specialties
-    h4.heading-h4 Markets
-    div
-      - if !@company.keywords.nil? and @company.keywords.kind_of?(Hash)
-        - @company.keywords.each do |index, value|
+    - if !@company.job_types.nil? and @company.job_types.kind_of?(Hash)
+      h4.heading-h4 Job Types
+      div
+        - @company.job_types.each do |index, value|
           .tag.tag--grey
-            = I18n.t("enumerize.freelancer_keywords.#{index}")
-      - else
-        | This company has no markets listed.
+            = I18n.t("enumerize.job_types.#{index}")
 
-    h4.heading-h4 Skills
-    div
-      - if !@company.skills.nil? and @company.skills.kind_of?(Hash)
-        - @company.skills.each do |index, value|
+    - if !@company.job_markets.nil? and @company.job_markets.kind_of?(Hash)
+      h4.heading-h4 Job Markets
+      div
+        - if !@company.job_markets_for_job_type("system_integration").empty? and !@company.job_types.nil? and @company.job_types.include?("system_integration")
+          h5.heading-h5 System Integration
+          - @company.job_markets_for_job_type("system_integration").each do |value|
+            .tag.tag--grey
+              = value
+        - if !@company.job_markets_for_job_type("live_events_staging_and_rental").empty? and !@company.job_types.nil? and @company.job_types.include?("live_events_staging_and_rental")
+          h5.heading-h5 Live Events Staging & Rental
+          - @company.job_markets_for_job_type("live_events_staging_and_rental").each do |value|
+            .tag.tag--grey
+              = value
+
+    - if !@company.technical_skill_tags.nil? and @company.technical_skill_tags.kind_of?(Hash)
+      h4.heading-h4 Technical Skill Tags
+      div
+        - @company.technical_skill_tags.each do |index, value|
           .tag.tag--grey
-            = I18n.t("enumerize.freelancer_skills.#{index}")
-      - else
-        | This company has no skills listed.
+            = I18n.t("enumerize.technical_skill_tags.#{index}")
+
+    - if !@company.manufacturer_tags.nil? and @company.manufacturer_tags.kind_of?(Hash)
+      h4.heading-h4 Manufacturer Tags
+      div
+        - @company.manufacturer_tags.each do |index, value|
+          .tag.tag--grey
+            = I18n.t("enumerize.manufacturer_tags.#{index}")
 
   - if current_admin.present?
     - if @company.confirmed_at.nil? && @company.confirmation_token.present?

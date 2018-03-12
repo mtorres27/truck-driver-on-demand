@@ -6,11 +6,10 @@ class Admin::CompaniesController < Admin::BaseController
   def index
     @keywords = params.dig(:search, :keywords).presence
 
-    @companies = Company.order(:name)
+    @companies = Company.order('created_at DESC')
     if @keywords
       @companies = @companies.search(@keywords)
     end
-    @companies = @companies.page(params[:page])
   end
 
   def show
@@ -20,7 +19,8 @@ class Admin::CompaniesController < Admin::BaseController
   end
 
   def update
-    if @company.update(company_params)
+    @company.attributes = company_params
+    if @company.save(validate: false)
       redirect_to admin_company_path(@company), notice: "Company updated."
     else
       render :edit
@@ -42,7 +42,22 @@ class Admin::CompaniesController < Admin::BaseController
     redirect_to admin_companies_path, notice: "Company disabled."
   end
 
+  def download_csv
+    @companies = Company.order('created_at DESC')
+    create_csv
+    send_data @csv_file, :type => 'text/csv; charset=iso-8859-1; header=present', :disposition => 'attachment; filename=companies.csv'
+  end
+
   private
+
+    def create_csv
+      @csv_file = CSV.generate({}) do |csv|
+        csv << @companies.first.attributes.keys unless @companies.first.nil?
+        @companies.each do |c|
+          csv << c.attributes.values
+        end
+      end
+    end
 
     def set_company
       @company = Company.find(params[:id])
@@ -73,42 +88,12 @@ class Admin::CompaniesController < Admin::BaseController
         :number_of_offices,
         :number_of_employees,
         :established_in,
-        skills: [
-          :flat_panel_displays,
-          :video_walls,
-          :structured_cabling,
-          :rack_work,
-          :cable_pull,
-          :cable_termination,
-          :projectors,
-          :troubleshooting,
-          :service_and_repair,
-          :av_programming,
-          :interactive_displays,
-          :audio,
-          :video_conferencing,
-          :video_processors,
-          :stagehand,
-          :lighting,
-          :camera,
-          :general_labor,
-          :installation,
-          :rental
-        ],
-        keywords: [
-          :corporate,
-          :government,
-          :broadcast,
-          :retail,
-          :house_of_worship,
-          :higher_education,
-          :k12_education,
-          :residential,
-          :commercial_av,
-          :live_events_and_staging,
-          :rental,
-          :hospitality
-        ],
+        company_installs_attributes: [:id, :year, :installs, :_destroy],
+        featured_projects_attributes: [:id, :file, :name, :_destroy],
+        job_types: I18n.t("enumerize.job_types").keys,
+        job_markets: (I18n.t("enumerize.live_events_staging_and_rental_job_markets").keys + I18n.t("enumerize.system_integration_job_markets").keys).uniq,
+        technical_skill_tags:  I18n.t("enumerize.technical_skill_tags").keys,
+        manufacturer_tags:  I18n.t("enumerize.manufacturer_tags").keys,
       )
     end
 end
