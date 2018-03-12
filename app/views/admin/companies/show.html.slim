@@ -13,7 +13,14 @@ h1.heading-h1 Company Profile
   - else
     .profile__wallpaper style="background-image: url(#{@company.profile_header_url.include?("missing") ? "" : @company.profile_header_url});"
 
-
+  - if @company.phone_number?
+    h4.heading-h4
+      | Phone:
+      = " #{@company.phone_number}"
+  - if @company.address?
+    h4.heading-h4
+      | Address:
+      = " #{@company.address}#{@company.line2? ? ", #{@company.line2}" : "" }, #{@company.city}, #{@company.state}, #{@company.country.try(:upcase)}, #{@company.postal_code}"
   = render "shared/profile-company"
 
 
@@ -238,4 +245,3 @@ h1.heading-h1 Company Profile
 /                   td= link_to project.name, admin_project_path(project)
 /                   td.text-right= link_to 'Edit', edit_admin_project_path(project)
 /               end
-

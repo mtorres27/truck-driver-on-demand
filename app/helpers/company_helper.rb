@@ -33,7 +33,7 @@ module CompanyHelper
     "#{company.company_reviews_count} Review#{company.company_reviews_count == 1 ? '' : 's'}"
   end
 
-  
+
   def _is_favourite(company)
     favourites = current_freelancer.favourite_companies.where({company_id: company.id})
 

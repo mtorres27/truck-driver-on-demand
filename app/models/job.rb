@@ -2,37 +2,51 @@
 #
 # Table name: jobs
 #
-#  id                        :integer          not null, primary key
-#  company_id                :integer          not null
-#  project_id                :integer          not null
-#  title                     :string           not null
-#  state                     :string           default("created"), not null
-#  summary                   :text             not null
-#  scope_of_work             :text
-#  budget                    :decimal(10, 2)   not null
-#  job_function              :string           not null
-#  starts_on                 :date             not null
-#  ends_on                   :date
-#  duration                  :integer          not null
-#  pay_type                  :string
-#  freelancer_type           :string           not null
-#  keywords                  :text
-#  invite_only               :boolean          default(FALSE), not null
-#  scope_is_public           :boolean          default(TRUE), not null
-#  budget_is_public          :boolean          default(TRUE), not null
-#  working_days              :text             default([]), not null, is an Array
-#  working_time              :string
-#  contract_price            :decimal(10, 2)
-#  payment_schedule          :jsonb            not null
-#  reporting_frequency       :string
-#  require_photos_on_updates :boolean          default(FALSE), not null
-#  require_checkin           :boolean          default(FALSE), not null
-#  require_uniform           :boolean          default(FALSE), not null
-#  addendums                 :text
-#  applicants_count          :integer          default(0), not null
-#  messages_count            :integer          default(0), not null
-#  created_at                :datetime         not null
-#  updated_at                :datetime         not null
+#  id                                     :integer          not null, primary key
+#  company_id                             :integer          not null
+#  project_id                             :integer          not null
+#  title                                  :string           not null
+#  state                                  :string           default("created"), not null
+#  summary                                :text             not null
+#  scope_of_work                          :text
+#  budget                                 :decimal(10, 2)   not null
+#  job_function                           :string           not null
+#  starts_on                              :date             not null
+#  ends_on                                :date
+#  duration                               :integer          not null
+#  pay_type                               :string
+#  freelancer_type                        :string           not null
+#  keywords                               :text
+#  invite_only                            :boolean          default(FALSE), not null
+#  scope_is_public                        :boolean          default(TRUE), not null
+#  budget_is_public                       :boolean          default(FALSE), not null
+#  working_days                           :text             default([]), not null, is an Array
+#  working_time                           :string
+#  contract_price                         :decimal(10, 2)
+#  payment_schedule                       :jsonb            not null
+#  reporting_frequency                    :string
+#  require_photos_on_updates              :boolean          default(FALSE), not null
+#  require_checkin                        :boolean          default(FALSE), not null
+#  require_uniform                        :boolean          default(FALSE), not null
+#  addendums                              :text
+#  applicants_count                       :integer          default(0), not null
+#  messages_count                         :integer          default(0), not null
+#  created_at                             :datetime         not null
+#  updated_at                             :datetime         not null
+#  currency                               :string
+#  address                                :string
+#  lat                                    :decimal(9, 6)
+#  lng                                    :decimal(9, 6)
+#  formatted_address                      :string
+#  contract_sent                          :boolean          default(FALSE)
+#  opt_out_of_freelance_service_agreement :boolean          default(FALSE)
+#  country                                :string
+#  scope_file_data                        :text
+#  applicable_sales_tax                   :decimal(10, 2)
+#  stripe_charge_id                       :string
+#  stripe_balance_transaction_id          :string
+#  funds_available_on                     :integer
+#  funds_available                        :boolean          default(FALSE)
 #
 
 class Job < ApplicationRecord
@@ -59,29 +73,14 @@ class Job < ApplicationRecord
 
   schema_validations except: :working_days
 
-  serialize :keywords
+  serialize :technical_skill_tags
+  serialize :manufacturer_tags
 
   attr_accessor :send_contract
 
   audited
 
-  enumerize :job_function, in: [
-    :av_installation_technician,
-    :av_rental_and_staging_technician,
-    :av_programmer,
-    :general_laborer,
-    :camera_operator,
-    :projectionist,
-    :project_manager,
-    :drafter,
-    :a1_audio_engineer,
-    :a2_audio_assist,
-    :l1_lighting_engineer,
-    :l2_lighting_assist,
-    :me_master_electrician,
-    :v1_video_engineer,
-    :v2_video_assist
-  ]
+  enumerize :job_type, in: I18n.t('enumerize.job_types').keys
 
   enumerize :working_time, in: [
     :standard_workday,
@@ -92,7 +91,11 @@ class Job < ApplicationRecord
 
   pg_search_scope :search, against: {
     title: "A",
-    keywords: "B",
+    job_type: "B",
+    job_market: "B",
+    technical_skill_tags: "B",
+    manufacturer_tags: "B",
+    job_function: "B",
     summary: "C",
     scope_of_work: "C"
   }, using: {
@@ -180,7 +183,6 @@ class Job < ApplicationRecord
   ]
 
   validates :budget, numericality: true, sane_price: true
-  validates :job_function, inclusion: { in: job_function.values }
   validates :duration, numericality: { only_integer: true }
   validates :pay_type, inclusion: { in: pay_type.values }, allow_blank: true
   validates :freelancer_type, inclusion: { in: freelancer_type.values }
@@ -188,7 +190,6 @@ class Job < ApplicationRecord
   validates_presence_of :country
   validate :scope_or_file
   validates_presence_of :address
-  validates_presence_of :keywords
 
   def freelancer
     applicants.with_state(:accepted).first&.freelancer
@@ -221,6 +222,14 @@ class Job < ApplicationRecord
 
   def gpayments_sum_total
     payments_sum_total * (1 + ((applicable_sales_tax||0) / 100))
+  end
+
+  def self.all_job_functions
+    I18n.t("enumerize.system_integration_job_functions").merge(I18n.t("enumerize.live_events_staging_and_rental_job_functions"))
+  end
+
+  def self.all_job_markets
+    I18n.t("enumerize.system_integration_job_markets").merge(I18n.t("enumerize.live_events_staging_and_rental_job_markets"))
   end
 
   private
