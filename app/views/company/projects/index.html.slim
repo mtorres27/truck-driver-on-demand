@@ -1,7 +1,9 @@
 .header-bar
   h1.heading-h1 Job Postings
-  - if ['trialing', 'active'].include?(current_company.subscription_status)
+  - if ['trialing', 'active'].include?(current_company.subscription_status) || (current_company.subscription_status == "cancelled" && current_company.billing_period_ends_at > Time.now.to_i)
     = link_to "Post a Job", new_company_job_path, class: "btn btn--primary", role: "button"
+  - else
+    = link_to "Subscribe to post jobs", company_plans_path, class: "btn btn--primary", role: "button"
 
 - content_for :secondary do
   .action-bar
