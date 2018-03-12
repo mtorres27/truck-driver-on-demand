@@ -655,6 +655,43 @@ ALTER SEQUENCE freelancer_insurances_id_seq OWNED BY freelancer_insurances.id;
 
 --
 -- Name: freelancer_portfolios; Type: TABLE; Schema: public; Owner: -
+<<<<<<< HEAD
+=======
+--
+
+CREATE TABLE freelancer_portfolios (
+    id bigint NOT NULL,
+    name text,
+    image character varying,
+    image_data text,
+    freelancer_id integer,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: freelancer_portfolios_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE freelancer_portfolios_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: freelancer_portfolios_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE freelancer_portfolios_id_seq OWNED BY freelancer_portfolios.id;
+
+
+--
+-- Name: freelancer_references; Type: TABLE; Schema: public; Owner: -
+>>>>>>> Create plans and subscription modules
 --
 
 CREATE TABLE freelancer_portfolios (
@@ -789,12 +826,18 @@ CREATE TABLE freelancers (
     valid_driver boolean,
     own_tools boolean,
     company_name character varying,
+<<<<<<< HEAD
     special_avj_fees numeric(10,2),
     job_types citext,
     job_functions citext,
     manufacturer_tags citext,
     special_avj_fees numeric(10,2),
     avj_credit numeric(10,2) DEFAULT NULL::numeric
+=======
+    job_types citext,
+    job_functions citext,
+    manufacturer_tags citext
+>>>>>>> Create plans and subscription modules
 );
 
 
@@ -998,7 +1041,10 @@ CREATE TABLE jobs (
     stripe_balance_transaction_id character varying,
     funds_available_on integer,
     funds_available boolean DEFAULT false,
+<<<<<<< HEAD
     contracted_at timestamp without time zone,
+=======
+>>>>>>> Create plans and subscription modules
     job_type citext,
     job_market citext,
     manufacturer_tags citext
@@ -1142,6 +1188,46 @@ ALTER SEQUENCE payments_id_seq OWNED BY payments.id;
 
 
 --
+<<<<<<< HEAD
+=======
+-- Name: plans; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE plans (
+    id bigint NOT NULL,
+    name character varying,
+    code character varying,
+    trial_period integer,
+    subscription_fee numeric(10,2),
+    fee_schema json,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL,
+    description text,
+    period character varying DEFAULT 'yearly'::character varying
+);
+
+
+--
+-- Name: plans_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE plans_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: plans_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE plans_id_seq OWNED BY plans.id;
+
+
+--
+>>>>>>> Create plans and subscription modules
 -- Name: projects; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -1240,6 +1326,46 @@ CREATE TABLE schema_migrations (
 
 
 --
+<<<<<<< HEAD
+=======
+-- Name: subscriptions; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE subscriptions (
+    id bigint NOT NULL,
+    company_id integer,
+    plan_id integer,
+    stripe_subscription_id character varying,
+    is_active boolean,
+    ends_at date,
+    billing_perios_ends_at date,
+    amount numeric,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: subscriptions_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE subscriptions_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: subscriptions_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE subscriptions_id_seq OWNED BY subscriptions.id;
+
+
+--
+>>>>>>> Create plans and subscription modules
 -- Name: users; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -1386,6 +1512,16 @@ ALTER TABLE ONLY freelancer_insurances ALTER COLUMN id SET DEFAULT nextval('free
 
 --
 -- Name: freelancer_portfolios id; Type: DEFAULT; Schema: public; Owner: -
+<<<<<<< HEAD
+=======
+--
+
+ALTER TABLE ONLY freelancer_portfolios ALTER COLUMN id SET DEFAULT nextval('freelancer_portfolios_id_seq'::regclass);
+
+
+--
+-- Name: freelancer_references id; Type: DEFAULT; Schema: public; Owner: -
+>>>>>>> Create plans and subscription modules
 --
 
 ALTER TABLE ONLY freelancer_portfolios ALTER COLUMN id SET DEFAULT nextval('freelancer_portfolios_id_seq'::regclass);
@@ -1612,6 +1748,17 @@ ALTER TABLE ONLY freelancer_insurances
 
 --
 -- Name: freelancer_portfolios freelancer_portfolios_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+<<<<<<< HEAD
+=======
+--
+
+ALTER TABLE ONLY freelancer_portfolios
+    ADD CONSTRAINT freelancer_portfolios_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: freelancer_references freelancer_references_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+>>>>>>> Create plans and subscription modules
 --
 
 ALTER TABLE ONLY freelancer_portfolios
@@ -1830,6 +1977,7 @@ CREATE UNIQUE INDEX index_companies_on_email ON companies USING btree (email);
 
 --
 -- Name: index_companies_on_job_markets; Type: INDEX; Schema: public; Owner: -
+<<<<<<< HEAD
 --
 
 CREATE INDEX index_companies_on_job_markets ON companies USING btree (job_markets);
@@ -1839,6 +1987,17 @@ CREATE INDEX index_companies_on_job_markets ON companies USING btree (job_market
 -- Name: index_companies_on_manufacturer_tags; Type: INDEX; Schema: public; Owner: -
 --
 
+=======
+--
+
+CREATE INDEX index_companies_on_job_markets ON companies USING btree (job_markets);
+
+
+--
+-- Name: index_companies_on_manufacturer_tags; Type: INDEX; Schema: public; Owner: -
+--
+
+>>>>>>> Create plans and subscription modules
 CREATE INDEX index_companies_on_manufacturer_tags ON companies USING btree (manufacturer_tags);
 
 
@@ -1977,6 +2136,7 @@ CREATE UNIQUE INDEX index_freelancers_on_reset_password_token ON freelancers USI
 
 --
 -- Name: index_freelancers_on_technical_skill_tags; Type: INDEX; Schema: public; Owner: -
+<<<<<<< HEAD
 --
 
 CREATE INDEX index_freelancers_on_technical_skill_tags ON freelancers USING btree (technical_skill_tags);
@@ -1987,6 +2147,11 @@ CREATE INDEX index_freelancers_on_technical_skill_tags ON freelancers USING btre
 --
 
 CREATE INDEX index_friend_invites_on_freelancer_id ON friend_invites USING btree (freelancer_id);
+=======
+--
+
+CREATE INDEX index_freelancers_on_technical_skill_tags ON freelancers USING btree (technical_skill_tags);
+>>>>>>> Create plans and subscription modules
 
 
 --
@@ -2397,6 +2562,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20180301194139'),
 ('20180305202451'),
 ('20180305202656'),
+<<<<<<< HEAD
 ('20180309165026'),
 ('20180312205533'),
 ('20180321172650'),
@@ -2407,5 +2573,11 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20180413190903'),
 ('20180418190453'),
 ('20180418195120');
+=======
+('20180311184145'),
+('20180311184319'),
+('20180311185453'),
+('20180311194837');
+>>>>>>> Create plans and subscription modules
 
 
