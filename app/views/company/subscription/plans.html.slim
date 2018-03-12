@@ -4,9 +4,9 @@ br
 - content_for :secondary do
   .result-wrapper
     .result-content
-      - if @subscription && current_company.subscription_status == "trialing" || current_company.subscription_status == "active"
+      - if !current_company.plan_id.nil? && !@subscription.nil? && (current_company.subscription_status == "trialing" || current_company.subscription_status == "active")
         h2.plans__header
-          | You're currently subscribed to the #{current_company.subscription_cycle}ly plan,
+          | You're currently subscribed to the #{current_company.plan.present? ? current_company.plan.name : ''} plan,
           - if current_company.subscription_status == "trialing"
             | with
             strong<>  #{((Time.at(@subscription.current_period_end)-Time.at(@subscription.current_period_start))/1.day).floor}
@@ -39,21 +39,24 @@ br
               div Cancel subscription
 
       - else
-        h2.plans__header
-          - if ((Time.now- current_company.created_at)/1.day).floor <= 90
-            | You are currently on
-            strong<>  Day #{((Time.now- current_company.created_at)/1.day).floor}
-            | of your 90 Day free trial.
-          br/
-          | Updgrade your account to continue with full access to your AV Junction account.
+        / h2.plans__header
+        /   - if ((Time.now- current_company.created_at)/1.day).floor <= 90
+        /     | You are currently on
+        /     strong<>  Day #{((Time.now- current_company.created_at)/1.day).floor}
+        /     | of your 90 Day free trial.
+        /   br/
+        /   | Updgrade your account to continue with full access to your AV Junction account.
         .plans-container
           - @plans.each do |plan|
             .plans
               h3.plans__title #{plan[:name]}
               .plans__subtitle #{ plan.description}
               .plans__pricing
-                .plans__price $#{plan[:subscription_fee]}
-                .plans__currency USD #{ current_company.country == 'ca' && plan[:subscription_fee] > 0 ?  "+ " + (province_tax(current_company.province)*100).to_s + "% tax" : '' }
+                - if  plan[:subscription_fee] > 0
+                  .plans__price $#{plan[:subscription_fee]}
+                  .plans__currency USD #{ current_company.country == 'ca'  ?  "+ " + (province_tax(current_company.province)*100).to_s + "% tax" : '' }
+                - else
+                  .plans__price Free
               div style="text-align: center"
                 = form_tag company_subscription_checkout_path, method: 'post', plan: plan  do
                   input type="hidden" name="plan_id" value=plan[:code]
