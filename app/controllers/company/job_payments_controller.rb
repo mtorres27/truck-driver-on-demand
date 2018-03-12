@@ -3,7 +3,6 @@ class Company::JobPaymentsController < Company::BaseController
   before_action :set_payment, except: [:index]
 
   def index
-    # logger.debug @job.inspect
     @payments = @job.payments.order(:created_at)
     @accepted_quote = @job.accepted_quote
     @connector = StripeAccount.new(@job.freelancer)
