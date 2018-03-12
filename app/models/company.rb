@@ -80,6 +80,8 @@ class Company < ApplicationRecord
   include AvatarUploader[:avatar]
   include ProfileHeaderUploader[:profile_header]
 
+  belongs_to :plan, foreign_key: 'plan_id', optional: true
+
   has_many :projects, -> { order(updated_at: :desc) }, dependent: :destroy
   has_many :jobs, dependent: :destroy
   has_many :applicants, dependent: :destroy
@@ -147,47 +149,6 @@ class Company < ApplicationRecord
 
   scope :new_registrants, -> { where(disabled: true) }
 
-  after_create :add_to_hubspot
-
-  def add_to_hubspot
-    api_key = "5c7ad391-2bfe-4d11-9ba3-82b5622212ba"
-    url = "https://api.hubapi.com/contacts/v1/contact/createOrUpdate/email/#{email}/?hapikey=#{api_key}"
-    uri = URI.parse(url)
-    http = Net::HTTP.new(uri.host, uri.port)
-    http.use_ssl = true if uri.scheme == 'https'
-    req = Net::HTTP::Post.new uri
-    data = {
-        properties: [
-            {
-                property: "email",
-                value: email
-            },
-            {
-                property: 'company',
-                value: name
-            },
-            {
-                property: "firstname",
-                value: contact_name.split(" ")[0]
-            },
-            {
-                property: "lastname",
-                value: contact_name.split(" ")[1]
-            },
-            {
-                property: "lifecyclestage",
-                value: "customer"
-            },
-            {
-                property: "im_an",
-                value: "AV Company"
-            },
-        ]
-    }
-    req.body = data.to_json
-    res = http.start { |http| http.request req }
-  end
-
   def freelancers
     Freelancer.
     joins(applicants: :job).
@@ -224,6 +185,48 @@ class Company < ApplicationRecord
   def start_trial
     self.subscription_status = "trialing"
     self.billing_period_ends_at = (Time.now + 3.months).to_datetime
+  end
+
+  after_create :add_to_hubspot
+
+  def add_to_hubspot
+    api_key = "5c7ad391-2bfe-4d11-9ba3-82b5622212ba"
+    url = "https://api.hubapi.com/contacts/v1/contact/createOrUpdate/email/#{email}/?hapikey=#{api_key}"
+    uri = URI.parse(url)
+    http = Net::HTTP.new(uri.host, uri.port)
+    http.use_ssl = true if uri.scheme == 'https'
+    req = Net::HTTP::Post.new uri
+    data = {
+      properties: [
+        {
+          property: "email",
+          value: email
+        },
+        {
+          property: 'company',
+          value: name
+        },
+        {
+          property: "firstname",
+          value: contact_name.split(" ")[0]
+        },
+        {
+          property: "lastname",
+          value: contact_name.split(" ")[1]
+        },
+        {
+          property: "lifecyclestage",
+          value: "customer"
+        },
+        {
+          property: "im_an",
+          value: "AV Company"
+        },
+      ]
+    }
+
+    req.body = data.to_json
+    res = http.start { |http| http.request req }
   end
 
   # def province=(value)
