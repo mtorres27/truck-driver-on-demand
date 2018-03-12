@@ -358,7 +358,7 @@ CREATE TABLE companies (
     postal_code character varying,
     job_types citext,
     manufacturer_tags citext,
-    current_plan_id integer,
+    plan_id bigint,
     is_trial_applicable boolean DEFAULT true
 );
 
@@ -2011,6 +2011,13 @@ CREATE INDEX index_companies_on_name ON companies USING btree (name);
 
 
 --
+-- Name: index_companies_on_plan_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_companies_on_plan_id ON companies USING btree (plan_id);
+
+
+--
 -- Name: index_companies_on_reset_password_token; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -2333,6 +2340,14 @@ ALTER TABLE ONLY jobs
 
 ALTER TABLE ONLY freelancer_reviews
     ADD CONSTRAINT fk_rails_2d750cb05f FOREIGN KEY (freelancer_id) REFERENCES freelancers(id);
+
+
+--
+-- Name: companies fk_rails_2e8c071a79; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY companies
+    ADD CONSTRAINT fk_rails_2e8c071a79 FOREIGN KEY (plan_id) REFERENCES plans(id);
 
 
 --
