@@ -33,6 +33,8 @@ class Company < ApplicationRecord
   include AvatarUploader[:avatar]
   include ProfileHeaderUploader[:profile_header]
 
+  belongs_to :plan, foreign_key: 'plan_id', optional: true
+
   has_many :projects, -> { order(updated_at: :desc) }, dependent: :destroy
   has_many :jobs, dependent: :destroy
   has_many :applicants, dependent: :destroy
@@ -171,12 +173,12 @@ class Company < ApplicationRecord
     res = http.start { |http| http.request req }
   end
 
-  before_create :start_trial
-
-  def start_trial
-    self.subscription_status = "trialing"
-    self.billing_period_ends_at = (Time.now + 3.months).to_datetime
-  end
+  # before_create :start_trial
+  #
+  # def start_trial
+  #   self.subscription_status = "trialing"
+  #   self.billing_period_ends_at = (Time.now + 3.months).to_datetime
+  # end
 
   # def province=(value)
   #   write_attribute(:state, value)
