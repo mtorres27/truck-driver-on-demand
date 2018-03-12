@@ -11,6 +11,17 @@ class Freelancer::ContractsController < Freelancer::BaseController
     @job.save
     @accepted_quote = @job.accepted_quote
 
+    # calculate avj fees
+    plan = @job.company.plan
+    if @accepted_quote.amount > 2000
+      fees = plan.fee_schema["above_2000"]
+      @job.avj_fees = fees
+    else
+      fees = plan.fee_schema["below_2000"]
+      @job.avj_fees = fees
+    end
+    @job.save
+
     # Send notice email
     PaymentsMailer.request_funds_company(@job.company, current_freelancer, @job).deliver
 
