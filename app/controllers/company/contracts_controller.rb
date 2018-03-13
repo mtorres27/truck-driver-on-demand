@@ -22,10 +22,12 @@ class Company::ContractsController < Company::BaseController
       else
         freelancer.update_attribute(:avj_credit, freelancer.avj_credit.to_f - CurrencyExchange.currency_to_dollars(avj_credit_used, currency))
       end
-      platform_fees = (((quote.amount * avj_fees) - avj_credit_used) - stripe_fees)
+      plan_fees = @job.company_plan_fees
+      platform_fees = (((quote.amount * avj_fees) - avj_credit_used) - stripe_fees + plan_fees - stripe_fees)
       if platform_fees < 0
         platform_fees = 0
       end
+      # TODO: calculate taxes on app fees
 
       charge = Stripe::Charge.create({
         amount: (amount * 100).floor ,
