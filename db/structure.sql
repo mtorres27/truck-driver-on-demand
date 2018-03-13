@@ -1001,7 +1001,7 @@ CREATE TABLE jobs (
     job_type citext,
     job_market citext,
     manufacturer_tags citext,
-    avj_fees integer DEFAULT 0
+    company_plan_fees integer DEFAULT 0
 );
 
 
