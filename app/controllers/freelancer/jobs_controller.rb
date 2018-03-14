@@ -76,7 +76,8 @@ class Freelancer::JobsController < Freelancer::BaseController
     @applicant.job = @job
     @applicant.company = @job.company
 
-    if !@stripe_connector.verified? && !Rails.env.development?
+    # if !@stripe_connector.verified? && !Rails.env.development?
+    if !@stripe_connector.verified?
       redirect_to freelancer_job_path(@job), alert: "You need to verify your identity before applying for a job."
     elsif apply_params[:message].nil? or apply_params[:pay_type].nil?
       redirect_to freelancer_job_path(@job), alert: "Required data not found; please ensure your message and amount have both been entered."

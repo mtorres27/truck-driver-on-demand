@@ -1,4 +1,4 @@
-class Freelancer::ReviewsController < Company::BaseController
+class Freelancer::ReviewsController < Freelancer::BaseController
   before_action :set_job
 
   def show
