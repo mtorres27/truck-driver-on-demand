@@ -85,6 +85,7 @@ class Admin::FreelancersController < Admin::BaseController
         :pay_unit_time_preference,
         :disabled,
         :verified,
+        :special_avj_fees,
         job_types: I18n.t("enumerize.job_types").keys,
         job_markets: (I18n.t("enumerize.live_events_staging_and_rental_job_markets").keys + I18n.t("enumerize.system_integration_job_markets").keys).uniq,
         job_functions: (I18n.t("enumerize.system_integration_job_functions").keys + I18n.t("enumerize.live_events_staging_and_rental_job_functions").keys).uniq,
@@ -95,7 +96,7 @@ class Admin::FreelancersController < Admin::BaseController
         freelancer_affiliations_attributes: [:id, :name, :image, :_destroy],
         freelancer_insurances_attributes: [:id, :name, :description, :_destroy],
         freelancer_clearances_attributes: [:id, :description, :image, :_destroy],
-        freelancer_portfolios_attributes: [:id, :name, :image, :_destroy]
+        freelancer_portfolios_attributes: [:id, :name, :image, :_destroy],
       )
 
     end

@@ -824,7 +824,8 @@ CREATE TABLE freelancers (
     company_name character varying,
     job_types citext,
     job_functions citext,
-    manufacturer_tags citext
+    manufacturer_tags citext,
+    special_avj_fees numeric(10,2)
 );
 
 
@@ -2408,6 +2409,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20180130000647'),
 ('20180130013756'),
 ('20180130022656'),
+('20180201201033'),
 ('20180205194146'),
 ('20180206182339'),
 ('20180212001020'),
