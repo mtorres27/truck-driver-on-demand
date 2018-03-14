@@ -2,13 +2,14 @@ class Freelancer::JobsController < Freelancer::BaseController
   include JobHelper
 
   def index
-    if params[:search][:keywords].blank? && params[:search][:address].blank?
+    if params[:search][:keywords].blank? && params[:search][:address].blank?&& params[:search][:country].blank?
       flash[:error] = "You'll need to add some search criteria to narrow your search results!"
       redirect_to freelancer_root_path
     end
 
     @keywords = params.dig(:search, :keywords).presence
     @address = params.dig(:search, :address).presence
+    @country = params.dig(:search, :country).presence
 
     @sort = params.dig(:search, :sort).presence
     @distance = params.dig(:search, :distance).presence
@@ -50,6 +51,10 @@ class Freelancer::JobsController < Freelancer::BaseController
 
     if @keywords
       @jobs = @jobs.search(@keywords)
+    end
+
+    if @country
+      @jobs = @jobs.where(country: @country)
     end
 
     @jobs = @jobs.page(params[:page]).per(50)

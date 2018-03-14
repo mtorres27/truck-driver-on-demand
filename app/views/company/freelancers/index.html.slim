@@ -4,7 +4,7 @@ h1.heading-h1 Search for AV Freelancers
 - content_for :secondary do
   .action-bar
     h2.heading-h2.heading-h2--action-bar
-      - if params.dig(:search, :keywords).presence || params.dig(:search, :address).presence
+      - if params.dig(:search, :keywords).presence || params.dig(:search, :address).presence || params.dig(:search, :country).presence
         = "#{@freelancers.total_count} freelancers found for "
       - else
         = "#{@freelancers.total_count} freelancers found"
@@ -15,6 +15,10 @@ h1.heading-h1 Search for AV Freelancers
         = " near "
         span class="result-header__text--strong"
           = params[:search][:address]
+      - if params.dig(:search, :country).presence and params[:search][:country] > ""
+        = " in "
+        span class="result-header__text--strong"
+          = I18n.t("enumerize.country.#{params[:search][:country]}")
 
 
     .action-bar__actions

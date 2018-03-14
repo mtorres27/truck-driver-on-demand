@@ -106,6 +106,10 @@ class Job < ApplicationRecord
 
   enumerize :freelancer_type, in: [ :independent, :team ]
 
+  enumerize :country, in: [
+      :at, :au, :be, :ca, :ch, :de, :dk, :es, :fi, :fr, :gb, :hk, :ie, :it, :jp, :lu, :nl, :no, :nz, :pt, :se, :sg, :us
+  ]
+
   enumerize :state, in: [
     :created,
     :published,
@@ -176,10 +180,6 @@ class Job < ApplicationRecord
     :daily,
     :every_other_day,
     :weekly
-  ]
-
-  enumerize :country, in: [
-    :at, :au, :be, :ca, :ch, :de, :dk, :es, :fi, :fr, :gb, :hk, :ie, :it, :jp, :lu, :nl, :no, :nz, :pt, :se, :sg, :us
   ]
 
   validates :budget, numericality: true, sane_price: true

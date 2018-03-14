@@ -3,7 +3,9 @@
   input type="hidden" value="#{params.dig(:search, :distance)}" id="distance" name="search[distance]"
   .grid-cell.grid-cell--100
     = f.input :keywords, label: false, placeholder: "Search by job function, skills, etc.", input_html: { value: @keywords }
-  .grid-cell.grid-cell--50
+  .grid-cell.grid-cell--100
     = f.input :address, label: false, placeholder: "Enter City and State/Province", input_html: { value: @address }
-  .grid-cell.grid-cell--50
+  .grid-cell.grid-cell--67
+    = f.input :country, collection: I18n.t('enumerize.country').map { |i, v| [i, v] }, label_method: :second, value_method: :first, label: false, prompt: "Select Country", selected: @country
+  .grid-cell.grid-cell--33
     = f.submit "Search", class: "btn btn--primary"
