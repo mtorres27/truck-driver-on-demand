@@ -998,7 +998,8 @@ CREATE TABLE jobs (
     funds_available boolean DEFAULT false,
     job_type citext,
     job_market citext,
-    manufacturer_tags citext
+    manufacturer_tags citext,
+    contracted_at timestamp without time zone
 );
 
 
@@ -1136,41 +1137,6 @@ ALTER SEQUENCE payments_id_seq OWNED BY payments.id;
 
 
 --
--- Name: plans; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE plans (
-    id bigint NOT NULL,
-    name character varying NOT NULL,
-    code character varying NOT NULL,
-    trial_period integer,
-    subscription_fees numeric(10,2),
-    fee_schema json,
-    created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
-);
-
-
---
--- Name: plans_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE plans_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: plans_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE plans_id_seq OWNED BY plans.id;
-
-
---
 -- Name: projects; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -1241,7 +1207,8 @@ CREATE TABLE quotes (
     applicable_sales_tax integer,
     avj_fees numeric(10,2),
     stripe_fees numeric(10,2),
-    net_avj_fees numeric(10,2)
+    net_avj_fees numeric(10,2),
+    accepted_at timestamp without time zone
 );
 
 
@@ -1271,43 +1238,6 @@ ALTER SEQUENCE quotes_id_seq OWNED BY quotes.id;
 CREATE TABLE schema_migrations (
     version character varying NOT NULL
 );
-
-
---
--- Name: subscriptions; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE subscriptions (
-    id bigint NOT NULL,
-    company_id integer,
-    plan_id integer,
-    stripe_subscription_id character varying,
-    is_active boolean DEFAULT false,
-    ends_at date,
-    billing_perios_ends_at date,
-    amount numeric,
-    created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
-);
-
-
---
--- Name: subscriptions_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE subscriptions_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: subscriptions_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE subscriptions_id_seq OWNED BY subscriptions.id;
 
 
 --
@@ -1533,13 +1463,6 @@ ALTER TABLE ONLY payments ALTER COLUMN id SET DEFAULT nextval('payments_id_seq':
 
 
 --
--- Name: plans id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY plans ALTER COLUMN id SET DEFAULT nextval('plans_id_seq'::regclass);
-
-
---
 -- Name: projects id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -1551,13 +1474,6 @@ ALTER TABLE ONLY projects ALTER COLUMN id SET DEFAULT nextval('projects_id_seq':
 --
 
 ALTER TABLE ONLY quotes ALTER COLUMN id SET DEFAULT nextval('quotes_id_seq'::regclass);
-
-
---
--- Name: subscriptions id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY subscriptions ALTER COLUMN id SET DEFAULT nextval('subscriptions_id_seq'::regclass);
 
 
 --
@@ -1784,14 +1700,6 @@ ALTER TABLE ONLY payments
 
 
 --
--- Name: plans plans_pkey; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY plans
-    ADD CONSTRAINT plans_pkey PRIMARY KEY (id);
-
-
---
 -- Name: projects projects_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -1813,14 +1721,6 @@ ALTER TABLE ONLY quotes
 
 ALTER TABLE ONLY schema_migrations
     ADD CONSTRAINT schema_migrations_pkey PRIMARY KEY (version);
-
-
---
--- Name: subscriptions subscriptions_pkey; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY subscriptions
-    ADD CONSTRAINT subscriptions_pkey PRIMARY KEY (id);
 
 
 --
@@ -2502,12 +2402,6 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20171218020642'),
 ('20171218023711'),
 ('20171222051331'),
-('20180114213233'),
-('20180114214827'),
-('20180114215226'),
-('20180114220148'),
-('20180117114408'),
-('20180117114800'),
 ('20180119214528'),
 ('20180127120826'),
 ('20180127123843'),
@@ -2522,6 +2416,8 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20180301181649'),
 ('20180301194139'),
 ('20180305202451'),
-('20180305202656');
+('20180305202656'),
+('20180309165026'),
+('20180312205533');
 
 

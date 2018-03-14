@@ -76,7 +76,7 @@ class Freelancer::JobsController < Freelancer::BaseController
     @applicant.job = @job
     @applicant.company = @job.company
 
-    if !@stripe_connector.verified?
+    if !@stripe_connector.verified? && !Rails.env.development?
       redirect_to freelancer_job_path(@job), alert: "You need to verify your identity before applying for a job."
     elsif apply_params[:message].nil? or apply_params[:pay_type].nil?
       redirect_to freelancer_job_path(@job), alert: "Required data not found; please ensure your message and amount have both been entered."
@@ -131,8 +131,8 @@ class Freelancer::JobsController < Freelancer::BaseController
           @message.quote_id = @applicant.quotes.last.id
           @message.save
         end
-
         # add quote
+        CompanyMailer.notice_received_new_quote_from_freelancer(@applicant.freelancer, @job.company, @job, @applicant.quotes.last).deliver
         redirect_to freelancer_path(@job), notice: "Application successfully submitted"
       else
         # error message; redirect back to job page

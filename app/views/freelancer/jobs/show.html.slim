@@ -7,7 +7,7 @@
   .action-bar
     h2.heading-h2.heading-h2--action-bar Job Detail
     .action-bar__actions
-      - if @have_applied == false && @connector.verified?
+      - if @have_applied == false && @connector.verified? || Rails.env.development?
           a.btn.btn--primary href="#" id="apply-for-job"
             | Apply Now
       - elsif !@connector.verified?

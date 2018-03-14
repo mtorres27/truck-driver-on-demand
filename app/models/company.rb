@@ -143,6 +143,47 @@ class Company < ApplicationRecord
 
   scope :new_registrants, -> { where(disabled: true) }
 
+  after_create :add_to_hubspot
+
+  def add_to_hubspot
+    api_key = "5c7ad391-2bfe-4d11-9ba3-82b5622212ba"
+    url = "https://api.hubapi.com/contacts/v1/contact/createOrUpdate/email/#{email}/?hapikey=#{api_key}"
+    uri = URI.parse(url)
+    http = Net::HTTP.new(uri.host, uri.port)
+    http.use_ssl = true if uri.scheme == 'https'
+    req = Net::HTTP::Post.new uri
+    data = {
+        properties: [
+            {
+                property: "email",
+                value: email
+            },
+            {
+                property: 'company',
+                value: name
+            },
+            {
+                property: "firstname",
+                value: contact_name.split(" ")[0]
+            },
+            {
+                property: "lastname",
+                value: contact_name.split(" ")[1]
+            },
+            {
+                property: "lifecyclestage",
+                value: "customer"
+            },
+            {
+                property: "im_an",
+                value: "AV Company"
+            },
+        ]
+    }
+    req.body = data.to_json
+    res = http.start { |http| http.request req }
+  end
+
   def freelancers
     Freelancer.
     joins(applicants: :job).
@@ -173,48 +214,6 @@ class Company < ApplicationRecord
       :description,
       :established_in,
       if: :enforce_profile_edit
-
-  after_create :add_to_hubspot
-
-  def add_to_hubspot
-    api_key = "5c7ad391-2bfe-4d11-9ba3-82b5622212ba"
-    url = "https://api.hubapi.com/contacts/v1/contact/createOrUpdate/email/#{email}/?hapikey=#{api_key}"
-    uri = URI.parse(url)
-    http = Net::HTTP.new(uri.host, uri.port)
-    http.use_ssl = true if uri.scheme == 'https'
-    req = Net::HTTP::Post.new uri
-    data = {
-      properties: [
-        {
-          property: "email",
-          value: email
-        },
-        {
-          property: 'company',
-          value: name
-        },
-        {
-          property: "firstname",
-          value: contact_name.split(" ")[0]
-        },
-        {
-          property: "lastname",
-          value: contact_name.split(" ")[1]
-        },
-        {
-          property: "lifecyclestage",
-          value: "customer"
-        },
-        {
-          property: "im_an",
-          value: "AV Company"
-        },
-      ]
-    }
-
-    req.body = data.to_json
-    res = http.start { |http| http.request req }
-  end
 
   before_create :start_trial
 

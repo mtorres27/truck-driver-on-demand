@@ -152,9 +152,9 @@ class Freelancer < ApplicationRecord
       :pay_unit_time_preference,
       if: :enforce_profile_edit
 
-  after_create :add_to_hubspot
-
   scope :new_registrants, -> { where(disabled: true) }
+
+  after_create :add_to_hubspot
 
   def add_to_hubspot
     api_key = "5c7ad391-2bfe-4d11-9ba3-82b5622212ba"
@@ -164,32 +164,38 @@ class Freelancer < ApplicationRecord
     http.use_ssl = true if uri.scheme == 'https'
     req = Net::HTTP::Post.new uri
     data = {
-      properties: [
-        {
-          property: "email",
-          value: email
-        },
-        {
-          property: "firstname",
-          value: name.split(" ")[0]
-        },
-        {
-          property: "lastname",
-          value: name.split(" ")[1]
-        },
-        {
-          property: "lifecyclestage",
-          value: "customer"
-        },
-        {
-          property: "im_an",
-          value: "AV Freelancer"
-        },
-      ]
+        properties: [
+            {
+                property: "email",
+                value: email
+            },
+            {
+                property: "firstname",
+                value: name.split(" ")[0]
+            },
+            {
+                property: "lastname",
+                value: name.split(" ")[1]
+            },
+            {
+                property: "lifecyclestage",
+                value: "customer"
+            },
+            {
+                property: "im_an",
+                value: "AV Freelancer"
+            },
+        ]
     }
-
     req.body = data.to_json
     res = http.start { |http| http.request req }
+  end
+
+
+  after_create :send_welcome_email
+
+  def send_welcome_email
+    FreelancerMailer.verify_your_identity(self).deliver
   end
 
   pg_search_scope :search, against: {
