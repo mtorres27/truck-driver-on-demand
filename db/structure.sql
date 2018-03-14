@@ -998,7 +998,8 @@ CREATE TABLE jobs (
     funds_available boolean DEFAULT false,
     job_type citext,
     job_market citext,
-    manufacturer_tags citext
+    manufacturer_tags citext,
+    contracted_at timestamp without time zone
 );
 
 
@@ -1206,7 +1207,8 @@ CREATE TABLE quotes (
     applicable_sales_tax integer,
     avj_fees numeric(10,2),
     stripe_fees numeric(10,2),
-    net_avj_fees numeric(10,2)
+    net_avj_fees numeric(10,2),
+    accepted_at timestamp without time zone
 );
 
 
@@ -2414,6 +2416,8 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20180301181649'),
 ('20180301194139'),
 ('20180305202451'),
-('20180305202656');
+('20180305202656'),
+('20180309165026'),
+('20180312205533');
 
 

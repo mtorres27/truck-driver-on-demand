@@ -9,13 +9,13 @@ p= "Summary: #{@job.summary}"
 p= "Budget #{number_to_currency(@job.budget)}"
 p
   | Job Type:
-  = t("enumerize.job_types.#{@job.job_type}")
+  = @job.job_type.nil? ? "Not specified" : t("enumerize.job_types.#{@job.job_type}")
 p
   | Job Function: 
-  = Job.all_job_functions[@job.job_function.to_sym]
+  = @job.job_function.nil? ? "Not specified" : Job.all_job_functions[@job.job_function.to_sym]
 p
   | Job Market:
-  = Job.all_job_markets[@job.job_market.to_sym]
+  = @job.job_market.nil? ? "Not specified" : Job.all_job_markets[@job.job_market.to_sym]
 p
   = "Technical Skill Tags:"
   - if @job.technical_skill_tags.nil?

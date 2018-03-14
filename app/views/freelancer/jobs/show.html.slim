@@ -7,6 +7,7 @@
   .action-bar
     h2.heading-h2.heading-h2--action-bar Job Detail
     .action-bar__actions
+      /- if @have_applied == false && @connector.verified? || Rails.env.development?
       - if @have_applied == false && @connector.verified?
           a.btn.btn--primary href="#" id="apply-for-job"
             | Apply Now
@@ -108,7 +109,7 @@
           - @job.technical_skill_tags.each do |index, value|
             .grey.tag
               = I18n.t("enumerize.technical_skill_tags.#{index}")
-      - if !@job.technical_skill_tags.nil? and @job.technical_skill_tags.kind_of?(Hash)
+      - if !@job.manufacturer_tags.nil? and @job.manufacturer_tags.kind_of?(Hash)
         h3.heading-h3 Manufacturer Tags
         div
           - @job.manufacturer_tags.each do |index, value|

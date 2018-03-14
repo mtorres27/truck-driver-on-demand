@@ -20,3 +20,5 @@
 /public/packs
 
 /public/uploads
+
+.env

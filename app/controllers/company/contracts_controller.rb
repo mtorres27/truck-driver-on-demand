@@ -45,6 +45,7 @@ class Company::ContractsController < Company::BaseController
 
       # Send notice email
       PaymentsMailer.notice_funds_freelancer(current_company, freelancer, @job).deliver
+      PaymentsMailer.notice_funds_company(current_company, freelancer, @job).deliver
       # logger.debug quote.inspect
 
     rescue => e
@@ -87,12 +88,15 @@ class Company::ContractsController < Company::BaseController
         @m.send_contract = true
         @m.body = "Hi #{@job.freelancer.name}! This is a note to let you know that we've just sent a work order to you. <a href='/freelancer/jobs/#{@job.id}/work_order'>Click here</a> to view it!"
         @m.save
+        FreelancerMailer.notice_work_order_received(current_company, @job.freelancer).deliver
 
         @job.messages << @m
 
         # TODO: Add bit of code here that sets something in the table to denote being sent?
         @job.contract_sent = true
         @job.save
+
+
       end
       redirect_to company_job_path(@job), notice: "Work Order updated." if !@job.contracted?
     else
