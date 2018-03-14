@@ -6,10 +6,11 @@
       .profile__meta__info
         h2.heading-h2
           = @freelancer.name
-        h4.heading-h4
-          | Email:
-          a href="mailto:#{@freelancer.email}" target="_blank"
-            = @freelancer.email
+        - unless current_company
+          h4.heading-h4
+            | Email:
+            a href="mailto:#{@freelancer.email}" target="_blank"
+              = @freelancer.email
         h4.heading-h4
           = "Joined #{@freelancer.created_at.strftime('%B %d, %Y')}"
         h4.heading-h4
