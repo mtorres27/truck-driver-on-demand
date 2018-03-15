@@ -268,7 +268,7 @@ class Company < ApplicationRecord
 
     after_save :check_if_should_do_geocode
     def check_if_should_do_geocode
-      if saved_changes.include?("address") or (!address.nil? and lat.nil?)
+      if saved_changes.include?("address") or saved_changes.include?("city") or (!address.nil? and lat.nil?) or (!city.nil? and lat.nil?)
         do_geocode
         update_columns(lat: lat, lng: lng)
       end
@@ -302,7 +302,7 @@ class Company < ApplicationRecord
       Company.all.each do |f|
         p "Doing geocode for " + f.id.to_s + "(#{f.compile_address})"
         f.do_geocode
-        f.save
+        f.update_columns(lat: f.lat, lng: f.lng)
 
         sleep 1
       end
