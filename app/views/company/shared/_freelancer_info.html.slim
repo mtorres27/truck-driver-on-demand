@@ -1,4 +1,5 @@
-a.list-item.list-item--freelancer href="/company/freelancers/#{freelancer.id}"
+- has_avatar_class = freelancer.avatar_url == "avatar/missing.png"  ? "freelancer_without_avatar" : "freelancer_with_avatar"
+a.list-item.list-item--freelancer href="/company/freelancers/#{freelancer.id}" class="#{has_avatar_class}"
 
   .list__img
     - if is_favourite(freelancer)

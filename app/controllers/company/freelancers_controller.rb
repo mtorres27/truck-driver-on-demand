@@ -5,6 +5,7 @@ class Company::FreelancersController < Company::BaseController
     @keywords = params.dig(:search, :keywords).presence
     @address = params.dig(:search, :address).presence
     @country = params.dig(:search, :country).presence
+    @avatar_only = params[:avatar_only] == "1"
 
     if params.has_key?(:search) and !@keywords and !@address and !@country
       flash[:error] = "You'll need to add some search criteria to narrow your search results!"
