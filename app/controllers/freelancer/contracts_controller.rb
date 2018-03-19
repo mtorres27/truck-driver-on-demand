@@ -14,12 +14,17 @@ class Freelancer::ContractsController < Freelancer::BaseController
 
     # calculate avj fees
     plan = @job.company.plan
+    currency_rate = CurrencyRate.where("currency = ?", @job.currency).first
+    # logger.debug plan.inspect
+    # logger.debug currency_rate.inspect
     if @accepted_quote.amount > 2000
       fees = plan.fee_schema["above_2000"]
-      @job.avj_fees = fees
+      # logger.debug fees
+      @job.company_plan_fees = fees * currency_rate.rate
     else
       fees = plan.fee_schema["below_2000"]
-      @job.avj_fees = fees
+      # logger.debug fees
+      @job.company_plan_fees = fees * currency_rate.rate
     end
     @job.save
 
