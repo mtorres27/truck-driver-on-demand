@@ -29,6 +29,8 @@ class Company::FreelancersController < Company::BaseController
       @freelancers = Freelancer.where(disabled: false)
     end
 
+    @freelancers = @freelancers.order("verified DESC")
+
     if @address
       # check for cached version of address
       if Rails.cache.read(@address)
