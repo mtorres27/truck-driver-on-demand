@@ -90,6 +90,8 @@ group :development, :test do
 
   gem "mocha", "~> 1.2.1"
   gem "rails-erd"
+
+  gem 'pry'
 end
 
 group :development do
