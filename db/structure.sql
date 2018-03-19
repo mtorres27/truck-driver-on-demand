@@ -1083,7 +1083,7 @@ CREATE TABLE jobs (
     job_type citext,
     job_market citext,
     manufacturer_tags citext,
-    company_plan_fees integer DEFAULT 0
+    company_plan_fees numeric(10,2) DEFAULT 0
 );
 
 
@@ -2694,7 +2694,12 @@ INSERT INTO "schema_migrations" (version) VALUES
 >>>>>>> Add AVJ fees to jobs
 =======
 ('20180312192616'),
+<<<<<<< HEAD
 ('20180319115900');
 >>>>>>> Create currency rate model
+=======
+('20180319115900'),
+('20180319144208');
+>>>>>>> Change plan fees column type to decimal to accept new currency rates
 
 
