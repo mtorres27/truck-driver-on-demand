@@ -47,7 +47,7 @@ en:
     job:
       freelancer_type:
         independent: "Independent"
-        team: "Team"
+        service_provider: "Service Provider"
       header_source:
         color: "Colour"
         wallpaper: "Wallpaper"

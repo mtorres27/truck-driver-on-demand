@@ -216,7 +216,7 @@ class Freelancer < ApplicationRecord
   ]
 
   enumerize :freelancer_type, in: [
-    :independent, :team
+    :independent, :service_provider
   ]
 
   enumerize :freelancer_team_size, in: [
