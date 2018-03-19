@@ -487,6 +487,39 @@ ALTER SEQUENCE company_reviews_id_seq OWNED BY company_reviews.id;
 
 
 --
+-- Name: currency_rates; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE currency_rates (
+    id bigint NOT NULL,
+    currency character varying,
+    country character varying,
+    rate numeric(10,2) NOT NULL,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: currency_rates_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE currency_rates_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: currency_rates_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE currency_rates_id_seq OWNED BY currency_rates.id;
+
+
+--
 -- Name: favourites; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -1426,6 +1459,13 @@ ALTER TABLE ONLY company_reviews ALTER COLUMN id SET DEFAULT nextval('company_re
 
 
 --
+-- Name: currency_rates id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY currency_rates ALTER COLUMN id SET DEFAULT nextval('currency_rates_id_seq'::regclass);
+
+
+--
 -- Name: favourites id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -1658,6 +1698,14 @@ ALTER TABLE ONLY company_installs
 
 ALTER TABLE ONLY company_reviews
     ADD CONSTRAINT company_reviews_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: currency_rates currency_rates_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY currency_rates
+    ADD CONSTRAINT currency_rates_pkey PRIMARY KEY (id);
 
 
 --
@@ -2548,6 +2596,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20180311185453'),
 ('20180311194837'),
 ('20180312143559'),
-('20180312192616');
+('20180312192616'),
+('20180319115900');
 
 
