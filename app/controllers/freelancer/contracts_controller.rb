@@ -17,7 +17,9 @@ class Freelancer::ContractsController < Freelancer::BaseController
     currency_rate = CurrencyRate.where("currency = ?", @job.currency).first
     # logger.debug plan.inspect
     # logger.debug currency_rate.inspect
-    if @accepted_quote.amount > 2000
+    # Get Amount in USD
+    job_amout = @accepted_quote.amount * currency_rate.rate
+    if job_amout > 2000
       fees = plan.fee_schema["above_2000"]
       # logger.debug fees
       @job.company_plan_fees = fees * currency_rate.rate
