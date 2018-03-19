@@ -1,0 +1,45 @@
+/ p= @job.freelancer&.formatted_address || @job.freelancer&.address
+.invoice
+  .invoice__meta-1
+    .avatar.avatar--invoice
+      = image_tag('avjunction-logo_header.svg', size: "130x70")
+    .invoice__meta-4
+  / div= @job.freelancer&.name
+  / div= @job.freelancer&.formatted_address
+  / div= @job.freelancer&.sales_tax_number
+
+  .invoice__meta-2
+    .invoice__meta-1
+      .invoice__text--right Company:
+      .invoice__meta-4
+        div= current_company.name
+        div= current_company.address
+        div= current_company.sales_tax_number
+    / div 293 Rhodes DR.
+    / div Orlando, FL 32003
+    .invoice__meta-1
+      .invoice__meta-3
+        .invoice__text--right Inv #:
+        .invoice__text--right Date:
+      .invoice__meta-4
+        div AVJ Fee
+        div= @job.company_plan_fees
+  .invoice__meta-2
+    .invoice__meta-1
+      .invoice__text--right Job:
+      .invoice__to-name-addy
+        div= @job.title
+  .invoice__table
+    .invoice__table-row.invoice__table-row--header
+      .invoice__table-text.invoice__table-text--left Description
+      .invoice__table-text.invoice__table-text--right Amount
+    .invoice__table-row
+      .invoice__table-text.invoice__table-text--left AVJ Fee
+      .invoice__table-text.invoice__table-text--right= number_with_precision(@job.company_plan_fees, precision: 2).to_s + " " + @job.currency.upcase
+    - if current_company.country == 'ca'
+      .invoice__table-row
+        .invoice__table-text.invoice__table-text--left Sales Tax @ #{@job.applicable_sales_tax}%
+        .invoice__table-text.invoice__table-text--right= number_with_precision((@job.company_plan_fees * 0.13), precision: 2).to_s + " " + @job.currency.upcase
+    .invoice__table-row.invoice__table-row--total
+      .invoice__table-text.invoice__table-text--left Total Payout
+      .invoice__table-text.invoice__table-text--right= number_with_precision(@job.company_plan_fees * 1.13, precision: 2).to_s + " " + @job.currency.upcase

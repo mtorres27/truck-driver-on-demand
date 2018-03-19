@@ -1,10 +1,18 @@
 class Company::JobsController < Company::BaseController
-  before_action :set_job, only: [:show, :edit, :update, :destroy, :contract, :edit_contract, :update_contract, :publish]
+  before_action :set_job, only: [:print_avj_invoice, :avj_invoice, :show, :edit, :update, :destroy, :contract, :edit_contract, :update_contract, :publish]
 
   def job_countries
     country = params[:country]
     specs = Stripe::CountrySpec.retrieve(country.upcase)
     render partial: "job_currencies", locals: { currencies: specs.supported_bank_account_currencies } if specs.supported_bank_account_currencies
+  end
+
+  def avj_invoice
+
+  end
+
+  def print_avj_invoice
+
   end
 
   def new
