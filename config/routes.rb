@@ -96,6 +96,8 @@ Rails.application.routes.draw do
 
     resources :notifications
     get 'job_country_currency', to: 'jobs#job_countries', as: 'job_country_currency'
+    get '/:id/avj-invoice', to: 'jobs#avj_invoice', as: 'job_avj_invoice'
+    get '/:id/print-avj-invoice', to: 'jobs#print_avj_invoice', as: 'job_avj_invoice_print'
     resources :jobs, except: [:index] do
       resources :applicants do
         get :request_quote, on: :member
