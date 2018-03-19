@@ -4,17 +4,16 @@
     .avatar.avatar--invoice
       = image_tag('avjunction-logo_header.svg', size: "130x70")
     .invoice__meta-4
-  / div= @job.freelancer&.name
-  / div= @job.freelancer&.formatted_address
-  / div= @job.freelancer&.sales_tax_number
 
   .invoice__meta-2
     .invoice__meta-1
       .invoice__text--right Company:
       .invoice__meta-4
-        div= current_company.name
-        div= current_company.address
-        div= current_company.sales_tax_number
+        div AV Junction
+        div 2010 Winston Park Drive, Suite 200
+        div Oakville North
+        div Ontario, Canada
+        div 72393 3693 RC0001
     / div 293 Rhodes DR.
     / div Orlando, FL 32003
     .invoice__meta-1
@@ -22,8 +21,8 @@
         .invoice__text--right Inv #:
         .invoice__text--right Date:
       .invoice__meta-4
-        div AVJ Fee
-        div= @job.company_plan_fees
+        div= @job.id
+        div= @job.accepted_quote.paid_at.to_date
   .invoice__meta-2
     .invoice__meta-1
       .invoice__text--right Job:
