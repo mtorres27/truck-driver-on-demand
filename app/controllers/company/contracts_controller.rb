@@ -7,8 +7,9 @@ class Company::ContractsController < Company::BaseController
       quote = @job.accepted_quote
       freelancer = @job.freelancer
       payments = @job.payments
+      currency_rate = CurrencyRate.find_by(currency: @job.currency)
       amount = (quote.amount * (1 + (@job.applicable_sales_tax / 100)))
-      stripe_fees = amount * 0.029 + 0.3
+      stripe_fees = amount * 0.029 + ( 0.3 * currency_rate.rate )
       avj_fees = freelancer.special_avj_fees || Rails.configuration.avj_fees
       currency = @job.currency
       avj_credit_available = currency == 'usd' ? freelancer.avj_credit.to_f : CurrencyExchange.dollars_to_currency(freelancer.avj_credit.to_f, currency)
@@ -22,6 +23,7 @@ class Company::ContractsController < Company::BaseController
       else
         freelancer.update_attribute(:avj_credit, freelancer.avj_credit.to_f - CurrencyExchange.currency_to_dollars(avj_credit_used, currency))
       end
+
       plan_fees = @job.company_plan_fees
       platform_fees = (((quote.amount * avj_fees) - avj_credit_used) - stripe_fees + plan_fees - stripe_fees)
       if platform_fees < 0
