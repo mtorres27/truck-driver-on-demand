@@ -1034,7 +1034,7 @@ CREATE TABLE jobs (
     job_type citext,
     job_market citext,
     manufacturer_tags citext,
-    company_plan_fees integer DEFAULT 0
+    company_plan_fees numeric(10,2) DEFAULT 0
 );
 
 
@@ -2597,6 +2597,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20180311194837'),
 ('20180312143559'),
 ('20180312192616'),
-('20180319115900');
+('20180319115900'),
+('20180319144208');
 
 
