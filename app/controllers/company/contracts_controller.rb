@@ -6,9 +6,10 @@ class Company::ContractsController < Company::BaseController
       quote = @job.accepted_quote
       freelancer = @job.freelancer
       payments = @job.payments
+      currency_rate = CurrencyRate.find_by(currency: @job.currency)
 
       amount = (quote.amount * (1 + (@job.applicable_sales_tax / 100)))
-      stripe_fees = amount * 0.029 + 0.3
+      stripe_fees = amount * 0.029 + ( 0.3 * currency_rate.rate )
       plan_fees = @job.company_plan_fees
       platform_fees = ((quote.amount * Rails.configuration.avj_fees) + plan_fees - stripe_fees)
       # TODO: calculate taxes on app fees
