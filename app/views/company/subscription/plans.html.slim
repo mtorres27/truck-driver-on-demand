@@ -4,7 +4,7 @@ br
 - content_for :secondary do
   .result-wrapper
     .result-content
-      - if !current_company.plan_id.nil? && !@subscription.nil? && (current_company.subscription_status == "trialing" || current_company.subscription_status == "active")
+      - if !current_company.stripe_plan_id.nil? && !@subscription.nil? && (current_company.subscription_status == "trialing" || current_company.subscription_status == "active")
         h2.plans__header
           | You're currently subscribed to the #{current_company.plan.present? ? current_company.plan.name : ''} plan,
           - if current_company.subscription_status == "trialing"
