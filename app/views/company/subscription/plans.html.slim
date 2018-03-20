@@ -12,7 +12,7 @@ br
             strong<>  #{((Time.at(@subscription.current_period_end)-Time.at(@subscription.current_period_start))/1.day).floor}
             | days left in your trial.
           - elsif !current_company.is_subscription_cancelled
-            | Your subscription will renewed at #{Time.at(@subscription.current_period_end).to_date}
+            | Your subscription will be renewed at #{Time.at(@subscription.current_period_end).to_date}
           - elsif current_company.is_subscription_cancelled == true
             | But unfortunately you requested to cancel your subscription, it'll end at #{current_company.billing_period_ends_at}
           - else
@@ -40,12 +40,8 @@ br
 
       - else
         / h2.plans__header
-        /   - if ((Time.now- current_company.created_at)/1.day).floor <= 90
-        /     | You are currently on
-        /     strong<>  Day #{((Time.now- current_company.created_at)/1.day).floor}
-        /     | of your 90 Day free trial.
-        /   br/
-        /   | Updgrade your account to continue with full access to your AV Junction account.
+        /   - if current_company.billing_period_ends_at > Time.now
+        /     | You're currently subscribed to the #{current_company.plan.present? ? current_company.plan.name : ''} plan, But unfortunately you requested to cancel your subscription, it'll end at #{current_company.billing_period_ends_at}
         .plans-container
           - @plans.each do |plan|
             .plans

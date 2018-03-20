@@ -1035,7 +1035,7 @@ CREATE TABLE jobs (
     job_type citext,
     job_market citext,
     manufacturer_tags citext,
-    company_plan_fees numeric(10,2) DEFAULT 0
+    company_plan_fees numeric(10,2) DEFAULT 0,
     contracted_at timestamp without time zone
 );
 
@@ -2595,15 +2595,15 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20180301194139'),
 ('20180305202451'),
 ('20180305202656'),
+('20180309165026'),
 ('20180311184145'),
 ('20180311184319'),
 ('20180311185453'),
 ('20180311194837'),
 ('20180312143559'),
 ('20180312192616'),
+('20180312205533'),
 ('20180319115900'),
-('20180319144208'),
-('20180309165026'),
-('20180312205533');
+('20180319144208');
 
 
