@@ -1083,7 +1083,12 @@ CREATE TABLE jobs (
     job_type citext,
     job_market citext,
     manufacturer_tags citext,
+<<<<<<< HEAD
     company_plan_fees numeric(10,2) DEFAULT 0
+=======
+    company_plan_fees numeric(10,2) DEFAULT 0,
+    contracted_at timestamp without time zone
+>>>>>>> Comment some lines
 );
 
 
@@ -2665,6 +2670,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20180305202451'),
 ('20180305202656'),
 <<<<<<< HEAD
+<<<<<<< HEAD
 ('20180309165026'),
 ('20180312205533'),
 ('20180321172650'),
@@ -2676,6 +2682,9 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20180418190453'),
 ('20180418195120');
 =======
+=======
+('20180309165026'),
+>>>>>>> Comment some lines
 ('20180311184145'),
 ('20180311184319'),
 ('20180311185453'),
@@ -2695,11 +2704,17 @@ INSERT INTO "schema_migrations" (version) VALUES
 =======
 ('20180312192616'),
 <<<<<<< HEAD
+<<<<<<< HEAD
 ('20180319115900');
 >>>>>>> Create currency rate model
 =======
 ('20180319115900'),
 ('20180319144208');
 >>>>>>> Change plan fees column type to decimal to accept new currency rates
+=======
+('20180312205533'),
+('20180319115900'),
+('20180319144208');
+>>>>>>> Comment some lines
 
 
