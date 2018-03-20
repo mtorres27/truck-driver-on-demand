@@ -2,13 +2,14 @@ class Freelancer::JobsController < Freelancer::BaseController
   include JobHelper
 
   def index
-    if params[:search][:keywords].blank? && params[:search][:address].blank?
+    if params[:search][:keywords].blank? && params[:search][:address].blank?&& params[:search][:country].blank?
       flash[:error] = "You'll need to add some search criteria to narrow your search results!"
       redirect_to freelancer_root_path
     end
 
     @keywords = params.dig(:search, :keywords).presence
     @address = params.dig(:search, :address).presence
+    @country = params.dig(:search, :country).presence
 
     @sort = params.dig(:search, :sort).presence
     @distance = params.dig(:search, :distance).presence
@@ -52,6 +53,10 @@ class Freelancer::JobsController < Freelancer::BaseController
       @jobs = @jobs.search(@keywords)
     end
 
+    if @country
+      @jobs = @jobs.where(country: @country)
+    end
+
     @jobs = @jobs.page(params[:page]).per(50)
   end
 
@@ -76,6 +81,7 @@ class Freelancer::JobsController < Freelancer::BaseController
     @applicant.job = @job
     @applicant.company = @job.company
 
+    # if !@stripe_connector.verified? && !Rails.env.development?
     if !@stripe_connector.verified?
       redirect_to freelancer_job_path(@job), alert: "You need to verify your identity before applying for a job."
     elsif apply_params[:message].nil? or apply_params[:pay_type].nil?
@@ -131,8 +137,8 @@ class Freelancer::JobsController < Freelancer::BaseController
           @message.quote_id = @applicant.quotes.last.id
           @message.save
         end
-
         # add quote
+        CompanyMailer.notice_received_new_quote_from_freelancer(@applicant.freelancer, @job.company, @job, @applicant.quotes.last).deliver
         redirect_to freelancer_path(@job), notice: "Application successfully submitted"
       else
         # error message; redirect back to job page

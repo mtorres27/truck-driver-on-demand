@@ -88,6 +88,8 @@ class Admin::CompaniesController < Admin::BaseController
         :number_of_offices,
         :number_of_employees,
         :established_in,
+        company_installs_attributes: [:id, :year, :installs, :_destroy],
+        featured_projects_attributes: [:id, :file, :name, :_destroy],
         job_types: I18n.t("enumerize.job_types").keys,
         job_markets: (I18n.t("enumerize.live_events_staging_and_rental_job_markets").keys + I18n.t("enumerize.system_integration_job_markets").keys).uniq,
         technical_skill_tags:  I18n.t("enumerize.technical_skill_tags").keys,

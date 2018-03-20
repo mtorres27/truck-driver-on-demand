@@ -6,10 +6,11 @@
       .profile__meta__info
         h2.heading-h2
           = @freelancer.name
-        h4.heading-h4
-          | Email:
-          a href="mailto:#{@freelancer.email}" target="_blank"
-            = @freelancer.email
+        - unless current_company
+          h4.heading-h4
+            | Email:
+            a href="mailto:#{@freelancer.email}" target="_blank"
+              = @freelancer.email
         h4.heading-h4
           = "Joined #{@freelancer.created_at.strftime('%B %d, %Y')}"
         h4.heading-h4
@@ -191,11 +192,3 @@
             = "#{review.company.contact_name}, #{review.company.name}"
       - else
         p This freelancer doesn't have any reviews.
-
-  - if current_admin.present?
-    - if @freelancer.confirmed_at.nil? && @freelancer.confirmation_token.present?
-      .grid-cell.grid-cell--100
-        .confirmation_link
-          .confirmation_label
-          strong<> Confirmation Link:
-          = confirmation_url(@freelancer, confirmation_token: @freelancer.confirmation_token)

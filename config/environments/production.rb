@@ -68,15 +68,15 @@ Rails.application.configure do
 
   config.action_mailer.default_url_options = { host: 'app.avjunction.com' }
   config.action_mailer.asset_host = "http://app.avjunction.com"
-
   config.action_mailer.delivery_method = :smtp
   config.action_mailer.smtp_settings = {
-    address:              'smtp.mailgun.org',
-    port:                 587,
-    domain:               'mg.avjunction.com',
-    authentication:       :plain,
-    user_name:            'postmaster@mg.avjunction.com',
-    password:             '86cce58250969e6a3e564391e35c5543',
+      user_name: ENV['SENDGRID_USERNAME'],
+      password: ENV['SENDGRID_PASSWORD'],
+      domain: 'mg.avjunction.com',
+      address: 'smtp.sendgrid.net',
+      port: 587,
+      authentication: :plain,
+      enable_starttls_auto: true
   }
 
   # Enable locale fallbacks for I18n (makes lookups for any locale fall back to

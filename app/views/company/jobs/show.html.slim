@@ -61,13 +61,13 @@
 
     .grid-cell.grid-cell--expand
       h3.heading-h3 Job Type
-      p = I18n.t("enumerize.job_types")[@job.job_type.to_sym]
+      p = @job.job_type.nil? ? "Not specified" : I18n.t("enumerize.job_types")[@job.job_type.to_sym]
     .grid-cell.grid-cell--expand
       h3.heading-h3 Job Market
-      p = Job.all_job_markets[@job.job_market.to_sym]
+      p = @job.job_market.nil? ? "Not specified" : Job.all_job_markets[@job.job_market.to_sym]
     .grid-cell.grid-cell--expand
       h3.heading-h3 Job Function
-      p = Job.all_job_functions[@job.job_function.to_sym]
+      p = @job.job_function.nil? ? "Not specified" : Job.all_job_functions[@job.job_function.to_sym]
     .grid-cell.grid-cell--expand
       h3.heading-h3 Start
       p = l @job.starts_on

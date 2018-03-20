@@ -144,6 +144,11 @@
                 br
                 input type='checkbox' id='accept_agreement' onclick="toggleAccept()"
                 |  I accept the Freelance Services Agreement
+      .grid-cell.grid-cell--100
+        .form__field-label
+          | About Insurance
+        p
+          | Please be advised that AV Junction does not provide any insurance for AV Companies or Freelancers. Each User, at its sole cost and expense, will maintain appropriate insurance.
 
 
         - if @job.state != :contracted and @job.freelancer.id == current_freelancer.id

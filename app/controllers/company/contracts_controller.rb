@@ -9,11 +9,13 @@ class Company::ContractsController < Company::BaseController
       currency_rate = CurrencyRate.find_by(currency: @job.currency)
 
       amount = (quote.amount * (1 + (@job.applicable_sales_tax / 100)))
+
       stripe_fees = amount * 0.029 + ( 0.3 * currency_rate.rate )
       plan_fees = @job.company_plan_fees
       platform_fees = ((quote.amount * Rails.configuration.avj_fees) + plan_fees - stripe_fees)
+
       # TODO: calculate taxes on app fees
-      freelancer_amount = quote.amount * (1 - Rails.configuration.avj_fees)
+      freelancer_amount = quote.amount * (1 - avj_fees)
 
       charge = Stripe::Charge.create({
         amount: (amount * 100).floor ,
@@ -38,7 +40,7 @@ class Company::ContractsController < Company::BaseController
       quote.save
 
       payments.each do |payment|
-        payment.avj_fees = payment.amount * Rails.configuration.avj_fees
+        payment.avj_fees = payment.amount * avj_fees
         payment.tax_amount = (payment.amount * (@job.applicable_sales_tax / 100))
         payment.total_amount = payment.amount * (1 + (@job.applicable_sales_tax / 100))
         payment.save
@@ -47,6 +49,7 @@ class Company::ContractsController < Company::BaseController
 
       # Send notice email
       PaymentsMailer.notice_funds_freelancer(current_company, freelancer, @job).deliver
+      PaymentsMailer.notice_funds_company(current_company, freelancer, @job).deliver
       # logger.debug quote.inspect
 
     rescue => e
@@ -89,12 +92,15 @@ class Company::ContractsController < Company::BaseController
         @m.send_contract = true
         @m.body = "Hi #{@job.freelancer.name}! This is a note to let you know that we've just sent a work order to you. <a href='/freelancer/jobs/#{@job.id}/work_order'>Click here</a> to view it!"
         @m.save
+        FreelancerMailer.notice_work_order_received(current_company, @job.freelancer).deliver
 
         @job.messages << @m
 
         # TODO: Add bit of code here that sets something in the table to denote being sent?
         @job.contract_sent = true
         @job.save
+
+
       end
       redirect_to company_job_path(@job), notice: "Work Order updated." if !@job.contracted?
     else

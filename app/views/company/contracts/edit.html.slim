@@ -85,6 +85,12 @@
           | AV Junction provides a template freelance service agreement for you to use at your sole discretion.  This template agreement does not bind AV Junction Inc to this work order.  This work order is between you and the hired AV freelancer.  If you would like to opt out of using this template please check the box.
           = f.input :opt_out_of_freelance_service_agreement, label: "Opt out of Freelance Service Agreement"
 
+      .grid-cell.grid-cell--100
+        .form__field-label
+          | About Insurance
+        p
+          | Please be advised that AV Junction does not provide any insurance for AV Companies or Freelancers. Each User, at its sole cost and expense, will maintain appropriate insurance.
+
       .grid-cell.grid-cell--100  
         - if @job.pre_contracted?
           .buttons

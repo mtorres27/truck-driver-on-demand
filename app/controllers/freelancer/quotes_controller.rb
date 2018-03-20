@@ -54,15 +54,19 @@ class Freelancer::QuotesController < Freelancer::BaseController
 
         @message.quote_id = @new_quote.id
         @message.save
+
+        CompanyMailer.notice_received_negociated_quote_from_freelancer(@job.company, current_freelancer, @new_quote, @job).deliver
         
       elsif params[:message][:status] == "accept"
         @q = @quotes.where({applicant_id: @applicant.id}).first
         @q.accepted_by_freelancer = true
         @q.save
+        CompanyMailer.notice_received_accepted_quote_from_freelancer(@job.company, current_freelancer, @q, @job).deliver
       elsif params[:message][:status] == "decline"
         @q = @quotes.where({applicant_id: @applicant.id}).first
         @q.accepted_by_freelancer = false
         @q.save
+        CompanyMailer.notice_received_declined_quote_from_freelancer(@job.company, current_freelancer, @job).deliver
       end
 
       redirect_to freelancer_job_application_index_path(@job, @applicant)

@@ -859,7 +859,8 @@ CREATE TABLE freelancers (
     company_name character varying,
     job_types citext,
     job_functions citext,
-    manufacturer_tags citext
+    manufacturer_tags citext,
+    special_avj_fees numeric(10,2)
 );
 
 
@@ -1035,6 +1036,7 @@ CREATE TABLE jobs (
     job_market citext,
     manufacturer_tags citext,
     company_plan_fees numeric(10,2) DEFAULT 0
+    contracted_at timestamp without time zone
 );
 
 
@@ -1279,7 +1281,8 @@ CREATE TABLE quotes (
     applicable_sales_tax integer,
     avj_fees numeric(10,2),
     stripe_fees numeric(10,2),
-    net_avj_fees numeric(10,2)
+    net_avj_fees numeric(10,2),
+    accepted_at timestamp without time zone
 );
 
 
@@ -2582,6 +2585,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20180130000647'),
 ('20180130013756'),
 ('20180130022656'),
+('20180201201033'),
 ('20180205194146'),
 ('20180206182339'),
 ('20180212001020'),
@@ -2598,6 +2602,8 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20180312143559'),
 ('20180312192616'),
 ('20180319115900'),
-('20180319144208');
+('20180319144208'),
+('20180309165026'),
+('20180312205533');
 
 

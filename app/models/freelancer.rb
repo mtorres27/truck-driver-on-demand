@@ -92,6 +92,12 @@ class Freelancer < ApplicationRecord
   has_many :freelancer_affiliations
   accepts_nested_attributes_for :freelancer_affiliations, :reject_if => :all_blank, :allow_destroy => true
 
+  has_many :freelancer_clearances
+  accepts_nested_attributes_for :freelancer_clearances, :reject_if => :all_blank, :allow_destroy => true
+
+  has_many :freelancer_portfolios
+  accepts_nested_attributes_for :freelancer_portfolios, :reject_if => :all_blank, :allow_destroy => true
+
   has_many :freelancer_insurances
   accepts_nested_attributes_for :freelancer_insurances, :reject_if => :all_blank, :allow_destroy => true
 
@@ -146,9 +152,9 @@ class Freelancer < ApplicationRecord
       :pay_unit_time_preference,
       if: :enforce_profile_edit
 
-  after_create :add_to_hubspot
-
   scope :new_registrants, -> { where(disabled: true) }
+
+  after_create :add_to_hubspot
 
   def add_to_hubspot
     api_key = "5c7ad391-2bfe-4d11-9ba3-82b5622212ba"
@@ -158,32 +164,38 @@ class Freelancer < ApplicationRecord
     http.use_ssl = true if uri.scheme == 'https'
     req = Net::HTTP::Post.new uri
     data = {
-      properties: [
-        {
-          property: "email",
-          value: email
-        },
-        {
-          property: "firstname",
-          value: name.split(" ")[0]
-        },
-        {
-          property: "lastname",
-          value: name.split(" ")[1]
-        },
-        {
-          property: "lifecyclestage",
-          value: "customer"
-        },
-        {
-          property: "im_an",
-          value: "AV Freelancer"
-        },
-      ]
+        properties: [
+            {
+                property: "email",
+                value: email
+            },
+            {
+                property: "firstname",
+                value: name.split(" ")[0]
+            },
+            {
+                property: "lastname",
+                value: name.split(" ")[1]
+            },
+            {
+                property: "lifecyclestage",
+                value: "customer"
+            },
+            {
+                property: "im_an",
+                value: "AV Freelancer"
+            },
+        ]
     }
-
     req.body = data.to_json
     res = http.start { |http| http.request req }
+  end
+
+
+  after_create :send_welcome_email
+
+  def send_welcome_email
+    FreelancerMailer.verify_your_identity(self).deliver
   end
 
   pg_search_scope :search, against: {
@@ -204,7 +216,7 @@ class Freelancer < ApplicationRecord
   ]
 
   enumerize :freelancer_type, in: [
-    :independent, :team
+    :independent, :service_provider
   ]
 
   enumerize :freelancer_team_size, in: [
@@ -267,7 +279,9 @@ class Freelancer < ApplicationRecord
     score += 5 * self.certifications.count
     score += 2 * self.freelancer_references.count
     score += 2 * self.freelancer_affiliations.count
+    score += 2 * self.freelancer_clearances.count
     score += 1 * self.freelancer_insurances.count
+    score += 1 * self.freelancer_portfolios.count
     score
   end
 
@@ -281,7 +295,7 @@ class Freelancer < ApplicationRecord
 
   after_save :check_if_should_do_geocode
   def check_if_should_do_geocode
-    if saved_changes.include?("address") or (!address.nil? and lat.nil?)
+    if saved_changes.include?("address") or saved_changes.include?("city") or (!address.nil? and lat.nil?) or (!city.nil? and lat.nil?)
       do_geocode
       update_columns(lat: lat, lng: lng)
     end
@@ -299,11 +313,23 @@ class Freelancer < ApplicationRecord
     !exists and empty
   end
 
+  def reject_freelancer_clearance(attrs)
+    exists = attrs["id"].present?
+    empty = attrs["image"].blank? and attrs["description"].blank?
+    !exists and empty
+  end
+
+  def reject_freelancer_portfolio(attrs)
+    exists = attrs["id"].present?
+    empty = attrs["image"].blank? and attrs["description"].blank?
+    !exists and empty
+  end
+
   def self.do_all_geocodes
     Freelancer.all.each do |f|
       p "Doing geocode for " + f.id.to_s + "(#{f.compile_address})"
       f.do_geocode
-      f.save
+      f.update_columns(lat: f.lat, lng: f.lng)
 
       sleep 1
     end
