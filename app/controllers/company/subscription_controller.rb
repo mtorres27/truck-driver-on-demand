@@ -38,7 +38,7 @@ class Company::SubscriptionController < Company::BaseController
     @plans = Plan.order(name: :asc)
     begin
       @subscription = Stripe::Subscription.retrieve(current_company.stripe_subscription_id) if current_company.stripe_subscription_id
-    rescue InvalidRequestError => ex
+    rescue Stripe::InvalidRequestError => ex
       flash[:alert] = 'Please subscribe to one of the following plans'
     rescue Exception => ex
       flash[:error] = 'Something wrong happened!'
