@@ -118,10 +118,6 @@ GEM
       warden (~> 1.2.3)
     domain_name (0.5.20170404)
       unf (>= 0.0.5, < 1.0.0)
-    dotenv (2.2.1)
-    dotenv-rails (2.2.1)
-      dotenv (= 2.2.1)
-      railties (>= 3.2, < 5.2)
     down (3.0.0)
     easy_postgis (0.2.0)
       activerecord
@@ -407,7 +403,6 @@ DEPENDENCIES
   cocoon (~> 1.2.10)
   coderay (~> 1.1.1)
   devise
-  dotenv-rails
   easy_postgis
   enumerize (~> 2.1.2)
   factory_girl_rails (~> 4.8.0)
