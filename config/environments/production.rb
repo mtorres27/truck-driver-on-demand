@@ -70,8 +70,8 @@ Rails.application.configure do
   config.action_mailer.asset_host = "http://app.avjunction.com"
   config.action_mailer.delivery_method = :smtp
   config.action_mailer.smtp_settings = {
-      user_name: ENV['SENDGRID_USERNAME'],
-      password: ENV['SENDGRID_PASSWORD'],
+      user_name: Rails.application.secrets.sendgrid_username,
+      password: Rails.application.secrets.sendgrid_password,
       domain: 'mg.avjunction.com',
       address: 'smtp.sendgrid.net',
       port: 587,
