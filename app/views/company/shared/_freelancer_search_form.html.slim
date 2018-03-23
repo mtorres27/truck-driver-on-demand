@@ -9,8 +9,3 @@
     = f.input :country, collection: I18n.t('enumerize.country').map { |i, v| [i, v] }, label_method: :second, value_method: :first, label: false, prompt: "Select Country", selected: @country
   .grid-cell.grid-cell--expand
     = f.submit "Search", class: "btn btn--primary"
-  .grid-cell.grid-cell--100
-    label
-      - checked = @avatar_only
-      = check_box_tag "avatar_only", "1", checked, id: "show_avatar_only"
-      = " Show freelancers with profile picture only"
