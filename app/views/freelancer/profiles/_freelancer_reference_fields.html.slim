@@ -1,8 +1,0 @@
-.authorable_attachment__item
-  .profile__meta__details__1-1
-    .profile__meta__info
-      = f.input :name, as: :string, placeholder: "Enter the reference name", label: "Reference Name"
-      = f.input :phone, as: :string, placeholder: "Enter the reference phone number", label: "Reference Phone Number"
-    .profile__meta__info
-      = f.input :description, label: "Tell something about your work with the reference", placeholder: "Write a description", :input_html => { :class => 'form__profile-bio-textarea' }
-    = link_to_remove_association "", f, { onClick: "hide_remove_association(this)", class: "btn-icon-link"}
