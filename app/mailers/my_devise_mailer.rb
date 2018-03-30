@@ -78,7 +78,8 @@ class MyDeviseMailer < Devise::Mailer
     headers 'X-SMTPAPI' => {
         sub: {
             '%email%' => [@email],
-            '%new_email%' => [@new_email]
+            '%new_email%' => [@new_email],
+            '%root_url%' => [root_url]
         },
         filters: {
             templates: {
@@ -97,7 +98,8 @@ class MyDeviseMailer < Devise::Mailer
     @resource = instance_variable_set("@#{devise_mapping.name}", record)
     headers 'X-SMTPAPI' => {
         sub: {
-            '%resource_email%' => [@resource.email]
+            '%resource_email%' => [@resource.email],
+            '%root_url%' => [root_url]
         },
         filters: {
             templates: {

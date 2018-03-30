@@ -11,7 +11,7 @@ class Freelancer::MessagesController < Freelancer::BaseController
 
     if @message.save
       if @job.state == "contracted" || @job.state == "completed"
-        CompanyMailer.notice_message_received(@job.company, current_freelancer, @message).deliver
+        CompanyMailer.notice_message_received(@job.company, current_freelancer, @job, @message).deliver
       else
         CompanyMailer.notice_work_order_declined_with_comments(@job.company, current_freelancer, @job, @message).deliver
       end
