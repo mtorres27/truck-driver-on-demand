@@ -1,7 +1,3 @@
-.action-bar
-  h2.heading-h2.heading-h2--action-bar Post a new Job
-  .action-bar__actions
-
 = simple_form_for([:company, @job]) do |f|
   .grid-h
     .grid-cell.grid-cell--67
@@ -9,11 +5,11 @@
         .grid-cell.grid-cell--100
           .grid-h.grid-h--no-margin
             .grid-cell.grid-cell--75
-              = f.association :project, collection: current_company.projects.open, prompt: "Select"
+              = f.association :project, collection: @company.projects.open, prompt: "Select"
             .grid-cell.grid-cell--25.grid-cell--span25
               br
               .form-button
-                .btn.btn--secondary type="button" data-toggle="modal" data-target="#new_project" 
+                .btn.btn--secondary type="button" data-toggle="modal" data-target="#new_project"
                   | New Project
         .grid-cell.grid-cell--100
           = f.input :title, placeholder: "Enter the job title"
@@ -21,13 +17,13 @@
           = f.input :address, placeholder: "Enter the city of the job", label: "City"
         .grid-cell.grid-cell--100
           = f.input :country, prompt: "Select"
-        .grid-cell.grid-cell--100 
+        .grid-cell.grid-cell--100
           span
             abbr title="required"= "*"
-            = " " 
+            = " "
             = f.label :summary, "Summary"
           = f.input :summary, label: false, placeholder: "Enter the job summary"
-        .grid-cell.grid-cell--100   
+        .grid-cell.grid-cell--100
           span
             abbr title="required"= "*"
             = " "
@@ -74,7 +70,7 @@
     .grid-cell.grid-cell--33
       .grid-v
         .grid-cell.grid-cell--100
-          = f.input :budget, placeholder: "Enter a budget", input_html: { value: number_with_precision(f.object.budget, precision: 2) }
+          = f.input :budget, placeholder: "Enter a budget", input_html: {value: number_with_precision(f.object.budget, precision: 2)}
         .grid-cell.grid-cell--100
           = f.input :budget_is_public
         .grid-cell.grid-cell--100
@@ -110,7 +106,7 @@
         .grid-cell.grid-cell--100
           = f.input :pay_type, prompt: "Select", label: "Preferred Pay Type"
         .grid-cell.grid-cell--100
-          = f.input :freelancer_type, prompt: "Select" 
+          = f.input :freelancer_type, prompt: "Select"
     .grid-cell.grid-cell--100
       .buttons
         - if @job.created?
@@ -119,14 +115,14 @@
         - else
           = f.button :submit, "Save", class: "btn btn--primary"
         - unless @job.new_record?
-          .btn.btn--secondary 
-            = link_to "Delete Job", company_job_path(@job), data: { confirm: "Are you sure you want to permanently delete this job posting?", class: "btn btn--secondary" }, method: :delete
+          .btn.btn--secondary
+            = link_to "Delete Job", company_job_path(@job), data: {confirm: "Are you sure you want to permanently delete this job posting?", class: "btn btn--secondary"}, method: :delete
 
 
 .modal#new_project role="dialog" tabindex="-1"
   .modal-dialog role="document"
     .modal-content
-      = simple_form_for([:company, current_company.projects.new], remote: true) do |f|
+      = simple_form_for([:company, @company.projects.new], remote: true) do |f|
         .modal-header
           h2 Create a New Project
         .container
@@ -137,7 +133,7 @@
               = f.input :external_project_id, placeholder: "Enter the project number"
             .grid-cell.grid-cell--100
               = f.input :budget, placeholder: "Enter a budget"
-            .grid-cell.grid-cell--100  
+            .grid-cell.grid-cell--100
               = f.input :address, placeholder: "Enter the address"
             .grid-cell.grid-cell--50
               = f.input :starts_on, html5: true
@@ -150,19 +146,19 @@
                   | Cancel
 
   javascript:
-    function get_currencies(country){
-      $.get( "#{company_job_country_currency_path}", { country: country})
-      .done(function( data ) {
-        var select = $('#job_currency');
-        select.empty().append(data);
-      });
+    function get_currencies(country) {
+      $.get("#{company_job_country_currency_path}", {country: country})
+              .done(function (data) {
+                var select = $('#job_currency');
+                select.empty().append(data);
+              });
     }
 
-    $(document).ready(function() {
-      if ($('#job_country').val() != ""){
+    $(document).ready(function () {
+      if ($('#job_country').val() != "") {
         get_currencies($('#job_country').val())
       }
-      $('#job_country').on('change', function(){
+      $('#job_country').on('change', function () {
         get_currencies($(this).val())
       });
     });

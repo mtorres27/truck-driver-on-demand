@@ -134,6 +134,7 @@ Rails.application.routes.draw do
     resources :companies, except: [:new, :create] do
       get :disable, on: :member
       get :enable, on: :member
+      get :jobs
     end
 
     resource :company do
