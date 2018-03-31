@@ -10,11 +10,7 @@ class Freelancer::MessagesController < Freelancer::BaseController
     @message.authorable = current_freelancer
 
     if @message.save
-      if @job.state == "contracted" || @job.state == "completed"
-        CompanyMailer.notice_message_received(@job.company, current_freelancer, @job, @message).deliver
-      else
-        CompanyMailer.notice_work_order_declined_with_comments(@job.company, current_freelancer, @job, @message).deliver
-      end
+      CompanyMailer.notice_message_received(@job.company, current_freelancer, @job, @message).deliver
       redirect_to freelancer_job_messages_path(@job)
     else
       set_collection

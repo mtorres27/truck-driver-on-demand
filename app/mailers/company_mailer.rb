@@ -157,32 +157,6 @@ class CompanyMailer < ApplicationMailer
     mail(to: @company.email, subject: 'Received message from freelancer')
   end
 
-  def notice_work_order_declined_with_comments(company, freelancer, job, message)
-    @company = company
-    @freelancer = freelancer
-    @job = job
-    @message = message
-    headers 'X-SMTPAPI' => {
-        sub: {
-            '%company_name%' => [@company.name],
-            '%freelancer_name%' => [@freelancer.name],
-            '%job_title%' => [@job.title],
-            '%job_id%' => [@job.id],
-            '%message_body%' => [@message.body],
-            '%root_url%' => [root_url]
-        },
-        filters: {
-            templates: {
-                settings: {
-                    enable: 1,
-                    template_id: '7a551c8c-c7ef-4bc2-9162-1c922e3b6eaa'
-                }
-            }
-        }
-    }.to_json
-    mail(to: @company.email, subject: 'Freelancer declined your work order with comments')
-  end
-
   def notice_freelancer_review(company, freelancer, review)
     @company = company
     @freelancer = freelancer
