@@ -157,6 +157,28 @@ class CompanyMailer < ApplicationMailer
     mail(to: @company.email, subject: 'Received message from freelancer')
   end
 
+  def notice_message_sent(company, freelancer, message)
+    @company = company
+    @freelancer = freelancer
+    @message = message
+    headers 'X-SMTPAPI' => {
+        sub: {
+            '%sender_name%' => [@company.name],
+            '%recipient_name%' => [@freelancer.name],
+            '%message_body%' => [@message.body]
+        },
+        filters: {
+            templates: {
+                settings: {
+                    enable: 1,
+                    template_id: 'c8cd4c3a-e14c-4a5e-97bc-4ad97806b5b3'
+                }
+            }
+        }
+    }.to_json
+    mail(to: @company.email, subject: 'Message Sent')
+  end
+
   def notice_freelancer_review(company, freelancer, review)
     @company = company
     @freelancer = freelancer
