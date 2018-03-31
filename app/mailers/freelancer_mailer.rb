@@ -54,6 +54,7 @@ class FreelancerMailer < ApplicationMailer
             '%freelancer_name%' => [@freelancer.name],
             '%quote_pay_type%' => [@quote.pay_type],
             '%quote_amount%' => [@quote.amount],
+            '%job_currency%' => [@job.currency.upcase],
             '%job_title%' => [@job.title],
             '%job_id%' => [@job.id],
             '%root_url%' => [root_url]
