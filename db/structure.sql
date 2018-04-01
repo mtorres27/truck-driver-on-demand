@@ -2714,7 +2714,12 @@ INSERT INTO "schema_migrations" (version) VALUES
 =======
 ('20180312205533'),
 ('20180319115900'),
+<<<<<<< HEAD
 ('20180319144208');
 >>>>>>> Comment some lines
+=======
+('20180319144208'),
+('20180321172650');
+>>>>>>> Update secrets file with fixer api key
 
 
