@@ -8,12 +8,13 @@ module StripeTool
     company.subscription_cycle        = subscription.plan.interval
     company.subscription_status       = subscription.status
     company.is_subscription_cancelled = false
-    company.is_trial_applicable       = false if plan[:trial_period] > 0
-    company.last_4_digits             = customer.sources.data[0].last4
-    company.card_brand                = customer.sources.data[0].brand
-    company.exp_month                 = customer.sources.data[0].exp_month
-    company.exp_year                  = customer.sources.data[0].exp_year
-    company.is_trial_applicable       = false if plan[:trial_period] > 0
+    company.is_trial_applicable       = false if plan[:trial_period].positive?
+    if customer.sources.data.any?
+      company.last_4_digits             = customer.sources.data[0].last4
+      company.card_brand                = customer.sources.data[0].brand
+      company.exp_month                 = customer.sources.data[0].exp_month
+      company.exp_year                  = customer.sources.data[0].exp_year
+    end
     company.save
   end
 
@@ -30,10 +31,16 @@ module StripeTool
   end
 
   def self.create_customer(email: email, stripe_token: stripe_token)
-    Stripe::Customer.create(
-      email: email,
-      source: stripe_token
-    )
+    if stripe_token.present?
+      Stripe::Customer.create(
+        email: email,
+        source: stripe_token
+      )
+    else
+      Stripe::Customer.create(
+        email: email
+      )
+    end
   end
 
   def self.create_charge(customer_id: customer_id, amount: amount, description: description)
