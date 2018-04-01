@@ -149,6 +149,11 @@ Rails.application.routes.draw do
     resources :jobs, except: [:new, :create] do
       get :disable, on: :member
       get :enable, on: :member
+      resources :applicants
+      resource :contract, only: [:show, :edit, :update], as: "work_order", path: "work_order"
+      resources :messages, only: [:index, :create]
+      resources :payments, controller: "job_payments", only: [:index, :show]
+      resource :review, only: [:show, :create]
     end
 
     resources :pages, only: [:index, :edit, :update]
