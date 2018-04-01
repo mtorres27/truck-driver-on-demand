@@ -86,9 +86,6 @@ class Freelancer < ApplicationRecord
   has_many :certifications, -> { order(updated_at: :desc) }, dependent: :destroy
   accepts_nested_attributes_for :certifications, allow_destroy: true, reject_if: :reject_certification
 
-  has_many :freelancer_references
-  accepts_nested_attributes_for :freelancer_references, :reject_if => :all_blank, :allow_destroy => true
-
   has_many :freelancer_affiliations
   accepts_nested_attributes_for :freelancer_affiliations, :reject_if => :all_blank, :allow_destroy => true
 
@@ -277,7 +274,6 @@ class Freelancer < ApplicationRecord
     score += 3 if self.phone_number.present?
     score += 3 if self.bio.present?
     score += 5 * self.certifications.count
-    score += 2 * self.freelancer_references.count
     score += 2 * self.freelancer_affiliations.count
     score += 2 * self.freelancer_clearances.count
     score += 1 * self.freelancer_insurances.count
