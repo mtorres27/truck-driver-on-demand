@@ -51,7 +51,8 @@
       - if !job.freelancer
         | Progress
       - else
-        a href=company_job_messages_path(job)
+        - path = current_admin.nil? ? company_job_messages_path(job) : admin_job_messages_path(job)
+        a href=path
           | Progress
     .tab-bar__item class=("tab-bar__item--active" if request.path.index(/payment/)) class=("tab-bar__item--inactive" if job.pre_contracted?)
       - if job.pre_contracted?
