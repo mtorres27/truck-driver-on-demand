@@ -32,7 +32,7 @@ br
                 | No Card provided yet.
             div style="text-align: center"
               = form_tag '/company/update_card_info', method: 'post' do
-                script.stripe-button  data-email=("#{current_company.email}") src="https://checkout.stripe.com/checkout.js" class="stripe-button" data-key="pk_test_Pq6cvwflOIyhEhJNcY3VpaiA" data-image="/assets/avjunction-logo_header.svg" data-name="AVJunction" data-panel-label="Update Card Details" data-label="Update Card Details" data-allow-remember-me=false data-locale="auto"
+                script.stripe-button  data-email=("#{current_company.email}") src="https://checkout.stripe.com/checkout.js" class="stripe-button" data-key="#{Rails.configuration.stripe[:publishable_key]}" data-image="/assets/avjunction-logo_header.svg" data-name="AVJunction" data-panel-label="Update Card Details" data-label="Update Card Details" data-allow-remember-me=false data-locale="auto"
 
           .plans
             h3.plans__title Cancel your subscription
