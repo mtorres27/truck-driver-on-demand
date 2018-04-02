@@ -6,7 +6,7 @@ class JobInviteMailer < ApplicationMailer
         sub: {
             '%freelancer_name%' => [@freelancer.name],
             '%job_title%' => [@job.title],
-            '%job_company_name%' => [@job.company.name],
+            '%company_name%' => [@job.company.name],
             '%job_id%' => [@job.id],
             '%root_url%' => [root_url]
         },

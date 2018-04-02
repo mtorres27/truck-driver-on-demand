@@ -10,6 +10,7 @@ class PaymentsMailer < ApplicationMailer
             '%root_url%' => [root_url],
             '%job_id%' => [@job.id],
             '%job_title%' => [@job.title],
+            '%job_currency%' => [@job.currency.upcase],
             '%job_accepted_quote_total_amount%' => [@job.accepted_quote.amount]
         },
         filters: {
@@ -35,6 +36,7 @@ class PaymentsMailer < ApplicationMailer
             '%root_url%' => [root_url],
             '%job_id%' => [@job.id],
             '%job_title%' => [@job.title],
+            '%job_currency%' => [@job.currency.upcase],
             '%job_accepted_quote_total_amount%' => [@job.accepted_quote.amount]
         },
         filters: {
@@ -61,7 +63,8 @@ class PaymentsMailer < ApplicationMailer
             '%root_url%' => [root_url],
             '%job_id%' => [@job.id],
             '%job_title%' => [@job.title],
-            '%payment_description%' => [@payment.description]
+            '%payment_description%' => [@payment.description],
+            '%payment_id%' => [@payment.id]
         },
         filters: {
             templates: {
@@ -86,6 +89,7 @@ class PaymentsMailer < ApplicationMailer
             '%root_url%' => [root_url],
             '%job_id%' => [@job.id],
             '%job_title%' => [@job.title],
+            '%job_currency%' => [@job.currency.upcase],
             '%job_accepted_quote_total_amount%' => [@job.accepted_quote.total_amount]
         },
         filters: {
@@ -112,7 +116,8 @@ class PaymentsMailer < ApplicationMailer
             '%root_url%' => [root_url],
             '%job_id%' => [@job.id],
             '%job_title%' => [@job.title],
-            '%payment_description%' => [@payment.description]
+            '%payment_description%' => [@payment.description],
+            '%payment_id%' => [@payment.id]
         },
         filters: {
             templates: {
@@ -137,7 +142,8 @@ class PaymentsMailer < ApplicationMailer
             '%root_url%' => [root_url],
             '%job_id%' => [@job.id],
             '%job_title%' => [@job.title],
-            'job_accepted_quote_total_amount' => [@job.accepted_quote.total_amount]
+            '%job_currency%' => [@job.currency.upcase],
+            '%job_accepted_quote_total_amount%' => [@job.accepted_quote.total_amount]
         },
         filters: {
             templates: {
@@ -162,7 +168,8 @@ class PaymentsMailer < ApplicationMailer
             '%root_url%' => [root_url],
             '%job_id%' => [@job.id],
             '%job_title%' => [@job.title],
-            'job_accepted_quote_total_amount' => [@job.accepted_quote.total_amount]
+            '%job_currency%' => [@job.currency.upcase],
+            '%job_accepted_quote_total_amount%' => [@job.accepted_quote.total_amount]
         },
         filters: {
             templates: {
@@ -188,7 +195,8 @@ class PaymentsMailer < ApplicationMailer
             '%root_url%' => [root_url],
             '%job_id%' => [@job.id],
             '%job_title%' => [@job.title],
-            '%payment_description%' => [@payment.description]
+            '%payment_description%' => [@payment.description],
+            '%payment_id%' => [@payment.id]
         },
         filters: {
             templates: {
