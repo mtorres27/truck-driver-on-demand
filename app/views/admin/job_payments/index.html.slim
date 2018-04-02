@@ -1,0 +1,9 @@
+= render partial: "company/shared/job_nav", locals: { job: @job }
+
+- content_for :secondary do
+
+  .action-bar
+    h2.heading-h2.heading-h2--action-bar Payments
+
+  .result-content
+    = render partial: "company/job_payments/table", locals: { job: @job, payments: @payments }

@@ -7,29 +7,8 @@
         | Reviews
     .result-content
       - if @review.new_record?
-        .review__title
-          = "Please take a minute to provide feedback on your experience with #{@job.freelancer.name}"
-        = simple_form_for(@review, url: company_job_review_path(@job)) do |f|
-          = f.error_notification
-          .review__options
-            - FreelancerReview::RATING_ATTRS.each do |attr|
-              .review__label
-                = attr.to_s.gsub('_', ' ')
-              .review__option
-                = f.input attr, collection: 1..5, as: :radio_buttons, label: false
-          .review__comments
-            .review__label
-              | Comments
-            = f.input :comments, placeholder: "Add any additional comments you'd like to make. These will be public.", label: false
-          = f.submit "Submit Review", class: "btn btn--primary"
+        = render partial: "review_form", locals: {review: @review, job: @job}
       - else
         .review__title
           | Thank you for your feedback
-        .review__options
-          - FreelancerReview::RATING_ATTRS.each do |attr|
-            .review__label
-              = "#{attr.to_s.gsub('_', ' ')} : #{@review.send(attr)}"
-        .review__comments
-          .review__label
-            | Comments
-          = @review.comments
+        = render partial: "review_info", locals: {review: @review}

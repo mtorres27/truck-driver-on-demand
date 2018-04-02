@@ -58,11 +58,13 @@
       - if job.pre_contracted?
         | Payments
       - else
-        a href=company_job_payments_path(job)
+        - path = current_admin.nil? ? company_job_payments_path(job) : admin_job_payments_path(job)
+        a href=path
           | Payments
     .tab-bar__item class=("tab-bar__item--active" if request.path.index(/review/)) class=("tab-bar__item--inactive" unless job.completed?)
       - unless job.completed?
         | Review
       - else
-        a href=company_job_review_path(job)
+        - path= current_admin.nil? ? company_job_review_path(job) : admin_job_review_path(job)
+        a href=path
           | Review
