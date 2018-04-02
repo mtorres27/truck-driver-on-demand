@@ -4,7 +4,8 @@ class FreelancerMailer < ApplicationMailer
     @freelancer = freelancer
     headers 'X-SMTPAPI' => {
         sub: {
-            '%freelancer_name%' => [@freelancer.name]
+            '%freelancer_name%' => [@freelancer.name],
+            '%root_url%' => [root_url]
         },
         filters: {
             templates: {
@@ -26,7 +27,9 @@ class FreelancerMailer < ApplicationMailer
         sub: {
             '%company_name%' => [@company.name],
             '%freelancer_name%' => [@freelancer.name],
-            '%job_title%' => [@job.title]
+            '%job_title%' => [@job.title],
+            '%job_id%' => [@job.id],
+            '%root_url%' => [root_url]
         },
         filters: {
             templates: {
@@ -51,7 +54,10 @@ class FreelancerMailer < ApplicationMailer
             '%freelancer_name%' => [@freelancer.name],
             '%quote_pay_type%' => [@quote.pay_type],
             '%quote_amount%' => [@quote.amount],
-            '%job_title%' => [@job.title]
+            '%job_currency%' => [@job.currency.upcase],
+            '%job_title%' => [@job.title],
+            '%job_id%' => [@job.id],
+            '%root_url%' => [root_url]
         },
         filters: {
             templates: {
@@ -74,9 +80,9 @@ class FreelancerMailer < ApplicationMailer
         sub: {
             '%company_name%' => [@company.name],
             '%freelancer_name%' => [@freelancer.name],
-            '%quote_pay_type%' => [@quote.pay_type],
-            '%quote_amount%' => [@quote.amount],
-            '%job_title%' => [@job.title]
+            '%job_title%' => [@job.title],
+            '%job_id%' => [@job.id],
+            '%root_url%' => [root_url],
         },
         filters: {
             templates: {
@@ -98,7 +104,8 @@ class FreelancerMailer < ApplicationMailer
         sub: {
             '%company_name%' => [@company.name],
             '%freelancer_name%' => [@freelancer.name],
-            '%job_title%' => [@job.title]
+            '%job_title%' => [@job.title],
+            '%root_url%' => [root_url]
         },
         filters: {
             templates: {
@@ -112,13 +119,17 @@ class FreelancerMailer < ApplicationMailer
     mail(to: @freelancer.email, subject: 'Received declined quote from company')
   end
 
-  def notice_work_order_received(company, freelancer)
+  def notice_work_order_received(company, freelancer, job)
     @company = company
     @freelancer = freelancer
+    @job = job
     headers 'X-SMTPAPI' => {
         sub: {
             '%company_name%' => [@company.name],
             '%freelancer_name%' => [@freelancer.name],
+            '%job_title%' => [@job.title],
+            '%job_id%' => [@job.id],
+            '%root_url%' => [root_url]
         },
         filters: {
             templates: {
@@ -132,15 +143,18 @@ class FreelancerMailer < ApplicationMailer
     mail(to: @freelancer.email, subject: 'Received work order from company')
   end
 
-  def notice_message_received(company, freelancer, message)
+  def notice_message_received(company, freelancer, job, message)
     @company = company
     @freelancer = freelancer
     @message = message
+    @job = job
     headers 'X-SMTPAPI' => {
         sub: {
             '%company_name%' => [@company.name],
             '%freelancer_name%' => [@freelancer.name],
-            '%message_body%' => [@message.body]
+            '%message_body%' => [@message.body],
+            '%job_id%' => [@job.id],
+            '%root_url%' => [root_url]
         },
         filters: {
             templates: {
@@ -154,6 +168,28 @@ class FreelancerMailer < ApplicationMailer
     mail(to: @freelancer.email, subject: 'Received message from company')
   end
 
+  def notice_message_sent(company, freelancer, message)
+    @company = company
+    @freelancer = freelancer
+    @message = message
+    headers 'X-SMTPAPI' => {
+        sub: {
+            '%recipient_name%' => [@company.name],
+            '%sender_name%' => [@freelancer.name],
+            '%message_body%' => [@message.body]
+        },
+        filters: {
+            templates: {
+                settings: {
+                    enable: 1,
+                    template_id: 'c8cd4c3a-e14c-4a5e-97bc-4ad97806b5b3'
+                }
+            }
+        }
+    }.to_json
+    mail(to: @freelancer.email, subject: 'Message sent')
+  end
+
   def notice_company_review(company, freelancer, review)
     @company = company
     @freelancer = freelancer
@@ -162,7 +198,7 @@ class FreelancerMailer < ApplicationMailer
         sub: {
             '%company_name%' => [@company.name],
             '%freelancer_name%' => [@freelancer.name],
-            '%review_id%' => [@review.id]
+            '%root_url%' => [root_url]
         },
         filters: {
             templates: {
