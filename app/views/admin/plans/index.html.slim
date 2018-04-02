@@ -1,0 +1,27 @@
+.row
+  .col-xs-12.col-sm-6
+    h2 Plans
+  .col-xs-12.col-sm-6
+    .search-form
+      = simple_form_for :search, url: admin_plans_path, method: :get do |f|
+        = f.input :keywords, label: false, placeholder: "Search", input_html: { value: @keywords }
+
+.table-responsive
+  table.table.table-striped
+    thead
+      tr
+        th Plan
+        th Code
+        th.text-right Actions
+
+    tbody
+      - @plans.each do |plan|
+        tr
+          td= link_to plan.name, admin_plan_path(plan)
+          td= link_to plan.code, admin_plan_path(plan)
+          td.text-right
+            = link_to 'Edit', edit_admin_plan_path(plan)
+            '  |
+            = link_to 'Delete', admin_plan_path(plan), data: { confirm: "Are you sure?" }, method: :delete
+
+= paginate @plans
