@@ -1,0 +1,13 @@
+h2= @plan.name
+p= "Code: #{@plan.code}"
+p= "Description: #{@plan.description}"
+p= "Period: #{@plan.period}"
+p= "Trial period: #{@plan.trial_period}"
+p= "Subscription fee: #{@plan.subscription_fee}"
+p= "Fee Schema: #{@plan.fee_schema}"
+
+
+hr
+= link_to 'Edit', edit_admin_plan_path(@plan)
+'  |
+= link_to 'Back', admin_plans_path

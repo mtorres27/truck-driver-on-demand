@@ -162,6 +162,11 @@ Rails.application.routes.draw do
       resource :review, only: [:show, :create]
     end
 
+    resources :plans, except: [:new, :create] do
+      get :disable, on: :member
+      get :enable, on: :member
+    end
+
     resources :pages, only: [:index, :edit, :update]
     resources :audits, only: [:index]
 
