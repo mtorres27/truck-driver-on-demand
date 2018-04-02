@@ -158,11 +158,17 @@
         | This freelancer has not yet added any insurances.
       - @freelancer.freelancer_insurances.each do |insurance|
         .profile__certifications__certificate
-          | Name:
-          = insurance.name
-        .profile__certifications__certificate
-          | Description
-          = insurance.description
+          - url = insurance.image_url
+          - if insurance.image_url != "certification/missing.pdf"
+            a href=url target="_blank"
+              - if is_image(url)
+                - src=url
+              - else
+                - src="/assets/certification/certification_placeholder.png"
+              .profile__certification
+                img.profile__certification__image sizes="185.96875px" src=src
+                .profile__certification__label= insurance.name
+                .profile__certification__label= insurance.description
   .grid-cell.grid-cell--100
     a name="reviews"
       h3.heading-h3 Reviews
