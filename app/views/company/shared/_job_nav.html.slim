@@ -33,7 +33,7 @@
     .tab-bar__item--active
       Job Details
   - else
-    .tab-bar__item class=("tab-bar__item--active" if controller.controller_name == "jobs" or request.path.index(/work_order/))
+    .tab-bar__item class=("tab-bar__item--active" if (controller.controller_name == "jobs" && request.path != company_job_avj_invoice_path) or request.path.index(/work_order/))
       a href=company_job_path(job)
         | Job Details
     .tab-bar__item class=("tab-bar__item--active" if request.path.index(/applicant/)) class=("tab-bar__item--inactive" if job.applicants_count == 0 )
@@ -48,7 +48,7 @@
       - else
         a href=company_job_messages_path(job)
           | Progress
-    .tab-bar__item class=("tab-bar__item--active" if request.path.index(/payment/)) class=("tab-bar__item--inactive" if job.pre_contracted?)
+    .tab-bar__item class=("tab-bar__item--active" if request.path.index(/payment/) || request.path == company_job_avj_invoice_path(id: @job.id)) class=("tab-bar__item--inactive" if job.pre_contracted?)
       - if job.pre_contracted?
         | Payments
       - else

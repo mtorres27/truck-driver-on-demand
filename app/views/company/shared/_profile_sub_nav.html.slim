@@ -1,0 +1,7 @@
+h1.heading-h1
+  | Profile
+.tab-bar
+  a.tab-bar__item href="#{company_profile_path}" class=("tab-bar__item--active" if request.path == company_profile_path)
+    | General
+  a.tab-bar__item href="#{company_plans_path}" class=("tab-bar__item--active" if request.path == company_plans_path or request.path == "/freelancer/profile/identity" or request.path == "/freelancer/profile/bank_account")
+    | Subscriptions

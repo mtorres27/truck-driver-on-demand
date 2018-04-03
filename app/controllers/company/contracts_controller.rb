@@ -15,7 +15,7 @@ class Company::ContractsController < Company::BaseController
       platform_fees = ((quote.amount * Rails.configuration.avj_fees) + plan_fees - stripe_fees)
 
       # TODO: calculate taxes on app fees
-      freelancer_amount = quote.amount * (1 - avj_fees)
+      freelancer_amount = quote.amount * (1 - Rails.configuration.avj_fees)
 
       charge = Stripe::Charge.create({
         amount: (amount * 100).floor ,
