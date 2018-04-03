@@ -5,7 +5,7 @@ h1 Editing Plan
 
   .form-inputs
     = f.input :name
-    = f.input :code
+    = f.input :code, label: "Stripe Plan Code (Do Not Edit)"
     = f.input :description
     = f.input :period
     / - @plan.fee_schema.try(:each) do |key, value|
