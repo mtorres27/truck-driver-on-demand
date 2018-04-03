@@ -23,5 +23,6 @@
 
 .env
 
-# Ignore encrypted secrets key file.
+# Ignore encrypted secrets files.
 config/secrets.yml.key
+config/secrets.yml.enc
