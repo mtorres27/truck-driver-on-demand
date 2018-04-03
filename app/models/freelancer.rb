@@ -69,8 +69,11 @@ class Freelancer < ApplicationRecord
   has_many :company_favourites
   has_many :favourite_companies, through: :company_favourites, source: :company
 
-  serialize :keywords
-  serialize :skills
+  serialize :job_types
+  serialize :job_markets
+  serialize :technical_skill_tags
+  serialize :job_functions
+  serialize :manufacturer_tags
 
   validates :years_of_experience, numericality: { only_integer: true }
 
@@ -107,8 +110,6 @@ class Freelancer < ApplicationRecord
       :service_areas,
       :bio,
       :years_of_experience,
-      :keywords,
-      :skills,
       :pay_unit_time_preference,
       if: :enforce_profile_edit
 
