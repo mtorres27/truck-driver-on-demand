@@ -85,44 +85,6 @@ class Admin::FreelancersController < Admin::BaseController
         :pay_unit_time_preference,
         :disabled,
         :verified,
-<<<<<<< HEAD
-        skills: [
-          :flat_panel_displays,
-          :video_walls,
-          :structured_cabling,
-          :rack_work,
-          :cable_pull,
-          :cable_termination,
-          :projectors,
-          :troubleshooting,
-          :service_and_repair,
-          :av_programming,
-          :interactive_displays,
-          :audio,
-          :video_conferencing,
-          :video_processors,
-          :stagehand,
-          :lighting,
-          :camera,
-          :general_labor,
-          :installation,
-          :rental
-        ],
-        keywords: [
-          :corporate,
-          :government,
-          :broadcast,
-          :retail,
-          :house_of_worship,
-          :higher_education,
-          :k12_education,
-          :residential,
-          :commercial_av,
-          :live_events_and_staging,
-          :rental,
-          :hospitality
-        ],
-=======
         :special_avj_fees,
         job_types: I18n.t("enumerize.job_types").keys,
         job_markets: (I18n.t("enumerize.live_events_staging_and_rental_job_markets").keys + I18n.t("enumerize.system_integration_job_markets").keys).uniq,
@@ -134,7 +96,6 @@ class Admin::FreelancersController < Admin::BaseController
         freelancer_insurances_attributes: [:id, :name, :description, :_destroy],
         freelancer_clearances_attributes: [:id, :description, :image, :_destroy],
         freelancer_portfolios_attributes: [:id, :name, :image, :_destroy],
->>>>>>> staging
       )
 
     end
