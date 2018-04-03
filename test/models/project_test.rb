@@ -17,7 +17,6 @@
 #  closed              :boolean          default(FALSE), not null
 #  created_at          :datetime         not null
 #  updated_at          :datetime         not null
-#  currency            :string
 #
 
 require 'test_helper'

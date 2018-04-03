@@ -24,8 +24,8 @@
       h3.heading-h3
         = @freelancer.tagline
       .profile__specialties--summary
-        - if !@freelancer.technical_skill_tags.nil? and @freelancer.technical_skill_tags.kind_of?(Hash)
-          - @freelancer.technical_skill_tags.first(4).each do |index, value|
+        - if !@freelancer.keywords.nil? and @freelancer.keywords.kind_of?(Hash)
+          - @freelancer.keywords.first(2).each do |index, value|
             .tag.tag--grey
               = I18n.t("enumerize.technical_skill_tags.#{index}")
   .grid-cell.grid-cell--33
