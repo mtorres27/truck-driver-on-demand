@@ -32,6 +32,7 @@ class Quote < ApplicationRecord
 
   def accept!
     self.state = :accepted
+    self.accepted_at = Time.zone.today
     save
   end
 

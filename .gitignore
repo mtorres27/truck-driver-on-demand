@@ -20,3 +20,8 @@
 /public/packs
 
 /public/uploads
+
+.env
+
+# Ignore encrypted secrets key file.
+config/secrets.yml.key

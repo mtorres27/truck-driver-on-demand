@@ -232,7 +232,8 @@ CREATE TABLE certifications (
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
     thumbnail text,
-    certificate_data text
+    certificate_data text,
+    cert_type character varying
 );
 
 
@@ -315,8 +316,8 @@ CREATE TABLE companies (
     company_reviews_count integer DEFAULT 0 NOT NULL,
     profile_header_data text,
     contract_preference character varying DEFAULT 'no_preference'::character varying,
-    keywords citext,
-    skills citext,
+    job_markets citext,
+    technical_skill_tags citext,
     profile_views integer DEFAULT 0 NOT NULL,
     website character varying,
     phone_number character varying,
@@ -332,12 +333,6 @@ CREATE TABLE companies (
     last_sign_in_at timestamp without time zone,
     current_sign_in_ip inet,
     last_sign_in_ip inet,
-    header_color character varying DEFAULT 'FF6C38'::character varying,
-    country character varying,
-    confirmation_token character varying,
-    confirmed_at timestamp without time zone,
-    confirmation_sent_at timestamp without time zone,
-    header_source character varying DEFAULT 'color'::character varying,
     stripe_customer_id character varying,
     stripe_subscription_id character varying,
     stripe_plan_id character varying,
@@ -349,12 +344,22 @@ CREATE TABLE companies (
     card_brand character varying,
     exp_month character varying,
     exp_year character varying,
+    header_color character varying DEFAULT 'FF6C38'::character varying,
+    country character varying,
+    confirmation_token character varying,
+    confirmed_at timestamp without time zone,
+    confirmation_sent_at timestamp without time zone,
+    header_source character varying DEFAULT 'color'::character varying,
     province character varying,
     sales_tax_number character varying,
     line2 character varying,
     city character varying,
     state character varying,
-    postal_code character varying
+    postal_code character varying,
+    job_types citext,
+    manufacturer_tags citext,
+    plan_id bigint,
+    is_trial_applicable boolean DEFAULT true
 );
 
 
@@ -482,6 +487,39 @@ ALTER SEQUENCE company_reviews_id_seq OWNED BY company_reviews.id;
 
 
 --
+-- Name: currency_rates; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE currency_rates (
+    id bigint NOT NULL,
+    currency character varying,
+    country character varying,
+    rate numeric(10,2) NOT NULL,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: currency_rates_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE currency_rates_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: currency_rates_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE currency_rates_id_seq OWNED BY currency_rates.id;
+
+
+--
 -- Name: favourites; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -557,7 +595,8 @@ CREATE TABLE freelancer_affiliations (
     image character varying,
     freelancer_id integer,
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+    updated_at timestamp without time zone NOT NULL,
+    image_data text
 );
 
 
@@ -578,6 +617,40 @@ CREATE SEQUENCE freelancer_affiliations_id_seq
 --
 
 ALTER SEQUENCE freelancer_affiliations_id_seq OWNED BY freelancer_affiliations.id;
+
+
+--
+-- Name: freelancer_clearances; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE freelancer_clearances (
+    id bigint NOT NULL,
+    description text,
+    image character varying,
+    image_data text,
+    freelancer_id integer,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: freelancer_clearances_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE freelancer_clearances_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: freelancer_clearances_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE freelancer_clearances_id_seq OWNED BY freelancer_clearances.id;
 
 
 --
@@ -614,15 +687,14 @@ ALTER SEQUENCE freelancer_insurances_id_seq OWNED BY freelancer_insurances.id;
 
 
 --
--- Name: freelancer_references; Type: TABLE; Schema: public; Owner: -
+-- Name: freelancer_portfolios; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE freelancer_references (
+CREATE TABLE freelancer_portfolios (
     id bigint NOT NULL,
-    name character varying,
-    title character varying,
-    description text,
-    phone character varying(12),
+    name text,
+    image character varying,
+    image_data text,
     freelancer_id integer,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL
@@ -630,10 +702,10 @@ CREATE TABLE freelancer_references (
 
 
 --
--- Name: freelancer_references_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+-- Name: freelancer_portfolios_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE freelancer_references_id_seq
+CREATE SEQUENCE freelancer_portfolios_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -642,10 +714,10 @@ CREATE SEQUENCE freelancer_references_id_seq
 
 
 --
--- Name: freelancer_references_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+-- Name: freelancer_portfolios_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
-ALTER SEQUENCE freelancer_references_id_seq OWNED BY freelancer_references.id;
+ALTER SEQUENCE freelancer_portfolios_id_seq OWNED BY freelancer_portfolios.id;
 
 
 --
@@ -706,7 +778,7 @@ CREATE TABLE freelancers (
     pay_per_unit_time character varying,
     tagline character varying,
     bio text,
-    keywords citext,
+    job_markets citext,
     years_of_experience integer DEFAULT 0 NOT NULL,
     profile_views integer DEFAULT 0 NOT NULL,
     projects_completed integer DEFAULT 0 NOT NULL,
@@ -716,7 +788,7 @@ CREATE TABLE freelancers (
     updated_at timestamp without time zone NOT NULL,
     messages_count integer DEFAULT 0 NOT NULL,
     freelancer_reviews_count integer DEFAULT 0 NOT NULL,
-    skills citext,
+    technical_skill_tags citext,
     profile_header_data text,
     verified boolean DEFAULT false,
     encrypted_password character varying DEFAULT ''::character varying NOT NULL,
@@ -739,17 +811,21 @@ CREATE TABLE freelancers (
     stripe_account_id character varying,
     stripe_account_status text,
     currency character varying,
-    phone_number character varying,
     sales_tax_number character varying,
     line2 character varying,
     state character varying,
     postal_code character varying,
     service_areas character varying,
     city character varying,
+    phone_number character varying,
     profile_score smallint,
     valid_driver boolean,
     own_tools boolean,
-    company_name character varying
+    company_name character varying,
+    job_types citext,
+    job_functions citext,
+    manufacturer_tags citext,
+    special_avj_fees numeric(10,2)
 );
 
 
@@ -890,7 +966,7 @@ CREATE TABLE jobs (
     duration integer NOT NULL,
     pay_type character varying,
     freelancer_type character varying NOT NULL,
-    keywords text,
+    technical_skill_tags text,
     invite_only boolean DEFAULT false NOT NULL,
     scope_is_public boolean DEFAULT true NOT NULL,
     budget_is_public boolean DEFAULT false NOT NULL,
@@ -920,7 +996,12 @@ CREATE TABLE jobs (
     stripe_charge_id character varying,
     stripe_balance_transaction_id character varying,
     funds_available_on integer,
-    funds_available boolean DEFAULT false
+    funds_available boolean DEFAULT false,
+    job_type citext,
+    job_market citext,
+    manufacturer_tags citext,
+    company_plan_fees numeric(10,2) DEFAULT 0,
+    contracted_at timestamp without time zone
 );
 
 
@@ -1058,6 +1139,43 @@ ALTER SEQUENCE payments_id_seq OWNED BY payments.id;
 
 
 --
+-- Name: plans; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE plans (
+    id bigint NOT NULL,
+    name character varying,
+    code character varying,
+    trial_period integer,
+    subscription_fee numeric(10,2),
+    fee_schema json,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL,
+    description text,
+    period character varying DEFAULT 'yearly'::character varying
+);
+
+
+--
+-- Name: plans_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE plans_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: plans_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE plans_id_seq OWNED BY plans.id;
+
+
+--
 -- Name: projects; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -1128,7 +1246,8 @@ CREATE TABLE quotes (
     applicable_sales_tax integer,
     avj_fees numeric(10,2),
     stripe_fees numeric(10,2),
-    net_avj_fees numeric(10,2)
+    net_avj_fees numeric(10,2),
+    accepted_at timestamp without time zone
 );
 
 
@@ -1158,6 +1277,43 @@ ALTER SEQUENCE quotes_id_seq OWNED BY quotes.id;
 CREATE TABLE schema_migrations (
     version character varying NOT NULL
 );
+
+
+--
+-- Name: subscriptions; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE subscriptions (
+    id bigint NOT NULL,
+    company_id integer,
+    plan_id integer,
+    stripe_subscription_id character varying,
+    is_active boolean,
+    ends_at date,
+    billing_perios_ends_at date,
+    amount numeric,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: subscriptions_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE subscriptions_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: subscriptions_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE subscriptions_id_seq OWNED BY subscriptions.id;
 
 
 --
@@ -1271,6 +1427,13 @@ ALTER TABLE ONLY company_reviews ALTER COLUMN id SET DEFAULT nextval('company_re
 
 
 --
+-- Name: currency_rates id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY currency_rates ALTER COLUMN id SET DEFAULT nextval('currency_rates_id_seq'::regclass);
+
+
+--
 -- Name: favourites id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -1292,6 +1455,13 @@ ALTER TABLE ONLY freelancer_affiliations ALTER COLUMN id SET DEFAULT nextval('fr
 
 
 --
+-- Name: freelancer_clearances id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY freelancer_clearances ALTER COLUMN id SET DEFAULT nextval('freelancer_clearances_id_seq'::regclass);
+
+
+--
 -- Name: freelancer_insurances id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -1299,10 +1469,10 @@ ALTER TABLE ONLY freelancer_insurances ALTER COLUMN id SET DEFAULT nextval('free
 
 
 --
--- Name: freelancer_references id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: freelancer_portfolios id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY freelancer_references ALTER COLUMN id SET DEFAULT nextval('freelancer_references_id_seq'::regclass);
+ALTER TABLE ONLY freelancer_portfolios ALTER COLUMN id SET DEFAULT nextval('freelancer_portfolios_id_seq'::regclass);
 
 
 --
@@ -1369,6 +1539,13 @@ ALTER TABLE ONLY payments ALTER COLUMN id SET DEFAULT nextval('payments_id_seq':
 
 
 --
+-- Name: plans id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY plans ALTER COLUMN id SET DEFAULT nextval('plans_id_seq'::regclass);
+
+
+--
 -- Name: projects id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -1380,6 +1557,13 @@ ALTER TABLE ONLY projects ALTER COLUMN id SET DEFAULT nextval('projects_id_seq':
 --
 
 ALTER TABLE ONLY quotes ALTER COLUMN id SET DEFAULT nextval('quotes_id_seq'::regclass);
+
+
+--
+-- Name: subscriptions id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY subscriptions ALTER COLUMN id SET DEFAULT nextval('subscriptions_id_seq'::regclass);
 
 
 --
@@ -1478,6 +1662,14 @@ ALTER TABLE ONLY company_reviews
 
 
 --
+-- Name: currency_rates currency_rates_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY currency_rates
+    ADD CONSTRAINT currency_rates_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: favourites favourites_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -1502,6 +1694,14 @@ ALTER TABLE ONLY freelancer_affiliations
 
 
 --
+-- Name: freelancer_clearances freelancer_clearances_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY freelancer_clearances
+    ADD CONSTRAINT freelancer_clearances_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: freelancer_insurances freelancer_insurances_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -1510,11 +1710,11 @@ ALTER TABLE ONLY freelancer_insurances
 
 
 --
--- Name: freelancer_references freelancer_references_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: freelancer_portfolios freelancer_portfolios_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY freelancer_references
-    ADD CONSTRAINT freelancer_references_pkey PRIMARY KEY (id);
+ALTER TABLE ONLY freelancer_portfolios
+    ADD CONSTRAINT freelancer_portfolios_pkey PRIMARY KEY (id);
 
 
 --
@@ -1590,6 +1790,14 @@ ALTER TABLE ONLY payments
 
 
 --
+-- Name: plans plans_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY plans
+    ADD CONSTRAINT plans_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: projects projects_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -1611,6 +1819,14 @@ ALTER TABLE ONLY quotes
 
 ALTER TABLE ONLY schema_migrations
     ADD CONSTRAINT schema_migrations_pkey PRIMARY KEY (version);
+
+
+--
+-- Name: subscriptions subscriptions_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY subscriptions
+    ADD CONSTRAINT subscriptions_pkey PRIMARY KEY (id);
 
 
 --
@@ -1720,10 +1936,17 @@ CREATE UNIQUE INDEX index_companies_on_email ON companies USING btree (email);
 
 
 --
--- Name: index_companies_on_keywords; Type: INDEX; Schema: public; Owner: -
+-- Name: index_companies_on_job_markets; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_companies_on_keywords ON companies USING btree (keywords);
+CREATE INDEX index_companies_on_job_markets ON companies USING btree (job_markets);
+
+
+--
+-- Name: index_companies_on_manufacturer_tags; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_companies_on_manufacturer_tags ON companies USING btree (manufacturer_tags);
 
 
 --
@@ -1734,6 +1957,13 @@ CREATE INDEX index_companies_on_name ON companies USING btree (name);
 
 
 --
+-- Name: index_companies_on_plan_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_companies_on_plan_id ON companies USING btree (plan_id);
+
+
+--
 -- Name: index_companies_on_reset_password_token; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -1741,10 +1971,10 @@ CREATE UNIQUE INDEX index_companies_on_reset_password_token ON companies USING b
 
 
 --
--- Name: index_companies_on_skills; Type: INDEX; Schema: public; Owner: -
+-- Name: index_companies_on_technical_skill_tags; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_companies_on_skills ON companies USING btree (skills);
+CREATE INDEX index_companies_on_technical_skill_tags ON companies USING btree (technical_skill_tags);
 
 
 --
@@ -1825,10 +2055,24 @@ CREATE UNIQUE INDEX index_freelancers_on_email ON freelancers USING btree (email
 
 
 --
--- Name: index_freelancers_on_keywords; Type: INDEX; Schema: public; Owner: -
+-- Name: index_freelancers_on_job_functions; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_freelancers_on_keywords ON freelancers USING btree (keywords);
+CREATE INDEX index_freelancers_on_job_functions ON freelancers USING btree (job_functions);
+
+
+--
+-- Name: index_freelancers_on_job_markets; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_freelancers_on_job_markets ON freelancers USING btree (job_markets);
+
+
+--
+-- Name: index_freelancers_on_manufacturer_tags; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_freelancers_on_manufacturer_tags ON freelancers USING btree (manufacturer_tags);
 
 
 --
@@ -1846,10 +2090,10 @@ CREATE UNIQUE INDEX index_freelancers_on_reset_password_token ON freelancers USI
 
 
 --
--- Name: index_freelancers_on_skills; Type: INDEX; Schema: public; Owner: -
+-- Name: index_freelancers_on_technical_skill_tags; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_freelancers_on_skills ON freelancers USING btree (skills);
+CREATE INDEX index_freelancers_on_technical_skill_tags ON freelancers USING btree (technical_skill_tags);
 
 
 --
@@ -1871,6 +2115,13 @@ CREATE UNIQUE INDEX index_identities_on_loginable_type_and_provider_and_uid ON i
 --
 
 CREATE INDEX index_jobs_on_company_id ON jobs USING btree (company_id);
+
+
+--
+-- Name: index_jobs_on_manufacturer_tags; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_jobs_on_manufacturer_tags ON jobs USING btree (manufacturer_tags);
 
 
 --
@@ -2050,6 +2301,14 @@ ALTER TABLE ONLY jobs
 
 ALTER TABLE ONLY freelancer_reviews
     ADD CONSTRAINT fk_rails_2d750cb05f FOREIGN KEY (freelancer_id) REFERENCES freelancers(id);
+
+
+--
+-- Name: companies fk_rails_2e8c071a79; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY companies
+    ADD CONSTRAINT fk_rails_2e8c071a79 FOREIGN KEY (plan_id) REFERENCES plans(id);
 
 
 --
@@ -2247,7 +2506,6 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20171017101132'),
 ('20171020113522'),
 ('20171020123018'),
-('20171023181456'),
 ('20171105210413'),
 ('20171113154821'),
 ('20171114170911'),
@@ -2265,13 +2523,38 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20171218020642'),
 ('20171218023711'),
 ('20171222051331'),
+('20180114213233'),
+('20180114214827'),
+('20180114215226'),
+('20180114220148'),
+('20180117114408'),
+('20180117114800'),
 ('20180119214528'),
 ('20180127120826'),
 ('20180127123843'),
 ('20180130000647'),
 ('20180130013756'),
 ('20180130022656'),
+('20180201201033'),
 ('20180205194146'),
-('20180206182339');
+('20180206182339'),
+('20180212001020'),
+('20180214212732'),
+('20180301165221'),
+('20180301181649'),
+('20180301194139'),
+('20180305202451'),
+('20180305202656'),
+('20180309165026'),
+('20180311184145'),
+('20180311184319'),
+('20180311185453'),
+('20180311194837'),
+('20180312143559'),
+('20180312192616'),
+('20180312205533'),
+('20180319115900'),
+('20180319144208'),
+('20180321172650');
 
 

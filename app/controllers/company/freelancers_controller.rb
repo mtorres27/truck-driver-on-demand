@@ -4,8 +4,10 @@ class Company::FreelancersController < Company::BaseController
   def index
     @keywords = params.dig(:search, :keywords).presence
     @address = params.dig(:search, :address).presence
+    @country = params.dig(:search, :country).presence
+    @avatar_only = params[:avatar_only] == "1"
 
-    if params.has_key?(:search) and !@keywords and !@address
+    if params.has_key?(:search) and !@keywords and !@address and !@country
       flash[:error] = "You'll need to add some search criteria to narrow your search results!"
       redirect_to company_freelancers_path
     end
@@ -26,6 +28,8 @@ class Company::FreelancersController < Company::BaseController
     else
       @freelancers = Freelancer.where(disabled: false)
     end
+
+    @freelancers = @freelancers.order("verified DESC")
 
     if @address
       # check for cached version of address
@@ -48,13 +52,16 @@ class Company::FreelancersController < Company::BaseController
       end
     end
 
-    if (!@keywords and !@address) or (@keywords.blank? and @address.blank?)
+    if (!@keywords and !@address and !@country) or (@keywords.blank? and @address.blank? and @country.blank?)
       @freelancers = Freelancer.none
     else
       if !@keywords.blank?
         @freelancers = @freelancers.search(@keywords)
-      else
       end
+    end
+
+    if @country
+      @freelancers = @freelancers.where(country: @country)
     end
 
     @freelancers = @freelancers.page(params[:page]).per(50)

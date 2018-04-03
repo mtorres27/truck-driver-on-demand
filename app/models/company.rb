@@ -77,8 +77,10 @@ class Company < ApplicationRecord
     :more_than_one_thousand
   ]
 
-  serialize :keywords
-  serialize :skills
+  serialize :job_types
+  serialize :job_markets
+  serialize :technical_skill_tags
+  serialize :manufacturer_tags
 
   enumerize :country, in: [
     :at, :au, :be, :ca, :ch, :de, :dk, :es, :fi, :fr, :gb, :hk, :ie, :it, :jp, :lu, :nl, :no, :nz, :pt, :se, :sg, :us
@@ -97,6 +99,47 @@ class Company < ApplicationRecord
   accepts_nested_attributes_for :company_installs, allow_destroy: true, reject_if: :reject_company_installs
 
   scope :new_registrants, -> { where(disabled: true) }
+
+  after_create :add_to_hubspot
+
+  def add_to_hubspot
+    api_key = "5c7ad391-2bfe-4d11-9ba3-82b5622212ba"
+    url = "https://api.hubapi.com/contacts/v1/contact/createOrUpdate/email/#{email}/?hapikey=#{api_key}"
+    uri = URI.parse(url)
+    http = Net::HTTP.new(uri.host, uri.port)
+    http.use_ssl = true if uri.scheme == 'https'
+    req = Net::HTTP::Post.new uri
+    data = {
+        properties: [
+            {
+                property: "email",
+                value: email
+            },
+            {
+                property: 'company',
+                value: name
+            },
+            {
+                property: "firstname",
+                value: contact_name.split(" ")[0]
+            },
+            {
+                property: "lastname",
+                value: contact_name.split(" ")[1]
+            },
+            {
+                property: "lifecyclestage",
+                value: "customer"
+            },
+            {
+                property: "im_an",
+                value: "AV Company"
+            },
+        ]
+    }
+    req.body = data.to_json
+    res = http.start { |http| http.request req }
+  end
 
   def freelancers
     Freelancer.
@@ -127,51 +170,7 @@ class Company < ApplicationRecord
       :country,
       :description,
       :established_in,
-      :keywords,
-      :skills,
       if: :enforce_profile_edit
-
-  after_create :add_to_hubspot
-
-  def add_to_hubspot
-    api_key = "5c7ad391-2bfe-4d11-9ba3-82b5622212ba"
-    url = "https://api.hubapi.com/contacts/v1/contact/createOrUpdate/email/#{email}/?hapikey=#{api_key}"
-    uri = URI.parse(url)
-    http = Net::HTTP.new(uri.host, uri.port)
-    http.use_ssl = true if uri.scheme == 'https'
-    req = Net::HTTP::Post.new uri
-    data = {
-      properties: [
-        {
-          property: "email",
-          value: email
-        },
-        {
-          property: 'company',
-          value: name
-        },
-        {
-          property: "firstname",
-          value: contact_name.split(" ")[0]
-        },
-        {
-          property: "lastname",
-          value: contact_name.split(" ")[1]
-        },
-        {
-          property: "lifecyclestage",
-          value: "customer"
-        },
-        {
-          property: "im_an",
-          value: "AV Company"
-        },
-      ]
-    }
-
-    req.body = data.to_json
-    res = http.start { |http| http.request req }
-  end
 
   before_create :start_trial
 
@@ -190,11 +189,16 @@ class Company < ApplicationRecord
     email: "A",
     contact_name: "B",
     area: "B",
+    job_types: "B",
+    job_markets: "B",
+    technical_skill_tags: "B",
+    manufacturer_tags: "B",
     formatted_address: "C",
     description: "C"
     }, using: {
       tsearch: { prefix: true }
     }
+
 
     attr_accessor :user_type
     # We want to populate both name and contact_name on sign up
@@ -221,7 +225,7 @@ class Company < ApplicationRecord
 
     after_save :check_if_should_do_geocode
     def check_if_should_do_geocode
-      if saved_changes.include?("address") or (!address.nil? and lat.nil?)
+      if saved_changes.include?("address") or saved_changes.include?("city") or (!address.nil? and lat.nil?) or (!city.nil? and lat.nil?)
         do_geocode
         update_columns(lat: lat, lng: lng)
       end
@@ -239,11 +243,23 @@ class Company < ApplicationRecord
       !exists and empty
     end
 
+    def job_markets_for_job_type(job_type)
+      all_job_markets = I18n.t("enumerize.#{job_type}_job_markets")
+      return [] unless all_job_markets.kind_of?(Hash)
+      freelancer_job_markets = []
+      job_markets.each do |index, value|
+        if all_job_markets[index.to_sym]
+          freelancer_job_markets << all_job_markets[index.to_sym]
+        end
+      end
+      freelancer_job_markets
+    end
+
     def self.do_all_geocodes
       Company.all.each do |f|
         p "Doing geocode for " + f.id.to_s + "(#{f.compile_address})"
         f.do_geocode
-        f.save
+        f.update_columns(lat: f.lat, lng: f.lng)
 
         sleep 1
       end

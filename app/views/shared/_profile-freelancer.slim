@@ -6,10 +6,11 @@
       .profile__meta__info
         h2.heading-h2
           = @freelancer.name
-        h4.heading-h4
-          | Email:
-          a href="mailto:#{@freelancer.email}" target="_blank"
-            = @freelancer.email
+        - unless current_company
+          h4.heading-h4
+            | Email:
+            a href="mailto:#{@freelancer.email}" target="_blank"
+              = @freelancer.email
         h4.heading-h4
           = "Joined #{@freelancer.created_at.strftime('%B %d, %Y')}"
         h4.heading-h4
@@ -26,11 +27,7 @@
         - if !@freelancer.keywords.nil? and @freelancer.keywords.kind_of?(Hash)
           - @freelancer.keywords.first(2).each do |index, value|
             .tag.tag--grey
-              = I18n.t("enumerize.freelancer_keywords.#{index}")
-        - if !@freelancer.skills.nil? and @freelancer.skills.kind_of?(Hash)
-          - @freelancer.skills.first(2).each do |index, value|
-            .tag.tag--grey
-              = I18n.t("enumerize.freelancer_skills.#{index}")
+              = I18n.t("enumerize.technical_skill_tags.#{index}")
   .grid-cell.grid-cell--33
     .profile__stats-box
       .profile__stats.profile__stats--33
@@ -65,25 +62,60 @@
         | This freelancer has not yet added a bio.
       - else
         = "#{@freelancer.bio}"
+  - if @freelancer.company_name.present?
+    .grid-cell.grid-cell--50
+      h3.heading-h3 Company Name
+      p
+        = @freelancer.company_name
+  - if @freelancer.valid_driver
+    .grid-cell.grid-cell--50
+      h3.heading-h3 I've a valid driver license
+  - if @freelancer.own_tools
+    .grid-cell.grid-cell--50
+      h3.heading-h3 I've my own tools
   .grid-cell.grid-cell--50
     .grid-v
       .grid-cell
         div
-          h3.heading-h3 Specialties
-          h4.heading-h4 Markets
-          - if !@freelancer.keywords.nil? and @freelancer.keywords.kind_of?(Hash)
-            - @freelancer.keywords.each do |index, value|
+          - if !@freelancer.job_types.nil? and @freelancer.job_types.kind_of?(Hash)
+            h3.heading-h3 Job Types
+            - @freelancer.job_types.each do |index, value|
               .tag.tag--grey
-                = I18n.t("enumerize.freelancer_keywords.#{index}")
-          - else
-            | This freelancer has no markets listed.
-          h4.heading-h4 Skills
-          - if !@freelancer.skills.nil? and @freelancer.skills.kind_of?(Hash)
-            - @freelancer.skills.each do |index, value|
+                = I18n.t("enumerize.job_types.#{index}")
+          - if !@freelancer.job_markets.nil? and @freelancer.job_markets.kind_of?(Hash)
+            h3.heading-h3 Job Markets
+            - if !@freelancer.job_markets_for_job_type("system_integration").empty? and !@freelancer.job_types.nil? and @freelancer.job_types.include?("system_integration")
+              h4.heading-h4 System Integration
+              - @freelancer.job_markets_for_job_type("system_integration").each do |value|
+                .tag.tag--grey
+                  = value
+            - if !@freelancer.job_markets_for_job_type("live_events_staging_and_rental").empty? and !@freelancer.job_types.nil? and @freelancer.job_types.include?("live_events_staging_and_rental")
+              h4.heading-h4 Live Events Staging & Rental
+              - @freelancer.job_markets_for_job_type("live_events_staging_and_rental").each do |value|
+                .tag.tag--grey
+                  = value
+          - if !@freelancer.job_functions.nil? and @freelancer.job_functions.kind_of?(Hash)
+            h3.heading-h3 Job Functions
+            - if !@freelancer.job_functions_for_job_type("system_integration").empty? and !@freelancer.job_types.nil? and @freelancer.job_types.include?("system_integration")
+              h4.heading-h4 System Integration
+              - @freelancer.job_functions_for_job_type("system_integration").each do |value|
+                .tag.tag--grey
+                  = value
+            - if !@freelancer.job_functions_for_job_type("live_events_staging_and_rental").empty? and !@freelancer.job_types.nil? and @freelancer.job_types.include?("live_events_staging_and_rental")
+              h4.heading-h4 Live Events Staging & Rental
+              - @freelancer.job_functions_for_job_type("live_events_staging_and_rental").each do |value|
+                .tag.tag--grey
+                  = value
+          - if !@freelancer.technical_skill_tags.nil? and @freelancer.technical_skill_tags.kind_of?(Hash)
+            h3.heading-h3 Technical Skill Tags
+            - @freelancer.technical_skill_tags.each do |index, value|
               .tag.tag--grey
-                = I18n.t("enumerize.freelancer_skills.#{index}")
-          - else
-            | This freelancer has no skills listed.
+                = I18n.t("enumerize.technical_skill_tags.#{index}")
+          - if !@freelancer.manufacturer_tags.nil? and @freelancer.manufacturer_tags.kind_of?(Hash)
+            h3.heading-h3 Manufacturer Tags
+            - @freelancer.manufacturer_tags.each do |index, value|
+              .tag.tag--grey
+                = I18n.t("enumerize.manufacturer_tags.#{index}")
 
       .grid-cell.grid-cell--vshrink
         h3.heading-h3 Type
@@ -120,6 +152,18 @@
                 .profile__certification__label= certification.name
 
   .grid-cell.grid-cell--100
+    h3.heading-h3 Insurances
+    .profile__certifications__container
+      - if @freelancer.freelancer_insurances.count == 0
+        | This freelancer has not yet added any insurances.
+      - @freelancer.freelancer_insurances.each do |insurance|
+        .profile__certifications__certificate
+          | Name:
+          = insurance.name
+        .profile__certifications__certificate
+          | Description
+          = insurance.description
+  .grid-cell.grid-cell--100
     a name="reviews"
       h3.heading-h3 Reviews
     .profile__reviews-value
@@ -132,11 +176,3 @@
             = "#{review.company.contact_name}, #{review.company.name}"
       - else
         p This freelancer doesn't have any reviews.
-
-  - if current_admin.present?
-    - if @freelancer.confirmed_at.nil? && @freelancer.confirmation_token.present?
-      .grid-cell.grid-cell--100
-        .confirmation_link
-          .confirmation_label
-          strong<> Confirmation Link:
-          = confirmation_url(@freelancer, confirmation_token: @freelancer.confirmation_token)

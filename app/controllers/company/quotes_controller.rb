@@ -28,10 +28,12 @@ class Company::QuotesController < Company::BaseController
         redirect_to edit_company_job_work_order_path(@job)
         @job.state = "negotiated"
         @job.save
+        FreelancerMailer.notice_received_accepted_quote_from_company(current_company, @applicant.freelancer, @quotes.where({applicant_id: @applicant.id}).first, @job).deliver
         return
       elsif @status == "decline"
         @applicant.reject!
         @quotes.where({applicant_id: @applicant.id}).first.decline!
+        FreelancerMailer.notice_received_declined_quote_from_company(current_company, @applicant.freelancer, @job).deliver
       elsif @status == "negotiate"
         # not sure what goes here.
         # either add a new quote, or add a counter offer somehow. NOT SURE.
@@ -73,7 +75,7 @@ class Company::QuotesController < Company::BaseController
         if @quotes.count == 0
           @applicant.quotes << @new_quote
         end
-
+        FreelancerMailer.notice_received_negociated_quote_from_company(current_company, @applicant.freelancer, @new_quote, @job).deliver
       end
 
       redirect_to company_job_applicant_quotes_path(@job, @applicant)
@@ -97,6 +99,7 @@ class Company::QuotesController < Company::BaseController
         # update quote to be declined
         applicant.state = "declined"
         applicant.save
+        FreelancerMailer.notice_received_declined_quote_from_company(current_company, applicant.freelancer, applicant.job).deliver
       end
     end
   end

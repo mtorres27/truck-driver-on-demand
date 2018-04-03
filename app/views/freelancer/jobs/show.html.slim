@@ -7,6 +7,7 @@
   .action-bar
     h2.heading-h2.heading-h2--action-bar Job Detail
     .action-bar__actions
+      /- if @have_applied == false && @connector.verified? || Rails.env.development?
       - if @have_applied == false && @connector.verified?
           a.btn.btn--primary href="#" id="apply-for-job"
             | Apply Now
@@ -17,12 +18,26 @@
   
   .grid-h
     .grid-cell.grid-cell--33.grid-cell--span33
+      h3.heading-h3 Job Type
+      div
+        - if @job.job_type.nil?
+          = "N/A"
+        - else
+          = t("enumerize.job_types.#{@job.job_type}")
+    .grid-cell.grid-cell--33.grid-cell--span33
+      h3.heading-h3 Job Market
+      div
+        - if @job.job_market.nil?
+          = "N/A"
+        - else
+          = Job.all_job_markets[@job.job_market.to_sym]
+    .grid-cell.grid-cell--33.grid-cell--span33
       h3.heading-h3 Job Function
       div
         - if @job.job_function.nil?
           = "N/A"
         - else
-          = t("enumerize.job.job_function.#{@job.job_function}")
+          = Job.all_job_functions[@job.job_function.to_sym]
     .grid-cell.grid-cell--33.grid-cell--span33
       h3.heading-h3 Location
       div
@@ -88,11 +103,18 @@
     .grid-cell.grid-cell--50
       h3.heading-h3 Job Summary
       p= @job.summary
-      div
-        - if !@job.keywords.nil? and @job.keywords.kind_of?(Hash)
-          - @job.keywords.each do |index, value|
+      - if !@job.technical_skill_tags.nil? and @job.technical_skill_tags.kind_of?(Hash)
+        h3.heading-h3 Technical Skill Tags
+        div
+          - @job.technical_skill_tags.each do |index, value|
             .grey.tag
-              = I18n.t("enumerize.freelancer_skills.#{index}")
+              = I18n.t("enumerize.technical_skill_tags.#{index}")
+      - if !@job.manufacturer_tags.nil? and @job.manufacturer_tags.kind_of?(Hash)
+        h3.heading-h3 Manufacturer Tags
+        div
+          - @job.manufacturer_tags.each do |index, value|
+            .grey.tag
+              = I18n.t("enumerize.manufacturer_tags.#{index}")
 
     .grid-cell.grid-cell--50
       h3.heading-h3 Scope of Work

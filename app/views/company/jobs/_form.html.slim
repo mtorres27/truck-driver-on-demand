@@ -40,15 +40,31 @@
             a href=@job.scope_file_url target="_blank"
               = @job.scope_file.original_filename
         .grid-cell.grid-cell--100
-          = f.label :summary, "Skills required for this job"
-          - if @job.errors.full_messages.include?("Keywords can't be blank")
+          = f.label :summary, "Technical skills required for this job"
+          - if @job.errors.full_messages.include?("Technical skill tags can't be blank")
             .has-error
               .help-block
                 | One skill must be selected.
           .freelancer-profile__checkboxes
-            - I18n.t('enumerize.freelancer_skills').each do |index, value|
-              - tag_name = "job[keywords][#{index.to_s}]"
-              - if @job.keywords and @job.keywords.include?(index.to_s)
+            - I18n.t('enumerize.technical_skill_tags').each do |index, value|
+              - tag_name = "job[technical_skill_tags][#{index.to_s}]"
+              - if !@job.technical_skill_tags.nil? and @job.technical_skill_tags.include?(index.to_s)
+                - checked = true
+              - else
+                - checked = false
+              .freelancer-profile__checkbox
+                = check_box_tag tag_name, "1", checked
+                = " #{value}"
+        .grid-cell.grid-cell--100
+          = f.label :summary, "Manufacturer skills required for this job"
+          - if @job.errors.full_messages.include?("Manufacturer tags can't be blank")
+            .has-error
+              .help-block
+                | One skill must be selected.
+          .freelancer-profile__checkboxes
+            - I18n.t('enumerize.manufacturer_tags').each do |index, value|
+              - tag_name = "job[manufacturer_tags][#{index.to_s}]"
+              - if !@job.manufacturer_tags.nil? and @job.manufacturer_tags.include?(index.to_s)
                 - checked = true
               - else
                 - checked = false
@@ -64,7 +80,29 @@
         .grid-cell.grid-cell--100
           = f.input :currency, required: true, as: :select
         .grid-cell.grid-cell--100
-          = f.input :job_function, prompt: "Select"
+          = f.input :job_type, prompt: "Select"
+        .grid-cell.grid-cell--100
+          = f.label :job_market
+          select#job_job_market.form-control.select(name='job[job_market]')
+            option(value='')
+              | Select
+            = I18n.t("enumerize.live_events_staging_and_rental_job_markets").each do |index, value|
+              option.job_live_events_staging_and_rental_option(value="#{index}")
+                = value
+            = I18n.t("enumerize.system_integration_job_markets").each do |index, value|
+              option.job_system_integration_option(value="#{index}")
+                = value
+        .grid-cell.grid-cell--100
+          = f.label :job_function
+          select#job_job_function.form-control.select(name='job[job_function]')
+            option(value='')
+              | Select
+            = I18n.t("enumerize.live_events_staging_and_rental_job_functions").each do |index, value|
+              option.job_live_events_staging_and_rental_option(value="#{index}")
+                = value
+            = I18n.t("enumerize.system_integration_job_functions").each do |index, value|
+              option.job_system_integration_option(value="#{index}")
+                = value
         .grid-cell.grid-cell--100
           = f.input :starts_on, html5: true
         .grid-cell.grid-cell--100
@@ -76,10 +114,10 @@
     .grid-cell.grid-cell--100
       .buttons
         - if @job.created?
-            = f.button :button, "Publish", name: "job[state]", value: "published", class: "btn btn--primary"
-            = f.button :submit, "Save as Draft", class: "btn btn--secondary"
+          = f.button :button, "Publish", name: "job[state]", value: "published", class: "btn btn--primary"
+          = f.button :submit, "Save as Draft", class: "btn btn--secondary"
         - else
-            = f.button :submit, "Save", class: "btn btn--primary"
+          = f.button :submit, "Save", class: "btn btn--primary"
         - unless @job.new_record?
           .btn.btn--secondary 
             = link_to "Delete Job", company_job_path(@job), data: { confirm: "Are you sure you want to permanently delete this job posting?", class: "btn btn--secondary" }, method: :delete

@@ -8,12 +8,13 @@ class Freelancer::ContractsController < Freelancer::BaseController
     @job = Job.find(params[:id])
 
     @job.state = "contracted"
+    @job.contracted_at = Time.zone.today
     @job.save
     @accepted_quote = @job.accepted_quote
 
     # Send notice email
     PaymentsMailer.request_funds_company(@job.company, current_freelancer, @job).deliver
-
+    PaymentsMailer.wait_for_funds_freelancer(@job.company, current_freelancer, @job).deliver
     render :show
   end
 end

@@ -48,6 +48,8 @@ class Company::JobPaymentsController < Company::BaseController
 
       if @job.payments.outstanding.empty?
         @job.update(state: :completed)
+        FreelancerMailer.notice_job_complete_freelancer(current_company, freelancer, @job).deliver
+        CompanyMailer.notice_job_complete_company(current_company, freelancer, @job).deliver
         redirect_to company_job_review_path(@job)
       else
         redirect_to company_job_payments_path(@job)

@@ -25,9 +25,9 @@ gem 'easy_postgis'
 
 gem 'devise'
 gem 'stripe'
-
 gem 'hubspot-ruby'
-
+gem 'smtpapi'
+gem 'pry'
 
 # See https://github.com/rails/execjs#readme for more supported runtimes
 gem "therubyracer", platforms: :ruby
@@ -55,6 +55,8 @@ gem "stackprof", "~> 0.2.10"
 
 gem "audited", "~> 4.5.0"
 
+gem "carrierwave", "~> 1.0.0"
+
 gem 'avatax'
 
 gem 'taxjar-ruby', require: 'taxjar'
@@ -74,6 +76,10 @@ gem "factory_girl_rails", "~> 4.8.0"
 
 gem 'jquery-datatables'
 
+gem 'whenever', require: false
+
+gem 'pry'
+
 group :development, :test do
   # Call "byebug" anywhere in the code to stop execution and get a debugger console
   gem "byebug", platforms: [:mri, :mingw, :x64_mingw]
@@ -85,6 +91,8 @@ group :development, :test do
 
   gem "mocha", "~> 1.2.1"
   gem "rails-erd"
+
+  gem 'pry'
 end
 
 group :development do

@@ -5,7 +5,11 @@ class Certification < ApplicationRecord
   include CertificationUploader[:certificate]
   belongs_to :freelancer
 
+  extend Enumerize
+
   after_save :generate_thumbnail
+
+  enumerize :cert_type, in: [ :skill, :onsite ]
 
   def generate_thumbnail
     if self.certificate_data.nil?

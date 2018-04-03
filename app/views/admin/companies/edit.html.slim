@@ -3,61 +3,8 @@ h1 Editing Company
 = simple_form_for([:admin, @company], html: { multipart: true }) do |f|
   = f.error_notification
 
-  .form-inputs
-    - if @company.avatar&.exists?
-      img src=@company.avatar_url
-    = f.hidden_field :avatar, value: @company.cached_avatar_data
-    = f.input :avatar, as: :file, accept: 'image/gif, image/jpg, image/jpeg, image/png'
-    = f.input :name, label: 'Company Name'
-
-    = f.input :contact_name
-    = f.input :email, as: :string, label: 'Contact Email'
-    = f.input :sales_tax_number, as: :string, label: 'Sales Tax No.'
-    = f.input :address, as: :string, label: 'HQ Company Address'
-    = f.input :line2, as: :string, label: 'Address Line 2'
-    = f.input :city, as: :string
-    = f.input :state, as: :string
-    = f.input :province, as: :string
-    = f.input :postal_code, as: :string, label: 'Zip/Postal Code'
-    = f.input :country
-    = f.input :area, label: 'Service Areas'
-    = f.input :website
-    = f.input :phone_number
-    = f.input :contract_preference, label: 'Work Order Type Preference'
-    = f.input :number_of_offices
-    = f.input :description, label: 'About the Company'
-    = f.input :established_in, label: 'Year Company was Established'
-    = f.input :number_of_employees
-
-    .freelancer-profile__item
-      .freelancer-profile__title
-        | Company Markets
-      .freelancer-profile__checkboxes
-        - I18n.t('enumerize.freelancer_keywords').each do |index, value|
-          - tag_name = "company[keywords][#{index.to_s}]"
-          - if @company.keywords and @company.keywords.include?(index.to_s)
-            - checked = true
-          - else
-            - checked = false
-          .freelancer-profile__checkbox
-            = check_box_tag tag_name, "1", checked
-            = value
-
-    .freelancer-profile__item
-      .freelancer-profile__title
-        | Company Skills
-      .freelancer-profile__checkboxes
-        - I18n.t('enumerize.freelancer_skills').each do |index, value|
-          - tag_name = "company[skills][#{index.to_s}]"
-          - if @company.skills and @company.skills.include?(index.to_s)
-            - checked = true
-          - else
-            - checked = false
-          .freelancer-profile__checkbox
-            = check_box_tag tag_name, "1", checked
-            = value
-
-    = f.input :disabled
+  = render "/company/profiles/edit_company_profile", f: f
+  = f.input :disabled
 
   .form-actions
     = f.button :submit, class: "btn btn-primary"
@@ -66,3 +13,98 @@ hr
 = link_to 'Show', admin_company_path(@company)
 '  |
 = link_to 'Back', admin_companies_path
+
+javascript:
+  function toggle_province(country){
+    if (country == "ca"){
+      $(".province_line").removeClass('hidden');
+      $(".state_line").addClass('hidden');
+    }
+    else{
+      $('#company_province').val('');
+      $(".province_line").addClass('hidden');
+      $(".state_line").removeClass('hidden');
+    }
+  }
+
+  $(document).ready(function() {
+    if ($('#company_country').val() != ""){
+      toggle_province($('#company_country').val())
+    }
+    $('#company_country').on('change', function(){
+      toggle_province($(this).val())
+    });
+  });
+
+  var updateHeaderImage = function() {
+    $("#edit-company-profile-header").click();
+    $("#edit-company-profile-header").on('change', function(e) {
+      var imgPath = $(this)[0].value;
+      var extn = imgPath.substring(imgPath.lastIndexOf('.') + 1).toLowerCase();
+      var image_holder = $("#company-edit-profile__header");
+
+      if (extn == "gif" || extn == "png" || extn == "jpg" || extn == "jpeg") {
+        if (typeof (FileReader) != "undefined") {
+          var reader = new FileReader();
+          reader.onload = function (e) {
+            image_holder.attr('src', e.target.result);
+          }
+
+          reader.readAsDataURL($(this)[0].files[0]);
+        }
+      } else {
+        alert("Only images can be selected.");
+      }
+    });
+  }
+
+  var updateProfilePicture = function() {
+    $("#edit-company-profile-avatar").click();
+    $("#edit-company-profile-avatar").on('change', function() {
+      var imgPath = $(this)[0].value;
+      var extn = imgPath.substring(imgPath.lastIndexOf('.') + 1).toLowerCase();
+      var image_holder = $("#company-edit-profile__avatar");
+
+      if (extn == "gif" || extn == "png" || extn == "jpg" || extn == "jpeg") {
+        if (typeof (FileReader) != "undefined") {
+          var reader = new FileReader();
+          reader.onload = function (e) {
+            image_holder.attr('src', e.target.result)
+          }
+
+          reader.readAsDataURL($(this)[0].files[0]);
+        }
+      } else {
+        alert("Only images can be selected.");
+      }
+    });
+  }
+
+  function uploadFeaturedProject (index) {
+    if (index != undefined) {
+      var ref = $("#company_featured_projects_attributes_"+index+"_file");
+    } else {
+      var ref = $(".add-new-project").prev('div').find(".nested_fields").find(".file-input--hidden");
+    }
+
+
+    ref.on('change', function() {
+      var imgPath = $(this)[0].value;
+      var extn = imgPath.substring(imgPath.lastIndexOf('.') + 1).toLowerCase();
+      var image_holder = $(this).parent().parent().parent().find(".freelancer-profile__image").find(".authorable_attachment--full").find("img");
+      if (extn == "gif" || extn == "png" || extn == "jpg" || extn == "jpeg") {
+        if (typeof (FileReader) != "undefined") {
+          var reader = new FileReader();
+          reader.onload = function (e) {
+            image_holder.attr('src', e.target.result)
+          }
+
+          reader.readAsDataURL($(this)[0].files[0]);
+        }
+      } else {
+        alert("Only images can be selected.");
+      }
+    });
+
+    ref.click();
+  }
