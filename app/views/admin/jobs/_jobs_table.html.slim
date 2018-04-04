@@ -3,6 +3,7 @@
     thead
       tr
         th Job
+        th Company Name
         th Project
         th.text-right Actions
 
@@ -10,6 +11,7 @@
       - @jobs.each do |job|
         tr
           td= link_to job.title, admin_job_path(job)
+          td= link_to job.company.name, admin_company_path(job.company)
           td= link_to job.project.name, admin_project_path(job.project)
           td.text-right
             = link_to 'Edit', edit_admin_job_path(job)
