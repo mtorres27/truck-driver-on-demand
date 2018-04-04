@@ -1,31 +1,31 @@
-- if @accepted_quote && !@accepted_quote.paid_by_company
+- if accepted_quote && !accepted_quote.paid_by_company
   .payments
     .payments__flexbox
       .tag.tag--in-progress funds pending
     .payments__status For this project to be started, it must be fully funded. This shows the AV Freelancer that funds are available but will not be accessible until the milestones are met and you authorize the payout.
-    = form_tag company_job_contract_pay_path, method: 'post' do
-      input type="hidden" name="quote_id" value=@accepted_quote.id
-      script.stripe-button data-label="Add #{@accepted_quote.amount.floor} #{job.currency.upcase} + tax in funds" data-amount="#{(@accepted_quote.amount.floor * 100) + (@accepted_quote.amount * @job.applicable_sales_tax)}" data-email=("#{current_company.email}") data-description="Pay for work order for job#{@job.id}" data-key=("#{Rails.configuration.stripe[:publishable_key]}") data-locale="auto" src="https://checkout.stripe.com/checkout.js" data-currency="#{@job.currency}"
-- elsif @accepted_quote && @accepted_quote.paid_by_company && !@job.funds_available
+    = form_tag company_job_contract_pay_path(job), method: 'post' do
+      input type="hidden" name="quote_id" value=accepted_quote.id
+      script.stripe-button data-label="Add #{accepted_quote.amount.floor} #{job.currency.upcase} + tax in funds" data-amount="#{(accepted_quote.amount.floor * 100) + (accepted_quote.amount * job.applicable_sales_tax)}" data-email=("#{current_company.email}") data-description="Pay for work order for job#{job.id}" data-key=("#{Rails.configuration.stripe[:publishable_key]}") data-locale="auto" src="https://checkout.stripe.com/checkout.js" data-currency="#{job.currency}"
+- elsif accepted_quote && accepted_quote.paid_by_company && !job.funds_available
   .payments
     .payments__flexbox
       .tag.tag--in-progress funds pending
       .payments__total-group
         .payments__total-amt #{number_with_precision(job.gpayments_sum_total, precision: 2)} #{job.currency.upcase}
         .payments__payout-label Funded
-    .payments__status Thanks for funding this project. These funds will be available to the freelancer #{@job.funds_available_on ? "on " + Time.at(@job.funds_available_on).to_date.to_s : 'in 7-10 days'}. After which you will be able to release payouts.
-- elsif @accepted_quote && @accepted_quote.paid_by_company && @job.funds_available
+    .payments__status Thanks for funding this project. These funds will be available to the freelancer #{job.funds_available_on ? "on " + Time.at(job.funds_available_on).to_date.to_s : 'in 7-10 days'}. After which you will be able to release payouts.
+- elsif accepted_quote && accepted_quote.paid_by_company && job.funds_available
   .payments
     .payments__flexbox
       .tag.tag--success #{(job.payments_sum_paid == job.payments_sum_total) ? 'Job Done' : 'FUNDS AVAILABLE'}
-      - if !@connector.account.external_accounts.data.any?
+      - if !connector.account.external_accounts.data.any?
         .tag.tag--in-progress Freelancer has no bank account
       .payments__total-group
         .payments__total-amt #{number_with_precision(job.gpayments_sum_paid, precision: 2)} #{job.currency.upcase}
         .payments__payout-label Total Payouts
     .payments__status You have secured funds for this project. AV Junction will hold these payments on your behalf until each of the milestones listed below are met.
 - payments.each do |payment|
-    div class="payments #{ "milestone--inactive" if @accepted_quote.nil? || (@accepted_quote.present? && !@accepted_quote.paid_by_company)}"
+    div class="payments #{ "milestone--inactive" if accepted_quote.nil? || (accepted_quote.present? && !accepted_quote.paid_by_company)}"
       .payments__flexbox
         .payments__title #{payment.description}
         .payments__amt #{payment.total_amount.present? ? number_with_precision(payment.total_amount, precision: 2) : number_with_precision(payment.amount, precision: 2)} #{job.currency ? job.currency.upcase : ''}
@@ -34,7 +34,7 @@
           .payments__date Paid on #{payment.paid_on}
         - elsif payment.issued_on.present?
           .payments__date Requested from #{job.freelancer.name} on #{payment.issued_on}
-      - if !@connector.nil? && @connector.account.external_accounts.data.any? && @accepted_quote.present? && @accepted_quote.paid_by_company && @job.funds_available
+      - if !payment.paid_on.blank? || !connector.nil? && connector.account.external_accounts.data.any? && accepted_quote.present? && accepted_quote.paid_by_company && job.funds_available
         = link_to company_job_payment_path(job, payment), class: 'btn-primary--active top-margin w-inline-block'
           div #{(payment.paid_on.blank? ? "Issue Payout" : "View Invoice")}
       - else
