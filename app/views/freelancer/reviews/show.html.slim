@@ -2,17 +2,10 @@
 = render partial: "freelancer/shared/job_shared_nav", locals: { job: @job }
 
 - content_for :secondary do
-  .result-wrapper
-    .result-header
-      .result-header__text
-        | Reviews
-    - if @job.freelancer and @job.freelancer.id == current_freelancer.id
-      .result-content
-        - if @review.new_record?
-          .review__title
-            = "Please take a minute to provide feedback on your experience with #{@review.company ? @review.company.name : "N/A"}"
-          = render partial: "review_form", locals: {review: @review, job: @job}
-        - else
-          .review__title
-            | Thank you for your feedback
-          = render partial: "review_info", locals: {review: @review}
+  .action-bar
+    h2.heading-h2.heading-h2--action-bar Add a review
+  - if !current_admin.nil? || @job.freelancer and @job.freelancer.id == current_freelancer.id
+    - if @review.new_record?
+      = render partial: "review_form", locals: {review: @review, job: @job}
+    - else
+      = render partial: "review_info", locals: {review: @review}
