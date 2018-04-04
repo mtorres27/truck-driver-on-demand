@@ -1,0 +1,23 @@
+= render partial: "company/shared/job_nav", locals: { job: @job }
+
+- content_for :secondary do
+  .result-wrapper
+    .result-header
+      .result-header__text
+        | Reviews
+    .result-content
+      - if @freelancer_review.new_record?
+        h2.review__title
+          = "The company hasn't submitted a review of #{@job.freelancer.name}"
+      - else
+        h2.review__title
+          = "Company's review of #{@job.freelancer.name}"
+        = render partial: "company/reviews/review_info", locals: {review: @freelancer_review}
+      hr
+      - if @company_review.new_record?
+        h2.review__title
+          = "The freelancer hasn't submitted a review of #{@job.company.name}"
+      - else
+        h2.review__title
+          = "Freelancer's review of #{@job.company.name}"
+        = render partial: "freelancer/reviews/review_info", locals: {review: @company_review}

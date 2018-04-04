@@ -1,0 +1,21 @@
+.table-responsive
+  table.table.table-striped
+    thead
+      tr
+        th Job
+        th Company Name
+        th Project
+        th.text-right Actions
+
+    tbody
+      - @jobs.each do |job|
+        tr
+          td= link_to job.title, admin_job_path(job)
+          td= link_to job.company.name, admin_company_path(job.company)
+          td= link_to job.project.name, admin_project_path(job.project)
+          td.text-right
+            = link_to 'Edit', edit_admin_job_path(job)
+            '  |
+            = link_to 'Delete', admin_job_path(job), data: { confirm: "Are you sure?" }, method: :delete
+
+        = paginate @jobs

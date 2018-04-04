@@ -1,0 +1,8 @@
+.review__options
+  - CompanyReview::RATING_ATTRS.each do |attr|
+    .review__label
+      = "#{attr.to_s.gsub('_', ' ')} : #{review.send(attr)}"
+.review__comments
+  .review__label
+    | Comments
+  = review.comments

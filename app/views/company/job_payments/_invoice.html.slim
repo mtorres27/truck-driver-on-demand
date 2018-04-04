@@ -12,9 +12,9 @@
     .invoice__meta-1
       .invoice__text--right Company:
       .invoice__meta-4
-        div= current_company.name
-        div= current_company.address
-        div= current_company.sales_tax_number
+        div= @job.company.name
+        div= @job.company.address
+        div= @job.company.sales_tax_number
         / div 293 Rhodes DR.
         / div Orlando, FL 32003
     .invoice__meta-1

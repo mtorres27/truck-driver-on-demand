@@ -16,14 +16,16 @@
         .job-header__budget-label Budget
 
   h4.heading-h4
-    a href=company_projects_path
+    - path = current_admin.nil? ? company_projects_path : admin_company_jobs_path(job.company)
+    a href=path
       | #{job.project&.name}
   h5.heading-h5 #{job.created_at}
   h2.heading-h2 #{job.title}
   - if job.freelancer
     h4.heading-h4
       | AWARDED TO
-      a<> href=company_freelancer_path(id: job.freelancer.id) #{job.freelancer.name}
+      - path = current_admin.nil? ? company_freelancer_path(id: job.freelancer.id) : admin_freelancer_path(job.freelancer)
+      a<> href=path #{job.freelancer.name}
 
 
 
@@ -34,11 +36,14 @@
       Job Details
   - else
     .tab-bar__item class=("tab-bar__item--active" if controller.controller_name == "jobs" or request.path.index(/work_order/))
-      a href=company_job_path(job)
+      - path = current_admin.nil? ? company_job_path(job) : admin_job_path(job)
+      a href=path
         | Job Details
     .tab-bar__item class=("tab-bar__item--active" if request.path.index(/applicant/)) class=("tab-bar__item--inactive" if job.applicants_count == 0 )
       - if job.applicants_count > 0
         a href=company_job_applicants_path(job)
+        - path = current_admin.nil? ? company_job_applicants_path(job) : admin_job_applicants_path(job)
+        a href=path
           | Applicants
       - else
         | Applicants
@@ -46,17 +51,20 @@
       - if !job.freelancer
         | Progress
       - else
-        a href=company_job_messages_path(job)
+        - path = current_admin.nil? ? company_job_messages_path(job) : admin_job_messages_path(job)
+        a href=path
           | Progress
     .tab-bar__item class=("tab-bar__item--active" if request.path.index(/payment/)) class=("tab-bar__item--inactive" if job.pre_contracted?)
       - if job.pre_contracted?
         | Payments
       - else
-        a href=company_job_payments_path(job)
+        - path = current_admin.nil? ? company_job_payments_path(job) : admin_job_payments_path(job)
+        a href=path
           | Payments
     .tab-bar__item class=("tab-bar__item--active" if request.path.index(/review/)) class=("tab-bar__item--inactive" unless job.completed?)
       - unless job.completed?
         | Review
       - else
-        a href=company_job_review_path(job)
+        - path= current_admin.nil? ? company_job_review_path(job) : admin_job_review_path(job)
+        a href=path
           | Review

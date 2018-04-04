@@ -5,14 +5,6 @@
     h2.heading-h2.heading-h2--action-bar
       = "Work Order #{@job.work_order}"
     .action-bar--actions
-      = link_to "Edit", edit_company_job_work_order_path(@job), class: "btn btn--primary"
+      = link_to "Edit", edit_admin_job_work_order_path(@job), class: "btn btn--primary"
 
-  = render "work_order_info"
-
-
-
-  
-  
-  
-  
-  
+  = render "company/contracts/work_order_info"

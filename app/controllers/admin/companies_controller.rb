@@ -12,6 +12,12 @@ class Admin::CompaniesController < Admin::BaseController
     end
   end
 
+  def jobs
+    @company = Company.find(params[:company_id])
+    @jobs = @company.jobs
+    @jobs = @jobs.page(params[:page])
+  end
+
   def show
   end
 
