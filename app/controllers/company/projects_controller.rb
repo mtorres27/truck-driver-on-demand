@@ -102,6 +102,6 @@ class Company::ProjectsController < Company::BaseController
     end
 
     def project_params
-      params.require(:project).permit(:name, :external_project_id, :budget, :currency, :address, :starts_on, :duration)
+      params.require(:project).permit(:name, :external_project_id, :currency)
     end
 end
