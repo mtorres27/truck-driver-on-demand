@@ -248,9 +248,22 @@ class Freelancer < ApplicationRecord
   def score
     score = 0
     score += 1 if self.name.present?
-    score += 3 if self.email.present?
-    score += 3 if self.phone_number.present?
-    score += 3 if self.bio.present?
+    score += 5 if self.avatar_data.present?
+    score += 1 if self.email.present?
+    score += 1 if self.address.present?
+    score += 1 if self.area.present?
+    score += 1 if self.city.present?
+    score += 1 if self.state.present?
+    score += 1 if self.postal_code.present?
+    score += 1 if self.phone_number.present?
+
+    score += 1 if self.bio.present?
+    score += 1 if self.tag_line.present?
+    score += 1 if self.company_name.present?
+    score += 1 if self.valid_driver
+
+    score += 1 if self.available
+
     score += 5 * self.certifications.count
     score += 2 * self.freelancer_affiliations.count
     score += 2 * self.freelancer_clearances.count
