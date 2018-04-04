@@ -663,7 +663,9 @@ CREATE TABLE freelancer_insurances (
     description text,
     freelancer_id integer,
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+    updated_at timestamp without time zone NOT NULL,
+    image character varying,
+    image_data text
 );
 
 
@@ -1000,8 +1002,8 @@ CREATE TABLE jobs (
     job_type citext,
     job_market citext,
     manufacturer_tags citext,
-    company_plan_fees numeric(10,2) DEFAULT 0,
-    contracted_at timestamp without time zone
+    contracted_at timestamp without time zone,
+    company_plan_fees numeric(10,2) DEFAULT 0
 );
 
 
@@ -2523,12 +2525,6 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20171218020642'),
 ('20171218023711'),
 ('20171222051331'),
-('20180114213233'),
-('20180114214827'),
-('20180114215226'),
-('20180114220148'),
-('20180117114408'),
-('20180117114800'),
 ('20180119214528'),
 ('20180127120826'),
 ('20180127123843'),
@@ -2555,6 +2551,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20180312205533'),
 ('20180319115900'),
 ('20180319144208'),
-('20180321172650');
+('20180321172650'),
+('20180402194248');
 
 
