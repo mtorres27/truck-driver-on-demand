@@ -46,7 +46,7 @@
           | My Freelancers
         a.mobile-nav__menu__item href=company_payments_path data-turbolinks="false"
           | Payments
-        a.mobile-nav__menu__item
+        a.mobile-nav__menu__item href=company_profile_path data-turbolinks="false"
           = image_tag current_company.avatar_url
           | my profile
         = link_to "Logout", destroy_company_session_path, method: :delete, class: "mobile-nav__menu__item"
