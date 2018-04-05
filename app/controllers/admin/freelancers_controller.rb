@@ -8,7 +8,7 @@ class Admin::FreelancersController < Admin::BaseController
 
     @freelancers = Freelancer.order('created_at DESC')
     if @keywords
-      @freelancers = @freelancers.search(@keywords)
+      @freelancers = @freelancers.name_search(@keywords)
     end
   end
 

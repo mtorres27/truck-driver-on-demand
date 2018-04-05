@@ -195,9 +195,16 @@ class Company < ApplicationRecord
     manufacturer_tags: "B",
     formatted_address: "C",
     description: "C"
-    }, using: {
+  }, using: {
       tsearch: { prefix: true }
-    }
+  }
+
+  pg_search_scope :name_or_email_search, against: {
+      name: "A",
+      email: "A",
+  }, using: {
+      tsearch: { prefix: true }
+  }
 
 
     attr_accessor :user_type
