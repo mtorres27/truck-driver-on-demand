@@ -1,4 +1,5 @@
-= simple_form_for([:company, project], remote: true) do |f|
+- controller = current_admin.nil? ? :company : :admin
+= simple_form_for([controller, project], remote: true) do |f|
   .grid-h
     .grid-cell.grid-cell--50
       = f.input :name, placeholder: "Enter the project name booya"
@@ -7,8 +8,10 @@
     .grid-cell.grid-cell--100
       .buttons
         = f.button :submit, "Update", class: "btn btn--primary"
-        a.btn.btn--secondary data-dismiss="modal" href=company_projects_path
+        - path = current_admin.nil? ? company_projects_path : admin_project_path(project)
+        a.btn.btn--secondary data-dismiss="modal" href=path
           | Cancel
         - unless project.new_record?
           '
-          = link_to "Delete", company_project_path(project), class: "btn btn--danger", data: { confirm: "Are you sure?" }, method: :delete
+          -path = path = current_admin.nil? ? company_project_path(project) : admin_project_path(project)
+          = link_to "Delete", path, class: "btn btn--danger", data: { confirm: "Are you sure?" }, method: :delete

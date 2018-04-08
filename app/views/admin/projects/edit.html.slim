@@ -1,17 +1,6 @@
-h1 Editing Project
+- content_for :secondary do
+  .action-bar
+    h2.heading-h2.heading-h2--action-bar Edit Project
 
-= simple_form_for([:admin, @project]) do |f|
-  = f.error_notification
-
-  .form-inputs
-    = f.input :name
-    = f.input :external_project_id
-    
-  .form-actions
-    = f.button :submit, class: "btn btn-primary", prompt: "Select"
-
-hr
-= link_to 'Show', admin_project_path(@project)
-'  |
-= link_to 'Back', admin_projects_path
+  = render partial: "company/projects/form", locals: { project: @project }
 

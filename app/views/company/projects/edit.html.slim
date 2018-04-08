@@ -1,11 +1,5 @@
-/ .tab-bar
-/   a.tab-bar__item href="#{company_projects_path}" class=("tab-bar__item--active" unless params[:closed])
-/     | Open Projects
-/   a.tab-bar__item href="#{company_projects_path(closed: true)}" class=("tab-bar__item--active" if params[:closed])
-/     | Closed Projects
-    
 - content_for :secondary do
   .action-bar
     h2.heading-h2.heading-h2--action-bar Edit Project
-  
+
   = render partial: "form", locals: { project: @project }

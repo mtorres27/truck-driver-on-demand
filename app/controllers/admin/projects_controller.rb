@@ -51,9 +51,6 @@ class Admin::ProjectsController < Admin::BaseController
       params.require(:project).permit(
         :name,
         :external_project_id,
-        :area,
-        :closed,
-        :currency
       )
     end
 end

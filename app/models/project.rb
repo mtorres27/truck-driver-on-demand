@@ -64,7 +64,4 @@ class Project < ApplicationRecord
   def gpayments_sum_total
     jobs.sum { |job| job.gpayments_sum_total || 0 }
   end
-
-  scope :open, -> { where(closed: false) }
-  scope :closed, -> { where(closed: true) }
 end
