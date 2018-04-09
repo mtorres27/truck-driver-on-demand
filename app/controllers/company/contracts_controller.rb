@@ -40,7 +40,7 @@ class Company::ContractsController < Company::BaseController
       quote.save
 
       payments.each do |payment|
-        payment.avj_fees = payment.amount * avj_fees
+        payment.avj_fees = payment.amount * Rails.configuration.avj_fees
         payment.tax_amount = (payment.amount * (@job.applicable_sales_tax / 100))
         payment.total_amount = payment.amount * (1 + (@job.applicable_sales_tax / 100))
         payment.save
