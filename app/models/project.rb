@@ -26,9 +26,6 @@ class Project < ApplicationRecord
   belongs_to :company
   has_many :jobs, -> { order(updated_at: :desc) }, dependent: :destroy
 
-  validates :budget, numericality: true, sane_price: true
-  validates :duration, numericality: { only_integer: true, greater_than: 0, less_than: 365 }, allow_blank: true
-
   audited
 
   # enumerize :currency, in: [
@@ -67,7 +64,4 @@ class Project < ApplicationRecord
   def gpayments_sum_total
     jobs.sum { |job| job.gpayments_sum_total || 0 }
   end
-
-  scope :open, -> { where(closed: false) }
-  scope :closed, -> { where(closed: true) }
 end

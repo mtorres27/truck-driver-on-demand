@@ -1,7 +1,7 @@
 class Admin::JobsController < Admin::BaseController
   
     before_action :set_job, only: [:show, :edit, :update, :destroy, :enable, :disable, :login_as]
-  
+
     def index
       @keywords = params.dig(:search, :keywords).presence
   
@@ -16,6 +16,7 @@ class Admin::JobsController < Admin::BaseController
     end
   
     def edit
+      @company = @job.company
     end
   
     def update

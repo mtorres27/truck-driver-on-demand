@@ -1,25 +1,2 @@
 = render partial: "company/shared/job_nav", locals: { job: @job }
-
-- content_for :secondary do
-  .action-bar
-    h2.heading-h2.heading-h2--action-bar Applicants
-    .action-bar__actions
-      .messaging-filter
-        .messaging-filter__text
-          | Filter
-        .messaging-filter__select
-          select id="messaging-filter"
-            option value="" label="All Applicants"
-            option value="quoting" label="Quoting Applicants" selected=("quoting" if params[:filter] == "quoting")
-            option value="accepted" label="Accepted Applicant" selected=("selected" if params[:filter] == "accepted")
-  .grid-h
-    .grid-cell.grid-cell--25.company-applicants
-      = render partial: "company/shared/applicants_for_messaging", locals: { applicants: @applicants, job: @job, current_applicant_id: @current_applicant_id }
-    .grid-cell.grid-cell--75.messages-and-activity
-      = render partial: "company/shared/messaging_cluster", locals: { applicant_accepted: @applicant_accepted, applicants: @applicants, job: @job, current_applicant_id: @current_applicant_id,  }
-
-javascript:
-  $("#messaging-filter").on('change', function() {
-    var val = $(this).val();
-    window.location.href = "http://"+window.location.host+window.location.pathname+"?filter="+val;
-  })     
+= render "applicants_info"

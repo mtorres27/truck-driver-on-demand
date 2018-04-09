@@ -2,7 +2,8 @@
   h3.heading-h3
     | Freelancer
     p
-      a href="/company/freelancers/#{job.freelancer.id}"
+      - nspace = current_admin.nil? ? "company" : "admin"
+      a href="/#{nspace}/freelancers/#{job.freelancer.id}"
         = job.freelancer.name
     
 

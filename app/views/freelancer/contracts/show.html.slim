@@ -153,7 +153,8 @@
 
         - if @job.state != :contracted and @job.freelancer.id == current_freelancer.id
           .buttons
-            a.btn.btn--primary href="#" data-link="/freelancer/jobs/#{@job.id}/work_order/accept" id="accept_work_order_button" disabled=true
+            - disabled = !@job.opt_out_of_freelance_service_agreement
+            a.btn.btn--primary href="#" data-link="/freelancer/jobs/#{@job.id}/work_order/accept" id="accept_work_order_button" disabled=disabled
               | Accept Work Order
           p
           p  

@@ -5,16 +5,8 @@
   - else
     = link_to "Subscribe to post jobs", company_plans_path, class: "btn btn--primary", role: "button"
 
-.tab-bar
-  a.tab-bar__item href="#{company_projects_path}" class=("tab-bar__item--active" unless params[:closed])
-    | Open Projects
-  a.tab-bar__item href="#{company_projects_path(closed: true)}" class=("tab-bar__item--active" if params[:closed])
-    | Closed Projects
-
 - content_for :secondary do
   .action-bar
-    h2.heading-h2.heading-h2--action-bar
-      = "#{@projects.total_count} #{params[:closed] ? 'Closed' : 'Open'} Projects with a total of #{@job_count} jobs."
     .action-bar__actions
       .btn.btn--secondary type="button" onClick="toggleJobs(this)" data-action="show"
         | Expand All

@@ -1,0 +1,159 @@
+- content_for :secondary do
+  .action-bar
+    h2.heading-h2.heading-h2--action-bar Edit Work Order
+    .action-bar__actions
+
+  - path = current_admin.nil? ? company_job_work_order_path(@job) : admin_job_work_order_path(@job)
+  = simple_form_for(@job, url: path) do |f|
+    .grid-h
+      .grid-cell.grid-cell--33
+        = render partial: "company/shared/contract_meta", locals: { job: @job }
+
+      .grid-cell.grid-cell--33
+        h3.heading-h3 Project Reference
+        p
+          - if current_admin.nil?
+            a href=company_projects_path()
+              = project_reference(@job.project)
+          - else
+            = project_reference(@job.project)
+      .grid-cell.grid-cell--expand
+        h3.heading-h3 Job Title
+        p
+          - path = current_admin.nil? ? company_jobs_path(@job) : admin_jobs_path(@job)
+          a href=path
+            = @job.title
+
+    .grid-h
+      .grid-cell.grid-cell--33
+        = f.input :pay_type, required: true, prompt: "Select", label: "Project Type", input_html: { class: 'form__select-field' }
+
+      .grid-cell.grid-cell--33
+        - if f.object and f.object.accepted_quote
+          = f.input :contract_price, required: true, input_html: { value: number_with_precision(f.object.accepted_quote.amount, precision: 2, class: 'form__text-field') }, label: "Job Work Order Amount", disabled: true
+        - else
+          = f.input :contract_price, required: true, label: "Job Work Order Amount", disabled: true, input_html: { class: 'form__text-field' }
+        .job-details__price-status
+          = ""
+
+      .grid-cell.grid-cell--33
+        = f.input :applicable_sales_tax, html5: true, label: "Applicable Sales Tax (%)", input_html: { class: 'form__text-field'}
+        .form__field-helper-text
+          | If the freelancer collects sales tax, be sure to ask them what amount of tax this is. The rate of tax entered here will be reflected in your invoices.
+
+      .grid-cell.grid-cell--33
+        = f.input :starts_on, html5: true, label: "Start Date (Estimated)", input_html: { class: 'form__text-field'}
+
+      .grid-cell.grid-cell--33
+        = f.input :ends_on, html5: true, label: "End date (estimated)", input_html: { class: 'form__text-field'}
+
+      .grid-cell.grid-cell--33
+        = f.input :working_time, prompt: "Select", label: "Acceptable Working Hours"
+
+
+
+      .grid-cell.grid-cell--100
+        #payments
+          .form__field-label
+            | Payment Schedule
+          = f.simple_fields_for :payments do |payment_form|
+            = render "payment_fields", f: payment_form
+          .buttons
+            = link_to_add_association 'Add Schedule Item', f, :payments, class: "btn btn--primary"
+
+      .grid-cell.grid-cell--100
+        .form__field-label
+          | Reporting Requirements
+        = f.input :reporting_frequency, as: :radio_buttons, item_wrapper_class: "inline", label: false
+        = f.input :require_photos_on_updates
+        = f.input :require_checkin
+        = f.input :require_uniform
+
+      .grid-cell.grid-cell--100.job-details
+        #featured_projects
+          .form__field-label
+            | Addenda
+          = f.simple_fields_for :attachments do |attachment_form|
+            = render "attachment_fields", f: attachment_form
+          .buttons.add-new-addendum
+            = link_to_add_association 'Add Addendum', f, :attachments, class: "btn btn--primary"
+
+      .grid-cell.grid-cell--100
+        .form__field-label
+          | Freelancer Agreements
+        p
+          a href="/freelance-service-agreement?job=#{@job.id}#{random_append}" target="_blank"
+            | Freelance Service Agreement
+        p
+          | AV Junction provides a template freelance service agreement for you to use at your sole discretion.  This template agreement does not bind AV Junction Inc to this work order.  This work order is between you and the hired AV freelancer.  If you would like to opt out of using this template please check the box.
+          = f.input :opt_out_of_freelance_service_agreement, label: "Opt out of Freelance Service Agreement"
+
+      .grid-cell.grid-cell--100
+        .form__field-label
+          | About Insurance
+        p
+          | Please be advised that AV Junction does not provide any insurance for AV Companies or Freelancers. Each User, at its sole cost and expense, will maintain appropriate insurance.
+
+      .grid-cell.grid-cell--100
+        - if @job.pre_contracted?
+          .buttons
+            = f.hidden_field :send_contract, value: false
+            .btn.btn--primary onclick="sendContract()"
+              | Send Work Order
+            .btn.btn--secondary onclick="saveDraft()"
+              | Save Draft
+
+
+javascript:
+  var toggleExpandedJobDetails = function() {
+    var collapsed = "job-details--collapsed";
+    if ($("#contract-extra-data").hasClass(collapsed)) {
+      $("#contract-extra-data").removeClass(collapsed);
+      $(".result-content__expand-btn").html("collapse job details");
+    } else {
+      $("#contract-extra-data").addClass(collapsed);
+      $(".result-content__expand-btn").html("expand job details");
+    }
+  }
+
+  var sendContract = function() {
+    $("#job_send_contract").val(true);
+    $(".edit_job").submit()
+  }
+
+  var saveDraft = function() {
+    $("#job_send_contract").val(false);
+    $(".edit_job").submit()
+  }
+
+  function uploadAddendum (index) {
+    if (index != undefined) {
+      var id = "#job_attachments_attributes_"+index+"_file";
+      var ref = $(id);
+    } else {
+      var ref = $(".add-new-addendum").prev('div').find(".nested_fields").find(".file-input--hidden");
+
+    }
+
+    ref.on('change', function() {
+      var imgPath = $(this)[0].value;
+      var extn = imgPath.substring(imgPath.lastIndexOf('.') + 1).toLowerCase();
+      var image_holder = $(this).parent().parent().find(".freelancer-profile__image").find(".authorable_attachment--full").find("img");
+      if (extn == "gif" || extn == "png" || extn == "jpg" || extn == "jpeg") {
+        if (typeof (FileReader) != "undefined") {
+          var reader = new FileReader();
+          reader.onload = function (e) {
+            image_holder.attr('src', e.target.result)
+          }
+
+          reader.readAsDataURL($(this)[0].files[0]);
+        }
+      } else if (extn == "pdf") {
+        image_holder.attr('src', "/assets/certification/certification_placeholder.png")
+      } else {
+        alert("Only images can be selected.");
+      }
+    });
+
+    ref.click();
+  }

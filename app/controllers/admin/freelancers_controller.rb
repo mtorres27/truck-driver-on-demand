@@ -8,7 +8,7 @@ class Admin::FreelancersController < Admin::BaseController
 
     @freelancers = Freelancer.order('created_at DESC')
     if @keywords
-      @freelancers = @freelancers.search(@keywords)
+      @freelancers = @freelancers.name_search(@keywords)
     end
   end
 
@@ -93,7 +93,7 @@ class Admin::FreelancersController < Admin::BaseController
         manufacturer_tags:  I18n.t("enumerize.manufacturer_tags").keys,
         certifications_attributes: [:id, :certificate, :cert_type, :name, :_destroy],
         freelancer_affiliations_attributes: [:id, :name, :image, :_destroy],
-        freelancer_insurances_attributes: [:id, :name, :description, :_destroy],
+        freelancer_insurances_attributes: [:id, :name, :description, :image, :_destroy],
         freelancer_clearances_attributes: [:id, :description, :image, :_destroy],
         freelancer_portfolios_attributes: [:id, :name, :image, :_destroy],
       )

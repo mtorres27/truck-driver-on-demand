@@ -1,7 +1,22 @@
 .authorable_attachment__item
   .profile__meta__details__1-1
     .profile__meta__info
+      .freelancer-profile__image.float-left
+        - if !f.object.image_url.nil? && !f.object.image_url.include?('missing.pdf')
+          - url = is_image(f.object.image_url) ? f.object.image_url : "/assets/certification/certification_placeholder.png"
+          a.authorable_attachment--full href=f.object.image_url target="_blank"
+            img src=url
+          .freelancer-profile__image-upload onclick="uploadInsuranceImage(#{f.index})"
+            span class="zmdi zmdi-upload"
+        - else
+          .authorable_attachment--full
+            img src=""
+          .freelancer-profile__image-upload onclick="uploadInsuranceImage()"
+            span class="zmdi zmdi-upload"
+
       = f.input :name, as: :string, placeholder: "Enter the insurance name", label: "Insurance Name"
+
     .profile__meta__info
+      = f.file_field :image, :accept => 'image/gif,image/jpg,image/jpeg,image/png,document/pdf,application/pdf,application/x-pdf', label: false, class: "file-input--hidden"
       = f.input :description, label: "Tell something about this insurance", placeholder: "Insurance description", :input_html => { :class => 'form__profile-bio-textarea' }
     = link_to_remove_association "", f, { onClick: "hide_remove_association(this)", class: "btn-icon-link"}

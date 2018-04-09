@@ -2,7 +2,8 @@
   = simple_form_for(:message, url: company_job_applicant_quotes_path(@job, @applicant)) do |f|
     .applicant-messages__messages
       - if @all_quotes.where({state: "accepted"}).length == 0
-        = render partial: "company/shared/new_message", locals: { f: f, n: @applicant.freelancer.name, type: "quote", quotes: @quotes }
+        - if current_company
+          = render partial: "company/shared/new_message", locals: { f: f, n: @applicant.freelancer.name, type: "quote", quotes: @quotes }
       - else
         .new-message--wrapper
           .new-message_amount
@@ -18,7 +19,8 @@
                   = "Simply click the button below to proceed to creating a work order."
 
                 div
-                a.btn.btn--primary href=company_job_work_order_path(@job)
+                - path = current_admin.nil? ? company_job_work_order_path(@job) : admin_job_work_order_path(@job)
+                a.btn.btn--primary href=path
                   | view Work Order
       .applicant-messages__messages--inner class=("applicant-messages__messages--inner--inactive" if @applicant_accepted == true)
         - @harmonized_items.each_with_index do |item, index|

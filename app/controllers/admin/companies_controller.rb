@@ -8,8 +8,14 @@ class Admin::CompaniesController < Admin::BaseController
 
     @companies = Company.order('created_at DESC')
     if @keywords
-      @companies = @companies.search(@keywords)
+      @companies = @companies.name_or_email_search(@keywords)
     end
+  end
+
+  def jobs
+    @company = Company.find(params[:company_id])
+    @jobs = @company.jobs
+    @jobs = @jobs.page(params[:page])
   end
 
   def show

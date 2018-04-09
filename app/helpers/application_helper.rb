@@ -46,7 +46,7 @@ module ApplicationHelper
 
 
   def calc_distance_from(freelancer)
-    if current_company.lat.nil?
+    if current_company.nil? || current_company.lat.nil?
       return "N/A"
     end
 

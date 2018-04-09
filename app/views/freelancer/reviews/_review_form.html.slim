@@ -1,0 +1,18 @@
+= simple_form_for(review, url: freelancer_job_review_path(job)) do |f|
+  .grid-h
+    .grid-cell.grid-cell--100
+      h3.heading-h3= "Please take a minute to provide feedback on your experience with #{job.company ? job.company.name : "N/A"}"
+      = f.error_notification
+    - CompanyReview::RATING_ATTRS.each do |attr|
+      .grid-cell.grid-cell--50
+        .review__label
+          = attr.to_s.gsub('_', ' ').capitalize
+        .review__option
+          = f.input attr, collection: 1..5, as: :radio_buttons, label: false
+    .grid-cell.grid-cell--50
+      .review__label
+        | Comments
+      = f.input :comments, placeholder: "Add any additional comments you'd like to make. These will be public.", label: false
+    .grid-cell.grid-cell--100
+      .buttons
+        = f.submit "Submit Review", class: "btn btn--primary"

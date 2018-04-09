@@ -1,5 +1,6 @@
 class Company::JobsController < Company::BaseController
   before_action :set_job, only: [:print_avj_invoice, :avj_invoice, :show, :edit, :update, :destroy, :contract, :edit_contract, :update_contract, :publish]
+  before_action :set_company, only: [:edit, :new]
 
   def job_countries
     country = params[:country]
@@ -108,6 +109,10 @@ class Company::JobsController < Company::BaseController
 
 
   private
+
+    def set_company
+      @company = current_company
+    end
 
     def set_job
       @job = current_company.jobs.find(params[:id])
