@@ -1186,18 +1186,11 @@ CREATE TABLE projects (
     company_id bigint NOT NULL,
     external_project_id character varying,
     name character varying NOT NULL,
-    budget numeric(10,2) NOT NULL,
-    starts_on date,
-    duration integer,
-    address character varying NOT NULL,
     formatted_address character varying,
-    area character varying,
     lat numeric(9,6),
     lng numeric(9,6),
-    closed boolean DEFAULT false NOT NULL,
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL,
-    currency character varying
+    updated_at timestamp without time zone NOT NULL
 );
 
 
@@ -2190,27 +2183,6 @@ CREATE INDEX index_payments_on_job_id ON payments USING btree (job_id);
 
 
 --
--- Name: index_projects_on_area; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_projects_on_area ON projects USING btree (area);
-
-
---
--- Name: index_projects_on_budget; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_projects_on_budget ON projects USING btree (budget);
-
-
---
--- Name: index_projects_on_closed; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_projects_on_closed ON projects USING btree (closed);
-
-
---
 -- Name: index_projects_on_company_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -2229,13 +2201,6 @@ CREATE INDEX index_projects_on_external_project_id ON projects USING btree (exte
 --
 
 CREATE INDEX index_projects_on_name ON projects USING btree (name);
-
-
---
--- Name: index_projects_on_starts_on; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_projects_on_starts_on ON projects USING btree (starts_on);
 
 
 --
@@ -2552,6 +2517,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20180319115900'),
 ('20180319144208'),
 ('20180321172650'),
-('20180402194248');
+('20180402194248'),
+('20180404170355');
 
 

@@ -11,11 +11,7 @@ Company.create(
   # Project 1
   company.projects.create(
     external_project_id: 800600,
-    budget: 5000,
-    starts_on: Date.parse("2017-09-07"),
-    duration: 10,
     name: "Executive Boardroom",
-    address: "5333 Westheimer Rd #1000, Houston, TX 77056, USA",
     area: "Texas",
     closed: false
   ).tap do |project|
@@ -112,11 +108,7 @@ Company.create(
   company.projects.create(
     name: "Atrium 5x5 Videowall - Digital Signage Project",
     external_project_id: 800601,
-    budget: 6000,
-    address: "1754 Technology Dr #135, San Jose, CA 95110, USA",
     area: "San Jose",
-    starts_on: Date.parse("2017-09-19"),
-    duration: 7,
     closed: false
   ).tap do |project|
 
@@ -206,11 +198,7 @@ Company.create(
   company.projects.create(
     name: "Broadcast Studio - LED installation",
     external_project_id: 800602,
-    budget: 10000,
-    address: "366 Adelaide Street East #230, Toronto, ON M5A 3X9",
     area: "Toronto",
-    starts_on: Date.parse("2017-10-04"),
-    duration: 15,
     closed: false
   ).tap do |project|
 
@@ -293,11 +281,7 @@ Company.create(
   company.projects.create(
     name: "University New AV Build - 40 Classrooms (2 room types)",
     external_project_id: 800603,
-    budget: 9000,
-    address: "University of Cambridge, Downing Pl, Cambridge CB2 3EN, UK",
     area: "Cambridge",
-    starts_on: Date.parse("2017-10-16"),
-    duration: 20,
     closed: false
   ).tap do |project|
 
@@ -365,11 +349,7 @@ Company.create(
   company.projects.create(
     name: "Retail Digital Signage Project",
     external_project_id: 800604,
-    budget: 5500,
-    address: "151 W 34th St, New York, NY 10001, USA",
     area: "New York",
-    starts_on: Date.parse("2017-09-21"),
-    duration: 7,
     closed: false
   ).tap do |project|
 
