@@ -11,7 +11,7 @@
                 a data-toggle="collapse" data-parent="#projects-accordion" href="#project-group-#{project.id}" aria-controls="project-group-#{project.id}" role="button" aria-expanded="false"
                   = project.name
               .col-xs-6.text-right class=(project.payments_sum_paid == project.payments_sum_total ? "text-success" : "")
-                = "Paid #{number_with_precision(project.gpayments_sum_paid, precision: 2)} #{project.currency} of #{number_with_precision(project.gpayments_sum_total, precision: 2)} #{project.currency ? project.currency.upcase : ''}"
+                = "Paid #{number_with_precision(project.gpayments_sum_paid, precision: 2)} #{project.currency ? project.currency.upcase : ''} of #{number_with_precision(project.gpayments_sum_total, precision: 2)} #{project.currency ? project.currency.upcase : ''}"
             hr
           .collapse( id="project-group-#{project.id}" aria-labelledby="project-header-#{project.id}" )
             #jobs-accordion role="tablist" area-multiselectable="true"

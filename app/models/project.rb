@@ -36,6 +36,10 @@ class Project < ApplicationRecord
       tsearch: { prefix: true, any_word: true }
   }
 
+  def currency
+    jobs.first.nil? ? nil : jobs.first.currency
+  end
+
   def contract_value
     jobs.sum { |job| job.contract_price || 0 }
   end
