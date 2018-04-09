@@ -20,17 +20,18 @@
             | The #{ current_company.subscription_status == "trialing" ? "trial":"subscription"} will end at #{current_company.billing_period_ends_at}
 
     - if current_company.last_4_digits.present? && !current_company.is_subscription_cancelled
-      .grid-cell.grid-cell--50
-        .plans
-          h2.heading-h2.center
-            = current_company.card_brand
-          .plans__pricing
-            .plans__subtitle
-              | **** **** **** #{current_company.last_4_digits}
-            .plans__subtitle Expires #{current_company.exp_month} / #{current_company.exp_year}
-          div style="text-align: center"
-            = form_tag '/company/update_card_info', method: 'post' do
-              script.stripe-button  data-email=("#{current_company.email}") src="https://checkout.stripe.com/checkout.js" class="stripe-button" data-key="#{Rails.configuration.stripe[:publishable_key]}" data-image="/assets/avjunction-logo_header.svg" data-name="AVJunction" data-panel-label="Update Card Details" data-label="Update Card Details" data-allow-remember-me=false data-locale="auto"
+      - if current_company.plan.subscription_fee > 0
+        .grid-cell.grid-cell--50
+          .plans
+            h2.heading-h2.center
+              = current_company.card_brand
+            .plans__pricing
+              .plans__subtitle
+                | **** **** **** #{current_company.last_4_digits}
+              .plans__subtitle Expires #{current_company.exp_month} / #{current_company.exp_year}
+            div style="text-align: center"
+              = form_tag '/company/update_card_info', method: 'post' do
+                script.stripe-button  data-email=("#{current_company.email}") src="https://checkout.stripe.com/checkout.js" class="stripe-button" data-key="#{Rails.configuration.stripe[:publishable_key]}" data-image="https://stripe.com/img/documentation/checkout/marketplace.png" data-name="AVJunction" data-panel-label="Update Card Details" data-label="Update Card Details" data-allow-remember-me=false data-locale="auto"
           / - else
           /   h3.plans__title
           /     | No Card provided yet.
