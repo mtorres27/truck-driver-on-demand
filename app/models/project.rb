@@ -37,6 +37,10 @@ class Project < ApplicationRecord
   #   :yen,
   # ]
 
+  def currency
+    jobs.first.nil? ? nil : jobs.first.currency
+  end
+
   def contract_value
     jobs.sum { |job| job.contract_price || 0 }
   end
