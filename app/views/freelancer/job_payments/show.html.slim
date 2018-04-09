@@ -2,17 +2,15 @@
 = render partial: "/freelancer/shared/job_shared_nav", locals: { job: @job }
 
 - content_for :secondary do
-  .result-wrapper
-    .result-header
-      .result-header__text
-        | Payments
-      .invoice-actions
-        - unless action_name == "print"
-          a.icon href=print_company_job_payment_path(@job, @payment) target="_blank" title="Print"
-            span.glyphicon.glyphicon-print aria-hidden=true
-          a.icon href=print_company_job_payment_path(@job, @payment, format: :pdf) title="Download"
-            span.glyphicon.glyphicon-download aria-hidden=true
-          - if !@payment.paid_on.blank?
-            .tag.tag--success Paid
-    .result-content
-      = render "invoice"
+  .action-bar
+    h2.heading-h2 Payments
+    .action-bar__actions
+      - unless action_name == "print"
+        a.icon href=print_company_job_payment_path(@job, @payment) target="_blank" title="Print"
+          span.glyphicon.glyphicon-print aria-hidden=true
+        a.icon href=print_company_job_payment_path(@job, @payment, format: :pdf) title="Download"
+          span.glyphicon.glyphicon-download aria-hidden=true
+        - if !@payment.paid_on.blank?
+          .tag.tag--success Paid
+  .grid-h
+    = render "invoice"
