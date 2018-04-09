@@ -1,6 +1,8 @@
 h2= @plan.name
 p= "Code: #{@plan.code}"
-p= "Description: #{@plan.description}"
+p<>
+  | Description
+  == @plan.description
 p= "Period: #{@plan.period}"
 p= "Trial period: #{@plan.trial_period}"
 p= "Subscription fee: #{@plan.subscription_fee}"

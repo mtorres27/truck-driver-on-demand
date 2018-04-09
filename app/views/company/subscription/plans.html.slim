@@ -53,13 +53,14 @@
         .grid-cell.grid-cell--50
           .plans
             h2.heading-h2.center #{plan[:name]}
-            .plans__subtitle #{ plan.description}
+            .plans__subtitle
+              == plan.description
             .plans__pricing
-              - if  plan[:subscription_fee] > 0
-                .plans__price $#{plan[:subscription_fee]}
-                .plans__currency USD #{ current_company.country == 'ca'  ?  "+ " + (province_tax(current_company.province)*100).to_s + "% tax" : '' }
-              - else
-                .plans__price Free
+              / - if  plan[:subscription_fee] > 0
+              .plans__price $#{number_with_precision(plan[:subscription_fee] , precision: 2,  strip_insignificant_zeros: true)}
+              .plans__currency USD #{ current_company.country == 'ca'  ?  "+ " + (province_tax(current_company.province)*100).to_s + "% tax" : '' }
+              / - else
+              /   .plans__price Free
 
             div style="text-align: center"
               = form_tag company_subscription_checkout_path, method: 'post', plan: plan  do

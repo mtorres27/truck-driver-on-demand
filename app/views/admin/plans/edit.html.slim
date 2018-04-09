@@ -1,3 +1,6 @@
+<link rel="stylesheet" type="text/css" href="/trix.css">
+<script type="text/javascript" src="/trix.js"></script>
+
 h1 Editing Plan
 
 = simple_form_for([:admin, @plan]) do |f|
@@ -6,7 +9,8 @@ h1 Editing Plan
   .form-inputs
     = f.input :name
     = f.input :code, label: "Stripe Plan Code (Do Not Edit)"
-    = f.input :description
+    = f.input :description, as: "hidden", id: "description"
+    trix-editor input="plan_description"
     = f.input :period
     / - @plan.fee_schema.try(:each) do |key, value|
     /   = key
