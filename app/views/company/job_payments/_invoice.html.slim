@@ -30,7 +30,8 @@
       .invoice__table-text= @payment.description
       .invoice__table-text.invoice__table-text--right= number_with_precision(@payment.amount, precision: 2).to_s + " " + @job.currency.upcase
     .invoice__table-row
-      .invoice__table-text Sales Tax @ #{@job.applicable_sales_tax}%
+      .invoice__table-text Applicable Taxes
+      / @ #{@job.applicable_sales_tax}%
       .invoice__table-text.invoice__table-text--right= number_with_precision(@payment.tax_amount, precision: 2).to_s + " " + @job.currency.upcase
     .invoice__table-row.invoice__table-row--total
       .invoice__table-text Total Payout

@@ -1,10 +1,13 @@
-div class="payments #{ "milestone--inactive" if @accepted_quote.nil? || (@accepted_quote.present? && !@accepted_quote.paid_by_company)}"
-  .payments__flexbox
-    .payments__title AV Junction Fees
-    .payments__amt #{job.company_plan_fees.present? ? number_with_precision(job.company_plan_fees , precision: 2) : '' } #{job.currency.upcase}
-  .payments__flexbox
-    =link_to company_job_avj_invoice_path(id: job.id), class: 'btn-link'
-      | View Invoice
+- if @accepted_quote.paid_by_company
+  div class="payments #{ "milestone--inactive" if @accepted_quote.nil? || (@accepted_quote.present? && !@accepted_quote.paid_by_company)}"
+    .payments__flexbox
+      .payments__title AV Junction Fees
+      .payments__amt
+        = job.company_plan_fees.present? ? number_with_precision(job.company_plan_fees , precision: 2) : ''
+        | #{job.currency.upcase}
+    .payments__flexbox
+      =link_to company_job_avj_invoice_path(id: job.id), class: 'btn-link'
+        | View Invoice
 - if @accepted_quote && !@accepted_quote.paid_by_company
   .payments
     .payments__flexbox
@@ -48,7 +51,7 @@ div class="payments #{ "milestone--inactive" if @accepted_quote.nil? || (@accept
         .tag.tag--in-progress Freelancer has no bank account
       .payments__total-group
         .payments__total-amt #{number_with_precision(job.gpayments_sum_paid, precision: 2)} #{job.currency.upcase}
-        .payments__payout-label Total Payouts
+        .payments__payout-label Total
     .payments__status You have secured funds for this project. AV Junction will hold these payments on your behalf until each of the milestones listed below are met.
 
 - payments.each do |payment|
