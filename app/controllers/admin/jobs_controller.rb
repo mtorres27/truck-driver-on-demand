@@ -20,6 +20,7 @@ class Admin::JobsController < Admin::BaseController
     end
   
     def update
+      @company = @job.company
       if @job.update(job_params)
         redirect_to admin_job_path(@job), notice: "Job updated."
       else

@@ -12,6 +12,12 @@ class MainController < ApplicationController
 
   end
 
+  def job_countries
+    country = params[:country]
+    specs = Stripe::CountrySpec.retrieve(country.upcase)
+    render partial: "job_currencies", locals: { currencies: specs.supported_bank_account_currencies } if specs.supported_bank_account_currencies
+  end
+
   def freelance_service_agreement
 
     @job = Job.joins(:company).where(:companies => {:disabled => false}).where({id: params[:job]})
