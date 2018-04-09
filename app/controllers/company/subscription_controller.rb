@@ -100,7 +100,7 @@ class Company::SubscriptionController < Company::BaseController
     # invoice = StripeTool.create_invoice(customer_id: customer.id, subscription: subscription)
     StripeTool.update_company_info_with_subscription(company: current_company, customer: customer, subscription: subscription, plan: plan)
 
-    flash[:notice] = 'Successfully subscribed to ' + subscription.plan.name
+    flash[:notice] = 'Successfully subscribed to "' + subscription.plan.name.upcase + '" Plan'
     redirect_to company_plans_path
   end
 
