@@ -7,7 +7,7 @@ class Admin::JobsController < Admin::BaseController
   
       @jobs = Job.order(:title)
       if @keywords
-        @jobs = @jobs.search(@jobs)
+        @jobs = @jobs.search(@keywords)
       end
       @jobs = @jobs.page(params[:page])
     end
