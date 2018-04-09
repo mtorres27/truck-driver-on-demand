@@ -12,6 +12,8 @@ Rails.application.routes.draw do
 
   get "confirm_email", to: "main#confirm_email"
 
+  get 'job_country_currency', to: 'main#job_countries', as: 'job_country_currency'
+
 
   namespace :freelancer do
 
@@ -95,7 +97,6 @@ Rails.application.routes.draw do
       get 'plan/invoice', to: 'subscription#invoice', as: 'invoice'
 
     resources :notifications
-    get 'job_country_currency', to: 'jobs#job_countries', as: 'job_country_currency'
     resources :jobs, except: [:index] do
       resources :applicants do
         get :request_quote, on: :member

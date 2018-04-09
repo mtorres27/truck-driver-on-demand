@@ -7,7 +7,7 @@ class Admin::ProjectsController < Admin::BaseController
 
     @projects = Project.order(:name)
     if @keywords
-      @projects = @projects.search(@projects)
+      @projects = @projects.search(@keywords)
     end
     @projects = @projects.page(params[:page])
   end
