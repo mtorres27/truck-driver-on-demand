@@ -1,7 +1,7 @@
 div class="payments #{ "milestone--inactive" if @accepted_quote.nil? || (@accepted_quote.present? && !@accepted_quote.paid_by_company)}"
   .payments__flexbox
     .payments__title AV Junction Fees
-    .payments__amt #{number_with_precision(@job.company_plan_fees , precision: 2) } #{@job.currency.upcase}
+    .payments__amt #{@job.company_plan_fees.present? ? number_with_precision(@job.company_plan_fees , precision: 2) : '' } #{@job.currency.upcase}
   .payments__flexbox
     =link_to company_job_avj_invoice_path(id: @job.id), class: 'btn-link'
       | View Invoice
