@@ -169,6 +169,61 @@
                 img.profile__certification__image sizes="185.96875px" src=src
                 .profile__certification__label= insurance.name
                 .profile__certification__label= insurance.description
+
+  .grid-cell.grid-cell--100
+    h3.heading-h3 Affiliates
+    .profile__certifications__container
+      - if @freelancer.freelancer_affiliations.count == 0
+        | This freelancer has not yet added any affiliates.
+      - @freelancer.freelancer_affiliations.each do |affiliate|
+        .profile__certifications__certificate
+          - url = affiliate.image_url
+          - if affiliate.image_url != "certification/missing.pdf"
+            a href=url target="_blank"
+              - if is_image(url)
+                - src=url
+              - else
+                - src="/assets/certification/certification_placeholder.png"
+              .profile__certification
+                img.profile__certification__image sizes="185.96875px" src=src
+                .profile__certification__label= affiliate.name
+
+  .grid-cell.grid-cell--100
+    h3.heading-h3 Security clearances
+    .profile__certifications__container
+      - if @freelancer.freelancer_clearances.count == 0
+        | This freelancer has not yet added any security clearances.
+      - @freelancer.freelancer_clearances.each do |clearance|
+        .profile__certifications__certificate
+          - url = clearance.image_url
+          - if clearance.image_url != "certification/missing.pdf"
+            a href=url target="_blank"
+              - if is_image(url)
+                - src=url
+              - else
+                - src="/assets/certification/certification_placeholder.png"
+              .profile__certification
+                img.profile__certification__image sizes="185.96875px" src=src
+                .profile__certification__label= clearance.description
+
+  .grid-cell.grid-cell--100
+    h3.heading-h3 Portfolio gallery
+    .profile__certifications__container
+      - if @freelancer.freelancer_portfolios.count == 0
+        | This freelancer has not yet added anything to their portfilio gallery.
+      - @freelancer.freelancer_portfolios.each do |portfolio|
+        .profile__certifications__certificate
+          - url = portfolio.image_url
+          - if portfolio.image_url != "certification/missing.pdf"
+            a href=url target="_blank"
+              - if is_image(url)
+                - src=url
+              - else
+                - src="/assets/certification/certification_placeholder.png"
+              .profile__certification
+                img.profile__certification__image sizes="185.96875px" src=src
+                .profile__certification__label= portfolio.name
+
   .grid-cell.grid-cell--100
     a name="reviews"
       h3.heading-h3 Reviews
