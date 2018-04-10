@@ -172,10 +172,11 @@ class Freelancer < ApplicationRecord
     tsearch: { prefix: true, any_word: true }
   }
 
-  pg_search_scope :name_search, against: {
+  pg_search_scope :name_or_email_search, against: {
       name: "A",
+      email: "A",
   }, using: {
-      tsearch: { prefix: true, any_word: true }
+      tsearch: { prefix: true }
   }
 
   enumerize :pay_unit_time_preference, in: [

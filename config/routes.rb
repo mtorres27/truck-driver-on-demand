@@ -12,6 +12,8 @@ Rails.application.routes.draw do
 
   get "confirm_email", to: "main#confirm_email"
 
+  get 'job_country_currency', to: 'main#job_countries', as: 'job_country_currency'
+
 
   namespace :freelancer do
 

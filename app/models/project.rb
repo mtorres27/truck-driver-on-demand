@@ -22,20 +22,23 @@
 class Project < ApplicationRecord
   include Geocodable
   extend Enumerize
+  include PgSearch
 
   belongs_to :company
   has_many :jobs, -> { order(updated_at: :desc) }, dependent: :destroy
 
   audited
 
-  # enumerize :currency, in: [
-  #   :cad,
-  #   :euro,
-  #   :ruble,
-  #   :rupee,
-  #   :usd,
-  #   :yen,
-  # ]
+  pg_search_scope :search, against: {
+      name: "A",
+      external_project_id: "B"
+  }, using: {
+      tsearch: { prefix: true, any_word: true }
+  }
+
+  def currency
+    jobs.first.nil? ? nil : jobs.first.currency
+  end
 
   def contract_value
     jobs.sum { |job| job.contract_price || 0 }

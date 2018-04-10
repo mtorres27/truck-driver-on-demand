@@ -1,6 +1,7 @@
 class Company::JobsController < Company::BaseController
+<<<<<<< HEAD
   before_action :set_job, only: [:print_avj_invoice, :avj_invoice, :show, :edit, :update, :destroy, :contract, :edit_contract, :update_contract, :publish]
-  before_action :set_company, only: [:edit, :new]
+  before_action :set_company, only: [:edit, :new, :create, :update]
 
   def job_countries
     country = params[:country]
