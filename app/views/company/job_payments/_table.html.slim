@@ -39,7 +39,7 @@
     - if current_admin.nil?
       = form_tag company_job_contract_pay_path(job), method: 'post' do
         input type="hidden" name="quote_id" value=accepted_quote.id
-        script.stripe-button data-label="Fund this Job" data-amount="#{((accepted_quote.amount.floor + (current_company.country == "ca" ? job.company_plan_fees * 1.13 : job.company_plan_fees) ) * 100) + (accepted_quote.amount * job.applicable_sales_tax) }" data-image="/assets/stripe-logo.png" data-email=("#{current_company.email}") data-description="Pay for work order for job#{job.id}" data-key=("#{Rails.configuration.stripe[:publishable_key]}") data-locale="auto" src="https://checkout.stripe.com/checkout.js" data-currency="#{job.currency}"
+        script.stripe-button data-label="Fund this Job" data-amount="#{((accepted_quote.amount.floor + (current_company.country == "ca" ? job.company_plan_fees * 1.13 : job.company_plan_fees) ) * 100) + (accepted_quote.amount * job.applicable_sales_tax) }" data-image="/assets/stripe-logo.png" data-email=("#{current_company.email}") data-description="Fund this Job" data-key=("#{Rails.configuration.stripe[:publishable_key]}") data-locale="auto" src="https://checkout.stripe.com/checkout.js" data-currency="#{job.currency}" data-panel-label="Fund"
 - elsif accepted_quote && accepted_quote.paid_by_company && !job.funds_available
   .payments
     .payments__flexbox
