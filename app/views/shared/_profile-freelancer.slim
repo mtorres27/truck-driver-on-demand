@@ -234,11 +234,12 @@
     .grid-cell.grid-cell--100
       a name="reviews"
         h3.heading-h3 Reviews
-      .profile__reviews-value
-        - if @freelancer.freelancer_reviews_count > 0
-          .profile__reviews__review
+        .grid-h
           - @freelancer.freelancer_reviews.each do |review|
-            .profile__reviews__review-text
-              = review.comments
-            .profile__reviews__review-name
-              = "#{review.company.contact_name}, #{review.company.name}"
+            .grid-cell.grid-cell--50
+              p 
+                = review.comments
+              p
+                i 
+                  = "#{review.company.contact_name}, #{review.company.name}"
+                
