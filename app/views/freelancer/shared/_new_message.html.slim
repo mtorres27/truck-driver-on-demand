@@ -10,19 +10,19 @@
         = f.radio_button :status, "decline"
         = f.label :status_decline, "Decline this quote"
 
-    = f.hidden_field :checkin, value: "false"
-        
     .attachment.common__text-field-group
       label.common__field-label for="name-4"
         = "Send a message to #{n}"
       = f.text_area :body, as: :string, placeholder: "Enter your message", label: false, maxlength: 5000, class: "w-input"
-
-    .new-message__attachment
+      = f.input :checkin, as: :boolean, checked_value: true, unchecked_value: false, label: "Check in to my location (Turn on GPS for more accurate results)"
+      = f.hidden_field :lat
+      = f.hidden_field :lng
       = f.input :attachment, as: :file, label: false
 
     .common__form-action-cont.w-clearfix
+      div#new-message__loading-notice
       div#new-message__validation-errors
-      a.btn-primary--active.w-inline-block.width-100 onclick="submitForm();"
+      a#message-submit.btn.btn--primary.w-inline-block.width-100 onclick="submitForm();"
         div#new-message__submit
           | Send
 
@@ -33,19 +33,21 @@ javascript:
   };
 
   var submitForm = function() {
-    var validated = true;
-    $("#new-message__validation-errors").html("");
-    
-    if ($("#message_body").val() == "") {  
-      validated = false;
-    }
+    if ($("#message-submit").attr('disabled') === undefined) {
+      var validated = true;
+      $("#new-message__validation-errors").html("");
 
-    if (validated) {
-      $(".simple_form").submit();
-    } else {
-      $("#new-message__validation-errors").html("The message field cannot be empty.")
+      if ($("#message_body").val() == "") {
+        validated = false;
+      }
+
+      if (validated) {
+        $(".simple_form").submit();
+      } else {
+        $("#new-message__validation-errors").html("The message field cannot be empty.")
+      }
     }
-  }
+  };
 
   $("#message_attachment").change(function() {
     $("#attachment-indicator").addClass("new-message__checkin--active");
@@ -59,4 +61,4 @@ javascript:
       $(".new-message__checkin").addClass("new-message__checkin--active");
       $("#message_checkin").val("true");
     }
-  }
+  };

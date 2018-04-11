@@ -18,6 +18,8 @@
                     - if !message.checkin
                       = message.body
                     - else
+                      .map
+                        img(src="https://maps.googleapis.com/maps/api/staticmap?center=#{message.lat},#{message.lng}&zoom=16&size=260x260&markers=color:red%7C#{message.lat},#{message.lng}&key=#{Rails.application.secrets.google_maps_js_api_key}")
                       span class="new-message__checkin fa fa-map-marker"
                       = "Checked in at job site #{message.created_at.strftime("%B %d, %Y at %l:%M %P")}:"
                       br
