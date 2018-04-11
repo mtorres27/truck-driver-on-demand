@@ -30,8 +30,8 @@
               = I18n.t("enumerize.technical_skill_tags.#{index}")
   .grid-cell.grid-cell--33
     .profile__stats-box
-      .profile__stats.profile__stats--33
-        h2.heading-h2.heading-h2--no-margin
+      .profile__stats.profile__stats--50
+        h3.heading-h3
           - if !@freelancer.pay_unit_time_preference.nil?
             = t("enumerize.job.pay_type.#{@freelancer.pay_unit_time_preference}")
           - else
@@ -39,21 +39,17 @@
         h4.heading-h4
           | Pay Pref
 
-      .profile__stats.profile__stats--33
-        h2.heading-h2.heading-h2--no-margin
+      .profile__stats.profile__stats--50
+        h3.heading-h3
           - if !@freelancer.pay_per_unit_time.nil?
             = @freelancer.pay_per_unit_time
           - else
             | N/A
         h4.heading-h4
           | Rate
-
-      .profile__stats.profile__stats--33
-        h2.heading-h2.heading-h2--no-margin
-          ="#{@freelancer.years_of_experience} yrs"
-        h4.heading-h4
-          | Exp
-
+          
+  .grid-cell.grid-cell--100
+    hr
 
   .grid-cell.grid-cell--50
     h3.heading-h3 Bio
@@ -62,64 +58,16 @@
         | This freelancer has not yet added a bio.
       - else
         = "#{@freelancer.bio}"
-  - if @freelancer.company_name.present?
-    .grid-cell.grid-cell--50
-      h3.heading-h3 Company Name
-      p
-        = @freelancer.company_name
-  - if @freelancer.valid_driver
-    .grid-cell.grid-cell--50
-      h3.heading-h3 I've a valid driver license
-  - if @freelancer.own_tools
-    .grid-cell.grid-cell--50
-      h3.heading-h3 I've my own tools
+  
   .grid-cell.grid-cell--50
-    .grid-v
-      .grid-cell
-        div
-          - if !@freelancer.job_types.nil? and @freelancer.job_types.kind_of?(Hash)
-            h3.heading-h3 Job Types
-            - @freelancer.job_types.each do |index, value|
-              .tag.tag--grey
-                = I18n.t("enumerize.job_types.#{index}")
-          - if !@freelancer.job_markets.nil? and @freelancer.job_markets.kind_of?(Hash)
-            h3.heading-h3 Job Markets
-            - if !@freelancer.job_markets_for_job_type("system_integration").empty? and !@freelancer.job_types.nil? and @freelancer.job_types.include?("system_integration")
-              h4.heading-h4 System Integration
-              - @freelancer.job_markets_for_job_type("system_integration").each do |value|
-                .tag.tag--grey
-                  = value
-            - if !@freelancer.job_markets_for_job_type("live_events_staging_and_rental").empty? and !@freelancer.job_types.nil? and @freelancer.job_types.include?("live_events_staging_and_rental")
-              h4.heading-h4 Live Events Staging & Rental
-              - @freelancer.job_markets_for_job_type("live_events_staging_and_rental").each do |value|
-                .tag.tag--grey
-                  = value
-          - if !@freelancer.job_functions.nil? and @freelancer.job_functions.kind_of?(Hash)
-            h3.heading-h3 Job Functions
-            - if !@freelancer.job_functions_for_job_type("system_integration").empty? and !@freelancer.job_types.nil? and @freelancer.job_types.include?("system_integration")
-              h4.heading-h4 System Integration
-              - @freelancer.job_functions_for_job_type("system_integration").each do |value|
-                .tag.tag--grey
-                  = value
-            - if !@freelancer.job_functions_for_job_type("live_events_staging_and_rental").empty? and !@freelancer.job_types.nil? and @freelancer.job_types.include?("live_events_staging_and_rental")
-              h4.heading-h4 Live Events Staging & Rental
-              - @freelancer.job_functions_for_job_type("live_events_staging_and_rental").each do |value|
-                .tag.tag--grey
-                  = value
-          - if !@freelancer.technical_skill_tags.nil? and @freelancer.technical_skill_tags.kind_of?(Hash)
-            h3.heading-h3 Technical Skill Tags
-            - @freelancer.technical_skill_tags.each do |index, value|
-              .tag.tag--grey
-                = I18n.t("enumerize.technical_skill_tags.#{index}")
-          - if !@freelancer.manufacturer_tags.nil? and @freelancer.manufacturer_tags.kind_of?(Hash)
-            h3.heading-h3 Manufacturer Tags
-            - @freelancer.manufacturer_tags.each do |index, value|
-              .tag.tag--grey
-                = I18n.t("enumerize.manufacturer_tags.#{index}")
-
-      .grid-cell.grid-cell--vshrink
-        h3.heading-h3 Type
-        p
+    .list-item.list-item--profile
+      .list-bar
+        h4.heading-h4 Years of Experience
+        h3.heading-h3 ="#{@freelancer.years_of_experience} years"
+    .list-item.list-item--profile
+      .list-bar
+        h4.heading-h4 Type
+        h3.heading-h3
           - if @freelancer.freelancer_type.nil?
             | N/A
           - else
@@ -131,109 +79,166 @@
                 = ""
               - else
                 = "(#{t("enumerize.job.freelancer_team_size.#{@freelancer.freelancer_team_size}")})"
+    - if @freelancer.company_name.present?
+      .list-item.list-item--profile
+        .list-bar
+          h4.heading-h4 Company Name
+          h3.heading-h3 = @freelancer.company_name
+    - if @freelancer.valid_driver
+      .list-item.list-item--profile
+        .list-bar
+          h4.heading-h4 Has Driver License
+          h3.heading-h3 Yes
+    - if @freelancer.own_tools
+      .list-item.list-item--profile
+        .list-bar
+          h4.heading-h4 Has Own Tools
+          h3.heading-h3 Yes
+    
+  .grid-cell.grid-cell--100
+    hr  
+
+  - if !@freelancer.job_markets_for_job_type("system_integration").empty? and !@freelancer.job_types.nil? and @freelancer.job_types.include?("system_integration")
+    .grid-cell.grid-cell--50
+      h3.heading-h3 System Integration
+      div
+        - @freelancer.job_markets_for_job_type("system_integration").each do |value|
+          .tag.tag--grey
+            = value
+        - @freelancer.job_functions_for_job_type("system_integration").each do |value|
+          .tag.tag--grey
+            = value
+
+  - if !@freelancer.job_markets_for_job_type("live_events_staging_and_rental").empty? and !@freelancer.job_types.nil? and @freelancer.job_types.include?("live_events_staging_and_rental")
+    .grid-cell.grid-cell--50      
+      h3.heading-h3 Live Events Staging & Rental
+      div
+        - @freelancer.job_markets_for_job_type("live_events_staging_and_rental").each do |value|
+          .tag.tag--grey
+            = value
+        - @freelancer.job_functions_for_job_type("live_events_staging_and_rental").each do |value|
+          .tag.tag--grey
+            = value
+
+  - if !@freelancer.technical_skill_tags.nil? and @freelancer.technical_skill_tags.kind_of?(Hash)
+    .grid-cell.grid-cell--50 
+      h3.heading-h3 Technical Skills
+      div
+        - @freelancer.technical_skill_tags.each do |index, value|
+          .tag.tag--grey
+            = I18n.t("enumerize.technical_skill_tags.#{index}")
+
+  - if !@freelancer.manufacturer_tags.nil? and @freelancer.manufacturer_tags.kind_of?(Hash)
+    .grid-cell.grid-cell--50 
+      h3.heading-h3 Manufacturers
+      div
+        - @freelancer.manufacturer_tags.each do |index, value|
+          .tag.tag--grey
+            = I18n.t("enumerize.manufacturer_tags.#{index}")
 
   .grid-cell.grid-cell--100
-    h3.heading-h3 Certifications
-    .profile__certifications__container
-      - if @freelancer.certifications.count == 0
-        | This freelancer has not yet added any certifications.
-      - @freelancer.certifications.each do |certification|
-        .profile__certifications__certificate
-          - url = certification.certificate_url
-          - if certification.certificate_url != "certification/missing.pdf"
+    hr    
+
+  - if @freelancer.freelancer_portfolios.any?
+    .grid-cell.grid-cell--50
+      h3.heading-h3 Portfolio gallery
+      .profile__certifications__container
+        - @freelancer.freelancer_portfolios.each do |portfolio|
+          .profile__certifications__certificate
+            - url = portfolio.image_url
+            - if portfolio.image_url != "certification/missing.pdf"
+              a href=url target="_blank"
+                - if is_image(url)
+                  - src=url
+                - else
+                  - src="/assets/certification/certification_placeholder.png"
+                .profile__certification
+                  img.profile__certification__image sizes="185px" src=src
+                  .profile__certification__label= portfolio.name
+
+  - if @freelancer.certifications.any?
+    .grid-cell.grid-cell--50
+      h3.heading-h3 Certifications
+      .profile__certifications__container
+        - @freelancer.certifications.each do |certification|
+          .profile__certifications__certificate
             - url = certification.certificate_url
-            a href=url target="_blank"
-              - if is_image(url)
-                - src=url
-              - else
-                - src="/assets/certification/certification_placeholder.png"
-              .profile__certification
-                img.profile__certification__image sizes="185.96875px" src=src
-                .profile__certification__label= certification.name
+            - if certification.certificate_url != "certification/missing.pdf"
+              - url = certification.certificate_url
+              a href=url target="_blank"
+                - if is_image(url)
+                  - src=url
+                - else
+                  - src="/assets/certification/certification_placeholder.png"
+                .profile__certification
+                  img.profile__certification__image sizes="185px" src=src
+                  .profile__certification__label= certification.name
 
-  .grid-cell.grid-cell--100
-    h3.heading-h3 Insurances
-    .profile__certifications__container
-      - if @freelancer.freelancer_insurances.count == 0
-        | This freelancer has not yet added any insurances.
-      - @freelancer.freelancer_insurances.each do |insurance|
-        .profile__certifications__certificate
-          - url = insurance.image_url
-          - if insurance.image_url != "certification/missing.pdf"
-            a href=url target="_blank"
-              - if is_image(url)
-                - src=url
-              - else
-                - src="/assets/certification/certification_placeholder.png"
-              .profile__certification
-                img.profile__certification__image sizes="185.96875px" src=src
-                .profile__certification__label= insurance.name
-                .profile__certification__label= insurance.description
+  - if @freelancer.freelancer_insurances.any?
+    .grid-cell.grid-cell--50
+      h3.heading-h3 Insurances
+      .profile__certifications__container
+        - @freelancer.freelancer_insurances.each do |insurance|
+          .profile__certifications__certificate
+            - url = insurance.image_url
+            - if insurance.image_url != "certification/missing.pdf"
+              a href=url target="_blank"
+                - if is_image(url)
+                  - src=url
+                - else
+                  - src="/assets/certification/certification_placeholder.png"
+                .profile__certification
+                  img.profile__certification__image sizes="185px" src=src
+                  .profile__certification__label= insurance.name
+                  .profile__certification__label= insurance.description
 
-  .grid-cell.grid-cell--100
-    h3.heading-h3 Affiliates
-    .profile__certifications__container
-      - if @freelancer.freelancer_affiliations.count == 0
-        | This freelancer has not yet added any affiliates.
-      - @freelancer.freelancer_affiliations.each do |affiliate|
-        .profile__certifications__certificate
-          - url = affiliate.image_url
-          - if affiliate.image_url != "certification/missing.pdf"
-            a href=url target="_blank"
-              - if is_image(url)
-                - src=url
-              - else
-                - src="/assets/certification/certification_placeholder.png"
-              .profile__certification
-                img.profile__certification__image sizes="185.96875px" src=src
-                .profile__certification__label= affiliate.name
+  - if @freelancer.freelancer_affiliations.any?
+    .grid-cell.grid-cell--50
+      h3.heading-h3 Affiliates
+      .profile__certifications__container
+        - @freelancer.freelancer_affiliations.each do |affiliate|
+          .profile__certifications__certificate
+            - url = affiliate.image_url
+            - if affiliate.image_url != "certification/missing.pdf"
+              a href=url target="_blank"
+                - if is_image(url)
+                  - src=url
+                - else
+                  - src="/assets/certification/certification_placeholder.png"
+                .profile__certification
+                  img.profile__certification__image sizes="185px" src=src
+                  .profile__certification__label= affiliate.name
 
-  .grid-cell.grid-cell--100
-    h3.heading-h3 Security clearances
-    .profile__certifications__container
-      - if @freelancer.freelancer_clearances.count == 0
-        | This freelancer has not yet added any security clearances.
-      - @freelancer.freelancer_clearances.each do |clearance|
-        .profile__certifications__certificate
-          - url = clearance.image_url
-          - if clearance.image_url != "certification/missing.pdf"
-            a href=url target="_blank"
-              - if is_image(url)
-                - src=url
-              - else
-                - src="/assets/certification/certification_placeholder.png"
-              .profile__certification
-                img.profile__certification__image sizes="185.96875px" src=src
-                .profile__certification__label= clearance.description
+  - if @freelancer.freelancer_clearances.any?
+    .grid-cell.grid-cell--50
+      h3.heading-h3 Security clearances
+      .profile__certifications__container
+        - @freelancer.freelancer_clearances.each do |clearance|
+          .profile__certifications__certificate
+            - url = clearance.image_url
+            - if clearance.image_url != "certification/missing.pdf"
+              a href=url target="_blank"
+                - if is_image(url)
+                  - src=url
+                - else
+                  - src="/assets/certification/certification_placeholder.png"
+                .profile__certification
+                  img.profile__certification__image sizes="185px" src=src
+                  .profile__certification__label= clearance.description
 
-  .grid-cell.grid-cell--100
-    h3.heading-h3 Portfolio gallery
-    .profile__certifications__container
-      - if @freelancer.freelancer_portfolios.count == 0
-        | This freelancer has not yet added anything to their portfilio gallery.
-      - @freelancer.freelancer_portfolios.each do |portfolio|
-        .profile__certifications__certificate
-          - url = portfolio.image_url
-          - if portfolio.image_url != "certification/missing.pdf"
-            a href=url target="_blank"
-              - if is_image(url)
-                - src=url
-              - else
-                - src="/assets/certification/certification_placeholder.png"
-              .profile__certification
-                img.profile__certification__image sizes="185.96875px" src=src
-                .profile__certification__label= portfolio.name
-
-  .grid-cell.grid-cell--100
-    a name="reviews"
-      h3.heading-h3 Reviews
-    .profile__reviews-value
-      - if @freelancer.freelancer_reviews_count > 0
-        .profile__reviews__review
-        - @freelancer.freelancer_reviews.each do |review|
-          .profile__reviews__review-text
-            = review.comments
-          .profile__reviews__review-name
-            = "#{review.company.contact_name}, #{review.company.name}"
-      - else
-        p This freelancer doesn't have any reviews.
+  
+  - if @freelancer.freelancer_reviews.any?
+    .grid-cell.grid-cell--100
+      hr 
+    
+    .grid-cell.grid-cell--100
+      a name="reviews"
+        h3.heading-h3 Reviews
+      .profile__reviews-value
+        - if @freelancer.freelancer_reviews_count > 0
+          .profile__reviews__review
+          - @freelancer.freelancer_reviews.each do |review|
+            .profile__reviews__review-text
+              = review.comments
+            .profile__reviews__review-name
+              = "#{review.company.contact_name}, #{review.company.name}"
