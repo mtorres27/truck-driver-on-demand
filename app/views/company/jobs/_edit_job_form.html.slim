@@ -84,22 +84,42 @@
             option(value='')
               | Select
             = I18n.t("enumerize.live_events_staging_and_rental_job_markets").each do |index, value|
-              option.job_live_events_staging_and_rental_option(value="#{index}")
-                = value
+              - selected = (!@job.job_market.nil? and @job.job_market == index.to_s)
+              - if selected
+                option.job_live_events_staging_and_rental_option(value="#{index}" selected)
+                  = value
+              - else
+                option.job_live_events_staging_and_rental_option(value="#{index}")
+                  = value
             = I18n.t("enumerize.system_integration_job_markets").each do |index, value|
-              option.job_system_integration_option(value="#{index}")
-                = value
+              - selected = (!@job.job_market.nil? and @job.job_market == index.to_s)
+              - if selected
+                option.job_system_integration_option(value="#{index}" selected)
+                  = value
+              - else
+                option.job_system_integration_option(value="#{index}")
+                  = value
         .grid-cell.grid-cell--100
           = f.label :job_function
           select#job_job_function.form-control.select(name='job[job_function]')
             option(value='')
               | Select
             = I18n.t("enumerize.live_events_staging_and_rental_job_functions").each do |index, value|
-              option.job_live_events_staging_and_rental_option(value="#{index}")
-                = value
+              - selected = (!@job.job_function.nil? and @job.job_function == index.to_s)
+              - if selected
+                option.job_live_events_staging_and_rental_option(value="#{index}" selected)
+                  = value
+              - else
+                option.job_live_events_staging_and_rental_option(value="#{index}")
+                  = value
             = I18n.t("enumerize.system_integration_job_functions").each do |index, value|
-              option.job_system_integration_option(value="#{index}")
-                = value
+              - selected = (!@job.job_function.nil? and @job.job_function == index.to_s)
+              - if selected
+                option.job_system_integration_option(value="#{index}" selected)
+                  = value
+              - else
+                option.job_system_integration_option(value="#{index}")
+                  = value
         .grid-cell.grid-cell--100
           = f.input :starts_on, html5: true
         .grid-cell.grid-cell--100
