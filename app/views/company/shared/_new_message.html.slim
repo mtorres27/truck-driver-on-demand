@@ -17,8 +17,6 @@
         
     .new-message__input
       = f.input :body, as: :string, placeholder: "Send a message to #{n.split(" ").first}", label: false
-      .new-message__attachment-button onclick="triggerFileUpload()"
-        .span class="fa fa-paperclip"
       
     .new-message__counter
       = f.select :counter_type, options: ["fixed", "hourly", "daily"]
@@ -34,11 +32,9 @@
       = f.input :counter_daily_rate, as: :string, placeholder: "Daily Rate", label: false
       = f.input :counter_number_of_days, as: :string, placeholder: "Number of Days", label: false
 
+    = f.input :attachment, as: :file, label: false
+    = f.submit "Post Message", class: "btn btn--primary", id: "new-message__submit", onclick: "return validateMessage();"
 
-    .new-message__submit
-      = f.submit "Post Message", class: "btn btn--primary", id: "new-message__submit", onclick: "return validateMessage();"
-    .new-message__attachment
-      = f.input :attachment, as: :file, label: false
     div#new-message__validation-errors
 
 
