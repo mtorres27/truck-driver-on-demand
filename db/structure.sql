@@ -851,6 +851,38 @@ ALTER SEQUENCE freelancers_id_seq OWNED BY freelancers.id;
 
 
 --
+-- Name: friend_invites; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE friend_invites (
+    id bigint NOT NULL,
+    email citext,
+    name character varying,
+    freelancer_id bigint,
+    accepted boolean DEFAULT false
+);
+
+
+--
+-- Name: friend_invites_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE friend_invites_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: friend_invites_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE friend_invites_id_seq OWNED BY friend_invites.id;
+
+
+--
 -- Name: identities; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -1487,6 +1519,13 @@ ALTER TABLE ONLY freelancers ALTER COLUMN id SET DEFAULT nextval('freelancers_id
 
 
 --
+-- Name: friend_invites id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY friend_invites ALTER COLUMN id SET DEFAULT nextval('friend_invites_id_seq'::regclass);
+
+
+--
 -- Name: identities id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -1728,6 +1767,14 @@ ALTER TABLE ONLY freelancer_reviews
 
 ALTER TABLE ONLY freelancers
     ADD CONSTRAINT freelancers_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: friend_invites friend_invites_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY friend_invites
+    ADD CONSTRAINT friend_invites_pkey PRIMARY KEY (id);
 
 
 --
@@ -2091,6 +2138,13 @@ CREATE UNIQUE INDEX index_freelancers_on_reset_password_token ON freelancers USI
 --
 
 CREATE INDEX index_freelancers_on_technical_skill_tags ON freelancers USING btree (technical_skill_tags);
+
+
+--
+-- Name: index_friend_invites_on_freelancer_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_friend_invites_on_freelancer_id ON friend_invites USING btree (freelancer_id);
 
 
 --
@@ -2521,6 +2575,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20180321172650'),
 ('20180402194248'),
 ('20180404170355'),
-('20180410210448');
+('20180410210448'),
+('20180413155543');
 
 
