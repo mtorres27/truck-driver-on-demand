@@ -218,7 +218,7 @@ class Freelancer < ApplicationRecord
     all_job_markets = I18n.t("enumerize.#{job_type}_job_markets")
     return [] unless all_job_markets.kind_of?(Hash)
     freelancer_job_markets = []
-    unless job_markets_for_job_type.nil?
+    unless job_markets.nil?
       job_markets.each do |index, value|
         if all_job_markets[index.to_sym]
           freelancer_job_markets << all_job_markets[index.to_sym]
