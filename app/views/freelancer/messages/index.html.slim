@@ -26,7 +26,7 @@
                       .map
                         img(src="https://maps.googleapis.com/maps/api/staticmap?center=#{message.lat},#{message.lng}&zoom=16&size=260x260&markers=color:red%7C#{message.lat},#{message.lng}&key=#{Rails.application.secrets.google_maps_js_api_key}")
                   - else
-                      = message.body.html_safe
+                    = message.body.html_safe
                 - if message.attachment
                   .new-message__image
                     = attachment_image_link(message.attachment)

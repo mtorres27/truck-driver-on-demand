@@ -1,28 +1,23 @@
 - @messages.each do |message|
-  .media.new-message__item
-    .media-left
-      .freelancer_avatar
-        = image_tag(message.authorable.avatar_url, size: "40x40")
-    .media-body
-      span class="authorable_name"
-        = "#{message.authorable.name} "
-      span class="authorable_date"
-        = "#{time_ago_in_words(message.created_at)} ago"
-      .authorable_body
+  .freelancer-job__quote-msg
+    .common__user-avatar style="background-image: url(#{message.authorable.avatar_url})"
+    .freelancer-job__msg-cont.w-clearfix
+      .freelancer-job__msg-user-name= message.authorable.name
+      .freelancer-job__msg-created-at= "#{time_ago_in_words(message.created_at)} ago"
+      p.freelancer-job__msg-text
         - if message.send_contract != true
           - if !message.checkin
             = message.body
           - else
-            .map
-              img(src="https://maps.googleapis.com/maps/api/staticmap?center=#{message.lat},#{message.lng}&zoom=16&size=260x260&markers=color:red%7C#{message.lat},#{message.lng}&key=#{Rails.application.secrets.google_maps_js_api_key}")
+            = message.body
+            br
             span class="new-message__checkin fa fa-map-marker"
             = "Checked in at job site #{message.created_at.strftime("%B %d, %Y at %l:%M %P")}:"
             br
-            = message.body
+            .map
+              img(src="https://maps.googleapis.com/maps/api/staticmap?center=#{message.lat},#{message.lng}&zoom=16&size=260x260&markers=color:red%7C#{message.lat},#{message.lng}&key=#{Rails.application.secrets.google_maps_js_api_key}")
         - else
           = message.body.html_safe
-
-
-        - if message.attachment
-          .new-message__image
-            = attachment_image_link(message.attachment)
+      - if message.attachment
+        .new-message__image
+          = attachment_image_link(message.attachment)
