@@ -62,6 +62,8 @@ class Freelancer < ApplicationRecord
   has_many :freelancer_insurances
   accepts_nested_attributes_for :freelancer_insurances, :reject_if => :all_blank, :allow_destroy => true
 
+  has_many :friend_invites
+  accepts_nested_attributes_for :friend_invites, :reject_if => :all_blank, :allow_destroy => true
 
   has_many :job_favourites
   has_many :favourite_jobs, through: :job_favourites, source: :job

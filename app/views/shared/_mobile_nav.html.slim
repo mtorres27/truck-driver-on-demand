@@ -30,6 +30,14 @@
         a.mobile-nav__menu__item href=freelancer_profile_path data-turbolinks="false"
           = image_tag current_freelancer.avatar_url
           | my profile
+        a.mobile-nav__menu__item href=freelancer_friend_invites_path data-turbolinks="false"
+          - if current_freelancer.avj_credit.nil?
+            | Earn credit
+          - elsif current_freelancer.avj_credit > 0
+            | My AVJ credit
+          / avj_credit = 0 -> current_freelancer had credit in the past and has used it all up
+          - elsif current_freelancer.avj_credit == 0
+            | Invite friends
         = link_to "Logout", destroy_freelancer_session_path, method: :delete, class: "mobile-nav__menu__item"
     - elsif request.path.index('company') == 1
       - if current_company.nil?

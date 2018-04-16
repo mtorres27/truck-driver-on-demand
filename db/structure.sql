@@ -828,7 +828,7 @@ CREATE TABLE freelancers (
     job_functions citext,
     manufacturer_tags citext,
     special_avj_fees numeric(10,2),
-    avj_credit numeric(10,2) DEFAULT 0
+    avj_credit numeric(10,2) DEFAULT NULL::numeric
 );
 
 

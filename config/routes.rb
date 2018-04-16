@@ -67,6 +67,8 @@ Rails.application.routes.draw do
 
     resources :notifications
 
+    resources :friend_invites, only: [:index, :create]
+
   end
 
   namespace :company do
