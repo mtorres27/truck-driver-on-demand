@@ -15,8 +15,11 @@
           = f.label :status_accept, "Accept this quote"
         = f.hidden_field :override, value: ""
         
-    .new-message__input
-      = f.input :body, as: :string, placeholder: "Send a message to #{n.split(" ").first}", label: false
+    .attachment.common__text-field-group
+      label.common__field-label for="name-4"
+        = "Send a message to #{n}"
+      = f.text_area :body, as: :string, placeholder: "Enter your message", label: false, maxlength: 5000, class: "w-input"
+      = f.input :attachment, as: :file, label: false
       
     .new-message__counter
       = f.select :counter_type, options: ["fixed", "hourly", "daily"]
@@ -32,7 +35,6 @@
       = f.input :counter_daily_rate, as: :string, placeholder: "Daily Rate", label: false
       = f.input :counter_number_of_days, as: :string, placeholder: "Number of Days", label: false
 
-    = f.input :attachment, as: :file, label: false
     = f.submit "Post Message", class: "btn btn--primary", id: "new-message__submit", onclick: "return validateMessage();"
 
     div#new-message__validation-errors
