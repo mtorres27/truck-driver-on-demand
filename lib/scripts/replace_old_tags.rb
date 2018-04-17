@@ -12,12 +12,16 @@ def replace_job_market(freelancer, old, new, system_integration, live_events)
   if freelancer.job_markets.include?(old)
     freelancer.job_markets.delete(old)
     if live_events
-      unless freelancer.job_types && freelancer.job_types.include?("live_events_staging_and_rental")
+      if freelancer.job_types.nil?
+        freelancer.job_types = { "live_events_staging_and_rental" => "1" }
+      elsif !freelancer.job_types.include?("live_events_staging_and_rental")
         freelancer.job_types["live_events_staging_and_rental"] = "1"
       end
     end
     if system_integration
-      unless freelancer.job_types && freelancer.job_types.include?("system_integration")
+      if freelancer.job_types.nil?
+        freelancer.job_types = { "system_integration" => "1" }
+      elsif !freelancer.job_types.include?("system_integration")
         freelancer.job_types["system_integration"] = "1"
       end
     end
@@ -32,12 +36,16 @@ def replace_job_function(freelancer, old, new, system_integration, live_events)
   if freelancer.job_functions.include?(old)
     freelancer.job_functions.delete(old)
     if live_events
-      unless freelancer.job_types && freelancer.job_types.include?("live_events_staging_and_rental")
+      if freelancer.job_types.nil?
+        freelancer.job_types = { "live_events_staging_and_rental" => "1" }
+      elsif !freelancer.job_types.include?("live_events_staging_and_rental")
         freelancer.job_types["live_events_staging_and_rental"] = "1"
       end
     end
     if system_integration
-      unless freelancer.job_types && freelancer.job_types.include?("system_integration")
+      if freelancer.job_types.nil?
+        freelancer.job_types = { "system_integration" => "1" }
+      elsif !freelancer.job_types.include?("system_integration")
         freelancer.job_types["system_integration"] = "1"
       end
     end
