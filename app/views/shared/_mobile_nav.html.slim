@@ -32,7 +32,10 @@
           | my profile
         a.mobile-nav__menu__item href=freelancer_friend_invites_path data-turbolinks="false"
           - if current_freelancer.avj_credit.nil?
-            | Earn credit
+            - if current_freelancer.friend_invites.count > 0
+              | My AVJ credit
+            - else
+              | Earn credit
           - elsif current_freelancer.avj_credit > 0
             | My AVJ credit
           / avj_credit = 0 -> current_freelancer had credit in the past and has used it all up

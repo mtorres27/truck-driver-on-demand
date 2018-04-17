@@ -6,10 +6,16 @@ h1.heading-h1
     .grid-cell.grid-cell--100
       .grid-h
         - if current_freelancer.avj_credit.nil?
-          .grid-cell.grid-cell--50
-            h2.heading-h2 Did yu know?
-            p You can earn credit by inviting all of your friends to join AVJunction. For each friend that joins, you will earn $50 credit applicable on your next payment's AVJ fees. Your friends will also earn $20 by accepting your invitation.
-            p What are you waiting for? Invite all your friends and start getting credits.
+          - if current_freelancer.friend_invites.count > 0
+            .grid-cell.grid-cell--50
+              h2.heading-h2 Thank you for inviting your friends
+              p You'll be notified when they accept your invitation and a $50 credit will be made available for each friend that joins the AVJ network.
+              p Keep inviting more friends for a bigger chance of getting credit.
+          -else
+            .grid-cell.grid-cell--50
+              h2.heading-h2 Did you know?
+              p You can earn credit by inviting all of your friends to join AVJunction. For each friend that joins, you will earn $50 credit applicable on your next payment's AVJ fees. Your friends will also earn $20 by accepting your invitation.
+              p What are you waiting for? Invite all your friends and start getting credits.
         - elsif current_freelancer.avj_credit > 0
           .grid-cell.grid-cell--50
             h2.heading-h2 You have credit
