@@ -1152,7 +1152,8 @@ CREATE TABLE payments (
     updated_at timestamp without time zone NOT NULL,
     tax_amount numeric(10,2),
     total_amount numeric(10,2),
-    avj_fees numeric(10,2)
+    avj_fees numeric(10,2),
+    avj_credit numeric(10,2) DEFAULT NULL::numeric
 );
 
 
@@ -1277,7 +1278,8 @@ CREATE TABLE quotes (
     avj_fees numeric(10,2),
     stripe_fees numeric(10,2),
     net_avj_fees numeric(10,2),
-    accepted_at timestamp without time zone
+    accepted_at timestamp without time zone,
+    avj_credit numeric(10,2) DEFAULT NULL::numeric
 );
 
 
@@ -2578,6 +2580,8 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20180404170355'),
 ('20180410210448'),
 ('20180413155543'),
-('20180413190903');
+('20180413190903'),
+('20180418190453'),
+('20180418195120');
 
 

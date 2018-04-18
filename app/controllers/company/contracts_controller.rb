@@ -6,13 +6,22 @@ class Company::ContractsController < Company::BaseController
       quote = @job.accepted_quote
       freelancer = @job.freelancer
       payments = @job.payments
-
       amount = (quote.amount * (1 + (@job.applicable_sales_tax / 100)))
       stripe_fees = amount * 0.029 + 0.3
       avj_fees = freelancer.special_avj_fees || Rails.configuration.avj_fees
-      platform_fees = ((quote.amount * avj_fees) - stripe_fees)
+      if quote.amount * avj_fees <= freelancer.avj_credit
+        avj_credit_used = quote.amount * avj_fees
+        freelancer.update_attribute(:avj_credit, freelancer.avj_credit - avj_credit_used)
+      else
+        avj_credit_used = freelancer.avj_credit
+        freelancer.update_attribute(:avj_credit, 0)
+      end
+      platform_fees = (((quote.amount * avj_fees) - avj_credit_used) - stripe_fees)
+      if platform_fees < 0
+        platform_fees = 0
+      end
       # TODO: calculate taxes on app fees
-      freelancer_amount = quote.amount * (1 - avj_fees)
+      freelancer_amount = (quote.amount * (1 - avj_fees)) + avj_credit_used
 
       charge = Stripe::Charge.create({
         amount: (amount * 100).floor ,
@@ -29,6 +38,7 @@ class Company::ContractsController < Company::BaseController
       quote.avj_fees = quote.amount * avj_fees
       quote.stripe_fees = stripe_fees
       quote.net_avj_fees = platform_fees
+      quote.avj_credit = avj_credit_used
       quote.tax_amount = (quote.amount * (@job.applicable_sales_tax / 100))
       quote.total_amount = amount
       quote.paid_by_company = true
@@ -36,8 +46,16 @@ class Company::ContractsController < Company::BaseController
       quote.platform_fees_amount = platform_fees
       quote.save
 
+      avj_credit_left = avj_credit_used
       payments.each do |payment|
         payment.avj_fees = payment.amount * avj_fees
+        if payment.avj_fees <= avj_credit_left
+          payment.avj_credit = payment.avj_fees
+          avj_credit_left -= payment.avj_credit
+        else
+          payment.avj_credit = avj_credit_left
+          avj_credit_left = 0
+        end
         payment.tax_amount = (payment.amount * (@job.applicable_sales_tax / 100))
         payment.total_amount = payment.amount * (1 + (@job.applicable_sales_tax / 100))
         payment.save
