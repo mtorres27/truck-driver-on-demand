@@ -1,3 +1,4 @@
+# TODO: Do we use this module?
 module AvalaraTool
   def initialize
 
@@ -10,6 +11,7 @@ module AvalaraTool
         config.username = credentials['username']
         config.password = credentials['password']
       rescue
+        # TODO: Use this as default credentials on secrets file
         config.endpoint = 'https://sandbox-rest.avatax.com'
         config.username = "khodeir.mt@gmail.com"
         config.password = "4B6A78769D"
