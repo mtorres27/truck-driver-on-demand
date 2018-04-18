@@ -118,48 +118,8 @@ class Freelancer < ApplicationRecord
   scope :new_registrants, -> { where(disabled: true) }
 
   after_create :add_to_hubspot
-
-  def add_to_hubspot
-    api_key = "5c7ad391-2bfe-4d11-9ba3-82b5622212ba"
-    url = "https://api.hubapi.com/contacts/v1/contact/createOrUpdate/email/#{email}/?hapikey=#{api_key}"
-    uri = URI.parse(url)
-    http = Net::HTTP.new(uri.host, uri.port)
-    http.use_ssl = true if uri.scheme == 'https'
-    req = Net::HTTP::Post.new uri
-    data = {
-        properties: [
-            {
-                property: "email",
-                value: email
-            },
-            {
-                property: "firstname",
-                value: name.split(" ")[0]
-            },
-            {
-                property: "lastname",
-                value: name.split(" ")[1]
-            },
-            {
-                property: "lifecyclestage",
-                value: "customer"
-            },
-            {
-                property: "im_an",
-                value: "AV Freelancer"
-            },
-        ]
-    }
-    req.body = data.to_json
-    res = http.start { |http| http.request req }
-  end
-
-
+  after_create :check_for_invites
   after_create :send_welcome_email
-
-  def send_welcome_email
-    FreelancerMailer.verify_your_identity(self).deliver
-  end
 
   pg_search_scope :search, against: {
     name: "A",
@@ -305,6 +265,62 @@ class Freelancer < ApplicationRecord
       f.update_columns(lat: f.lat, lng: f.lng)
 
       sleep 1
+    end
+  end
+
+  private
+
+  def add_to_hubspot
+    api_key = "5c7ad391-2bfe-4d11-9ba3-82b5622212ba"
+    url = "https://api.hubapi.com/contacts/v1/contact/createOrUpdate/email/#{email}/?hapikey=#{api_key}"
+    uri = URI.parse(url)
+    http = Net::HTTP.new(uri.host, uri.port)
+    http.use_ssl = true if uri.scheme == 'https'
+    req = Net::HTTP::Post.new uri
+    data = {
+        properties: [
+            {
+                property: "email",
+                value: email
+            },
+            {
+                property: "firstname",
+                value: name.split(" ")[0]
+            },
+            {
+                property: "lastname",
+                value: name.split(" ")[1]
+            },
+            {
+                property: "lifecyclestage",
+                value: "customer"
+            },
+            {
+                property: "im_an",
+                value: "AV Freelancer"
+            },
+        ]
+    }
+    req.body = data.to_json
+    res = http.start { |http| http.request req }
+  end
+
+  def send_welcome_email
+    FreelancerMailer.verify_your_identity(self).deliver
+  end
+
+  def check_for_invites
+    if FriendInvite.where(email: email)
+      self.avj_credit = 20
+      save!
+      FreelancerMailer.notice_credit_earned(self, 20).deliver
+      FriendInvite.where(email: email).each do |invite|
+        freelancer = invite.freelancer
+        freelancer.avj_credit = freelancer.avj_credit.nil? ? 50 : freelancer.avj_credit + 50
+        freelancer.save!
+        invite.update_attribute(:accepted, true)
+        FreelancerMailer.notice_credit_earned(freelancer, 50).deliver
+      end
     end
   end
 end

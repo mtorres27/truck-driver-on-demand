@@ -230,5 +230,26 @@ class FreelancerMailer < ApplicationMailer
     }.to_json
     mail(to: @freelancer.email, subject: 'Thank you for inviting your friends')
   end
+
+  def notice_credit_earned(freelancer, amount)
+    @freelancer = freelancer
+    @amount = amount
+    headers 'X-SMTPAPI' => {
+        sub: {
+            '%freelancer_name%' => [@freelancer.name],
+            '%$_amount%' => [@amount],
+            '%root_url%' => [root_url]
+        },
+        filters: {
+            templates: {
+                settings: {
+                    enable: 1,
+                    template_id: 'd7625e90-252d-4ee6-86cf-1d2340f08438'
+                }
+            }
+        }
+    }.to_json
+    mail(to: @freelancer.email, subject: 'You earned credit')
+  end
 end
 

@@ -45,10 +45,22 @@ h1.heading-h1
         - if current_freelancer.friend_invites.count > 0
           .grid-cell.grid-cell--100
             h2.heading-h2 Check the status of your invites here
-            - if current_freelancer.friend_invites.pending.count > 0
+          - if current_freelancer.friend_invites.pending.count > 0
+            .grid-cell.grid-cell--100
               h3.heading-h3 Pending invites
-            - if current_freelancer.friend_invites.accepted.count > 0
+            - current_freelancer.friend_invites.pending.each do |invite|
+              .grid-cell.grid-cell--30
+                = invite.name
+              .grid-cell.grid-cell--expand
+                = invite.email
+          - if current_freelancer.friend_invites.accepted.count > 0
+            .grid-cell.grid-cell--100
               h3.heading-h3 Accepted invites
+            - current_freelancer.friend_invites.accepted.each do |invite|
+              .grid-cell.grid-cell--30
+                = invite.name
+              .grid-cell.grid-cell--expand
+                = invite.email
 
 
 
