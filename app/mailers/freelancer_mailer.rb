@@ -211,5 +211,24 @@ class FreelancerMailer < ApplicationMailer
     }.to_json
     mail(to: @freelancer.email, subject: 'Company has left a review')
   end
+
+  def notice_invites_sent(freelancer)
+    @freelancer = freelancer
+    headers 'X-SMTPAPI' => {
+        sub: {
+            '%freelancer_name%' => [@freelancer.name],
+            '%root_url%' => [root_url]
+        },
+        filters: {
+            templates: {
+                settings: {
+                    enable: 1,
+                    template_id: '3bfb1797-cf94-4d3b-865e-ab933867a7c3'
+                }
+            }
+        }
+    }.to_json
+    mail(to: @freelancer.email, subject: 'Thank you for inviting your friends')
+  end
 end
 

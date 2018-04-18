@@ -67,7 +67,7 @@ Rails.application.routes.draw do
 
     resources :notifications
 
-    resources :friend_invites, only: [:index, :create]
+    resource :friend_invites, only: [:show, :update]
 
   end
 

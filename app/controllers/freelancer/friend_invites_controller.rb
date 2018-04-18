@@ -1,20 +1,18 @@
 class Freelancer::FriendInvitesController < Freelancer::BaseController
-  def index
+  def show
     @friend_invites = current_freelancer.friend_invites
     @avj_credit = current_freelancer.avj_credit || 0
   end
 
-  def create
-    # Check this shit
+  def update
     @freelancer = current_freelancer
 
-    if @freelancer.udate(friend_invites_params)
+    if @freelancer.update(friend_invites_params)
       FreelancerMailer.notice_invites_sent(@freelancer).deliver
-      flash[:notice] = "Thank you for helping make the AVJ network bigger, you'll earn a $50 credit for each reference that accepts your invite"
-      redirect_to freelancer_root_path
+      redirect_to freelancer_friend_invites_path
     else
-      flash[:error] = "An error occurred, please review your information."
-      render :index
+      flash[:error] = "An error occurred. #{@freelancer.errors.full_messages}"
+      render :show
     end
   end
 
