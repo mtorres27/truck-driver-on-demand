@@ -1,41 +1,19 @@
-h1.center.heading-h1 Login to AV Junction
 - content_for :secondary do
   = simple_form_for(resource, as: resource_name, url: session_path(resource_name)) do |f|
     = f.error_notification
     .form-inputs
-      - if resource.class.name != "Admin"
-        .login__account-selector
-          .login__label
-            | Choose your account type:
-          span
-            a href="/freelancer/login"
-              - if resource.class.name.downcase == "freelancer"
-                input type="radio" name="user_type" id="user_type_freelancer" value="freelancer" checked="checked"
-              - else 
-                input type="radio" name="user_type" id="user_type_freelancer" value="freelancer"
-              = label :user_type, "freelancer"
-          span
-            a href="/company/login"
-              - if resource.class.name.downcase == "company"
-                input type="radio" name="user_type" id="user_type_company" value="company" checked="checked"
-              - else
-                input type="radio" name="user_type" id="user_type_company" value="company"
-              = label :user_type, "company"
-      = f.input :email, as: :string, label: false, required: true, autofocus: true, placeholder: "Enter your Email Address"
-      = f.input :password, required: true, label: false, placeholder: "Enter your Password"
-
-      
-      .login__checkbox
-        = f.input :remember_me, as: :boolean if devise_mapping.rememberable?
-
+      h1.center.heading-h1 Login to AV Junction
+      strong EMAIL ADDRESS
+      = f.input :email, as: :string, label: false, required: true, autofocus: true, placeholder: "email"
+      strong PASSWORD
+      = f.input :password, required: true, label: false, placeholder: "password"
+      br/
     .form-actions.login__buttons
       .login__buttons-left
-        = f.button :submit, "Login", class:"btn-primary"
+        - if devise_mapping.recoverable? && controller_name != 'passwords' && controller_name != 'registrations'
+            a.btn.btn--secondary href=new_password_path(resource_name)
+              | Forgot your password?
 
       .login__buttons-right
-        - if devise_mapping.recoverable? && controller_name != 'passwords' && controller_name != 'registrations'
-          a.btn.btn--secondary href=new_password_path(resource_name)
-            | Forgot your password?
-          br
-
-  = render "devise/shared/links"
+        = f.button :submit, "Login", class:"btn-primary"
+        = render "devise/shared/links"
