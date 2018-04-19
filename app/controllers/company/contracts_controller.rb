@@ -62,9 +62,12 @@ class Company::ContractsController < Company::BaseController
         # logger.debug payment.inspect
       end
 
-      # Send notice email
+      # Send notice emails
       PaymentsMailer.notice_funds_freelancer(current_company, freelancer, @job).deliver
       PaymentsMailer.notice_funds_company(current_company, freelancer, @job).deliver
+      if avj_credit_used > 0
+        FreelancerMailer.notice_credit_used(freelancer, avj_credit_used).deliver
+      end
       # logger.debug quote.inspect
 
     rescue => e
