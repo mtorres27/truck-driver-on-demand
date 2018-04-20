@@ -39,7 +39,6 @@ gem "jbuilder", "~> 2.5"
 # General purpose
 gem 'avatax'
 gem 'taxjar-ruby', require: 'taxjar'
-gem "listen", "~> 3.0.5", "< 3.2"
 gem "kaminari", "~> 1.0.1"
 gem "therubyracer", platforms: :ruby
 gem "coderay", "~> 1.1.1"
@@ -72,26 +71,37 @@ gem "flamegraph", "~> 0.9.5"
 gem "stackprof", "~> 0.2.10"
 gem "bullet", "~> 5.5.1" # TODO: Remove bullet from production
 
-group :development, :test do
-  # Call "byebug" anywhere in the code to stop execution and get a debugger console
-  gem "byebug", platforms: [:mri, :mingw, :x64_mingw]
-  gem "capybara", "~> 2.13.0"
-  gem "selenium-webdriver"
-  gem "annotate", "~> 2.7.2"
-  gem "mocha", "~> 1.2.1"
-  gem "rails-erd"
-  gem 'pry'
-  gem "faker", "~> 1.7.3"
-  gem "factory_girl_rails", "~> 4.8.0"
-end
-
 group :development do
-  # Access an IRB console on exception pages or by using <%= console %> anywhere in the code.
-  gem "web-console", "~> 3.3.0"
+  gem "annotate"
+  gem "better_errors"
+  gem "binding_of_caller"
+  gem "listen"
+  gem "rubocop"
   gem "capistrano", "~> 3.8.1"
   gem "capistrano-rails", "~> 1.2.3"
   gem "capistrano-passenger"
-  gem "rubocop", "~> 0.49", require: false
+  gem "rails-erd"
+end
+
+group :development, :test do
+  gem "factory_bot_rails"
+  gem "faker"
+  gem "pry-byebug"
+  gem "rspec-rails"
+end
+
+group :test do
+  gem "capybara"
+  gem "cucumber-rails", require: false
+  gem "database_cleaner"
+  gem "rails-controller-testing"
+  gem "selenium-webdriver"
+  gem "shoulda-matchers"
+  gem "simplecov"
+  gem "timecop"
+  gem "vcr"
+  gem "webmock"
+  gem "cucumber"
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
