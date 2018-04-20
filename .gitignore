@@ -24,7 +24,6 @@
 .env
 .ruby-gemset
 .DS_Store
-/config/database.yml
 
 # Ignore encrypted secrets files.
 config/secrets.yml.key
