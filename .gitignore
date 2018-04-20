@@ -24,6 +24,7 @@
 .env
 .ruby-gemset
 .DS_Store
+/coverage
 
 # Ignore encrypted secrets files.
 config/secrets.yml.key
