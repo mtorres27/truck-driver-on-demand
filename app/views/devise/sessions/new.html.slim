@@ -1,19 +1,22 @@
 - content_for :secondary do
-  = simple_form_for(resource, as: resource_name, url: session_path(resource_name)) do |f|
-    = f.error_notification
-    .form-inputs
-      h1.center.heading-h1 Login to AV Junction
-      strong EMAIL ADDRESS
-      = f.input :email, as: :string, label: false, required: true, autofocus: true, placeholder: "email"
-      strong PASSWORD
-      = f.input :password, required: true, label: false, placeholder: "password"
-      br/
-    .form-actions.login__buttons
-      .login__buttons-left
-        - if devise_mapping.recoverable? && controller_name != 'passwords' && controller_name != 'registrations'
-            a.btn.btn--secondary href=new_password_path(resource_name)
-              | Forgot your password?
-
-      .login__buttons-right
-        = f.button :submit, "Login", class:"btn-primary"
-        = render "devise/shared/links"
+    .action-bar
+      h2.heading-h2.heading-h2--action-bar Login to AV Junction
+    = simple_form_for(resource, as: resource_name, url: session_path(resource_name)) do |f|
+      = f.error_notification
+      .grid-h
+        .grid-cell.grid-cell--50
+          .grid-h
+            .grid-cell.grid-cell--100
+              = f.input :email, as: :string, label: "Email Address", required: true, autofocus: true, placeholder: "Enter your email address"
+            .grid-cell.grid-cell--100
+              = f.input :password, required: true, label: "Password", placeholder: "Enter your password"
+            .grid-cell.grid-cell--50
+              = f.button :submit, "Login", class:"btn btn--primary"
+            .grid-cell.grid-cell--50
+              - if devise_mapping.recoverable? && controller_name != 'passwords' && controller_name != 'registrations'
+                a.btn.btn--clear href=new_password_path(resource_name)
+                  | Forgot your password?
+            .grid-cell.grid-cell--100
+              = render "devise/shared/links"
+          
+          
