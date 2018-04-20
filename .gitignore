@@ -22,6 +22,8 @@
 /public/uploads
 
 .env
+.ruby-gemset
+.DS_Store
 
 # Ignore encrypted secrets files.
 config/secrets.yml.key
