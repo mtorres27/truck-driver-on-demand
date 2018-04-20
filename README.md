@@ -1,6 +1,6 @@
 # AVJunction
 
-[Project description]
+The easier way to hire and manage freelancers. We connect the best AV freelancers with the most reputable AV companies.
 
 ## Dependencies
 
@@ -14,13 +14,14 @@
 ## External Services
 
 * [Amazon S3](https://aws.amazon.com/s3)
+* [Google Maps API](https://developers.google.com/maps/)
 * [HubSpot](https://www.hubspot.com)
 * [Sendgrid](https://sendgrid.com)
 * [Stripe](https://www.stripe.com)
 
 ## Instances
 
-Stage - []()
+Stage - [https://staging.avjunction.com/](https://staging.avjunction.com/)
 Production - [https://app.avjunction.com](https://app.avjunction.com)
 
 ## Development Setup
