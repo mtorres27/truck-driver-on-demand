@@ -1,4 +1,6 @@
 class Company::ContractsController < Company::BaseController
+  include CurrencyExchangeHelper
+
   before_action :set_job
 
   def contract_pay
@@ -9,23 +11,26 @@ class Company::ContractsController < Company::BaseController
       amount = (quote.amount * (1 + (@job.applicable_sales_tax / 100)))
       stripe_fees = amount * 0.029 + 0.3
       avj_fees = freelancer.special_avj_fees || Rails.configuration.avj_fees
-      if quote.amount * avj_fees <= freelancer.avj_credit
+      currency = @job.currency
+      avj_credit_available = currency == 'usd' ? freelancer.avj_credit : dollars_to_currency(freelancer.avj_credit, currency)
+      if quote.amount * avj_fees <= avj_credit_available
         avj_credit_used = quote.amount * avj_fees
+      else
+        avj_credit_used = avj_credit_available
+      end
+      if currency == 'usd'
         freelancer.update_attribute(:avj_credit, freelancer.avj_credit - avj_credit_used)
       else
-        avj_credit_used = freelancer.avj_credit
-        freelancer.update_attribute(:avj_credit, 0)
+        freelancer.update_attribute(:avj_credit, freelancer.avj_credit - currency_to_dollars(avj_credit_used, currency))
       end
       platform_fees = (((quote.amount * avj_fees) - avj_credit_used) - stripe_fees)
       if platform_fees < 0
         platform_fees = 0
       end
-      # TODO: calculate taxes on app fees
-      freelancer_amount = (quote.amount * (1 - avj_fees)) + avj_credit_used
 
       charge = Stripe::Charge.create({
         amount: (amount * 100).floor ,
-        currency: @job.currency,
+        currency: currency,
         source: params[:stripeToken],
         statement_descriptor: "AV Junction - (stripe)",
         application_fee: (platform_fees * 100).floor
@@ -66,7 +71,10 @@ class Company::ContractsController < Company::BaseController
       PaymentsMailer.notice_funds_freelancer(current_company, freelancer, @job).deliver
       PaymentsMailer.notice_funds_company(current_company, freelancer, @job).deliver
       if avj_credit_used > 0
-        FreelancerMailer.notice_credit_used(freelancer, avj_credit_used).deliver
+        if currency != 'usd'
+          avj_credit_used = currency_to_dollars(avj_credit_used, currency)
+        end
+        FreelancerMailer.notice_credit_used(freelancer, avj_credit_used.floor).deliver
       end
       # logger.debug quote.inspect
 
