@@ -19,7 +19,7 @@ h1.heading-h1
         - elsif current_freelancer.avj_credit > 0
           .grid-cell.grid-cell--50
             h2.heading-h2 You have credit
-            p Thank you for inviting your friends to join AVJuntion. You have an available credit of $#{current_freelancer.avj_credit} that will be applied on your hire.
+            p Thank you for inviting your friends to join AVJuntion. You have an available credit of $#{current_freelancer.avj_credit} that will be applied on your next hire.
             p Invite more of your friends to get even more.
         / avj_credit = 0 -> current_freelancer had credit in the past and has used it all up
         - elsif current_freelancer.avj_credit == 0
@@ -37,7 +37,6 @@ h1.heading-h1
         .grid-cell.grid-cell--100
           = simple_form_for(current_freelancer, url: freelancer_friend_invites_path) do |f|
             = f.simple_fields_for :friend_invites do |friend_invite_form|
-              /= render "friend_invite_fields", f: friend_invite_form
             .buttons
               = link_to_add_association 'Add friend', f, :friend_invites, class: "btn btn--primary", id: "add_invite_button"
               = f.submit "Send all invites", class: "btn btn--primary", id: "friend-invites__submit", disabled: true

@@ -1,6 +1,18 @@
+# == Schema Information
+#
+# Table name: friend_invites
+#
+#  id            :integer          not null, primary key
+#  email         :citext
+#  name          :string
+#  freelancer_id :integer
+#  accepted      :boolean          default(FALSE)
+#
+
 class FriendInvite < ApplicationRecord
   belongs_to :freelancer
 
+  validates :name, :email, presence: true
   validate :number_of_invites_below_six
   validate :hasnt_been_invited_by_freelancer
 

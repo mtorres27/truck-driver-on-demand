@@ -1,3 +1,16 @@
+# == Schema Information
+#
+# Table name: freelancer_portfolios
+#
+#  id            :integer          not null, primary key
+#  name          :text
+#  image         :string
+#  image_data    :text
+#  freelancer_id :integer
+#  created_at    :datetime         not null
+#  updated_at    :datetime         not null
+#
+
 require "image_processing/mini_magick"
 include ImageProcessing::MiniMagick
 
