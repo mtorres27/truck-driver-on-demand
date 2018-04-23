@@ -44,10 +44,6 @@ class Company::SubscriptionController < Company::BaseController
       flash[:error] = 'Something wrong happened!'
     end
 
-
-    logger.debug current_company.inspect
-    logger.debug Stripe::Plan.all.inspect
-    logger.debug @subscription.inspect
   end
 
   def reset_company
