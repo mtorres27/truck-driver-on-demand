@@ -2,7 +2,8 @@ h1.center.heading-h1 Choose the type of account you'd like to continue with!
 - content_for :secondary do
   .landing-container
     .landing__user-role
-      = image_tag("company-folder.png")
+      div.center-text.gutter-bottom
+        = image_tag("company-folder.png")
       h3.center.heading-h2 AV Company
       .landing__subtitle
         | I want to hire quality AV professionals. Find, hire and manage industry experts.
@@ -15,7 +16,8 @@ h1.center.heading-h1 Choose the type of account you'd like to continue with!
         a.btn-ghost--active.w-inline-block.width-100 href=new_company_session_path
           div Login
     .landing__user-role
-      = image_tag("person-blue.png")
+      div.center-text.gutter-bottom
+        = image_tag("person-blue.png")
       h3.center.heading-h2 AV Freelancer
       .landing__subtitle
         | I want to find AV work. Find jobs that excite you and grow your business.
