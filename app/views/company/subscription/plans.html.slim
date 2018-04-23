@@ -5,19 +5,22 @@
 - content_for :secondary do
   .action-bar
     h2.heading-h2.heading-h2--action-bar
-      | You're currently subscribed to the #{current_company.plan.present? ? current_company.plan.name : ''} plan
+      - if current_company.plan.present?
+        | You're currently subscribed to the #{current_company.plan.present? ? current_company.plan.name : ''} plan
+      - else 
+        | You'll need to subscribe to a plan to post a job.
   .grid-h
-    - if !current_company.stripe_plan_id.nil? && !@subscription.nil? && (current_company.subscription_status == "trialing" || current_company.subscription_status == "active")
-      .grid-cell.grid-cell--100
-        h3.heading-h3.center
-          - if current_company.plan.subscription_fee == 0
-            | Free Forever
-          - elsif !current_company.is_subscription_cancelled && current_company.plan.subscription_fee > 0
-            | Your subscription will be renewed on #{Time.at(@subscription.current_period_end).to_date}
-          - elsif current_company.is_subscription_cancelled == true
-            | You requested to cancel your subscription, it'll end at #{current_company.billing_period_ends_at}
-          - elsif current_company.plan.subscription_fee > 0
-            | The #{ current_company.subscription_status == "trialing" ? "trial":"subscription"} will end at #{current_company.billing_period_ends_at}
+    / - if !current_company.stripe_plan_id.nil? && !@subscription.nil? && (current_company.subscription_status == "trialing" || current_company.subscription_status == "active")
+    /   .grid-cell.grid-cell--100
+    /     h3.heading-h3.center
+    /       - if current_company.plan.subscription_fee == 0
+    /         | Free Forever
+    /       - elsif !current_company.is_subscription_cancelled && current_company.plan.subscription_fee > 0
+    /         | Your subscription will be renewed on #{Time.at(@subscription.current_period_end).to_date}
+    /       - elsif current_company.is_subscription_cancelled == true
+    /         | You requested to cancel your subscription, it'll end at #{current_company.billing_period_ends_at}
+    /       - elsif current_company.plan.subscription_fee > 0
+    /         | The #{ current_company.subscription_status == "trialing" ? "trial":"subscription"} will end at #{current_company.billing_period_ends_at}
 
     - if current_company.last_4_digits.present? && !current_company.is_subscription_cancelled
       - if current_company.plan.subscription_fee > 0
@@ -26,9 +29,9 @@
             h2.heading-h2.center
               = current_company.card_brand
             .plans__pricing
-              .plans__subtitle
-                | **** **** **** #{current_company.last_4_digits}
-              .plans__subtitle Expires #{current_company.exp_month} / #{current_company.exp_year}
+              .plans__price
+                | **** #{current_company.last_4_digits}
+              .plans__tax Expires #{current_company.exp_month} / #{current_company.exp_year}
             div style="text-align: center"
               = form_tag '/company/update_card_info', method: 'post' do
                 script.stripe-button  data-email=("#{current_company.email}") src="https://checkout.stripe.com/checkout.js" class="stripe-button" data-key="#{Rails.configuration.stripe[:publishable_key]}" data-image="/assets/stripe-logo.png" data-name="Update Card Details" data-panel-label="Update Card Details" data-label="Update Card Details" data-allow-remember-me=false data-locale="auto"
@@ -43,7 +46,7 @@
           .plans__subtitle Like we said, no strings attached.
           .plans__pricing
             .plans__price
-          a.btn-ghost--active.w-inline-block.width-100 href=company_subscription_cancel_path  onclick="return confirm('Are you sure you want to cancel this plan?')"
+          a.btn-ghost--active.w-inline-block.width-100 href=company_subscription_cancel_path  onclick="return confirm('Are you sure you want to cancel your subscription?')"
             div Cancel subscription
 
     - else
@@ -57,9 +60,14 @@
             .plans__subtitle
               == plan.description
             .plans__pricing
-              / - if  plan[:subscription_fee] > 0
-              .plans__price $#{number_with_precision(plan[:subscription_fee] , precision: 2,  strip_insignificant_zeros: true)}
-              .plans__currency USD #{ current_company.country == 'ca'  ?  "+ " + (province_tax(current_company.province)*100).to_s + "% tax" : '' }
+              - if  plan[:subscription_fee] <= 0
+                .plans__price $#{number_with_precision(plan[:subscription_fee] , precision: 2,  strip_insignificant_zeros: true)}
+                .plans__tax &nbsp;
+              - else
+                .plans__price $#{number_with_precision(plan[:subscription_fee] , precision: 2,  strip_insignificant_zeros: true)}
+                .plans__tax USD #{ current_company.country == 'ca'  ?  "+ " + (province_tax(current_company.province)*100).to_s + "% tax" : '' }
+              /  if  plan[:subscription_fee] > 0 
+                
               / - else
               /   .plans__price Free
 
