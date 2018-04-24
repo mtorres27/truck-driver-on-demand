@@ -40,6 +40,12 @@ class Company::ContractsController < Company::BaseController
       quote.platform_fees_amount = platform_fees
       quote.save
 
+      # Decrement waived jobs if applicable
+      if plan_fees.zero?
+        current_company.waived_jobs = current_company.waived_jobs - 1
+        current_company.save
+      end
+
       payments.each do |payment|
         payment.avj_fees = payment.amount * Rails.configuration.avj_fees
         payment.tax_amount = (payment.amount * (@job.applicable_sales_tax / 100))
