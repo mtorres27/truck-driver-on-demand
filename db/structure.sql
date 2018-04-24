@@ -1335,7 +1335,11 @@ CREATE TABLE quotes (
     stripe_fees numeric(10,2),
     net_avj_fees numeric(10,2),
     accepted_at timestamp without time zone,
+<<<<<<< HEAD
     avj_credit numeric(10,2) DEFAULT NULL::numeric
+=======
+    plan_fee numeric(10,2) DEFAULT 0
+>>>>>>> Add plan fee to quotes
 );
 
 
@@ -2727,7 +2731,13 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20180321172650'),
 ('20180402194248'),
 ('20180404170355'),
+<<<<<<< HEAD
 ('20180424155938');
 >>>>>>> Add waived job to companies
+=======
+('20180410210448'),
+('20180424155938'),
+('20180424190619');
+>>>>>>> Add plan fee to quotes
 
 

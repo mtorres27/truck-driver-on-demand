@@ -23,8 +23,7 @@ class Company::ContractsController < Company::BaseController
       else
         freelancer.update_attribute(:avj_credit, freelancer.avj_credit.to_f - CurrencyExchange.currency_to_dollars(avj_credit_used, currency))
       end
-
-      plan_fees = @job.company_plan_fees
+      plan_fees = current_company.waived_jobs.positive? ? 0 : @job.company_plan_fees
       platform_fees = (((quote.amount * avj_fees) - avj_credit_used) - stripe_fees + plan_fees - stripe_fees)
       if platform_fees < 0
         platform_fees = 0
@@ -45,6 +44,7 @@ class Company::ContractsController < Company::BaseController
 
       quote.avj_fees = quote.amount * avj_fees
       quote.stripe_fees = stripe_fees
+      quote.plan_fee = plan_fees
       quote.net_avj_fees = platform_fees
       quote.avj_credit = avj_credit_used
       quote.tax_amount = (quote.amount * (@job.applicable_sales_tax / 100))
