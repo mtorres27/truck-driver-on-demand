@@ -75,4 +75,6 @@ Rails.application.configure do
       authentication: :plain,
       enable_starttls_auto: true
   }
+
+  config.action_mailer.preview_path = "#{Rails.root}/spec/mailers/previews"
 end

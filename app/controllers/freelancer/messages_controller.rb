@@ -30,6 +30,6 @@ class Freelancer::MessagesController < Freelancer::BaseController
   end
 
   def message_params
-    params.require(:message).permit(:body, :attachment, :checkin)
+    params.require(:message).permit(:body, :attachment, :checkin, :lat, :lng)
   end
 end

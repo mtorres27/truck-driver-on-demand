@@ -218,9 +218,11 @@ class Freelancer < ApplicationRecord
     all_job_markets = I18n.t("enumerize.#{job_type}_job_markets")
     return [] unless all_job_markets.kind_of?(Hash)
     freelancer_job_markets = []
-    job_markets.each do |index, value|
-      if all_job_markets[index.to_sym]
-        freelancer_job_markets << all_job_markets[index.to_sym]
+    unless job_markets.nil?
+      job_markets.each do |index, value|
+        if all_job_markets[index.to_sym]
+          freelancer_job_markets << all_job_markets[index.to_sym]
+        end
       end
     end
     freelancer_job_markets
@@ -230,9 +232,11 @@ class Freelancer < ApplicationRecord
     all_job_functions = I18n.t("enumerize.#{job_type}_job_functions")
     return [] unless all_job_functions.kind_of?(Hash)
     freelancer_job_functions = []
-    job_functions.each do |index, value|
-      if all_job_functions[index.to_sym]
-        freelancer_job_functions << all_job_functions[index.to_sym]
+    unless job_functions.nil?
+      job_functions.each do |index, value|
+        if all_job_functions[index.to_sym]
+          freelancer_job_functions << all_job_functions[index.to_sym]
+        end
       end
     end
     freelancer_job_functions
