@@ -359,7 +359,8 @@ CREATE TABLE companies (
     job_types citext,
     manufacturer_tags citext,
     plan_id bigint,
-    is_trial_applicable boolean DEFAULT true
+    is_trial_applicable boolean DEFAULT true,
+    waived_jobs integer DEFAULT 1
 );
 
 
@@ -2719,7 +2720,14 @@ INSERT INTO "schema_migrations" (version) VALUES
 >>>>>>> Comment some lines
 =======
 ('20180319144208'),
+<<<<<<< HEAD
 ('20180321172650');
 >>>>>>> Update secrets file with fixer api key
+=======
+('20180321172650'),
+('20180402194248'),
+('20180404170355'),
+('20180424155938');
+>>>>>>> Add waived job to companies
 
 
