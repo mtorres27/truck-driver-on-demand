@@ -44,10 +44,6 @@ class Company::SubscriptionController < Company::BaseController
       flash[:error] = 'Something wrong happened!'
     end
 
-
-    logger.debug current_company.inspect
-    logger.debug Stripe::Plan.all.inspect
-    logger.debug @subscription.inspect
   end
 
   def reset_company
@@ -88,7 +84,7 @@ class Company::SubscriptionController < Company::BaseController
   def subscription_checkout
     plan = Plan.find_by(code: params[:plan_id])
     # logger.debug params[:stripeToken]
-    # logger.debug plan.inspect
+    logger.debug plan.inspect
     # exit
     customer = StripeTool.create_customer(email: params[:stripeEmail],
                                           stripe_token: params[:stripeToken])
