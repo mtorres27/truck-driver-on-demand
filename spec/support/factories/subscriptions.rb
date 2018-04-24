@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :subscription do
     company_id 1
     plan_id 1
