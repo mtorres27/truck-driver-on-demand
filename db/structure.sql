@@ -1245,7 +1245,8 @@ CREATE TABLE quotes (
     avj_fees numeric(10,2),
     stripe_fees numeric(10,2),
     net_avj_fees numeric(10,2),
-    accepted_at timestamp without time zone
+    accepted_at timestamp without time zone,
+    plan_fee numeric(10,2) DEFAULT 0
 );
 
 
@@ -2528,7 +2529,8 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20180321172650'),
 ('20180402194248'),
 ('20180404170355'),
-('20180424155938');
-('20180410210448');
+('20180410210448'),
+('20180424155938'),
+('20180424190619');
 
 

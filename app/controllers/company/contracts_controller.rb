@@ -11,7 +11,7 @@ class Company::ContractsController < Company::BaseController
       amount = (quote.amount * (1 + (@job.applicable_sales_tax / 100)))
 
       stripe_fees = amount * 0.029 + ( 0.3 * currency_rate.rate )
-      plan_fees = @job.company_plan_fees
+      plan_fees = current_company.waived_jobs.positive? ? 0 : @job.company_plan_fees
       platform_fees = ((quote.amount * Rails.configuration.avj_fees) + plan_fees - stripe_fees)
 
       # TODO: calculate taxes on app fees
@@ -31,6 +31,7 @@ class Company::ContractsController < Company::BaseController
 
       quote.avj_fees = (quote.amount * Rails.configuration.avj_fees)
       quote.stripe_fees = stripe_fees
+      quote.plan_fee = plan_fees
       quote.net_avj_fees = platform_fees
       quote.tax_amount = (quote.amount * (@job.applicable_sales_tax / 100))
       quote.total_amount = amount
