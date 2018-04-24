@@ -9,6 +9,8 @@ class Company::PaymentsController < Company::BaseController
       order(created_at: :desc).
       page(params[:page]).
       per(50)
+      # logger.debug @projects.jobs.inspect
+      # exit
   end
 
 end

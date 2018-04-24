@@ -158,6 +158,10 @@ class Job < ApplicationRecord
     end
   end
 
+  # def plan_fee_us
+  #   if accepted_quote.amount
+  # end
+
   def work_order
     "WO-"+(id.to_s.rjust(5, '0'))
   end
