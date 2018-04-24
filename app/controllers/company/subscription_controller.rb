@@ -84,7 +84,7 @@ class Company::SubscriptionController < Company::BaseController
   def subscription_checkout
     plan = Plan.find_by(code: params[:plan_id])
     # logger.debug params[:stripeToken]
-    # logger.debug plan.inspect
+    logger.debug plan.inspect
     # exit
     customer = StripeTool.create_customer(email: params[:stripeEmail],
                                           stripe_token: params[:stripeToken])

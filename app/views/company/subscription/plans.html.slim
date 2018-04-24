@@ -73,7 +73,7 @@
 
             div style="text-align: center"
               = form_tag company_subscription_checkout_path, method: 'post', plan: plan  do
-                =link_to "Subscribe", company_subscription_checkout_path(free: false), method: :post, class: "subscribe #{plan[:subscription_fee] > 0 ? 'paid':'free'} btn btn--primary"
+                =link_to "Subscribe to this plan", company_subscription_checkout_path(free: false), method: :post, class: "subscribe #{plan[:subscription_fee] > 0 ? 'paid':'free'} btn btn--primary"
                 / a.btn-ghost--active.w-inline-block.width-100 href=company_subscription_checkout_path
                 /   div Subscribe
                 input type="hidden" name="plan_id" value=plan[:code]
