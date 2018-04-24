@@ -3,16 +3,16 @@
 # Table name: friend_invites
 #
 #  id            :integer          not null, primary key
-#  email         :citext
-#  name          :string
-#  freelancer_id :integer
+#  email         :citext           not null
+#  name          :string           not null
+#  freelancer_id :integer          not null
 #  accepted      :boolean          default(FALSE)
 #
 
 class FriendInvite < ApplicationRecord
   belongs_to :freelancer
 
-  validates :name, :email, presence: true
+  validates :name, :email, :freelancer_id, presence: true
   validate :number_of_invites_below_six
   validate :hasnt_been_invited_by_freelancer
 
@@ -36,6 +36,6 @@ class FriendInvite < ApplicationRecord
   end
 
   def send_invite_email
-    FriendInvitesMailer.send_invite(email, name, freelancer).deliver
+    FriendInvitesMailer.send_invite(email, name, freelancer).deliver_later
   end
 end

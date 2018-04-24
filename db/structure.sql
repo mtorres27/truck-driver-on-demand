@@ -857,9 +857,9 @@ ALTER SEQUENCE freelancers_id_seq OWNED BY freelancers.id;
 
 CREATE TABLE friend_invites (
     id bigint NOT NULL,
-    email citext,
-    name character varying,
-    freelancer_id bigint,
+    email citext NOT NULL,
+    name character varying NOT NULL,
+    freelancer_id bigint NOT NULL,
     accepted boolean DEFAULT false
 );
 

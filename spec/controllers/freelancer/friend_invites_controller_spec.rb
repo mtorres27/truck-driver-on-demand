@@ -14,6 +14,7 @@ describe Freelancer::FriendInvitesController, type: :controller  do
         expect(assigns(:friend_invites).count).to eq(0)
       end
     end
+
     context 'when invites and no credit' do
       before(:each) do
         create(:friend_invite, freelancer: subject.current_freelancer)
@@ -25,6 +26,7 @@ describe Freelancer::FriendInvitesController, type: :controller  do
         expect(assigns(:friend_invites).count).to eq(1)
       end
     end
+
     context 'when invites and credit' do
       before(:each) do
         subject.current_freelancer.update_attribute(:avj_credit, 50)
@@ -71,7 +73,7 @@ describe Freelancer::FriendInvitesController, type: :controller  do
         expect(flash[:error]).to be_present
       end
 
-      it 'doesn\'t create any invites' do
+      it "doesn't create any invites" do
         expect(FriendInvite.count).to eq(@invites_count)
       end
     end

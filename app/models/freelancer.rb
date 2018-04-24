@@ -311,6 +311,7 @@ class Freelancer < ApplicationRecord
 
   private
 
+  # TODO: Needs refactor
   def add_to_hubspot
     api_key = "5c7ad391-2bfe-4d11-9ba3-82b5622212ba"
     url = "https://api.hubapi.com/contacts/v1/contact/createOrUpdate/email/#{email}/?hapikey=#{api_key}"
