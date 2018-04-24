@@ -53,7 +53,11 @@ class Company::ContractsController < Company::BaseController
       quote.paid_at = DateTime.now
       quote.platform_fees_amount = platform_fees
       quote.save
-
+      # Decrement waived jobs if applicable
+      if plan_fees.zero?
+        current_company.waived_jobs = current_company.waived_jobs - 1
+        current_company.save
+      end
       avj_credit_left = avj_credit_used
       payments.each do |payment|
         payment.avj_fees = payment.amount * avj_fees
