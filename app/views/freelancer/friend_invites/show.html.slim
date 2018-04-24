@@ -1,5 +1,4 @@
-h1.heading-h1
-  | Invite your friends to earn extra credit
+= render partial: "/freelancer/shared/profile_sub_nav"
 
 - content_for :secondary do
   .grid-h.grid-h--no-margin
@@ -14,12 +13,12 @@ h1.heading-h1
           -else
             .grid-cell.grid-cell--50
               h2.heading-h2 Did you know?
-              p You can earn credit by inviting all of your friends to join AVJunction. For each friend that joins, you will earn $50 credit applicable on your next hire. Your friends will also earn $20 by accepting your invitation.
+              p You can earn credit by inviting all of your friends to join AVJunction. For each friend that joins, you will earn $50 credit applicable on your next job. Your friends will also earn $20 by accepting your invitation.
               p What are you waiting for? Invite all your friends and start getting credits.
         - elsif current_freelancer.avj_credit > 0
           .grid-cell.grid-cell--50
             h2.heading-h2 You have credit
-            p Thank you for inviting your friends to join AVJuntion. You have an available credit of $#{current_freelancer.avj_credit} that will be applied on your next hire.
+            p Thank you for inviting your friends to join AVJuntion. You have an available credit of $#{current_freelancer.avj_credit} that will be applied on your next job.
             p Invite more of your friends to get even more.
         / avj_credit = 0 -> current_freelancer had credit in the past and has used it all up
         - elsif current_freelancer.avj_credit == 0
@@ -34,6 +33,12 @@ h1.heading-h1
               h4.heading-h4
                 | Available credit
 
+        - if !current_freelancer.avj_credit.nil?
+          .grid-cell.grid-cell--100
+            p
+              = "Check out your payments to see the credit you have used "
+              a href=freelancer_payments_path here
+              | .
         .grid-cell.grid-cell--100
           = simple_form_for(current_freelancer, url: freelancer_friend_invites_path) do |f|
             = f.simple_fields_for :friend_invites do |friend_invite_form|
