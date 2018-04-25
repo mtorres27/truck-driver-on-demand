@@ -1,41 +1,22 @@
-h1.center.heading-h1 Login to AV Junction
 - content_for :secondary do
-  = simple_form_for(resource, as: resource_name, url: session_path(resource_name)) do |f|
-    = f.error_notification
-    .form-inputs
-      - if resource.class.name != "Admin"
-        .login__account-selector
-          .login__label
-            | Choose your account type:
-          span
-            a href="/freelancer/login"
-              - if resource.class.name.downcase == "freelancer"
-                input type="radio" name="user_type" id="user_type_freelancer" value="freelancer" checked="checked"
-              - else 
-                input type="radio" name="user_type" id="user_type_freelancer" value="freelancer"
-              = label :user_type, "freelancer"
-          span
-            a href="/company/login"
-              - if resource.class.name.downcase == "company"
-                input type="radio" name="user_type" id="user_type_company" value="company" checked="checked"
-              - else
-                input type="radio" name="user_type" id="user_type_company" value="company"
-              = label :user_type, "company"
-      = f.input :email, as: :string, label: false, required: true, autofocus: true, placeholder: "Enter your Email Address"
-      = f.input :password, required: true, label: false, placeholder: "Enter your Password"
-
-      
-      .login__checkbox
-        = f.input :remember_me, as: :boolean if devise_mapping.rememberable?
-
-    .form-actions.login__buttons
-      .login__buttons-left
-        = f.button :submit, "Login", class:"btn-primary"
-
-      .login__buttons-right
-        - if devise_mapping.recoverable? && controller_name != 'passwords' && controller_name != 'registrations'
-          a.btn.btn--secondary href=new_password_path(resource_name)
-            | Forgot your password?
-          br
-
-  = render "devise/shared/links"
+    .action-bar
+      h2.heading-h2.heading-h2--action-bar Login to AV Junction
+    = simple_form_for(resource, as: resource_name, url: session_path(resource_name)) do |f|
+      = f.error_notification
+      .grid-h
+        .grid-cell.grid-cell--50
+          .grid-h
+            .grid-cell.grid-cell--100
+              = f.input :email, as: :string, label: "Email Address", required: true, autofocus: true, placeholder: "Enter your email address"
+            .grid-cell.grid-cell--100
+              = f.input :password, required: true, label: "Password", placeholder: "Enter your password"
+            .grid-cell.grid-cell--50
+              = f.button :submit, "Login", class:"btn btn--primary"
+            .grid-cell.grid-cell--50
+              - if devise_mapping.recoverable? && controller_name != 'passwords' && controller_name != 'registrations'
+                a.btn.btn--clear href=new_password_path(resource_name)
+                  | Forgot your password?
+            .grid-cell.grid-cell--100
+              = render "devise/shared/links"
+          
+          

@@ -33,7 +33,7 @@ html
       img height="1", width="1", src="https://www.facebook.com/tr?id=372487999888650&ev=PageView&noscript=1"
 
 
-  body
+  body(class = "#{controller.controller_name}-#{controller.action_name}")
     .wrap
       .section.section--header
         .container.container--header
@@ -41,8 +41,8 @@ html
             = render "shared/nav"
             = render "shared/mobile_nav"
             = render "shared/onboarding"
-      
-      .section.section--body 
+
+      .section.section--body
         = render "shared/flash"
         - no_header_controllers = []
         - no_header_controllers << { controller: "freelancer/companies" }
@@ -52,7 +52,7 @@ html
         - header_controllers = []
         - header_controllers << { controller: "freelancer/companies", action: "av_companies" }
         - header_controllers << { controller: "freelancer/companies", action: "favourites" }
-      
+
         - show_header = true
         - no_header_controllers.each do |controller|
           - if params[:controller] == controller[:controller]
@@ -73,9 +73,9 @@ html
         - if content_for(:secondary)
           .container
             .frame= yield :secondary
-      
-      .section.section--footer 
+
+      .section.section--footer
         = render "shared/footer"
       /! Start of HubSpot Embed Code
-      script#hs-script-loader async="" defer="" src="//js.hs-scripts.com/3224021.js" type="text/javascript" 
+      script#hs-script-loader async="" defer="" src="//js.hs-scripts.com/3224021.js" type="text/javascript"
       /! End of HubSpot Embed Code

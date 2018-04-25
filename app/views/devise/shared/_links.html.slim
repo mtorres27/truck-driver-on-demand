@@ -6,12 +6,7 @@
 
   - if devise_mapping.registerable? && controller_name != 'registrations' && resource.class.name != "Admin"
     | Don't have an account? 
-    = link_to "Register", new_registration_path(resource_name)
-    | , it's free
-    br
-
-  - if devise_mapping.confirmable? && controller_name != 'confirmations'
-    = link_to "Didn't receive confirmation instructions?", new_confirmation_path(resource_name)
+    = link_to "Register now", new_registration_path(resource_name)
     br
 
   - if devise_mapping.lockable? && resource_class.unlock_strategy_enabled?(:email) && controller_name != 'unlocks'
