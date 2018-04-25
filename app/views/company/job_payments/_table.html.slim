@@ -6,7 +6,7 @@
         = job.company_plan_fees.present? ? number_with_precision(job.company_plan_fees , precision: 2) : ''
         | #{job.currency.upcase}
     .payments__flexbox
-      - if accepted_quote.plan_fee.positive?
+      - if job.company_plan_fees.positive?
         =link_to company_job_avj_invoice_path(id: job.id), class: 'btn-link'
           | View Invoice
       - else
@@ -33,7 +33,7 @@
     .payments__status
       | AVJ fees :
       strong<
-        | #{number_with_precision(job.company_plan_fees , precision: 2) } #{job.currency.upcase}
+        | #{ job.company_plan_fees.positive? ? number_with_precision(job.company_plan_fees , precision: 2) : "Waived"} #{ job.company_plan_fees.positive? ? job.currency.upcase : ''}
     - if  job.applicable_sales_tax.present?
       .payments__status
         | Applicable Sales Tax :
