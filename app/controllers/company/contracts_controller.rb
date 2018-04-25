@@ -6,11 +6,13 @@ class Company::ContractsController < Company::BaseController
       quote = @job.accepted_quote
       freelancer = @job.freelancer
       payments = @job.payments
-      currency_rate = CurrencyRate.find_by(currency: @job.currency)
+
+      currency = CurrencyRate.where('currency = ?', @job.currency).first
+      currency_rate = currency_rate.nil? ?  1 : currency.rate
 
       amount = (quote.amount * (1 + (@job.applicable_sales_tax / 100)))
 
-      stripe_fees = amount * 0.029 + ( 0.3 * currency_rate.rate )
+      stripe_fees = amount * 0.029 + ( 0.3 * currency_rate )
       plan_fees = current_company.waived_jobs.positive? ? 0 : @job.company_plan_fees
       platform_fees = ((quote.amount * Rails.configuration.avj_fees) + plan_fees - stripe_fees)
 

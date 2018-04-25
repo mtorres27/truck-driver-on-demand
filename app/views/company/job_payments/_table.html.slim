@@ -68,7 +68,7 @@
           .payments__date Paid on #{payment.paid_on}
         - elsif payment.issued_on.present?
           .payments__date Requested from #{job.freelancer.name} on #{payment.issued_on}
-      - if !payment.paid_on.blank? || !connector.nil? && connector.account.external_accounts.data.any? && accepted_quote.present? && accepted_quote.paid_by_company && job.funds_available
+      - if !payment.paid_on.blank? || (!connector.nil? && !connector.account.nil? && connector.account.external_accounts.data.any? && accepted_quote.present? && accepted_quote.paid_by_company && job.funds_available)
         - path = current_admin.nil? ? company_job_payment_path(job, payment) : admin_job_payment_path(job, payment)
         = link_to path, class: 'btn-primary--active top-margin w-inline-block'
           div #{((payment.paid_on.blank? && current_admin.nil?) ? "Issue Payout" : "View Invoice")}
