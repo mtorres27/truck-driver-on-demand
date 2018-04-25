@@ -211,5 +211,66 @@ class FreelancerMailer < ApplicationMailer
     }.to_json
     mail(to: @freelancer.email, subject: 'Company has left a review')
   end
+
+  def notice_invites_sent(freelancer)
+    @freelancer = freelancer
+    headers 'X-SMTPAPI' => {
+        sub: {
+            '%freelancer_name%' => [@freelancer.name],
+            '%root_url%' => [root_url]
+        },
+        filters: {
+            templates: {
+                settings: {
+                    enable: 1,
+                    template_id: '3bfb1797-cf94-4d3b-865e-ab933867a7c3'
+                }
+            }
+        }
+    }.to_json
+    mail(to: @freelancer.email, subject: 'Thank you for inviting your friends')
+  end
+
+  def notice_credit_earned(freelancer, amount)
+    @freelancer = freelancer
+    @amount = amount
+    headers 'X-SMTPAPI' => {
+        sub: {
+            '%freelancer_name%' => [@freelancer.name],
+            '%$_amount%' => [@amount],
+            '%root_url%' => [root_url]
+        },
+        filters: {
+            templates: {
+                settings: {
+                    enable: 1,
+                    template_id: 'd7625e90-252d-4ee6-86cf-1d2340f08438'
+                }
+            }
+        }
+    }.to_json
+    mail(to: @freelancer.email, subject: 'You earned credit')
+  end
+
+  def notice_credit_used(freelancer, amount_used)
+    @freelancer = freelancer
+    @amount_used = amount_used
+    headers 'X-SMTPAPI' => {
+        sub: {
+            '%freelancer_name%' => [@freelancer.name],
+            '%$_amount%' => [@amount_used],
+            '%root_url%' => [root_url]
+        },
+        filters: {
+            templates: {
+                settings: {
+                    enable: 1,
+                    template_id: '28157705-f9d9-4ca5-b7fc-5d5ddd75d3f8'
+                }
+            }
+        }
+    }.to_json
+    mail(to: @freelancer.email, subject: 'You earned credit')
+  end
 end
 

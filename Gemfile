@@ -15,7 +15,7 @@ gem "pg_search", "~> 2.0.1"
 gem "schema_validations", "~> 2.2.1"
 gem "enumerize", "~> 2.1.2"
 gem "audited", "~> 4.5.0"
-gem 'easy_postgis'
+gem "easy_postgis"
 gem "activejob-perform_later", "~> 1.0.2"
 
 # Assets
@@ -25,10 +25,10 @@ gem "turbolinks", "~> 5"
 gem "bootstrap-sass", "~> 3.3.7"
 gem "font-awesome-rails", "~> 4.7.0"
 gem "jquery-rails", "~> 4.3.1"
-gem 'jquery-datatables'
+gem "jquery-datatables"
 
 # Authentication & Authorization
-gem 'devise'
+gem "devise"
 
 # Views
 gem "slim-rails", "~> 3.1.2"
@@ -37,8 +37,8 @@ gem "cocoon", "~> 1.2.10"
 gem "jbuilder", "~> 2.5"
 
 # General purpose
-gem 'avatax'
-gem 'taxjar-ruby', require: 'taxjar'
+gem "avatax"
+gem "taxjar-ruby", require: "taxjar"
 gem "kaminari", "~> 1.0.1"
 gem "therubyracer", platforms: :ruby
 gem "coderay", "~> 1.1.1"
@@ -54,16 +54,19 @@ gem "fastimage", "~> 2.1.0" # TODO: Do we use this gem?
 gem "mini_magick", "~> 4.7.0"
 
 # Payments
-gem 'stripe'
+gem "stripe"
+
+# Currency
+gem "money-open-exchange-rates"
 
 # Jobs
-gem 'whenever', require: false
+gem "whenever", require: false
 
 # Marketing
-gem 'hubspot-ruby'
+gem "hubspot-ruby"
 
 # Emails
-gem 'smtpapi'
+gem "smtpapi"
 
 # Profiling
 gem "rack-mini-profiler", "~> 0.10.2"

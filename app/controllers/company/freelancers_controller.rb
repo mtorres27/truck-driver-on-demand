@@ -108,7 +108,7 @@ class Company::FreelancersController < Company::BaseController
           result = 3
         else
           # freelancer is clear to be invited
-          JobInviteMailer.invite_to_quote(@freelancer, @job).deliver
+          JobInviteMailer.invite_to_quote(@freelancer, @job).deliver_later
           @invite = JobInvite.new
           @invite.freelancer_id = @freelancer.id
           @invite.job_id = @job.id
