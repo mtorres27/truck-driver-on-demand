@@ -14,15 +14,16 @@ class Freelancer::ContractsController < Freelancer::BaseController
 
     # calculate avj fees
     plan = @job.company.plan
-    currency_rate = CurrencyRate.where('currency = ?', @job.currency).first
+    currency = CurrencyRate.where('currency = ?', @job.currency).first
+    currency_rate = currency_rate.nil? ?  1 : currency.rate
     # Get Amount in USD
-    job_amout = @accepted_quote.amount / currency_rate.rate
+    job_amout = @accepted_quote.amount / currency_rate
     if job_amout > 2000
       fees = plan.fee_schema['above_2000']
     else
       fees = plan.fee_schema['below_2000']
     end
-    @job.company_plan_fees = fees * currency_rate.rate
+    @job.company_plan_fees = fees * currency_rate
     @job.save
 
     # Send notice email
