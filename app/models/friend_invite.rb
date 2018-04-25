@@ -20,19 +20,19 @@ class FriendInvite < ApplicationRecord
 
   scope :accepted, -> { where(accepted: true) }
   scope :pending, -> { where(accepted: false) }
+  scope :by_email, ->(email) { where(email: email) }
+  scope :by_freelancer, ->(freelancer) { where(freelancer_id: freelancer.id) }
 
   private
 
   def number_of_invites_below_six
-    if FriendInvite.where(email: email).count >= 5
-      errors.add(:base, "#{email} has already been invited by others to join AVJunction.")
-    end
+    return if FriendInvite.by_email(email).count < 5
+    errors.add(:base, "#{email} has already been invited by others to join AVJunction.")
   end
 
   def hasnt_been_invited_by_freelancer
-    if FriendInvite.where(email: email, freelancer: freelancer).count > 0
-      errors.add(:base, "You already invited #{email}.You cannot invite the same person more than once.")
-    end
+    return if FriendInvite.by_email(email).by_freelancer(freelancer).count.zero?
+    errors.add(:base, "You already invited #{email}.You cannot invite the same person more than once.")
   end
 
   def send_invite_email

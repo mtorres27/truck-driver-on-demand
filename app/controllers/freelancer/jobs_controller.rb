@@ -138,7 +138,7 @@ class Freelancer::JobsController < Freelancer::BaseController
           @message.save
         end
         # add quote
-        CompanyMailer.notice_received_new_quote_from_freelancer(@applicant.freelancer, @job.company, @job, @applicant.quotes.last).deliver
+        CompanyMailer.notice_received_new_quote_from_freelancer(@applicant.freelancer, @job.company, @job, @applicant.quotes.last).deliver_later
         redirect_to freelancer_path(@job), notice: "Application successfully submitted"
       else
         # error message; redirect back to job page

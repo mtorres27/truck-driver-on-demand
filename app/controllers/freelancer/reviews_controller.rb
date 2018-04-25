@@ -13,7 +13,7 @@ class Freelancer::ReviewsController < Freelancer::BaseController
     @review.freelancer = current_freelancer
 
     if @review.save
-      CompanyMailer.notice_freelancer_review(@job.company, current_freelancer, @review).deliver
+      CompanyMailer.notice_freelancer_review(@job.company, current_freelancer, @review).deliver_later
       redirect_to freelancer_job_review_path(@job)
     else
       render :show

@@ -348,21 +348,20 @@ class Freelancer < ApplicationRecord
   end
 
   def send_welcome_email
-    FreelancerMailer.verify_your_identity(self).deliver
+    FreelancerMailer.verify_your_identity(self).deliver_later
   end
 
   def check_for_invites
-    if FriendInvite.where(email: email).count > 0
-      self.avj_credit = 20
-      save!
-      FreelancerMailer.notice_credit_earned(self, 20).deliver
-      FriendInvite.where(email: email).each do |invite|
-        freelancer = invite.freelancer
-        freelancer.avj_credit = freelancer.avj_credit.nil? ? 50 : freelancer.avj_credit + 50
-        freelancer.save!
-        invite.update_attribute(:accepted, true)
-        FreelancerMailer.notice_credit_earned(freelancer, 50).deliver
-      end
+    return if FriendInvite.by_email(email).count.zero?
+    self.avj_credit = 20
+    save!
+    FreelancerMailer.notice_credit_earned(self, 20).deliver_later
+    FriendInvite.by_email(email).each do |invite|
+      freelancer = invite.freelancer
+      freelancer.avj_credit = freelancer.avj_credit.nil? ? 50 : freelancer.avj_credit + 50
+      freelancer.save!
+      invite.update_attribute(:accepted, true)
+      FreelancerMailer.notice_credit_earned(freelancer, 50).deliver_later
     end
   end
 end

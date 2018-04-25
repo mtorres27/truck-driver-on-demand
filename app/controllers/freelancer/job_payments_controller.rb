@@ -31,7 +31,7 @@ class Freelancer::JobPaymentsController < Freelancer::BaseController
     @payment.issued_on = Date.today
     @payment.save
     # Send notice email
-    PaymentsMailer.request_payout_company(@job.company, current_freelancer, @job, @payment).deliver
+    PaymentsMailer.request_payout_company(@job.company, current_freelancer, @job, @payment).deliver_later
     redirect_to freelancer_job_payments_path(job_id: @job.id)
   end
 

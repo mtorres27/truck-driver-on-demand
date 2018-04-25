@@ -11,17 +11,16 @@ class Company::ContractsController < Company::BaseController
       stripe_fees = amount * 0.029 + 0.3
       avj_fees = freelancer.special_avj_fees || Rails.configuration.avj_fees
       currency = @job.currency
-      freelancer_avj_credit = freelancer.avj_credit || 0
-      avj_credit_available = currency == 'usd' ? freelancer_avj_credit : CurrencyExchange.dollars_to_currency(freelancer_avj_credit, currency)
+      avj_credit_available = currency == 'usd' ? freelancer.avj_credit.to_f : CurrencyExchange.dollars_to_currency(freelancer.avj_credit.to_f, currency)
       if quote.amount * avj_fees <= avj_credit_available
         avj_credit_used = quote.amount * avj_fees
       else
         avj_credit_used = avj_credit_available
       end
       if currency == 'usd'
-        freelancer.update_attribute(:avj_credit, freelancer_avj_credit - avj_credit_used)
+        freelancer.update_attribute(:avj_credit, freelancer.avj_credit.to_f - avj_credit_used)
       else
-        freelancer.update_attribute(:avj_credit, freelancer_avj_credit - CurrencyExchange.currency_to_dollars(avj_credit_used, currency))
+        freelancer.update_attribute(:avj_credit, freelancer.avj_credit.to_f - CurrencyExchange.currency_to_dollars(avj_credit_used, currency))
       end
       platform_fees = (((quote.amount * avj_fees) - avj_credit_used) - stripe_fees)
       if platform_fees < 0
@@ -68,13 +67,13 @@ class Company::ContractsController < Company::BaseController
       end
 
       # Send notice emails
-      PaymentsMailer.notice_funds_freelancer(current_company, freelancer, @job).deliver
-      PaymentsMailer.notice_funds_company(current_company, freelancer, @job).deliver
+      PaymentsMailer.notice_funds_freelancer(current_company, freelancer, @job).deliver_later
+      PaymentsMailer.notice_funds_company(current_company, freelancer, @job).deliver_later
       if avj_credit_used > 0
         if currency != 'usd'
           avj_credit_used = CurrencyExchange.currency_to_dollars(avj_credit_used, currency)
         end
-        FreelancerMailer.notice_credit_used(freelancer, avj_credit_used.floor).deliver
+        FreelancerMailer.notice_credit_used(freelancer, avj_credit_used.floor).deliver_later
       end
       # logger.debug quote.inspect
 
@@ -118,7 +117,7 @@ class Company::ContractsController < Company::BaseController
         @m.send_contract = true
         @m.body = "Hi #{@job.freelancer.name}! This is a note to let you know that we've just sent a work order to you. <a href='/freelancer/jobs/#{@job.id}/work_order'>Click here</a> to view it!"
         @m.save
-        FreelancerMailer.notice_work_order_received(current_company, @job.freelancer, @job).deliver
+        FreelancerMailer.notice_work_order_received(current_company, @job.freelancer, @job).deliver_later
 
         @job.messages << @m
 

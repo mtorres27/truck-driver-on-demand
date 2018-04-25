@@ -16,7 +16,7 @@ describe FriendInvite, type: :model do
     let(:freelancer) { create(:freelancer) }
     let(:email) { Faker::Internet.unique.email }
 
-    it 'is not valid when more than six invites sent to same email' do
+    it 'is not valid when more than five invites sent to same email' do
       freelancers = create_list(:freelancer, 5)
       freelancers.each do |f|
         create(:friend_invite, email: email, name: 'Example', freelancer: f)
