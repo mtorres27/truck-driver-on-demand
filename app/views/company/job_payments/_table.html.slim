@@ -7,8 +7,11 @@
         = job.company_plan_fees.present? ? number_with_precision(job.company_plan_fees , precision: 2) : ''
         | #{job.currency.upcase}
     .payments__flexbox
-      =link_to company_job_avj_invoice_path(id: job.id), class: 'btn-link'
-        | View Invoice
+      - if job.company_plan_fees.positive?
+        =link_to company_job_avj_invoice_path(id: job.id), class: 'btn-link'
+          | View Invoice
+      - else
+        .payments__payout-label Waived
 - if @accepted_quote && !@accepted_quote.paid_by_company 
   .grid-h
     .grid-cell.grid-cell--50
@@ -30,10 +33,10 @@
             | #{number_with_precision(@accepted_quote.amount.floor , precision: 2) } #{@job.currency.upcase}
       .payments__flexbox
         .payments__status
-          | AVJ fees :
+          | AV Junction fees ($45 USD):
         .payments__status  
           strong<
-            | #{number_with_precision(@job.company_plan_fees , precision: 2) } #{@job.currency.upcase}
+            | #{ @job.company_plan_fees.positive? ? number_with_precision(@job.company_plan_fees , precision: 2) : "Waived"} #{ @job.company_plan_fees.positive? ? @job.currency.upcase : ''}
       - if  @job.applicable_sales_tax.present?
         .payments__flexbox
           .payments__status
