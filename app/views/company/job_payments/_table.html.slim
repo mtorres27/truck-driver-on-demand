@@ -1,7 +1,7 @@
 - if accepted_quote && accepted_quote.paid_by_company
-  div class="payments #{ "milestone--inactive" if accepted_quote.nil? || (accepted_quote.present? && !accepted_quote.paid_by_company)}"
+  div class="#{ "milestone--inactive" if accepted_quote.nil? || (accepted_quote.present? && !accepted_quote.paid_by_company)}"
     .payments__flexbox
-      .payments__title AV Junction Fees
+      h3.heading-h3 AV Junction Fees
       .payments__amt
         = job.company_plan_fees.present? ? number_with_precision(job.company_plan_fees , precision: 2) : ''
         | #{job.currency.upcase}
