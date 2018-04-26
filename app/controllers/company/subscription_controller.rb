@@ -5,7 +5,9 @@ class Company::SubscriptionController < Company::BaseController
 
   def cancel
     # logger.debug current_company.inspect
+    plan = current_company.plan
     StripeTool.cancel_subscription(company: current_company)
+    SubscriptionMailer.notice_company_subscription_canceled(current_company, plan).deliver_later
     flash[:notice] = "Your just cancelled your company subscription!"
     redirect_to company_plans_path
   end
@@ -96,6 +98,7 @@ class Company::SubscriptionController < Company::BaseController
     # invoice = StripeTool.create_invoice(customer_id: customer.id, subscription: subscription)
     StripeTool.update_company_info_with_subscription(company: current_company, customer: customer, subscription: subscription, plan: plan)
 
+    SubscriptionMailer.notice_company_subscribed_to_plan(current_company, plan).deliver_later
     flash[:notice] = 'Successfully subscribed to "' + subscription.plan.name.upcase + '" Plan'
     redirect_to company_plans_path
   end

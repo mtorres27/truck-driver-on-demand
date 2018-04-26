@@ -66,6 +66,7 @@
 #  manufacturer_tags         :citext
 #  plan_id                   :integer
 #  is_trial_applicable       :boolean          default(TRUE)
+#  waived_jobs               :integer          default(1)
 #
 
 class Company < ApplicationRecord

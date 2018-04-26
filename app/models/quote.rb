@@ -27,6 +27,7 @@
 #  stripe_fees            :decimal(10, 2)
 #  net_avj_fees           :decimal(10, 2)
 #  accepted_at            :datetime
+#  plan_fee               :decimal(10, 2)   default(0.0)
 #  avj_credit             :decimal(10, 2)
 #
 

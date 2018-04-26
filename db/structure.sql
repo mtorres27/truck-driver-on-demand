@@ -333,12 +333,6 @@ CREATE TABLE companies (
     last_sign_in_at timestamp without time zone,
     current_sign_in_ip inet,
     last_sign_in_ip inet,
-    header_color character varying DEFAULT 'FF6C38'::character varying,
-    country character varying,
-    confirmation_token character varying,
-    confirmed_at timestamp without time zone,
-    confirmation_sent_at timestamp without time zone,
-    header_source character varying DEFAULT 'color'::character varying,
     stripe_customer_id character varying,
     stripe_subscription_id character varying,
     stripe_plan_id character varying,
@@ -350,6 +344,12 @@ CREATE TABLE companies (
     card_brand character varying,
     exp_month character varying,
     exp_year character varying,
+    header_color character varying DEFAULT 'FF6C38'::character varying,
+    country character varying,
+    confirmation_token character varying,
+    confirmed_at timestamp without time zone,
+    confirmation_sent_at timestamp without time zone,
+    header_source character varying DEFAULT 'color'::character varying,
     province character varying,
     sales_tax_number character varying,
     line2 character varying,
@@ -691,43 +691,6 @@ ALTER SEQUENCE freelancer_insurances_id_seq OWNED BY freelancer_insurances.id;
 
 --
 -- Name: freelancer_portfolios; Type: TABLE; Schema: public; Owner: -
-<<<<<<< HEAD
-=======
---
-
-CREATE TABLE freelancer_portfolios (
-    id bigint NOT NULL,
-    name text,
-    image character varying,
-    image_data text,
-    freelancer_id integer,
-    created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
-);
-
-
---
--- Name: freelancer_portfolios_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE freelancer_portfolios_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: freelancer_portfolios_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE freelancer_portfolios_id_seq OWNED BY freelancer_portfolios.id;
-
-
---
--- Name: freelancer_references; Type: TABLE; Schema: public; Owner: -
->>>>>>> Create plans and subscription modules
 --
 
 CREATE TABLE freelancer_portfolios (
@@ -851,29 +814,22 @@ CREATE TABLE freelancers (
     stripe_account_id character varying,
     stripe_account_status text,
     currency character varying,
-    phone_number character varying,
     sales_tax_number character varying,
     line2 character varying,
     state character varying,
     postal_code character varying,
     service_areas character varying,
     city character varying,
+    phone_number character varying,
     profile_score smallint,
     valid_driver boolean,
     own_tools boolean,
     company_name character varying,
-<<<<<<< HEAD
-    special_avj_fees numeric(10,2),
     job_types citext,
     job_functions citext,
     manufacturer_tags citext,
     special_avj_fees numeric(10,2),
     avj_credit numeric(10,2) DEFAULT NULL::numeric
-=======
-    job_types citext,
-    job_functions citext,
-    manufacturer_tags citext
->>>>>>> Create plans and subscription modules
 );
 
 
@@ -1077,19 +1033,11 @@ CREATE TABLE jobs (
     stripe_balance_transaction_id character varying,
     funds_available_on integer,
     funds_available boolean DEFAULT false,
-<<<<<<< HEAD
-    contracted_at timestamp without time zone,
-=======
->>>>>>> Create plans and subscription modules
     job_type citext,
     job_market citext,
     manufacturer_tags citext,
-<<<<<<< HEAD
+    contracted_at timestamp without time zone,
     company_plan_fees numeric(10,2) DEFAULT 0
-=======
-    company_plan_fees numeric(10,2) DEFAULT 0,
-    contracted_at timestamp without time zone
->>>>>>> Comment some lines
 );
 
 
@@ -1230,8 +1178,6 @@ ALTER SEQUENCE payments_id_seq OWNED BY payments.id;
 
 
 --
-<<<<<<< HEAD
-=======
 -- Name: plans; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -1269,7 +1215,6 @@ ALTER SEQUENCE plans_id_seq OWNED BY plans.id;
 
 
 --
->>>>>>> Create plans and subscription modules
 -- Name: projects; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -1335,11 +1280,8 @@ CREATE TABLE quotes (
     stripe_fees numeric(10,2),
     net_avj_fees numeric(10,2),
     accepted_at timestamp without time zone,
-<<<<<<< HEAD
+    plan_fee numeric(10,2) DEFAULT 0,
     avj_credit numeric(10,2) DEFAULT NULL::numeric
-=======
-    plan_fee numeric(10,2) DEFAULT 0
->>>>>>> Add plan fee to quotes
 );
 
 
@@ -1372,8 +1314,6 @@ CREATE TABLE schema_migrations (
 
 
 --
-<<<<<<< HEAD
-=======
 -- Name: subscriptions; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -1411,7 +1351,6 @@ ALTER SEQUENCE subscriptions_id_seq OWNED BY subscriptions.id;
 
 
 --
->>>>>>> Create plans and subscription modules
 -- Name: users; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -1565,16 +1504,6 @@ ALTER TABLE ONLY freelancer_insurances ALTER COLUMN id SET DEFAULT nextval('free
 
 --
 -- Name: freelancer_portfolios id; Type: DEFAULT; Schema: public; Owner: -
-<<<<<<< HEAD
-=======
---
-
-ALTER TABLE ONLY freelancer_portfolios ALTER COLUMN id SET DEFAULT nextval('freelancer_portfolios_id_seq'::regclass);
-
-
---
--- Name: freelancer_references id; Type: DEFAULT; Schema: public; Owner: -
->>>>>>> Create plans and subscription modules
 --
 
 ALTER TABLE ONLY freelancer_portfolios ALTER COLUMN id SET DEFAULT nextval('freelancer_portfolios_id_seq'::regclass);
@@ -1823,17 +1752,6 @@ ALTER TABLE ONLY freelancer_insurances
 
 --
 -- Name: freelancer_portfolios freelancer_portfolios_pkey; Type: CONSTRAINT; Schema: public; Owner: -
-<<<<<<< HEAD
-=======
---
-
-ALTER TABLE ONLY freelancer_portfolios
-    ADD CONSTRAINT freelancer_portfolios_pkey PRIMARY KEY (id);
-
-
---
--- Name: freelancer_references freelancer_references_pkey; Type: CONSTRAINT; Schema: public; Owner: -
->>>>>>> Create plans and subscription modules
 --
 
 ALTER TABLE ONLY freelancer_portfolios
@@ -2068,7 +1986,6 @@ CREATE UNIQUE INDEX index_companies_on_email ON companies USING btree (email);
 
 --
 -- Name: index_companies_on_job_markets; Type: INDEX; Schema: public; Owner: -
-<<<<<<< HEAD
 --
 
 CREATE INDEX index_companies_on_job_markets ON companies USING btree (job_markets);
@@ -2078,17 +1995,6 @@ CREATE INDEX index_companies_on_job_markets ON companies USING btree (job_market
 -- Name: index_companies_on_manufacturer_tags; Type: INDEX; Schema: public; Owner: -
 --
 
-=======
---
-
-CREATE INDEX index_companies_on_job_markets ON companies USING btree (job_markets);
-
-
---
--- Name: index_companies_on_manufacturer_tags; Type: INDEX; Schema: public; Owner: -
---
-
->>>>>>> Create plans and subscription modules
 CREATE INDEX index_companies_on_manufacturer_tags ON companies USING btree (manufacturer_tags);
 
 
@@ -2234,7 +2140,6 @@ CREATE UNIQUE INDEX index_freelancers_on_reset_password_token ON freelancers USI
 
 --
 -- Name: index_freelancers_on_technical_skill_tags; Type: INDEX; Schema: public; Owner: -
-<<<<<<< HEAD
 --
 
 CREATE INDEX index_freelancers_on_technical_skill_tags ON freelancers USING btree (technical_skill_tags);
@@ -2245,11 +2150,6 @@ CREATE INDEX index_freelancers_on_technical_skill_tags ON freelancers USING btre
 --
 
 CREATE INDEX index_friend_invites_on_freelancer_id ON friend_invites USING btree (freelancer_id);
-=======
---
-
-CREATE INDEX index_freelancers_on_technical_skill_tags ON freelancers USING btree (technical_skill_tags);
->>>>>>> Create plans and subscription modules
 
 
 --
@@ -2634,7 +2534,6 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20171017101132'),
 ('20171020113522'),
 ('20171020123018'),
-('20171023181456'),
 ('20171105210413'),
 ('20171113154821'),
 ('20171114170911'),
@@ -2652,12 +2551,6 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20171218020642'),
 ('20171218023711'),
 ('20171222051331'),
-('20180114213233'),
-('20180114214827'),
-('20180114215226'),
-('20180114220148'),
-('20180117114408'),
-('20180117114800'),
 ('20180119214528'),
 ('20180127120826'),
 ('20180127123843'),
@@ -2674,10 +2567,16 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20180301194139'),
 ('20180305202451'),
 ('20180305202656'),
-<<<<<<< HEAD
-<<<<<<< HEAD
 ('20180309165026'),
+('20180311184145'),
+('20180311184319'),
+('20180311185453'),
+('20180311194837'),
+('20180312143559'),
+('20180312192616'),
 ('20180312205533'),
+('20180319115900'),
+('20180319144208'),
 ('20180321172650'),
 ('20180402194248'),
 ('20180404170355'),
@@ -2685,59 +2584,8 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20180413155543'),
 ('20180413190903'),
 ('20180418190453'),
-('20180418195120');
-=======
-=======
-('20180309165026'),
->>>>>>> Comment some lines
-('20180311184145'),
-('20180311184319'),
-('20180311185453'),
-<<<<<<< HEAD
-('20180311194837');
->>>>>>> Create plans and subscription modules
-=======
-('20180311194837'),
-<<<<<<< HEAD
-('20180312143559');
->>>>>>> Add subscription fields to company
-=======
-('20180312143559'),
-<<<<<<< HEAD
-('20180312192616');
->>>>>>> Add AVJ fees to jobs
-=======
-('20180312192616'),
-<<<<<<< HEAD
-<<<<<<< HEAD
-('20180319115900');
->>>>>>> Create currency rate model
-=======
-('20180319115900'),
-('20180319144208');
->>>>>>> Change plan fees column type to decimal to accept new currency rates
-=======
-('20180312205533'),
-('20180319115900'),
-<<<<<<< HEAD
-('20180319144208');
->>>>>>> Comment some lines
-=======
-('20180319144208'),
-<<<<<<< HEAD
-('20180321172650');
->>>>>>> Update secrets file with fixer api key
-=======
-('20180321172650'),
-('20180402194248'),
-('20180404170355'),
-<<<<<<< HEAD
-('20180424155938');
->>>>>>> Add waived job to companies
-=======
-('20180410210448'),
+('20180418195120'),
 ('20180424155938'),
 ('20180424190619');
->>>>>>> Add plan fee to quotes
 
 
