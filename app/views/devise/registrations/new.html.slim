@@ -1,58 +1,29 @@
-h1.center.heading-h1 Register with AV Junction
 - content_for :secondary do
-
-  = simple_form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f|
+  h1.center.heading-h1 = "Register as a #{resource.class}"
+  div class="container-progressbar"
+    ul class="progressbar"
+      li class="active" Step 1
+      li Step 2
+      li Step 3
+      li Step 4
+  = simple_form_for(resource, url: registration_path(resource_name)) do |f|
     = f.error_notification
     .form-inputs
-      .register__account-selector
-        .register__label
-          | Choose the account type you'd like to register:
-        span
-          a href="/freelancer/register"
-            - if resource.class.name.downcase == "freelancer"
-              input type="radio" name="user_type" id="user_type_freelancer" value="freelancer" checked="checked"
-            - else
-              input type="radio" name="user_type" id="user_type_freelancer" value="freelancer"
-            = label :user_type, "freelancer"
-        span
-          a href="/company/register"
-            - if resource.class.name.downcase == "company"
-              input type="radio" name="user_type" id="user_type_company" value="company" checked="checked"
-            - else
-              input type="radio" name="user_type" id="user_type_company" value="company"
-            = label :user_type, "company"
-      .register__label
-        - if resource.class.name.downcase == "company"
-          | Company Name
-        - else
-          | Full Name
-      = f.input :name, as: :string, label: false, required: true, autofocus: true, placeholder: (resource.class.name.downcase == "freelancer" ? "Enter your full name" : "Enter your company name")
+      b REGISTER WITH
+      br/
+      br/
+      a.btn.btn--primary style="display: inline-block"
+        | Linkedin
+      a.btn.btn--secondary style="display: inline-block"
+        | Facebook
+      br/
+      br/
+      b OR
+      br/
+      br/
       .register__label
         | Email Address
       = f.input :email, as: :string, label: false, required: true, autofocus: true, placeholder: "Enter your email address"
-      - if resource.class.name == "Company"
-        .register__label
-          | Contact Name
-        = f.input :contact_name, as: :string, label: false, required: true, autofocus: true, placeholder: "Enter your full name"
-
-      - if resource.class.name != "Admin"
-        .register__label
-          | City
-        = f.input :city, required: true, label: false, placeholder: "Enter your city"
-
-        .register__label
-          | Country
-
-        = f.input :country, required: true, label: false, prompt: "Select Country"
-
-        - if resource.class.name == "Company"
-          .province_line.hidden
-            .register__label
-              | Province
-
-            = f.input :province, required: false, label: false, prompt: "Select Province"
-
-
       .register__label
         | Enter a Password
       = f.input :password, required: true, label: false, placeholder: "Enter a password"
@@ -77,52 +48,20 @@ h1.center.heading-h1 Register with AV Junction
         - elsif error.include?("code of conduct")
           - code_of_conduct_error = true
       span class=(terms_of_service_error == true ? "validation-error" : "")
+      br
         = f.check_box :accept_terms_of_service, required: true
         = " "
-        | I accept the
+        | Accept
         a href="http://www.avjunction.com/term-of-service" target="_blank"
-          | Terms of Service
-      br
-      span class=(privacy_policy_error == true ? "validation-error" : "fine")
-        = f.check_box :accept_privacy_policy, required: true
-        = " "
-        | I accept the
+          | Terms & Conditions ,
         a href="http://www.avjunction.com/privacy-policy" target="_blank"
-          | Privacy Policy
-      br
-      span class=(code_of_conduct_error == true ? "validation-error" : "")
-        = f.check_box :accept_code_of_conduct, required: true
-        = " "
-        | I accept the
+          | Privacy ,
         a href="http://www.avjunction.com/code-of-conduct" target="_blank"
           | Code of Conduct
-
       br
       br
-
 
     .form-actions
-      = f.button :submit, "Register", class: "btn-primary"
+      = f.button :submit, "Save & Continue", class: "btn-primary"
 
   = render "devise/shared/links"
-
-javascript:
- 
-  function toggle_province(country){
-    if (country == "ca"){
-      $(".province_line").removeClass('hidden');
-    }
-    else{
-      $('#company_province').val('');
-      $(".province_line").addClass('hidden');
-    }
-  }
-
-  $(document).ready(function() {
-    if ($('#company_country').val() != ""){
-      toggle_province($('#company_country').val())
-    }
-    $('#company_country').on('change', function(){
-      toggle_province($(this).val())
-    });
-  });

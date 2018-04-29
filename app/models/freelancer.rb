@@ -120,9 +120,6 @@ class Freelancer < ApplicationRecord
 
   validates :years_of_experience, numericality: { only_integer: true }
 
-  validates_presence_of :country, :on => :create
-  validates_presence_of :city, :on => :create
-
   validates :phone_number, length: { minimum: 7 }, allow_blank: true
 
   validates :phone_number, length: { minimum: 7 }, on: :update, allow_blank: true
@@ -141,8 +138,7 @@ class Freelancer < ApplicationRecord
 
   attr_accessor :enforce_profile_edit
 
-    validates_presence_of :name,
-      :email,
+    validates_presence_of :email,
       :address,
       :city,
       :state,
@@ -155,9 +151,15 @@ class Freelancer < ApplicationRecord
       :pay_unit_time_preference,
       if: :enforce_profile_edit
 
+  validates_presence_of :name, :lastname, :company_name, :country, :city, on: :update
+  validates_presence_of :job_types, on: :update, if: :job_info?
+
+  def job_info?
+    registration_step == "profile"
+  end
+
   scope :new_registrants, -> { where(disabled: true) }
 
-  after_create :add_to_hubspot
   after_create :check_for_invites
   after_create :send_welcome_email
 
@@ -319,6 +321,8 @@ class Freelancer < ApplicationRecord
     )
   end
 
+  private
+
   def send_welcome_email
     FreelancerMailer.verify_your_identity(self).deliver_later
   end
@@ -338,4 +342,9 @@ class Freelancer < ApplicationRecord
     end
   end
 
+  protected
+
+  def confirmation_required?
+    registration_step == "wicked_finish"
+  end
 end

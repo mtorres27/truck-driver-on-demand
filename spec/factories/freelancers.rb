@@ -33,5 +33,6 @@ FactoryBot.define do
     password "password"
     country [:es, :fi, :fr, :gb, :pt, :us].sample
     city { Faker::Address.city }
+    company_name { 'avjunction' }
   end
 end

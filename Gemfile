@@ -43,6 +43,7 @@ gem "kaminari", "~> 1.0.1"
 gem "therubyracer", platforms: :ruby
 gem "coderay", "~> 1.1.1"
 gem "redcarpet", "~> 3.4.0"
+gem "wicked"
 gem "wicked_pdf", "~> 1.1.0"
 gem "wkhtmltopdf-binary", "~> 0.12.3.1"
 

@@ -1,0 +1,48 @@
+- content_for :secondary do
+  h1.center.heading-h1 = "Register as a Freelancer"
+  div class="container-progressbar"
+  ul class="progressbar"
+    li class="active completed" Step 1
+    li class="active completed" Step 2
+    li class="active completed" Step 3
+    li class="active" Step 4
+  = simple_form_for(current_freelancer, url: wizard_path) do |f|
+    .grid-cell.grid-cell--33
+      label Profile Picture
+      .freelancer-profile__image style="width: 100px; height: 100px;"
+        = image_tag(@freelancer.avatar_url, id: "freelancer-edit-profile__avatar")
+        .freelancer-profile__image-upload onclick="updateProfilePicture()"
+          span class="zmdi zmdi-camera-add"
+      = f.file_field :avatar, label: false, :accept => 'image/png,image/gif,image/jpeg', id: "edit-freelancer-profile-avatar", class: "file-input--hidden"
+    .grid-cell.grid-cell--67
+      .grid-v
+        .grid-cell.grid-cell--100
+          = f.input :tagline, required: true, label: "Tagline", placeholder: "Enter your tagline"
+        .grid-cell.grid-cell--100.grid-cell--expand
+          = f.input :bio, required: true, label: "Biography", placeholder: "Write a bio", :input_html => { :class => 'form__profile-bio-textarea' }
+    .buttons
+      = f.button :submit, "Skip & Register", class: "btn btn--secondary"
+      = f.button :submit, "Complete Registration", class: "btn btn--primary"
+
+javascript:
+   var updateProfilePicture = function() {
+    $("#edit-freelancer-profile-avatar").click();
+    $("#edit-freelancer-profile-avatar").on('change', function() {
+      var imgPath = $(this)[0].value;
+      var extn = imgPath.substring(imgPath.lastIndexOf('.') + 1).toLowerCase();
+      var image_holder = $("#freelancer-edit-profile__avatar");
+
+      if (extn == "gif" || extn == "png" || extn == "jpg" || extn == "jpeg") {
+        if (typeof (FileReader) != "undefined") {
+          var reader = new FileReader();
+          reader.onload = function (e) {
+            image_holder.attr('src', e.target.result)
+          }
+
+          reader.readAsDataURL($(this)[0].files[0]);
+        }
+      } else {
+        alert("Only images can be selected.");
+      }
+    });
+  }
