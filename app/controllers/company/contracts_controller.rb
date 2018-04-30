@@ -7,6 +7,7 @@ class Company::ContractsController < Company::BaseController
       quote = @job.accepted_quote
       freelancer = @job.freelancer
       payments = @job.payments
+
       avj_fees = freelancer.special_avj_fees || Rails.configuration.avj_fees
       avj_credit_available = @job.currency == 'usd' ? freelancer.avj_credit.to_f : CurrencyExchange.dollars_to_currency(freelancer.avj_credit.to_f, @job.currency)
       if quote.amount * avj_fees <= avj_credit_available
@@ -22,11 +23,10 @@ class Company::ContractsController < Company::BaseController
       amount = (quote.amount * (1 + (@job.applicable_sales_tax / 100)))
       stripe_fees = amount * 0.029 + CurrencyExchange.dollars_to_currency(0.3, @job.currency)
       plan_fees = @job.company_plan_fees
-      platform_fees = (((quote.amount * avj_fees) - avj_credit_used) - stripe_fees + plan_fees - stripe_fees)
+      platform_fees = (((quote.amount * avj_fees) - avj_credit_used) - stripe_fees + plan_fees)
       if platform_fees < 0
         platform_fees = 0
       end
-      # TODO: calculate taxes on app fees
 
       charge = Stripe::Charge.create({
         amount: (amount * 100).floor ,
@@ -40,7 +40,7 @@ class Company::ContractsController < Company::BaseController
       @job.stripe_balance_transaction_id = charge[:balance_transaction]
       @job.save
 
-      quote.avj_fees = quote.amount * avj_fees
+      quote.avj_fees = (quote.amount * Rails.configuration.avj_fees)
       quote.stripe_fees = stripe_fees
       # quote.plan_fee = plan_fees
       quote.net_avj_fees = platform_fees

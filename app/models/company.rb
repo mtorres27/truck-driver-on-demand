@@ -181,12 +181,7 @@ class Company < ApplicationRecord
       :established_in,
       if: :enforce_profile_edit
 
-  before_create :start_trial
 
-  def start_trial
-    self.subscription_status = "trialing"
-    self.billing_period_ends_at = (Time.now + 3.months).to_datetime
-  end
 
   after_create :add_to_hubspot
 
