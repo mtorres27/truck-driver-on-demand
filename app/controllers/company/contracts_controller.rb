@@ -7,9 +7,9 @@ class Company::ContractsController < Company::BaseController
       quote = @job.accepted_quote
       freelancer = @job.freelancer
       payments = @job.payments
-
       avj_fees = freelancer.special_avj_fees || Rails.configuration.avj_fees
-      avj_credit_available = @job.currency == 'usd' ? freelancer.avj_credit.to_f : CurrencyExchange.dollars_to_currency(freelancer.avj_credit.to_f, @job.currency)
+      currency_rate = CurrencyExchange.get_currency_rate(@job.currency)
+      avj_credit_available = @job.currency == 'usd' ? freelancer.avj_credit.to_f : freelancer.avj_credit.to_f * currency_rate
       if quote.amount * avj_fees <= avj_credit_available
         avj_credit_used = quote.amount * avj_fees
       else
@@ -18,10 +18,10 @@ class Company::ContractsController < Company::BaseController
       if @job.currency == 'usd'
         freelancer.update_attribute(:avj_credit, freelancer.avj_credit.to_f - avj_credit_used)
       else
-        freelancer.update_attribute(:avj_credit, freelancer.avj_credit.to_f - CurrencyExchange.currency_to_dollars(avj_credit_used, @job.currency))
+        freelancer.update_attribute(:avj_credit, freelancer.avj_credit.to_f - (avj_credit_used / currency_rate))
       end
       amount = (quote.amount * (1 + (@job.applicable_sales_tax / 100)))
-      stripe_fees = amount * 0.029 + CurrencyExchange.dollars_to_currency(0.3, @job.currency)
+      stripe_fees = amount * 0.029 + (0.3 * currency_rate)
       plan_fees = @job.company_plan_fees
       platform_fees = (((quote.amount * avj_fees) - avj_credit_used) - stripe_fees + plan_fees)
       if platform_fees < 0
@@ -73,7 +73,7 @@ class Company::ContractsController < Company::BaseController
       PaymentsMailer.notice_funds_company(current_company, freelancer, @job).deliver_later
       if avj_credit_used > 0
         if @job.currency != 'usd'
-          avj_credit_used = CurrencyExchange.currency_to_dollars(avj_credit_used, @job.currency)
+          avj_credit_used = (avj_credit_used / currency_rate)
         end
         FreelancerMailer.notice_credit_used(freelancer, avj_credit_used.floor).deliver_later
       end
