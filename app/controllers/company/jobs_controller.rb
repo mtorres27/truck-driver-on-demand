@@ -1,5 +1,5 @@
 class Company::JobsController < Company::BaseController
-  before_action :set_job, only: [:print_avj_invoice, :avj_invoice, :show, :edit, :update, :destroy, :contract, :edit_contract, :update_contract, :publish]
+  before_action :set_job, only: [:contract_invoice, :print_avj_invoice, :avj_invoice, :show, :edit, :update, :destroy, :contract, :edit_contract, :update_contract, :publish]
   before_action :set_company, only: [:edit, :new, :create, :update]
 
   def job_countries
@@ -14,6 +14,10 @@ class Company::JobsController < Company::BaseController
 
   def print_avj_invoice
 
+  end
+
+  def contract_invoice
+    @accepted_quote = @job.accepted_quote
   end
 
   def new

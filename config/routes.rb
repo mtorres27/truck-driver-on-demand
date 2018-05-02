@@ -120,6 +120,7 @@ Rails.application.routes.draw do
         post 'contract_pay' => 'contracts#contract_pay'
       end
       resource :review, only: [:show, :create]
+      get :contract_invoice, on: :member
     end
 
     get "jobs/:id/publish", to: "jobs#publish"
