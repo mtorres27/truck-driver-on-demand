@@ -8,9 +8,8 @@
   - sign_in_count = -1
 
 - if sign_in_count <= 1000000000 and sign_in_count > -1 and has_seen_onboarding == false
-  -if current_freelancer.registration_step == "wicked_finish"
+  -if current_freelancer.registration_completed?
     - set_has_seen_onboarding
-    - if !current_freelancer.nil?
       .onboarding-container
         .onboarding-navbar
           a.modal-close.w-inline-block href="#"
@@ -24,19 +23,19 @@
             .btn.btn--primary onClick="showFreelancerProfile()"
               | Build a killer profile
 
-    - elsif !current_company.nil?
-      .onboarding-container
-        .onboarding-navbar
-          a.modal-close.w-inline-block href="#"
-          span class="fa fa-close" onClick="hideOnboard()"
-        .onboarding-content-container
-          .onboarding-content
-            h1.onboarding-title Welcome to AV Junction
-            p Finding great talent to fulfill the overwhelming new business you've just landed is difficult—that’s why we created AV Junction—to empower you with access to hundreds of AV professionals from around the world.
-            p You're going global, Cali today, NYC tomorrow… we know what you’re thinking. But before we get ahead of ourselves we’ll need put your best foot forward and create a killer profile to attract the best talent.
-            p Ready? Let’s do it.
-            .btn.btn--primary onClick="showCompanyProfile()"
-              | Build a killer profile
+  - elsif !current_company.nil?
+    .onboarding-container
+      .onboarding-navbar
+        a.modal-close.w-inline-block href="#"
+        span class="fa fa-close" onClick="hideOnboard()"
+      .onboarding-content-container
+        .onboarding-content
+          h1.onboarding-title Welcome to AV Junction
+          p Finding great talent to fulfill the overwhelming new business you've just landed is difficult—that’s why we created AV Junction—to empower you with access to hundreds of AV professionals from around the world.
+          p You're going global, Cali today, NYC tomorrow… we know what you’re thinking. But before we get ahead of ourselves we’ll need put your best foot forward and create a killer profile to attract the best talent.
+          p Ready? Let’s do it.
+          .btn.btn--primary onClick="showCompanyProfile()"
+            | Build a killer profile
 
   javascript:
     var hideOnboard = function() {

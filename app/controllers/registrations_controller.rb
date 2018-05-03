@@ -3,7 +3,7 @@ class RegistrationsController < Devise::RegistrationsController
 
   def after_sign_up_path_for(resource)
     if resource.class.name == "Freelancer"
-      freelancer_registration_step_path(:personal)
+      freelancer_registration_steps_path
     end
   end
 end

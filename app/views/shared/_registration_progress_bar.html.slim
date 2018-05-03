@@ -1,0 +1,33 @@
+div class="container-progressbar"
+    ul class="progressbar"
+      - if step > 1
+        - css_class = "active completed"
+      - elsif step == 1
+        - css_class = "active"
+      - else
+        - css_class = ""
+      li class="#{css_class}" Step 1
+
+      - if step > 2
+        - css_class = "active completed"
+      - elsif step == 2
+        - css_class = "active"
+      - else
+        - css_class = ""
+      li class="#{css_class}" Step 2
+
+      - if step > 3
+        - css_class = "active completed"
+      - elsif step == 3
+        - css_class = "active"
+      - else
+        - css_class = ""
+      li class="#{css_class}" Step 3
+
+      - if step > 4
+        - css_class = "active completed"
+      - elsif step == 4
+        - css_class = "active"
+      - else
+        - css_class = ""
+      li class="#{css_class}" Step 4

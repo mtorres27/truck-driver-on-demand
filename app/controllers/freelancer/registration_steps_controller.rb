@@ -8,11 +8,14 @@ class Freelancer::RegistrationStepsController < ApplicationController
       render_wizard
     end
 
+    def index
+      redirect_to freelancer_registration_step_path(:personal)
+    end
+
     def update
       @freelancer = current_freelancer
       @freelancer.attributes = params[:freelancer] ? freelancer_params : {}
       @freelancer.registration_step = next_step
-      @freelancer.add_to_hubspot if step == "personal"
       render_wizard @freelancer
     end
 
