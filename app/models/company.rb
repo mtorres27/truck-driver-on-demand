@@ -150,12 +150,14 @@ class Company < ApplicationRecord
 
   scope :new_registrants, -> { where(disabled: true) }
 
+  after_create :add_to_hubspot
+
   def freelancers
     Freelancer.
-    joins(applicants: :job).
-    where(jobs: { company_id: id }).
-    where(applicants: { state: :accepted }).
-    order(:name)
+      joins(applicants: :job).
+      where(jobs: { company_id: id }).
+      where(applicants: { state: :accepted }).
+      order(:name)
   end
 
   def renew_month
@@ -181,49 +183,6 @@ class Company < ApplicationRecord
       :established_in,
       if: :enforce_profile_edit
 
-
-
-  after_create :add_to_hubspot
-
-  def add_to_hubspot
-    api_key = "5c7ad391-2bfe-4d11-9ba3-82b5622212ba"
-    url = "https://api.hubapi.com/contacts/v1/contact/createOrUpdate/email/#{email}/?hapikey=#{api_key}"
-    uri = URI.parse(url)
-    http = Net::HTTP.new(uri.host, uri.port)
-    http.use_ssl = true if uri.scheme == 'https'
-    req = Net::HTTP::Post.new uri
-    data = {
-      properties: [
-        {
-          property: "email",
-          value: email
-        },
-        {
-          property: 'company',
-          value: name
-        },
-        {
-          property: "firstname",
-          value: contact_name.split(" ")[0]
-        },
-        {
-          property: "lastname",
-          value: contact_name.split(" ")[1]
-        },
-        {
-          property: "lifecyclestage",
-          value: "customer"
-        },
-        {
-          property: "im_an",
-          value: "AV Company"
-        },
-      ]
-    }
-
-    req.body = data.to_json
-    res = http.start { |http| http.request req }
-  end
 
   # def province=(value)
   #   write_attribute(:state, value)
@@ -253,70 +212,82 @@ class Company < ApplicationRecord
   }
 
 
-    attr_accessor :user_type
-    # We want to populate both name and contact_name on sign up
-    before_validation :set_contact_name, on: :create
-    def set_contact_name
-      self.contact_name = name unless contact_name
+  attr_accessor :user_type
+  # We want to populate both name and contact_name on sign up
+  before_validation :set_contact_name, on: :create
+  def set_contact_name
+    self.contact_name = name unless contact_name
+  end
+
+  def rating
+    if company_reviews.count > 0
+      company_reviews.average("(#{CompanyReview::RATING_ATTRS.map(&:to_s).join('+')}) / #{CompanyReview::RATING_ATTRS.length}").round
+    else
+      return nil
+    end
+  end
+
+  def self.avg_rating(company)
+    if company.company_reviews_count == 0
+      return nil
     end
 
-    def rating
-      if company_reviews.count > 0
-        company_reviews.average("(#{CompanyReview::RATING_ATTRS.map(&:to_s).join('+')}) / #{CompanyReview::RATING_ATTRS.length}").round
-      else
-        return nil
+    return company.rating
+  end
+
+  after_save :check_if_should_do_geocode
+  def check_if_should_do_geocode
+    if saved_changes.include?("address") or saved_changes.include?("city") or (!address.nil? and lat.nil?) or (!city.nil? and lat.nil?)
+      do_geocode
+      update_columns(lat: lat, lng: lng)
+    end
+  end
+
+  def reject_featured_projects(attrs)
+    exists = attrs["id"].present?
+    empty = attrs["file"].blank? and attrs["name"].blank?
+    !exists and empty
+  end
+
+  def reject_company_installs(attrs)
+    exists = attrs["id"].present?
+    empty = attrs["year"].blank? and attrs["installs"].blank
+    !exists and empty
+  end
+
+  def job_markets_for_job_type(job_type)
+    all_job_markets = I18n.t("enumerize.#{job_type}_job_markets")
+    return [] unless all_job_markets.kind_of?(Hash)
+    freelancer_job_markets = []
+    job_markets.each do |index, value|
+      if all_job_markets[index.to_sym]
+        freelancer_job_markets << all_job_markets[index.to_sym]
       end
     end
+    freelancer_job_markets
+  end
 
-    def self.avg_rating(company)
-      if company.company_reviews_count == 0
-        return nil
-      end
+  def self.do_all_geocodes
+    Company.all.each do |f|
+      p "Doing geocode for " + f.id.to_s + "(#{f.compile_address})"
+      f.do_geocode
+      f.update_columns(lat: f.lat, lng: f.lng)
 
-      return company.rating
+      sleep 1
     end
+  end
 
-    after_save :check_if_should_do_geocode
-    def check_if_should_do_geocode
-      if saved_changes.include?("address") or saved_changes.include?("city") or (!address.nil? and lat.nil?) or (!city.nil? and lat.nil?)
-        do_geocode
-        update_columns(lat: lat, lng: lng)
-      end
-    end
+  private
 
-    def reject_featured_projects(attrs)
-      exists = attrs["id"].present?
-      empty = attrs["file"].blank? and attrs["name"].blank?
-      !exists and empty
-    end
-
-    def reject_company_installs(attrs)
-      exists = attrs["id"].present?
-      empty = attrs["year"].blank? and attrs["installs"].blank
-      !exists and empty
-    end
-
-    def job_markets_for_job_type(job_type)
-      all_job_markets = I18n.t("enumerize.#{job_type}_job_markets")
-      return [] unless all_job_markets.kind_of?(Hash)
-      freelancer_job_markets = []
-      job_markets.each do |index, value|
-        if all_job_markets[index.to_sym]
-          freelancer_job_markets << all_job_markets[index.to_sym]
-        end
-      end
-      freelancer_job_markets
-    end
-
-    def self.do_all_geocodes
-      Company.all.each do |f|
-        p "Doing geocode for " + f.id.to_s + "(#{f.compile_address})"
-        f.do_geocode
-        f.update_columns(lat: f.lat, lng: f.lng)
-
-        sleep 1
-      end
-    end
+  def add_to_hubspot
+    Hubspot::Contact.createOrUpdate(email,
+      company: name,
+      firstname: contact_name.split(" ")[0],
+      lastname: contact_name.split(" ")[1],
+      lifecyclestage: "customer",
+      im_am: "AV Company",
+    )
+  end
 
   # This SQL needs to stay exactly in sync with it's related index (index_on_companies_location)
   # otherwise the index won't be used. (don't even add whitespace!)

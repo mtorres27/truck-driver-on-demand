@@ -149,7 +149,6 @@ class Freelancer < ApplicationRecord
       :postal_code,
       :country,
       :freelancer_type,
-      :country,
       :service_areas,
       :bio,
       :years_of_experience,
@@ -324,40 +323,13 @@ class Freelancer < ApplicationRecord
 
   private
 
-  # TODO: Needs refactor
   def add_to_hubspot
-    api_key = "5c7ad391-2bfe-4d11-9ba3-82b5622212ba"
-    url = "https://api.hubapi.com/contacts/v1/contact/createOrUpdate/email/#{email}/?hapikey=#{api_key}"
-    uri = URI.parse(url)
-    http = Net::HTTP.new(uri.host, uri.port)
-    http.use_ssl = true if uri.scheme == 'https'
-    req = Net::HTTP::Post.new uri
-    data = {
-        properties: [
-            {
-                property: "email",
-                value: email
-            },
-            {
-                property: "firstname",
-                value: name.split(" ")[0]
-            },
-            {
-                property: "lastname",
-                value: name.split(" ")[1]
-            },
-            {
-                property: "lifecyclestage",
-                value: "customer"
-            },
-            {
-                property: "im_an",
-                value: "AV Freelancer"
-            },
-        ]
-    }
-    req.body = data.to_json
-    res = http.start { |http| http.request req }
+    Hubspot::Contact.createOrUpdate(email,
+      firstname: name.split(" ")[0],
+      lastname: name.split(" ")[1],
+      lifecyclestage: "customer",
+      im_am: "AV Freelancer",
+    )
   end
 
   def send_welcome_email
@@ -366,6 +338,7 @@ class Freelancer < ApplicationRecord
 
   def check_for_invites
     return if FriendInvite.by_email(email).count.zero?
+
     self.avj_credit = 20
     save!
     FreelancerMailer.notice_credit_earned(self, 20).deliver_later
@@ -377,4 +350,5 @@ class Freelancer < ApplicationRecord
       FreelancerMailer.notice_credit_earned(freelancer, 50).deliver_later
     end
   end
+
 end
