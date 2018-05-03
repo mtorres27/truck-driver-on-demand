@@ -46,6 +46,9 @@ gem "redcarpet", "~> 3.4.0"
 gem "wicked_pdf", "~> 1.1.0"
 gem "wkhtmltopdf-binary", "~> 0.12.3.1"
 
+# Services
+gem "rollbar"
+
 # Images
 gem "carrierwave", "~> 1.0.0"
 gem "shrine", "~> 2.6.1"
