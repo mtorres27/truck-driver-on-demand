@@ -5,10 +5,10 @@
     .form-inputs
       .register__label
         | First Name
-        = f.input :name, as: :string, label: false, required: true, autofocus: true, placeholder:  "Enter your first name"
+        = f.input :first_name, as: :string, label: false, required: true, autofocus: true, placeholder:  "Enter your first name"
       .register__label
         | Last Name
-        = f.input :lastname, as: :string, label: false, required: true, autofocus: true, placeholder:  "Enter your last name"
+        = f.input :last_name, as: :string, label: false, required: true, autofocus: true, placeholder:  "Enter your last name"
       .register__label
         | Company Name
         = f.input :company_name, as: :string, label: false, required: true, autofocus: true, placeholder:  "Enter your company name"

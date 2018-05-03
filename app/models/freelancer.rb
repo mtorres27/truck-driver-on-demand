@@ -71,7 +71,6 @@ require 'net/http'
 require 'uri'
 
 class Freelancer < ApplicationRecord
-  after_initialize :set_defaults
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
   devise :database_authenticatable, :registerable,
@@ -152,7 +151,17 @@ class Freelancer < ApplicationRecord
       :pay_unit_time_preference,
       if: :enforce_profile_edit
 
-  validates :name, :lastname, :country, :city, presence: true, on: :update
+  attr_accessor :first_name, :last_name
+
+  before_save :set_name, if: :step_job_info?
+
+  def set_name
+    if self.name.nil?
+      self.name = [first_name, last_name].join(' ')
+    end
+  end
+
+  validates :first_name, :last_name, :country, :city, presence: true, on: :update,  if: :step_job_info?
 
   validates :job_types, presence: true, on: :update, if: :step_profile?
 
@@ -161,6 +170,7 @@ class Freelancer < ApplicationRecord
   after_create :check_for_invites
   after_create :send_welcome_email
   after_update :add_to_hubspot, if: :step_job_info?
+  after_initialize :set_default_step
 
   pg_search_scope :search, against: {
     name: "A",
@@ -309,6 +319,10 @@ class Freelancer < ApplicationRecord
     end
   end
 
+  def registration_completed?
+    registration_step == "wicked_finish"
+  end
+
   private
 
   def add_to_hubspot
@@ -319,12 +333,6 @@ class Freelancer < ApplicationRecord
       im_am: "AV Freelancer",
     )
   end
-
-  def registration_completed?
-    registration_step == "wicked_finish"
-  end
-
-  private
 
   def send_welcome_email
     FreelancerMailer.verify_your_identity(self).deliver_later
@@ -353,8 +361,8 @@ class Freelancer < ApplicationRecord
     registration_step == "job_info"
   end
 
-  def set_defaults
-    self.registration_step = "personal" if self.new_record?
+  def set_default_step
+    self.registration_step ||= "personal"
   end
 
   protected

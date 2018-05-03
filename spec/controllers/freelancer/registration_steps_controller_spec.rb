@@ -9,30 +9,34 @@ RSpec.describe Freelancer::RegistrationStepsController, type: :controller do
     end
 
     describe "step: personal" do
+      render_views
       context "when the fields are filled" do
-        let(:freelancer_params) do
-          {
-            name: "Test",
-            lastname: "Testerson",
-            city: "Chicago",
-            country: "us",
-          }
-        end
+        let(:freelancer_params) { { first_name: "Test", last_name: "Testerson", city: "Chicago", country: "us" } }
 
         it "updates personal information" do
           put :update, params: { id: :personal, freelancer: freelancer_params }
-          expect(freelancer.reload).to have_attributes(freelancer_params)
+          expect(freelancer.reload).to have_attributes( { name: "Test Testerson", city: "Chicago", country: "us" })
+        end
+
+        it "redirects to job info path" do
+          put :update, params: { id: :personal, freelancer: freelancer_params }
+          expect(response).to redirect_to(freelancer_registration_step_path(:job_info))
+        end
+
+        it "re-renders to job info page" do
+          put :update, params: { id: :personal, freelancer: freelancer_params }
+          expect(response).to render_template("registration_steps/job_info.html.slim")
         end
       end
 
       context "when the fields are not filled" do
-        let(:freelancer) { create(:freelancer, name: nil, lastname: nil, city: nil, country: nil) }
+        let(:freelancer) { create(:freelancer, name: nil, last_name: nil, city: nil, country: nil) }
         let(:freelancer_params) { {} }
 
         it "does not update personal information" do
           put :update, params: { id: :personal, freelancer: freelancer_params }
           expect(freelancer.reload.name).to be_nil
-          expect(freelancer.reload.lastname).to be_nil
+          expect(freelancer.reload.last_name).to be_nil
           expect(freelancer.reload.city).to be_nil
           expect(freelancer.reload.country).to be_nil
         end

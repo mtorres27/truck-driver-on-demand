@@ -21,8 +21,8 @@ class Freelancer::RegistrationStepsController < ApplicationController
 
     def freelancer_params
       params.require(:freelancer).permit(
-        :name,
-        :lastname,
+        :first_name,
+        :last_name,
         :city,
         :company_name,
         :country,

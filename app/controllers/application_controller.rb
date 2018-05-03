@@ -11,14 +11,15 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  def after_inactive_sign_up_path_for(resource)
+    cookies.delete(:onboarding)
+    '/confirm_email'
+  end
+
   def after_sign_in_path_for(resource)
-    if resource.class.name == "Freelancer"
-      case
-      when resource.registration_step ==  "personal" then freelancer_registration_step_path(:personal)
-      when resource.registration_step ==  "job_info" then freelancer_registration_step_path(:job_info)
-      when resource.registration_step ==  "profile" then freelancer_registration_step_path(:profile)
-      else freelancer_root_path
-      end
+    if resource.is_a?(Freelancer)
+      return freelancer_root_path if resource.registration_completed?
+      return freelancer_registration_step_path(resource.registration_step)
     end
   end
 
