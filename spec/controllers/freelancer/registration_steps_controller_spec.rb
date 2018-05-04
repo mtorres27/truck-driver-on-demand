@@ -1,6 +1,21 @@
 require "rails_helper"
 
 RSpec.describe Freelancer::RegistrationStepsController, type: :controller do
+  describe "GET #show" do
+    let(:freelancer) { create(:freelancer) }
+
+    before do
+      sign_in freelancer
+    end
+
+    describe "step: personal" do
+      it "renders personal template" do
+        get :show, params: { id: :personal }
+        expect(response).to render_template('freelancer/registration_steps/personal')
+      end
+    end
+  end
+
   describe "PUT #update" do
     let(:freelancer) { create(:freelancer) }
 
@@ -9,7 +24,6 @@ RSpec.describe Freelancer::RegistrationStepsController, type: :controller do
     end
 
     describe "step: personal" do
-      render_views
       context "when the fields are filled" do
         let(:freelancer_params) { { first_name: "Test", last_name: "Testerson", city: "Chicago", country: "us" } }
 
@@ -21,11 +35,6 @@ RSpec.describe Freelancer::RegistrationStepsController, type: :controller do
         it "redirects to job info path" do
           put :update, params: { id: :personal, freelancer: freelancer_params }
           expect(response).to redirect_to(freelancer_registration_step_path(:job_info))
-        end
-
-        it "re-renders to job info page" do
-          put :update, params: { id: :personal, freelancer: freelancer_params }
-          expect(response).to render_template("registration_steps/job_info.html.slim")
         end
       end
 
