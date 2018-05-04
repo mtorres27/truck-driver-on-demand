@@ -1,0 +1,90 @@
+version: 2
+jobs:
+  build:
+    working_directory: ~/repo
+
+    docker:
+       - image: circleci/ruby:2.4.1-node
+         environment:
+            PG_HOST: localhost
+            PG_USER: postgres
+            RAILS_ENV: test
+            RACK_ENV: test
+       - image: mdillon/postgis:9.6
+         environment:
+            POSTGRES_DB: avj_test
+            POSTGRES_USER: postgres
+
+    steps:
+      - checkout
+
+      - run:
+          name: Install rmagick dependencies
+          command: sudo apt-get install imagemagick
+
+      - run:
+          name: Install PG Client
+          command: |
+            echo 'deb http://apt.postgresql.org/pub/repos/apt/ jessie-pgdg main' | sudo tee /etc/apt/sources.list.d/pgdg.list > /dev/null
+            wget --no-check-certificate -q https://www.postgresql.org/media/keys/ACCC4CF8.asc -O- | sudo -u root apt-key add -
+            sudo apt-get update
+            sudo apt-get install postgresql-9.6 postgresql-client-9.6
+
+      - run:
+          name: Create Secrets file
+          command: |
+            mv config/secrets.yml.ci.enc config/secrets.yml.enc
+            mv config/secrets.yml.ci.key config/secrets.yml.key
+
+      - run:
+          name: Create DB config file
+          command: mv config/database.ci.yml config/database.yml
+
+      # Download and cache dependencies
+      - restore_cache:
+          keys:
+          - v1-dependencies-{{ checksum "Gemfile.lock" }}
+          # fallback to using the latest cache if no exact match is found
+          - v1-dependencies-
+
+      - run:
+          name: Install latest version of Bundler
+          command: gem install bundler
+
+      - run:
+          name: Install dependencies
+          command: bundle check --path=vendor/bundle || bundle install --path=vendor/bundle --jobs 4 --retry 3
+
+      - save_cache:
+          key: v1-dependencies-{{ checksum "Gemfile.lock" }}
+          paths:
+            - ./vendor/bundle
+
+      - run:
+          name: Database setup
+          command: |
+            bundle exec rails db:drop
+            bundle exec rails db:create
+            bundle exec rails db:migrate
+          environment:
+            DATABASE_URL: "postgres://postgres@localhost:5432/avj_test"
+
+      # run tests!
+      - run:
+          name: Run rspec tests
+          command: |
+            mkdir /tmp/test-results
+            TEST_FILES="$(circleci tests glob "spec/**/*_spec.rb" | circleci tests split --split-by=timings)"
+
+            bundle exec rspec --format documentation \
+                            --format RspecJunitFormatter \
+                            --out /tmp/test-results/rspec.xml \
+                            $TEST_FILES
+
+      # collect reports
+      - store_test_results:
+          path: /tmp/test-results
+
+      - store_artifacts:
+          path: /tmp/test-results
+          destination: test-results

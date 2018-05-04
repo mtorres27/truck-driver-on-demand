@@ -47,6 +47,9 @@ gem "wicked"
 gem "wicked_pdf", "~> 1.1.0"
 gem "wkhtmltopdf-binary", "~> 0.12.3.1"
 
+# Services
+gem "rollbar"
+
 # Images
 gem "carrierwave", "~> 1.0.0"
 gem "shrine", "~> 2.6.1"
@@ -106,6 +109,7 @@ group :test do
   gem "vcr"
   gem "webmock"
   gem "cucumber"
+  gem "rspec_junit_formatter"
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
