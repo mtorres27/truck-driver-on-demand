@@ -830,7 +830,8 @@ CREATE TABLE freelancers (
     manufacturer_tags citext,
     special_avj_fees numeric(10,2),
     avj_credit numeric(10,2) DEFAULT NULL::numeric,
-    registration_step character varying
+    registration_step character varying,
+    province character varying
 );
 
 

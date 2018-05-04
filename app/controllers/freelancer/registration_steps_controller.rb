@@ -26,6 +26,7 @@ class Freelancer::RegistrationStepsController < ApplicationController
         :city,
         :company_name,
         :country,
+        :province,
         :avatar,
         :bio,
         :tagline,
