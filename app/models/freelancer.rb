@@ -126,47 +126,32 @@ class Freelancer < ApplicationRecord
 
   audited
 
-  def connected?; !stripe_account_id.nil?; end
-
-  attr_accessor :accept_terms_of_service
-  attr_accessor :accept_privacy_policy
-  attr_accessor :accept_code_of_conduct
+  attr_accessor :first_name, :last_name, :accept_terms_of_service, :accept_privacy_policy,
+                :accept_code_of_conduct, :enforce_profile_edit, :user_type
 
   validates_acceptance_of :accept_terms_of_service
   validates_acceptance_of :accept_privacy_policy
   validates_acceptance_of :accept_code_of_conduct
 
-  attr_accessor :enforce_profile_edit
-
-    validates_presence_of :email,
-      :address,
-      :city,
-      :state,
-      :postal_code,
-      :country,
-      :freelancer_type,
-      :service_areas,
-      :bio,
-      :years_of_experience,
-      :pay_unit_time_preference,
-      if: :enforce_profile_edit
-
-  attr_accessor :first_name, :last_name
-
-  before_save :set_name, if: :step_job_info?
-
-  def set_name
-    if self.name.nil?
-      self.name = [first_name, last_name].join(' ')
-    end
-  end
+  validates_presence_of :email,
+    :address,
+    :city,
+    :state,
+    :postal_code,
+    :country,
+    :freelancer_type,
+    :service_areas,
+    :bio,
+    :years_of_experience,
+    :pay_unit_time_preference,
+    if: :enforce_profile_edit
 
   validates :first_name, :last_name, :country, :city, presence: true, on: :update,  if: :step_job_info?
-
   validates :job_types, presence: true, on: :update, if: :step_profile?
 
   scope :new_registrants, -> { where(disabled: true) }
 
+  before_save :set_name, if: :step_job_info?
   after_create :check_for_invites
   after_create :send_welcome_email
   after_update :add_to_hubspot, if: :step_job_info?
@@ -217,7 +202,9 @@ class Freelancer < ApplicationRecord
     :at, :au, :be, :ca, :ch, :de, :dk, :es, :fi, :fr, :gb, :hk, :ie, :it, :jp, :lu, :nl, :no, :nz, :pt, :se, :sg, :us
   ]
 
-  attr_accessor :user_type
+  def connected?
+    !stripe_account_id.nil?
+  end
 
   def rating
     if freelancer_reviews.count > 0
@@ -363,6 +350,10 @@ class Freelancer < ApplicationRecord
 
   def set_default_step
     self.registration_step ||= "personal"
+  end
+
+  def set_name
+    self.name ||= "#{first_name} #{last_name}"
   end
 
   protected

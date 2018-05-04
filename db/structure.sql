@@ -1,8 +1,8 @@
 SET statement_timeout = 0;
 SET lock_timeout = 0;
+SET idle_in_transaction_session_timeout = 0;
 SET client_encoding = 'UTF8';
 SET standard_conforming_strings = on;
-SELECT pg_catalog.set_config('search_path', '', false);
 SET check_function_bodies = false;
 SET client_min_messages = warning;
 SET row_security = off;
@@ -48,6 +48,8 @@ CREATE EXTENSION IF NOT EXISTS postgis WITH SCHEMA public;
 
 COMMENT ON EXTENSION postgis IS 'PostGIS geometry, geography, and raster spatial types and functions';
 
+
+SET search_path = public, pg_catalog;
 
 SET default_tablespace = '';
 
@@ -331,6 +333,12 @@ CREATE TABLE companies (
     last_sign_in_at timestamp without time zone,
     current_sign_in_ip inet,
     last_sign_in_ip inet,
+    header_color character varying DEFAULT 'FF6C38'::character varying,
+    country character varying,
+    confirmation_token character varying,
+    confirmed_at timestamp without time zone,
+    confirmation_sent_at timestamp without time zone,
+    header_source character varying DEFAULT 'color'::character varying,
     stripe_customer_id character varying,
     stripe_subscription_id character varying,
     stripe_plan_id character varying,
@@ -342,12 +350,6 @@ CREATE TABLE companies (
     card_brand character varying,
     exp_month character varying,
     exp_year character varying,
-    header_color character varying DEFAULT 'FF6C38'::character varying,
-    country character varying,
-    confirmation_token character varying,
-    confirmed_at timestamp without time zone,
-    confirmation_sent_at timestamp without time zone,
-    header_source character varying DEFAULT 'color'::character varying,
     province character varying,
     sales_tax_number character varying,
     line2 character varying,
@@ -776,13 +778,13 @@ CREATE TABLE freelancers (
     stripe_account_id character varying,
     stripe_account_status text,
     currency character varying,
+    phone_number character varying,
     sales_tax_number character varying,
     line2 character varying,
     state character varying,
     postal_code character varying,
     service_areas character varying,
     city character varying,
-    phone_number character varying,
     profile_score smallint,
     valid_driver boolean,
     own_tools boolean,
@@ -791,6 +793,7 @@ CREATE TABLE freelancers (
     job_types citext,
     job_functions citext,
     manufacturer_tags citext,
+    special_avj_fees numeric(10,2),
     avj_credit numeric(10,2) DEFAULT NULL::numeric,
     registration_step character varying
 );
@@ -996,10 +999,10 @@ CREATE TABLE jobs (
     stripe_balance_transaction_id character varying,
     funds_available_on integer,
     funds_available boolean DEFAULT false,
+    contracted_at timestamp without time zone,
     job_type citext,
     job_market citext,
-    manufacturer_tags citext,
-    contracted_at timestamp without time zone
+    manufacturer_tags citext
 );
 
 
@@ -1278,210 +1281,210 @@ ALTER SEQUENCE users_id_seq OWNED BY users.id;
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: admins id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY admins ALTER COLUMN id SET DEFAULT nextval('admins_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: applicants id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY applicants ALTER COLUMN id SET DEFAULT nextval('applicants_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: attachments id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY attachments ALTER COLUMN id SET DEFAULT nextval('attachments_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: audits id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY audits ALTER COLUMN id SET DEFAULT nextval('audits_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: certifications id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY certifications ALTER COLUMN id SET DEFAULT nextval('certifications_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: change_orders id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY change_orders ALTER COLUMN id SET DEFAULT nextval('change_orders_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: companies id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY companies ALTER COLUMN id SET DEFAULT nextval('companies_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: company_favourites id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY company_favourites ALTER COLUMN id SET DEFAULT nextval('company_favourites_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: company_installs id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY company_installs ALTER COLUMN id SET DEFAULT nextval('company_installs_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: company_reviews id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY company_reviews ALTER COLUMN id SET DEFAULT nextval('company_reviews_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: favourites id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY favourites ALTER COLUMN id SET DEFAULT nextval('favourites_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: featured_projects id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY featured_projects ALTER COLUMN id SET DEFAULT nextval('featured_projects_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: freelancer_affiliations id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY freelancer_affiliations ALTER COLUMN id SET DEFAULT nextval('freelancer_affiliations_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: freelancer_clearances id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY freelancer_clearances ALTER COLUMN id SET DEFAULT nextval('freelancer_clearances_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: freelancer_insurances id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY freelancer_insurances ALTER COLUMN id SET DEFAULT nextval('freelancer_insurances_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: freelancer_portfolios id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY freelancer_portfolios ALTER COLUMN id SET DEFAULT nextval('freelancer_portfolios_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: freelancer_reviews id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY freelancer_reviews ALTER COLUMN id SET DEFAULT nextval('freelancer_reviews_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: freelancers id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY freelancers ALTER COLUMN id SET DEFAULT nextval('freelancers_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: friend_invites id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY friend_invites ALTER COLUMN id SET DEFAULT nextval('friend_invites_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: identities id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY identities ALTER COLUMN id SET DEFAULT nextval('identities_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: job_favourites id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY job_favourites ALTER COLUMN id SET DEFAULT nextval('job_favourites_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: job_invites id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY job_invites ALTER COLUMN id SET DEFAULT nextval('job_invites_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: jobs id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY jobs ALTER COLUMN id SET DEFAULT nextval('jobs_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: messages id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY messages ALTER COLUMN id SET DEFAULT nextval('messages_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: pages id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY pages ALTER COLUMN id SET DEFAULT nextval('pages_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: payments id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY payments ALTER COLUMN id SET DEFAULT nextval('payments_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: projects id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY projects ALTER COLUMN id SET DEFAULT nextval('projects_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: quotes id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY quotes ALTER COLUMN id SET DEFAULT nextval('quotes_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: users id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY users ALTER COLUMN id SET DEFAULT nextval('users_id_seq'::regclass);
 
 
 --
--- Name: admins_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: admins admins_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY admins
@@ -1489,7 +1492,7 @@ ALTER TABLE ONLY admins
 
 
 --
--- Name: applicants_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: applicants applicants_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY applicants
@@ -1497,7 +1500,7 @@ ALTER TABLE ONLY applicants
 
 
 --
--- Name: ar_internal_metadata_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: ar_internal_metadata ar_internal_metadata_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY ar_internal_metadata
@@ -1505,7 +1508,7 @@ ALTER TABLE ONLY ar_internal_metadata
 
 
 --
--- Name: attachments_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: attachments attachments_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY attachments
@@ -1513,7 +1516,7 @@ ALTER TABLE ONLY attachments
 
 
 --
--- Name: audits_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: audits audits_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY audits
@@ -1521,7 +1524,7 @@ ALTER TABLE ONLY audits
 
 
 --
--- Name: certifications_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: certifications certifications_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY certifications
@@ -1529,7 +1532,7 @@ ALTER TABLE ONLY certifications
 
 
 --
--- Name: change_orders_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: change_orders change_orders_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY change_orders
@@ -1537,7 +1540,7 @@ ALTER TABLE ONLY change_orders
 
 
 --
--- Name: companies_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: companies companies_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY companies
@@ -1545,7 +1548,7 @@ ALTER TABLE ONLY companies
 
 
 --
--- Name: company_favourites_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: company_favourites company_favourites_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY company_favourites
@@ -1553,7 +1556,7 @@ ALTER TABLE ONLY company_favourites
 
 
 --
--- Name: company_installs_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: company_installs company_installs_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY company_installs
@@ -1561,7 +1564,7 @@ ALTER TABLE ONLY company_installs
 
 
 --
--- Name: company_reviews_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: company_reviews company_reviews_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY company_reviews
@@ -1569,7 +1572,7 @@ ALTER TABLE ONLY company_reviews
 
 
 --
--- Name: favourites_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: favourites favourites_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY favourites
@@ -1577,7 +1580,7 @@ ALTER TABLE ONLY favourites
 
 
 --
--- Name: featured_projects_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: featured_projects featured_projects_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY featured_projects
@@ -1585,7 +1588,7 @@ ALTER TABLE ONLY featured_projects
 
 
 --
--- Name: freelancer_affiliations_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: freelancer_affiliations freelancer_affiliations_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY freelancer_affiliations
@@ -1593,7 +1596,7 @@ ALTER TABLE ONLY freelancer_affiliations
 
 
 --
--- Name: freelancer_clearances_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: freelancer_clearances freelancer_clearances_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY freelancer_clearances
@@ -1601,7 +1604,7 @@ ALTER TABLE ONLY freelancer_clearances
 
 
 --
--- Name: freelancer_insurances_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: freelancer_insurances freelancer_insurances_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY freelancer_insurances
@@ -1609,7 +1612,7 @@ ALTER TABLE ONLY freelancer_insurances
 
 
 --
--- Name: freelancer_portfolios_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: freelancer_portfolios freelancer_portfolios_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY freelancer_portfolios
@@ -1617,7 +1620,7 @@ ALTER TABLE ONLY freelancer_portfolios
 
 
 --
--- Name: freelancer_reviews_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: freelancer_reviews freelancer_reviews_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY freelancer_reviews
@@ -1625,7 +1628,7 @@ ALTER TABLE ONLY freelancer_reviews
 
 
 --
--- Name: freelancers_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: freelancers freelancers_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY freelancers
@@ -1633,7 +1636,7 @@ ALTER TABLE ONLY freelancers
 
 
 --
--- Name: friend_invites_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: friend_invites friend_invites_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY friend_invites
@@ -1641,7 +1644,7 @@ ALTER TABLE ONLY friend_invites
 
 
 --
--- Name: identities_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: identities identities_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY identities
@@ -1649,7 +1652,7 @@ ALTER TABLE ONLY identities
 
 
 --
--- Name: job_favourites_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: job_favourites job_favourites_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY job_favourites
@@ -1657,7 +1660,7 @@ ALTER TABLE ONLY job_favourites
 
 
 --
--- Name: job_invites_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: job_invites job_invites_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY job_invites
@@ -1665,7 +1668,7 @@ ALTER TABLE ONLY job_invites
 
 
 --
--- Name: jobs_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: jobs jobs_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY jobs
@@ -1673,7 +1676,7 @@ ALTER TABLE ONLY jobs
 
 
 --
--- Name: messages_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: messages messages_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY messages
@@ -1681,7 +1684,7 @@ ALTER TABLE ONLY messages
 
 
 --
--- Name: pages_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: pages pages_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY pages
@@ -1689,7 +1692,7 @@ ALTER TABLE ONLY pages
 
 
 --
--- Name: payments_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: payments payments_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY payments
@@ -1697,7 +1700,7 @@ ALTER TABLE ONLY payments
 
 
 --
--- Name: projects_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: projects projects_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY projects
@@ -1705,7 +1708,7 @@ ALTER TABLE ONLY projects
 
 
 --
--- Name: quotes_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: quotes quotes_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY quotes
@@ -1713,7 +1716,7 @@ ALTER TABLE ONLY quotes
 
 
 --
--- Name: schema_migrations_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: schema_migrations schema_migrations_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY schema_migrations
@@ -1721,7 +1724,7 @@ ALTER TABLE ONLY schema_migrations
 
 
 --
--- Name: users_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: users users_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY users
@@ -2135,7 +2138,7 @@ CREATE INDEX user_index ON audits USING btree (user_id, user_type);
 
 
 --
--- Name: fk_rails_05756653f5; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: company_reviews fk_rails_05756653f5; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY company_reviews
@@ -2143,7 +2146,7 @@ ALTER TABLE ONLY company_reviews
 
 
 --
--- Name: fk_rails_0fc68a9316; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: payments fk_rails_0fc68a9316; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY payments
@@ -2151,7 +2154,7 @@ ALTER TABLE ONLY payments
 
 
 --
--- Name: fk_rails_1977e8b5a6; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: jobs fk_rails_1977e8b5a6; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY jobs
@@ -2159,7 +2162,7 @@ ALTER TABLE ONLY jobs
 
 
 --
--- Name: fk_rails_2d750cb05f; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: freelancer_reviews fk_rails_2d750cb05f; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY freelancer_reviews
@@ -2167,7 +2170,7 @@ ALTER TABLE ONLY freelancer_reviews
 
 
 --
--- Name: fk_rails_32d387f70d; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: applicants fk_rails_32d387f70d; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY applicants
@@ -2175,7 +2178,7 @@ ALTER TABLE ONLY applicants
 
 
 --
--- Name: fk_rails_44a549d7b3; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: projects fk_rails_44a549d7b3; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY projects
@@ -2183,7 +2186,7 @@ ALTER TABLE ONLY projects
 
 
 --
--- Name: fk_rails_4b7bc91392; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: applicants fk_rails_4b7bc91392; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY applicants
@@ -2191,7 +2194,7 @@ ALTER TABLE ONLY applicants
 
 
 --
--- Name: fk_rails_54727610ca; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: company_reviews fk_rails_54727610ca; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY company_reviews
@@ -2199,7 +2202,7 @@ ALTER TABLE ONLY company_reviews
 
 
 --
--- Name: fk_rails_7283c3d901; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: applicants fk_rails_7283c3d901; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY applicants
@@ -2207,7 +2210,7 @@ ALTER TABLE ONLY applicants
 
 
 --
--- Name: fk_rails_9b32fbc45b; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: quotes fk_rails_9b32fbc45b; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY quotes
@@ -2215,7 +2218,7 @@ ALTER TABLE ONLY quotes
 
 
 --
--- Name: fk_rails_ab5db9ea44; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: freelancer_reviews fk_rails_ab5db9ea44; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY freelancer_reviews
@@ -2223,7 +2226,7 @@ ALTER TABLE ONLY freelancer_reviews
 
 
 --
--- Name: fk_rails_b34da78090; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: jobs fk_rails_b34da78090; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY jobs
@@ -2231,7 +2234,7 @@ ALTER TABLE ONLY jobs
 
 
 --
--- Name: fk_rails_b35f361f8d; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: payments fk_rails_b35f361f8d; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY payments
@@ -2239,7 +2242,7 @@ ALTER TABLE ONLY payments
 
 
 --
--- Name: fk_rails_b3bebfe084; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: change_orders fk_rails_b3bebfe084; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY change_orders
@@ -2247,7 +2250,7 @@ ALTER TABLE ONLY change_orders
 
 
 --
--- Name: fk_rails_b73354eeb5; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: quotes fk_rails_b73354eeb5; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY quotes
@@ -2255,7 +2258,7 @@ ALTER TABLE ONLY quotes
 
 
 --
--- Name: fk_rails_cab1ecc845; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: change_orders fk_rails_cab1ecc845; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY change_orders
@@ -2263,7 +2266,7 @@ ALTER TABLE ONLY change_orders
 
 
 --
--- Name: fk_rails_dfd5a40d4e; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: company_reviews fk_rails_dfd5a40d4e; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY company_reviews
@@ -2271,7 +2274,7 @@ ALTER TABLE ONLY company_reviews
 
 
 --
--- Name: fk_rails_f184aba2e9; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: freelancer_reviews fk_rails_f184aba2e9; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY freelancer_reviews
@@ -2282,7 +2285,7 @@ ALTER TABLE ONLY freelancer_reviews
 -- PostgreSQL database dump complete
 --
 
-SET search_path TO "$user",
+SET search_path TO "$user", public;
 
 INSERT INTO "schema_migrations" (version) VALUES
 ('20170414003540'),

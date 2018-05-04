@@ -71,9 +71,31 @@ require 'rails_helper'
 
 describe Freelancer, type: :model do
   describe "hooks" do
+    describe "before save" do
+      describe "set_name" do
+        let(:freelancer) { build(:freelancer, first_name: "Jane", last_name: "Doe", registration_step: "job_info")}
+
+        it "sets the full name" do
+          expect(freelancer.name).to be_nil
+          freelancer.save
+          expect(freelancer.name).to eq("Jane Doe")
+        end
+      end
+    end
+
+    describe "after initializer" do
+      describe "set_default_step" do
+        it "sets default step to personal" do
+          freelancer = build(:freelancer)
+          expect(freelancer.registration_step).to eq("personal")
+        end
+      end
+    end
+
     describe "after create" do
       describe "add_to_hubspot" do
         let(:freelancer) { create(:freelancer) }
+
         it "creates or update a hubspot contact" do
           expect(Hubspot::Contact).to receive(:createOrUpdate).with(
             "test@test.com",
@@ -82,7 +104,7 @@ describe Freelancer, type: :model do
             lifecyclestage: "customer",
             im_am: "AV Freelancer",
           )
-          freelancer.update_attributes( email: "test@test.com", name: "John Doe", registration_step: "job_info")
+          freelancer.update_attributes(email: "test@test.com", name: "John Doe", registration_step: "job_info")
         end
       end
 
@@ -107,44 +129,35 @@ describe Freelancer, type: :model do
     end
   end
 
-  describe "set_name" do
-    let(:freelancer) { build(:freelancer, registration_step: "job_info")}
+  describe "validations" do
+    describe "step personal information" do
+      subject { create(:freelancer, registration_step: "job_info") }
 
-    it "sets the full name" do
-      expect(freelancer.name).to be_nil
-      freelancer.save
-      expect(freelancer.name).to eq(freelancer.first_name + " " + freelancer.last_name)
+      it { is_expected.to validate_presence_of(:first_name) }
+      it { is_expected.to validate_presence_of(:last_name) }
+      it { is_expected.to validate_presence_of(:country) }
+      it { is_expected.to validate_presence_of(:city) }
+    end
+
+    describe "step job_info" do
+      subject { create(:freelancer, registration_step: "profile") }
+
+      it { is_expected.to validate_presence_of(:job_types) }
     end
   end
 
-  describe "validations step personal information" do
-    let(:freelancer) { create(:freelancer, registration_step: "job_info")}
-    subject { freelancer }
-    it { should validate_presence_of(:first_name) }
-    it { should validate_presence_of(:last_name) }
-    it { should validate_presence_of(:country) }
-    it { should validate_presence_of(:city) }
-  end
+  describe "#registration_completed" do
 
-  describe "validations step job_info" do
-    let(:freelancer) { create(:freelancer, registration_step: "profile")}
-    subject { freelancer }
-    it { should validate_presence_of(:job_types) }
-  end
+    context "when registration step is wicked_finish" do
+      subject { create(:freelancer, registration_step: "wicked_finish") }
 
-  describe "set_default_step" do
-
-    it "sets default step to personal" do
-      expect_any_instance_of(Freelancer).to receive(:set_default_step)
-      build(:freelancer)
+      it { is_expected.to be_registration_completed }
     end
-  end
 
-  describe "registration_completed" do
-    let(:freelancer) { create(:freelancer, registration_step: "wicked_finish")}
+    context "when registration step is personal" do
+      subject { create(:freelancer, registration_step: "personal") }
 
-    it "sets step to wicked_finish" do
-      expect(freelancer.registration_completed?).to be_truthy
+      it { is_expected.not_to be_registration_completed }
     end
   end
 
