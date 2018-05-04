@@ -32,7 +32,9 @@ jobs:
 
       - run:
           name: Create Secrets file
-          command: mv config/secrets.yml.template config/secrets.yml
+          command: |
+            mv config/secrets.yml.ci.enc config/secrets.yml.enc
+            mv config/secrets.yml.ci.key config/secrets.yml.key
 
       - run:
           name: Create DB config file
