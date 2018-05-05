@@ -37,12 +37,11 @@
       .invoice__table-text.invoice__table-text--left Description
       .invoice__table-text.invoice__table-text--right Amount
     .invoice__table-row
-      .invoice__table-text.invoice__table-text--left AVJ Fee
-      .invoice__table-text.invoice__table-text--right= number_with_precision(@job.company_plan_fees, precision: 2).to_s + " " + @job.currency.upcase
-    - if current_company.country == 'ca'
-      .invoice__table-row
-        .invoice__table-text.invoice__table-text--left Applicable Taxes @ #{@job.applicable_sales_tax}%
-        .invoice__table-text.invoice__table-text--right= number_with_precision((@job.company_plan_fees * 0.13), precision: 2).to_s + " " + @job.currency.upcase
+      .invoice__table-text.invoice__table-text--left AV Junction Fee
+      .invoice__table-text.invoice__table-text--right= number_with_precision(@job.company_plan_fees * (current_company.country == 'ca' ? 0.87 : 1), precision: 2).to_s + " " + @job.currency.upcase
+    .invoice__table-row
+      .invoice__table-text.invoice__table-text--left Applicable Taxes @ #{ current_company.country == 'ca' ? 13 : 0 }%
+      .invoice__table-text.invoice__table-text--right= number_with_precision((current_company.country == 'ca' ? (@job.company_plan_fees * 0.13) : 0), precision: 2).to_s + " " + @job.currency.upcase
     .invoice__table-row.invoice__table-row--total
       .invoice__table-text.invoice__table-text--left Total Payout
-      .invoice__table-text.invoice__table-text--right= number_with_precision(@job.company_plan_fees * 1.13, precision: 2).to_s + " " + @job.currency.upcase
+      .invoice__table-text.invoice__table-text--right= number_with_precision(@job.company_plan_fees, precision: 2).to_s + " " + @job.currency.upcase

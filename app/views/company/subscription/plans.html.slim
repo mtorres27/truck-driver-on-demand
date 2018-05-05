@@ -46,9 +46,6 @@
           .plans__subtitle Like we said, no strings attached.
           .plans__pricing
             .plans__price
-          - if current_company.plan.subscription_fee > 0
-            = link_to company_invoices_path, class: 'btn-primary--active top-margin w-inline-block width-100'
-              div View receipts
           a.btn-ghost--active.w-inline-block.width-100 href=company_subscription_cancel_path  onclick="return confirm('Are you sure you want to cancel your subscription?')"
             div Cancel subscription
 

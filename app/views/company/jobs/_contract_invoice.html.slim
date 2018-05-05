@@ -18,7 +18,7 @@
     .invoice__meta-3
       div= "Inv #: #{@job.id}"
       - if !@accepted_quote.paid_at.nil?
-        div= "Date: #{div= @accepted_quote.paid_at.to_date}"
+        div= "Date paid: #{div= @accepted_quote.paid_at.to_date}"
 .grid-cell.grid-cell--expand
   .invoice__meta-1
     .invoice__meta-3
@@ -35,11 +35,17 @@
     .invoice__table-row
       .invoice__table-text Job sales tax
       .invoice__table-text.invoice__table-text--right
-        | #{number_with_precision((@accepted_quote.amount * @job.applicable_sales_tax/100) , precision: 2) } #{@job.currency.upcase}
+        | #{number_with_precision((@accepted_quote.amount * @job.applicable_sales_tax/100), precision: 2) } #{@job.currency.upcase}
+    .invoice__table-row.invoice__table-row--total
+      .invoice__table-text AV Junction Fees
     .invoice__table-row
       .invoice__table-text AV Junction fees #{ @accepted_quote.plan_fee.positive? ? "($"+@accepted_quote.plan_fee.to_i.to_s+" USD)" : ""}
       .invoice__table-text.invoice__table-text--right
-        | #{ @job.company_plan_fees.positive? ? number_with_precision(@job.company_plan_fees , precision: 2) : "Waived"} #{ @job.company_plan_fees.positive? ? @job.currency.upcase : ''}
+        | #{ @job.company_plan_fees.positive? ? number_with_precision(@job.company_plan_fees * (current_company.country == 'ca' ? 0.87 : 1), precision: 2) : "Waived"} #{ @job.company_plan_fees.positive? ? @job.currency.upcase : ''}
+    .invoice__table-row
+      .invoice__table-text AV Junction sales tax
+      .invoice__table-text.invoice__table-text--right
+        | #{ @job.company_plan_fees.positive? ? number_with_precision((current_company.country == 'ca' ? @job.company_plan_fees * 0.13 : 0), precision: 2) : "Waived"} #{ @job.company_plan_fees.positive? ? @job.currency.upcase : ''}
     .invoice__table-row.invoice__table-row--total
       - if @accepted_quote && !@accepted_quote.paid_by_company
         .invoice__table-text Total funds required for this job
@@ -47,3 +53,37 @@
         .invoice__table-text Total funds payed
       .invoice__table-text.invoice__table-text--right
         | #{number_with_precision((@accepted_quote.amount.floor + @job.company_plan_fees + (@accepted_quote.amount * @job.applicable_sales_tax/100)), precision: 2) } #{@job.currency.upcase}
+    /.invoice__table-row.invoice__table-row--header
+    /  .invoice__table-text. Description
+    /  .invoice__table-text.invoice__table-text--right Amount
+    /hr
+    /.invoice__table-row
+    /  .invoice__table-text Job subtotal
+    /  .invoice__table-text.invoice__table-text--right
+    /    | #{number_with_precision(@accepted_quote.amount.floor , precision: 2) } #{@job.currency.upcase}
+    /.invoice__table-row
+    /  .invoice__table-text Job sales tax
+    /  .invoice__table-text.invoice__table-text--right
+    /    | #{number_with_precision((@accepted_quote.amount * @job.applicable_sales_tax/100) , precision: 2) } #{@job.currency.upcase}
+    /hr
+    /.invoice__table-row
+    /  .invoice__table-text AV Junction fees #{ @accepted_quote.plan_fee.positive? ? "($"+@accepted_quote.plan_fee.to_i.to_s+" USD)" : ""}
+    /  - if current_company.country == 'ca'
+    /    .invoice__table-text.invoice__table-text--right
+    /      | #{ @job.company_plan_fees.positive? ? number_with_precision(@job.company_plan_fees * 0.87 , precision: 2) : "Waived"} #{ @job.company_plan_fees.positive? ? @job.currency.upcase : ''}
+    /  - else
+    /    .invoice__table-text.invoice__table-text--right
+    /      | #{ @job.company_plan_fees.positive? ? number_with_precision(@job.company_plan_fees, precision: 2) : "Waived"} #{ @job.company_plan_fees.positive? ? @job.currency.upcase : ''}
+    /- if current_company.country == 'ca'
+    /  .invoice__table-row
+    /    .invoice__table-text AV Junction applicable taxes @ 13%
+    /    .invoice__table-text.invoice__table-text--right
+    /      | #{ @job.company_plan_fees.positive? ? number_with_precision(@job.company_plan_fees * 0.13 , precision: 2) : "Waived"} #{ @job.company_plan_fees.positive? ? @job.currency.upcase : ''}
+    /hr
+    /.invoice__table-row.invoice__table-row--total
+    /  - if @accepted_quote && !@accepted_quote.paid_by_company
+    /    .invoice__table-text Total funds required for this job
+    /  - else
+    /    .invoice__table-text Total funds payed
+    /  .invoice__table-text.invoice__table-text--right
+    /    | #{number_with_precision((@accepted_quote.amount.floor + @job.company_plan_fees + (@accepted_quote.amount * @job.applicable_sales_tax/100)), precision: 2) } #{@job.currency.upcase}

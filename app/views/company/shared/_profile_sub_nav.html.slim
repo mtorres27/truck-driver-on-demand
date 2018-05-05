@@ -5,3 +5,6 @@ h1.heading-h1
     | General
   a.tab-bar__item href="#{company_plans_path}" class=("tab-bar__item--active" if request.path == company_plans_path or request.path == "/freelancer/profile/identity" or request.path == "/freelancer/profile/bank_account")
     | Subscriptions
+  - if current_company.plan.subscription_fee > 0
+    a.tab-bar__item href="#{company_invoices_path}" class=("tab-bar__item--active" if request.path == company_invoices_path or controller.action_name == "invoice")
+      | Invoices

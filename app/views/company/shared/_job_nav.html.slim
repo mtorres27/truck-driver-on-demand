@@ -54,7 +54,7 @@
         - path = current_admin.nil? ? company_job_messages_path(job) : admin_job_messages_path(job)
         a href=path
           | Progress
-    .tab-bar__item class=("tab-bar__item--active" if request.path.index(/payment/) || request.path == company_job_avj_invoice_path(id: @job.id)) class=("tab-bar__item--inactive" if job.pre_contracted?)
+    .tab-bar__item class=("tab-bar__item--active" if request.path.index(/payment/) || request.path == company_job_avj_invoice_path(id: job.id) || request.path == contract_invoice_company_job_path(job)) class=("tab-bar__item--inactive" if job.pre_contracted?)
       - if job.pre_contracted?
         | Payments
       - else
