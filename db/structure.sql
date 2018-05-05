@@ -770,7 +770,7 @@ CREATE TABLE freelancers (
     id bigint NOT NULL,
     token character varying,
     email citext NOT NULL,
-    name character varying NOT NULL,
+    name character varying,
     avatar_data text,
     address character varying,
     formatted_address character varying,
@@ -829,7 +829,8 @@ CREATE TABLE freelancers (
     job_functions citext,
     manufacturer_tags citext,
     special_avj_fees numeric(10,2),
-    avj_credit numeric(10,2) DEFAULT NULL::numeric
+    avj_credit numeric(10,2) DEFAULT NULL::numeric,
+    registration_step character varying
 );
 
 
@@ -1036,8 +1037,8 @@ CREATE TABLE jobs (
     job_type citext,
     job_market citext,
     manufacturer_tags citext,
-    company_plan_fees numeric(10,2) DEFAULT 0,
-    contracted_at timestamp without time zone
+    contracted_at timestamp without time zone,
+    company_plan_fees numeric(10,2) DEFAULT 0
 );
 
 
@@ -2551,12 +2552,6 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20171218020642'),
 ('20171218023711'),
 ('20171222051331'),
-('20180114213233'),
-('20180114214827'),
-('20180114215226'),
-('20180114220148'),
-('20180117114408'),
-('20180117114800'),
 ('20180119214528'),
 ('20180127120826'),
 ('20180127123843'),
@@ -2591,6 +2586,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20180413190903'),
 ('20180418190453'),
 ('20180418195120'),
+('20180420173017'),
 ('20180424155938'),
 ('20180424190619');
 

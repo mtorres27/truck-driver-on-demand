@@ -16,6 +16,7 @@ The easier way to hire and manage freelancers. We connect the best AV freelancer
 * [Amazon S3](https://aws.amazon.com/s3)
 * [Google Maps API](https://developers.google.com/maps/)
 * [HubSpot](https://www.hubspot.com)
+* [Rollbar](https://www.rollbar.com)
 * [Sendgrid](https://sendgrid.com)
 * [Stripe](https://www.stripe.com)
 
