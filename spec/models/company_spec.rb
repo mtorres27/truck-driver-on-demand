@@ -5,6 +5,7 @@ describe Company, type: :model do
     describe "after create" do
       describe "add_to_hubspot" do
         it "creates or update a hubspot contact" do
+          allow(Rails.application.secrets).to receive(:enabled_hubspot).and_return(true)
           expect(Hubspot::Contact).to receive(:createOrUpdate).with(
             "test@test.com",
             company: "Acme",

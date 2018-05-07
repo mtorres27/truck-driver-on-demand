@@ -313,6 +313,8 @@ class Freelancer < ApplicationRecord
   private
 
   def add_to_hubspot
+    return unless Rails.application.secrets.enabled_hubspot
+
     Hubspot::Contact.createOrUpdate(email,
       firstname: name.split(" ")[0],
       lastname: name.split(" ")[1],

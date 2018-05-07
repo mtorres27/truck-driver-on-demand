@@ -97,6 +97,7 @@ describe Freelancer, type: :model do
         let(:freelancer) { create(:freelancer) }
 
         it "creates or update a hubspot contact" do
+          allow(Rails.application.secrets).to receive(:enabled_hubspot).and_return(true)
           expect(Hubspot::Contact).to receive(:createOrUpdate).with(
             "test@test.com",
             firstname: "John",
