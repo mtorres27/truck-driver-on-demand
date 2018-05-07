@@ -830,7 +830,8 @@ CREATE TABLE freelancers (
     manufacturer_tags citext,
     special_avj_fees numeric(10,2),
     avj_credit numeric(10,2) DEFAULT NULL::numeric,
-    registration_step character varying
+    registration_step character varying,
+    province character varying
 );
 
 
@@ -2589,5 +2590,6 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20180420173017'),
 ('20180424155938'),
 ('20180424190619');
+('20180504205104');
 
 

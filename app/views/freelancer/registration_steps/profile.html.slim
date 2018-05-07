@@ -12,9 +12,9 @@
     .grid-cell.grid-cell--67
       .grid-v
         .grid-cell.grid-cell--100
-          = f.input :tagline, required: true, label: "Tagline", placeholder: "Enter your tagline"
+          = f.input :tagline, label: "Tagline", placeholder: "Enter your tagline"
         .grid-cell.grid-cell--100.grid-cell--expand
-          = f.input :bio, required: true, label: "Biography", placeholder: "Write a bio", :input_html => { :class => 'form__profile-bio-textarea' }
+          = f.input :bio, label: "Biography", placeholder: "Write a bio", :input_html => { :class => 'form__profile-bio-textarea' }
     .buttons
       = f.button :submit, "Skip & Register", class: "btn btn--secondary"
       = f.button :submit, "Complete Registration", class: "btn btn--primary"
