@@ -280,6 +280,8 @@ class Company < ApplicationRecord
   private
 
   def add_to_hubspot
+    return unless Rails.application.secrets.enabled_hubspot
+
     Hubspot::Contact.createOrUpdate(email,
       company: name,
       firstname: contact_name.split(" ")[0],
