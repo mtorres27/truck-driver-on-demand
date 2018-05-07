@@ -1,0 +1,34 @@
+<link rel="stylesheet" type="text/css" href="/trix.css">
+<script type="text/javascript" src="/trix.js"></script>
+
+h1 Editing Plan
+
+= simple_form_for([:admin, @plan]) do |f|
+  = f.error_notification
+
+  .form-inputs
+    = f.input :name
+    = f.input :code, label: "Stripe Plan Code (Do Not Edit)"
+    = f.input :description, as: "hidden", id: "description"
+    trix-editor input="plan_description"
+    = f.input :period
+    / - @plan.fee_schema.try(:each) do |key, value|
+    /   = key
+    /   = f.input key
+    = f.input :subscription_fee
+    = f.fields_for :fee_schema, OpenStruct.new(@plan.fee_schema) do |ff|
+      .form-group
+        = ff.label :below_2000
+        = ff.text_field :below_2000, class: 'form-control'
+      .form-group
+        = ff.label :above_2000
+        = ff.text_field :above_2000, class: 'form-control'
+
+  .form-actions
+    = f.button :submit, class: "btn btn-primary", prompt: "Select"
+
+hr
+= link_to 'Show', admin_plan_path(@plan)
+'  |
+= link_to 'Back', admin_plans_path
+

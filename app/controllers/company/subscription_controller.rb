@@ -5,7 +5,9 @@ class Company::SubscriptionController < Company::BaseController
 
   def cancel
     # logger.debug current_company.inspect
+    plan = current_company.plan
     StripeTool.cancel_subscription(company: current_company)
+    SubscriptionMailer.notice_company_subscription_canceled(current_company, plan).deliver_later
     flash[:notice] = "Your just cancelled your company subscription!"
     redirect_to company_plans_path
   end
@@ -35,10 +37,15 @@ class Company::SubscriptionController < Company::BaseController
       flash[:notice] = 'You must update your profile with the province!'
       redirect_to edit_company_profile_path
     end
-    @plans = StripeTool.get_plans
-    @subscription = Stripe::Subscription.retrieve(current_company.stripe_subscription_id) if current_company.stripe_subscription_id
-    # logger.debug @plans.inspect
-    # logger.debug @subscription.inspect
+    @plans = Plan.order(name: :asc)
+    begin
+      @subscription = Stripe::Subscription.retrieve(current_company.stripe_subscription_id) if current_company.stripe_subscription_id
+    rescue Stripe::InvalidRequestError => ex
+      flash[:alert] = 'Please subscribe to one of the following plans'
+    rescue Exception => ex
+      flash[:error] = 'Something wrong happened!'
+    end
+
   end
 
   def reset_company
@@ -54,6 +61,8 @@ class Company::SubscriptionController < Company::BaseController
     current_company.card_brand                = nil
     current_company.exp_month                 = nil
     current_company.exp_year                  = nil
+    current_company.plan_id                   = nil
+    current_company.is_subscription_cancelled = true
     current_company.save
     flash[:notice] = "Your just reset your company Successfully"
     redirect_to company_plans_path
@@ -75,18 +84,22 @@ class Company::SubscriptionController < Company::BaseController
   end
 
   def subscription_checkout
+    plan = Plan.find_by(code: params[:plan_id])
+    # logger.debug params[:stripeToken]
+    # logger.debug plan.inspect
+    # exit
     customer = StripeTool.create_customer(email: params[:stripeEmail],
                                           stripe_token: params[:stripeToken])
     subscription = StripeTool.subscribe(customer: customer,
                                         tax: current_company.country=='ca' ? province_tax(current_company.province)*100  : 0,
-                                        plan_id: params[:plan_id],
-                                        is_new: current_company.stripe_customer_id ? false : true,
-                                        registered_from: ((Time.now- current_company.created_at)/1.day).floor
+                                        plan: plan,
+                                        is_new: current_company.is_trial_applicable
                                         )
     # invoice = StripeTool.create_invoice(customer_id: customer.id, subscription: subscription)
-    StripeTool.update_company_info_with_subscription(company: current_company, customer: customer, subscription: subscription)
+    StripeTool.update_company_info_with_subscription(company: current_company, customer: customer, subscription: subscription, plan: plan)
 
-    flash[:notice] = 'Successfully subscribed to ' + subscription.plan.name
+    SubscriptionMailer.notice_company_subscribed_to_plan(current_company, plan).deliver_later
+    flash[:notice] = 'Successfully subscribed to "' + subscription.plan.name.upcase + '" Plan'
     redirect_to company_plans_path
   end
 

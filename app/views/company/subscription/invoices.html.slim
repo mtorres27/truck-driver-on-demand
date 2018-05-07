@@ -1,10 +1,19 @@
-h2
-  | Invoices
-span
-  | (Next invoice will be at #{Time.at(@upcoming[:date])} for #{pretty_amount(@upcoming[:amount_due])})
-.invoices
-  - @invoices.each do |invoice|
-    li.invoice
-      = link_to Time.at(invoice[:date]), company_invoice_path(invoice: invoice.id)
-      | =>
-      =pretty_amount(invoice[:lines][:data][0][:amount])
+= render partial: "/company/shared/profile_sub_nav"
+
+- content_for :title, "AVJunction - Subscriptions"
+
+- content_for :secondary do
+  .action-bar
+    h2.heading-h2.heading-h2--action-bar
+      | Receipts
+
+  .grid-h
+    .grid-cell.grid-cell--100
+      | (Next invoice will be at #{Time.at(@upcoming[:date])} for #{pretty_amount(@upcoming[:amount_due])})
+    .grid-cell.grid-cell--100
+      .invoices
+        - @invoices.each do |invoice|
+          li.invoice
+            = link_to Time.at(invoice[:date]), company_invoice_path(invoice: invoice.id)
+            | =>
+            =pretty_amount(invoice[:total])

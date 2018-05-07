@@ -26,8 +26,9 @@ FactoryBot.define do
     email { Faker::Internet.unique.email }
     name { Faker::Company.unique.name }
     contact_name { Faker::Name.unique.name }
-    password "password"
     country [:es, :fi, :fr, :gb, :pt, :us].sample
     city { Faker::Address.city }
+    password { 'password' }
+    password_confirmation { 'password' }
   end
 end

@@ -333,12 +333,6 @@ CREATE TABLE companies (
     last_sign_in_at timestamp without time zone,
     current_sign_in_ip inet,
     last_sign_in_ip inet,
-    header_color character varying DEFAULT 'FF6C38'::character varying,
-    country character varying,
-    confirmation_token character varying,
-    confirmed_at timestamp without time zone,
-    confirmation_sent_at timestamp without time zone,
-    header_source character varying DEFAULT 'color'::character varying,
     stripe_customer_id character varying,
     stripe_subscription_id character varying,
     stripe_plan_id character varying,
@@ -350,6 +344,12 @@ CREATE TABLE companies (
     card_brand character varying,
     exp_month character varying,
     exp_year character varying,
+    header_color character varying DEFAULT 'FF6C38'::character varying,
+    country character varying,
+    confirmation_token character varying,
+    confirmed_at timestamp without time zone,
+    confirmation_sent_at timestamp without time zone,
+    header_source character varying DEFAULT 'color'::character varying,
     province character varying,
     sales_tax_number character varying,
     line2 character varying,
@@ -357,7 +357,10 @@ CREATE TABLE companies (
     state character varying,
     postal_code character varying,
     job_types citext,
-    manufacturer_tags citext
+    manufacturer_tags citext,
+    plan_id bigint,
+    is_trial_applicable boolean DEFAULT true,
+    waived_jobs integer DEFAULT 1
 );
 
 
@@ -482,6 +485,39 @@ CREATE SEQUENCE company_reviews_id_seq
 --
 
 ALTER SEQUENCE company_reviews_id_seq OWNED BY company_reviews.id;
+
+
+--
+-- Name: currency_rates; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE currency_rates (
+    id bigint NOT NULL,
+    currency character varying,
+    country character varying,
+    rate numeric(10,2) NOT NULL,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: currency_rates_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE currency_rates_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: currency_rates_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE currency_rates_id_seq OWNED BY currency_rates.id;
 
 
 --
@@ -778,18 +814,17 @@ CREATE TABLE freelancers (
     stripe_account_id character varying,
     stripe_account_status text,
     currency character varying,
-    phone_number character varying,
     sales_tax_number character varying,
     line2 character varying,
     state character varying,
     postal_code character varying,
     service_areas character varying,
     city character varying,
+    phone_number character varying,
     profile_score smallint,
     valid_driver boolean,
     own_tools boolean,
     company_name character varying,
-    special_avj_fees numeric(10,2),
     job_types citext,
     job_functions citext,
     manufacturer_tags citext,
@@ -999,10 +1034,11 @@ CREATE TABLE jobs (
     stripe_balance_transaction_id character varying,
     funds_available_on integer,
     funds_available boolean DEFAULT false,
-    contracted_at timestamp without time zone,
     job_type citext,
     job_market citext,
-    manufacturer_tags citext
+    manufacturer_tags citext,
+    contracted_at timestamp without time zone,
+    company_plan_fees numeric(10,2) DEFAULT 0
 );
 
 
@@ -1143,6 +1179,43 @@ ALTER SEQUENCE payments_id_seq OWNED BY payments.id;
 
 
 --
+-- Name: plans; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE plans (
+    id bigint NOT NULL,
+    name character varying,
+    code character varying,
+    trial_period integer,
+    subscription_fee numeric(10,2),
+    fee_schema json,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL,
+    description text,
+    period character varying DEFAULT 'yearly'::character varying
+);
+
+
+--
+-- Name: plans_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE plans_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: plans_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE plans_id_seq OWNED BY plans.id;
+
+
+--
 -- Name: projects; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -1208,6 +1281,7 @@ CREATE TABLE quotes (
     stripe_fees numeric(10,2),
     net_avj_fees numeric(10,2),
     accepted_at timestamp without time zone,
+    plan_fee numeric(10,2) DEFAULT 0,
     avj_credit numeric(10,2) DEFAULT NULL::numeric
 );
 
@@ -1238,6 +1312,43 @@ ALTER SEQUENCE quotes_id_seq OWNED BY quotes.id;
 CREATE TABLE schema_migrations (
     version character varying NOT NULL
 );
+
+
+--
+-- Name: subscriptions; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE subscriptions (
+    id bigint NOT NULL,
+    company_id integer,
+    plan_id integer,
+    stripe_subscription_id character varying,
+    is_active boolean,
+    ends_at date,
+    billing_perios_ends_at date,
+    amount numeric,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: subscriptions_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE subscriptions_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: subscriptions_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE subscriptions_id_seq OWNED BY subscriptions.id;
 
 
 --
@@ -1348,6 +1459,13 @@ ALTER TABLE ONLY company_installs ALTER COLUMN id SET DEFAULT nextval('company_i
 --
 
 ALTER TABLE ONLY company_reviews ALTER COLUMN id SET DEFAULT nextval('company_reviews_id_seq'::regclass);
+
+
+--
+-- Name: currency_rates id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY currency_rates ALTER COLUMN id SET DEFAULT nextval('currency_rates_id_seq'::regclass);
 
 
 --
@@ -1463,6 +1581,13 @@ ALTER TABLE ONLY payments ALTER COLUMN id SET DEFAULT nextval('payments_id_seq':
 
 
 --
+-- Name: plans id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY plans ALTER COLUMN id SET DEFAULT nextval('plans_id_seq'::regclass);
+
+
+--
 -- Name: projects id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -1474,6 +1599,13 @@ ALTER TABLE ONLY projects ALTER COLUMN id SET DEFAULT nextval('projects_id_seq':
 --
 
 ALTER TABLE ONLY quotes ALTER COLUMN id SET DEFAULT nextval('quotes_id_seq'::regclass);
+
+
+--
+-- Name: subscriptions id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY subscriptions ALTER COLUMN id SET DEFAULT nextval('subscriptions_id_seq'::regclass);
 
 
 --
@@ -1569,6 +1701,14 @@ ALTER TABLE ONLY company_installs
 
 ALTER TABLE ONLY company_reviews
     ADD CONSTRAINT company_reviews_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: currency_rates currency_rates_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY currency_rates
+    ADD CONSTRAINT currency_rates_pkey PRIMARY KEY (id);
 
 
 --
@@ -1700,6 +1840,14 @@ ALTER TABLE ONLY payments
 
 
 --
+-- Name: plans plans_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY plans
+    ADD CONSTRAINT plans_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: projects projects_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -1721,6 +1869,14 @@ ALTER TABLE ONLY quotes
 
 ALTER TABLE ONLY schema_migrations
     ADD CONSTRAINT schema_migrations_pkey PRIMARY KEY (version);
+
+
+--
+-- Name: subscriptions subscriptions_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY subscriptions
+    ADD CONSTRAINT subscriptions_pkey PRIMARY KEY (id);
 
 
 --
@@ -1848,6 +2004,13 @@ CREATE INDEX index_companies_on_manufacturer_tags ON companies USING btree (manu
 --
 
 CREATE INDEX index_companies_on_name ON companies USING btree (name);
+
+
+--
+-- Name: index_companies_on_plan_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_companies_on_plan_id ON companies USING btree (plan_id);
 
 
 --
@@ -2170,6 +2333,14 @@ ALTER TABLE ONLY freelancer_reviews
 
 
 --
+-- Name: companies fk_rails_2e8c071a79; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY companies
+    ADD CONSTRAINT fk_rails_2e8c071a79 FOREIGN KEY (plan_id) REFERENCES plans(id);
+
+
+--
 -- Name: applicants fk_rails_32d387f70d; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -2398,7 +2569,15 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20180305202451'),
 ('20180305202656'),
 ('20180309165026'),
+('20180311184145'),
+('20180311184319'),
+('20180311185453'),
+('20180311194837'),
+('20180312143559'),
+('20180312192616'),
 ('20180312205533'),
+('20180319115900'),
+('20180319144208'),
 ('20180321172650'),
 ('20180402194248'),
 ('20180404170355'),
@@ -2407,6 +2586,8 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20180413190903'),
 ('20180418190453'),
 ('20180418195120'),
-('20180420173017');
+('20180420173017'),
+('20180424155938'),
+('20180424190619');
 
 

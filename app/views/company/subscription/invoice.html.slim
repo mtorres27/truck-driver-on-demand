@@ -1,23 +1,12 @@
-h2
-  | Invoice
-.invoice
-  .id
-    | id : #{@invoice[:id]}
-  .date
-    | date : #{Time.at(@invoice[:date])}
-  .amount
-    | Amount : #{pretty_amount(@invoice[:lines][:data][0][:amount])}
-  .Tax
-    | Tax (%#{@invoice[:tax_percent]}) : #{pretty_amount(@invoice[:tax])}
-  .Total
-    | Total : #{pretty_amount(@invoice[:total])}
-  .description
-    | description : #{@invoice[:lines][:data][0][:description]}
-  .start_date
-    | From : #{Time.at(@invoice[:lines][:data][0][:period][:start])}
-  .end_date
-    | To : #{Time.at(@invoice[:lines][:data][0][:period][:end])}
-  .plan
-    | Plan : #{@invoice[:lines][:data][0][:plan][:name]}
-  .interval
-    | Interval : #{@invoice[:lines][:data][0][:plan][:interval]}
+= render partial: "/company/shared/profile_sub_nav"
+
+- content_for :title, "AVJunction - Subscriptions"
+
+- content_for :secondary do
+  .action-bar
+    h2.heading-h2.heading-h2--action-bar
+      | Receipt
+    = link_to company_invoices_path, class: 'btn-primary--active top-margin w-inline-block'
+      div Back to receipts
+  .grid-h
+    = render "invoice"

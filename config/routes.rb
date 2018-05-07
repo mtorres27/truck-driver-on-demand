@@ -99,6 +99,9 @@ Rails.application.routes.draw do
       get 'plan/invoice', to: 'subscription#invoice', as: 'invoice'
 
     resources :notifications
+    get 'job_country_currency', to: 'jobs#job_countries', as: 'job_country_currency'
+    get '/:id/avj-invoice', to: 'jobs#avj_invoice', as: 'job_avj_invoice'
+    get '/:id/print-avj-invoice', to: 'jobs#print_avj_invoice', as: 'job_avj_invoice_print'
     resources :jobs, except: [:index] do
       resources :applicants do
         get :request_quote, on: :member
@@ -117,6 +120,7 @@ Rails.application.routes.draw do
         post 'contract_pay' => 'contracts#contract_pay'
       end
       resource :review, only: [:show, :create]
+      get :contract_invoice, on: :member
     end
 
     get "jobs/:id/publish", to: "jobs#publish"
@@ -157,6 +161,11 @@ Rails.application.routes.draw do
       resources :messages, only: [:index, :create]
       resources :payments, controller: "job_payments", only: [:index, :show]
       resource :review, only: [:show, :create]
+    end
+
+    resources :plans, except: [:new, :create] do
+      get :disable, on: :member
+      get :enable, on: :member
     end
 
     resources :pages, only: [:index, :edit, :update]

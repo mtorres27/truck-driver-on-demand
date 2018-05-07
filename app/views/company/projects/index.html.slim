@@ -1,7 +1,9 @@
 .header-bar
   h1.heading-h1 Job Postings
-  - if ['trialing', 'active'].include?(current_company.subscription_status)
+  - if ['trialing', 'active'].include?(current_company.subscription_status) || (current_company.subscription_status == "cancelled" && current_company.billing_period_ends_at > Time.now.to_i)
     = link_to "Post a Job", new_company_job_path, class: "btn btn--primary", role: "button"
+  - else
+    = link_to "Choose a plan to post jobs", company_plans_path, class: "btn btn--primary", role: "button"
 
 - content_for :secondary do
   .action-bar
@@ -9,7 +11,7 @@
       .btn.btn--secondary type="button" onClick="toggleJobs(this)" data-action="show"
         | Expand All
 
-  .grid-h  
+  .grid-h
     - @projects.each do |project|
       .grid-cell.grid-cell--100
         .header-bar
@@ -19,7 +21,7 @@
           .btn.btn--secondary data-toggle="collapse" data-target="#jobsFor#{project.id}" type="button" aria-expanded="false" aria-controls="jobsFor#{project.id}"
             | #{project.jobs.size} Jobs
       .grid-cell.grid-cell--100
-        .collapse.jobs( id="jobsFor#{project.id}" ) 
+        .collapse.jobs( id="jobsFor#{project.id}" )
           .grid-h
             - project.jobs.each do |job|
               = render partial: "job", locals: { project: project, job: job }

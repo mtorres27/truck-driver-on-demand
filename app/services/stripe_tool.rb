@@ -1,17 +1,20 @@
 module StripeTool
-  def self.update_company_info_with_subscription(company: company, customer: customer, subscription: subscription)
+  def self.update_company_info_with_subscription(company: company, customer: customer, subscription: subscription, plan: plan)
     company.billing_period_ends_at    = Time.at(subscription.current_period_end).to_datetime
     company.stripe_customer_id        = customer.id
     company.stripe_subscription_id    = subscription.id
     company.stripe_plan_id            = subscription.plan.id
+    company.plan_id                   = plan[:id]
     company.subscription_cycle        = subscription.plan.interval
     company.subscription_status       = subscription.status
     company.is_subscription_cancelled = false
-    company.last_4_digits             = customer.sources.data[0].last4
-    company.card_brand                = customer.sources.data[0].brand
-    company.exp_month                 = customer.sources.data[0].exp_month
-    company.exp_year                  = customer.sources.data[0].exp_year
-    # company.currency                  = 'cad' if company.currency == nil
+    company.is_trial_applicable       = false if plan[:trial_period].positive?
+    if customer.sources.data.any?
+      company.last_4_digits             = customer.sources.data[0].last4
+      company.card_brand                = customer.sources.data[0].brand
+      company.exp_month                 = customer.sources.data[0].exp_month
+      company.exp_year                  = customer.sources.data[0].exp_year
+    end
     company.save
   end
 
@@ -28,10 +31,16 @@ module StripeTool
   end
 
   def self.create_customer(email: email, stripe_token: stripe_token)
-    Stripe::Customer.create(
-      email: email,
-      source: stripe_token
-    )
+    if stripe_token.present?
+      Stripe::Customer.create(
+        email: email,
+        source: stripe_token
+      )
+    else
+      Stripe::Customer.create(
+        email: email
+      )
+    end
   end
 
   def self.create_charge(customer_id: customer_id, amount: amount, description: description)
@@ -43,10 +52,10 @@ module StripeTool
     )
   end
 
-  def self.subscribe(customer: customer, tax: tax, plan_id: plan_id, is_new: is_new, registered_from: registered_from)
+  def self.subscribe(customer: customer, tax: tax, plan: plan, is_new: is_new)
     customer.subscriptions.create(
-      plan: plan_id,
-      trial_period_days: (90-registered_from > 0 && is_new) ? 90-registered_from : 0,
+      plan: plan[:code],
+      trial_period_days: (is_new) ? plan[:trial_period] : 0,
       tax_percent: tax
     )
   end
@@ -82,11 +91,14 @@ module StripeTool
     company.is_subscription_cancelled = true
     subscription = Stripe::Subscription.retrieve(company.stripe_subscription_id)
     period_end = self.get_cancel_period_end(subscription: subscription)
+    Rails.logger.debug period_end
     self.cancel(subscription: subscription, period_end: period_end)
-    if subscription.plan.interval != 'month'
+    if subscription.plan.amount > 0
       self.refund_customer(customer: company.stripe_customer_id, old_exp: company.billing_period_ends_at.to_time.to_i)
     end
     company.billing_period_ends_at = Time.at(period_end).to_date
+    company.plan_id = nil
+    company.subscription_status = "cancelled"
     company.save
   end
 
@@ -97,7 +109,7 @@ module StripeTool
   private
 
     def self.get_cancel_period_end(subscription: subscription)
-      if (subscription.status == 'trialing' || subscription.plan.interval != 'month') && Time.at(subscription.current_period_start).to_date != Date.today && (subscription.current_period_end - Time.now.to_i) / 86_400 > 31
+      if (subscription.status == 'trialing' || subscription.plan.amount > 0) && Time.at(subscription.current_period_start).to_date != Date.today && (subscription.current_period_end - Time.now.to_i) / 86_400 > 31
         period_end = Time.at(subscription.current_period_end).to_date
         period_end = period_end >> -1 while period_end > Date.today
         return (period_end >> 1).to_time.to_i
@@ -110,7 +122,7 @@ module StripeTool
 
     def self.cancel(subscription: subscription, period_end: period_end)
       cancel_at_period_end = subscription.status == 'past_due' ? false : true
-      if subscription.status == 'trialing' || subscription.plan.interval != 'month'
+      if subscription.status == 'trialing' || subscription.plan.amount > 0
         subscription.trial_end = period_end
         subscription.prorate = false
         subscription.save
@@ -122,15 +134,16 @@ module StripeTool
 
     def self.refund_customer(customer: customer, old_exp: old_exp)
       # calculate months
-      monthly_plan = Stripe::Plan.retrieve('avj_monthly')
+      professional_plan = Stripe::Plan.retrieve('avj_professional')
       no_of_month = ((old_exp - Time.now.to_time.to_i)/1.month.second).to_i
-      amount = no_of_month * monthly_plan.amount
+      amount = no_of_month * professional_plan[:amount] / 12
+      Rails.logger.debug "Refund amount: #{amount}"
       # generate the refund
       charge = Stripe::Charge.create(
         amount: amount,
         currency:  'usd',
         customer: customer,
-        description: 'Refund for unused period in the annual plan.'
+        description: 'Refund for unused period in the professional plan.'
       )
       Stripe::Refund.create(
         charge: charge.id
