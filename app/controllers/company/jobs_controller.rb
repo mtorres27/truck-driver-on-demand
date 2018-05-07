@@ -1,5 +1,5 @@
 class Company::JobsController < Company::BaseController
-  before_action :set_job, only: [:contract_invoice, :print_avj_invoice, :avj_invoice, :show, :edit, :update, :destroy, :contract, :edit_contract, :update_contract, :publish]
+  before_action :set_job, except: [:job_countries, :new, :create]
   before_action :set_company, only: [:edit, :new, :create, :update]
 
   def job_countries
@@ -20,7 +20,7 @@ class Company::JobsController < Company::BaseController
     @accepted_quote = @job.accepted_quote
   end
 
-  def new
+    def new
     @job = Job.new(project_id: params[:project_id])
 
     @currencies = [

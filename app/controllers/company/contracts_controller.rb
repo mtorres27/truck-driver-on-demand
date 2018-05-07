@@ -21,6 +21,7 @@ class Company::ContractsController < Company::BaseController
         freelancer.update_attribute(:avj_credit, freelancer.avj_credit.to_f - (avj_credit_used / currency_rate))
       end
       amount = (quote.amount * (1 + (@job.applicable_sales_tax / 100)))
+      # Stripe fees equals to 2.9% of the total amount plus 30 cents USD
       stripe_fees = amount * 0.029 + (0.3 * currency_rate)
       plan_fees = @job.company_plan_fees
       platform_fees = (((quote.amount * avj_fees) - avj_credit_used) - stripe_fees + plan_fees)
@@ -42,7 +43,6 @@ class Company::ContractsController < Company::BaseController
 
       quote.avj_fees = (quote.amount * Rails.configuration.avj_fees)
       quote.stripe_fees = stripe_fees
-      # quote.plan_fee = plan_fees
       quote.net_avj_fees = platform_fees
       quote.avj_credit = avj_credit_used
       quote.tax_amount = (quote.amount * (@job.applicable_sales_tax / 100))

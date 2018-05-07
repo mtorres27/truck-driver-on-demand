@@ -1,5 +1,5 @@
 class Admin::PlansController < Admin::BaseController
-  before_action :set_plan, only: [:show, :edit, :update, :destroy, :enable, :disable, :login_as]
+  before_action :set_plan, except: [:index]
 
   def index
     @plans = Plan.order(:name)
@@ -27,19 +27,19 @@ class Admin::PlansController < Admin::BaseController
 
   private
 
-    def set_plan
-      @plan = Plan.find(params[:id])
-    end
+  def set_plan
+    @plan = Plan.find(params[:id])
+  end
 
-    def plan_params
-      params.require(:plan).permit(
-        :name,
-        :code,
-        :trial_period,
-        :subscription_fee,
-        :description,
-        :period,
-        fee_schema: ['below_2000', 'above_2000']
-      )
-    end
+  def plan_params
+    params.require(:plan).permit(
+      :name,
+      :code,
+      :trial_period,
+      :subscription_fee,
+      :description,
+      :period,
+      fee_schema: ['below_2000', 'above_2000']
+    )
+  end
 end
