@@ -20,6 +20,8 @@ class ApplicationController < ActionController::Base
     if resource.is_a?(Freelancer)
       return freelancer_root_path if resource.registration_completed?
       return freelancer_registration_step_path(resource.registration_step)
+    else
+      super
     end
   end
 
