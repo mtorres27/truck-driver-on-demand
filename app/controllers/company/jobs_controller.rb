@@ -20,7 +20,7 @@ class Company::JobsController < Company::BaseController
     @accepted_quote = @job.accepted_quote
   end
 
-    def new
+  def new
     @job = Job.new(project_id: params[:project_id])
 
     @currencies = [
