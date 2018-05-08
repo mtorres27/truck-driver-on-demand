@@ -50,12 +50,12 @@ module Geocodable
     begin
       res = JSON.parse(Net::HTTP.get(URI.parse(url)), symbolize_names: true)
       if res[:status] == "OK"
-        puts "Formatted address: #{res[:results][0][:formatted_address]}" unless Rails.env.test?
-        puts "Point: #{res[:results][0][:geometry][:location]}" unless Rails.env.test?
+        puts "Formatted address: #{res[:results][0][:formatted_address]}"
+        puts "Point: #{res[:results][0][:geometry][:location]}"
         self.formatted_address = res[:results][0][:formatted_address]
         self.lat = res[:results][0][:geometry][:location][:lat]
         self.lng = res[:results][0][:geometry][:location][:lng]
-        puts "Stored: #{lat}, #{lng}" unless Rails.env.test?
+        puts "Stored: #{lat}, #{lng}"
         return true
       end
     rescue Exception => e
