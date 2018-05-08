@@ -35,6 +35,5 @@ FactoryBot.define do
     country [:es, :fi, :fr, :gb, :pt, :us].sample
     city { Faker::Address.city }
     company_name { 'avjunction' }
-    province { Faker::Address.city }
   end
 end

@@ -3,11 +3,20 @@
   = render partial: "shared/registration_progress_bar", locals: { step: 2 }
   = simple_form_for(@freelancer, url: wizard_path) do |f|
     .form-inputs
-        = f.input :first_name, as: :string, label: "First Name", required: true, autofocus: true, placeholder:  "Enter your first name"
-        = f.input :last_name, as: :string, label: "Last Name", required: true, autofocus: true, placeholder:  "Enter your last name"
-        = f.input :company_name, as: :string, label: "Company Name", autofocus: true, placeholder:  "Enter your company name"
-        = f.input :city, required: true, label: "City", placeholder: "Enter your city"
-        = f.input :province, required: true, label: "Province/State", placeholder: "Enter your Province/State"
-        = f.input :country, required: true, label: "Country", prompt: "Select Country"
+      .register__label
+        | First Name
+        = f.input :first_name, as: :string, label: false, required: true, autofocus: true, placeholder:  "Enter your first name"
+      .register__label
+        | Last Name
+        = f.input :last_name, as: :string, label: false, required: true, autofocus: true, placeholder:  "Enter your last name"
+      .register__label
+        | Company Name
+        = f.input :company_name, as: :string, label: false, required: true, autofocus: true, placeholder:  "Enter your company name"
+      .register__label
+        | City
+        = f.input :city, required: true, label: false, placeholder: "Enter your city"
+      .register__label
+        | Country
+        = f.input :country, required: true, label: false, prompt: "Select Country"
     .form-actions
         = f.button :submit, "Continue", class: "btn-primary"

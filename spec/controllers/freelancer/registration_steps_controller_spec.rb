@@ -25,11 +25,11 @@ RSpec.describe Freelancer::RegistrationStepsController, type: :controller do
 
     describe "step: personal" do
       context "when the fields are filled" do
-        let(:freelancer_params) { { first_name: "Test", last_name: "Testerson", city: "Chicago", province: "Illinois", country: "us" } }
+        let(:freelancer_params) { { first_name: "Test", last_name: "Testerson", city: "Chicago", country: "us" } }
 
         it "updates personal information" do
           put :update, params: { id: :personal, freelancer: freelancer_params }
-          expect(freelancer.reload).to have_attributes( { name: "Test Testerson", city: "Chicago", province: "Illinois", country: "us" })
+          expect(freelancer.reload).to have_attributes( { name: "Test Testerson", city: "Chicago", country: "us" })
         end
 
         it "redirects to job info path" do
