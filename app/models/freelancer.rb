@@ -120,42 +120,46 @@ class Freelancer < ApplicationRecord
 
   validates :years_of_experience, numericality: { only_integer: true }
 
+  validates_presence_of :country, :on => :create
+  validates_presence_of :city, :on => :create
+
   validates :phone_number, length: { minimum: 7 }, allow_blank: true
 
   validates :phone_number, length: { minimum: 7 }, on: :update, allow_blank: true
 
   audited
 
-  attr_accessor :first_name, :last_name, :accept_terms_of_service, :accept_privacy_policy,
-                :accept_code_of_conduct, :enforce_profile_edit, :user_type
+  def connected?; !stripe_account_id.nil?; end
+
+  attr_accessor :accept_terms_of_service
+  attr_accessor :accept_privacy_policy
+  attr_accessor :accept_code_of_conduct
 
   validates_acceptance_of :accept_terms_of_service
   validates_acceptance_of :accept_privacy_policy
   validates_acceptance_of :accept_code_of_conduct
 
-  validates_presence_of :email,
-    :address,
-    :city,
-    :state,
-    :postal_code,
-    :country,
-    :freelancer_type,
-    :service_areas,
-    :bio,
-    :years_of_experience,
-    :pay_unit_time_preference,
-    if: :enforce_profile_edit
+  attr_accessor :enforce_profile_edit
 
-  validates :first_name, :last_name, :country, :city, presence: true, on: :update,  if: :step_job_info?
-  validates :job_types, presence: true, on: :update, if: :step_profile?
+    validates_presence_of :name,
+      :email,
+      :address,
+      :city,
+      :state,
+      :postal_code,
+      :country,
+      :freelancer_type,
+      :service_areas,
+      :bio,
+      :years_of_experience,
+      :pay_unit_time_preference,
+      if: :enforce_profile_edit
 
   scope :new_registrants, -> { where(disabled: true) }
 
-  before_save :set_name, if: :step_job_info?
+  after_create :add_to_hubspot
   after_create :check_for_invites
   after_create :send_welcome_email
-  after_update :add_to_hubspot, if: :step_job_info?
-  after_initialize :set_default_step
 
   pg_search_scope :search, against: {
     name: "A",
@@ -202,9 +206,7 @@ class Freelancer < ApplicationRecord
     :at, :au, :be, :ca, :ch, :de, :dk, :es, :fi, :fr, :gb, :hk, :ie, :it, :jp, :lu, :nl, :no, :nz, :pt, :se, :sg, :us
   ]
 
-  def connected?
-    !stripe_account_id.nil?
-  end
+  attr_accessor :user_type
 
   def rating
     if freelancer_reviews.count > 0
@@ -319,10 +321,6 @@ class Freelancer < ApplicationRecord
     end
   end
 
-  def registration_completed?
-    registration_step == "wicked_finish"
-  end
-
   private
 
   def add_to_hubspot
@@ -355,25 +353,4 @@ class Freelancer < ApplicationRecord
     end
   end
 
-  def step_profile?
-    registration_step == "profile"
-  end
-
-  def step_job_info?
-    registration_step == "job_info"
-  end
-
-  def set_default_step
-    self.registration_step ||= "personal"
-  end
-
-  def set_name
-    self.name ||= "#{first_name} #{last_name}"
-  end
-
-  protected
-
-  def confirmation_required?
-    registration_completed?
-  end
 end

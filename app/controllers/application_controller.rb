@@ -16,15 +16,6 @@ class ApplicationController < ActionController::Base
     '/confirm_email'
   end
 
-  def after_sign_in_path_for(resource)
-    if resource.is_a?(Freelancer)
-      return freelancer_root_path if resource.registration_completed?
-      return freelancer_registration_step_path(resource.registration_step)
-    else
-      super
-    end
-  end
-
   def do_geocode(address)
     url = "https://maps.googleapis.com/maps/api/geocode/json?address=#{url_encode(address)}&key=#{Rails.application.secrets.google_maps_api_key}"
     # Make the API request
