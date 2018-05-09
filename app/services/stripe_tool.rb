@@ -153,11 +153,12 @@ module StripeTool
       professional_plan = Stripe::Plan.retrieve('avj_professional')
       no_of_month = ((old_exp - Time.now.to_time.to_i)/1.month.second).to_i
       amount = no_of_month * professional_plan[:amount] / 12
-      Rails.logger.debug "Refund amount: #{amount}"
+      amount *= 1.13 if company.country == 'ca'
+      # Rails.logger.debug "Refund amount: #{amount}"
       # generate the refund
       if amount > 0
         charge = Stripe::Charge.create(
-          amount: amount,
+          amount: amount.round,
           currency:  'usd',
           customer: company.stripe_customer_id,
           description: 'Refund for unused period in the professional plan.'

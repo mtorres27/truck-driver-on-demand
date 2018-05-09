@@ -1,33 +1,39 @@
 = render partial: "/freelancer/shared/profile_sub_nav"
 
 - content_for :secondary do
+  .action-bar
+    - if current_freelancer.avj_credit.nil?
+      - if current_freelancer.friend_invites.count > 0
+        h2.heading-h2 Thank you for inviting your friends
+      - else
+        h2.heading-h2 Did you know?
+    - elsif current_freelancer.avj_credit > 0
+      h2.heading-h2 You have credit
+    - elsif current_freelancer.avj_credit == 0
+      h2.heading-h2 You ran out of credit
   .grid-h.grid-h--no-margin
     .grid-cell.grid-cell--100
       .grid-h
         - if current_freelancer.avj_credit.nil?
           - if current_freelancer.friend_invites.count > 0
             .grid-cell.grid-cell--50
-              h2.heading-h2 Thank you for inviting your friends
               p You'll be notified when they accept your invitation and a $50USD credit will be made available for each friend that joins the AVJ network.
               p Keep inviting more friends for a bigger chance of getting credit.
           -else
             .grid-cell.grid-cell--50
-              h2.heading-h2 Did you know?
               p You can earn credit by inviting all of your friends to join AVJunction. For each friend that joins, you will earn $50USD credit applicable on your next job. Your friends will also earn $20USD by accepting your invitation.
               p What are you waiting for? Invite all your friends and start getting credits.
         - elsif current_freelancer.avj_credit > 0
           .grid-cell.grid-cell--50
-            h2.heading-h2 You have credit
             p Thank you for inviting your friends to join AVJuntion. You have an available credit of $#{number_with_precision(@avj_credit, precision: 2)}USD that will be applied on your next job.
             p Invite more of your friends to get even more.
         / avj_credit = 0 -> current_freelancer had credit in the past and has used it all up
         - elsif current_freelancer.avj_credit == 0
           .grid-cell.grid-cell--50
-            h2.heading-h2 You ran out of credit
             p All your available credit has been applied. Invite friends to earn some more.
-        .grid-cell.grid-cell--30
+        .grid-cell.grid-cell--33
           .profile__stats-box
-            .profile__stats.profile__stats--100
+            .profile__stats.profile__stats--50
               h3.heading-h3
                 = "$#{number_with_precision(@avj_credit, precision: 2)}USD"
               h4.heading-h4
@@ -39,7 +45,7 @@
               = "Check out your payments to see the credit you have used "
               a href=freelancer_payments_path here
               | .
-        .grid-cell.grid-cell--100
+        .grid-cell.grid-cell--50
           = simple_form_for(current_freelancer, url: freelancer_friend_invites_path) do |f|
             = f.simple_fields_for :friend_invites do |friend_invite_form|
             .buttons
@@ -47,15 +53,15 @@
               = f.submit "Send all invites", class: "btn btn--primary", id: "friend-invites__submit", disabled: true
 
         - if current_freelancer.friend_invites.count > 0
-          .grid-cell.grid-cell--100
-            h2.heading-h2 Check the status of your invites here
+          / .grid-cell.grid-cell--100
+          /   h2.heading-h2 Check the status of your invites here
           - if current_freelancer.friend_invites.pending.count > 0
             .grid-cell.grid-cell--100
-              .action-bar
-                h2.heading-h2.heading-h2--action-bar
-                  | Pending invites
+              h2.heading-h2
+                | Pending invites
+            .grid-cell.grid-cell--100
               .grid-h
-                .grid-cell.grid-cell--100
+                .grid-cell.grid-cell--50
                   .list
                     - current_freelancer.friend_invites.pending.each do |invite|
                       .list-item
@@ -66,9 +72,8 @@
                             = invite.email
           - if current_freelancer.friend_invites.accepted.count > 0
             .grid-cell.grid-cell--100
-              .action-bar
-                h2.heading-h2.heading-h2--action-bar
-                  | Accepted invites
+              h2.heading-h2
+                | Accepted invites
               .grid-h
                 .grid-cell.grid-cell--100
                   .list
