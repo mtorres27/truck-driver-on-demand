@@ -1,28 +1,21 @@
-/ p= @job.freelancer&.formatted_address || @job.freelancer&.address
-.grid-cell.grid-cell--100
-  .invoice__meta-1
-    .avatar.avatar--invoice
-      = image_tag('avjunction-logo_header.svg', size: "130x70")
-    .invoice__meta-4
-      div AV Junction
-      div 2010 Winston Park Drive, Suite 200
-      div Oakville North
-      div Ontario, Canada
-      div 72393 3693 RC0001
 .grid-cell.grid-cell--33
-  h4.heading-h4= "Company: #{@job.company.name}"
-  div= @job.company.address
-  div= @job.company.sales_tax_number
+  .avatar.avatar--invoice
+    = image_tag('avjunction_logo.png', size: "130x33")
+  div 2010 Winston Park Drive, Suite 200
+  div Oakville, ON
+  div 72393 3693 RC0001
+
 .grid-cell.grid-cell--33
-  .invoice__meta-1
-    .invoice__meta-3
-      div= "Inv #: #{@job.id}"
-      - if !@accepted_quote.paid_at.nil?
-        div= "Date paid: #{div= @accepted_quote.paid_at.to_date}"
-.grid-cell.grid-cell--expand
-  .invoice__meta-1
-    .invoice__meta-3
-      div= "Job: #{@job.title}"
+  h4.heading-h4= "To: #{current_company.name}"
+  div= current_company.address
+  div #{current_company.city}, #{current_company.province}
+  div= current_company.postal_code
+  div BN Tax No. #{current_company.sales_tax_number}
+.grid-cell.grid-cell--33
+  h4.heading-h4= "Inv #: #{@job.id}"
+  - if !@accepted_quote.paid_at.nil?
+    div= "Date paid: #{div= @accepted_quote.paid_at.to_date}"
+  div= "Job: #{@job.title}"
 .grid-cell.grid-cell--100
   .invoice__table
     .invoice__table-row.invoice__table-row--header
