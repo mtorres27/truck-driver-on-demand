@@ -1,3 +1,16 @@
+# == Schema Information
+#
+# Table name: freelancer_affiliations
+#
+#  id            :integer          not null, primary key
+#  name          :string
+#  image         :string
+#  freelancer_id :integer
+#  created_at    :datetime         not null
+#  updated_at    :datetime         not null
+#  image_data    :text
+#
+
 require "image_processing/mini_magick"
 include ImageProcessing::MiniMagick
 

@@ -67,6 +67,8 @@ Rails.application.routes.draw do
 
     resources :notifications
 
+    resource :friend_invites, only: [:show, :update]
+
   end
 
   namespace :company do
@@ -118,6 +120,7 @@ Rails.application.routes.draw do
         post 'contract_pay' => 'contracts#contract_pay'
       end
       resource :review, only: [:show, :create]
+      get :contract_invoice, on: :member
     end
 
     get "jobs/:id/publish", to: "jobs#publish"

@@ -2,23 +2,71 @@
 #
 # Table name: companies
 #
-#  id                :integer          not null, primary key
-#  token             :string
-#  email             :citext           not null
-#  name              :string           not null
-#  contact_name      :string           not null
-#  currency          :string           default("CAD"), not null
-#  address           :string
-#  formatted_address :string
-#  area              :string
-#  lat               :decimal(9, 6)
-#  lng               :decimal(9, 6)
-#  hq_country        :string
-#  description       :string
-#  avatar_data       :text
-#  disabled          :boolean          default(FALSE), not null
-#  created_at        :datetime         not null
-#  updated_at        :datetime         not null
+#  id                        :integer          not null, primary key
+#  token                     :string
+#  email                     :citext           not null
+#  name                      :string           not null
+#  contact_name              :string           not null
+#  address                   :string
+#  formatted_address         :string
+#  area                      :string
+#  lat                       :decimal(9, 6)
+#  lng                       :decimal(9, 6)
+#  hq_country                :string
+#  description               :string
+#  avatar_data               :text
+#  disabled                  :boolean          default(TRUE), not null
+#  created_at                :datetime         not null
+#  updated_at                :datetime         not null
+#  messages_count            :integer          default(0), not null
+#  company_reviews_count     :integer          default(0), not null
+#  profile_header_data       :text
+#  contract_preference       :string           default(NULL)
+#  job_markets               :citext
+#  technical_skill_tags      :citext
+#  profile_views             :integer          default(0), not null
+#  website                   :string
+#  phone_number              :string
+#  number_of_offices         :integer          default(0)
+#  number_of_employees       :string
+#  established_in            :integer
+#  encrypted_password        :string           default(""), not null
+#  reset_password_token      :string
+#  reset_password_sent_at    :datetime
+#  remember_created_at       :datetime
+#  sign_in_count             :integer          default(0), not null
+#  current_sign_in_at        :datetime
+#  last_sign_in_at           :datetime
+#  current_sign_in_ip        :inet
+#  last_sign_in_ip           :inet
+#  stripe_customer_id        :string
+#  stripe_subscription_id    :string
+#  stripe_plan_id            :string
+#  subscription_cycle        :string
+#  is_subscription_cancelled :boolean          default(FALSE)
+#  subscription_status       :string
+#  billing_period_ends_at    :datetime
+#  last_4_digits             :string
+#  card_brand                :string
+#  exp_month                 :string
+#  exp_year                  :string
+#  header_color              :string           default("FF6C38")
+#  country                   :string
+#  confirmation_token        :string
+#  confirmed_at              :datetime
+#  confirmation_sent_at      :datetime
+#  header_source             :string           default("color")
+#  province                  :string
+#  sales_tax_number          :string
+#  line2                     :string
+#  city                      :string
+#  state                     :string
+#  postal_code               :string
+#  job_types                 :citext
+#  manufacturer_tags         :citext
+#  plan_id                   :integer
+#  is_trial_applicable       :boolean          default(TRUE)
+#  waived_jobs               :integer          default(1)
 #
 
 class Company < ApplicationRecord
@@ -104,51 +152,12 @@ class Company < ApplicationRecord
 
   after_create :add_to_hubspot
 
-  def add_to_hubspot
-    api_key = "5c7ad391-2bfe-4d11-9ba3-82b5622212ba"
-    url = "https://api.hubapi.com/contacts/v1/contact/createOrUpdate/email/#{email}/?hapikey=#{api_key}"
-    uri = URI.parse(url)
-    http = Net::HTTP.new(uri.host, uri.port)
-    http.use_ssl = true if uri.scheme == 'https'
-    req = Net::HTTP::Post.new uri
-    data = {
-        properties: [
-            {
-                property: "email",
-                value: email
-            },
-            {
-                property: 'company',
-                value: name
-            },
-            {
-                property: "firstname",
-                value: contact_name.split(" ")[0]
-            },
-            {
-                property: "lastname",
-                value: contact_name.split(" ")[1]
-            },
-            {
-                property: "lifecyclestage",
-                value: "customer"
-            },
-            {
-                property: "im_an",
-                value: "AV Company"
-            },
-        ]
-    }
-    req.body = data.to_json
-    res = http.start { |http| http.request req }
-  end
-
   def freelancers
     Freelancer.
-    joins(applicants: :job).
-    where(jobs: { company_id: id }).
-    where(applicants: { state: :accepted }).
-    order(:name)
+      joins(applicants: :job).
+      where(jobs: { company_id: id }).
+      where(applicants: { state: :accepted }).
+      order(:name)
   end
 
   def renew_month
@@ -173,7 +182,6 @@ class Company < ApplicationRecord
       :description,
       :established_in,
       if: :enforce_profile_edit
-
 
 
   # def province=(value)
@@ -204,70 +212,84 @@ class Company < ApplicationRecord
   }
 
 
-    attr_accessor :user_type
-    # We want to populate both name and contact_name on sign up
-    before_validation :set_contact_name, on: :create
-    def set_contact_name
-      self.contact_name = name unless contact_name
+  attr_accessor :user_type
+  # We want to populate both name and contact_name on sign up
+  before_validation :set_contact_name, on: :create
+  def set_contact_name
+    self.contact_name = name unless contact_name
+  end
+
+  def rating
+    if company_reviews.count > 0
+      company_reviews.average("(#{CompanyReview::RATING_ATTRS.map(&:to_s).join('+')}) / #{CompanyReview::RATING_ATTRS.length}").round
+    else
+      return nil
+    end
+  end
+
+  def self.avg_rating(company)
+    if company.company_reviews_count == 0
+      return nil
     end
 
-    def rating
-      if company_reviews.count > 0
-        company_reviews.average("(#{CompanyReview::RATING_ATTRS.map(&:to_s).join('+')}) / #{CompanyReview::RATING_ATTRS.length}").round
-      else
-        return nil
+    return company.rating
+  end
+
+  after_save :check_if_should_do_geocode
+  def check_if_should_do_geocode
+    if saved_changes.include?("address") or saved_changes.include?("city") or (!address.nil? and lat.nil?) or (!city.nil? and lat.nil?)
+      do_geocode
+      update_columns(lat: lat, lng: lng)
+    end
+  end
+
+  def reject_featured_projects(attrs)
+    exists = attrs["id"].present?
+    empty = attrs["file"].blank? and attrs["name"].blank?
+    !exists and empty
+  end
+
+  def reject_company_installs(attrs)
+    exists = attrs["id"].present?
+    empty = attrs["year"].blank? and attrs["installs"].blank
+    !exists and empty
+  end
+
+  def job_markets_for_job_type(job_type)
+    all_job_markets = I18n.t("enumerize.#{job_type}_job_markets")
+    return [] unless all_job_markets.kind_of?(Hash)
+    freelancer_job_markets = []
+    job_markets.each do |index, value|
+      if all_job_markets[index.to_sym]
+        freelancer_job_markets << all_job_markets[index.to_sym]
       end
     end
+    freelancer_job_markets
+  end
 
-    def self.avg_rating(company)
-      if company.company_reviews_count == 0
-        return nil
-      end
+  def self.do_all_geocodes
+    Company.all.each do |f|
+      p "Doing geocode for " + f.id.to_s + "(#{f.compile_address})"
+      f.do_geocode
+      f.update_columns(lat: f.lat, lng: f.lng)
 
-      return company.rating
+      sleep 1
     end
+  end
 
-    after_save :check_if_should_do_geocode
-    def check_if_should_do_geocode
-      if saved_changes.include?("address") or saved_changes.include?("city") or (!address.nil? and lat.nil?) or (!city.nil? and lat.nil?)
-        do_geocode
-        update_columns(lat: lat, lng: lng)
-      end
-    end
+  private
 
-    def reject_featured_projects(attrs)
-      exists = attrs["id"].present?
-      empty = attrs["file"].blank? and attrs["name"].blank?
-      !exists and empty
-    end
+  def add_to_hubspot
+    return unless Rails.application.secrets.enabled_hubspot
 
-    def reject_company_installs(attrs)
-      exists = attrs["id"].present?
-      empty = attrs["year"].blank? and attrs["installs"].blank
-      !exists and empty
-    end
-
-    def job_markets_for_job_type(job_type)
-      all_job_markets = I18n.t("enumerize.#{job_type}_job_markets")
-      return [] unless all_job_markets.kind_of?(Hash)
-      freelancer_job_markets = []
-      job_markets.each do |index, value|
-        if all_job_markets[index.to_sym]
-          freelancer_job_markets << all_job_markets[index.to_sym]
-        end
-      end
-      freelancer_job_markets
-    end
-
-    def self.do_all_geocodes
-      Company.all.each do |f|
-        p "Doing geocode for " + f.id.to_s + "(#{f.compile_address})"
-        f.do_geocode
-        f.update_columns(lat: f.lat, lng: f.lng)
-
-        sleep 1
-      end
-    end
+    Hubspot::Contact.createOrUpdate(email,
+      company: name,
+      firstname: contact_name.split(" ")[0],
+      lastname: contact_name.split(" ")[1],
+      lifecyclestage: "customer",
+      im_am: "AV Company",
+    )
+  end
 
   # This SQL needs to stay exactly in sync with it's related index (index_on_companies_location)
   # otherwise the index won't be used. (don't even add whitespace!)

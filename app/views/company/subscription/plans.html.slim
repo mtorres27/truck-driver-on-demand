@@ -7,7 +7,7 @@
     h2.heading-h2.heading-h2--action-bar
       - if current_company.plan.present?
         | You're currently subscribed to the #{current_company.plan.present? ? current_company.plan.name : ''} plan
-      - else 
+      - else
         | You'll need to subscribe to a plan to post a job.
   .grid-h
     / - if !current_company.stripe_plan_id.nil? && !@subscription.nil? && (current_company.subscription_status == "trialing" || current_company.subscription_status == "active")
@@ -23,7 +23,7 @@
     /         | The #{ current_company.subscription_status == "trialing" ? "trial":"subscription"} will end at #{current_company.billing_period_ends_at}
 
     - if current_company.last_4_digits.present? && !current_company.is_subscription_cancelled
-      - if current_company.plan.subscription_fee > 0
+      - if !current_company.plan.nil? && current_company.plan.subscription_fee > 0
         .grid-cell.grid-cell--50
           .plans
             h2.heading-h2.center
@@ -66,8 +66,8 @@
               - else
                 .plans__price $#{number_with_precision(plan[:subscription_fee] , precision: 2,  strip_insignificant_zeros: true)}
                 .plans__tax USD #{ current_company.country == 'ca'  ?  "+ " + (province_tax(current_company.province)*100).to_s + "% tax" : '' }
-              /  if  plan[:subscription_fee] > 0 
-                
+              /  if  plan[:subscription_fee] > 0
+
               / - else
               /   .plans__price Free
 

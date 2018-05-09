@@ -30,5 +30,8 @@ FactoryBot.define do
   factory :freelancer do
     email { Faker::Internet.unique.email }
     name { Faker::Name.unique.name }
+    password "password"
+    country [:es, :fi, :fr, :gb, :pt, :us].sample
+    city { Faker::Address.city }
   end
 end

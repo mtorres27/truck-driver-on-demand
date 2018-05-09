@@ -1,16 +1,15 @@
-.full-height
-  | 
-.login__form
-  .login__title
-    | Recover your Password
-
-  = simple_form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :post }) do |f|
-    = f.error_notification
-
-    .form-inputs
-      = f.input :email, as: :string, required: true, autofocus: true, label: false, placeholder: "Enter your Email Address"
-
-    .form-actions
-      = f.button :submit, "Send me password reset instructions", class:"btn-primary"
-
-  = render "devise/shared/links"
+- content_for :secondary do
+    .action-bar
+      h2.heading-h2.heading-h2--action-bar Recover your Password
+    = simple_form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :post }) do |f|
+      = f.error_notification
+      .grid-h
+      .grid-cell.grid-cell--50
+        .grid-h
+          .grid-cell.grid-cell--100
+            = f.input :email, as: :string, required: true, autofocus: true, label: "Email address", placeholder: "Enter your Email Address"
+          .grid-cell.grid-cell--100
+            div
+              = f.button :submit, "Send me password reset instructions", class:"btn btn--primary"
+          .grid-cell.grid-cell--100
+            = render "devise/shared/links"

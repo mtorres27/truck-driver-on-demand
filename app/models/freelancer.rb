@@ -13,17 +13,58 @@
 #  lat                      :decimal(9, 6)
 #  lng                      :decimal(9, 6)
 #  pay_unit_time_preference :string
-#  pay_per_unit_time        :integer
+#  pay_per_unit_time        :string
 #  tagline                  :string
 #  bio                      :text
-#  keywords                 :citext
+#  job_markets              :citext
 #  years_of_experience      :integer          default(0), not null
 #  profile_views            :integer          default(0), not null
 #  projects_completed       :integer          default(0), not null
 #  available                :boolean          default(TRUE), not null
-#  disabled                 :boolean          default(FALSE), not null
+#  disabled                 :boolean          default(TRUE), not null
 #  created_at               :datetime         not null
 #  updated_at               :datetime         not null
+#  messages_count           :integer          default(0), not null
+#  freelancer_reviews_count :integer          default(0), not null
+#  technical_skill_tags     :citext
+#  profile_header_data      :text
+#  verified                 :boolean          default(FALSE)
+#  encrypted_password       :string           default(""), not null
+#  reset_password_token     :string
+#  reset_password_sent_at   :datetime
+#  remember_created_at      :datetime
+#  sign_in_count            :integer          default(0), not null
+#  current_sign_in_at       :datetime
+#  last_sign_in_at          :datetime
+#  current_sign_in_ip       :inet
+#  last_sign_in_ip          :inet
+#  header_color             :string           default("FF6C38")
+#  country                  :string
+#  confirmation_token       :string
+#  confirmed_at             :datetime
+#  confirmation_sent_at     :datetime
+#  freelancer_team_size     :string
+#  freelancer_type          :string
+#  header_source            :string           default("color")
+#  stripe_account_id        :string
+#  stripe_account_status    :text
+#  currency                 :string
+#  sales_tax_number         :string
+#  line2                    :string
+#  state                    :string
+#  postal_code              :string
+#  service_areas            :string
+#  city                     :string
+#  phone_number             :string
+#  profile_score            :integer
+#  valid_driver             :boolean
+#  own_tools                :boolean
+#  company_name             :string
+#  job_types                :citext
+#  job_functions            :citext
+#  manufacturer_tags        :citext
+#  special_avj_fees         :decimal(10, 2)
+#  avj_credit               :decimal(10, 2)
 #
 
 require 'net/http'
@@ -62,6 +103,8 @@ class Freelancer < ApplicationRecord
   has_many :freelancer_insurances
   accepts_nested_attributes_for :freelancer_insurances, :reject_if => :all_blank, :allow_destroy => true
 
+  has_many :friend_invites
+  accepts_nested_attributes_for :friend_invites, :reject_if => :all_blank, :allow_destroy => true
 
   has_many :job_favourites
   has_many :favourite_jobs, through: :job_favourites, source: :job
@@ -106,7 +149,6 @@ class Freelancer < ApplicationRecord
       :postal_code,
       :country,
       :freelancer_type,
-      :country,
       :service_areas,
       :bio,
       :years_of_experience,
@@ -116,48 +158,8 @@ class Freelancer < ApplicationRecord
   scope :new_registrants, -> { where(disabled: true) }
 
   after_create :add_to_hubspot
-
-  def add_to_hubspot
-    api_key = "5c7ad391-2bfe-4d11-9ba3-82b5622212ba"
-    url = "https://api.hubapi.com/contacts/v1/contact/createOrUpdate/email/#{email}/?hapikey=#{api_key}"
-    uri = URI.parse(url)
-    http = Net::HTTP.new(uri.host, uri.port)
-    http.use_ssl = true if uri.scheme == 'https'
-    req = Net::HTTP::Post.new uri
-    data = {
-        properties: [
-            {
-                property: "email",
-                value: email
-            },
-            {
-                property: "firstname",
-                value: name.split(" ")[0]
-            },
-            {
-                property: "lastname",
-                value: name.split(" ")[1]
-            },
-            {
-                property: "lifecyclestage",
-                value: "customer"
-            },
-            {
-                property: "im_an",
-                value: "AV Freelancer"
-            },
-        ]
-    }
-    req.body = data.to_json
-    res = http.start { |http| http.request req }
-  end
-
-
+  after_create :check_for_invites
   after_create :send_welcome_email
-
-  def send_welcome_email
-    FreelancerMailer.verify_your_identity(self).deliver
-  end
 
   pg_search_scope :search, against: {
     name: "A",
@@ -318,4 +320,37 @@ class Freelancer < ApplicationRecord
       sleep 1
     end
   end
+
+  private
+
+  def add_to_hubspot
+    return unless Rails.application.secrets.enabled_hubspot
+
+    Hubspot::Contact.createOrUpdate(email,
+      firstname: name.split(" ")[0],
+      lastname: name.split(" ")[1],
+      lifecyclestage: "customer",
+      im_am: "AV Freelancer",
+    )
+  end
+
+  def send_welcome_email
+    FreelancerMailer.verify_your_identity(self).deliver_later
+  end
+
+  def check_for_invites
+    return if FriendInvite.by_email(email).count.zero?
+
+    self.avj_credit = 20
+    save!
+    FreelancerMailer.notice_credit_earned(self, 20).deliver_later
+    FriendInvite.by_email(email).each do |invite|
+      freelancer = invite.freelancer
+      freelancer.avj_credit = freelancer.avj_credit.nil? ? 50 : freelancer.avj_credit + 50
+      freelancer.save!
+      invite.update_attribute(:accepted, true)
+      FreelancerMailer.notice_credit_earned(freelancer, 50).deliver_later
+    end
+  end
+
 end

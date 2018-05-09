@@ -34,7 +34,7 @@ class Admin::ContractsController < Admin::BaseController
         @m.send_contract = true
         @m.body = "Hi #{@job.freelancer.name}! This is a note to let you know that we've just sent a work order to you. <a href='/freelancer/jobs/#{@job.id}/work_order'>Click here</a> to view it!"
         @m.save
-        FreelancerMailer.notice_work_order_received(@job.company, @job.freelancer, @job).deliver
+        FreelancerMailer.notice_work_order_received(@job.company, @job.freelancer, @job).deliver_later
 
         @job.messages << @m
 
