@@ -9,10 +9,14 @@
   - if @subscriptions.any?
     .grid-h
       .grid-cell.grid-cell--100
-        .invoices
+        .list
           - @subscriptions.each do |subscription|
-            li.invoice
-              = link_to subscription.description , company_invoice_path(subscription: subscription.stripe_subscription_id)
-              | => $#{subscription.amount}
+            a.list-item href=company_invoice_path(subscription: subscription.stripe_subscription_id)
+              .list-bar
+                .list__title
+                  = subscription.description
+                .list__title
+                  | $#{number_with_precision(subscription.amount+subscription.tax, precision: 2)} USD
+
   - else
     | You don't have any invoices yet
