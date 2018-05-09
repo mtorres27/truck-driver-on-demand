@@ -153,7 +153,7 @@ class Freelancer < ApplicationRecord
 
   before_save :set_name, if: :step_job_info?
   after_create :check_for_invites
-  after_create :send_welcome_email
+  after_update :send_welcome_email, if: :confirmed_freelancer?
   after_update :add_to_hubspot, if: :step_job_info?
   after_initialize :set_default_step
 
@@ -337,7 +337,9 @@ class Freelancer < ApplicationRecord
   end
 
   def send_welcome_email
+    return unless confirmation_sent_at.nil?
     FreelancerMailer.verify_your_identity(self).deliver_later
+    self.send_confirmation_instructions
   end
 
   def check_for_invites
@@ -369,6 +371,10 @@ class Freelancer < ApplicationRecord
 
   def set_name
     self.name ||= "#{first_name} #{last_name}"
+  end
+
+  def confirmed_freelancer?
+    registration_completed? && self.confirmed? == false
   end
 
   protected

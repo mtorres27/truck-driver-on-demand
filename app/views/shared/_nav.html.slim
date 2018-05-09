@@ -66,7 +66,7 @@ nav#top-nav.navbar
             = link_to "Logout", destroy_admin_session_path, method: :delete
       - elsif request.path.index('freelancer') == 1
         - if current_freelancer
-          - if current_freelancer.registration_completed?
+          - if current_freelancer.registration_completed? || current_freelancer.registration_step.nil?
             li( class=("active" if request.path == (freelancer_root_path)) )
               a.mobile-nav__menu__item href=freelancer_root_path data-turbolinks="false"
                 | search jobs

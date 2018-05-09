@@ -18,7 +18,7 @@ class ApplicationController < ActionController::Base
 
   def after_sign_in_path_for(resource)
     if resource.is_a?(Freelancer)
-      return freelancer_root_path if resource.registration_completed?
+      return freelancer_root_path if resource.registration_completed? || resource.registration_step.nil?
       return freelancer_registration_step_path(resource.registration_step)
     else
       super
