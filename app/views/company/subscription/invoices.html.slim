@@ -1,9 +1,16 @@
-h2
-  | Invoices
-span
-  / | (Next invoice will be at #{Time.at(@upcoming[:date])} for #{pretty_amount(@upcoming[:amount_due])})
-.invoices
-  - @subscriptions.each do |subscription|
-    li.invoice
-      = link_to subscription.description , company_invoice_path(subscription: subscription.stripe_subscription_id)
-      | => $#{subscription.amount}
+= render partial: "/company/shared/profile_sub_nav"
+
+- content_for :title, "AVJunction - Subscriptions"
+
+- content_for :secondary do
+  .action-bar
+    h2.heading-h2.heading-h2--action-bar
+      | Receipts
+
+  .grid-h
+    .grid-cell.grid-cell--100
+      .invoices
+        - @subscriptions.each do |subscription|
+          li.invoice
+            = link_to subscription.description , company_invoice_path(subscription: subscription.stripe_subscription_id)
+            | => $#{subscription.amount}

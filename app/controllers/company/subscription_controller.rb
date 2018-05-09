@@ -17,7 +17,9 @@ class Company::SubscriptionController < Company::BaseController
   end
 
   def invoice
+    # raise exception if company is not the invoice owner
     @subscription = Subscription.where(['stripe_subscription_id = ? ', params[:subscription]]).first()
+    raise Exception.new('You can\'t see this invoice!') if @subscription.nil? || @subscription.company_id != current_company.id
   end
 
   def change_plan
