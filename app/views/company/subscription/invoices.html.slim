@@ -6,11 +6,13 @@
   .action-bar
     h2.heading-h2.heading-h2--action-bar
       | Invoices
-
-  .grid-h
-    .grid-cell.grid-cell--100
-      .invoices
-        - @subscriptions.each do |subscription|
-          li.invoice
-            = link_to subscription.description , company_invoice_path(subscription: subscription.stripe_subscription_id)
-            | => $#{subscription.amount}
+  - if @subscriptions.any?
+    .grid-h
+      .grid-cell.grid-cell--100
+        .invoices
+          - @subscriptions.each do |subscription|
+            li.invoice
+              = link_to subscription.description , company_invoice_path(subscription: subscription.stripe_subscription_id)
+              | => $#{subscription.amount}
+  - else
+    | You don't have any invoices yet
