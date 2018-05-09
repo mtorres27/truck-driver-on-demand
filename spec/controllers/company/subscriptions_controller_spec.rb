@@ -55,11 +55,30 @@ describe Company::SubscriptionController, type: :controller  do
   end
 
   describe 'GET invoice' do
-    let!(:subscription) { create(:subscription, company_id: company.id) }
+    context 'when invoice belongs to company' do
+      let!(:subscription) { create(:subscription, company_id: company.id) }
 
-    it 'assigns @subscription' do
-      get :invoice, params: { subscription: subscription.stripe_subscription_id }
-      expect(assigns(:subscription)).to eq(subscription)
+      it 'assigns @subscription' do
+        get :invoice, params: { subscription: subscription.stripe_subscription_id }
+        expect(assigns(:subscription)).to eq(subscription)
+      end
+    end
+
+    context 'when invoice does not belong to company' do
+      let(:other_company) { create(:company) }
+      let!(:subscription) { create(:subscription, company_id: other_company.id) }
+
+      before(:each) do
+        get :invoice, params: { subscription: subscription.stripe_subscription_id }
+      end
+
+      it 'redirects to invoices' do
+        expect(response).to redirect_to(company_invoices_path)
+      end
+
+      it 'shows error message' do
+        expect(flash[:error]).to be_present
+      end
     end
   end
 

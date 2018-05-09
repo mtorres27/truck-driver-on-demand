@@ -1,4 +1,6 @@
 module StripeTool
+  CANADA_SALES_TAX = 0.13
+
   def self.update_company_info_with_subscription(company: company, customer: customer, subscription: subscription, plan: plan)
     company.billing_period_ends_at    = Time.at(subscription.current_period_end).to_datetime
     company.stripe_customer_id        = customer.id
@@ -26,7 +28,7 @@ module StripeTool
     company_subscription.is_active = true
     company_subscription.ends_at = company.billing_period_ends_at
     company_subscription.amount = plan.subscription_fee
-    company_subscription.tax = plan.subscription_fee * 0.13 if company.country == 'ca'
+    company_subscription.tax = plan.subscription_fee * CANADA_SALES_TAX if company.canada_country?
     company_subscription.save
 
   end
@@ -153,7 +155,7 @@ module StripeTool
       professional_plan = Stripe::Plan.retrieve('avj_professional')
       no_of_month = ((old_exp - Time.now.to_time.to_i)/1.month.second).to_i
       amount = no_of_month * professional_plan[:amount] / 12
-      amount *= 1.13 if company.country == 'ca'
+      amount += amount * CANADA_SALES_TAX if company.canada_country?
       # generate the refund
       if amount > 0
         charge = Stripe::Charge.create(

@@ -1,9 +1,5 @@
 .grid-cell.grid-cell--33
-  .avatar.avatar--invoice
-    = image_tag('avjunction_logo.png', size: "130x33")
-  div 2010 Winston Park Drive, Suite 200
-  div Oakville, ON
-  div 72393 3693 RC0001
+  = render "shared/avj_logo_and_address"
 
 .grid-cell.grid-cell--33
   h4.heading-h4= "To: #{current_company.name}"
@@ -24,7 +20,7 @@
       .invoice__table-text.invoice__table-text--right
         | $#{(@subscription[:amount])}USD
     .invoice__table-row
-      .invoice__table-text Tax (%#{current_company.country == 'ca'? 13: 0})
+      .invoice__table-text Tax (%#{current_company.canada_country? ? 13: 0})
       .invoice__table-text.invoice__table-text--right
         | $#{@subscription[:tax]}USD
     .invoice__table-row.invoice__table-row--total

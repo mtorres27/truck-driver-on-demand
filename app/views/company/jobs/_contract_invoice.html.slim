@@ -1,9 +1,5 @@
 .grid-cell.grid-cell--33
-  .avatar.avatar--invoice
-    = image_tag('avjunction_logo.png', size: "130x33")
-  div 2010 Winston Park Drive, Suite 200
-  div Oakville, ON
-  div 72393 3693 RC0001
+  = render "shared/avj_logo_and_address"
 
 .grid-cell.grid-cell--33
   h4.heading-h4= "To: #{current_company.name}"
@@ -34,11 +30,11 @@
     .invoice__table-row
       .invoice__table-text AV Junction fees #{ @accepted_quote.plan_fee.positive? ? "($"+@accepted_quote.plan_fee.to_i.to_s+" USD)" : ""}
       .invoice__table-text.invoice__table-text--right
-        | #{ @job.company_plan_fees.positive? ? number_with_precision(@job.company_plan_fees * (current_company.country == 'ca' ? 0.87 : 1), precision: 2) : "Waived"} #{ @job.company_plan_fees.positive? ? @job.currency.upcase : ''}
+        | #{ @job.company_plan_fees.positive? ? number_with_precision(@job.company_plan_fees * (current_company.canada_country? ? 0.87 : 1), precision: 2) : "Waived"} #{ @job.company_plan_fees.positive? ? @job.currency.upcase : ''}
     .invoice__table-row
       .invoice__table-text AV Junction sales tax
       .invoice__table-text.invoice__table-text--right
-        | #{ @job.company_plan_fees.positive? ? number_with_precision((current_company.country == 'ca' ? @job.company_plan_fees * 0.13 : 0), precision: 2) : "Waived"} #{ @job.company_plan_fees.positive? ? @job.currency.upcase : ''}
+        | #{ @job.company_plan_fees.positive? ? number_with_precision((current_company.canada_country? ? @job.company_plan_fees * 0.13 : 0), precision: 2) : "Waived"} #{ @job.company_plan_fees.positive? ? @job.currency.upcase : ''}
     .invoice__table-row
     .invoice__table-row.invoice__table-row--total
       - if @accepted_quote && !@accepted_quote.paid_by_company

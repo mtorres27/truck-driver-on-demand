@@ -3,6 +3,8 @@ class Company::SubscriptionController < Company::BaseController
   before_action :amount_to_be_charged, :set_description
   protect_from_forgery except: :webhook
 
+  CANADA_SALES_TAX_PERCENT = 13
+
   def cancel
     # logger.debug current_company.inspect
     plan = current_company.plan
@@ -13,27 +15,21 @@ class Company::SubscriptionController < Company::BaseController
   end
 
   def invoices
-    @subscriptions = Subscription.where(['company_id = ? ', current_company.id])
+    @subscriptions = Subscription.where(company_id: current_company.id)
   end
 
   def invoice
     # raise exception if company is not the invoice owner
-    @subscription = Subscription.where(['stripe_subscription_id = ? ', params[:subscription]]).first()
-    raise Exception.new('You can\'t see this invoice!') if @subscription.nil? || @subscription.company_id != current_company.id
-  end
-
-  def change_plan
-    if current_company.stripe_plan_id != params[:plan]
-      new_plan = StripeTool.get_stripe_plan (params[:plan])
-      StripeTool.cancel_subscription
-      flash[:notice] = 'Your just cancelled your company subscription!'
+    @subscription = Subscription.find_by(stripe_subscription_id: params[:subscription])
+    if @subscription.nil? || @subscription.company_id != current_company.id
+      flash[:error] = 'You can\'t see this invoice!'
+      redirect_to company_invoices_path
     end
-    redirect_to company_plans_path
   end
 
   def plans
     # redirect to profile edit if no province canadian company
-    if current_company.country == 'ca' && current_company.province.nil?
+    if current_company.canada_country? && current_company.province.nil?
       flash[:notice] = 'You must update your profile with the province!'
       redirect_to edit_company_profile_path
     end
@@ -91,7 +87,7 @@ class Company::SubscriptionController < Company::BaseController
     customer = StripeTool.create_customer(email: params[:stripeEmail],
                                           stripe_token: params[:stripeToken])
     subscription = StripeTool.subscribe(customer: customer,
-                                        tax: current_company.country=='ca' ? 13 : 0,
+                                        tax: current_company.canada_country? ? CANADA_SALES_TAX_PERCENT : 0,
                                         plan: plan,
                                         is_new: current_company.is_trial_applicable
                                         )

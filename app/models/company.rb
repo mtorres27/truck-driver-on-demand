@@ -267,6 +267,10 @@ class Company < ApplicationRecord
     freelancer_job_markets
   end
 
+  def canada_country?
+    country == 'ca'
+  end
+
   def self.do_all_geocodes
     Company.all.each do |f|
       p "Doing geocode for " + f.id.to_s + "(#{f.compile_address})"
