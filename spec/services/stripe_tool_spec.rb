@@ -39,6 +39,7 @@ describe StripeTool do
       allow(Stripe::Subscription).to receive(:retrieve).and_return(subscription)
       allow(StripeTool).to receive(:get_cancel_period_end).and_return(1)
       allow(StripeTool).to receive(:cancel).and_return(true)
+      allow(StripeTool).to receive(:refund_customer).and_return(true)
       allow_any_instance_of(Company).to receive(:save).and_return(true)
     end
 
