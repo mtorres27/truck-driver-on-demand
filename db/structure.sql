@@ -828,7 +828,8 @@ CREATE TABLE freelancers (
     job_types citext,
     job_functions citext,
     manufacturer_tags citext,
-    special_avj_fees numeric(10,2)
+    special_avj_fees numeric(10,2),
+    avj_credit numeric(10,2) DEFAULT NULL::numeric
 );
 
 
@@ -849,6 +850,38 @@ CREATE SEQUENCE freelancers_id_seq
 --
 
 ALTER SEQUENCE freelancers_id_seq OWNED BY freelancers.id;
+
+
+--
+-- Name: friend_invites; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE friend_invites (
+    id bigint NOT NULL,
+    email citext NOT NULL,
+    name character varying NOT NULL,
+    freelancer_id bigint NOT NULL,
+    accepted boolean DEFAULT false
+);
+
+
+--
+-- Name: friend_invites_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE friend_invites_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: friend_invites_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE friend_invites_id_seq OWNED BY friend_invites.id;
 
 
 --
@@ -1120,7 +1153,8 @@ CREATE TABLE payments (
     updated_at timestamp without time zone NOT NULL,
     tax_amount numeric(10,2),
     total_amount numeric(10,2),
-    avj_fees numeric(10,2)
+    avj_fees numeric(10,2),
+    avj_credit numeric(10,2) DEFAULT NULL::numeric
 );
 
 
@@ -1246,7 +1280,8 @@ CREATE TABLE quotes (
     stripe_fees numeric(10,2),
     net_avj_fees numeric(10,2),
     accepted_at timestamp without time zone,
-    plan_fee numeric(10,2) DEFAULT 0
+    plan_fee numeric(10,2) DEFAULT 0,
+    avj_credit numeric(10,2) DEFAULT NULL::numeric
 );
 
 
@@ -1292,7 +1327,10 @@ CREATE TABLE subscriptions (
     billing_perios_ends_at date,
     amount numeric,
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+    updated_at timestamp without time zone NOT NULL,
+    refund numeric(10,2) DEFAULT 0,
+    tax numeric(10,2) DEFAULT 0,
+    description character varying
 );
 
 
@@ -1486,6 +1524,13 @@ ALTER TABLE ONLY freelancer_reviews ALTER COLUMN id SET DEFAULT nextval('freelan
 --
 
 ALTER TABLE ONLY freelancers ALTER COLUMN id SET DEFAULT nextval('freelancers_id_seq'::regclass);
+
+
+--
+-- Name: friend_invites id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY friend_invites ALTER COLUMN id SET DEFAULT nextval('friend_invites_id_seq'::regclass);
 
 
 --
@@ -1730,6 +1775,14 @@ ALTER TABLE ONLY freelancer_reviews
 
 ALTER TABLE ONLY freelancers
     ADD CONSTRAINT freelancers_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: friend_invites friend_invites_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY friend_invites
+    ADD CONSTRAINT friend_invites_pkey PRIMARY KEY (id);
 
 
 --
@@ -2093,6 +2146,13 @@ CREATE UNIQUE INDEX index_freelancers_on_reset_password_token ON freelancers USI
 --
 
 CREATE INDEX index_freelancers_on_technical_skill_tags ON freelancers USING btree (technical_skill_tags);
+
+
+--
+-- Name: index_friend_invites_on_freelancer_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_friend_invites_on_freelancer_id ON friend_invites USING btree (freelancer_id);
 
 
 --
@@ -2530,7 +2590,12 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20180402194248'),
 ('20180404170355'),
 ('20180410210448'),
+('20180413155543'),
+('20180413190903'),
+('20180418190453'),
+('20180418195120'),
 ('20180424155938'),
-('20180424190619');
+('20180424190619'),
+('20180509110048');
 
 
