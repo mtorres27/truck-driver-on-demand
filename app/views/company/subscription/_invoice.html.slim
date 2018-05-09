@@ -14,7 +14,7 @@
   div BN Tax No. #{current_company.sales_tax_number}
 .grid-cell.grid-cell--33
   h4.heading-h4= "Inv #: #{@subscription[:id]}"
-  div= "Date: #{Time.at(@subscription[:created_at])}"
+  div= "Date: #{Time.at(@subscription[:created_at]).strftime('%b %-d, %Y')}"
 .grid-cell.grid-cell--100
   .invoice__table
     .invoice__table-row.invoice__table-row--header

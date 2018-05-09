@@ -770,7 +770,7 @@ CREATE TABLE freelancers (
     id bigint NOT NULL,
     token character varying,
     email citext NOT NULL,
-    name character varying NOT NULL,
+    name character varying,
     avatar_data text,
     address character varying,
     formatted_address character varying,
@@ -829,7 +829,9 @@ CREATE TABLE freelancers (
     job_functions citext,
     manufacturer_tags citext,
     special_avj_fees numeric(10,2),
-    avj_credit numeric(10,2) DEFAULT NULL::numeric
+    avj_credit numeric(10,2) DEFAULT NULL::numeric,
+    registration_step character varying,
+    province character varying
 );
 
 
@@ -1370,7 +1372,12 @@ CREATE TABLE users (
     current_sign_in_ip inet,
     last_sign_in_ip inet,
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+    updated_at timestamp without time zone NOT NULL,
+    confirmation_token character varying,
+    confirmed_at timestamp without time zone,
+    confirmation_sent_at timestamp without time zone,
+    meta_id integer,
+    meta_type character varying
 );
 
 
@@ -2282,10 +2289,24 @@ CREATE INDEX index_quotes_on_company_id ON quotes USING btree (company_id);
 
 
 --
+-- Name: index_users_on_confirmation_token; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX index_users_on_confirmation_token ON users USING btree (confirmation_token);
+
+
+--
 -- Name: index_users_on_email; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE UNIQUE INDEX index_users_on_email ON users USING btree (email);
+
+
+--
+-- Name: index_users_on_meta_id_and_meta_type; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_users_on_meta_id_and_meta_type ON users USING btree (meta_id, meta_type);
 
 
 --
@@ -2537,7 +2558,6 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20171017101132'),
 ('20171020113522'),
 ('20171020123018'),
-('20171023181456'),
 ('20171105210413'),
 ('20171113154821'),
 ('20171114170911'),
@@ -2589,8 +2609,12 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20180413190903'),
 ('20180418190453'),
 ('20180418195120'),
+('20180420173017'),
 ('20180424155938'),
 ('20180424190619'),
+('20180504205104'),
+('20180508222720'),
+('20180508223949'),
 ('20180509110048');
 
 
