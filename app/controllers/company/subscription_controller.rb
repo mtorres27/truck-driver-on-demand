@@ -14,8 +14,6 @@ class Company::SubscriptionController < Company::BaseController
 
   def invoices
     @subscriptions = Subscription.where(['company_id = ? ', current_company.id])
-    # @invoices = StripeTool.get_invoices(customer: current_company.stripe_customer_id)
-    # @upcoming = Stripe::Invoice.upcoming(customer: current_company.stripe_customer_id)
   end
 
   def invoice
@@ -25,7 +23,6 @@ class Company::SubscriptionController < Company::BaseController
   end
 
   def change_plan
-    # logger.debug current_company.inspect
     if current_company.stripe_plan_id != params[:plan]
       new_plan = StripeTool.get_stripe_plan (params[:plan])
       StripeTool.cancel_subscription
@@ -109,7 +106,6 @@ class Company::SubscriptionController < Company::BaseController
     begin
       event_json = JSON.parse(request.body.read)
       event_object = event_json['data']['object']
-      # Rails.logger.debug event_json.inspect
       case event_json['type']
         when 'invoice.payment_succeeded'
           handle_success_invoice event_object

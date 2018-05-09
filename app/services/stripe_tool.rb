@@ -154,7 +154,6 @@ module StripeTool
       no_of_month = ((old_exp - Time.now.to_time.to_i)/1.month.second).to_i
       amount = no_of_month * professional_plan[:amount] / 12
       amount *= 1.13 if company.country == 'ca'
-      # Rails.logger.debug "Refund amount: #{amount}"
       # generate the refund
       if amount > 0
         charge = Stripe::Charge.create(
