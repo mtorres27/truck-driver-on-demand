@@ -2,22 +2,12 @@ h2
   | Invoice
 .invoice
   .id
-    | id : #{@invoice[:id]}
+    | id : #{@subscription[:id]}
   .date
-    | date : #{Time.at(@invoice[:date])}
+    | date : #{Time.at(@subscription[:created_at])}
   .amount
-    | Amount : #{pretty_amount(@invoice[:lines][:data][0][:amount])}
+    | Amount : $#{@subscription[:amount]}
   .Tax
-    | Tax (%#{@invoice[:tax_percent]}) : #{pretty_amount(@invoice[:tax])}
+    | Tax (%#{current_company.country == 'ca'? 13: 0}) : #{(current_company.country == 'ca' ? @subscription[:tax] : 0)}
   .Total
-    | Total : #{pretty_amount(@invoice[:total])}
-  .description
-    | description : #{@invoice[:lines][:data][0][:description]}
-  .start_date
-    | From : #{Time.at(@invoice[:lines][:data][0][:period][:start])}
-  .end_date
-    | To : #{Time.at(@invoice[:lines][:data][0][:period][:end])}
-  .plan
-    | Plan : #{@invoice[:lines][:data][0][:plan][:name]}
-  .interval
-    | Interval : #{@invoice[:lines][:data][0][:plan][:interval]}
+    | Total : $#{(@subscription[:amount]+@subscription[:tax])}

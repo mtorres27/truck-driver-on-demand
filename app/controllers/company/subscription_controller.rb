@@ -11,12 +11,13 @@ class Company::SubscriptionController < Company::BaseController
   end
 
   def invoices
-    @invoices = StripeTool.get_invoices(customer: current_company.stripe_customer_id)
-    @upcoming = Stripe::Invoice.upcoming(customer: current_company.stripe_customer_id)
+    @subscriptions = Subscription.where(['company_id = ? ', current_company.id])
+    # @invoices = StripeTool.get_invoices(customer: current_company.stripe_customer_id)
+    # @upcoming = Stripe::Invoice.upcoming(customer: current_company.stripe_customer_id)
   end
 
   def invoice
-    @invoice = StripeTool.get_invoice(invoice: params[:invoice])
+    @subscription = Subscription.where(['stripe_subscription_id = ? ', params[:subscription]]).first()
   end
 
   def change_plan
@@ -89,11 +90,10 @@ class Company::SubscriptionController < Company::BaseController
     customer = StripeTool.create_customer(email: params[:stripeEmail],
                                           stripe_token: params[:stripeToken])
     subscription = StripeTool.subscribe(customer: customer,
-                                        tax: current_company.country=='ca' ? province_tax(current_company.province)*100  : 0,
+                                        tax: current_company.country=='ca' ? 13 : 0,
                                         plan: plan,
                                         is_new: current_company.is_trial_applicable
                                         )
-    # invoice = StripeTool.create_invoice(customer_id: customer.id, subscription: subscription)
     StripeTool.update_company_info_with_subscription(company: current_company, customer: customer, subscription: subscription, plan: plan)
 
     flash[:notice] = 'Successfully subscribed to "' + subscription.plan.name.upcase + '" Plan'
