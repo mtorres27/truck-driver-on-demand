@@ -51,17 +51,31 @@
             h2.heading-h2 Check the status of your invites here
           - if current_freelancer.friend_invites.pending.count > 0
             .grid-cell.grid-cell--100
-              h3.heading-h3 Pending invites
-            - current_freelancer.friend_invites.pending.each do |invite|
-              .grid-cell.grid-cell--30
-                = invite.name
-              .grid-cell.grid-cell--expand
-                = invite.email
+              .action-bar
+                h2.heading-h2.heading-h2--action-bar
+                  | Pending invites
+              .grid-h
+                .grid-cell.grid-cell--100
+                  .list
+                    - current_freelancer.friend_invites.pending.each do |invite|
+                      .list-item
+                        .list-bar
+                          .list__title
+                            = invite.name
+                          .list__title
+                            = invite.email
           - if current_freelancer.friend_invites.accepted.count > 0
             .grid-cell.grid-cell--100
-              h3.heading-h3 Accepted invites
-            - current_freelancer.friend_invites.accepted.each do |invite|
-              .grid-cell.grid-cell--30
-                = invite.name
-              .grid-cell.grid-cell--expand
-                = invite.email
+              .action-bar
+                h2.heading-h2.heading-h2--action-bar
+                  | Accepted invites
+              .grid-h
+                .grid-cell.grid-cell--100
+                  .list
+                    - current_freelancer.friend_invites.accepted.each do |invite|
+                      .list-item
+                        .list-bar
+                          .list__title
+                            = invite.name
+                          .list__title
+                            = invite.email
