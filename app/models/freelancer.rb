@@ -162,7 +162,9 @@ class Freelancer < ApplicationRecord
   after_create :add_to_hubspot
   after_create :check_for_invites
   after_save :add_credit_to_inviters, if: :confirmed_at_changed?
-  after_create :send_welcome_email
+  after_update :send_welcome_email, if: :confirmed_freelancer?
+  after_update :add_to_hubspot, if: :step_job_info?
+  after_initialize :set_default_step
 
   pg_search_scope :search, against: {
     name: "A",
@@ -342,7 +344,9 @@ class Freelancer < ApplicationRecord
   end
 
   def send_welcome_email
+    return unless confirmation_sent_at.nil?
     FreelancerMailer.verify_your_identity(self).deliver_later
+    self.send_confirmation_instructions
   end
 
   def check_for_invites
@@ -369,4 +373,29 @@ class Freelancer < ApplicationRecord
     end
   end
 
+  def step_profile?
+    registration_step == "profile"
+  end
+
+  def step_job_info?
+    registration_step == "job_info"
+  end
+
+  def set_default_step
+    self.registration_step ||= "personal"
+  end
+
+  def set_name
+    self.name ||= "#{first_name} #{last_name}"
+  end
+
+  def confirmed_freelancer?
+    registration_completed? && self.confirmed? == false
+  end
+
+  protected
+
+  def confirmation_required?
+    registration_completed?
+  end
 end

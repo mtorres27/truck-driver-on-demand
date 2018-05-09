@@ -66,21 +66,22 @@ nav#top-nav.navbar
             = link_to "Logout", destroy_admin_session_path, method: :delete
       - elsif request.path.index('freelancer') == 1
         - if current_freelancer
-          li( class=("active" if request.path == (freelancer_root_path)) )
-            a.mobile-nav__menu__item href=freelancer_root_path data-turbolinks="false"
-              | search jobs
-          li( class=("active" if request.path.include?(my_jobs_freelancer_jobs_path)) )
-            a.mobile-nav__menu__item href=my_jobs_freelancer_jobs_path data-turbolinks="false"
-              | my jobs
-          li
-            a.mobile-nav__menu__item href=av_companies_freelancer_companies_path data-turbolinks="false"
-              | av companies
-          li
-            a.mobile-nav__menu__item href=freelancer_payments_path data-turbolinks="false"
-              | Payments
-          li
-            a.mobile-nav__menu__item href=freelancer_profile_path data-turbolinks="false"
-              | my profile
+          - if current_freelancer.registration_completed? || current_freelancer.registration_step.nil?
+            li( class=("active" if request.path == (freelancer_root_path)) )
+              a.mobile-nav__menu__item href=freelancer_root_path data-turbolinks="false"
+                | search jobs
+            li( class=("active" if request.path.include?(my_jobs_freelancer_jobs_path)) )
+              a.mobile-nav__menu__item href=my_jobs_freelancer_jobs_path data-turbolinks="false"
+                | my jobs
+            li
+              a.mobile-nav__menu__item href=av_companies_freelancer_companies_path data-turbolinks="false"
+                | av companies
+            li
+              a.mobile-nav__menu__item href=freelancer_payments_path data-turbolinks="false"
+                | Payments
+            li
+              a.mobile-nav__menu__item href=freelancer_profile_path data-turbolinks="false"
+                | my profile
 
           li
             = link_to "Logout", destroy_freelancer_session_path, method: :delete, class: "mobile-nav__menu__item"
