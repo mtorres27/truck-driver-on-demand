@@ -17,7 +17,7 @@ module StripeTool
     end
     company.save
     # subscription
-    Subscriptions.where(company_id: company.id).update_all(is_active: false)
+    Subscription.where(company_id: company.id).update_all(is_active: false)
     company_subscription = Subscription.new
     company_subscription.company_id = company.id
     company_subscription.plan_id = plan.id
