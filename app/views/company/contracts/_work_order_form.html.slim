@@ -37,7 +37,7 @@
           = ""
 
       .grid-cell.grid-cell--33
-        = f.input :applicable_sales_tax, html5: true, label: "Applicable Sales Tax (%)", input_html: { class: 'form__text-field'}
+        = f.input :applicable_sales_tax, html5: true, label: "Applicable Sales Tax (%)", input_html: { class: 'form__text-field', value: @job.applicable_sales_tax || 0 }
         .form__field-helper-text
           | If the freelancer collects sales tax, be sure to ask them what amount of tax this is. The rate of tax entered here will be reflected in your invoices.
 
