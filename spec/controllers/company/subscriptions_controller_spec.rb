@@ -45,32 +45,21 @@ describe Company::SubscriptionController, type: :controller  do
 
   describe 'GET invoices' do
     before(:each) do
-      invoice_1 = { date: Date.today, lines: { data: [ { amount: 100 } ] } }
-      invoice_2 = { date: Date.today, lines: { data: [ { amount: 100 } ] } }
-      allow(StripeTool).to receive(:get_invoices).and_return([invoice_1, invoice_2])
-      allow(Stripe::Invoice).to receive(:upcoming).and_return(invoice_1)
+      create(:subscription, company_id: company.id)
     end
 
-    it 'assigns @invoices and @upcoming' do
+    it 'assigns @subscriptions' do
       get :invoices
-      expect(assigns(:invoices).count).to eq(2)
-      expect(assigns(:upcoming)).to be_present
+      expect(assigns(:subscriptions).count).to eq(1)
     end
   end
 
   describe 'GET invoice' do
-    let(:invoice) { { id: 1, date: Date.today, tax_percent: 0.1, tax: 10, total: 100,
-                     lines: { data: [
-                         { amount: 100, description: 'desc',
-                           plan: { name: 'plan', interval: 'interval' },
-                           period: { start: 'start', end: 'end' } } ] } } }
-    before(:each) do
-      allow(StripeTool).to receive(:get_invoice).and_return(invoice)
-    end
+    let!(:subscription) { create(:subscription, company_id: company.id) }
 
-    it 'assigns @invoice' do
-      get :invoice, params: { invoice: 1 }
-      expect(assigns(:invoice)).to eq(invoice)
+    it 'assigns @subscription' do
+      get :invoice, params: { subscription: subscription.stripe_subscription_id }
+      expect(assigns(:subscription)).to eq(subscription)
     end
   end
 
