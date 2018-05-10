@@ -348,12 +348,10 @@ class Freelancer < ApplicationRecord
       freelancer = invite.freelancer
       if freelancer.avj_credit.nil?
         freelancer.avj_credit = 50
+      elsif freelancer.avj_credit + 50 <= 400
+        freelancer.avj_credit += 50
       else
-        if freelancer.avj_credit + 50 <= 400
-          freelancer.avj_credit += 50
-        else
-          freelancer.avj_credit = 400
-        end
+        freelancer.avj_credit = 400
       end
       freelancer.save!
       invite.update_attribute(:accepted, true)
