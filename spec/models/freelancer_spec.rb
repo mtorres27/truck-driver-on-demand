@@ -87,21 +87,48 @@ describe Freelancer, type: :model do
       end
 
       describe "check_for_invites" do
-        let(:freelancer_one) { create(:freelancer, avj_credit: nil) }
-        let(:freelancer_two) { create(:freelancer, avj_credit: nil) }
+        let(:inviter) { create(:freelancer, avj_credit: nil) }
         let(:email) { Faker::Internet.unique.email }
-        let!(:invite_1) { create(:friend_invite, email: email, name: 'Example', freelancer: freelancer_one) }
-        let!(:invite_2) { create(:friend_invite, email: email, name: 'Example', freelancer: freelancer_two) }
+        let!(:invite) { create(:friend_invite, email: email, name: 'Example', freelancer: inviter) }
 
-        it "adds credit to invitation that matches the email" do
+        it "adds 20 avj credit ti invited freelancer" do
           freelancer = create(:freelancer, email: email)
           expect(freelancer.avj_credit).to eq(20)
-          expect(freelancer_one.friend_invites.last).to be_accepted
-          freelancer_one.reload
-          expect(freelancer_one.avj_credit).to eq(50)
-          expect(freelancer_two.friend_invites.last).to be_accepted
-          freelancer_two.reload
-          expect(freelancer_two.avj_credit).to eq(50)
+        end
+
+        context "when inviter has nil avj_credit" do
+          it "sets avj credit of inviter to 50" do
+            create(:freelancer, email: email)
+            expect(inviter.friend_invites.last).to be_accepted
+            inviter.reload
+            expect(inviter.avj_credit).to eq(50)
+          end
+        end
+
+        context "when inviter has not nil avj_credit" do
+          context "when inviter avj credit + 50 is less than 400" do
+            before(:each) do
+              inviter.update_attribute(:avj_credit, 50)
+              create(:freelancer, email: email)
+              inviter.reload
+            end
+
+            it "adds 50 to the current avj credit of the inviter" do
+              expect(inviter.avj_credit).to eq(100)
+            end
+          end
+
+          context "when inviter avj credit + 50 is greater than 400" do
+            before(:each) do
+              inviter.update_attribute(:avj_credit, 380)
+              create(:freelancer, email: email)
+              inviter.reload
+            end
+
+            it "sets avj credit of the inviter to 400" do
+              expect(inviter.avj_credit).to eq(400)
+            end
+          end
         end
       end
     end

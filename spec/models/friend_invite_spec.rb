@@ -33,6 +33,7 @@ describe FriendInvite, type: :model do
       expect(build(:friend_invite, email: 'example+1@example.com', name: 'Example', freelancer: freelancer)).to_not be_valid
     end
   end
+
   context 'triggers' do
     let!(:freelancer) { create(:freelancer) }
     let(:email) { Faker::Internet.unique.email }
