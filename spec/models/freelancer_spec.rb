@@ -70,6 +70,22 @@
 require 'rails_helper'
 
 describe Freelancer, type: :model do
+  describe "methods" do
+    describe "#was_invited?" do
+      subject(:freelancer) { create(:freelancer) }
+
+      context "when freelancer was not invited" do
+        it { is_expected.not_to be_was_invited }
+      end
+
+      context "when freelancer was invited" do
+        let!(:friend_invite) { create(:friend_invite, email: freelancer.email, freelancer: create(:freelancer), accepted: true) }
+
+        it { is_expected.to be_was_invited }
+      end
+    end
+  end
+
   describe "hooks" do
     describe "after create" do
       describe "add_to_hubspot" do

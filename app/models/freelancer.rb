@@ -244,6 +244,10 @@ class Freelancer < ApplicationRecord
     freelancer_job_functions
   end
 
+  def was_invited?
+    FriendInvite.where(email: email, accepted: true).count > 0
+  end
+
   def score
     score = 0
     score += 1 if self.name.present?
