@@ -79,7 +79,7 @@ h1.center.heading-h1 Register with AV Junction
       span class=(terms_of_service_error == true ? "validation-error" : "")
         = f.check_box :accept_terms_of_service, required: true
         = " "
-        | I accept the
+        | By creating an account, you agree to the AV Junction
         a href="http://www.avjunction.com/term-of-service" target="_blank"
           | Terms of Service
       br
@@ -107,7 +107,7 @@ h1.center.heading-h1 Register with AV Junction
   = render "devise/shared/links"
 
 javascript:
- 
+
   function toggle_province(country){
     if (country == "ca"){
       $(".province_line").removeClass('hidden');
