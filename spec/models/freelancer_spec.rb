@@ -117,6 +117,34 @@ describe Freelancer, type: :model do
       end
     end
 
+    describe "after update" do
+      let(:freelancer) { create(:freelancer) }
+      let(:freelancer_params) {
+        {
+          registration_step: "wicked_finish"
+        }
+      }
+      context "when registration is completed" do
+        it "calls send_welcome_email" do
+          expect(freelancer).to receive(:send_welcome_email)
+          freelancer.update(freelancer_params)
+        end
+      end
+
+      context "when the freelancer is not confirmed" do
+        it "sends the confirmation mail and verify your identity mail" do
+          expect { freelancer.update(freelancer_params) }.to change(ActionMailer::Base.deliveries, :count).by(2)
+        end
+      end
+
+      context "when the freelancer is confirmed" do
+        it "does not send the confirmation mail and verify your identity mail" do
+          freelancer.confirm
+          expect { freelancer.update(freelancer_params) }.to change(ActionMailer::Base.deliveries, :count).by(0)
+        end
+      end
+    end
+
     describe "after_save" do
       context "when freelancer confirms their email" do
         let(:email) { Faker::Internet.unique.email }
