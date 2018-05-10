@@ -28,6 +28,10 @@ describe FriendInvite, type: :model do
       FriendInvite.create!(email: email, name: 'Example', freelancer: freelancer)
       expect(build(:friend_invite, email: email, name: 'Example', freelancer: freelancer)).to_not be_valid
     end
+
+    it 'is not valid when email has + operator' do
+      expect(build(:friend_invite, email: 'example+1@example.com', name: 'Example', freelancer: freelancer)).to_not be_valid
+    end
   end
   context 'triggers' do
     let!(:freelancer) { create(:freelancer) }

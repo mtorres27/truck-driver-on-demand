@@ -15,6 +15,7 @@ class FriendInvite < ApplicationRecord
   validates :name, :email, :freelancer_id, presence: true
   validate :number_of_invites_below_six
   validate :hasnt_been_invited_by_freelancer
+  validate :email_is_valid
 
   after_create :send_invite_email
 
@@ -33,6 +34,11 @@ class FriendInvite < ApplicationRecord
   def hasnt_been_invited_by_freelancer
     return if FriendInvite.by_email(email).by_freelancer(freelancer).count.zero?
     errors.add(:base, "You already invited #{email}.You cannot invite the same person more than once.")
+  end
+
+  def email_is_valid
+    return unless email.include?('+')
+    errors.add(:base, "Invalid email.")
   end
 
   def send_invite_email
