@@ -6,11 +6,12 @@ RSpec.describe Freelancer::RegistrationStepsController, type: :controller do
 
     before do
       sign_in freelancer
+      session[:step_freelancer_id] = freelancer.id
     end
 
     describe "step: personal" do
       it "renders personal template" do
-        get :show, params: { id: :personal }
+        get :show, params: { id: :personal}
         expect(response).to render_template('freelancer/registration_steps/personal')
       end
     end
@@ -21,6 +22,7 @@ RSpec.describe Freelancer::RegistrationStepsController, type: :controller do
 
     before do
       sign_in freelancer
+      session[:step_freelancer_id] = freelancer.id
     end
 
     describe "step: personal" do

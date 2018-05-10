@@ -18,6 +18,12 @@ class Freelancer::RegistrationStepsController < ApplicationController
     render_wizard @freelancer
   end
 
+  private
+
+  def current_freelancer
+    Freelancer.find(session[:step_freelancer_id])
+  end
+
   def finish_wizard_path
     confirm_email_path
   end
