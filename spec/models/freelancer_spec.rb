@@ -91,7 +91,7 @@ describe Freelancer, type: :model do
         let(:email) { Faker::Internet.unique.email }
         let!(:invite) { create(:friend_invite, email: email, name: 'Example', freelancer: inviter) }
 
-        it "adds 20 avj credit ti invited freelancer" do
+        it "adds 20 avj credit to invited freelancer" do
           freelancer = create(:freelancer, email: email)
           expect(freelancer.avj_credit).to eq(20)
         end
