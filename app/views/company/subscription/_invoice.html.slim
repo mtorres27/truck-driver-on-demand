@@ -20,7 +20,7 @@
       .invoice__table-text.invoice__table-text--right
         | $#{(@subscription[:amount])}USD
     .invoice__table-row
-      .invoice__table-text Tax (%#{current_company.canada_country? ? 13: 0})
+      .invoice__table-text Tax (%#{current_company.canada_country? ? Subscription::CANADA_SALES_TAX_PERCENT : 0})
       .invoice__table-text.invoice__table-text--right
         | $#{@subscription[:tax]}USD
     .invoice__table-row.invoice__table-row--total

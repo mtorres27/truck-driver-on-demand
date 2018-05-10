@@ -3,8 +3,6 @@ class Company::SubscriptionController < Company::BaseController
   before_action :amount_to_be_charged, :set_description
   protect_from_forgery except: :webhook
 
-  CANADA_SALES_TAX_PERCENT = 13
-
   def cancel
     # logger.debug current_company.inspect
     plan = current_company.plan
@@ -22,7 +20,7 @@ class Company::SubscriptionController < Company::BaseController
     # raise exception if company is not the invoice owner
     @subscription = Subscription.find_by(stripe_subscription_id: params[:subscription])
     if @subscription.nil? || @subscription.company_id != current_company.id
-      flash[:error] = 'You can\'t see this invoice!'
+      flash[:error] = "You can't see this invoice!"
       redirect_to company_invoices_path
     end
   end
@@ -87,7 +85,7 @@ class Company::SubscriptionController < Company::BaseController
     customer = StripeTool.create_customer(email: params[:stripeEmail],
                                           stripe_token: params[:stripeToken])
     subscription = StripeTool.subscribe(customer: customer,
-                                        tax: current_company.canada_country? ? CANADA_SALES_TAX_PERCENT : 0,
+                                        tax: current_company.canada_country? ? Subscription::CANADA_SALES_TAX_PERCENT : 0,
                                         plan: plan,
                                         is_new: current_company.is_trial_applicable
                                         )
