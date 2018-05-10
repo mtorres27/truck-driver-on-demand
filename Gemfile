@@ -71,6 +71,8 @@ gem "hubspot-ruby"
 # Emails
 gem "smtpapi"
 
+gem "listen"
+
 # Profiling
 gem "rack-mini-profiler", "~> 0.10.2"
 gem "flamegraph", "~> 0.9.5"
@@ -81,7 +83,6 @@ group :development do
   gem "annotate"
   gem "better_errors"
   gem "binding_of_caller"
-  gem "listen"
   gem "rubocop"
   gem "capistrano", "~> 3.8.1"
   gem "capistrano-rails", "~> 1.2.3"
