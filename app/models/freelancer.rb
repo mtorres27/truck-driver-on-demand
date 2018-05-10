@@ -346,7 +346,13 @@ class Freelancer < ApplicationRecord
     FreelancerMailer.notice_credit_earned(self, 20).deliver_later
     FriendInvite.by_email(email).each do |invite|
       freelancer = invite.freelancer
-      freelancer.avj_credit = freelancer.avj_credit.nil? ? 50 : freelancer.avj_credit + 50
+      if freelancer.avj_credit.nil?
+        freelancer.avj_credit = 50
+      elsif freelancer.avj_credit + 50 <= 400
+        freelancer.avj_credit += 50
+      else
+        freelancer.avj_credit = 400
+      end
       freelancer.save!
       invite.update_attribute(:accepted, true)
       FreelancerMailer.notice_credit_earned(freelancer, 50).deliver_later
