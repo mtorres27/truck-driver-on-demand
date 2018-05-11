@@ -334,7 +334,7 @@ class Freelancer < ApplicationRecord
       firstname: name.split(" ")[0],
       lastname: name.split(" ")[1],
       lifecyclestage: "customer",
-      im_am: "AV Freelancer",
+      im_an: "AV Freelancer",
     )
   end
 
