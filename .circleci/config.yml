@@ -1,6 +1,10 @@
 version: 2
 jobs:
   build:
+    branches:
+      ignore:
+        - setup-environments
+
     working_directory: ~/repo
 
     docker:
