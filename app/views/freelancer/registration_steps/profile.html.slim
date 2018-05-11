@@ -2,22 +2,22 @@
   h1.center.heading-h1 = "Register as a Freelancer"
   = render partial: "shared/registration_progress_bar", locals: { step: 4 }
   = simple_form_for(@freelancer, url: wizard_path) do |f|
-    .grid-cell.grid-cell--33
-      label Profile Picture
-      .freelancer-profile__image style="width: 100px; height: 100px;"
-        = image_tag(@freelancer.avatar_url, id: "freelancer-edit-profile__avatar")
-        .freelancer-profile__image-upload onclick="updateProfilePicture()"
-          span class="zmdi zmdi-camera-add"
-      = f.file_field :avatar, label: false, :accept => 'image/png,image/gif,image/jpeg', id: "edit-freelancer-profile-avatar", class: "file-input--hidden"
-    .grid-cell.grid-cell--67
-      .grid-v
-        .grid-cell.grid-cell--100
-          = f.input :tagline, label: "Tagline", placeholder: "Enter your tagline"
-        .grid-cell.grid-cell--100.grid-cell--expand
-          = f.input :bio, label: "Biography", placeholder: "Write a bio", :input_html => { :class => 'form__profile-bio-textarea' }
-    .buttons
-      = f.button :submit, "Skip & Register", class: "btn btn--secondary"
-      = f.button :submit, "Complete Registration", class: "btn btn--primary"
+    .grid-h
+      .grid-cell.grid-cell--100
+        label Profile Picture
+        .freelancer-profile__image style="width: 100px; height: 100px;"
+          = image_tag(@freelancer.avatar_url, id: "freelancer-edit-profile__avatar")
+          .freelancer-profile__image-upload onclick="updateProfilePicture()"
+            span class="zmdi zmdi-camera-add"
+        = f.file_field :avatar, label: false, :accept => 'image/png,image/gif,image/jpeg', id: "edit-freelancer-profile-avatar", class: "file-input--hidden"
+      .grid-cell.grid-cell--100
+        = f.input :tagline, label: "Tagline", placeholder: "Enter your tagline"
+      .grid-cell.grid-cell--100
+        = f.input :bio, label: "Biography", placeholder: "Write a bio", :input_html => { :class => 'form__profile-bio-textarea' }
+      .grid-cell.grid-cell--100
+        .buttons
+          = f.button :submit, "Skip & Register", class: "btn btn--secondary"
+          = f.button :submit, "Complete Registration", class: "btn btn--primary"
 
 javascript:
    var updateProfilePicture = function() {
