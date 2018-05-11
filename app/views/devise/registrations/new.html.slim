@@ -2,11 +2,14 @@
   h1.center.heading-h1 = "Register as a #{resource.class}"
   = render partial: "shared/registration_progress_bar", locals: { step: 1 }
   = simple_form_for(resource, url: registration_path(resource_name)) do |f|
-    = f.error_notification
-    .form-inputs
-      = f.input :email, as: :string, label: "Email Address", required: true, autofocus: true, placeholder: "Enter your email address"
-      = f.input :password, required: true, label: "Enter a password", placeholder: "Enter a password"
-      = f.input :password_confirmation, label: "Confirm password", required: true, placeholder: "Confirm your password"
+    / = f.error_notification
+    .grid-h
+      .grid-cell.grid-cell--100
+        = f.input :email, as: :string, label: "Email Address", required: true, autofocus: true, placeholder: "Enter your email address"
+      .grid-cell.grid-cell--100
+        = f.input :password, required: true, label: "Enter a password", placeholder: "Enter a password"
+      .grid-cell.grid-cell--100
+        = f.input :password_confirmation, label: "Confirm password", required: true, placeholder: "Confirm your password"
       - privacy_policy_error = false
       - terms_of_service_error = false
       - code_of_conduct_error = false
@@ -24,21 +27,20 @@
           - terms_of_service_error = true
         - elsif error.include?("code of conduct")
           - code_of_conduct_error = true
-      span class=(terms_of_service_error == true ? "validation-error" : "")
-      br
-        = f.check_box :accept_terms_of_service, required: true
-        = " "
-        | By creating an account, you agree to the AV Junction
-        a href="http://www.avjunction.com/term-of-service" target="_blank"
-          | Terms & Conditions ,
-        a href="http://www.avjunction.com/privacy-policy" target="_blank"
-          | Privacy ,
-        a href="http://www.avjunction.com/code-of-conduct" target="_blank"
-          | Code of Conduct
-      br
-      br
+      .grid-cell.grid-cell--100
+        span class=(terms_of_service_error == true ? "validation-error" : "")
+          = f.check_box :accept_terms_of_service, required: true
+          = " "
+          | By creating an account, you agree to the AV Junction
+          a href="http://www.avjunction.com/term-of-service" target="_blank"
+            | Terms & Conditions ,
+          a href="http://www.avjunction.com/privacy-policy" target="_blank"
+            | Privacy ,
+          a href="http://www.avjunction.com/code-of-conduct" target="_blank"
+            | Code of Conduct
+      .grid-cell.grid-cell--100
+        .buttons
+          = f.button :submit, "Save & Continue", class: "btn btn--primary"
 
-    .form-actions
-      = f.button :submit, "Save & Continue", class: "btn-primary"
-
-  = render "devise/shared/links"
+      .grid-cell.grid-cell--100
+        = render "devise/shared/links"
