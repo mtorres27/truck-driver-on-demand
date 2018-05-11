@@ -96,7 +96,7 @@ describe Freelancer, type: :model do
             firstname: "John",
             lastname: "Doe",
             lifecyclestage: "customer",
-            im_am: "AV Freelancer",
+            im_an: "AV Freelancer",
           )
           create(:freelancer, email: "test@test.com", name: "John Doe")
         end
