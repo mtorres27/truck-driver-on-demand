@@ -146,7 +146,7 @@ class Freelancer < ApplicationRecord
     :pay_unit_time_preference,
     if: :enforce_profile_edit
 
-  validates :first_name, :last_name, :country, :province , :city, presence: true, on: :update,  if: :step_job_info?
+  validates :first_name, :last_name, :country, :state , :city, presence: true, on: :update,  if: :step_job_info?
   validates :job_types, presence: true, on: :update, if: :step_profile?
 
   scope :new_registrants, -> { where(disabled: true) }
