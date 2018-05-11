@@ -17,29 +17,29 @@
         .grid-cell.grid-cell--50
           - if current_freelancer.avj_credit.nil?
             - if current_freelancer.friend_invites.count > 0
-              p You'll be notified when they accept your invitation and a $50USD credit will be made available for each friend that joins the AVJ network.
+              p You'll be notified when they accept your invitation and a $50 USD credit will be made available for each friend that joins the AVJ network.
               p Keep inviting more friends for a bigger chance of getting credit.
             -else
-              p You can earn credit by inviting all of your friends to join AVJunction. For each friend that joins, you will earn $50USD credit applicable on your next job. Your friends will also earn $20USD by accepting your invitation.
+              p You can earn credit by inviting all of your friends to join AV Junction. For each friend that joins, you will earn $50 USD credit applicable on your next job. Your friends will also earn $20 USD by accepting your invitation.
               p What are you waiting for? Invite all your friends and start getting credits.
           - elsif current_freelancer.avj_credit > 0
             - if current_freelancer.was_invited? && current_freelancer.friend_invites.count == 0
-              p You have an available credit of $#{number_with_precision(@avj_credit, precision: 2)}USD that will be applied on your next job.
-              p You can earn more credit by inviting all of your friends to join AVJunction. For each friend that joins, you will earn $50 credit applicable on your next job. Your friends will also earn $20 by accepting your invitation.
+              p You have an available credit of $#{number_with_precision(@avj_credit, precision: 0)} USD that will be applied on your next job.
+              p You can earn more credit by inviting all of your friends to join AV Junction. For each friend that joins, you will earn $50 credit applicable on your next job. Your friends will also earn $20 by accepting your invitation.
               p What are you waiting for? Invite all your friends and start getting credits.
             - else
-              p Thank you for inviting your friends to join AVJuntion. You have an available credit of $#{number_with_precision(@avj_credit, precision: 2)}USD that will be applied on your next job.
+              p Thank you for inviting your friends to join AV Junction. You have an available credit of $#{number_with_precision(@avj_credit, precision: 0)} USD that will be applied on your next job.
               p Invite more of your friends to get even more.
           / avj_credit = 0 -> current_freelancer had credit in the past and has used it all up
           - elsif current_freelancer.avj_credit == 0
             p All your available credit has been applied. Invite friends to earn some more.
           p
             i Terms:  Credits are only applied to your account when the invited friend has successfully created an account with AV Junction using the email address the invitation was sent to.  Available credit limit is set at $400 per freelancer.  Equivalent to 8 friend invites.
-        .grid-cell.grid-cell--33
+        .grid-cell.grid-cell--shrink
           .profile__stats-box
-            .profile__stats.profile__stats--50
+            .profile__stats.profile__stats--expand
               h3.heading-h3
-                = "$#{number_with_precision(@avj_credit, precision: 2)}USD"
+                = "$#{number_with_precision(@avj_credit, precision: 0)} USD"
               h4.heading-h4
                 | Available credit
 
@@ -57,8 +57,6 @@
               = f.submit "Send all invites", class: "btn btn--primary", id: "friend-invites__submit", disabled: true
 
         - if current_freelancer.friend_invites.count > 0
-          / .grid-cell.grid-cell--100
-          /   h2.heading-h2 Check the status of your invites here
           - if current_freelancer.friend_invites.pending.count > 0
             .grid-cell.grid-cell--100
               h2.heading-h2
