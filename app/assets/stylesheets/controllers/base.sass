@@ -196,10 +196,12 @@ input[type=radio]
 
 .progressbar
   counter-reset: step
+  padding: 0
+  display: flex
+  position: relative
 
 .progressbar li
   list-style: none
-  display: inline-block
   width: 24%
   position: relative
   text-align: center
@@ -230,6 +232,7 @@ input[type=radio]
 
 .progressbar li.active
   color: #f16a24
+  z-index: 10
 
 .progressbar li.active:before
   border-color: #f16a24
