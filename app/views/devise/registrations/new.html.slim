@@ -31,15 +31,15 @@ h1.center.heading-h1 Register with AV Junction
         span class=(terms_of_service_error == true ? "validation-error" : "")
           = f.check_box :accept_terms_of_service, required: true
           = " "
-          | By creating an account, you agree to the AV Junction 
+          | By creating an account, you agree to the AV Junction
           a href="http://www.avjunction.com/term-of-service" target="_blank"
-            | Terms & Conditions
-          |, 
+            |   Terms & Conditions
+          |,
           a href="http://www.avjunction.com/privacy-policy" target="_blank"
-            | Privacy 
-          | and  
+            |   Privacy
+          |   and
           a href="http://www.avjunction.com/code-of-conduct" target="_blank"
-            | Code of Conduct
+            |  Code of Conduct
       .grid-cell.grid-cell--100
         .buttons
           = f.button :submit, "Save & Continue", class: "btn btn--primary"
