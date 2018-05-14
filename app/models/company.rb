@@ -291,7 +291,7 @@ class Company < ApplicationRecord
       firstname: contact_name.split(" ")[0],
       lastname: contact_name.split(" ")[1],
       lifecyclestage: "customer",
-      im_am: "AV Company",
+      im_an: "AV Company",
     )
   end
 

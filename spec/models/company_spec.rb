@@ -12,7 +12,7 @@ describe Company, type: :model do
             firstname: "John",
             lastname: "Doe",
             lifecyclestage: "customer",
-            im_am: "AV Company",
+            im_an: "AV Company",
           )
           create(:company, email: "test@test.com", contact_name: "John Doe", name: "Acme")
         end
