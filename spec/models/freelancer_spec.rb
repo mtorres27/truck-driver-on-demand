@@ -103,7 +103,7 @@ describe Freelancer, type: :model do
       end
 
       describe "check_for_invites" do
-        let(:inviter) { create(:freelancer, avj_credit: nil) }
+        let(:inviter) { create(:freelancer) }
         let(:email) { Faker::Internet.unique.email }
         let!(:invite) { create(:friend_invite, email: email, name: 'Example', freelancer: inviter) }
 
@@ -111,38 +111,52 @@ describe Freelancer, type: :model do
           freelancer = create(:freelancer, email: email)
           expect(freelancer.avj_credit).to eq(20)
         end
+      end
+    end
 
-        context "when inviter has nil avj_credit" do
-          it "sets avj credit of inviter to 50" do
-            create(:freelancer, email: email)
+    describe "after_save" do
+      context "when freelancer confirms their email" do
+        let(:email) { Faker::Internet.unique.email }
+        let!(:invite) { create(:friend_invite, email: email, name: 'Example', freelancer: inviter) }
+        let(:freelancer) { create(:freelancer, email: email) }
+
+        describe "add_credit_to_inviters" do
+          let(:inviter) { create(:freelancer, avj_credit: nil) }
+
+          it "sets friend invite to accepted" do
+            freelancer.confirm
             expect(inviter.friend_invites.last).to be_accepted
-            inviter.reload
-            expect(inviter.avj_credit).to eq(50)
           end
-        end
 
-        context "when inviter has not nil avj_credit" do
-          context "when inviter avj credit + 50 is less than 400" do
-            before(:each) do
-              inviter.update_attribute(:avj_credit, 50)
-              create(:freelancer, email: email)
+          context "when inviter has nil avj_credit" do
+            let(:inviter) { create(:freelancer, avj_credit: nil) }
+
+            it "sets avj credit of inviter to 50" do
+              freelancer.confirm
               inviter.reload
-            end
-
-            it "adds 50 to the current avj credit of the inviter" do
-              expect(inviter.avj_credit).to eq(100)
+              expect(inviter.avj_credit).to eq(50)
             end
           end
 
-          context "when inviter avj credit + 50 is greater than 400" do
-            before(:each) do
-              inviter.update_attribute(:avj_credit, 380)
-              create(:freelancer, email: email)
-              inviter.reload
+          context "when inviter has not nil avj_credit" do
+            context "when inviter avj credit + 50 is less than 400" do
+              let(:inviter) { create(:freelancer, avj_credit: 50) }
+
+              it "adds 50 to the current avj credit of the inviter" do
+                freelancer.confirm
+                inviter.reload
+                expect(inviter.avj_credit).to eq(100)
+              end
             end
 
-            it "sets avj credit of the inviter to 400" do
-              expect(inviter.avj_credit).to eq(400)
+            context "when inviter avj credit + 50 is greater than 400" do
+              let(:inviter) { create(:freelancer, avj_credit: 380) }
+
+              it "sets avj credit of the inviter to 400" do
+                freelancer.confirm
+                inviter.reload
+                expect(inviter.avj_credit).to eq(400)
+              end
             end
           end
         end

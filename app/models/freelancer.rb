@@ -159,6 +159,7 @@ class Freelancer < ApplicationRecord
 
   after_create :add_to_hubspot
   after_create :check_for_invites
+  after_save :add_credit_to_inviters, if: :confirmed_at_changed?
   after_create :send_welcome_email
 
   pg_search_scope :search, against: {
@@ -344,10 +345,13 @@ class Freelancer < ApplicationRecord
 
   def check_for_invites
     return if FriendInvite.by_email(email).count.zero?
-
     self.avj_credit = 20
     save!
     FreelancerMailer.notice_credit_earned(self, 20).deliver_later
+  end
+
+  def add_credit_to_inviters
+    return if FriendInvite.by_email(email).count.zero?
     FriendInvite.by_email(email).each do |invite|
       freelancer = invite.freelancer
       if freelancer.avj_credit.nil?
