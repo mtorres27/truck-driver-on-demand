@@ -1,5 +1,6 @@
 class Freelancer::RegistrationStepsController < ApplicationController
   include Wicked::Wizard
+
   steps :personal, :job_info, :profile
 
   def show
