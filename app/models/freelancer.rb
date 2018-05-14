@@ -122,9 +122,6 @@ class Freelancer < ApplicationRecord
 
   validates :years_of_experience, numericality: { only_integer: true }
 
-  validates_presence_of :country, :on => :create
-  validates_presence_of :city, :on => :create
-
   validates :phone_number, length: { minimum: 7 }, allow_blank: true
 
   validates :phone_number, length: { minimum: 7 }, on: :update, allow_blank: true
@@ -154,11 +151,12 @@ class Freelancer < ApplicationRecord
     :pay_unit_time_preference,
     if: :enforce_profile_edit
 
-  validates :first_name, :last_name, :country, :state , :city, presence: true, on: :update,  if: :step_job_info?
+  validates :first_name, :last_name, :country, :state , :city, presence: true, on: :update, if: :step_job_info?
   validates :job_types, presence: true, on: :update, if: :step_profile?
 
   scope :new_registrants, -> { where(disabled: true) }
 
+  before_save :set_name, if: :step_job_info?
   after_create :add_to_hubspot
   after_create :check_for_invites
   after_save :add_credit_to_inviters, if: :confirmed_at_changed?
@@ -219,6 +217,10 @@ class Freelancer < ApplicationRecord
     else
       return nil
     end
+  end
+
+  def registration_completed?
+    registration_step == "wicked_finish"
   end
 
   def job_markets_for_job_type(job_type)

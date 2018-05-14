@@ -17,7 +17,7 @@ RSpec.describe Freelancer::RegistrationStepsController, type: :controller do
   end
 
   describe "PUT #update" do
-    let(:freelancer) { create(:freelancer) }
+    let(:freelancer) { create(:freelancer, name: nil) }
 
     before do
       session[:step_freelancer_id] = freelancer.id

@@ -20,6 +20,7 @@ Rails.application.routes.draw do
     root "main#index"
     resource :freelancer, only: [:show]
 
+    resources :registration_steps, only: [:show, :update, :index]
     resources :companies, only: [:index, :show] do
       get :favourites, on: :collection
       post :add_favourites, on: :collection
