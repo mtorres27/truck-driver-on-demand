@@ -22,9 +22,17 @@ The easier way to hire and manage freelancers. We connect the best AV freelancer
 
 ## Instances
 
-Stage - [https://staging.avjunction.com/](https://staging.avjunction.com/)
+Development - [http://dev.avjunction.com/](http://dev.avjunction.com)
+
+    Instance which we can deploy specific brances in order to do some testing before merge to staging server or demo to the client. Only for internal purposes.
+
+Staging - [https://staging.avjunction.com/](https://staging.avjunction.com)
+
+    Instance which we deploy new features that are ready for the client to review and approve before pushing to production. Usually on this instance we do demos to the client.
 
 Production - [https://app.avjunction.com](https://app.avjunction.com)
+
+    Instance which will have the released and approved features that the customers are going to use.
 
 ## Development Setup
 
@@ -66,3 +74,13 @@ And then copy the content from `config/secrets.yml.template` to the `secrets` an
 ### Migrate and seed database
 
     rails db:setup
+
+## Deployment
+
+In order to deploy to Dev, Staging or Production instances you need to have `ssh` access to them.
+
+- `cap dev deploy`: Deploy to dev server. This will ask you which branch you want to deploy to the server.
+
+- `cap staging deploy`: Deploy to staging server. This will deploy the remote `develop` branch to staging server.
+
+- `cap production deploy`: Deploy to production server. This will deploy the remote `master` branch to production the server.
