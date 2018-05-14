@@ -11,9 +11,6 @@ set :ssh_options, {
 
 set :passenger_restart_with_touch, true
 
-# Default branch is :master
-ask :branch, `git rev-parse --abbrev-ref HEAD`.chomp
-
 # Default deploy_to directory is /var/www/my_app_name
 # set :deploy_to, "/var/www/my_app_name"
 
@@ -28,7 +25,7 @@ ask :branch, `git rev-parse --abbrev-ref HEAD`.chomp
 # set :pty, true
 
 # Default value for :linked_files is []
-append :linked_files, "config/secrets.yml.enc", "config/secrets.yml.key"
+append :linked_files, "config/secrets.yml", "config/database.yml"
 
 # Default value for linked_dirs is []
 append :linked_dirs, "log", "tmp/pids", "tmp/cache", "tmp/sockets", "public/system", "public/uploads", "bundle", "node_modules"
