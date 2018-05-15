@@ -3,17 +3,21 @@ module JobHelper
     if job.created?
       company_job_path(job)
     elsif job.published?
-      company_job_applicants_path(job) \
+      company_job_applicants_path(job)
     elsif job.quoted?
-      company_job_applicants_path(job) \
+      company_job_applicants_path(job)
     elsif job.negotiated?
       if job.contract_sent != true
-        edit_company_job_work_order_path(job) \
+        if job.company.plan_id.nil?
+          company_job_applicants_path(job)
+        else
+          edit_company_job_work_order_path(job)
+        end
       else
         company_job_path(job)
       end
     elsif job.contracted?
-      company_job_messages_path(job) \
+      company_job_messages_path(job)
     else
       company_job_review_path(job)
     end
