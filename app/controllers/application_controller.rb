@@ -1,9 +1,12 @@
 class ApplicationController < ActionController::Base
+  protect_from_forgery with: :exception
+
   require "erb"
   include ERB::Util
   before_action :configure_permitted_parameters, if: :devise_controller?
 
-  protect_from_forgery with: :exception
+  before_action :redirect_to_registration_step, if: :current_freelancer_registering?
+
 
   before_action do
     if Rails.env.development?
@@ -23,6 +26,17 @@ class ApplicationController < ActionController::Base
     else
       super
     end
+  end
+
+  def current_freelancer_registering?
+    current_freelancer &&
+    !current_freelancer.registration_completed? &&
+    !(request.original_fullpath.include? freelancer_registration_step_path(current_freelancer.registration_step)) &&
+    request.original_fullpath != destroy_freelancer_session_path
+  end
+
+  def redirect_to_registration_step
+    redirect_to freelancer_registration_step_path(current_freelancer.registration_step)
   end
 
   def do_geocode(address)

@@ -16,6 +16,7 @@
         = f.input :bio, label: "Biography", placeholder: "Write a bio", :input_html => { :class => 'form__profile-bio-textarea' }
       .grid-cell.grid-cell--100
         .buttons
+          = link_to "Register with a different account", destroy_freelancer_session_path,  method: :delete, class: "btn btn--secondary"
           = f.button :submit, "Skip & Register", class: "btn btn--secondary"
           = f.button :submit, "Complete Registration", class: "btn btn--primary"
 

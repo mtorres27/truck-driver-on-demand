@@ -157,7 +157,6 @@ class Freelancer < ApplicationRecord
   scope :new_registrants, -> { where(disabled: true) }
 
   before_save :set_name, if: :step_job_info?
-  after_create :add_to_hubspot
   after_create :check_for_invites
   after_save :add_credit_to_inviters, if: :confirmed_at_changed?
   after_update :send_welcome_email, if: :confirmed_freelancer?
