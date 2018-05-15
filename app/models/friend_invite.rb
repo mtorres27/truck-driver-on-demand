@@ -15,8 +15,7 @@ class FriendInvite < ApplicationRecord
   validates :name, :email, :freelancer_id, presence: true
   validate :number_of_invites_below_six
   validate :hasnt_been_invited_by_freelancer
-  # validate :email_is_valid
-  # Remember uncommenting specs after uncommenting this line
+  validate :email_is_valid
 
   after_create :send_invite_email
 
