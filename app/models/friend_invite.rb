@@ -28,17 +28,17 @@ class FriendInvite < ApplicationRecord
 
   def number_of_invites_below_six
     return if FriendInvite.by_email(email).count < 5
-    errors.add(:base, "#{email} has already been invited by others to join AVJunction.")
+    errors.add(:email, "#{email} has already been invited by others to join AVJunction.")
   end
 
   def hasnt_been_invited_by_freelancer
     return if FriendInvite.by_email(email).by_freelancer(freelancer).count.zero?
-    errors.add(:base, "You already invited #{email}.You cannot invite the same person more than once.")
+    errors.add(:email, "#{email} has already been invited by you.You cannot invite the same person more than once.")
   end
 
   def email_is_valid
     return unless email.include?('+')
-    errors.add(:base, "Invalid email.")
+    errors.add(:email, "#{email} is invalid.")
   end
 
   def send_invite_email
