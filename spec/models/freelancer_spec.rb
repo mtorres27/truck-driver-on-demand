@@ -5,7 +5,7 @@
 #  id                       :integer          not null, primary key
 #  token                    :string
 #  email                    :citext           not null
-#  name                     :string           not null
+#  name                     :string
 #  avatar_data              :text
 #  address                  :string
 #  formatted_address        :string
@@ -65,6 +65,8 @@
 #  manufacturer_tags        :citext
 #  special_avj_fees         :decimal(10, 2)
 #  avj_credit               :decimal(10, 2)
+#  registration_step        :string
+#  province                 :string
 #
 
 require 'rails_helper'

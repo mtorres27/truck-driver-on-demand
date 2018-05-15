@@ -12,6 +12,9 @@
 #  amount                 :decimal(, )
 #  created_at             :datetime         not null
 #  updated_at             :datetime         not null
+#  refund                 :decimal(10, 2)   default(0.0)
+#  tax                    :decimal(10, 2)   default(0.0)
+#  description            :string
 #
 
 class Subscription < ApplicationRecord
