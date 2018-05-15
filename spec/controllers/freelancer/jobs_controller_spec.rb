@@ -28,8 +28,6 @@ describe Freelancer::JobsController, type: :controller  do
       context 'when address exists' do
         before(:each) do
           get :index, params: { search: { address: 'Address' } }
-        end
-        before(:each) do
           allow(Rails).to receive(:cache).and_return(double('Readable', read: true))
         end
 
