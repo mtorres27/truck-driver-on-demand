@@ -35,10 +35,10 @@ describe FriendInvite, type: :model do
       it { is_expected.to be_invalid }
     end
 
-    # context 'when email has + operator' do
-    #   subject { build(:friend_invite, email: 'example+1@example.com', name: 'Example', freelancer: freelancer) }
-    #   it { is_expected.to be_invalid }
-    # end
+    context 'when email has + operator' do
+      subject { build(:friend_invite, email: 'example+1@example.com', name: 'Example', freelancer: freelancer) }
+      it { is_expected.to be_invalid }
+    end
   end
 
   context 'triggers' do
