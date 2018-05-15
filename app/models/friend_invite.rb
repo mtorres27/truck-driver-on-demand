@@ -15,6 +15,7 @@ class FriendInvite < ApplicationRecord
   validates :name, :email, :freelancer_id, presence: true
   validate :number_of_invites_below_six
   validate :hasnt_been_invited_by_freelancer
+  validate :freelancer_does_not_exist
   validate :email_is_valid
 
   after_create :send_invite_email
@@ -39,6 +40,11 @@ class FriendInvite < ApplicationRecord
   def email_is_valid
     return unless email.include?('+')
     errors.add(:email, "#{email} is invalid.")
+  end
+
+  def freelancer_does_not_exist
+    return if Freelancer.where(email: email).count.zero?
+    errors.add(:email, "#{email} is already registered to AV Junction.")
   end
 
   def send_invite_email

@@ -74,14 +74,15 @@ require 'rails_helper'
 describe Freelancer, type: :model do
   describe "methods" do
     describe "#was_invited?" do
-      subject(:freelancer) { create(:freelancer) }
-
       context "when freelancer was not invited" do
+        subject(:freelancer) { create(:freelancer) }
         it { is_expected.not_to be_was_invited }
       end
 
       context "when freelancer was invited" do
-        let!(:friend_invite) { create(:friend_invite, email: freelancer.email, freelancer: create(:freelancer), accepted: true) }
+        let(:email) { Faker::Internet.unique.email }
+        let!(:friend_invite) { create(:friend_invite, email: email, freelancer: create(:freelancer), accepted: true) }
+        subject(:freelancer) { create(:freelancer, email: email) }
 
         it { is_expected.to be_was_invited }
       end

@@ -39,6 +39,14 @@ describe FriendInvite, type: :model do
       subject { build(:friend_invite, email: 'example+1@example.com', name: 'Example', freelancer: freelancer) }
       it { is_expected.to be_invalid }
     end
+
+    context 'when freelancer with email already exists' do
+      before(:each) do
+        create(:freelancer, email: email)
+      end
+      subject { build(:friend_invite, email: email, name: 'Example', freelancer: freelancer) }
+      it { is_expected.to be_invalid }
+    end
   end
 
   context 'triggers' do
