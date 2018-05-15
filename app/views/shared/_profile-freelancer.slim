@@ -28,6 +28,9 @@
           - @freelancer.technical_skill_tags.first(2).each do |index, value|
             .tag.tag--grey
               = I18n.t("enumerize.technical_skill_tags.#{index}")
+      br
+      h4.heading-h4
+        = "#{@freelancer.city}, #{@freelancer.state}, #{@freelancer.country.upcase}"
   .grid-cell.grid-cell--33
     .profile__stats-box
       .profile__stats.profile__stats--50

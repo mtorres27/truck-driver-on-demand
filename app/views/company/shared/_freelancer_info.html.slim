@@ -20,11 +20,11 @@ a.list-item.list-item--freelancer href="/company/freelancers/#{freelancer.id}" c
 
     .list__city
       - if params.dig(:search, :address) == nil
-        = " #{freelancer.city}"
+        = " #{freelancer.city}, #{freelancer.state}, #{freelancer.country.upcase}"
       - elsif params.dig(:search, :address) == ''
-        = " #{freelancer.city}"
+        = " #{freelancer.city}, #{freelancer.state}, #{freelancer.country.upcase}"
       - else
-        = " #{freelancer.city}, #{distance_from(freelancer)} miles away"
+        = " #{freelancer.city}, #{freelancer.state}, #{freelancer.country.upcase}. #{distance_from(freelancer)} miles away"
 
     .list__rating
     - @stars = freelancer_avg_rating(freelancer)
