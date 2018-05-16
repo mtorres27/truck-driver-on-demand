@@ -63,7 +63,7 @@ nav#top-nav.navbar
           li( class=("active" if request.path.index(/^\/admin\/pages/)) )
             = link_to "Pages", admin_pages_path
           li
-            = link_to "Logout", destroy_admin_session_path, method: :delete
+            = link_to "Logout", destroy_user_session_path, method: :delete
       - elsif request.path.index('freelancer') == 1
         - if current_freelancer
           li( class=("active" if request.path == (freelancer_root_path)) )

@@ -11,6 +11,10 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  def current_admin
+    current_user.meta_type == 'Admin' ? current_user.meta : nil
+  end
+
   def after_inactive_sign_up_path_for(resource)
     cookies.delete(:onboarding)
     '/confirm_email'
