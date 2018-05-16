@@ -85,6 +85,9 @@ class Freelancer < ApplicationRecord
   include ProfileHeaderUploader[:profile_header]
   include EasyPostgis
 
+  attr_accessor :first_name, :last_name, :accept_terms_of_service, :accept_privacy_policy,
+                 :accept_code_of_conduct, :enforce_profile_edit, :user_type
+
   has_many :applicants, -> { order(updated_at: :desc) }, dependent: :destroy
   has_many :jobs, through: :applicants
   has_many :messages, -> { order(created_at: :desc) }, as: :authorable, dependent: :destroy
@@ -130,10 +133,6 @@ class Freelancer < ApplicationRecord
 
   def connected?; !stripe_account_id.nil?; end
 
-  attr_accessor :accept_terms_of_service
-  attr_accessor :accept_privacy_policy
-  attr_accessor :accept_code_of_conduct
-
   validates_acceptance_of :accept_terms_of_service
   validates_acceptance_of :accept_privacy_policy
   validates_acceptance_of :accept_code_of_conduct
@@ -160,7 +159,7 @@ class Freelancer < ApplicationRecord
   after_create :check_for_invites
   after_save :add_credit_to_inviters, if: :confirmed_at_changed?
   after_update :send_welcome_email, if: :confirmed_freelancer?
-  after_update :add_to_hubspot, if: :step_job_info?
+  after_save :add_to_hubspot, if: :step_job_info?
   after_initialize :set_default_step
 
   pg_search_scope :search, against: {
@@ -207,8 +206,6 @@ class Freelancer < ApplicationRecord
   enumerize :country, in: [
     :at, :au, :be, :ca, :ch, :de, :dk, :es, :fi, :fr, :gb, :hk, :ie, :it, :jp, :lu, :nl, :no, :nz, :pt, :se, :sg, :us
   ]
-
-  attr_accessor :user_type
 
   def rating
     if freelancer_reviews.count > 0

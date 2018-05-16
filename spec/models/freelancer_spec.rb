@@ -101,7 +101,7 @@ describe Freelancer, type: :model do
             lifecyclestage: "customer",
             im_an: "AV Freelancer",
           )
-          create(:freelancer, email: "test@test.com", name: "John Doe")
+          create(:freelancer, registration_step: 'job_info', email: "test@test.com", name: "John Doe")
         end
       end
 

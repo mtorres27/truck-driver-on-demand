@@ -69,7 +69,6 @@
               = " #{value}"
       .grid-cell.grid-cell--100
         .buttons
-          = link_to "Register with a different account", destroy_freelancer_session_path,  method: :delete, class: "btn btn--secondary"
           = link_to "Skip", skip_freelancer_registration_step_path(:job_info), method: :post, class: "btn btn--secondary"
           = f.button :submit, "Continue", class: "btn btn--primary"
-
+          = link_to "Register with a different account", destroy_freelancer_session_path,  method: :delete, class: "btn btn--secondary"
