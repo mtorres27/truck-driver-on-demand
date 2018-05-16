@@ -155,7 +155,17 @@ describe Freelancer, type: :model do
             context "when inviter avj credit + 20 is greater than 200" do
               let(:inviter) { create(:freelancer, avj_credit: 190) }
 
-              it "sets avj credit of the inviter to 400" do
+              it "sets avj credit of the inviter to 200" do
+                freelancer.confirm
+                inviter.reload
+                expect(inviter.avj_credit).to eq(200)
+              end
+            end
+
+            context "when inviter avj_credit is already 200" do
+              let(:inviter) { create(:freelancer, avj_credit: 200) }
+
+              it "does not change freelancers avj credit" do
                 freelancer.confirm
                 inviter.reload
                 expect(inviter.avj_credit).to eq(200)
