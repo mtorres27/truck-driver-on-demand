@@ -347,9 +347,9 @@ class Freelancer < ApplicationRecord
 
   def check_for_invites
     return if FriendInvite.by_email(email).count.zero?
-    self.avj_credit = 20
+    self.avj_credit = 10
     save!
-    FreelancerMailer.notice_credit_earned(self, 20).deliver_later
+    FreelancerMailer.notice_credit_earned(self, 10).deliver_later
   end
 
   def add_credit_to_inviters
@@ -357,15 +357,15 @@ class Freelancer < ApplicationRecord
     FriendInvite.by_email(email).each do |invite|
       freelancer = invite.freelancer
       if freelancer.avj_credit.nil?
-        freelancer.avj_credit = 50
-      elsif freelancer.avj_credit + 50 <= 400
-        freelancer.avj_credit += 50
+        freelancer.avj_credit = 20
+      elsif freelancer.avj_credit + 20 <= 200
+        freelancer.avj_credit += 20
       else
-        freelancer.avj_credit = 400
+        freelancer.avj_credit = 200
       end
       freelancer.save!
       invite.update_attribute(:accepted, true)
-      FreelancerMailer.notice_credit_earned(freelancer, 50).deliver_later
+      FreelancerMailer.notice_credit_earned(freelancer, 20).deliver_later
     end
   end
 

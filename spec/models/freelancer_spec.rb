@@ -110,9 +110,9 @@ describe Freelancer, type: :model do
         let(:email) { Faker::Internet.unique.email }
         let!(:invite) { create(:friend_invite, email: email, name: 'Example', freelancer: inviter) }
 
-        it "adds 20 avj credit to invited freelancer" do
+        it "adds 10 avj credit to invited freelancer" do
           freelancer = create(:freelancer, email: email)
-          expect(freelancer.avj_credit).to eq(20)
+          expect(freelancer.avj_credit).to eq(10)
         end
       end
     end
@@ -134,31 +134,31 @@ describe Freelancer, type: :model do
           context "when inviter has nil avj_credit" do
             let(:inviter) { create(:freelancer, avj_credit: nil) }
 
-            it "sets avj credit of inviter to 50" do
+            it "sets avj credit of inviter to 20" do
               freelancer.confirm
               inviter.reload
-              expect(inviter.avj_credit).to eq(50)
+              expect(inviter.avj_credit).to eq(20)
             end
           end
 
           context "when inviter has not nil avj_credit" do
-            context "when inviter avj credit + 50 is less than 400" do
+            context "when inviter avj credit + 20 is less than 200" do
               let(:inviter) { create(:freelancer, avj_credit: 50) }
 
               it "adds 50 to the current avj credit of the inviter" do
                 freelancer.confirm
                 inviter.reload
-                expect(inviter.avj_credit).to eq(100)
+                expect(inviter.avj_credit).to eq(70)
               end
             end
 
-            context "when inviter avj credit + 50 is greater than 400" do
-              let(:inviter) { create(:freelancer, avj_credit: 380) }
+            context "when inviter avj credit + 20 is greater than 200" do
+              let(:inviter) { create(:freelancer, avj_credit: 190) }
 
               it "sets avj credit of the inviter to 400" do
                 freelancer.confirm
                 inviter.reload
-                expect(inviter.avj_credit).to eq(400)
+                expect(inviter.avj_credit).to eq(200)
               end
             end
           end
