@@ -5,8 +5,7 @@ ApplicationRecord.descendants.each do |klass|
 end
 
 admin_user_attributes = { name: "Paul Weatherhead", user_attributes: { email: "pweather24@gmail.com", password: "654321", password_confirmation: "654321" } }
-admin = Admin.new(admin_user_attributes)
-admin.save(validate: false)
+admin = Admin.create!(admin_user_attributes)
 
 40.times do
   Freelancer.create!(

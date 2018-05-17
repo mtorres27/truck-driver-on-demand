@@ -28,5 +28,5 @@ class User < ApplicationRecord
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable, :confirmable
 
-  belongs_to :meta, polymorphic: true
+  belongs_to :meta, polymorphic: true, optional: true
 end
