@@ -1,9 +1,10 @@
 class ApplicationController < ActionController::Base
+  protect_from_forgery with: :exception
+
   require "erb"
   include ERB::Util
   before_action :configure_permitted_parameters, if: :devise_controller?
-
-  protect_from_forgery with: :exception
+  before_action :redirect_to_registration_step, if: :current_company_registering?
 
   before_action do
     if Rails.env.development?
@@ -18,9 +19,29 @@ class ApplicationController < ActionController::Base
 
   def after_sign_in_path_for(resource)
     if resource.is_a?(Freelancer)
-      return freelancer_root_path if resource.registration_completed?
+      return freelancer_root_path if resource.registration_completed? || resource.registration_step.nil?
       return freelancer_registration_step_path(resource.registration_step)
+
+    elsif resource.is_a?(Company)
+      return company_root_path if resource.registration_completed? || resource.registration_step.nil?
+      return company_registration_step_path(resource.registration_step)
+
+    else
+      super
     end
+  end
+
+  def current_company_registering?
+    unless current_company.try(:registration_step).nil?
+      current_company &&
+      !current_company.registration_completed? &&
+      !(request.original_fullpath.include? company_registration_step_path(current_company.registration_step)) &&
+      request.original_fullpath != destroy_company_session_path
+    end
+  end
+
+  def redirect_to_registration_step
+    redirect_to company_registration_step_path(current_company.registration_step)
   end
 
   def do_geocode(address)

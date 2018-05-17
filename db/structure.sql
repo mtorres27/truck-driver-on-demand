@@ -299,8 +299,8 @@ CREATE TABLE companies (
     id bigint NOT NULL,
     token character varying,
     email citext NOT NULL,
-    name character varying NOT NULL,
-    contact_name character varying NOT NULL,
+    name character varying,
+    contact_name character varying,
     address character varying,
     formatted_address character varying,
     area character varying,
@@ -357,7 +357,8 @@ CREATE TABLE companies (
     state character varying,
     postal_code character varying,
     job_types citext,
-    manufacturer_tags citext
+    manufacturer_tags citext,
+    registration_step character varying
 );
 
 
@@ -2407,6 +2408,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20180413190903'),
 ('20180418190453'),
 ('20180418195120'),
-('20180420173017');
+('20180420173017'),
+('20180506150209');
 
 

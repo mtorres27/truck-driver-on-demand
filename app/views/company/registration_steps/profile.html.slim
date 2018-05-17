@@ -1,0 +1,74 @@
+- content_for :secondary do
+  h1.center.heading-h1 = "Register as a Company"
+  = render partial: "shared/registration_progress_bar", locals: { step: 4 }
+  = simple_form_for(@company, url: wizard_path) do |f|
+    .grid-h
+      .grid-cell.grid-cell--100
+        label Company Logo
+        .company-profile__image style="width: 100px; height: 100px;"
+          = image_tag(@company.avatar_url, id: "company-edit-profile__avatar")
+          .company-profile__image-upload onclick="updateCompanyLogo()"
+            span class="zmdi zmdi-camera-add"
+        = f.file_field :avatar, label: false, :accept => 'image/png,image/gif,image/jpeg', id: "edit-company-profile-avatar", class: "file-input--hidden"
+
+      .grid-cell.grid-cell--100
+        = f.input :description, as: :text, label: "About the company", placeholder: "Describe your company", :input_html => { :class => 'form__profile-bio-textarea' }
+      .grid-cell.grid-cell--50
+        = f.input :established_in, as: :integer, label: "Year Est"
+      .grid-cell.grid-cell--50
+        = f.input :number_of_employees, prompt: "Select", label: "# Employees"
+      .grid-cell.grid-cell--50
+        = f.input :number_of_offices, as: :integer, label: "# Offices"
+      .grid-cell.grid-cell--50
+        = f.input :website, as: :string, label: "Website", placeholder: "Enter Company's Website URL"
+      .grid-cell.grid-cell--100
+        = f.input :area, as: :string, label: "Service Areas", placeholder: "Enter the areas your company services (separate multiple areas with commas)."
+      .grid-cell.grid-cell--100
+        .buttons
+          = f.button :submit, "Skip & Register", class: "btn btn--secondary"
+          = f.button :submit, "Complete Registration", class: "btn btn--primary"
+          = link_to "Register with a different account", destroy_company_session_path,  method: :delete, class: "btn btn--secondary"
+
+javascript:
+   var updateCompanyLogo = function() {
+    $("#edit-company-profile-avatar").click();
+    $("#edit-company-profile-avatar").on('change', function() {
+      var imgPath = $(this)[0].value;
+      var extn = imgPath.substring(imgPath.lastIndexOf('.') + 1).toLowerCase();
+      var image_holder = $("#company-edit-profile__avatar");
+
+      if (extn == "gif" || extn == "png" || extn == "jpg" || extn == "jpeg") {
+        if (typeof (FileReader) != "undefined") {
+          var reader = new FileReader();
+          reader.onload = function (e) {
+            image_holder.attr('src', e.target.result)
+          }
+
+          reader.readAsDataURL($(this)[0].files[0]);
+        }
+      } else {
+        alert("Only images can be selected.");
+      }
+    });
+  }
+ var updateProfilePicture = function() {
+    $("#edit-company-profile-avatar").click();
+    $("#edit-company-profile-avatar").on('change', function() {
+      var imgPath = $(this)[0].value;
+      var extn = imgPath.substring(imgPath.lastIndexOf('.') + 1).toLowerCase();
+      var image_holder = $("#company-edit-profile__avatar");
+
+      if (extn == "gif" || extn == "png" || extn == "jpg" || extn == "jpeg") {
+        if (typeof (FileReader) != "undefined") {
+          var reader = new FileReader();
+          reader.onload = function (e) {
+            image_holder.attr('src', e.target.result)
+          }
+
+          reader.readAsDataURL($(this)[0].files[0]);
+        }
+      } else {
+        alert("Only images can be selected.");
+      }
+    });
+  }
