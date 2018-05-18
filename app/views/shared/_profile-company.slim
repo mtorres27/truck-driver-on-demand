@@ -169,4 +169,4 @@
         .confirmation_link
           .confirmation_label
           strong<> Confirmation Link:
-          = confirmation_url(@company, confirmation_token: @company.user.confirmation_token)
+          = confirmation_url(@company.user, confirmation_token: @company.user.confirmation_token)

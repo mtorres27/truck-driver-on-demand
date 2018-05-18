@@ -25,7 +25,7 @@ h1.headin-h1 Freelancer Profile
     .confirmation_link
       .confirmation_label
         strong<> Confirmation Link:
-        = confirmation_url(@freelancer, confirmation_token: @freelancer.user.confirmation_token)
+        = confirmation_url(@freelancer.user, confirmation_token: @freelancer.user.confirmation_token)
   - if @freelancer.special_avj_fees?
     h4.heading-h4= "Special AVJ Fee #{@freelancer.special_avj_fees}"
   = render "shared/profile-freelancer"
