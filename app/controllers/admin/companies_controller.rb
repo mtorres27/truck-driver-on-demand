@@ -73,7 +73,6 @@ class Admin::CompaniesController < Admin::BaseController
       # params.fetch(:company, {:name, :email})
       params.require(:company).permit(
         :name,
-        :email,
         :avatar,
         :contact_name,
         :country,
@@ -101,6 +100,7 @@ class Admin::CompaniesController < Admin::BaseController
         job_markets: (I18n.t("enumerize.live_events_staging_and_rental_job_markets").keys + I18n.t("enumerize.system_integration_job_markets").keys).uniq,
         technical_skill_tags:  I18n.t("enumerize.technical_skill_tags").keys,
         manufacturer_tags:  I18n.t("enumerize.manufacturer_tags").keys,
+        user_attributes: [:id, :email]
       )
     end
 end

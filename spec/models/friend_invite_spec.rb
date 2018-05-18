@@ -42,7 +42,7 @@ describe FriendInvite, type: :model do
 
     context 'when freelancer with email already exists' do
       before(:each) do
-        create(:freelancer, email: email)
+        create(:freelancer, user: build(:user, email: email))
       end
       subject { build(:friend_invite, email: email, name: 'Example', freelancer: freelancer) }
       it { is_expected.to be_invalid }

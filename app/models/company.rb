@@ -70,10 +70,6 @@
 #
 
 class Company < ApplicationRecord
-  # Include default devise modules. Others available are:
-  # :confirmable, :lockable, :timeoutable and :omniauthable
-  devise :database_authenticatable, :registerable,
-         :recoverable, :rememberable, :trackable, :validatable, :confirmable
   extend Enumerize
   include PgSearch
   include Geocodable
@@ -83,6 +79,8 @@ class Company < ApplicationRecord
 
   belongs_to :plan, foreign_key: 'plan_id', optional: true
 
+  has_one :user, as: :meta, dependent: :destroy
+  accepts_nested_attributes_for :user
   has_many :projects, -> { order(updated_at: :desc) }, dependent: :destroy
   has_many :jobs, dependent: :destroy
   has_many :applicants, dependent: :destroy
@@ -233,6 +231,10 @@ class Company < ApplicationRecord
     else
       return nil
     end
+  end
+
+  def email
+    user.email
   end
 
   def self.avg_rating(company)

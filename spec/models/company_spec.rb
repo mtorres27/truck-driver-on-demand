@@ -85,7 +85,7 @@ describe Company, type: :model do
             lifecyclestage: "customer",
             im_an: "AV Company",
           )
-          create(:company, email: "test@test.com", contact_name: "John Doe", name: "Acme")
+          create(:company, contact_name: "John Doe", name: "Acme", user: build(:user, email: "test@test.com"))
         end
       end
     end

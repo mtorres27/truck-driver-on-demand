@@ -71,12 +71,10 @@
 
 FactoryBot.define do
   factory :company do
-    email { Faker::Internet.unique.email }
     name { Faker::Company.unique.name }
     contact_name { Faker::Name.unique.name }
     country [:es, :fi, :fr, :gb, :pt, :us].sample
     city { Faker::Address.city }
-    password { 'password' }
-    password_confirmation { 'password' }
+    user { FactoryBot.build(:user) }
   end
 end

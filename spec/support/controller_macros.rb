@@ -3,8 +3,8 @@ module ControllerMacros
     before(:each) do
       @request.env["devise.mapping"] = Devise.mappings[:freelancer]
       freelancer = FactoryBot.create(:freelancer)
-      freelancer.confirm
-      sign_in freelancer
+      freelancer.user.confirm
+      sign_in freelancer.user
     end
   end
 
@@ -12,8 +12,8 @@ module ControllerMacros
     before(:each) do
       @request.env["devise.mapping"] = Devise.mappings[:company]
       company = FactoryBot.create(:company)
-      company.confirm
-      sign_in company
+      company.user.confirm
+      sign_in company.user
     end
   end
 
@@ -21,7 +21,7 @@ module ControllerMacros
     before(:each) do
       @request.env["devise.mapping"] = Devise.mappings[:admin]
       admin = FactoryBot.create(:admin)
-      sign_in admin
+      sign_in admin.user
     end
   end
 end

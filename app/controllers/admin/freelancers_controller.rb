@@ -67,7 +67,6 @@ class Admin::FreelancersController < Admin::BaseController
       # params.fetch(:freelancer, {})
       params.require(:freelancer).permit(
         :name,
-        :email,
         :address,
         :line2,
         :city,
@@ -96,6 +95,7 @@ class Admin::FreelancersController < Admin::BaseController
         freelancer_insurances_attributes: [:id, :name, :description, :image, :_destroy],
         freelancer_clearances_attributes: [:id, :description, :image, :_destroy],
         freelancer_portfolios_attributes: [:id, :name, :image, :_destroy],
+        user_attributes: [:id, :email]
       )
 
     end
