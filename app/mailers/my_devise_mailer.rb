@@ -10,7 +10,7 @@ class MyDeviseMailer < Devise::Mailer
     @resource = instance_variable_set("@#{devise_mapping.name}", record)
     headers 'X-SMTPAPI' => {
         sub: {
-            '%name%' => [@resource.name],
+            '%name%' => [@resource.meta.name],
             '%email%' => [@resource.email],
             '%confirmation_url%' => [confirmation_url(@resource, confirmation_token: @token)]
         },

@@ -30,7 +30,7 @@
         a.mobile-nav__menu__item href=freelancer_profile_path data-turbolinks="false"
           = image_tag current_freelancer.avatar_url
           | my profile
-        = link_to "Logout", destroy_freelancer_session_path, method: :delete, class: "mobile-nav__menu__item"
+        = link_to "Logout", destroy_user_session_path, method: :delete, class: "mobile-nav__menu__item"
     - elsif request.path.index('company') == 1
       - if current_company.nil?
         a.mobile-nav__menu__item href=new_company_session_path data-turbolinks="false"

@@ -759,7 +759,6 @@ ALTER SEQUENCE freelancer_reviews_id_seq OWNED BY freelancer_reviews.id;
 CREATE TABLE freelancers (
     id bigint NOT NULL,
     token character varying,
-    email citext NOT NULL,
     name character varying,
     avatar_data text,
     address character varying,
@@ -784,20 +783,8 @@ CREATE TABLE freelancers (
     technical_skill_tags citext,
     profile_header_data text,
     verified boolean DEFAULT false,
-    encrypted_password character varying DEFAULT ''::character varying NOT NULL,
-    reset_password_token character varying,
-    reset_password_sent_at timestamp without time zone,
-    remember_created_at timestamp without time zone,
-    sign_in_count integer DEFAULT 0 NOT NULL,
-    current_sign_in_at timestamp without time zone,
-    last_sign_in_at timestamp without time zone,
-    current_sign_in_ip inet,
-    last_sign_in_ip inet,
     header_color character varying DEFAULT 'FF6C38'::character varying,
     country character varying,
-    confirmation_token character varying,
-    confirmed_at timestamp without time zone,
-    confirmation_sent_at timestamp without time zone,
     freelancer_team_size character varying,
     freelancer_type character varying,
     header_source character varying DEFAULT 'color'::character varying,
@@ -2069,24 +2056,10 @@ CREATE INDEX index_freelancers_on_available ON freelancers USING btree (availabl
 
 
 --
--- Name: index_freelancers_on_confirmation_token; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX index_freelancers_on_confirmation_token ON freelancers USING btree (confirmation_token);
-
-
---
 -- Name: index_freelancers_on_disabled; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_freelancers_on_disabled ON freelancers USING btree (disabled);
-
-
---
--- Name: index_freelancers_on_email; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX index_freelancers_on_email ON freelancers USING btree (email);
 
 
 --
@@ -2115,13 +2088,6 @@ CREATE INDEX index_freelancers_on_manufacturer_tags ON freelancers USING btree (
 --
 
 CREATE INDEX index_freelancers_on_name ON freelancers USING btree (name);
-
-
---
--- Name: index_freelancers_on_reset_password_token; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX index_freelancers_on_reset_password_token ON freelancers USING btree (reset_password_token);
 
 
 --
@@ -2592,6 +2558,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20180508222720'),
 ('20180508223949'),
 ('20180508230343'),
-('20180509110048');
+('20180509110048'),
+('20180518015549');
 
 

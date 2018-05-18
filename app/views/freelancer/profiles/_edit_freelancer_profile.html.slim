@@ -15,7 +15,8 @@
           .grid-cell.grid-cell--100
             = f.input :name, required: true, label: "Full Name", placeholder: "Enter your Name."
           .grid-cell.grid-cell--100
-            = f.input :email, as: :string, required: true, label: "Email Address", placeholder: "Email"
+            = f.simple_fields_for :user do |user_form|
+              = user_form.input :email, as: :string, required: true, label: "Email Address", placeholder: "Email"
           .grid-cell.grid-cell--100
             = f.input :phone_number, as: :string, required: true, label: "Phone Number", placeholder: "Phone Number"
   .grid-cell.grid-cell--100

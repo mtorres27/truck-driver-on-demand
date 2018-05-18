@@ -12,7 +12,11 @@ class ApplicationController < ActionController::Base
   end
 
   def current_admin
-    current_user.meta_type == 'Admin' ? current_user.meta : nil
+    current_user.meta_type == 'Admin' ? current_user.meta : nil unless current_user.nil?
+  end
+
+  def current_freelancer
+    current_user.meta_type == 'Freelancer' ? current_user.meta : nil unless current_user.nil?
   end
 
   def after_inactive_sign_up_path_for(resource)

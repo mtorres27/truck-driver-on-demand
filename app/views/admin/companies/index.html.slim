@@ -38,7 +38,7 @@
           td= company.state
           td= company.country.try(:upcase)
           td= company.created_at.strftime('%b %-d, %Y')
-          td= !company.confirmed_at.nil?
+          td= !company.user.confirmed_at.nil?
           td= company.disabled
           td.text-right
             = link_to 'Edit', edit_admin_company_path(company)

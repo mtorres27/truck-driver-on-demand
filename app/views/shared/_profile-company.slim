@@ -164,9 +164,9 @@
             = I18n.t("enumerize.manufacturer_tags.#{index}")
 
   - if current_admin.present?
-    - if @company.confirmed_at.nil? && @company.confirmation_token.present?
+    - if @company.user.confirmed_at.nil? && @company.user.confirmation_token.present?
       .grid-cell.grid-cell--100
         .confirmation_link
           .confirmation_label
           strong<> Confirmation Link:
-          = confirmation_url(@company, confirmation_token: @company.confirmation_token)
+          = confirmation_url(@company, confirmation_token: @company.user.confirmation_token)
