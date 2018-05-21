@@ -1,5 +1,17 @@
 module ApplicationHelper
 
+  def current_admin
+    current_user.meta_type == 'Admin' ? current_user.meta : nil unless current_user.nil?
+  end
+
+  def current_freelancer
+    current_user.meta_type == 'Freelancer' ? current_user.meta : nil unless current_user.nil?
+  end
+
+  def current_company
+    current_user.meta_type == 'Company' ? current_user.meta : nil unless current_user.nil?
+  end
+
   def attachment_image_link(attachment)
     return unless attachment
     content_tag(:a, href: attachment.url, target: "_blank") do
