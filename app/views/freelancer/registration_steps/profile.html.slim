@@ -15,10 +15,13 @@
       .grid-cell.grid-cell--100
         = f.input :bio, label: "Biography", placeholder: "Write a bio", :input_html => { :class => 'form__profile-bio-textarea' }
       .grid-cell.grid-cell--100
-        .buttons
-          = f.button :submit, "Skip & Register", class: "btn btn--secondary"
-          = f.button :submit, "Complete Registration", class: "btn btn--primary"
-          = link_to "Register with a different account", destroy_freelancer_session_path,  method: :delete, class: "btn btn--secondary"
+        .grid-h
+          .grid-cell.grid-cell--33
+            = f.button :submit, "Complete", class: "btn btn--primary"
+          .grid-cell.grid-cell--33
+            = f.button :submit, "Skip & Register", class: "btn btn--secondary"
+          .grid-cell.grid-cell--33
+            = link_to "Use another account", destroy_freelancer_session_path,  method: :delete, class: "btn btn--clear"
 javascript:
    var updateProfilePicture = function() {
     $("#edit-freelancer-profile-avatar").click();

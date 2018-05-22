@@ -1,4 +1,3 @@
-h1.center.heading-h1 Register with AV Junction
 - content_for :secondary do
   h1.center.heading-h1 = "Register as a #{resource.class}"
   = render partial: "shared/registration_progress_bar", locals: { step: 1 }
@@ -41,8 +40,8 @@ h1.center.heading-h1 Register with AV Junction
           a href="http://www.avjunction.com/code-of-conduct" target="_blank"
             |  Code of Conduct
       .grid-cell.grid-cell--100
-        .buttons
-          = f.button :submit, "Save & Continue", class: "btn btn--primary"
-
+        .grid-h
+          .grid-cell.grid-cell--50
+            = f.button :submit, "Continue", class: "btn btn--primary"
       .grid-cell.grid-cell--100
         = render "devise/shared/links"
