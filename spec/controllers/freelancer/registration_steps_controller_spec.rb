@@ -101,8 +101,10 @@ RSpec.describe Freelancer::RegistrationStepsController, type: :controller do
         it "does not update the freelancer" do
           put :update, params: { id: :profile, freelancer: freelancer_params }
 
-          expect(freelancer.reload.bio).to be_empty
-          expect(freelancer.tagline).to be_empty
+          freelancer.reload
+
+          expect(freelancer.bio).not_to be_empty
+          expect(freelancer.tagline).not_to be_empty
         end
       end
 
@@ -117,8 +119,8 @@ RSpec.describe Freelancer::RegistrationStepsController, type: :controller do
 
         it "updates profile information" do
           put :update, params: { id: :profile, freelancer: freelancer_params }
-          expect(freelancer.reload.bio).not_to be_nil
-          expect(freelancer.tagline).not_to be_nil
+          expect(freelancer.reload.bio).to eq("my bio")
+          expect(freelancer.tagline).to eq("my tagline")
           expect(freelancer.avatar).not_to be_nil
         end
       end

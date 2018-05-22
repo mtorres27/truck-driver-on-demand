@@ -100,6 +100,13 @@ describe Freelancer, type: :model do
           expect(freelancer.name).to eq("Jane Doe")
         end
       end
+
+      describe "set_default_step" do
+        it "sets default step to personal" do
+          freelancer = create(:freelancer)
+          expect(freelancer.registration_step).to eq("personal")
+        end
+      end
     end
 
     describe "after create" do
@@ -155,17 +162,6 @@ describe Freelancer, type: :model do
           expect(freelancer.avj_credit).to eq(10)
         end
       end
-
-      describe "set_default_step" do
-        it "sets default step to personal" do
-          freelancer = create(:freelancer)
-          expect(freelancer.registration_step).to eq("personal")
-    end
-      end
-    end
-
-    describe "after save" do
-
     end
 
     describe "after_save" do

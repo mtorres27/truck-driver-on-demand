@@ -161,7 +161,7 @@ class Freelancer < ApplicationRecord
   after_save :add_credit_to_inviters, if: :confirmed_at_changed?
   after_save :send_welcome_email, if: :registration_step_changed?
   after_save :add_to_hubspot, if: :step_job_info?
-  after_create :set_default_step
+  before_create :set_default_step
 
   pg_search_scope :search, against: {
     name: "A",

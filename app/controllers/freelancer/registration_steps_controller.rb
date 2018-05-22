@@ -36,9 +36,9 @@ class Freelancer::RegistrationStepsController < ApplicationController
   end
 
   def profile_form_filled?
-    !current_freelancer.avatar.nil? &&
-    !current_freelancer.bio.nil? &&
-    !current_freelancer.tagline.nil?
+    current_freelancer.avatar.present? &&
+    current_freelancer.bio.present? &&
+    current_freelancer.tagline.present?
   end
 
   def freelancer_params
