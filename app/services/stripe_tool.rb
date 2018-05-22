@@ -1,4 +1,5 @@
 module StripeTool
+
   def self.update_company_info_with_subscription(company: company, customer: customer, subscription: subscription, plan: plan)
     company.billing_period_ends_at    = Time.at(subscription.current_period_end).to_datetime
     company.stripe_customer_id        = customer.id
@@ -16,6 +17,19 @@ module StripeTool
       company.exp_year                  = customer.sources.data[0].exp_year
     end
     company.save
+    # subscription
+    Subscription.where(company_id: company.id).update_all(is_active: false)
+    company_subscription = Subscription.new
+    company_subscription.company_id = company.id
+    company_subscription.plan_id = plan.id
+    company_subscription.description = "Subscription to #{plan.name} plan."
+    company_subscription.stripe_subscription_id = subscription.id
+    company_subscription.is_active = true
+    company_subscription.ends_at = company.billing_period_ends_at
+    company_subscription.amount = plan.subscription_fee
+    company_subscription.tax = plan.subscription_fee * (Subscription::CANADA_SALES_TAX_PERCENT/100) if company.canada_country?
+    company_subscription.save
+
   end
 
   def self.update_company_card_info(company: company, last_4_digits: last_4_digits, card_brand: card_brand, exp_month: exp_month, exp_year: exp_year)
@@ -91,10 +105,13 @@ module StripeTool
     company.is_subscription_cancelled = true
     subscription = Stripe::Subscription.retrieve(company.stripe_subscription_id)
     period_end = self.get_cancel_period_end(subscription: subscription)
-    Rails.logger.debug period_end
+    # Rails.logger.debug period_end
     self.cancel(subscription: subscription, period_end: period_end)
     if subscription.plan.amount > 0
-      self.refund_customer(customer: company.stripe_customer_id, old_exp: company.billing_period_ends_at.to_time.to_i)
+      self.refund_customer(
+        company: company,
+        old_exp: company.billing_period_ends_at.to_time.to_i
+        )
     end
     company.billing_period_ends_at = Time.at(period_end).to_date
     company.plan_id = nil
@@ -132,21 +149,29 @@ module StripeTool
       )
     end
 
-    def self.refund_customer(customer: customer, old_exp: old_exp)
+    def self.refund_customer(company: company, old_exp: old_exp)
       # calculate months
       professional_plan = Stripe::Plan.retrieve('avj_professional')
       no_of_month = ((old_exp - Time.now.to_time.to_i)/1.month.second).to_i
       amount = no_of_month * professional_plan[:amount] / 12
-      Rails.logger.debug "Refund amount: #{amount}"
+      amount += amount * (Subscription::CANADA_SALES_TAX_PERCENT/100) if company.canada_country?
       # generate the refund
-      charge = Stripe::Charge.create(
-        amount: amount,
-        currency:  'usd',
-        customer: customer,
-        description: 'Refund for unused period in the professional plan.'
-      )
-      Stripe::Refund.create(
-        charge: charge.id
-      )
+      if amount > 0
+        charge = Stripe::Charge.create(
+          amount: amount.round,
+          currency:  'usd',
+          customer: company.stripe_customer_id,
+          description: 'Refund for unused period in the professional plan.'
+        )
+        Stripe::Refund.create(
+          charge: charge.id
+        )
+        company_subscription = Subscription.where(['company_id = ?', company.id]).order("created_at DESC").first()
+        if company_subscription.present?
+          company_subscription.refund = amount/100
+          company_subscription.is_active = false
+          company_subscription.save
+        end
+      end
     end
 end

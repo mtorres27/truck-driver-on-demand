@@ -1328,7 +1328,10 @@ CREATE TABLE subscriptions (
     billing_perios_ends_at date,
     amount numeric,
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+    updated_at timestamp without time zone NOT NULL,
+    refund numeric(10,2) DEFAULT 0,
+    tax numeric(10,2) DEFAULT 0,
+    description character varying
 );
 
 
@@ -1368,7 +1371,12 @@ CREATE TABLE users (
     current_sign_in_ip inet,
     last_sign_in_ip inet,
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+    updated_at timestamp without time zone NOT NULL,
+    confirmation_token character varying,
+    confirmed_at timestamp without time zone,
+    confirmation_sent_at timestamp without time zone,
+    meta_id integer,
+    meta_type character varying
 );
 
 
@@ -2280,10 +2288,24 @@ CREATE INDEX index_quotes_on_company_id ON quotes USING btree (company_id);
 
 
 --
+-- Name: index_users_on_confirmation_token; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX index_users_on_confirmation_token ON users USING btree (confirmation_token);
+
+
+--
 -- Name: index_users_on_email; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE UNIQUE INDEX index_users_on_email ON users USING btree (email);
+
+
+--
+-- Name: index_users_on_meta_id_and_meta_type; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_users_on_meta_id_and_meta_type ON users USING btree (meta_id, meta_type);
 
 
 --
@@ -2588,4 +2610,8 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20180418195120'),
 ('20180420173017'),
 ('20180424155938'),
-('20180424190619');
+('20180424190619'),
+('20180504205104'),
+('20180509110048');
+
+

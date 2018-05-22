@@ -1,5 +1,6 @@
 class Freelancer::RegistrationStepsController < ApplicationController
   include Wicked::Wizard
+
   steps :personal, :job_info, :profile
 
   def show
@@ -15,14 +16,19 @@ class Freelancer::RegistrationStepsController < ApplicationController
     @freelancer = current_freelancer
     @freelancer.attributes = params[:freelancer] ? freelancer_params : {}
     @freelancer.registration_step = next_step
+
+    sign_out @freelancer if next_step == "wicked_finish"
+
     render_wizard @freelancer
   end
 
-  private
-
-  def current_freelancer
-    Freelancer.find(session[:step_freelancer_id])
+  def skip
+    @freelancer = current_freelancer
+    @freelancer.update_attribute(:registration_step, next_step)
+    redirect_to freelancer_registration_step_path(next_step)
   end
+
+  private
 
   def finish_wizard_path
     confirm_email_path

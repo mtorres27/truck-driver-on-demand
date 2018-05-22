@@ -9,5 +9,6 @@
           script.stripe-button data-label="Fund this Job" data-amount="#{ (@accepted_quote.amount.floor +  @job.company_plan_fees + (@accepted_quote.amount * @job.applicable_sales_tax / 100)) * 100 }" data-image="/assets/stripe-logo.png" data-email=("#{current_company.email}") data-description="Fund this Job" data-key=("#{Rails.configuration.stripe[:publishable_key]}") data-locale="auto" src="https://checkout.stripe.com/checkout.js" data-currency="#{@job.currency}" data-panel-label="Fund"
       - else
         .tag.tag--success Paid
+  br
   .grid-h
     = render "contract_invoice"

@@ -3,9 +3,9 @@
 # Table name: friend_invites
 #
 #  id            :integer          not null, primary key
-#  email         :citext
-#  name          :string
-#  freelancer_id :integer
+#  email         :citext           not null
+#  name          :string           not null
+#  freelancer_id :integer          not null
 #  accepted      :boolean          default(FALSE)
 #
 

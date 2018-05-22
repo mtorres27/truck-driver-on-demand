@@ -1,33 +1,26 @@
-/ p= @job.freelancer&.formatted_address || @job.freelancer&.address
-.grid-cell.grid-cell--100
-  .invoice__meta-1
-    .avatar.avatar--invoice
-      = image_tag(@job.freelancer.avatar_url, size: "65x65")
-    .invoice__meta-4
-      div= @job.freelancer&.name
-      div= @job.freelancer&.formatted_address
-      div= @job.freelancer&.sales_tax_number
 .grid-cell.grid-cell--33
-  h4.heading-h4= "Company: #{@job.company.name}"
+  h4.heading-h4= "From: #{@job.company.name}"
   div= @job.company.address
-  div= @job.company.sales_tax_number
+  div #{current_company.city}, #{current_company.province}
+  div= current_company.postal_code
+  div BN Tax No. #{current_company.sales_tax_number}
 .grid-cell.grid-cell--33
-  .invoice__meta-1
-    .invoice__meta-3
-      div= "Inv #: #{@payment.id}"
-      div= "Date: #{@payment.paid_on}"
-.grid-cell.grid-cell--expand
-  .invoice__meta-1
-    .invoice__meta-3
-      div= "Job: #{@job.title}"
-      div= "Phase: #{@payment.description}"
+  h4.heading-h4= "To: #{@job.freelancer&.name}"
+  div= @job.freelancer&.formatted_address
+  div= @job.freelancer&.sales_tax_number
+.grid-cell.grid-cell--33
+  h4.heading-h4= "Job: #{@job.title}"
+  div= "Phase: #{@payment.description}"
+  div= "Inv #: #{@payment.id}"
+  div= "Date: #{@payment.paid_on}"
+
 .grid-cell.grid-cell--100
   .invoice__table
     .invoice__table-row.invoice__table-row--header
       .invoice__table-text. Description
       .invoice__table-text.invoice__table-text--right Amount
     .invoice__table-row
-      .invoice__table-text= @payment.description
+      .invoice__table-text= @job.title + ": " +@payment.description
       .invoice__table-text.invoice__table-text--right= number_with_precision(@payment.amount, precision: 2).to_s + " " + @job.currency.upcase
     .invoice__table-row
       .invoice__table-text Applicable Taxes

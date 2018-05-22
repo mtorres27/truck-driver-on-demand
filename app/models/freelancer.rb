@@ -5,7 +5,7 @@
 #  id                       :integer          not null, primary key
 #  token                    :string
 #  email                    :citext           not null
-#  name                     :string           not null
+#  name                     :string
 #  avatar_data              :text
 #  address                  :string
 #  formatted_address        :string
@@ -65,6 +65,8 @@
 #  manufacturer_tags        :citext
 #  special_avj_fees         :decimal(10, 2)
 #  avj_credit               :decimal(10, 2)
+#  registration_step        :string
+#  province                 :string
 #
 
 require 'net/http'
@@ -82,6 +84,9 @@ class Freelancer < ApplicationRecord
   include AvatarUploader[:avatar]
   include ProfileHeaderUploader[:profile_header]
   include EasyPostgis
+
+  attr_accessor :first_name, :last_name, :accept_terms_of_service, :accept_privacy_policy,
+                 :accept_code_of_conduct, :enforce_profile_edit, :user_type
 
   has_many :applicants, -> { order(updated_at: :desc) }, dependent: :destroy
   has_many :jobs, through: :applicants
@@ -126,8 +131,7 @@ class Freelancer < ApplicationRecord
 
   audited
 
-  attr_accessor :first_name, :last_name, :accept_terms_of_service, :accept_privacy_policy,
-                :accept_code_of_conduct, :enforce_profile_edit, :user_type
+  def connected?; !stripe_account_id.nil?; end
 
   validates_acceptance_of :accept_terms_of_service
   validates_acceptance_of :accept_privacy_policy
@@ -146,15 +150,16 @@ class Freelancer < ApplicationRecord
     :pay_unit_time_preference,
     if: :enforce_profile_edit
 
-  validates :first_name, :last_name, :country, :state , :city, presence: true, on: :update,  if: :step_job_info?
+  validates :first_name, :last_name, :country, :state , :city, presence: true, on: :update, if: :step_job_info?
   validates :job_types, presence: true, on: :update, if: :step_profile?
 
   scope :new_registrants, -> { where(disabled: true) }
 
   before_save :set_name, if: :step_job_info?
   after_create :check_for_invites
+  after_save :add_credit_to_inviters, if: :confirmed_at_changed?
   after_update :send_welcome_email, if: :confirmed_freelancer?
-  after_update :add_to_hubspot, if: :step_job_info?
+  after_save :add_to_hubspot, if: :step_job_info?
   after_initialize :set_default_step
 
   pg_search_scope :search, against: {
@@ -202,16 +207,16 @@ class Freelancer < ApplicationRecord
     :at, :au, :be, :ca, :ch, :de, :dk, :es, :fi, :fr, :gb, :hk, :ie, :it, :jp, :lu, :nl, :no, :nz, :pt, :se, :sg, :us
   ]
 
-  def connected?
-    !stripe_account_id.nil?
-  end
-
   def rating
     if freelancer_reviews.count > 0
       freelancer_reviews.average("(#{FreelancerReview::RATING_ATTRS.map(&:to_s).join('+')}) / #{FreelancerReview::RATING_ATTRS.length}").round
     else
       return nil
     end
+  end
+
+  def registration_completed?
+    registration_step == "wicked_finish"
   end
 
   def job_markets_for_job_type(job_type)
@@ -240,6 +245,10 @@ class Freelancer < ApplicationRecord
       end
     end
     freelancer_job_functions
+  end
+
+  def was_invited?
+    FriendInvite.where(email: email, accepted: true).count > 0
   end
 
   def score
@@ -319,10 +328,6 @@ class Freelancer < ApplicationRecord
     end
   end
 
-  def registration_completed?
-    registration_step == "wicked_finish"
-  end
-
   private
 
   def add_to_hubspot
@@ -332,7 +337,7 @@ class Freelancer < ApplicationRecord
       firstname: name.split(" ")[0],
       lastname: name.split(" ")[1],
       lifecyclestage: "customer",
-      im_am: "AV Freelancer",
+      im_an: "AV Freelancer",
     )
   end
 
@@ -344,16 +349,26 @@ class Freelancer < ApplicationRecord
 
   def check_for_invites
     return if FriendInvite.by_email(email).count.zero?
-
-    self.avj_credit = 20
+    self.avj_credit = 10
     save!
-    FreelancerMailer.notice_credit_earned(self, 20).deliver_later
+    FreelancerMailer.notice_credit_earned(self, 10).deliver_later
+  end
+
+  def add_credit_to_inviters
+    return if FriendInvite.by_email(email).count.zero?
     FriendInvite.by_email(email).each do |invite|
       freelancer = invite.freelancer
-      freelancer.avj_credit = freelancer.avj_credit.nil? ? 50 : freelancer.avj_credit + 50
+      if freelancer.avj_credit.nil?
+        credit_earned = 20
+      elsif freelancer.avj_credit + 20 <= 200
+        credit_earned = 20
+      else
+        credit_earned = 200 - freelancer.avj_credit
+      end
+      freelancer.avj_credit = freelancer.avj_credit.to_f + credit_earned
       freelancer.save!
       invite.update_attribute(:accepted, true)
-      FreelancerMailer.notice_credit_earned(freelancer, 50).deliver_later
+      FreelancerMailer.notice_credit_earned(freelancer, credit_earned).deliver_later if credit_earned > 0
     end
   end
 

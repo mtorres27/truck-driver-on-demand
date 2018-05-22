@@ -267,6 +267,10 @@ class Company < ApplicationRecord
     freelancer_job_markets
   end
 
+  def canada_country?
+    country == 'ca'
+  end
+
   def self.do_all_geocodes
     Company.all.each do |f|
       p "Doing geocode for " + f.id.to_s + "(#{f.compile_address})"
@@ -287,7 +291,7 @@ class Company < ApplicationRecord
       firstname: contact_name.split(" ")[0],
       lastname: contact_name.split(" ")[1],
       lifecyclestage: "customer",
-      im_am: "AV Company",
+      im_an: "AV Company",
     )
   end
 

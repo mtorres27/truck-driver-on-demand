@@ -13,7 +13,7 @@
             | Apply Now
       - elsif !@connector.verified?
         a href="/freelancer/profile/bank_info"
-          | Verify your account to apply.
+          | Set up your banking details to apply.
 
   
   .grid-h
@@ -154,36 +154,36 @@
 
           .grid-cell.grid-cell--100.freelancer-job__apply-modal__content-amount--fixed  
             .common__text-field-group
-              = f.label :amount, "Amount", class: "common__field-label"
-              = f.input :amount, type: "text", id: "quote-amount-fixed", placeholder: "Your quote", label: false, class: "common__text-field w-input", label: false
+              = f.label :amount, "Amount", class: "common__field-label required-field"
+              = f.input :amount, type: "text", id: "quote-amount-fixed", placeholder: "Your quote", class: "common__text-field w-input", label: false, required: false
 
           .grid-cell.grid-cell--50.freelancer-job__apply-modal__content-amount--hourly 
             .common__text-field-group
-              = f.label :number_of_hours, "Number of Hours", class: "common__field-label"
-              = f.input :number_of_hours, type: "text", id: "quote-amount-hourly", placeholder: "No. of Hrs", class: "common__text-field w-input", label: false
+              = f.label :number_of_hours, "Number of Hours", class: "common__field-label required-field"
+              = f.input :number_of_hours, type: "text", id: "quote-amount-hourly", placeholder: "No. of Hrs", class: "common__text-field w-input", label: false, required: false
 
           .grid-cell.grid-cell--50.freelancer-job__apply-modal__content-amount--hourly  
             .common__text-field-group
-              = f.label :hourly_rate, "Hourly Rate", class: "common__field-label"
-              = f.input :hourly_rate, type: "text", id: "quote-amount-hourly-rate", placeholder: "Hourly Rate", class: "common__text-field w-input", label: false
+              = f.label :hourly_rate, "Hourly Rate", class: "common__field-label required-field"
+              = f.input :hourly_rate, type: "text", id: "quote-amount-hourly-rate", placeholder: "Hourly Rate", class: "common__text-field w-input", label: false, required: false
 
           .grid-cell.grid-cell--50.freelancer-job__apply-modal__content-amount--daily
             .common__text-field-group
-              = f.label :number_of_days, "No. of Days", class: "common__field-label"
-              = f.input :number_of_days, type: "text", id: "quote-amount-daily", placeholder: "No. of Days", class: "common__text-field w-input", label: false
+              = f.label :number_of_days, "No. of Days", class: "common__field-label required-field"
+              = f.input :number_of_days, type: "text", id: "quote-amount-daily", placeholder: "No. of Days", class: "common__text-field w-input", label: false, required: false
 
           .grid-cell.grid-cell--50.freelancer-job__apply-modal__content-amount--daily
             .common__text-field-group
-              = f.label :daily_rate, "Daily Rate", class: "common__field-label"
-              = f.input :daily_rate, type: "text", id: "quote-amount-daily-rate", placeholder: "Daily Rate", class: "common__text-field w-input", label: false
+              = f.label :daily_rate, "Daily Rate", class: "common__field-label required-field"
+              = f.input :daily_rate, type: "text", id: "quote-amount-daily-rate", placeholder: "Daily Rate", class: "common__text-field w-input", label: false, required: false
           .grid-cell.grid-cell--100
             .attachment.common__text-field-group
-              label.common__field-label for="name-4"
+              label.common__field-label.required-field for="name-4"
                 = "Send a message to #{@job.company.name}"
               = f.file_field :attachment, as: :file, id: "message_attachment", label: false, :accept => 'document/pdf,application/pdf,application/x-pdf,image/png,image/jpg,image/jpeg,image/gif',  class: "file-input--hidden"
               = f.text_area :message, as: :string, placeholder: "Enter your message", label: false, maxlength: 5000, class: "w-input"
           .grid-cell.grid-cell--100  
-            = f.input :attachment, as: :file, label: "Attachments"
+            = f.input :attachment, as: :file, label: "Attachments", required: false
           .grid-cell.grid-cell--100 
             .buttons
               .freelancer-job__apply-modal__errors

@@ -17,7 +17,7 @@ RSpec.describe Freelancer::RegistrationStepsController, type: :controller do
   end
 
   describe "PUT #update" do
-    let(:freelancer) { create(:freelancer) }
+    let(:freelancer) { create(:freelancer, name: nil) }
 
     before do
       session[:step_freelancer_id] = freelancer.id
@@ -53,6 +53,10 @@ RSpec.describe Freelancer::RegistrationStepsController, type: :controller do
     end
 
     describe "step :job_info" do
+      before do
+        freelancer.update(registration_step: "job_info")
+      end
+
       context "when job types are not selected" do
         let(:freelancer_params) { {} }
 
@@ -87,6 +91,10 @@ RSpec.describe Freelancer::RegistrationStepsController, type: :controller do
     end
 
     describe "step :profile" do
+      before do
+        freelancer.update_attribute(:registration_step, "profile")
+      end
+
       context "when user does not fill the fields" do
         let(:freelancer_params) { {} }
 
