@@ -29,10 +29,12 @@ class ApplicationController < ActionController::Base
   end
 
   def current_freelancer_registering?
-    current_freelancer &&
-    !current_freelancer.registration_completed? &&
-    !(request.original_fullpath.include? freelancer_registration_step_path(current_freelancer.registration_step)) &&
-    request.original_fullpath != destroy_freelancer_session_path
+    unless current_freelancer.try(:registration_step).nil?
+      current_freelancer &&
+      !current_freelancer.registration_completed? &&
+      !(request.original_fullpath.include? freelancer_registration_step_path(current_freelancer.registration_step)) &&
+      request.original_fullpath != destroy_freelancer_session_path
+    end
   end
 
   def redirect_to_registration_step

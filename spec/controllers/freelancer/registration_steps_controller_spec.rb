@@ -5,7 +5,7 @@ RSpec.describe Freelancer::RegistrationStepsController, type: :controller do
     let(:freelancer) { create(:freelancer) }
 
     before do
-      session[:step_freelancer_id] = freelancer.id
+      sign_in freelancer
     end
 
     describe "step: personal" do
@@ -20,7 +20,7 @@ RSpec.describe Freelancer::RegistrationStepsController, type: :controller do
     let(:freelancer) { create(:freelancer, name: nil) }
 
     before do
-      session[:step_freelancer_id] = freelancer.id
+      sign_in freelancer
     end
 
     describe "step: personal" do
@@ -96,12 +96,13 @@ RSpec.describe Freelancer::RegistrationStepsController, type: :controller do
       end
 
       context "when user does not fill the fields" do
-        let(:freelancer_params) { {} }
+        let(:freelancer_params) { { bio: nil, tagline: nil } }
 
         it "does not update the freelancer" do
           put :update, params: { id: :profile, freelancer: freelancer_params }
-          expect(freelancer.reload.bio).to be_nil
-          expect(freelancer.tagline).to be_nil
+
+          expect(freelancer.reload.bio).to be_empty
+          expect(freelancer.tagline).to be_empty
         end
       end
 
@@ -110,12 +111,15 @@ RSpec.describe Freelancer::RegistrationStepsController, type: :controller do
           {
             bio: "my bio",
             tagline: "my tagline",
+            avatar: fixture_file_upload(Rails.root.join("spec", "fixtures", "image.png"), "image/png")
           }
         }
 
         it "updates profile information" do
           put :update, params: { id: :profile, freelancer: freelancer_params }
-          expect(freelancer.reload).to have_attributes(freelancer_params)
+          expect(freelancer.reload.bio).not_to be_nil
+          expect(freelancer.tagline).not_to be_nil
+          expect(freelancer.avatar).not_to be_nil
         end
       end
     end

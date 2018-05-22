@@ -152,15 +152,16 @@ class Freelancer < ApplicationRecord
 
   validates :first_name, :last_name, :country, :state , :city, presence: true, on: :update, if: :step_job_info?
   validates :job_types, presence: true, on: :update, if: :step_profile?
+  validates :avatar, :tagline, :bio, presence: true, on: :update, if: :registration_completed?
 
   scope :new_registrants, -> { where(disabled: true) }
 
   before_save :set_name, if: :step_job_info?
   after_create :check_for_invites
   after_save :add_credit_to_inviters, if: :confirmed_at_changed?
-  after_update :send_welcome_email, if: :confirmed_freelancer?
+  after_save :send_welcome_email, if: :registration_step_changed?
   after_save :add_to_hubspot, if: :step_job_info?
-  after_initialize :set_default_step
+  after_create :set_default_step
 
   pg_search_scope :search, against: {
     name: "A",
@@ -342,8 +343,7 @@ class Freelancer < ApplicationRecord
   end
 
   def send_welcome_email
-    return unless confirmation_sent_at.nil?
-    FreelancerMailer.verify_your_identity(self).deliver_later
+    return if confirmed? || !registration_completed? || confirmation_sent_at.present?
     self.send_confirmation_instructions
   end
 
