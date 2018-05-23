@@ -1,16 +1,17 @@
 Rails.application.routes.draw do
   devise_for :users
 
+  devise_scope :user do
+    get "/company/login" => "devise/sessions#new", :as => "/company/login"
+    get "/freelancer/login" => "devise/sessions#new", :as => "/freelancer/login"
+    get "/admin/login" => "devise/sessions#new", :as => "/admin/login"
+  end
+
   root "main#index"
 
-  get "company/login", to: "devise/session#new"
   get "freelance-service-agreement", to: "main#freelance_service_agreement"
-
-
   get "confirm_email", to: "main#confirm_email"
-
-  get 'job_country_currency', to: 'main#job_countries', as: 'job_country_currency'
-
+  get "job_country_currency", to: "main#job_countries", as: "job_country_currency"
 
   namespace :freelancer do
 

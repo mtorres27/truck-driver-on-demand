@@ -41,7 +41,7 @@ class Company::ContractsController < Company::BaseController
       @job.stripe_balance_transaction_id = charge[:balance_transaction]
       @job.save
 
-      quote.avj_fees = (quote.amount * Rails.configuration.avj_fees)
+      quote.avj_fees = (quote.amount * avj_fees)
       quote.stripe_fees = stripe_fees
       quote.net_avj_fees = platform_fees
       quote.avj_credit = avj_credit_used
@@ -79,8 +79,8 @@ class Company::ContractsController < Company::BaseController
       end
       # logger.debug quote.inspect
 
-    rescue => e
-      flash[:error] = e.message
+    # rescue => e
+    #   flash[:error] = e.message
     end
 
     redirect_to company_job_payments_path, job_id: @job.id
