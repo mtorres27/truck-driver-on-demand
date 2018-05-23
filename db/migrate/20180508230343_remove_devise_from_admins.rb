@@ -15,6 +15,7 @@ class RemoveDeviseFromAdmins < ActiveRecord::Migration[5.1]
                           last_sign_in_ip: admin.last_sign_in_ip,
                           meta: admin)
           user.save(validate: false)
+          user.confirm
         end
       rescue Exception => e
         puts e
@@ -63,6 +64,7 @@ class RemoveDeviseFromAdmins < ActiveRecord::Migration[5.1]
                                 last_sign_in_at: user.last_sign_in_at,
                                 current_sign_in_ip: user.current_sign_in_ip,
                                 last_sign_in_ip: user.last_sign_in_ip)
+        user.destroy!
       rescue Exception => e
       end
     end

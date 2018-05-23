@@ -75,6 +75,7 @@ class RemoveDeviseFromFreelancers < ActiveRecord::Migration[5.1]
                                 last_sign_in_at: user.last_sign_in_at,
                                 current_sign_in_ip: user.current_sign_in_ip,
                                 last_sign_in_ip: user.last_sign_in_ip)
+        user.destroy!
       rescue Exception => e
       end
     end
