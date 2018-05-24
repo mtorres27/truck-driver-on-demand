@@ -73,10 +73,19 @@ FactoryBot.define do
   factory :company do
     email { Faker::Internet.unique.email }
     name { Faker::Company.unique.name }
-    contact_name { Faker::Name.unique.name }
+    first_name { Faker::Name.unique.name }
+    last_name { Faker::Name.unique.name }
+    password "password"
+    password_confirmation { 'password' }
     country [:es, :fi, :fr, :gb, :pt, :us].sample
     city { Faker::Address.city }
-    password { 'password' }
-    password_confirmation { 'password' }
+    state { Faker::Address.state}
+    avatar { fixture_file_upload(Rails.root.join("spec", "fixtures", "image.png"), "image/png") }
+    description { Faker::Lorem.sentence }
+    established_in { Faker::Number.number(4) }
+    number_of_employees { "eleven_to_one_hundred" }
+    number_of_offices { Faker::Number.number(1) }
+    website { Faker::Lorem.word }
+    area { "USA" }
   end
 end

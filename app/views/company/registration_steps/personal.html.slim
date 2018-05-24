@@ -1,0 +1,27 @@
+- content_for :secondary do
+  h1.center.heading-h1 = "Register as a Company"
+  = render partial: "shared/registration_progress_bar", locals: { step: 2 }
+  = simple_form_for(@company, url: wizard_path) do |f|
+    .grid-h
+      .grid-cell.grid-cell--50
+        = f.input :first_name, as: :string, label: "First Name", required: true, autofocus: true, placeholder:  "Enter your first name"
+      .grid-cell.grid-cell--50
+        = f.input :last_name, as: :string, label: "Last Name", required: true, autofocus: true, placeholder:  "Enter your last name"
+      .grid-cell.grid-cell--100
+        = f.input :name, as: :string, label: "Company Name", required: true, autofocus: true, placeholder:  "Enter your company name"
+      .grid-cell.grid-cell--33
+        = f.input :city, required: true, label: "City", placeholder: "Enter your city"
+      .grid-cell.grid-cell--33
+        = f.input :state, required: true, label: "Province/State", placeholder: "Enter your Province/State"
+      .grid-cell.grid-cell--33
+        = f.input :country, required: true, label: "Country", prompt: "Select Country"
+      .grid-cell.grid-cell--100
+        .grid-h
+          .grid-cell.grid-cell--33
+            = f.button :submit, "Continue", class: "btn btn--primary"
+          .grid-cell.grid-cell--33
+            = link_to "Use another account", destroy_company_session_path,  method: :delete, class: "btn btn--clear"
+
+
+
+

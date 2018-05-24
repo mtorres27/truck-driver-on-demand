@@ -2,8 +2,13 @@ class RegistrationsController < Devise::RegistrationsController
   protected
 
   def after_sign_up_path_for(resource)
-    (super && return) unless resource.is_a?(Freelancer)
-    freelancer_registration_steps_path
+    if resource.is_a?(Freelancer)
+      freelancer_registration_steps_path
+    elsif resource.is_a?(Company)
+      company_registration_steps_path
+    else
+      super
+    end
   end
 
   def after_inactive_sign_up_path_for(resource)
