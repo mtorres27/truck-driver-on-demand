@@ -12,7 +12,7 @@ Rails.application.configure do
   # Attempt to read encrypted secrets from `config/secrets.yml.enc`.
   # Requires an encryption key in `ENV["RAILS_MASTER_KEY"]` or
   # `config/secrets.yml.key`.
-  config.read_encrypted_secrets = true
+  config.read_encrypted_secrets = false
 
   # Show full error reports.
   config.consider_all_requests_local = true
@@ -46,9 +46,9 @@ Rails.application.configure do
   config.assets.quiet = true
 
   # AVJ fees
-  config.avj_fees = 0.08
+  config.avj_fees = Rails.application.secrets.avj_fees
 
-  config.avj_sales_tax_number = "72393 3693 RC0001"
+  config.avj_sales_tax_number = Rails.application.secrets.avj_sales_tax_number
 
   # Raises error for missing translations
   # config.action_view.raise_on_missing_translations = true
@@ -57,24 +57,15 @@ Rails.application.configure do
   # routes, locales, etc. This feature depends on the listen gem.
   config.file_watcher = ActiveSupport::EventedFileUpdateChecker
 
+  config.action_mailer.default_url_options = { host: 'localhost', port: 3000 }
+  config.action_mailer.raise_delivery_errors = true
+  config.action_mailer.perform_caching = false
+  config.action_mailer.delivery_method = :file
+
+  config.action_mailer.preview_path = "#{Rails.root}/spec/mailers/previews"
+
   config.after_initialize do
     Bullet.enable = true
     Bullet.rails_logger = true
   end
-
-  config.action_mailer.default_url_options = { host: 'localhost', port: 3000 }
-  config.action_mailer.raise_delivery_errors = true
-  config.action_mailer.perform_caching = false
-  config.action_mailer.delivery_method = :smtp
-  config.action_mailer.smtp_settings = {
-      user_name: Rails.application.secrets.sendgrid_username,
-      password: Rails.application.secrets.sendgrid_password,
-      domain: 'localhost:3000',
-      address: 'smtp.sendgrid.net',
-      port: 587,
-      authentication: :plain,
-      enable_starttls_auto: true
-  }
-
-  config.action_mailer.preview_path = "#{Rails.root}/spec/mailers/previews"
 end

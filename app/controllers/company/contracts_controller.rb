@@ -7,29 +7,31 @@ class Company::ContractsController < Company::BaseController
       quote = @job.accepted_quote
       freelancer = @job.freelancer
       payments = @job.payments
-      amount = (quote.amount * (1 + (@job.applicable_sales_tax / 100)))
-      stripe_fees = amount * 0.029 + 0.3
       avj_fees = freelancer.special_avj_fees || Rails.configuration.avj_fees
-      currency = @job.currency
-      avj_credit_available = currency == 'usd' ? freelancer.avj_credit.to_f : CurrencyExchange.dollars_to_currency(freelancer.avj_credit.to_f, currency)
+      currency_rate = CurrencyExchange.get_currency_rate(@job.currency)
+      avj_credit_available = @job.currency == 'usd' ? freelancer.avj_credit.to_f : freelancer.avj_credit.to_f * currency_rate
       if quote.amount * avj_fees <= avj_credit_available
         avj_credit_used = quote.amount * avj_fees
       else
         avj_credit_used = avj_credit_available
       end
-      if currency == 'usd'
+      if @job.currency == 'usd'
         freelancer.update_attribute(:avj_credit, freelancer.avj_credit.to_f - avj_credit_used)
       else
-        freelancer.update_attribute(:avj_credit, freelancer.avj_credit.to_f - CurrencyExchange.currency_to_dollars(avj_credit_used, currency))
+        freelancer.update_attribute(:avj_credit, freelancer.avj_credit.to_f - (avj_credit_used / currency_rate))
       end
-      platform_fees = (((quote.amount * avj_fees) - avj_credit_used) - stripe_fees)
+      amount = (quote.amount * (1 + (@job.applicable_sales_tax / 100)))
+      # Stripe fees equals to 2.9% of the total amount plus 30 cents USD
+      stripe_fees = amount * 0.029 + (0.3 * currency_rate)
+      plan_fees = @job.company_plan_fees
+      platform_fees = (((quote.amount * avj_fees) - avj_credit_used) - stripe_fees + plan_fees)
       if platform_fees < 0
         platform_fees = 0
       end
 
       charge = Stripe::Charge.create({
         amount: (amount * 100).floor ,
-        currency: currency,
+        currency: @job.currency,
         source: params[:stripeToken],
         statement_descriptor: "AV Junction - (stripe)",
         application_fee: (platform_fees * 100).floor
@@ -39,7 +41,7 @@ class Company::ContractsController < Company::BaseController
       @job.stripe_balance_transaction_id = charge[:balance_transaction]
       @job.save
 
-      quote.avj_fees = quote.amount * avj_fees
+      quote.avj_fees = (quote.amount * Rails.configuration.avj_fees)
       quote.stripe_fees = stripe_fees
       quote.net_avj_fees = platform_fees
       quote.avj_credit = avj_credit_used
@@ -70,8 +72,8 @@ class Company::ContractsController < Company::BaseController
       PaymentsMailer.notice_funds_freelancer(current_company, freelancer, @job).deliver_later
       PaymentsMailer.notice_funds_company(current_company, freelancer, @job).deliver_later
       if avj_credit_used > 0
-        if currency != 'usd'
-          avj_credit_used = CurrencyExchange.currency_to_dollars(avj_credit_used, currency)
+        if @job.currency != 'usd'
+          avj_credit_used = (avj_credit_used / currency_rate)
         end
         FreelancerMailer.notice_credit_used(freelancer, avj_credit_used.floor).deliver_later
       end

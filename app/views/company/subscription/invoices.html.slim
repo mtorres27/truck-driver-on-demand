@@ -1,10 +1,22 @@
-h2
-  | Invoices
-span
-  | (Next invoice will be at #{Time.at(@upcoming[:date])} for #{pretty_amount(@upcoming[:amount_due])})
-.invoices
-  - @invoices.each do |invoice|
-    li.invoice
-      = link_to Time.at(invoice[:date]), company_invoice_path(invoice: invoice.id)
-      | =>
-      =pretty_amount(invoice[:lines][:data][0][:amount])
+= render partial: "/company/shared/profile_sub_nav"
+
+- content_for :title, "AVJunction - Subscriptions"
+
+- content_for :secondary do
+  .action-bar
+    h2.heading-h2.heading-h2--action-bar
+      | Invoices
+  - if @subscriptions.any?
+    .grid-h
+      .grid-cell.grid-cell--100
+        .list
+          - @subscriptions.each do |subscription|
+            a.list-item href=company_invoice_path(subscription: subscription.stripe_subscription_id)
+              .list-bar
+                .list__title
+                  = subscription.description
+                .list__title
+                  | $#{number_with_precision(subscription.amount+subscription.tax, precision: 2)} USD
+
+  - else
+    | You don't have any invoices yet

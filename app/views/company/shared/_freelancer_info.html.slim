@@ -19,12 +19,8 @@ a.list-item.list-item--freelancer href="/company/freelancers/#{freelancer.id}" c
         span.list__verified.zmdi.zmdi-check-circle
 
     .list__city
-      - if params.dig(:search, :address) == nil
-        = " #{freelancer.city}"
-      - elsif params.dig(:search, :address) == ''
-        = " #{freelancer.city}"
-      - else
-        = " #{freelancer.city}, #{distance_from(freelancer)} miles away"
+      - freelancer_address = "#{freelancer.city}, #{freelancer.state}, #{freelancer.country.upcase}"
+      = "#{freelancer_address}. #{params.dig(:search, :address).present? ? "#{distance_from(freelancer)} miles away" : "" }"
 
     .list__rating
     - @stars = freelancer_avg_rating(freelancer)

@@ -1,0 +1,29 @@
+.grid-cell.grid-cell--33
+  = render "shared/avj_logo_and_address"
+
+.grid-cell.grid-cell--33
+  h4.heading-h4= "To: #{current_company.name}"
+  div= current_company.address
+  div #{current_company.city}, #{current_company.province}
+  div= current_company.postal_code
+  div BN Tax No. #{current_company.sales_tax_number}
+.grid-cell.grid-cell--33
+  h4.heading-h4= "Inv #: #{@subscription[:id]}"
+  div= "Date: #{Time.at(@subscription[:created_at]).strftime('%b %-d, %Y')}"
+.grid-cell.grid-cell--100
+  .invoice__table
+    .invoice__table-row.invoice__table-row--header
+      .invoice__table-text. Description
+      .invoice__table-text.invoice__table-text--right Amount
+    .invoice__table-row
+      .invoice__table-text #{@subscription[:description]}
+      .invoice__table-text.invoice__table-text--right
+        | $#{(@subscription[:amount])}USD
+    .invoice__table-row
+      .invoice__table-text Tax (%#{current_company.canada_country? ? Subscription::CANADA_SALES_TAX_PERCENT : 0})
+      .invoice__table-text.invoice__table-text--right
+        | $#{@subscription[:tax]}USD
+    .invoice__table-row.invoice__table-row--total
+      .invoice__table-text Total
+      .invoice__table-text.invoice__table-text--right
+        | $#{(@subscription[:amount]+@subscription[:tax])}USD

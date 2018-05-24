@@ -2,7 +2,7 @@ class Freelancer::JobsController < Freelancer::BaseController
   include JobHelper
 
   def index
-    if params[:search][:keywords].blank? && params[:search][:address].blank?&& params[:search][:country].blank?
+    if params[:search].nil? || (params[:search][:keywords].blank? && params[:search][:address].blank?&& params[:search][:country].blank?)
       flash[:error] = "You'll need to add some search criteria to narrow your search results!"
       redirect_to freelancer_root_path
     end
@@ -23,9 +23,9 @@ class Freelancer::JobsController < Freelancer::BaseController
     end
 
     if sort != nil
-      @jobs = Job.joins(:company).where(:companies => {:disabled => false}).where({ state: "published" }).order(name: sort)
+      @jobs = Job.joins(:company).where(:companies => {disabled: false}).where.not(:companies => {plan_id: nil}).where({ state: "published" }).order(name: sort)
     else
-      @jobs = Job.joins(:company).where(:companies => {:disabled => false}).where({ state: "published" }).all
+      @jobs = Job.joins(:company).where(:companies => {disabled: false}).where.not(:companies => {plan_id: nil}).where({ state: "published" }).all
     end
 
     if @address

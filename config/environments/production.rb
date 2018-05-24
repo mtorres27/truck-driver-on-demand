@@ -4,6 +4,8 @@ Rails.application.configure do
   # Code is not reloaded between requests.
   config.cache_classes = true
 
+  config.secret_key_base = Rails.application.secrets.secret_key_base
+
   # Eager load code on boot. This eager loads most of Rails and
   # your application in memory, allowing both threaded web servers
   # and those relying on copy on write to perform better.
@@ -13,7 +15,7 @@ Rails.application.configure do
   # Attempt to read encrypted secrets from `config/secrets.yml.enc`.
   # Requires an encryption key in `ENV["RAILS_MASTER_KEY"]` or
   # `config/secrets.yml.key`.
-  config.read_encrypted_secrets = true
+  config.read_encrypted_secrets = false
 
   # Full error reports are disabled and caching is turned on.
   config.consider_all_requests_local       = false
@@ -90,9 +92,9 @@ Rails.application.configure do
   config.log_formatter = ::Logger::Formatter.new
 
   # AVJ fees
-  config.avj_fees = 0.08
+  config.avj_fees = Rails.application.secrets.avj_fees
 
-  config.avj_sales_tax_number = "72393 3693 RC0001"
+  config.avj_sales_tax_number = Rails.application.secrets.avj_sales_tax_number
 
   # Use a different logger for distributed setups.
   # require 'syslog/logger'
@@ -106,8 +108,4 @@ Rails.application.configure do
 
   # Do not dump schema after migrations.
   config.active_record.dump_schema_after_migration = false
-  config.after_initialize do
-    Bullet.enable = true
-    Bullet.rails_logger = true
-  end
 end

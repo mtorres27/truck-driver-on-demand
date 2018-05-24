@@ -5,6 +5,7 @@ h1 Editing Company
 
   = render "/company/profiles/edit_company_profile", f: f
   = f.input :disabled
+  = f.input :waived_jobs
 
   .form-actions
     = f.button :submit, class: "btn btn-primary"

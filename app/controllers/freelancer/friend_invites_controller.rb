@@ -11,7 +11,7 @@ class Freelancer::FriendInvitesController < Freelancer::BaseController
       FreelancerMailer.notice_invites_sent(@freelancer).deliver_later
       redirect_to freelancer_friend_invites_path
     else
-      flash[:error] = "An error occurred. #{@freelancer.errors.full_messages}"
+      flash[:error] = "An error occurred. #{@freelancer.errors.full_messages.to_sentence}"
       render :show
     end
   end

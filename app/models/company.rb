@@ -66,6 +66,7 @@
 #  manufacturer_tags         :citext
 #  plan_id                   :integer
 #  is_trial_applicable       :boolean          default(TRUE)
+#  waived_jobs               :integer          default(1)
 #
 
 class Company < ApplicationRecord
@@ -79,6 +80,8 @@ class Company < ApplicationRecord
   include Disableable
   include AvatarUploader[:avatar]
   include ProfileHeaderUploader[:profile_header]
+
+  belongs_to :plan, foreign_key: 'plan_id', optional: true
 
   has_many :projects, -> { order(updated_at: :desc) }, dependent: :destroy
   has_many :jobs, dependent: :destroy
@@ -167,12 +170,6 @@ class Company < ApplicationRecord
       :established_in,
       if: :enforce_profile_edit
 
-  before_create :start_trial
-
-  def start_trial
-    self.subscription_status = "trialing"
-    self.billing_period_ends_at = (Time.now + 3.months).to_datetime
-  end
 
   pg_search_scope :search, against: {
     name: "A",
@@ -244,6 +241,10 @@ class Company < ApplicationRecord
     freelancer_job_markets
   end
 
+  def canada_country?
+    country == 'ca'
+  end
+
   def self.do_all_geocodes
     Company.all.each do |f|
       p "Doing geocode for " + f.id.to_s + "(#{f.compile_address})"
@@ -261,12 +262,14 @@ class Company < ApplicationRecord
   private
 
   def add_to_hubspot
+    return unless Rails.application.secrets.enabled_hubspot
+
     Hubspot::Contact.createOrUpdate(email,
       company: name,
       firstname: contact_name.split(" ")[0],
       lastname: contact_name.split(" ")[1],
       lifecyclestage: "customer",
-      im_am: "AV Company",
+      im_an: "AV Company",
     )
   end
 

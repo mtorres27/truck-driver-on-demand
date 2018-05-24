@@ -8,7 +8,7 @@
   - sign_in_count = -1
 
 - if sign_in_count <= 1000000000 and sign_in_count > -1 and has_seen_onboarding == false
-  -if current_freelancer.registration_completed?
+  -if current_freelancer&.registration_completed?
       - set_has_seen_onboarding
         .onboarding-container
           .onboarding-navbar
@@ -23,7 +23,7 @@
               .btn.btn--primary onClick="showFreelancerProfile()"
                 | Build a killer profile
 
-  - elsif current_company.registration_completed?
+  - elsif current_company&.registration_completed?
     - set_has_seen_onboarding
       .onboarding-container
         .onboarding-navbar

@@ -90,6 +90,7 @@ class Admin::CompaniesController < Admin::BaseController
         :disabled,
         :contract_preference,
         :website,
+        :waived_jobs,
         :phone_number,
         :number_of_offices,
         :number_of_employees,
