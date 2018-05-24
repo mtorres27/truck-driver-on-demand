@@ -170,15 +170,9 @@ class Company < ApplicationRecord
 
   def city_state_country
     str = ""
-    if city.present?
-      str += "#{city}, "
-    end
-    if state.present?
-      str += "#{state}, "
-    end
-    if country.present?
-      str += "#{country.upcase}"
-    end
+    str += "#{city}, " if city.present?
+    str += "#{state}, " if state.present?
+    str += "#{country.upcase}" if country.present?
     str
   end
 
