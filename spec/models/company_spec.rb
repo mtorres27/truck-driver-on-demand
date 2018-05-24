@@ -90,4 +90,21 @@ describe Company, type: :model do
       end
     end
   end
+
+  describe "city_state_country" do
+    context "when state is missing" do
+      let(:company) { create :company, state: nil, city: 'Toronto', country: 'ca' }
+
+      it "returns location without state" do
+        expect(company.city_state_country).to eq("Toronto, CA")
+      end
+    end
+    context "when all is present" do
+      let(:company) { create :company, state: 'Ontario', city: 'Toronto', country: 'ca' }
+
+      it "returns location with state" do
+        expect(company.city_state_country).to eq("Toronto, Ontario, CA")
+      end
+    end
+  end
 end
