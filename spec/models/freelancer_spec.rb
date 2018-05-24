@@ -90,6 +90,25 @@ describe Freelancer, type: :model do
   end
 
   describe "hooks" do
+    describe "before save" do
+      describe "set_name" do
+        let(:freelancer) { build(:freelancer, first_name: "Jane", last_name: "Doe", registration_step: "job_info")}
+
+        it "sets the full name" do
+          expect(freelancer.name).to be_nil
+          freelancer.save
+          expect(freelancer.name).to eq("Jane Doe")
+        end
+      end
+
+      describe "set_default_step" do
+        it "sets default step to personal" do
+          freelancer = create(:freelancer)
+          expect(freelancer.registration_step).to eq("personal")
+        end
+      end
+    end
+
     describe "after create" do
       describe "add_to_hubspot" do
         it "creates or update a hubspot contact" do
@@ -101,7 +120,35 @@ describe Freelancer, type: :model do
             lifecyclestage: "customer",
             im_an: "AV Freelancer",
           )
-          create(:freelancer, email: "test@test.com", name: "John Doe")
+          create(:freelancer, registration_step: 'job_info', email: "test@test.com", name: "John Doe", avatar: nil)
+        end
+      end
+
+      describe "after update" do
+        let(:freelancer) { create(:freelancer) }
+        let(:freelancer_params) {
+          {
+            registration_step: "wicked_finish"
+          }
+        }
+        context "when registration is completed" do
+          it "calls send_welcome_email" do
+            expect(freelancer).to receive(:send_welcome_email)
+            freelancer.update(freelancer_params)
+          end
+        end
+
+        context "when the freelancer is not confirmed" do
+          it "sends the confirmation mail" do
+            expect { freelancer.update(freelancer_params) }.to change(ActionMailer::Base.deliveries, :count).by(1)
+          end
+        end
+
+        context "when the freelancer is confirmed" do
+          it "does not send the confirmation mail" do
+            freelancer.confirm
+            expect { freelancer.update(freelancer_params) }.to change(ActionMailer::Base.deliveries, :count).by(0)
+          end
         end
       end
 
@@ -118,6 +165,37 @@ describe Freelancer, type: :model do
     end
 
     describe "after_save" do
+      context "when a freelancer completes all the steps" do
+        let!(:freelancer) { create(:freelancer) }
+        let(:freelancer_params) {
+          {
+            registration_step: "wicked_finish",
+            bio: "my bio",
+            tagline: "my tagline",
+            avatar: fixture_file_upload(Rails.root.join("spec", "fixtures", "image.png"), "image/png")
+          }
+        }
+        context "when registration is completed" do
+          it "calls send_welcome_email" do
+            expect(freelancer).to receive(:send_welcome_email)
+            freelancer.update(freelancer_params)
+          end
+        end
+
+        context "when the freelancer is not confirmed" do
+          it "sends the confirmation mail" do
+            expect { freelancer.update(freelancer_params) }.to change(ActionMailer::Base.deliveries, :count).by(1)
+          end
+        end
+
+        context "when the freelancer is confirmed" do
+          it "does not send the confirmation mail" do
+            freelancer.confirm
+            expect { freelancer.update(freelancer_params) }.to change(ActionMailer::Base.deliveries, :count).by(0)
+          end
+        end
+      end
+
       context "when freelancer confirms their email" do
         let(:email) { Faker::Internet.unique.email }
         let!(:invite) { create(:friend_invite, email: email, name: 'Example', freelancer: inviter) }
@@ -190,4 +268,30 @@ describe Freelancer, type: :model do
       end
     end
   end
+
+  describe "validations" do
+    describe "step personal information" do
+      subject { create(:freelancer, registration_step: "job_info") }
+
+      it { is_expected.to validate_presence_of(:first_name) }
+      it { is_expected.to validate_presence_of(:last_name) }
+      it { is_expected.to validate_presence_of(:country) }
+      it { is_expected.to validate_presence_of(:city) }
+    end
+
+    describe "step job_info" do
+      subject { create(:freelancer, registration_step: "profile") }
+
+      it { is_expected.to validate_presence_of(:job_types) }
+    end
+
+    describe "step profile" do
+      subject { create(:freelancer, registration_step: "wicked_finish") }
+
+      it { is_expected.to validate_presence_of(:bio) }
+      it { is_expected.to validate_presence_of(:avatar) }
+      it { is_expected.to validate_presence_of(:tagline) }
+    end
+  end
+
 end

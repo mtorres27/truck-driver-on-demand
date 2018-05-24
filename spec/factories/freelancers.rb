@@ -72,9 +72,14 @@
 FactoryBot.define do
   factory :freelancer do
     email { Faker::Internet.unique.email }
-    name { Faker::Name.unique.name }
+    first_name { Faker::Name.unique.name }
+    last_name { Faker::Name.unique.name }
     password "password"
     country [:es, :fi, :fr, :gb, :pt, :us].sample
     city { Faker::Address.city }
+    state { Faker::Address.state }
+    bio { Faker::Lorem }
+    tagline { Faker::Lorem }
+    avatar { fixture_file_upload(Rails.root.join("spec", "fixtures", "image.png"), "image/png") }
   end
 end

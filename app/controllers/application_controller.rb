@@ -3,8 +3,9 @@ class ApplicationController < ActionController::Base
 
   require "erb"
   include ERB::Util
+
   before_action :configure_permitted_parameters, if: :devise_controller?
-  before_action :redirect_to_registration_step, if: :current_company_registering?
+  before_action :redirect_to_registration_step, if: :current_company_registering? || :current_freelancer_registering?
 
   before_action do
     if Rails.env.development?
@@ -21,18 +22,16 @@ class ApplicationController < ActionController::Base
     if resource.is_a?(Freelancer)
       return freelancer_root_path if resource.registration_completed? || resource.registration_step.nil?
       return freelancer_registration_step_path(resource.registration_step)
-
     elsif resource.is_a?(Company)
       return company_root_path if resource.registration_completed? || resource.registration_step.nil?
       return company_registration_step_path(resource.registration_step)
-
     else
       super
     end
   end
 
   def current_company_registering?
-    unless current_company.try(:registration_step).nil?
+    unless current_company&.registration_step
       current_company &&
       !current_company.registration_completed? &&
       !(request.original_fullpath.include? company_registration_step_path(current_company.registration_step)) &&
@@ -40,8 +39,18 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  def current_freelancer_registering?
+    unless current_freelancer&.registration_step
+      current_freelancer &&
+      !current_freelancer.registration_completed? &&
+      !(request.original_fullpath.include? freelancer_registration_step_path(current_freelancer.registration_step)) &&
+      request.original_fullpath != destroy_freelancer_session_path
+    end
+  end
+
   def redirect_to_registration_step
-    redirect_to company_registration_step_path(current_company.registration_step)
+    redirect_to company_registration_step_path(current_company.registration_step) if current_company
+    redirect_to freelancer_registration_step_path(current_freelancer.registration_step) if current_freelancer
   end
 
   def do_geocode(address)
