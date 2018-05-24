@@ -75,7 +75,6 @@ FactoryBot.define do
     name { Faker::Company.unique.name }
     first_name { Faker::Name.unique.name }
     last_name { Faker::Name.unique.name }
-    contact_name { Faker::Name.unique.name }
     password "password"
     password_confirmation { 'password' }
     country [:es, :fi, :fr, :gb, :pt, :us].sample

@@ -8,12 +8,12 @@
   - sign_in_count = -1
 
 - if sign_in_count <= 1000000000 and sign_in_count > -1 and has_seen_onboarding == false
-  -if current_freelancer&.registration_completed?
+  - if current_freelancer&.registration_completed?
       - set_has_seen_onboarding
         .onboarding-container
           .onboarding-navbar
             a.modal-close.w-inline-block href="#"
-            span class="zmdi zmdi-close" onClick="hideOnboard()"
+            span class="fa fa-close" onClick="hideOnboard()"
           .onboarding-content-container
             .onboarding-content
               h1.onboarding-title Welcome to AV Junction
