@@ -1,8 +1,8 @@
 - content_for :secondary do
-  h1.center.heading-h1 = "Register as a Company"
+  h1.text-center.heading-h1 = "Register as a Company"
   = render partial: "shared/registration_progress_bar", locals: { step: 3 }
   = simple_form_for(@company, url: wizard_path) do |f|
-    .grid-v
+    .grid-h
       .grid-cell.grid-cell--100
         .form__field-label Job Types
         - if @company.errors.full_messages.include?("Job types can't be blank")
@@ -45,7 +45,10 @@
               = check_box_tag tag_name, "1", checked, class: 'company_live_events_staging_and_rental_check_box'
               = " #{value}"
       .grid-cell.grid-cell--100
-        .buttons
-          = link_to "Skip", skip_company_registration_step_path(:job_info), method: :post, class: "btn btn--secondary"
-          = f.button :submit, "Continue", class: "btn btn--primary"
-          = link_to "Register with a different account", destroy_company_session_path,  method: :delete, class: "btn btn--secondary"
+        .grid-h
+          .grid-cell.grid-cell--33
+            = f.button :submit, "Continue", class: "btn btn--primary"
+          .grid-cell.grid-cell--33
+            = link_to "Skip", skip_company_registration_step_path(:job_info), method: :post, class: "btn btn--secondary"
+          .grid-cell.grid-cell--33
+            = link_to "Use another account", destroy_company_session_path,  method: :delete, class: "btn btn--clear"

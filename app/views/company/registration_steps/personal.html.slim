@@ -16,9 +16,11 @@
       .grid-cell.grid-cell--33
         = f.input :country, required: true, label: "Country", prompt: "Select Country"
       .grid-cell.grid-cell--100
-        .buttons
-          = f.button :submit, "Continue", class: "btn btn--primary"
-          = link_to "Register with a different account", destroy_company_session_path,  method: :delete, class: "btn btn--secondary"
+        .grid-h
+          .grid-cell.grid-cell--33
+            = f.button :submit, "Continue", class: "btn btn--primary"
+          .grid-cell.grid-cell--33
+            = link_to "Use another account", destroy_company_session_path,  method: :delete, class: "btn btn--clear"
 
 
 

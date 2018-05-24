@@ -23,7 +23,7 @@ nav#top-nav.navbar
     ul.nav.navbar-nav.navbar-right
       - if request.path.index('company') == 1
         - if current_company
-          - if current_company.registration_completed? || current_company.registration_step.nil?
+          - if current_company.registration_completed? && current_company.confirmed?  || current_company.registration_step.nil?
             li( class=("active" if request.path == company_root_path || is_showing_freelancer(request.path)) )
               = link_to "Search Freelancers", company_root_path
             li( class=("active" if request.path.include?(company_projects_path)) )

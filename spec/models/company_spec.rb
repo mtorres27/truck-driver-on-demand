@@ -14,7 +14,7 @@ describe Company, type: :model do
       end
     end
 
-    describe "after create" do
+    describe "after save" do
       describe "add_to_hubspot" do
         it "creates or update a hubspot contact" do
           expect(Hubspot::Contact).to receive(:createOrUpdate).with(
@@ -25,42 +25,44 @@ describe Company, type: :model do
             lifecyclestage: "customer",
             im_am: "AV Company",
           )
-          create(:company, registration_step: 'job_info', email: "test@test.com", contact_name: "John Doe", name: "Acme")
+          create(:company, registration_step: 'job_info', email: "test@test.com", contact_name: "John Doe", name: "Acme", avatar: nil)
         end
       end
 
-      describe "set_default_step" do
-        it "sets default step to personal" do
-          company = create(:company)
-          expect(company.registration_step).to eq("personal")
+      describe "send_confirmation_email" do
+        let(:company) { create(:company) }
+        let(:company_params) {
+          {
+            registration_step: "wicked_finish"
+          }
+        }
+        context "when registration is completed" do
+          it "calls send_confirmation_email" do
+            expect(company).to receive(:send_confirmation_email)
+            company.update(company_params)
+          end
+        end
+
+        context "when the company is not confirmed" do
+          it "sends the confirmation mail" do
+            expect { company.update(company_params) }.to change(ActionMailer::Base.deliveries, :count).by(1)
+          end
+        end
+
+        context "when the company is confirmed" do
+          it "does not send the confirmation mail" do
+            company.confirm
+            expect { company.update(company_params) }.to change(ActionMailer::Base.deliveries, :count).by(0)
+          end
         end
       end
     end
 
-    describe "after update" do
-      let(:company) { create(:company) }
-      let(:company_params) {
-        {
-          registration_step: "wicked_finish"
-        }
-      }
-      context "when registration is completed" do
-        it "calls send_confirmation_email" do
-          expect(company).to receive(:send_confirmation_email)
-          company.update(company_params)
-        end
-      end
-
-      context "when the company is not confirmed" do
-        it "sends the confirmation mail" do
-          expect { company.update(company_params) }.to change(ActionMailer::Base.deliveries, :count).by(1)
-        end
-      end
-
-      context "when the company is confirmed" do
-        it "does not send the confirmation mail" do
-          company.confirm
-          expect { company.update(company_params) }.to change(ActionMailer::Base.deliveries, :count).by(0)
+    describe "before create" do
+      describe "set_default_step" do
+        it "sets default step to personal" do
+          company = create(:company)
+          expect(company.registration_step).to eq("personal")
         end
       end
     end

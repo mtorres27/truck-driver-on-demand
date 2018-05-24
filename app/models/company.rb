@@ -103,6 +103,7 @@ class Company < ApplicationRecord
   validates :phone_number, length: { minimum: 7 }, allow_blank: true
   validates :first_name, :last_name, :name, :country, :state, :city, presence: true, on: :update,  if: :step_job_info?
   validates :job_types, presence: true, on: :update, if: :step_profile?
+  validates :avatar, :description, :established_in, :number_of_employees, :number_of_offices, :website, :area, presence: true, on: :update, if: :registration_completed?
 
   enumerize :contract_preference, in: [:prefer_fixed, :prefer_hourly, :prefer_daily]
 
@@ -134,8 +135,8 @@ class Company < ApplicationRecord
 
   before_save :set_name, if: :step_job_info?
   after_save :add_to_hubspot, if: :step_job_info?
-  after_create :set_default_step
-  after_update :send_confirmation_email, if: :confirmed_company?
+  before_create :set_default_step
+  after_save :send_confirmation_email, if: :confirmed_company?
 
   def freelancers
     Freelancer.
@@ -286,7 +287,7 @@ class Company < ApplicationRecord
   end
 
   def send_confirmation_email
-    return unless confirmation_sent_at.nil?
+    return if confirmed? || !registration_completed? || confirmation_sent_at.present?
     self.send_confirmation_instructions
   end
 

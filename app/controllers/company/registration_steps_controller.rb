@@ -16,7 +16,7 @@ class Company::RegistrationStepsController < ApplicationController
     @company.attributes = params[:company] ? company_params : {}
     @company.registration_step = next_step
 
-    sign_out @company if next_step == "wicked_finish"
+    sign_out @company if next_step == "wicked_finish" && profile_form_filled?
 
     render_wizard @company
   end
@@ -24,6 +24,7 @@ class Company::RegistrationStepsController < ApplicationController
   def skip
     @company = current_company
     @company.update_attribute(:registration_step, next_step)
+    sign_out @company if next_step == "wicked_finish"
     redirect_to company_registration_step_path(next_step)
   end
 
@@ -31,6 +32,16 @@ private
 
   def finish_wizard_path
     confirm_email_path
+  end
+
+  def profile_form_filled?
+    current_company.avatar.present? &&
+    current_company.description.present? &&
+    current_company.established_in.present? &&
+    current_company.number_of_employees.present? &&
+    current_company.number_of_offices.present? &&
+    current_company.website.present? &&
+    current_company.area.present?
   end
 
   def company_params

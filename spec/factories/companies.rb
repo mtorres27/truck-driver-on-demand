@@ -31,5 +31,12 @@ FactoryBot.define do
     country [:es, :fi, :fr, :gb, :pt, :us].sample
     city { Faker::Address.city }
     state { Faker::Address.state}
+    avatar { fixture_file_upload(Rails.root.join("spec", "fixtures", "image.png"), "image/png") }
+    description { Faker::Lorem.sentence }
+    established_in { Faker::Number.number(4) }
+    number_of_employees { "eleven_to_one_hundred" }
+    number_of_offices { Faker::Number.number(1) }
+    website { Faker::Lorem.word }
+    area { "USA" }
   end
 end

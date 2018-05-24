@@ -96,16 +96,16 @@ RSpec.describe Company::RegistrationStepsController, type: :controller do
       end
 
       context "when user does not fill the fields" do
-        let(:company_params) { {} }
+        let(:company_params) { { description: nil, established_in: nil, number_of_employees: nil, number_of_offices: nil, website: nil, area: nil} }
 
         it "does not update the company" do
           put :update, params: { id: :profile, company: company_params }
-          expect(company.reload.description).to be_nil
-          expect(company.established_in).to be_nil
-          expect(company.number_of_employees).to be_nil
-          expect(company.number_of_offices).to eq(0)
-          expect(company.website).to be_nil
-          expect(company.area).to be_nil
+          expect(company.reload.description).not_to be_empty
+          expect(company.established_in).not_to be_nil
+          expect(company.number_of_employees).not_to be_empty
+          expect(company.number_of_offices).not_to be_nil
+          expect(company.website).not_to be_empty
+          expect(company.area).not_to be_empty
         end
       end
 
