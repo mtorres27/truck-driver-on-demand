@@ -150,6 +150,7 @@ class Company::JobsController < Company::BaseController
         :budget_is_public,
         :state,
         :address,
+        :state_province,
         attachments_attributes: [:id, :file, :title, :_destroy],
         technical_skill_tags:  I18n.t("enumerize.technical_skill_tags").keys,
         manufacturer_tags:  I18n.t("enumerize.manufacturer_tags").keys,

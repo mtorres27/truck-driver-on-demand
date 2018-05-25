@@ -52,6 +52,7 @@
 #  manufacturer_tags                      :citext
 #  contracted_at                          :datetime
 #  company_plan_fees                      :decimal(10, 2)   default(0.0)
+#  state_province                         :string
 #
 
 class Job < ApplicationRecord
@@ -195,10 +196,8 @@ class Job < ApplicationRecord
   validates :duration, numericality: { only_integer: true }
   validates :pay_type, inclusion: { in: pay_type.values }, allow_blank: true
   validates :freelancer_type, inclusion: { in: freelancer_type.values }
-  validates_presence_of :currency
-  validates_presence_of :country
   validate :scope_or_file
-  validates_presence_of :address
+  validates :state_province, :address, :currency, :country, presence: true
 
   def freelancer
     applicants.with_state(:accepted).first&.freelancer
@@ -231,6 +230,14 @@ class Job < ApplicationRecord
 
   def gpayments_sum_total
     payments_sum_total * (1 + ((applicable_sales_tax||0) / 100))
+  end
+
+  def city_state_country
+    str = ""
+    str += "#{address}, " if address.present?
+    str += "#{state_province}, " if state_province.present?
+    str += "#{country.upcase}" if country.present?
+    str
   end
 
   def self.all_job_functions

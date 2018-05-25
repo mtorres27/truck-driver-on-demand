@@ -50,29 +50,28 @@
 #  job_type                               :citext
 #  job_market                             :citext
 #  manufacturer_tags                      :citext
-#  contracted_at                          :datetime
 #  company_plan_fees                      :decimal(10, 2)   default(0.0)
+#  contracted_at                          :datetime
 #  state_province                         :string
 #
 
-FactoryBot.define do
-  factory :job do
-    title "MyString"
-    summary "MyText"
-    scope_of_work "MyText"
-    budget "9.99"
-    job_function "MyString"
-    starts_on "2017-04-27 14:24:45"
-    ends_on "2017-04-27 14:24:45"
-    duration 1
-    invite_only false
-    scope_is_public false
-    budget_is_public false
-    contract_price "9.99"
-    payment_schedule "MyText"
-    require_photos_on_updates false
-    require_checkin false
-    require_uniform false
-    addendums "MyText"
+require 'rails_helper'
+
+describe Job, type: :model do
+  describe "validations" do
+    it { is_expected.to validate_presence_of(:state_province) }
+    it { is_expected.to validate_presence_of(:address) }
+    it { is_expected.to validate_presence_of(:currency) }
+    it { is_expected.to validate_presence_of(:country) }
+  end
+
+  describe "city_state_country" do
+    let(:company) { create(:company) }
+    let(:project) { create(:project, company: company) }
+    let(:job) { build(:job, state_province: 'Ontario', address: 'Toronto', country: 'ca', company: company, project: project) }
+
+    it "returns location with state" do
+      expect(job.city_state_country).to eq("Toronto, Ontario, CA")
+    end
   end
 end

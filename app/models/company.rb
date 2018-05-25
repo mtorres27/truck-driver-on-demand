@@ -168,14 +168,6 @@ class Company < ApplicationRecord
     self.expires_at = Date.today + 1.year
   end
 
-  def city_state_country
-    str = ""
-    str += "#{city}, " if city.present?
-    str += "#{state}, " if state.present?
-    str += "#{country.upcase}" if country.present?
-    str
-  end
-
   audited
 
   attr_accessor :enforce_profile_edit

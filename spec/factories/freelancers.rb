@@ -5,7 +5,7 @@
 #  id                       :integer          not null, primary key
 #  token                    :string
 #  email                    :citext           not null
-#  name                     :string
+#  name                     :string           not null
 #  avatar_data              :text
 #  address                  :string
 #  formatted_address        :string
@@ -60,13 +60,11 @@
 #  valid_driver             :boolean
 #  own_tools                :boolean
 #  company_name             :string
+#  special_avj_fees         :decimal(10, 2)
 #  job_types                :citext
 #  job_functions            :citext
 #  manufacturer_tags        :citext
-#  special_avj_fees         :decimal(10, 2)
 #  avj_credit               :decimal(10, 2)
-#  registration_step        :string
-#  province                 :string
 #
 
 FactoryBot.define do
