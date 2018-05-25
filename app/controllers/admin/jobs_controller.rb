@@ -64,6 +64,7 @@ class Admin::JobsController < Admin::BaseController
           :require_photos_on_updates,
           :require_checkin,
           :require_uniform,
+          :state_province,
           technical_skill_tags:  I18n.t("enumerize.technical_skill_tags").keys,
           manufacturer_tags:  I18n.t("enumerize.manufacturer_tags").keys,
         )
