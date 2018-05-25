@@ -79,8 +79,8 @@ class Company::ContractsController < Company::BaseController
       end
       # logger.debug quote.inspect
 
-    # rescue => e
-    #   flash[:error] = e.message
+    rescue => e
+      flash[:error] = e.message
     end
 
     redirect_to company_job_payments_path, job_id: @job.id
