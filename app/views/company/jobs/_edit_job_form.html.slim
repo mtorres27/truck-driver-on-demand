@@ -15,7 +15,9 @@
         .grid-cell.grid-cell--100
           = f.input :title, placeholder: "Enter the job title"
         .grid-cell.grid-cell--100
-          = f.input :address, placeholder: "Enter City, State/Province", label: "City"
+          = f.input :address, placeholder: "Enter City", label: "City"
+        .grid-cell.grid-cell--100
+          = f.input :state_province, placeholder: "Enter State/Province", label: "State/Province"
         .grid-cell.grid-cell--100
           = f.input :country, prompt: "Select"
         .grid-cell.grid-cell--100

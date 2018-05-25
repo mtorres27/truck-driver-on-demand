@@ -62,19 +62,9 @@ SET default_with_oids = false;
 CREATE TABLE admins (
     id bigint NOT NULL,
     token character varying,
-    email citext NOT NULL,
     name character varying NOT NULL,
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL,
-    encrypted_password character varying DEFAULT ''::character varying NOT NULL,
-    reset_password_token character varying,
-    reset_password_sent_at timestamp without time zone,
-    remember_created_at timestamp without time zone,
-    sign_in_count integer DEFAULT 0 NOT NULL,
-    current_sign_in_at timestamp without time zone,
-    last_sign_in_at timestamp without time zone,
-    current_sign_in_ip inet,
-    last_sign_in_ip inet
+    updated_at timestamp without time zone NOT NULL
 );
 
 
@@ -298,7 +288,6 @@ ALTER SEQUENCE change_orders_id_seq OWNED BY change_orders.id;
 CREATE TABLE companies (
     id bigint NOT NULL,
     token character varying,
-    email citext NOT NULL,
     name character varying NOT NULL,
     contact_name character varying NOT NULL,
     address character varying,
@@ -324,15 +313,6 @@ CREATE TABLE companies (
     number_of_offices integer DEFAULT 0,
     number_of_employees character varying,
     established_in integer,
-    encrypted_password character varying DEFAULT ''::character varying NOT NULL,
-    reset_password_token character varying,
-    reset_password_sent_at timestamp without time zone,
-    remember_created_at timestamp without time zone,
-    sign_in_count integer DEFAULT 0 NOT NULL,
-    current_sign_in_at timestamp without time zone,
-    last_sign_in_at timestamp without time zone,
-    current_sign_in_ip inet,
-    last_sign_in_ip inet,
     stripe_customer_id character varying,
     stripe_subscription_id character varying,
     stripe_plan_id character varying,
@@ -346,9 +326,6 @@ CREATE TABLE companies (
     exp_year character varying,
     header_color character varying DEFAULT 'FF6C38'::character varying,
     country character varying,
-    confirmation_token character varying,
-    confirmed_at timestamp without time zone,
-    confirmation_sent_at timestamp without time zone,
     header_source character varying DEFAULT 'color'::character varying,
     province character varying,
     sales_tax_number character varying,
@@ -769,7 +746,6 @@ ALTER SEQUENCE freelancer_reviews_id_seq OWNED BY freelancer_reviews.id;
 CREATE TABLE freelancers (
     id bigint NOT NULL,
     token character varying,
-    email citext NOT NULL,
     name character varying,
     avatar_data text,
     address character varying,
@@ -794,20 +770,8 @@ CREATE TABLE freelancers (
     technical_skill_tags citext,
     profile_header_data text,
     verified boolean DEFAULT false,
-    encrypted_password character varying DEFAULT ''::character varying NOT NULL,
-    reset_password_token character varying,
-    reset_password_sent_at timestamp without time zone,
-    remember_created_at timestamp without time zone,
-    sign_in_count integer DEFAULT 0 NOT NULL,
-    current_sign_in_at timestamp without time zone,
-    last_sign_in_at timestamp without time zone,
-    current_sign_in_ip inet,
-    last_sign_in_ip inet,
     header_color character varying DEFAULT 'FF6C38'::character varying,
     country character varying,
-    confirmation_token character varying,
-    confirmed_at timestamp without time zone,
-    confirmation_sent_at timestamp without time zone,
     freelancer_team_size character varying,
     freelancer_type character varying,
     header_source character varying DEFAULT 'color'::character varying,
@@ -1039,7 +1003,8 @@ CREATE TABLE jobs (
     job_market citext,
     manufacturer_tags citext,
     contracted_at timestamp without time zone,
-    company_plan_fees numeric(10,2) DEFAULT 0
+    company_plan_fees numeric(10,2) DEFAULT 0,
+    state_province character varying
 );
 
 
@@ -1911,20 +1876,6 @@ CREATE INDEX auditable_index ON audits USING btree (auditable_id, auditable_type
 
 
 --
--- Name: index_admins_on_email; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX index_admins_on_email ON admins USING btree (email);
-
-
---
--- Name: index_admins_on_reset_password_token; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX index_admins_on_reset_password_token ON admins USING btree (reset_password_token);
-
-
---
 -- Name: index_applicants_on_company_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -1974,24 +1925,10 @@ CREATE INDEX index_change_orders_on_job_id ON change_orders USING btree (job_id)
 
 
 --
--- Name: index_companies_on_confirmation_token; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX index_companies_on_confirmation_token ON companies USING btree (confirmation_token);
-
-
---
 -- Name: index_companies_on_disabled; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_companies_on_disabled ON companies USING btree (disabled);
-
-
---
--- Name: index_companies_on_email; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX index_companies_on_email ON companies USING btree (email);
 
 
 --
@@ -2020,13 +1957,6 @@ CREATE INDEX index_companies_on_name ON companies USING btree (name);
 --
 
 CREATE INDEX index_companies_on_plan_id ON companies USING btree (plan_id);
-
-
---
--- Name: index_companies_on_reset_password_token; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX index_companies_on_reset_password_token ON companies USING btree (reset_password_token);
 
 
 --
@@ -2093,24 +2023,10 @@ CREATE INDEX index_freelancers_on_available ON freelancers USING btree (availabl
 
 
 --
--- Name: index_freelancers_on_confirmation_token; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX index_freelancers_on_confirmation_token ON freelancers USING btree (confirmation_token);
-
-
---
 -- Name: index_freelancers_on_disabled; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_freelancers_on_disabled ON freelancers USING btree (disabled);
-
-
---
--- Name: index_freelancers_on_email; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX index_freelancers_on_email ON freelancers USING btree (email);
 
 
 --
@@ -2139,13 +2055,6 @@ CREATE INDEX index_freelancers_on_manufacturer_tags ON freelancers USING btree (
 --
 
 CREATE INDEX index_freelancers_on_name ON freelancers USING btree (name);
-
-
---
--- Name: index_freelancers_on_reset_password_token; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX index_freelancers_on_reset_password_token ON freelancers USING btree (reset_password_token);
 
 
 --
@@ -2615,6 +2524,10 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20180504205104'),
 ('20180508222720'),
 ('20180508223949'),
-('20180509110048');
+('20180508230343'),
+('20180509110048'),
+('20180518015549'),
+('20180518221742'),
+('20180525003348');
 
 

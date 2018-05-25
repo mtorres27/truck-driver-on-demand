@@ -4,7 +4,6 @@
 #
 #  id                       :integer          not null, primary key
 #  token                    :string
-#  email                    :citext           not null
 #  name                     :string
 #  avatar_data              :text
 #  address                  :string
@@ -29,20 +28,8 @@
 #  technical_skill_tags     :citext
 #  profile_header_data      :text
 #  verified                 :boolean          default(FALSE)
-#  encrypted_password       :string           default(""), not null
-#  reset_password_token     :string
-#  reset_password_sent_at   :datetime
-#  remember_created_at      :datetime
-#  sign_in_count            :integer          default(0), not null
-#  current_sign_in_at       :datetime
-#  last_sign_in_at          :datetime
-#  current_sign_in_ip       :inet
-#  last_sign_in_ip          :inet
 #  header_color             :string           default("FF6C38")
 #  country                  :string
-#  confirmation_token       :string
-#  confirmed_at             :datetime
-#  confirmation_sent_at     :datetime
 #  freelancer_team_size     :string
 #  freelancer_type          :string
 #  header_source            :string           default("color")

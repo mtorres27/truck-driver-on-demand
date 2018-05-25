@@ -4,7 +4,6 @@
 #
 #  id                        :integer          not null, primary key
 #  token                     :string
-#  email                     :citext           not null
 #  name                      :string           not null
 #  contact_name              :string           not null
 #  address                   :string
@@ -30,15 +29,6 @@
 #  number_of_offices         :integer          default(0)
 #  number_of_employees       :string
 #  established_in            :integer
-#  encrypted_password        :string           default(""), not null
-#  reset_password_token      :string
-#  reset_password_sent_at    :datetime
-#  remember_created_at       :datetime
-#  sign_in_count             :integer          default(0), not null
-#  current_sign_in_at        :datetime
-#  last_sign_in_at           :datetime
-#  current_sign_in_ip        :inet
-#  last_sign_in_ip           :inet
 #  stripe_customer_id        :string
 #  stripe_subscription_id    :string
 #  stripe_plan_id            :string
@@ -52,9 +42,6 @@
 #  exp_year                  :string
 #  header_color              :string           default("FF6C38")
 #  country                   :string
-#  confirmation_token        :string
-#  confirmed_at              :datetime
-#  confirmation_sent_at      :datetime
 #  header_source             :string           default("color")
 #  province                  :string
 #  sales_tax_number          :string
@@ -87,23 +74,6 @@ describe Company, type: :model do
           )
           create(:company, email: "test@test.com", contact_name: "John Doe", name: "Acme")
         end
-      end
-    end
-  end
-
-  describe "city_state_country" do
-    context "when state is missing" do
-      let(:company) { create :company, state: nil, city: 'Toronto', country: 'ca' }
-
-      it "returns location without state" do
-        expect(company.city_state_country).to eq("Toronto, CA")
-      end
-    end
-    context "when all is present" do
-      let(:company) { create :company, state: 'Ontario', city: 'Toronto', country: 'ca' }
-
-      it "returns location with state" do
-        expect(company.city_state_country).to eq("Toronto, Ontario, CA")
       end
     end
   end

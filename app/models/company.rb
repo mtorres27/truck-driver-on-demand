@@ -4,7 +4,6 @@
 #
 #  id                        :integer          not null, primary key
 #  token                     :string
-#  email                     :citext           not null
 #  name                      :string           not null
 #  contact_name              :string           not null
 #  address                   :string
@@ -30,15 +29,6 @@
 #  number_of_offices         :integer          default(0)
 #  number_of_employees       :string
 #  established_in            :integer
-#  encrypted_password        :string           default(""), not null
-#  reset_password_token      :string
-#  reset_password_sent_at    :datetime
-#  remember_created_at       :datetime
-#  sign_in_count             :integer          default(0), not null
-#  current_sign_in_at        :datetime
-#  last_sign_in_at           :datetime
-#  current_sign_in_ip        :inet
-#  last_sign_in_ip           :inet
 #  stripe_customer_id        :string
 #  stripe_subscription_id    :string
 #  stripe_plan_id            :string
@@ -52,9 +42,6 @@
 #  exp_year                  :string
 #  header_color              :string           default("FF6C38")
 #  country                   :string
-#  confirmation_token        :string
-#  confirmed_at              :datetime
-#  confirmation_sent_at      :datetime
 #  header_source             :string           default("color")
 #  province                  :string
 #  sales_tax_number          :string
@@ -166,14 +153,6 @@ class Company < ApplicationRecord
 
   def renew_year
     self.expires_at = Date.today + 1.year
-  end
-
-  def city_state_country
-    str = ""
-    str += "#{city}, " if city.present?
-    str += "#{state}, " if state.present?
-    str += "#{country.upcase}" if country.present?
-    str
   end
 
   audited

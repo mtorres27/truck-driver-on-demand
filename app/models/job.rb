@@ -52,6 +52,7 @@
 #  manufacturer_tags                      :citext
 #  contracted_at                          :datetime
 #  company_plan_fees                      :decimal(10, 2)   default(0.0)
+#  state_province                         :string
 #
 
 class Job < ApplicationRecord
@@ -231,6 +232,14 @@ class Job < ApplicationRecord
 
   def gpayments_sum_total
     payments_sum_total * (1 + ((applicable_sales_tax||0) / 100))
+  end
+
+  def city_state_country
+    str = ""
+    str += "#{address}, " if address.present?
+    str += "#{state_province}, " if state_province.present?
+    str += "#{country.upcase}" if country.present?
+    str
   end
 
   def self.all_job_functions
