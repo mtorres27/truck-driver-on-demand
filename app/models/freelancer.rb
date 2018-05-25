@@ -152,7 +152,7 @@ class Freelancer < ApplicationRecord
 
   validates :first_name, :last_name, :country, :state , :city, presence: true, on: :update, if: :step_job_info?
   validates :job_types, presence: true, on: :update, if: :step_profile?
-  validates :avatar, :tagline, :bio, presence: true, on: :update, if: :registration_completed?
+  validates :avatar, :tagline, :bio, presence: true, on: :update, if: :confirmed_freelancer?
 
   scope :new_registrants, -> { where(disabled: true) }
 
@@ -215,6 +215,7 @@ class Freelancer < ApplicationRecord
       return nil
     end
   end
+
 
   def registration_completed?
     registration_step == "wicked_finish"
