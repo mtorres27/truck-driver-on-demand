@@ -58,6 +58,13 @@
 require 'rails_helper'
 
 describe Job, type: :model do
+  describe "validations" do
+    it { is_expected.to validate_presence_of(:state_province) }
+    it { is_expected.to validate_presence_of(:address) }
+    it { is_expected.to validate_presence_of(:currency) }
+    it { is_expected.to validate_presence_of(:country) }
+  end
+
   describe "city_state_country" do
     let(:company) { create(:company) }
     let(:project) { create(:project, company: company) }
