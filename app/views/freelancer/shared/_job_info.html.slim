@@ -26,3 +26,5 @@ a.list-item href=freelancer_job_path(job)
       - @stars = company_avg_rating(job.company)
       - @stars.each do |star|
         i class=star
+  .list__author
+    = "#{job.city_state_country}"

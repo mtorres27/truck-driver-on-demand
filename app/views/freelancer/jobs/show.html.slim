@@ -44,7 +44,7 @@
         - if @job.address.nil?
           = "N/A"
         - else
-          = @job.address
+          = "#{@job.city_state_country}"
     .grid-cell.grid-cell--33.grid-cell--span33
       h3.heading-h3 Est. Start
       div

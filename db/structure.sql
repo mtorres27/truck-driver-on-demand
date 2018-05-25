@@ -771,7 +771,7 @@ CREATE TABLE freelancers (
     id bigint NOT NULL,
     token character varying,
     email citext NOT NULL,
-    name character varying,
+    name character varying NOT NULL,
     avatar_data text,
     address character varying,
     formatted_address character varying,
@@ -826,11 +826,11 @@ CREATE TABLE freelancers (
     valid_driver boolean,
     own_tools boolean,
     company_name character varying,
+    special_avj_fees numeric(10,2),
     job_types citext,
     job_functions citext,
     manufacturer_tags citext,
-    special_avj_fees numeric(10,2),
-    avj_credit numeric(10,2) DEFAULT NULL::numeric,
+    avj_credit numeric(10,2) DEFAULT NULL::numeric
     registration_step character varying
 );
 
@@ -1038,8 +1038,9 @@ CREATE TABLE jobs (
     job_type citext,
     job_market citext,
     manufacturer_tags citext,
+    company_plan_fees numeric(10,2) DEFAULT 0,
     contracted_at timestamp without time zone,
-    company_plan_fees numeric(10,2) DEFAULT 0
+    state_province character varying
 );
 
 
@@ -1282,8 +1283,8 @@ CREATE TABLE quotes (
     stripe_fees numeric(10,2),
     net_avj_fees numeric(10,2),
     accepted_at timestamp without time zone,
-    plan_fee numeric(10,2) DEFAULT 0,
-    avj_credit numeric(10,2) DEFAULT NULL::numeric
+    avj_credit numeric(10,2) DEFAULT NULL::numeric,
+    plan_fee numeric(10,2) DEFAULT 0
 );
 
 
@@ -1372,12 +1373,7 @@ CREATE TABLE users (
     current_sign_in_ip inet,
     last_sign_in_ip inet,
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL,
-    confirmation_token character varying,
-    confirmed_at timestamp without time zone,
-    confirmation_sent_at timestamp without time zone,
-    meta_id integer,
-    meta_type character varying
+    updated_at timestamp without time zone NOT NULL
 );
 
 
@@ -2289,24 +2285,10 @@ CREATE INDEX index_quotes_on_company_id ON quotes USING btree (company_id);
 
 
 --
--- Name: index_users_on_confirmation_token; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX index_users_on_confirmation_token ON users USING btree (confirmation_token);
-
-
---
 -- Name: index_users_on_email; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE UNIQUE INDEX index_users_on_email ON users USING btree (email);
-
-
---
--- Name: index_users_on_meta_id_and_meta_type; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_users_on_meta_id_and_meta_type ON users USING btree (meta_id, meta_type);
 
 
 --
@@ -2609,10 +2591,10 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20180413190903'),
 ('20180418190453'),
 ('20180418195120'),
-('20180420173017'),
 ('20180424155938'),
 ('20180424190619'),
 ('20180506150209'),
-('20180509110048');
+('20180509110048'),
+('20180525003348');
 
 
