@@ -200,6 +200,7 @@ class Job < ApplicationRecord
   validates_presence_of :country
   validate :scope_or_file
   validates_presence_of :address
+  validates_presence_of :state_province
 
   def freelancer
     applicants.with_state(:accepted).first&.freelancer
