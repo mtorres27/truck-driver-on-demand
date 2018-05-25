@@ -52,6 +52,7 @@
 #  manufacturer_tags                      :citext
 #  contracted_at                          :datetime
 #  company_plan_fees                      :decimal(10, 2)   default(0.0)
+#  state_province                         :string
 #
 
 class Job < ApplicationRecord

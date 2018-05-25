@@ -30,9 +30,6 @@
 #  verified                 :boolean          default(FALSE)
 #  header_color             :string           default("FF6C38")
 #  country                  :string
-#  confirmation_token       :string
-#  confirmed_at             :datetime
-#  confirmation_sent_at     :datetime
 #  freelancer_team_size     :string
 #  freelancer_type          :string
 #  header_source            :string           default("color")

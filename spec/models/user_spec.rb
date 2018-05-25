@@ -1,3 +1,27 @@
+# == Schema Information
+#
+# Table name: users
+#
+#  id                     :integer          not null, primary key
+#  email                  :string           default(""), not null
+#  encrypted_password     :string           default(""), not null
+#  reset_password_token   :string
+#  reset_password_sent_at :datetime
+#  remember_created_at    :datetime
+#  sign_in_count          :integer          default(0), not null
+#  current_sign_in_at     :datetime
+#  last_sign_in_at        :datetime
+#  current_sign_in_ip     :inet
+#  last_sign_in_ip        :inet
+#  created_at             :datetime         not null
+#  updated_at             :datetime         not null
+#  confirmation_token     :string
+#  confirmed_at           :datetime
+#  confirmation_sent_at   :datetime
+#  meta_id                :integer
+#  meta_type              :string
+#
+
 require 'rails_helper'
 
 describe User, type: :model do
@@ -66,7 +90,8 @@ describe User, type: :model do
               end
 
               it "does not send the FreelancerMailer.notice_credit_earned mail" do
-                expect(FreelancerMailer).not_to receive(:notice_credit_earned)
+                expect(FreelancerMailer).to receive(:notice_credit_earned).once
+                # The email is sent to the new user with $10 credit but not to the inviter
                 freelancer.user.confirm
               end
             end

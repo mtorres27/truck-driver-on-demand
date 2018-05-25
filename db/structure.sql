@@ -1003,7 +1003,8 @@ CREATE TABLE jobs (
     job_market citext,
     manufacturer_tags citext,
     contracted_at timestamp without time zone,
-    company_plan_fees numeric(10,2) DEFAULT 0
+    company_plan_fees numeric(10,2) DEFAULT 0,
+    state_province character varying
 );
 
 
@@ -2526,6 +2527,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20180508230343'),
 ('20180509110048'),
 ('20180518015549'),
-('20180518221742');
+('20180518221742'),
+('20180525003348');
 
 
