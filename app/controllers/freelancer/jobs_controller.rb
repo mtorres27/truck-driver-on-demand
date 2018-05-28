@@ -31,12 +31,15 @@ class Freelancer::JobsController < Freelancer::BaseController
 
     if @address
       # check for cached version of address
-      if Rails.cache.read(@address)
-        @geocode = Rails.cache.read(@address)
+      @address_for_geocode = @address
+      @address_for_geocode += ", #{CS.states(@country.to_sym)[@state_province.to_sym]}" if @state_province.present?
+      @address_for_geocode += ", #{CS.countries[@country.upcase.to_sym]}" if @country.present?
+      if Rails.cache.read(@address_for_geocode)
+        @geocode = Rails.cache.read(@address_for_geocode)
       else
         # save cached version of address
-        @geocode = do_geocode(@address)
-        Rails.cache.write(@address, @geocode)
+        @geocode = do_geocode(@address_for_geocode)
+        Rails.cache.write(@address_for_geocode, @geocode)
       end
 
       if @geocode
@@ -50,17 +53,9 @@ class Freelancer::JobsController < Freelancer::BaseController
       end
     end
 
-    if @keywords
-      @jobs = @jobs.search(@keywords)
-    end
-
-    if @country
-      @jobs = @jobs.where(country: @country)
-    end
-
-    if @state_province
-      @jobs = @jobs.where(state_province: @state_province)
-    end
+    @jobs = @jobs.search(@keywords) if @keywords
+    @jobs = @jobs.where(country: @country) if @country
+    @jobs = @jobs.where(state_province: @state_province) if @state_province
 
     @jobs = @jobs.page(params[:page]).per(50)
   end
