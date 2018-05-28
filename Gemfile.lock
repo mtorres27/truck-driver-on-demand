@@ -113,6 +113,8 @@ GEM
       ffi (~> 1.0, >= 1.0.11)
     choice (0.2.0)
     chronic (0.10.2)
+    city-state (0.0.13)
+      rubyzip (~> 1.1)
     cocoon (1.2.10)
     coderay (1.1.1)
     concurrent-ruby (1.0.5)
@@ -477,6 +479,7 @@ DEPENDENCIES
   capistrano-rails (~> 1.2.3)
   capybara
   carrierwave (~> 1.0.0)
+  city-state
   cocoon (~> 1.2.10)
   coderay (~> 1.1.1)
   cucumber

@@ -70,7 +70,6 @@ gem "hubspot-ruby"
 
 # Emails
 gem "smtpapi"
-
 gem "listen"
 
 # Profiling
@@ -78,6 +77,9 @@ gem "rack-mini-profiler", "~> 0.10.2"
 gem "flamegraph", "~> 0.9.5"
 gem "stackprof", "~> 0.2.10"
 gem "bullet", "~> 5.5.1" # TODO: Remove bullet from production
+
+# States and provinces
+gem "city-state"
 
 group :development do
   gem "annotate"
