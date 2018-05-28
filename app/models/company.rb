@@ -96,27 +96,17 @@ class Company < ApplicationRecord
   has_many :favourite_freelancers, through: :favourites, source: :freelancer
   has_many :company_installs, dependent: :destroy
 
-  attr_accessor :accept_terms_of_service
-  attr_accessor :accept_privacy_policy
-  attr_accessor :accept_code_of_conduct
+  attr_accessor :accept_terms_of_service, :accept_privacy_policy, :accept_code_of_conduct,
+                :first_name, :last_name, :enforce_profile_edit, :user_type
 
   validates_acceptance_of :accept_terms_of_service
   validates_acceptance_of :accept_privacy_policy
   validates_acceptance_of :accept_code_of_conduct
 
-  validates_presence_of :country, :on => :create
-  validates_presence_of :city, :on => :create
-
   validates :phone_number, length: { minimum: 7 }, allow_blank: true
-
-  # enumerize :currency, in: [
-  #   :cad,
-  #   :euro,
-  #   :ruble,
-  #   :rupee,
-  #   :usd,
-  #   :yen,
-  # ]
+  validates :first_name, :last_name, :name, :country, :state, :city, presence: true, on: :update,  if: :step_job_info?
+  validates :job_types, presence: true, on: :update, if: :step_profile?
+  validates :avatar, :description, :established_in, :number_of_employees, :number_of_offices, :website, :area, presence: true, on: :update, if: :confirmed_company?
 
   enumerize :contract_preference, in: [:prefer_fixed, :prefer_hourly, :prefer_daily]
 
@@ -136,10 +126,6 @@ class Company < ApplicationRecord
     :at, :au, :be, :ca, :ch, :de, :dk, :es, :fi, :fr, :gb, :hk, :ie, :it, :jp, :lu, :nl, :no, :nz, :pt, :se, :sg, :us
   ]
 
-  enumerize :province, in: [
-    :AB, :BC, :MB, :NB, :NL, :NT, :NS, :NU, :ON, :PE, :QC, :SK, :YT
-  ]
-
   enumerize :header_source, in: [
     :color,
     :wallpaper
@@ -150,7 +136,10 @@ class Company < ApplicationRecord
 
   scope :new_registrants, -> { where(disabled: true) }
 
-  after_create :add_to_hubspot
+  before_save :set_name, if: :step_job_info?
+  after_save :add_to_hubspot, if: :step_job_info?
+  before_create :set_default_step
+  after_save :send_confirmation_email, if: :confirmed_company?
 
   def freelancers
     Freelancer.
@@ -170,8 +159,6 @@ class Company < ApplicationRecord
 
   audited
 
-  attr_accessor :enforce_profile_edit
-
     validates_presence_of :name,
       :email,
       :address,
@@ -183,11 +170,6 @@ class Company < ApplicationRecord
       :established_in,
       if: :enforce_profile_edit
 
-
-  # def province=(value)
-  #   write_attribute(:state, value)
-  #   super(value)
-  # end
 
   pg_search_scope :search, against: {
     name: "A",
@@ -210,14 +192,6 @@ class Company < ApplicationRecord
   }, using: {
       tsearch: { prefix: true }
   }
-
-
-  attr_accessor :user_type
-  # We want to populate both name and contact_name on sign up
-  before_validation :set_contact_name, on: :create
-  def set_contact_name
-    self.contact_name = name unless contact_name
-  end
 
   def rating
     if company_reviews.count > 0
@@ -281,6 +255,10 @@ class Company < ApplicationRecord
     end
   end
 
+  def registration_completed?
+    registration_step == "wicked_finish"
+  end
+
   private
 
   def add_to_hubspot
@@ -293,6 +271,37 @@ class Company < ApplicationRecord
       lifecyclestage: "customer",
       im_an: "AV Company",
     )
+  end
+
+  def step_profile?
+    registration_step == "profile"
+  end
+
+  def step_job_info?
+    registration_step == "job_info"
+  end
+
+  def set_default_step
+    self.registration_step ||= "personal"
+  end
+
+  def set_name
+    self.contact_name ||= "#{first_name} #{last_name}"
+  end
+
+  def send_confirmation_email
+    return if confirmed? || !registration_completed? || confirmation_sent_at.present?
+    self.send_confirmation_instructions
+  end
+
+  def confirmed_company?
+    registration_completed? && self.confirmed? == false
+  end
+
+  protected
+
+  def confirmation_required?
+    registration_completed?
   end
 
   # This SQL needs to stay exactly in sync with it's related index (index_on_companies_location)

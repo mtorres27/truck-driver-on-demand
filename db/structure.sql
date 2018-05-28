@@ -299,8 +299,8 @@ CREATE TABLE companies (
     id bigint NOT NULL,
     token character varying,
     email citext NOT NULL,
-    name character varying NOT NULL,
-    contact_name character varying NOT NULL,
+    name character varying,
+    contact_name character varying,
     address character varying,
     formatted_address character varying,
     area character varying,
@@ -358,6 +358,7 @@ CREATE TABLE companies (
     postal_code character varying,
     job_types citext,
     manufacturer_tags citext,
+    registration_step character varying,
     plan_id bigint,
     is_trial_applicable boolean DEFAULT true,
     waived_jobs integer DEFAULT 1
@@ -829,7 +830,8 @@ CREATE TABLE freelancers (
     job_types citext,
     job_functions citext,
     manufacturer_tags citext,
-    avj_credit numeric(10,2) DEFAULT NULL::numeric
+    avj_credit numeric(10,2) DEFAULT NULL::numeric,
+    registration_step character varying
 );
 
 
@@ -2591,6 +2593,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20180418195120'),
 ('20180424155938'),
 ('20180424190619'),
+('20180506150209'),
 ('20180509110048'),
 ('20180525003348');
 

@@ -107,7 +107,7 @@
         .grid-h.grid-h--no-margin
           .grid-cell.grid-cell--100
             .form__field-label Job Types
-            - if @company.errors.full_messages.include?("Job Types can't be blank")
+            - if @company.errors.full_messages.include?("Job types can't be blank")
               .has-error
                 .help-block
                   | One job type must be selected.
