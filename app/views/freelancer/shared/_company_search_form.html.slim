@@ -2,6 +2,34 @@
   input type="hidden" value="#{params.dig(:search, :sort)}" id="sort" name="search[sort]"
   input type="hidden" value="#{params.dig(:search, :distance)}" id="distance" name="search[distance]"
   .grid-cell.grid-cell--100= f.input :keywords, label: false, placeholder: "Search by job function, skills etc", input_html: { value: @keywords }
-  .grid-cell.grid-cell--33= f.input :address, label: false, placeholder: "Enter City, State/Province", input_html: { value: @address }
-  .grid-cell.grid-cell--33= f.input :country, collection: I18n.t('enumerize.country').map { |i, v| [i, v] }, label_method: :second, value_method: :first, label: false, prompt: "Select Country", selected: @country
-  .grid-cell.grid-cell--expand= f.submit "Search jobs", class: "btn btn--primary"
+  .grid-cell.grid-cell--25= f.input :country, collection: I18n.t('enumerize.country').map { |i, v| [i, v] }, label_method: :second, value_method: :first, label: false, prompt: "Select Country", selected: @country
+  .grid-cell.grid-cell--25
+    select#search_state_province.form-control.select(name='search[state_province]')
+      option(value='')
+        | State/Province
+      = CS.states(:us).each do |index, value|
+        - selected = (!@state_province.nil? and @state_province == index.to_s)
+        - if selected
+          option.search_us_option(value="#{index}" selected)
+            = value
+        - else
+          option.search_us_option(value="#{index}")
+            = value
+      = CS.states(:ca).each do |index, value|
+        - selected = (!@state_province.nil? and @state_province == index.to_s)
+        - if selected
+          option.search_ca_option(value="#{index}" selected)
+            = value
+        - else
+          option.search_ca_option(value="#{index}")
+            = value
+  .grid-cell.grid-cell--25= f.input :address, label: false, placeholder: "City", input_html: { value: @address }
+  .grid-cell.grid-cell--25
+    select#search_distance.form-control.select(name='search[distance]')
+      option(value="")
+        | Radius
+      option value="160934" label="100 Miles" selected=("selected" if @distance == '160934')
+      option value="241402" label="150 Miles" selected=("selected" if @distance == '241402')
+      option value="321869" label="200 Miles" selected=("selected" if @distance == '321869')
+      option value="402336" label="250 Miles" selected=("selected" if @distance == '402336')
+  .grid-cell.grid-cell--50= f.submit "Search jobs", class: "btn btn--primary"

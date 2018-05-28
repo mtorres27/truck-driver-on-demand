@@ -68,7 +68,7 @@ describe Job, type: :model do
   describe "city_state_country" do
     let(:company) { create(:company) }
     let(:project) { create(:project, company: company) }
-    let(:job) { build(:job, state_province: 'Ontario', address: 'Toronto', country: 'ca', company: company, project: project) }
+    let(:job) { build(:job, state_province: 'ON', address: 'Toronto', country: 'ca', company: company, project: project) }
 
     it "returns location with state" do
       expect(job.city_state_country).to eq("Toronto, Ontario, CA")
