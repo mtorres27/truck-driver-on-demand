@@ -49,6 +49,18 @@ describe Freelancer::JobsController, type: :controller  do
         end
       end
 
+      context 'when state_province exists' do
+        before(:each) do
+          get :index, params: { search: { country: 'Country', state_province: 'State' } }
+        end
+        it 'sets @country' do
+          expect(assigns(:country)).to eq('Country')
+        end
+        it 'sets @state_province' do
+          expect(assigns(:state_province)).to eq('State')
+        end
+      end
+
       context 'when sort exists' do
         before(:each) do
           get :index, params: { search: { sort: 'Sort' } }

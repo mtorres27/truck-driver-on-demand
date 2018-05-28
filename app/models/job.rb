@@ -235,7 +235,7 @@ class Job < ApplicationRecord
   def city_state_country
     str = ""
     str += "#{address}, " if address.present?
-    str += "#{state_province}, " if state_province.present?
+    str += "#{CS.states(country.to_sym)[state_province.to_sym]}, " if state_province.present?
     str += "#{country.upcase}" if country.present?
     str
   end
