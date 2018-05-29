@@ -15,7 +15,11 @@ class Company::JobsController < Company::BaseController
   end
 
   def new
-    @job = Job.new(project_id: params[:project_id])
+    if params[:job]
+      @job = Job.new(job_params)
+    else
+      @job = Job.new(project_id: params[:project_id])
+    end
 
     @currencies = [
       ["Canadian Dollars", "cad"],
@@ -37,7 +41,8 @@ class Company::JobsController < Company::BaseController
 
     validate_ownership
     if @job.errors.size > 0
-      render :new
+      flash[:error] = "An error occurred: #{@job.errors.full_messages.to_sentence}"
+      redirect_to new_company_job_path(params: { job: job_params })
       return
     end
 
@@ -46,7 +51,8 @@ class Company::JobsController < Company::BaseController
     if @job.save
       redirect_to company_job_path(@job)
     else
-      render :new
+      flash[:error] = "An error occurred: #{@job.errors.full_messages.to_sentence}"
+      redirect_to new_company_job_path(params: { job: job_params })
     end
   end
 
