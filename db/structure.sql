@@ -358,10 +358,10 @@ CREATE TABLE companies (
     postal_code character varying,
     job_types citext,
     manufacturer_tags citext,
-    registration_step character varying,
     plan_id bigint,
     is_trial_applicable boolean DEFAULT true,
-    waived_jobs integer DEFAULT 1
+    waived_jobs integer DEFAULT 1,
+    registration_step character varying
 );
 
 
@@ -771,7 +771,7 @@ CREATE TABLE freelancers (
     id bigint NOT NULL,
     token character varying,
     email citext NOT NULL,
-    name character varying NOT NULL,
+    name character varying,
     avatar_data text,
     address character varying,
     formatted_address character varying,
@@ -2591,6 +2591,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20180413190903'),
 ('20180418190453'),
 ('20180418195120'),
+('20180420173017'),
 ('20180424155938'),
 ('20180424190619'),
 ('20180506150209'),

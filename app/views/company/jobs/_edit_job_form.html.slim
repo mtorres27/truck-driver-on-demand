@@ -181,6 +181,7 @@
 
   javascript:
     function get_currencies(country) {
+      console.log(country)
       $.get("#{job_country_currency_path}", {country: country})
               .done(function (data) {
                 var select = $('#job_currency');
