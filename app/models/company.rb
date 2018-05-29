@@ -137,7 +137,6 @@ class Company < ApplicationRecord
   scope :new_registrants, -> { where(disabled: true) }
 
   before_save :set_name, if: :step_job_info?
-  after_save :add_to_hubspot, if: :step_job_info?
   before_create :set_default_step
   after_save :send_confirmation_email, if: :confirmed_company?
 
@@ -259,19 +258,19 @@ class Company < ApplicationRecord
     registration_step == "wicked_finish"
   end
 
-  private
-
   def add_to_hubspot
     return unless Rails.application.secrets.enabled_hubspot
 
     Hubspot::Contact.createOrUpdate(email,
-      company: name,
-      firstname: contact_name.split(" ")[0],
-      lastname: contact_name.split(" ")[1],
-      lifecyclestage: "customer",
-      im_an: "AV Company",
+                                    company: name,
+                                    firstname: contact_name.split(" ")[0],
+                                    lastname: contact_name.split(" ")[1],
+                                    lifecyclestage: "customer",
+                                    im_an: "AV Company",
     )
   end
+
+  private
 
   def step_profile?
     registration_step == "profile"

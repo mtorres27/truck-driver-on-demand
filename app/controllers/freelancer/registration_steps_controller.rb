@@ -17,7 +17,10 @@ class Freelancer::RegistrationStepsController < ApplicationController
     @freelancer.attributes = params[:freelancer] ? freelancer_params : {}
     @freelancer.registration_step = next_step
 
-    sign_out @freelancer if next_step == "wicked_finish" && profile_form_filled?
+    if next_step == "wicked_finish" && profile_form_filled?
+      @freelancer.add_to_hubspot
+      sign_out @freelancer
+    end
 
     render_wizard @freelancer
   end

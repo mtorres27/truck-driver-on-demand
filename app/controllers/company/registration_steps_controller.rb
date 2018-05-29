@@ -16,7 +16,10 @@ class Company::RegistrationStepsController < ApplicationController
     @company.attributes = params[:company] ? company_params : {}
     @company.registration_step = next_step
 
-    sign_out @company if next_step == "wicked_finish" && profile_form_filled?
+    if next_step == "wicked_finish" && profile_form_filled?
+      @company.add_to_hubspot
+      sign_out @company
+    end
 
     render_wizard @company
   end

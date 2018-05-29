@@ -108,20 +108,6 @@ describe Freelancer, type: :model do
     end
 
     describe "after create" do
-      describe "add_to_hubspot" do
-        it "creates or update a hubspot contact" do
-          allow(Rails.application.secrets).to receive(:enabled_hubspot).and_return(true)
-          expect(Hubspot::Contact).to receive(:createOrUpdate).with(
-            "test@test.com",
-            firstname: "John",
-            lastname: "Doe",
-            lifecyclestage: "customer",
-            im_an: "AV Freelancer",
-          )
-          create(:freelancer, registration_step: 'job_info', email: "test@test.com", name: "John Doe", avatar: nil)
-        end
-      end
-
       describe "after update" do
         let(:freelancer) { create(:freelancer) }
         let(:freelancer_params) {

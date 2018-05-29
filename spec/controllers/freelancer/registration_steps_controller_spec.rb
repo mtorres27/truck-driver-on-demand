@@ -123,6 +123,13 @@ RSpec.describe Freelancer::RegistrationStepsController, type: :controller do
           expect(freelancer.tagline).to eq("my tagline")
           expect(freelancer.avatar).not_to be_nil
         end
+
+        it "creates or update a hubspot contact" do
+          freelancer.update_attribute(:name, "Name")
+          allow(Rails.application.secrets).to receive(:enabled_hubspot).and_return(true)
+          expect(Hubspot::Contact).to receive(:createOrUpdate)
+          put :update, params: { id: :profile, freelancer: freelancer_params }
+        end
       end
     end
   end
