@@ -41,8 +41,7 @@ class Company::JobsController < Company::BaseController
 
     validate_ownership
     if @job.errors.size > 0
-      flash[:error] = "An error occurred: #{@job.errors.full_messages.to_sentence}"
-      redirect_to new_company_job_path(params: { job: job_params })
+      render :new
       return
     end
 
@@ -51,8 +50,7 @@ class Company::JobsController < Company::BaseController
     if @job.save
       redirect_to company_job_path(@job)
     else
-      flash[:error] = "An error occurred: #{@job.errors.full_messages.to_sentence}"
-      redirect_to new_company_job_path(params: { job: job_params })
+      render :new
     end
   end
 
