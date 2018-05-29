@@ -1,5 +1,5 @@
 - content_for :secondary do
-  h1.center.heading-h1 = "Register as a Company"
+  h1.text-center.heading-h1 = "Register as a Company"
   = render partial: "shared/registration_progress_bar", locals: { step: 4 }
   = simple_form_for(@company, url: wizard_path) do |f|
     .grid-h
