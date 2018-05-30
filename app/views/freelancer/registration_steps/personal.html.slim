@@ -10,11 +10,30 @@
       .grid-cell.grid-cell--100
         = f.input :company_name, as: :string, label: "Company Name", autofocus: true, placeholder:  "Enter your company name"
       .grid-cell.grid-cell--33
-        = f.input :city, required: true, label: "City", placeholder: "Enter your city"
-      .grid-cell.grid-cell--33
-        = f.input :state, required: true, label: "Province/State", placeholder: "Enter your Province/State"
-      .grid-cell.grid-cell--33
         = f.input :country, required: true, label: "Country", prompt: "Select Country"
+      .grid-cell.grid-cell--33
+        = f.label "State/Province"
+        select#freelancer_state.form-control.select(name='freelancer[state]')
+          option(value='')
+            | Select
+          = CS.states(:us).each do |index, value|
+            - selected = (!@freelancer.state.nil? and @freelancer.state == index.to_s)
+            - if selected
+              option.freelancer_us_option(value="#{index}" selected)
+                = value
+            - else
+              option.freelancer_us_option(value="#{index}")
+                = value
+          = CS.states(:ca).each do |index, value|
+            - selected = (!@freelancer.state.nil? and @freelancer.state == index.to_s)
+            - if selected
+              option.freelancer_ca_option(value="#{index}" selected)
+                = value
+            - else
+              option.freelancer_ca_option(value="#{index}")
+                = value
+      .grid-cell.grid-cell--33
+        = f.input :city, required: true, label: "City", placeholder: "Enter your city"
       .grid-cell.grid-cell--100
         .grid-h
           .grid-cell.grid-cell--50

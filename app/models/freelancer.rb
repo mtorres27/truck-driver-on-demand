@@ -5,7 +5,7 @@
 #  id                       :integer          not null, primary key
 #  token                    :string
 #  email                    :citext           not null
-#  name                     :string           not null
+#  name                     :string
 #  avatar_data              :text
 #  address                  :string
 #  formatted_address        :string
@@ -65,6 +65,7 @@
 #  job_functions            :citext
 #  manufacturer_tags        :citext
 #  avj_credit               :decimal(10, 2)
+#  registration_step        :string
 #
 
 require 'net/http'
@@ -135,20 +136,8 @@ class Freelancer < ApplicationRecord
   validates_acceptance_of :accept_privacy_policy
   validates_acceptance_of :accept_code_of_conduct
 
-  validates_presence_of :email,
-    :address,
-    :city,
-    :state,
-    :postal_code,
-    :country,
-    :freelancer_type,
-    :service_areas,
-    :bio,
-    :years_of_experience,
-    :pay_unit_time_preference,
-    if: :enforce_profile_edit
-
-  validates :first_name, :last_name, :country, :state , :city, presence: true, on: :update, if: :step_job_info?
+  validates :email, :address, :city, :postal_code, :country, :freelancer_type, :service_areas, :bio, :years_of_experience, :pay_unit_time_preference, presence: true, if: :enforce_profile_edit
+  validates :first_name, :last_name, :country, :city, presence: true, on: :update, if: :step_job_info?
   validates :job_types, presence: true, on: :update, if: :step_profile?
   validates :avatar, :tagline, :bio, presence: true, on: :update, if: :confirmed_freelancer?
 
@@ -158,7 +147,7 @@ class Freelancer < ApplicationRecord
   after_create :check_for_invites
   after_save :add_credit_to_inviters, if: :confirmed_at_changed?
   after_save :send_welcome_email, if: :registration_step_changed?
-  after_save :add_to_hubspot, if: :step_job_info?
+  after_save :add_to_hubspot
   before_create :set_default_step
 
   pg_search_scope :search, against: {
@@ -328,10 +317,16 @@ class Freelancer < ApplicationRecord
     end
   end
 
+  def profile_form_filled?
+    avatar.present? && bio.present? && tagline.present?
+  end
+
   private
 
   def add_to_hubspot
     return unless Rails.application.secrets.enabled_hubspot
+    return unless registration_completed? && profile_form_filled?
+    return if changes[:registration_step].nil?
 
     Hubspot::Contact.createOrUpdate(email,
       firstname: name.split(" ")[0],

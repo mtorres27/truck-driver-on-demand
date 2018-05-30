@@ -197,7 +197,7 @@ class Job < ApplicationRecord
   validates :pay_type, inclusion: { in: pay_type.values }, allow_blank: true
   validates :freelancer_type, inclusion: { in: freelancer_type.values }
   validate :scope_or_file
-  validates :state_province, :address, :currency, :country, presence: true
+  validates :address, :currency, :country, presence: true
 
   def freelancer
     applicants.with_state(:accepted).first&.freelancer

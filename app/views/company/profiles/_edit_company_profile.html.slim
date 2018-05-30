@@ -34,7 +34,26 @@
           .grid-cell.grid-cell--50
             = f.input :city, as: :string, label: "City", placeholder: "Enter the city of your company's Headquarters."
           .grid-cell.grid-cell--50
-            = f.input :state, as: :string, label: "State/Province", placeholder: "Enter the State/Province of your company's Headquarters."
+            = f.label "State/Province"
+            select#company_state.form-control.select(name='company[state]')
+              option(value='')
+                | Select
+              = CS.states(:us).each do |index, value|
+                - selected = (!@company.state.nil? and @company.state == index.to_s)
+                - if selected
+                  option.company_us_option(value="#{index}" selected)
+                    = value
+                - else
+                  option.company_us_option(value="#{index}")
+                    = value
+              = CS.states(:ca).each do |index, value|
+                - selected = (!@company.state.nil? and @company.state == index.to_s)
+                - if selected
+                  option.company_ca_option(value="#{index}" selected)
+                    = value
+                - else
+                  option.company_ca_option(value="#{index}")
+                    = value
           .grid-cell.grid-cell--50
             = f.input :postal_code, as: :string, label: "ZIP/Postal Code", placeholder: "Enter the zip / postal code of your company's Headquarters."
           .grid-cell.grid-cell--50

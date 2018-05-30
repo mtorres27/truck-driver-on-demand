@@ -17,7 +17,7 @@ class Freelancer::RegistrationStepsController < ApplicationController
     @freelancer.attributes = params[:freelancer] ? freelancer_params : {}
     @freelancer.registration_step = next_step
 
-    sign_out @freelancer if next_step == "wicked_finish" && profile_form_filled?
+    sign_out @freelancer if next_step == "wicked_finish" && @freelancer.profile_form_filled?
 
     render_wizard @freelancer
   end
@@ -33,12 +33,6 @@ class Freelancer::RegistrationStepsController < ApplicationController
 
   def finish_wizard_path
     confirm_email_path
-  end
-
-  def profile_form_filled?
-    current_freelancer.avatar.present? &&
-    current_freelancer.bio.present? &&
-    current_freelancer.tagline.present?
   end
 
   def freelancer_params

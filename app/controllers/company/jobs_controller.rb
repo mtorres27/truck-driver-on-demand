@@ -2,12 +2,6 @@ class Company::JobsController < Company::BaseController
   before_action :set_job, except: [:job_countries, :new, :create]
   before_action :set_company, only: [:edit, :new, :create, :update]
 
-  def job_countries
-    country = params[:country]
-    specs = Stripe::CountrySpec.retrieve(country.upcase)
-    render partial: "job_currencies", locals: { currencies: specs.supported_bank_account_currencies } if specs.supported_bank_account_currencies
-  end
-
   def avj_invoice
 
   end
@@ -21,7 +15,11 @@ class Company::JobsController < Company::BaseController
   end
 
   def new
-    @job = Job.new(project_id: params[:project_id])
+    if params[:job]
+      @job = Job.new(job_params)
+    else
+      @job = Job.new(project_id: params[:project_id])
+    end
 
     @currencies = [
       ["Canadian Dollars", "cad"],

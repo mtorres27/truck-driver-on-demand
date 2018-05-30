@@ -5,8 +5,8 @@
 #  id                        :integer          not null, primary key
 #  token                     :string
 #  email                     :citext           not null
-#  name                      :string           not null
-#  contact_name              :string           not null
+#  name                      :string
+#  contact_name              :string
 #  address                   :string
 #  formatted_address         :string
 #  area                      :string
@@ -56,7 +56,6 @@
 #  confirmed_at              :datetime
 #  confirmation_sent_at      :datetime
 #  header_source             :string           default("color")
-#  province                  :string
 #  sales_tax_number          :string
 #  line2                     :string
 #  city                      :string
@@ -67,6 +66,7 @@
 #  plan_id                   :integer
 #  is_trial_applicable       :boolean          default(TRUE)
 #  waived_jobs               :integer          default(1)
+#  registration_step         :string
 #
 
 require 'rails_helper'
@@ -87,17 +87,27 @@ describe Company, type: :model do
 
     describe "after save" do
       describe "add_to_hubspot" do
-        it "creates or update a hubspot contact" do
-          allow(Rails.application.secrets).to receive(:enabled_hubspot).and_return(true)
-          expect(Hubspot::Contact).to receive(:createOrUpdate).with(
-            "test@test.com",
-            company: "Acme",
-            firstname: "John",
-            lastname: "Doe",
-            lifecyclestage: "customer",
-            im_an: "AV Company",
-          )
-          create(:company, registration_step: 'job_info', email: "test@test.com", contact_name: "John Doe", name: "Acme", avatar: nil)
+        before { allow(Rails.application.secrets).to receive(:enabled_hubspot).and_return(true) }
+
+        context "when registration is completed and profile form is filled" do
+          it "creates or update a hubspot contact" do
+            expect(Hubspot::Contact).to receive(:createOrUpdate).with(
+              "test@test.com",
+              company: "Acme",
+              firstname: "John",
+              lastname: "Doe",
+              lifecyclestage: "customer",
+              im_an: "AV Company",
+            )
+            create(:company, registration_step: 'wicked_finish', email: "test@test.com", contact_name: "John Doe", name: "Acme")
+          end
+        end
+
+        context "when registration is not completed" do
+          it "does not creates or update a hubspot contact" do
+            expect(Hubspot::Contact).not_to receive(:createOrUpdate)
+            create(:company, registration_step: 'job_info', email: "test@test.com", contact_name: "John Doe", name: "Acme")
+          end
         end
       end
 

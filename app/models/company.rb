@@ -5,8 +5,8 @@
 #  id                        :integer          not null, primary key
 #  token                     :string
 #  email                     :citext           not null
-#  name                      :string           not null
-#  contact_name              :string           not null
+#  name                      :string
+#  contact_name              :string
 #  address                   :string
 #  formatted_address         :string
 #  area                      :string
@@ -56,7 +56,6 @@
 #  confirmed_at              :datetime
 #  confirmation_sent_at      :datetime
 #  header_source             :string           default("color")
-#  province                  :string
 #  sales_tax_number          :string
 #  line2                     :string
 #  city                      :string
@@ -67,6 +66,7 @@
 #  plan_id                   :integer
 #  is_trial_applicable       :boolean          default(TRUE)
 #  waived_jobs               :integer          default(1)
+#  registration_step         :string
 #
 
 class Company < ApplicationRecord
@@ -104,7 +104,7 @@ class Company < ApplicationRecord
   validates_acceptance_of :accept_code_of_conduct
 
   validates :phone_number, length: { minimum: 7 }, allow_blank: true
-  validates :first_name, :last_name, :name, :country, :state, :city, presence: true, on: :update,  if: :step_job_info?
+  validates :first_name, :last_name, :name, :country, :city, presence: true, on: :update,  if: :step_job_info?
   validates :job_types, presence: true, on: :update, if: :step_profile?
   validates :avatar, :description, :established_in, :number_of_employees, :number_of_offices, :website, :area, presence: true, on: :update, if: :confirmed_company?
 
@@ -137,7 +137,7 @@ class Company < ApplicationRecord
   scope :new_registrants, -> { where(disabled: true) }
 
   before_save :set_name, if: :step_job_info?
-  after_save :add_to_hubspot, if: :step_job_info?
+  after_save :add_to_hubspot
   before_create :set_default_step
   after_save :send_confirmation_email, if: :confirmed_company?
 
@@ -259,10 +259,17 @@ class Company < ApplicationRecord
     registration_step == "wicked_finish"
   end
 
+  def profile_form_filled?
+    avatar.present? && description.present? && established_in.present? && area.present? &&
+    number_of_employees.present? && number_of_offices.present? && website.present?
+  end
+
   private
 
   def add_to_hubspot
     return unless Rails.application.secrets.enabled_hubspot
+    return unless registration_completed? && profile_form_filled?
+    return if changes[:registration_step].nil?
 
     Hubspot::Contact.createOrUpdate(email,
       company: name,

@@ -27,7 +27,7 @@ class Company::SubscriptionController < Company::BaseController
 
   def plans
     # redirect to profile edit if no province canadian company
-    if current_company.canada_country? && current_company.province.nil?
+    if current_company.canada_country? && current_company.state.nil?
       flash[:notice] = 'You must update your profile with the province!'
       redirect_to edit_company_profile_path
     end

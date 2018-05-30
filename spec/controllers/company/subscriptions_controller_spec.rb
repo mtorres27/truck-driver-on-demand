@@ -10,14 +10,14 @@ describe Company::SubscriptionController, type: :controller  do
         company.update_attribute(:country, 'ca')
       end
 
-      it 'redirects to profile edit if no province' do
-        company.update_attribute(:province, nil)
+      it 'redirects to profile edit if no state' do
+        company.update_attribute(:state, nil)
         get :plans
         expect(response).to redirect_to(edit_company_profile_path)
       end
 
-      it 'responds with 200 when province exists' do
-        company.update_attribute(:province, 'ON')
+      it 'responds with 200 when state exists' do
+        company.update_attribute(:state, 'ON')
         get :plans
         expect(response.status).to eq(200)
       end
