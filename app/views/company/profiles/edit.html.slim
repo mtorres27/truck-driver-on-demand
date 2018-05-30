@@ -17,27 +17,6 @@
 
 
 javascript:
-  function toggle_province(country){
-    if (country == "ca"){
-      $(".province_line").removeClass('hidden');
-      $(".state_line").addClass('hidden');
-    }
-    else{
-      $('#company_province').val('');
-      $(".province_line").addClass('hidden');
-      $(".state_line").removeClass('hidden');
-    }
-  }
-
-  $(document).ready(function() {
-    if ($('#company_country').val() != ""){
-      toggle_province($('#company_country').val())
-    }
-    $('#company_country').on('change', function(){
-      toggle_province($(this).val())
-    });
-  });
-
   var updateHeaderImage = function() {
     $("#edit-company-profile-header").click();
     $("#edit-company-profile-header").on('change', function(e) {

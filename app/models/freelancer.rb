@@ -5,7 +5,7 @@
 #  id                       :integer          not null, primary key
 #  token                    :string
 #  email                    :citext           not null
-#  name                     :string           not null
+#  name                     :string
 #  avatar_data              :text
 #  address                  :string
 #  formatted_address        :string
@@ -65,6 +65,7 @@
 #  job_functions            :citext
 #  manufacturer_tags        :citext
 #  avj_credit               :decimal(10, 2)
+#  registration_step        :string
 #
 
 require 'net/http'

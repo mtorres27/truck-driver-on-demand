@@ -33,7 +33,6 @@ class Company::ProfilesController < Company::BaseController
       :contact_name,
       :email,
       :country,
-      :province,
       :area,
       :line2,
       :city,

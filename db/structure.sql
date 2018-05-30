@@ -350,7 +350,6 @@ CREATE TABLE companies (
     confirmed_at timestamp without time zone,
     confirmation_sent_at timestamp without time zone,
     header_source character varying DEFAULT 'color'::character varying,
-    province character varying,
     sales_tax_number character varying,
     line2 character varying,
     city character varying,
@@ -2596,6 +2595,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20180424190619'),
 ('20180506150209'),
 ('20180509110048'),
-('20180525003348');
+('20180525003348'),
+('20180530180210');
 
 
