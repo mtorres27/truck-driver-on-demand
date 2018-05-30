@@ -64,7 +64,7 @@ class Company::FreelancersController < Company::BaseController
       @freelancers = @freelancers.where(country: @country)
     end
 
-    @freelancers = @freelancers.page(params[:page]).per(50)
+    @freelancers = @freelancers.page(params[:page]).per(10)
   end
 
   def hired
@@ -75,8 +75,7 @@ class Company::FreelancersController < Company::BaseController
       @freelancers = @freelancers.where({ city: params[:location] })
     end
 
-    @freelancers = @freelancers.page(params[:page]).
-      per(50)
+    @freelancers = @freelancers.page(params[:page]).per(10)
   end
 
   def favourites
