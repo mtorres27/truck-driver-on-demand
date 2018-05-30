@@ -325,8 +325,7 @@ class Freelancer < ApplicationRecord
 
   def add_to_hubspot
     return unless Rails.application.secrets.enabled_hubspot
-    return unless registration_completed? && profile_form_filled?
-    return if changes[:registration_step].nil?
+    return if !registration_completed? || changes[:registration_step].nil?
 
     Hubspot::Contact.createOrUpdate(email,
       firstname: name.split(" ")[0],
