@@ -136,20 +136,8 @@ class Freelancer < ApplicationRecord
   validates_acceptance_of :accept_privacy_policy
   validates_acceptance_of :accept_code_of_conduct
 
-  validates_presence_of :email,
-    :address,
-    :city,
-    :state,
-    :postal_code,
-    :country,
-    :freelancer_type,
-    :service_areas,
-    :bio,
-    :years_of_experience,
-    :pay_unit_time_preference,
-    if: :enforce_profile_edit
-
-  validates :first_name, :last_name, :country, :state , :city, presence: true, on: :update, if: :step_job_info?
+  validates :email, :address, :city, :postal_code, :country, :freelancer_type, :service_areas, :bio, :years_of_experience, :pay_unit_time_preference, presence: true, if: :enforce_profile_edit
+  validates :first_name, :last_name, :country, :city, presence: true, on: :update, if: :step_job_info?
   validates :job_types, presence: true, on: :update, if: :step_profile?
   validates :avatar, :tagline, :bio, presence: true, on: :update, if: :confirmed_freelancer?
 

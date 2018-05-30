@@ -104,7 +104,7 @@ class Company < ApplicationRecord
   validates_acceptance_of :accept_code_of_conduct
 
   validates :phone_number, length: { minimum: 7 }, allow_blank: true
-  validates :first_name, :last_name, :name, :country, :state, :city, presence: true, on: :update,  if: :step_job_info?
+  validates :first_name, :last_name, :name, :country, :city, presence: true, on: :update,  if: :step_job_info?
   validates :job_types, presence: true, on: :update, if: :step_profile?
   validates :avatar, :description, :established_in, :number_of_employees, :number_of_offices, :website, :area, presence: true, on: :update, if: :confirmed_company?
 
