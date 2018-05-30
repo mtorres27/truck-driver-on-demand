@@ -149,6 +149,30 @@ describe Freelancer, type: :model do
     end
 
     describe "after_save" do
+      describe "add_to_hubspot" do
+        before { allow(Rails.application.secrets).to receive(:enabled_hubspot).and_return(true) }
+
+        context "when registration is completed and profile form is filled" do
+          it "creates or update a hubspot contact" do
+            expect(Hubspot::Contact).to receive(:createOrUpdate).with(
+              "test@test.com",
+              firstname: "John",
+              lastname: "Doe",
+              lifecyclestage: "customer",
+              im_an: "AV Freelancer",
+            )
+            create(:freelancer, registration_step: 'wicked_finish', email: "test@test.com", name: "John Doe")
+          end
+        end
+
+        context "when registration is not completed" do
+          it "does not creates or update a hubspot contact" do
+            expect(Hubspot::Contact).not_to receive(:createOrUpdate)
+            create(:freelancer, registration_step: 'job_info', email: "test@test.com", name: "John Doe", bio: nil)
+          end
+        end
+      end
+
       context "when a freelancer completes all the steps" do
         let!(:freelancer) { create(:freelancer) }
         let(:freelancer_params) {

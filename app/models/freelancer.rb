@@ -158,6 +158,7 @@ class Freelancer < ApplicationRecord
   after_create :check_for_invites
   after_save :add_credit_to_inviters, if: :confirmed_at_changed?
   after_save :send_welcome_email, if: :registration_step_changed?
+  after_save :add_to_hubspot
   before_create :set_default_step
 
   pg_search_scope :search, against: {
@@ -327,18 +328,24 @@ class Freelancer < ApplicationRecord
     end
   end
 
-  def add_to_hubspot
-    return unless Rails.application.secrets.enabled_hubspot
-
-    Hubspot::Contact.createOrUpdate(email,
-                                    firstname: name.split(" ")[0],
-                                    lastname: name.split(" ")[1],
-                                    lifecyclestage: "customer",
-                                    im_an: "AV Freelancer",
-    )
+  def profile_form_filled?
+    avatar.present? && bio.present? && tagline.present?
   end
 
   private
+
+  def add_to_hubspot
+    return unless Rails.application.secrets.enabled_hubspot
+    return unless registration_completed? && profile_form_filled?
+    return if changes[:registration_step].nil?
+
+    Hubspot::Contact.createOrUpdate(email,
+      firstname: name.split(" ")[0],
+      lastname: name.split(" ")[1],
+      lifecyclestage: "customer",
+      im_an: "AV Freelancer",
+    )
+  end
 
   def send_welcome_email
     return if confirmed? || !registration_completed? || confirmation_sent_at.present?

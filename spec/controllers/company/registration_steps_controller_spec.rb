@@ -125,13 +125,6 @@ RSpec.describe Company::RegistrationStepsController, type: :controller do
           put :update, params: { id: :profile, company: company_params }
           expect(company.reload).to have_attributes(company_params)
         end
-
-        it "creates or update a hubspot contact" do
-          company.update_attribute(:contact_name, "Name")
-          allow(Rails.application.secrets).to receive(:enabled_hubspot).and_return(true)
-          expect(Hubspot::Contact).to receive(:createOrUpdate)
-          put :update, params: { id: :profile, company: company_params }
-        end
       end
     end
   end
