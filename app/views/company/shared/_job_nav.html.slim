@@ -39,10 +39,11 @@
       - path = current_admin.nil? ? company_job_path(job) : admin_job_path(job)
       a href=path
         | Job Details
-    .tab-bar__item class=("tab-bar__item--active" if (controller.controller_name == "jobs" && request.path == freelancer_matches_company_job_path))
-      - path = current_admin.nil? ? freelancer_matches_company_job_path(job) : freelancer_matches_company_job_path(job)
-      a href=path
-        | Matches
+    - if current_company.present?
+      .tab-bar__item class=("tab-bar__item--active" if (controller.controller_name == "jobs" && request.path == freelancer_matches_company_job_path))
+        - path = current_admin.nil? ? freelancer_matches_company_job_path(job) : freelancer_matches_company_job_path(job)
+        a href=path
+          | Matches
     .tab-bar__item class=("tab-bar__item--active" if request.path.index(/applicant/)) class=("tab-bar__item--inactive" if job.applicants_count == 0 )
       - if job.applicants_count > 0
         a href=company_job_applicants_path(job)
