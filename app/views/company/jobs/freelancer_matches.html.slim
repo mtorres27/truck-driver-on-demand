@@ -1,0 +1,7 @@
+= render partial: "company/shared/job_nav", locals: { job: @job }
+- content_for :secondary do
+  .action-bar
+    h2.heading-h2.heading-h2--action-bar Job Matches
+  .list
+    - @freelancers.each do |freelancer|
+      = render partial: "company/shared/freelancer_info", locals: {freelancer: freelancer}
