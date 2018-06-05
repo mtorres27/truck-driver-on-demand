@@ -9,9 +9,12 @@
           | Filter
         .messaging-filter__select
           select id="messaging-filter"
-            option value="" label="All Applicants"
-            option value="quoting" label="Quoting Applicants" selected=("quoting" if params[:filter] == "quoting")
-            option value="accepted" label="Accepted Applicant" selected=("selected" if params[:filter] == "accepted")
+            option value=""
+              | All Applicants
+            option value="quoting" selected=("quoting" if params[:filter] == "quoting")
+              | Quoting Applicants
+            option value="accepted" selected=("selected" if params[:filter] == "accepted")
+              | Accepted Applicant
   .grid-h.grid-h--no-margin
     .grid-cell.grid-cell--33.company-applicants
       = render partial: "company/shared/applicants_for_messaging", locals: { applicants: @applicants, job: @job, current_applicant_id: @current_applicant_id }
