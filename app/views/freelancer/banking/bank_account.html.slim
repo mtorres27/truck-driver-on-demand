@@ -12,8 +12,10 @@
             .attachment.common__text-field-group
               label.common__field-label for="name-4"  Account type
               select.common__select-field.w-select name="bank[holder_type]"  id="bank_holder_type"
-                option value="Individual"  Individual
-                option value="Company"  Company
+                option value="Individual"
+                  | Individual
+                option value="Company"
+                  | Company
             .common__text-field-group
               label.common__field-label for="name-4"  Routing Number (optional)
               input.w-input data-name=("Name 3") maxlength="256" id="bank_account_routing_number" name="bank[account][routing_number]" placeholder=("Routing number for your account") type="text" /
@@ -30,7 +32,8 @@
               label.common__field-label for="name-4"  Account Currency
               select.common__select-field.w-select name="bank[currency]" id="bank_currency"
                 - @country_spec.supported_bank_account_currencies.each do |val, arr |
-                  option[value="#{val}"] #{arr[0]}
+                  option[value="#{val}"]
+                    = arr[0]
             input type="hidden" name="bank[btok]" id="bank_btok"
             input type="hidden" name="bank[acc_id]" id="bank_acc_id"
             a#btn-primary.btn-primary--active.w-inline-block.width-100 href=""

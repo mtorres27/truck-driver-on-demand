@@ -13,9 +13,7 @@ h1.heading-h1 My Freelancers
       span class="result-header__distance-text"
         | filter by location
       select id="freelancer_favourites_location" class="company-freelancer__distance"
-        option value="" label="All" selected=("selected" if params.dig(:location) == "" || !params.dig(:location).presence)
-        - @locations.each do |location|
-          option value="#{location}" label="#{location}" selected=("selected" if params.dig(:location) == location)
+        = render "location_options"
   .list
     - @freelancers.each do |freelancer|
       = render partial: "company/shared/freelancer_info", locals: { freelancer: freelancer }
