@@ -21,14 +21,7 @@
         span class="result-header__distance-text"
           | distance
         select id="freelance_distance" class="company-freelancer__distance"
-            option value="160934" selected=("selected" if params.dig(:search, :distance) == '160934')
-              | 100 Miles
-            option value="241402" selected=("selected" if params.dig(:search, :distance) == '241402')
-              | 150 Miles
-            option value="321869" selected=("selected" if params.dig(:search, :distance) == '321869')
-              | 200 Miles
-            option value="402336" selected=("selected" if params.dig(:search, :distance) == '402336')
-              | 250 Miles
+          = render partial: "shared/distance_options", locals: { distance: params.dig(:search, :distance) }
 
     .result-freelancers
       - @freelancers.each do |freelancer|
