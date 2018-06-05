@@ -37,6 +37,7 @@ Rails.application.routes.draw do
       post :add_favourites, on: :collection
       get :my_jobs, on: :collection
       get :my_applications, on: :collection
+      get :job_matches, on: :collection
       post :apply, on: :collection
 
       resources :application, only: [:index, :create]
