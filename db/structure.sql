@@ -288,8 +288,8 @@ ALTER SEQUENCE change_orders_id_seq OWNED BY change_orders.id;
 CREATE TABLE companies (
     id bigint NOT NULL,
     token character varying,
-    name character varying NOT NULL,
-    contact_name character varying NOT NULL,
+    name character varying,
+    contact_name character varying,
     address character varying,
     formatted_address character varying,
     area character varying,
@@ -327,7 +327,6 @@ CREATE TABLE companies (
     header_color character varying DEFAULT 'FF6C38'::character varying,
     country character varying,
     header_source character varying DEFAULT 'color'::character varying,
-    province character varying,
     sales_tax_number character varying,
     line2 character varying,
     city character varying,
@@ -337,7 +336,8 @@ CREATE TABLE companies (
     manufacturer_tags citext,
     plan_id bigint,
     is_trial_applicable boolean DEFAULT true,
-    waived_jobs integer DEFAULT 1
+    waived_jobs integer DEFAULT 1,
+    registration_step character varying
 );
 
 
@@ -2522,12 +2522,14 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20180424155938'),
 ('20180424190619'),
 ('20180504205104'),
+('20180506150209'),
 ('20180508222720'),
 ('20180508223949'),
 ('20180508230343'),
 ('20180509110048'),
 ('20180518015549'),
 ('20180518221742'),
-('20180525003348');
+('20180525003348'),
+('20180530180210');
 
 

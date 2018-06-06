@@ -23,10 +23,7 @@ h1.heading-h1 Search for AV Freelancers
 
     .action-bar__actions
       select id="freelance_distance" class="company-freelancer__distance margin-right"
-          option value="160934" label="100 Miles" selected=("selected" if params.dig(:search, :distance) == '160934')
-          option value="241402" label="150 Miles" selected=("selected" if params.dig(:search, :distance) == '241402')
-          option value="321869" label="200 Miles" selected=("selected" if params.dig(:search, :distance) == '321869')
-          option value="402336" label="250 Miles" selected=("selected" if params.dig(:search, :distance) == '402336')
+        = render partial: "shared/distance_options", locals: { distance: params.dig(:search, :distance) }
       label
         - checked = @avatar_only
         = check_box_tag "avatar_only", "1", checked, id: "show_avatar_only"

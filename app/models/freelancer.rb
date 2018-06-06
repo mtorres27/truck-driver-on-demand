@@ -70,6 +70,10 @@ class Freelancer < ApplicationRecord
 
   has_one :user, as: :meta, dependent: :destroy
   accepts_nested_attributes_for :user
+
+  attr_accessor :first_name, :last_name, :accept_terms_of_service, :accept_privacy_policy,
+                 :accept_code_of_conduct, :enforce_profile_edit, :user_type
+
   has_many :applicants, -> { order(updated_at: :desc) }, dependent: :destroy
   has_many :jobs, through: :applicants
   has_many :messages, -> { order(created_at: :desc) }, as: :authorable, dependent: :destroy
@@ -107,9 +111,6 @@ class Freelancer < ApplicationRecord
 
   validates :years_of_experience, numericality: { only_integer: true }
 
-  validates_presence_of :country, :on => :create
-  validates_presence_of :city, :on => :create
-
   validates :phone_number, length: { minimum: 7 }, allow_blank: true
 
   validates :phone_number, length: { minimum: 7 }, on: :update, allow_blank: true
@@ -118,35 +119,23 @@ class Freelancer < ApplicationRecord
 
   def connected?; !stripe_account_id.nil?; end
 
-  attr_accessor :accept_terms_of_service
-  attr_accessor :accept_privacy_policy
-  attr_accessor :accept_code_of_conduct
-
   validates_acceptance_of :accept_terms_of_service
   validates_acceptance_of :accept_privacy_policy
   validates_acceptance_of :accept_code_of_conduct
 
-  attr_accessor :enforce_profile_edit
-
-    validates_presence_of :name,
-      :email,
-      :address,
-      :city,
-      :state,
-      :postal_code,
-      :country,
-      :freelancer_type,
-      :service_areas,
-      :bio,
-      :years_of_experience,
-      :pay_unit_time_preference,
-      if: :enforce_profile_edit
+  validates :email, :address, :city, :postal_code, :country, :freelancer_type, :service_areas, :bio, :years_of_experience, :pay_unit_time_preference, presence: true, if: :enforce_profile_edit
+  validates :first_name, :last_name, :country, :city, presence: true, on: :update, if: :step_job_info?
+  validates :job_types, presence: true, on: :update, if: :step_profile?
+  validates :avatar, :tagline, :bio, presence: true, on: :update, if: :confirmed_freelancer?
 
   scope :new_registrants, -> { where(disabled: true) }
 
-  after_create :add_to_hubspot
+  before_save :set_name, if: :step_job_info?
   after_create :check_for_invites
-  after_create :send_welcome_email
+  after_save :add_credit_to_inviters, if: :confirmed_at_changed?
+  after_save :send_welcome_email, if: :registration_step_changed?
+  after_save :add_to_hubspot
+  before_create :set_default_step
 
   pg_search_scope :search, against: {
     name: "A",
@@ -193,14 +182,17 @@ class Freelancer < ApplicationRecord
     :at, :au, :be, :ca, :ch, :de, :dk, :es, :fi, :fr, :gb, :hk, :ie, :it, :jp, :lu, :nl, :no, :nz, :pt, :se, :sg, :us
   ]
 
-  attr_accessor :user_type
-
   def rating
     if freelancer_reviews.count > 0
       freelancer_reviews.average("(#{FreelancerReview::RATING_ATTRS.map(&:to_s).join('+')}) / #{FreelancerReview::RATING_ATTRS.length}").round
     else
       return nil
     end
+  end
+
+
+  def registration_completed?
+    registration_step == "wicked_finish"
   end
 
   def job_markets_for_job_type(job_type)
@@ -316,10 +308,15 @@ class Freelancer < ApplicationRecord
     end
   end
 
+  def profile_form_filled?
+    avatar.present? && bio.present? && tagline.present?
+  end
+
   private
 
   def add_to_hubspot
     return unless Rails.application.secrets.enabled_hubspot
+    return if !registration_completed? || changes[:registration_step].nil?
 
     Hubspot::Contact.createOrUpdate(email,
       firstname: name.split(" ")[0],
@@ -330,7 +327,8 @@ class Freelancer < ApplicationRecord
   end
 
   def send_welcome_email
-    FreelancerMailer.verify_your_identity(self).deliver_later
+    return if confirmed? || !registration_completed? || confirmation_sent_at.present?
+    self.send_confirmation_instructions
   end
 
   def check_for_invites
@@ -338,5 +336,49 @@ class Freelancer < ApplicationRecord
     self.avj_credit = 10
     save!
     FreelancerMailer.notice_credit_earned(self, 10).deliver_later
+  end
+
+  def add_credit_to_inviters
+    return if FriendInvite.by_email(email).count.zero?
+    FriendInvite.by_email(email).each do |invite|
+      freelancer = invite.freelancer
+      if freelancer.avj_credit.nil?
+        credit_earned = 20
+      elsif freelancer.avj_credit + 20 <= 200
+        credit_earned = 20
+      else
+        credit_earned = 200 - freelancer.avj_credit
+      end
+      freelancer.avj_credit = freelancer.avj_credit.to_f + credit_earned
+      freelancer.save!
+      invite.update_attribute(:accepted, true)
+      FreelancerMailer.notice_credit_earned(freelancer, credit_earned).deliver_later if credit_earned > 0
+    end
+  end
+
+  def step_profile?
+    registration_step == "profile"
+  end
+
+  def step_job_info?
+    registration_step == "job_info"
+  end
+
+  def set_default_step
+    self.registration_step ||= "personal"
+  end
+
+  def set_name
+    self.name ||= "#{first_name} #{last_name}"
+  end
+
+  def confirmed_freelancer?
+    registration_completed? && self.confirmed? == false
+  end
+
+  protected
+
+  def confirmation_required?
+    registration_completed?
   end
 end

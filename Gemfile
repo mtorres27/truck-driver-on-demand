@@ -45,6 +45,7 @@ gem "coderay", "~> 1.1.1"
 gem "redcarpet", "~> 3.4.0"
 gem "wicked_pdf", "~> 1.1.0"
 gem "wkhtmltopdf-binary", "~> 0.12.3.1"
+gem "wicked"
 
 # Services
 gem "rollbar"
@@ -70,7 +71,6 @@ gem "hubspot-ruby"
 
 # Emails
 gem "smtpapi"
-
 gem "listen"
 
 # Profiling
@@ -78,6 +78,9 @@ gem "rack-mini-profiler", "~> 0.10.2"
 gem "flamegraph", "~> 0.9.5"
 gem "stackprof", "~> 0.2.10"
 gem "bullet", "~> 5.5.1" # TODO: Remove bullet from production
+
+# States and provinces
+gem "city-state"
 
 group :development do
   gem "annotate"

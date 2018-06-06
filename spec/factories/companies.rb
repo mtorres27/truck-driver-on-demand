@@ -4,8 +4,8 @@
 #
 #  id                        :integer          not null, primary key
 #  token                     :string
-#  name                      :string           not null
-#  contact_name              :string           not null
+#  name                      :string
+#  contact_name              :string
 #  address                   :string
 #  formatted_address         :string
 #  area                      :string
@@ -43,7 +43,6 @@
 #  header_color              :string           default("FF6C38")
 #  country                   :string
 #  header_source             :string           default("color")
-#  province                  :string
 #  sales_tax_number          :string
 #  line2                     :string
 #  city                      :string
@@ -54,14 +53,24 @@
 #  plan_id                   :integer
 #  is_trial_applicable       :boolean          default(TRUE)
 #  waived_jobs               :integer          default(1)
+#  registration_step         :string
 #
 
 FactoryBot.define do
   factory :company do
     name { Faker::Company.unique.name }
-    contact_name { Faker::Name.unique.name }
+    first_name { Faker::Name.unique.name }
+    last_name { Faker::Name.unique.name }
     country [:es, :fi, :fr, :gb, :pt, :us].sample
     city { Faker::Address.city }
     user { FactoryBot.build(:user) }
+    state { Faker::Address.state}
+    avatar { fixture_file_upload(Rails.root.join("spec", "fixtures", "image.png"), "image/png") }
+    description { Faker::Lorem.sentence }
+    established_in { Faker::Number.number(4) }
+    number_of_employees { "eleven_to_one_hundred" }
+    number_of_offices { Faker::Number.number(1) }
+    website { Faker::Lorem.word }
+    area { "USA" }
   end
 end

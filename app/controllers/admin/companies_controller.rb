@@ -77,7 +77,6 @@ class Admin::CompaniesController < Admin::BaseController
         :contact_name,
         :country,
         :sales_tax_number,
-        :province,
         :line2,
         :state,
         :postal_code,

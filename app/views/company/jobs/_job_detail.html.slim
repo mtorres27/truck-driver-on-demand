@@ -29,7 +29,7 @@
       h3.heading-h3 Location of Job
       p
         - if @job.address?
-          = @job.address
+          = @job.city_state_country
         - else
           = "Location Not Specified"
 

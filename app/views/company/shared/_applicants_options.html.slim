@@ -1,0 +1,6 @@
+option value=""
+  | All Applicants
+option value="quoting" selected=("quoting" if params[:filter] == "quoting")
+  | Quoting Applicants
+option value="accepted" selected=("selected" if params[:filter] == "accepted")
+  | Accepted Applicant

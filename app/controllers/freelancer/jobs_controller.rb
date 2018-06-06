@@ -2,14 +2,15 @@ class Freelancer::JobsController < Freelancer::BaseController
   include JobHelper
 
   def index
-    if params[:search].nil? || (params[:search][:keywords].blank? && params[:search][:address].blank?&& params[:search][:country].blank?)
+    if params[:search].nil? || (params[:search][:keywords].blank? && params[:search][:country].blank? && params[:search][:state_province].blank? && params[:search][:address].blank?)
       flash[:error] = "You'll need to add some search criteria to narrow your search results!"
       redirect_to freelancer_root_path
     end
 
     @keywords = params.dig(:search, :keywords).presence
-    @address = params.dig(:search, :address).presence
     @country = params.dig(:search, :country).presence
+    @state_province = params.dig(:search, :state_province).presence
+    @address = params.dig(:search, :address).presence
 
     @sort = params.dig(:search, :sort).presence
     @distance = params.dig(:search, :distance).presence
@@ -30,12 +31,15 @@ class Freelancer::JobsController < Freelancer::BaseController
 
     if @address
       # check for cached version of address
-      if Rails.cache.read(@address)
-        @geocode = Rails.cache.read(@address)
+      @address_for_geocode = @address
+      @address_for_geocode += ", #{CS.states(@country.to_sym)[@state_province.to_sym]}" if @state_province.present?
+      @address_for_geocode += ", #{CS.countries[@country.upcase.to_sym]}" if @country.present?
+      if Rails.cache.read(@address_for_geocode)
+        @geocode = Rails.cache.read(@address_for_geocode)
       else
         # save cached version of address
-        @geocode = do_geocode(@address)
-        Rails.cache.write(@address, @geocode)
+        @geocode = do_geocode(@address_for_geocode)
+        Rails.cache.write(@address_for_geocode, @geocode)
       end
 
       if @geocode
@@ -49,13 +53,9 @@ class Freelancer::JobsController < Freelancer::BaseController
       end
     end
 
-    if @keywords
-      @jobs = @jobs.search(@keywords)
-    end
-
-    if @country
-      @jobs = @jobs.where(country: @country)
-    end
+    @jobs = @jobs.search(@keywords) if @keywords
+    @jobs = @jobs.where(country: @country) if @country
+    @jobs = @jobs.where(state_province: @state_province) if @state_province
 
     @jobs = @jobs.page(params[:page]).per(50)
   end

@@ -2,9 +2,9 @@ module ControllerMacros
   def login_freelancer
     before(:each) do
       @request.env["devise.mapping"] = Devise.mappings[:freelancer]
-      freelancer = FactoryBot.create(:freelancer)
+      freelancer = FactoryBot.create(:freelancer, registration_step: "wicked_finish")
       freelancer.user.confirm
-      sign_in freelancer.user
+      sign_in freelancer
     end
   end
 

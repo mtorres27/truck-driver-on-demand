@@ -1,0 +1,50 @@
+- content_for :secondary do
+  h1.text-center.heading-h1 = "Register as a Freelancer"
+  = render partial: "shared/registration_progress_bar", locals: { step: 4 }
+  = simple_form_for(@freelancer, url: wizard_path) do |f|
+    .grid-h
+      .grid-cell.grid-cell--100
+        = f.label :avatar, label: "Profile Picture", required: true
+        .freelancer-profile__image style="width: 100px; height: 100px;"
+          = image_tag(@freelancer.avatar_url, id: "freelancer-edit-profile__avatar")
+          .freelancer-profile__image-upload onclick="updateProfilePicture()"
+            span class="zmdi zmdi-camera-add"
+        - if @freelancer.errors.full_messages.include?("Avatar can't be blank")
+          .has-error
+            .help-block
+              | Please select a profile picture.
+        = f.file_field :avatar, label: false, :accept => 'image/png,image/gif,image/jpeg', id: "edit-freelancer-profile-avatar", class: "file-input--hidden"
+      .grid-cell.grid-cell--100
+        = f.input :tagline, label: "Tagline", required: true, placeholder: "Enter your tagline"
+      .grid-cell.grid-cell--100
+        = f.input :bio, label: "Biography", required: true, placeholder: "Write a bio", :input_html => { :class => 'form__profile-bio-textarea' }
+      .grid-cell.grid-cell--100
+        .grid-h
+          .grid-cell.grid-cell--33
+            = f.button :submit, "Complete", class: "btn btn--primary"
+          .grid-cell.grid-cell--33
+            = link_to "Skip & Register", skip_freelancer_registration_step_path(:profile), method: :post, class: "btn btn--secondary"
+          .grid-cell.grid-cell--33
+            = link_to "Use another account", destroy_freelancer_session_path,  method: :delete, class: "btn btn--clear"
+javascript:
+   var updateProfilePicture = function() {
+    $("#edit-freelancer-profile-avatar").click();
+    $("#edit-freelancer-profile-avatar").on('change', function() {
+      var imgPath = $(this)[0].value;
+      var extn = imgPath.substring(imgPath.lastIndexOf('.') + 1).toLowerCase();
+      var image_holder = $("#freelancer-edit-profile__avatar");
+
+      if (extn == "gif" || extn == "png" || extn == "jpg" || extn == "jpeg") {
+        if (typeof (FileReader) != "undefined") {
+          var reader = new FileReader();
+          reader.onload = function (e) {
+            image_holder.attr('src', e.target.result)
+          }
+
+          reader.readAsDataURL($(this)[0].files[0]);
+        }
+      } else {
+        alert("Only images can be selected.");
+      }
+    });
+  }

@@ -62,5 +62,13 @@ FactoryBot.define do
     country [:es, :fi, :fr, :gb, :pt, :us].sample
     city { Faker::Address.city }
     user { FactoryBot.build(:user) }
+    first_name { Faker::Name.unique.name }
+    last_name { Faker::Name.unique.name }
+    country [:es, :fi, :fr, :gb, :pt, :us].sample
+    city { Faker::Address.city }
+    state { Faker::Address.state }
+    bio { Faker::Lorem }
+    tagline { Faker::Lorem }
+    avatar { fixture_file_upload(Rails.root.join("spec", "fixtures", "image.png"), "image/png") }
   end
 end

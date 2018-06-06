@@ -32,7 +32,26 @@
       .grid-cell.grid-cell--50
         = f.input :city, as: :string, required: true, label: "City", placeholder: "City"
       .grid-cell.grid-cell--50
-        = f.input :state, as: :string, required: true, label: "State/Province", placeholder: "State/Province"
+        = f.label "State/Province"
+        select#freelancer_state.form-control.select(name='freelancer[state]')
+          option(value='')
+            | Select
+          = CS.states(:us).each do |index, value|
+            - selected = (!@freelancer.state.nil? and @freelancer.state == index.to_s)
+            - if selected
+              option.freelancer_us_option(value="#{index}" selected)
+                = value
+            - else
+              option.freelancer_us_option(value="#{index}")
+                = value
+          = CS.states(:ca).each do |index, value|
+            - selected = (!@freelancer.state.nil? and @freelancer.state == index.to_s)
+            - if selected
+              option.freelancer_ca_option(value="#{index}" selected)
+                = value
+            - else
+              option.freelancer_ca_option(value="#{index}")
+                = value
       .grid-cell.grid-cell--50
         = f.input :postal_code, required: true, label: "ZIP/Postal Code", prompt: "ZIP/Postal Code"
       .grid-cell.grid-cell--50

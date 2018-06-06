@@ -1,0 +1,42 @@
+- content_for :secondary do
+  h1.text-center.heading-h1 = "Register as a Freelancer"
+  = render partial: "shared/registration_progress_bar", locals: { step: 2 }
+  = simple_form_for(@freelancer, url: wizard_path) do |f|
+    .grid-h
+      .grid-cell.grid-cell--50
+        = f.input :first_name, as: :string, label: "First Name", required: true, autofocus: true, placeholder:  "Enter your first name"
+      .grid-cell.grid-cell--50
+        = f.input :last_name, as: :string, label: "Last Name", required: true, autofocus: true, placeholder:  "Enter your last name"
+      .grid-cell.grid-cell--100
+        = f.input :company_name, as: :string, label: "Company Name", autofocus: true, placeholder:  "Enter your company name"
+      .grid-cell.grid-cell--33
+        = f.input :country, required: true, label: "Country", prompt: "Select Country"
+      .grid-cell.grid-cell--33
+        = f.label "State/Province"
+        select#freelancer_state.form-control.select(name='freelancer[state]')
+          option(value='')
+            | Select
+          = CS.states(:us).each do |index, value|
+            - selected = (!@freelancer.state.nil? and @freelancer.state == index.to_s)
+            - if selected
+              option.freelancer_us_option(value="#{index}" selected)
+                = value
+            - else
+              option.freelancer_us_option(value="#{index}")
+                = value
+          = CS.states(:ca).each do |index, value|
+            - selected = (!@freelancer.state.nil? and @freelancer.state == index.to_s)
+            - if selected
+              option.freelancer_ca_option(value="#{index}" selected)
+                = value
+            - else
+              option.freelancer_ca_option(value="#{index}")
+                = value
+      .grid-cell.grid-cell--33
+        = f.input :city, required: true, label: "City", placeholder: "Enter your city"
+      .grid-cell.grid-cell--100
+        .grid-h
+          .grid-cell.grid-cell--50
+            = f.button :submit, "Continue", class: "btn btn--primary"
+          .grid-cell.grid-cell--50
+            = link_to "Use another account", destroy_freelancer_session_path,  method: :delete, class: "btn btn--clear"

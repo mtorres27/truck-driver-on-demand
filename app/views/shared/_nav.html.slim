@@ -22,7 +22,7 @@ nav#top-nav.navbar
   #navbar-lg.collapse.navbar-collapse
     ul.nav.navbar-nav.navbar-right
       - if request.path.index('company') == 1
-        - if current_company
+        - if current_company.registration_completed? && current_company.confirmed?  || current_company.registration_step.nil?
           li( class=("active" if request.path == company_root_path || is_showing_freelancer(request.path)) )
             = link_to "Search Freelancers", company_root_path
           li( class=("active" if request.path.include?(company_projects_path)) )
@@ -65,7 +65,7 @@ nav#top-nav.navbar
           li
             = link_to "Logout", destroy_user_session_path, method: :delete
       - elsif request.path.index('freelancer') == 1
-        - if current_freelancer
+        - if current_freelancer.registration_completed? && current_freelancer.confirmed? || current_freelancer.registration_step.nil?
           li( class=("active" if request.path == (freelancer_root_path)) )
             a.mobile-nav__menu__item href=freelancer_root_path data-turbolinks="false"
               | search jobs

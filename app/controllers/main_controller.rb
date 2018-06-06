@@ -15,7 +15,7 @@ class MainController < ApplicationController
   def job_countries
     country = params[:country]
     specs = Stripe::CountrySpec.retrieve(country.upcase)
-    render partial: "job_currencies", locals: { currencies: specs.supported_bank_account_currencies } if specs.supported_bank_account_currencies
+    render partial: "job_currencies", locals: { currency: specs.default_currency } if specs.default_currency
   end
 
   def freelance_service_agreement

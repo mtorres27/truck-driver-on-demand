@@ -18,6 +18,12 @@ Rails.application.routes.draw do
     root "main#index"
     resource :freelancer, only: [:show]
 
+    resources :registration_steps, only: [:show, :update, :index] do
+      member do
+        post :skip
+      end
+    end
+
     resources :companies, only: [:index, :show] do
       get :favourites, on: :collection
       post :add_favourites, on: :collection
@@ -73,6 +79,11 @@ Rails.application.routes.draw do
     root "main#index"
 
     resource :profile, only: [:show, :edit, :update]
+    resources :registration_steps, only: [:show, :update, :index] do
+      member do
+        post :skip
+      end
+    end
     resources :freelancers, only: [:index, :show] do
       get :hired, on: :collection
       get :favourites, on: :collection

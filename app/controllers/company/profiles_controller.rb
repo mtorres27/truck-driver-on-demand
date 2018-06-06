@@ -32,7 +32,6 @@ class Company::ProfilesController < Company::BaseController
       :name,
       :contact_name,
       :country,
-      :province,
       :area,
       :line2,
       :city,

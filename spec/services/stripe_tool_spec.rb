@@ -3,7 +3,7 @@ require './app/services/stripe_tool'
 
 describe StripeTool do
   describe '.update_company_info_with_subscription' do
-    let(:company) { create(:company) }
+    let!(:company) { create(:company) }
     let(:plan) { double('Plan', id: 1, interval: 'interval', name: 'Name', subscription_fee: 10) }
     let(:subscription) { double('Subscription', id: 1, current_period_end: DateTime.now.to_i, status: 'status', plan: plan) }
     let(:card_data) { double('Card Data', any?: [1]) }
@@ -31,7 +31,7 @@ describe StripeTool do
   end
 
   describe '.cancel_subscription' do
-    let(:company) { create(:company, billing_period_ends_at: DateTime.now) }
+    let!(:company) { create(:company, billing_period_ends_at: DateTime.now) }
     let(:plan) { double('Plan', id: 1, name: 'Name', amount: 10) }
     let(:subscription) { double('Subscription', id: 1, current_period_start: DateTime.now.to_i, status: 'status', plan: plan) }
 
