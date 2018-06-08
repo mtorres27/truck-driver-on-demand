@@ -112,7 +112,6 @@ class Company::JobsController < Company::BaseController
   def freelancer_matches
     @jobs = @job.company.jobs
     @distance = params[:search][:distance] if params[:search].present?
-    @keywords = params[:search][:keywords] if params[:search].present?
     @freelancers = Freelancer.where(disabled: false).where("job_types like ?", "%#{@job.job_type}%").order(:name)
     @address_for_geocode = @job.address
     @address_for_geocode += ", #{CS.states(@job.country.to_sym)[@job.state_province.to_sym]}" if @job.state_province.present?
@@ -136,10 +135,6 @@ class Company::JobsController < Company::BaseController
     else
       flash[:error] = "Unable to search geocode. Please try again."
       @freelancers = Freelancer.none
-    end
-
-    if @keywords.present?
-      @freelancers = @freelancers.search(@keywords)
     end
   end
 

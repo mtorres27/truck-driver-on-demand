@@ -14,7 +14,6 @@ describe Company::JobsController, type: :controller  do
       allow(freelancers).to receive(:order).and_return(freelancers)
       allow(freelancers).to receive(:nearby).and_return(freelancers)
       allow(freelancers).to receive(:with_distance).and_return(freelancers)
-      allow(freelancers).to receive(:search).and_return(freelancers)
       allow(Freelancer).to receive(:where).and_return(freelancers)
     end
 
@@ -31,20 +30,6 @@ describe Company::JobsController, type: :controller  do
     it 'defines @geocode' do
       get :freelancer_matches, params: parameters
       expect(assigns(:geocode)).to be_present
-    end
-
-    context 'when keywords are present' do
-      let(:parameters) { { id: job.id, search: { keywords: 'test' } } }
-
-      it 'defines @keywords' do
-        get :freelancer_matches, params: parameters
-        expect(assigns(:keywords)).to eq('test')
-      end
-
-      it 'searches for keywords' do
-        expect(freelancers).to receive(:search).with("test").once
-        get :freelancer_matches, params: parameters
-      end
     end
 
     context 'when distance is present' do
