@@ -113,5 +113,14 @@ describe Freelancer::JobsController, type: :controller  do
         expect(assigns(:address)).to eq('Toronto, Ontario, Canada')
       end
     end
+
+    context 'when distance is present' do
+      let(:parameters) { { search: { distance: '160000' } } }
+
+      it 'defines @distance' do
+        get :job_matches, params: parameters
+        expect(assigns(:distance)).to eq('160000')
+      end
+    end
   end
 end

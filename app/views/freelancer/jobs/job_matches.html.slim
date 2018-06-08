@@ -1,7 +1,15 @@
 = render partial: "/freelancer/shared/jobs_sub_nav"
 - content_for :secondary do
   .action-bar
-    h2.heading-h2.heading-h2--action-bar My Jobs
+    h2.heading-h2.heading-h2--action-bar Job Matches
+    .action-bar__actions
+      = simple_form_for(:search, url: job_matches_freelancer_jobs_path, html: {method: :get, id: "freelancer-job-matches__form"}) do |f|
+        .buttons
+          select id="search_distance" name="search[distance]" class="freelancer-job-matches__distance margin-right"
+            option value="160934" label="100 Miles" selected=("selected" if params.dig(:search, :distance) == '160934')
+            option value="241402" label="150 Miles" selected=("selected" if params.dig(:search, :distance) == '241402')
+            option value="321869" label="200 Miles" selected=("selected" if params.dig(:search, :distance) == '321869')
+            option value="402336" label="250 Miles" selected=("selected" if params.dig(:search, :distance) == '402336')
   - if @jobs.total_count == 0
     h3.heading-h3
       | There aren't any jobs matching your profile. 

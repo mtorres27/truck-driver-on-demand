@@ -242,6 +242,7 @@ class Freelancer::JobsController < Freelancer::BaseController
     current_freelancer.job_types.each do |index, _value|
       @jobs = @jobs.or(Job.where(job_type: index))
     end
+    @distance = params[:search][:distance] if params[:search].present?
     @address = ''
     @address += "#{current_freelancer.address}, " if current_freelancer.address.present?
     @address += current_freelancer.city if current_freelancer.city.present?
@@ -264,7 +265,6 @@ class Freelancer::JobsController < Freelancer::BaseController
         end
         @jobs = @jobs.nearby(@geocode[:lat], @geocode[:lng], @distance).with_distance(point).order("distance")
       else
-        1/0
         @jobs = Job.none
       end
     end
