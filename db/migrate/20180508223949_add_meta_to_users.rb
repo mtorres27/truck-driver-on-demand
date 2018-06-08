@@ -1,8 +1,7 @@
 class AddMetaToUsers < ActiveRecord::Migration[5.1]
   def change
-    add_column :users, :meta_id, :integer
-    add_column :users, :meta_type, :string
+    add_column :users, :type, :string
 
-    add_index :users, [:meta_id, :meta_type]
+    add_index :users, :type
   end
 end

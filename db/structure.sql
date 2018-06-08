@@ -56,38 +56,6 @@ SET default_tablespace = '';
 SET default_with_oids = false;
 
 --
--- Name: admins; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE admins (
-    id bigint NOT NULL,
-    token character varying,
-    name character varying NOT NULL,
-    created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
-);
-
-
---
--- Name: admins_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE admins_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: admins_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE admins_id_seq OWNED BY admins.id;
-
-
---
 -- Name: applicants; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -288,6 +256,7 @@ ALTER SEQUENCE change_orders_id_seq OWNED BY change_orders.id;
 CREATE TABLE companies (
     id bigint NOT NULL,
     token character varying,
+    email citext NOT NULL,
     name character varying,
     contact_name character varying,
     address character varying,
@@ -313,6 +282,15 @@ CREATE TABLE companies (
     number_of_offices integer DEFAULT 0,
     number_of_employees character varying,
     established_in integer,
+    encrypted_password character varying DEFAULT ''::character varying NOT NULL,
+    reset_password_token character varying,
+    reset_password_sent_at timestamp without time zone,
+    remember_created_at timestamp without time zone,
+    sign_in_count integer DEFAULT 0 NOT NULL,
+    current_sign_in_at timestamp without time zone,
+    last_sign_in_at timestamp without time zone,
+    current_sign_in_ip inet,
+    last_sign_in_ip inet,
     stripe_customer_id character varying,
     stripe_subscription_id character varying,
     stripe_plan_id character varying,
@@ -326,6 +304,9 @@ CREATE TABLE companies (
     exp_year character varying,
     header_color character varying DEFAULT 'FF6C38'::character varying,
     country character varying,
+    confirmation_token character varying,
+    confirmed_at timestamp without time zone,
+    confirmation_sent_at timestamp without time zone,
     header_source character varying DEFAULT 'color'::character varying,
     sales_tax_number character varying,
     line2 character varying,
@@ -765,7 +746,6 @@ CREATE TABLE freelancers (
     disabled boolean DEFAULT true NOT NULL,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
-    messages_count integer DEFAULT 0 NOT NULL,
     freelancer_reviews_count integer DEFAULT 0 NOT NULL,
     technical_skill_tags citext,
     profile_header_data text,
@@ -789,13 +769,26 @@ CREATE TABLE freelancers (
     valid_driver boolean,
     own_tools boolean,
     company_name character varying,
+    special_avj_fees numeric(10,2),
     job_types citext,
     job_functions citext,
     manufacturer_tags citext,
-    special_avj_fees numeric(10,2),
     avj_credit numeric(10,2) DEFAULT NULL::numeric,
     registration_step character varying,
-    province character varying
+    email citext NOT NULL,
+    encrypted_password character varying DEFAULT ''::character varying NOT NULL,
+    reset_password_token character varying,
+    reset_password_sent_at timestamp without time zone,
+    remember_created_at timestamp without time zone,
+    sign_in_count integer NOT NULL,
+    current_sign_in_at timestamp without time zone,
+    last_sign_in_at timestamp without time zone,
+    current_sign_in_ip inet,
+    last_sign_in_ip inet,
+    confirmation_token character varying,
+    confirmed_at timestamp without time zone,
+    confirmation_sent_at timestamp without time zone,
+    messages_count integer DEFAULT 0 NOT NULL
 );
 
 
@@ -1002,8 +995,8 @@ CREATE TABLE jobs (
     job_type citext,
     job_market citext,
     manufacturer_tags citext,
-    contracted_at timestamp without time zone,
     company_plan_fees numeric(10,2) DEFAULT 0,
+    contracted_at timestamp without time zone,
     state_province character varying
 );
 
@@ -1247,8 +1240,8 @@ CREATE TABLE quotes (
     stripe_fees numeric(10,2),
     net_avj_fees numeric(10,2),
     accepted_at timestamp without time zone,
-    plan_fee numeric(10,2) DEFAULT 0,
-    avj_credit numeric(10,2) DEFAULT NULL::numeric
+    avj_credit numeric(10,2) DEFAULT NULL::numeric,
+    plan_fee numeric(10,2) DEFAULT 0
 );
 
 
@@ -1341,8 +1334,8 @@ CREATE TABLE users (
     confirmation_token character varying,
     confirmed_at timestamp without time zone,
     confirmation_sent_at timestamp without time zone,
-    meta_id integer,
-    meta_type character varying
+    type character varying,
+    messages_count integer DEFAULT 0 NOT NULL
 );
 
 
@@ -1363,13 +1356,6 @@ CREATE SEQUENCE users_id_seq
 --
 
 ALTER SEQUENCE users_id_seq OWNED BY users.id;
-
-
---
--- Name: admins id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY admins ALTER COLUMN id SET DEFAULT nextval('admins_id_seq'::regclass);
 
 
 --
@@ -1587,14 +1573,6 @@ ALTER TABLE ONLY subscriptions ALTER COLUMN id SET DEFAULT nextval('subscription
 --
 
 ALTER TABLE ONLY users ALTER COLUMN id SET DEFAULT nextval('users_id_seq'::regclass);
-
-
---
--- Name: admins admins_pkey; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY admins
-    ADD CONSTRAINT admins_pkey PRIMARY KEY (id);
 
 
 --
@@ -1925,10 +1903,24 @@ CREATE INDEX index_change_orders_on_job_id ON change_orders USING btree (job_id)
 
 
 --
+-- Name: index_companies_on_confirmation_token; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX index_companies_on_confirmation_token ON companies USING btree (confirmation_token);
+
+
+--
 -- Name: index_companies_on_disabled; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_companies_on_disabled ON companies USING btree (disabled);
+
+
+--
+-- Name: index_companies_on_email; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX index_companies_on_email ON companies USING btree (email);
 
 
 --
@@ -1957,6 +1949,13 @@ CREATE INDEX index_companies_on_name ON companies USING btree (name);
 --
 
 CREATE INDEX index_companies_on_plan_id ON companies USING btree (plan_id);
+
+
+--
+-- Name: index_companies_on_reset_password_token; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX index_companies_on_reset_password_token ON companies USING btree (reset_password_token);
 
 
 --
@@ -2030,6 +2029,13 @@ CREATE INDEX index_freelancers_on_disabled ON freelancers USING btree (disabled)
 
 
 --
+-- Name: index_freelancers_on_email; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX index_freelancers_on_email ON freelancers USING btree (email);
+
+
+--
 -- Name: index_freelancers_on_job_functions; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -2055,6 +2061,13 @@ CREATE INDEX index_freelancers_on_manufacturer_tags ON freelancers USING btree (
 --
 
 CREATE INDEX index_freelancers_on_name ON freelancers USING btree (name);
+
+
+--
+-- Name: index_freelancers_on_reset_password_token; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX index_freelancers_on_reset_password_token ON freelancers USING btree (reset_password_token);
 
 
 --
@@ -2212,17 +2225,17 @@ CREATE UNIQUE INDEX index_users_on_email ON users USING btree (email);
 
 
 --
--- Name: index_users_on_meta_id_and_meta_type; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_users_on_meta_id_and_meta_type ON users USING btree (meta_id, meta_type);
-
-
---
 -- Name: index_users_on_reset_password_token; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE UNIQUE INDEX index_users_on_reset_password_token ON users USING btree (reset_password_token);
+
+
+--
+-- Name: index_users_on_type; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_users_on_type ON users USING btree (type);
 
 
 --
@@ -2521,15 +2534,13 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20180420173017'),
 ('20180424155938'),
 ('20180424190619'),
-('20180504205104'),
 ('20180506150209'),
 ('20180508222720'),
 ('20180508223949'),
-('20180508230343'),
 ('20180509110048'),
-('20180518015549'),
-('20180518221742'),
 ('20180525003348'),
-('20180530180210');
+('20180530180210'),
+('20180606180539'),
+('20180607204701');
 
 

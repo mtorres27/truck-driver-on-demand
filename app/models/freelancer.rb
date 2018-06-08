@@ -54,26 +54,34 @@
 #  avj_credit               :decimal(10, 2)
 #  registration_step        :string
 #  province                 :string
+#  email                    :citext           not null
+#  encrypted_password       :string           default(""), not null
+#  reset_password_token     :string
+#  reset_password_sent_at   :datetime
+#  remember_created_at      :datetime
+#  sign_in_count            :integer          not null
+#  current_sign_in_at       :datetime
+#  last_sign_in_at          :datetime
+#  current_sign_in_ip       :inet
+#  last_sign_in_ip          :inet
+#  confirmation_token       :string
+#  confirmed_at             :datetime
+#  confirmation_sent_at     :datetime
 #
 
 require 'net/http'
 require 'uri'
 
-class Freelancer < ApplicationRecord
+class Freelancer < User
   extend Enumerize
   include PgSearch
-  include Geocodable
   include Disableable
-  include AvatarUploader[:avatar]
-  include ProfileHeaderUploader[:profile_header]
   include EasyPostgis
-
-  has_one :user, as: :meta, dependent: :destroy
-  accepts_nested_attributes_for :user
 
   attr_accessor :first_name, :last_name, :accept_terms_of_service, :accept_privacy_policy,
                  :accept_code_of_conduct, :enforce_profile_edit, :user_type
 
+  has_one :freelancer_data, dependent: :destroy
   has_many :applicants, -> { order(updated_at: :desc) }, dependent: :destroy
   has_many :jobs, through: :applicants
   has_many :messages, -> { order(created_at: :desc) }, as: :authorable, dependent: :destroy
@@ -119,9 +127,9 @@ class Freelancer < ApplicationRecord
 
   def connected?; !stripe_account_id.nil?; end
 
-  validates_acceptance_of :accept_terms_of_service
-  validates_acceptance_of :accept_privacy_policy
-  validates_acceptance_of :accept_code_of_conduct
+  # validates_acceptance_of :accept_terms_of_service
+  # validates_acceptance_of :accept_privacy_policy
+  # validates_acceptance_of :accept_code_of_conduct
 
   validates :email, :address, :city, :postal_code, :country, :freelancer_type, :service_areas, :bio, :years_of_experience, :pay_unit_time_preference, presence: true, if: :enforce_profile_edit
   validates :first_name, :last_name, :country, :city, presence: true, on: :update, if: :step_job_info?
@@ -192,7 +200,7 @@ class Freelancer < ApplicationRecord
 
 
   def registration_completed?
-    registration_step == "wicked_finish"
+    freelancer_data.registration_step == "wicked_finish" if freelancer_data
   end
 
   def job_markets_for_job_type(job_type)
@@ -254,24 +262,12 @@ class Freelancer < ApplicationRecord
     score
   end
 
-  def email
-    user.email
-  end
-
   def self.avg_rating(freelancer)
     if freelancer.freelancer_reviews_count == 0
       return nil
     end
 
     return freelancer.rating
-  end
-
-  after_save :check_if_should_do_geocode
-  def check_if_should_do_geocode
-    if saved_changes.include?("address") or saved_changes.include?("city") or (!address.nil? and lat.nil?) or (!city.nil? and lat.nil?)
-      do_geocode
-      update_columns(lat: lat, lng: lng)
-    end
   end
 
   def reject_certification(attrs)
@@ -309,7 +305,7 @@ class Freelancer < ApplicationRecord
   end
 
   def profile_form_filled?
-    avatar.present? && bio.present? && tagline.present?
+    freelancer_data.avatar.present? && bio.present? && tagline.present? if freelancer_data
   end
 
   private
@@ -357,15 +353,15 @@ class Freelancer < ApplicationRecord
   end
 
   def step_profile?
-    registration_step == "profile"
+    freelancer_data.registration_step == "profile" if freelancer_data
   end
 
   def step_job_info?
-    registration_step == "job_info"
+    freelancer_data.registration_step == "job_info" if freelancer_data
   end
 
   def set_default_step
-    self.registration_step ||= "personal"
+    freelancer_data.registration_step ||= "personal" if freelancer_data
   end
 
   def set_name
@@ -380,5 +376,9 @@ class Freelancer < ApplicationRecord
 
   def confirmation_required?
     registration_completed?
+  end
+
+  def registration_step_changed?
+    freelancer_data.registration_step_changed? if freelancer_data
   end
 end

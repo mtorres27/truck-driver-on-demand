@@ -10,7 +10,7 @@
 #
 
 class FriendInvite < ApplicationRecord
-  belongs_to :freelancer
+  belongs_to :freelancer, class_name: 'User', foreign_key: 'freelancer_id'
 
   validates :name, :email, :freelancer_id, presence: true
   validate :number_of_invites_below_six
@@ -43,7 +43,7 @@ class FriendInvite < ApplicationRecord
   end
 
   def freelancer_does_not_exist
-    return if User.where(email: email, meta_type: 'Freelancer').count.zero?
+    return if User.where(email: email, type: 'Freelancer').count.zero?
     errors.add(:email, "#{email} is already registered to AV Junction.")
   end
 

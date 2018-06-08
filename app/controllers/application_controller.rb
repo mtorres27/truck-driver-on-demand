@@ -13,18 +13,6 @@ class ApplicationController < ActionController::Base
     end
   end
 
-  def current_admin
-    current_user.meta_type == 'Admin' ? current_user.meta : nil unless current_user.nil?
-  end
-
-  def current_freelancer
-    current_user.meta_type == 'Freelancer' ? current_user.meta : nil unless current_user.nil?
-  end
-
-  def current_company
-    current_user.meta_type == 'Company' ? current_user.meta : nil unless current_user.nil?
-  end
-
   def after_inactive_sign_up_path_for(resource)
     cookies.delete(:onboarding)
     '/confirm_email'
@@ -43,21 +31,23 @@ class ApplicationController < ActionController::Base
   end
 
   def current_company_registering?
-    unless current_company&.registration_step
-      current_company &&
-      !current_company.registration_completed? &&
-      !(request.original_fullpath.include? company_registration_step_path(current_company.registration_step)) &&
-      request.original_fullpath != destroy_company_session_path
-    end
+    # unless current_company&.registration_step
+    #   current_company &&
+    #   !current_company.registration_completed? &&
+    #   !(request.original_fullpath.include? company_registration_step_path(current_company.registration_step)) &&
+    #   request.original_fullpath != destroy_company_session_path
+    # end
+    false
   end
 
   def current_freelancer_registering?
-    unless current_freelancer&.registration_step
-      current_freelancer &&
-      !current_freelancer.registration_completed? &&
-      !(request.original_fullpath.include? freelancer_registration_step_path(current_freelancer.registration_step)) &&
-      request.original_fullpath != destroy_freelancer_session_path
-    end
+    # unless current_freelancer&.registration_step
+    #   current_freelancer &&
+    #   !current_freelancer.registration_completed? &&
+    #   !(request.original_fullpath.include? freelancer_registration_step_path(current_freelancer.registration_step)) &&
+    #   request.original_fullpath != destroy_freelancer_session_path
+    # end
+    false
   end
 
   def redirect_to_registration_step
@@ -87,11 +77,11 @@ class ApplicationController < ActionController::Base
   protected
 
   def after_sign_in_path_for(resource)
-    if resource.meta_type == 'Admin'
+    if resource.type == 'Admin'
       admin_root_path
-    elsif resource.meta_type == 'Freelancer'
+    elsif resource.type == 'Freelancer'
       freelancer_root_path
-    elsif resource.meta_type == 'Company'
+    elsif resource.type == 'Company'
       company_root_path
     end
   end

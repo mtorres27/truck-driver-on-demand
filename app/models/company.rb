@@ -54,6 +54,19 @@
 #  is_trial_applicable       :boolean          default(TRUE)
 #  waived_jobs               :integer          default(1)
 #  registration_step         :string
+#  email                     :citext           not null
+#  encrypted_password        :string           default(""), not null
+#  reset_password_token      :string
+#  reset_password_sent_at    :datetime
+#  remember_created_at       :datetime
+#  sign_in_count             :integer          not null
+#  current_sign_in_at        :datetime
+#  last_sign_in_at           :datetime
+#  current_sign_in_ip        :inet
+#  last_sign_in_ip           :inet
+#  confirmation_token        :string
+#  confirmed_at              :datetime
+#  confirmation_sent_at      :datetime
 #
 
 class Company < ApplicationRecord
@@ -66,8 +79,6 @@ class Company < ApplicationRecord
 
   belongs_to :plan, foreign_key: 'plan_id', optional: true
 
-  has_one :user, as: :meta, dependent: :destroy
-  accepts_nested_attributes_for :user
   has_many :projects, -> { order(updated_at: :desc) }, dependent: :destroy
   has_many :jobs, dependent: :destroy
   has_many :applicants, dependent: :destroy
@@ -184,10 +195,6 @@ class Company < ApplicationRecord
     else
       return nil
     end
-  end
-
-  def email
-    user.email
   end
 
   def self.avg_rating(company)

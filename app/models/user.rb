@@ -18,8 +18,7 @@
 #  confirmation_token     :string
 #  confirmed_at           :datetime
 #  confirmation_sent_at   :datetime
-#  meta_id                :integer
-#  meta_type              :string
+#  type                   :string
 #
 
 class User < ApplicationRecord
@@ -28,14 +27,12 @@ class User < ApplicationRecord
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable, :confirmable
 
-  belongs_to :meta, polymorphic: true, optional: true
-
   after_save :add_credit_to_inviters
 
   private
 
   def add_credit_to_inviters
-    return if meta_type != 'Freelancer' || !confirmed_at_changed? || FriendInvite.by_email(email).count.zero?
+    return if type != 'Freelancer' || !confirmed_at_changed? || FriendInvite.by_email(email).count.zero?
     FriendInvite.by_email(email).each do |invite|
       freelancer = invite.freelancer
       if freelancer.avj_credit.nil?

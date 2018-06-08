@@ -2,11 +2,11 @@ class RegistrationsController < Devise::RegistrationsController
   protected
 
   def after_sign_in_path_for(resource)
-    if resource.meta_type == 'Admin'
+    if resource.type == 'Admin'
       admin_root_path
-    elsif resource.meta_type == 'Freelancer'
+    elsif resource.type == 'Freelancer'
       freelancer_root_path
-    elsif resource.meta_type == 'Company'
+    elsif resource.type == 'Company'
       company_root_path
     end
   end

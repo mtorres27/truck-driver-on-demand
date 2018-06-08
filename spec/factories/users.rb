@@ -18,8 +18,7 @@
 #  confirmation_token     :string
 #  confirmed_at           :datetime
 #  confirmation_sent_at   :datetime
-#  meta_id                :integer
-#  meta_type              :string
+#  type                   :string
 #
 
 FactoryBot.define do

@@ -28,7 +28,7 @@ class FreelancerReview < ApplicationRecord
   include Reviewable
 
   belongs_to :company
-  belongs_to :freelancer, counter_cache: true
+  belongs_to :freelancer, counter_cache: true, class_name: 'FreelancerData', foreign_key: 'freelancer_id'
   belongs_to :job
 
   schema_validations auto_create: false

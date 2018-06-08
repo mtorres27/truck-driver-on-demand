@@ -18,7 +18,7 @@ include ImageProcessing::MiniMagick
 
 class Certification < ApplicationRecord
   include CertificationUploader[:certificate]
-  belongs_to :freelancer
+  belongs_to :freelancer, class_name: 'User', foreign_key: 'freelancer_id'
 
   extend Enumerize
 
