@@ -2,7 +2,10 @@
   .grid-cell.grid-cell--33
     .profile__meta__details__1-1
       .profile__meta__image
-        = image_tag(@freelancer.avatar_url, size: "75x75")
+        - if @freelancer.avatar_data.nil?
+          .circle_profile__image.freelancer__image= @freelancer.name_initials
+        - else
+          = image_tag(@freelancer.avatar_url, size: "75x75")
       .profile__meta__info
         h2.heading-h2
           = @freelancer.name

@@ -321,6 +321,10 @@ class Freelancer < ApplicationRecord
     avatar.present? && bio.present? && tagline.present?
   end
 
+  def name_initials
+    name.blank? ? email[0].upcase : name.split.map(&:first).join
+  end
+
   private
 
   def add_to_hubspot
