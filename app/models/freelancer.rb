@@ -322,7 +322,7 @@ class Freelancer < ApplicationRecord
   end
 
   def name_initials
-    name.blank? ? email[0].upcase : name.split.map(&:first).join
+    name.blank? ? email[0].upcase : name.split.map(&:first).map(&:upcase).join
   end
 
   private
