@@ -74,5 +74,9 @@ FactoryBot.define do
     require_checkin false
     require_uniform false
     addendums "MyText"
+    freelancer_type "independent"
+    address "Address"
+    country "ca"
+    currency "CAD"
   end
 end

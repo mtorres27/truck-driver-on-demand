@@ -80,4 +80,47 @@ describe Freelancer::JobsController, type: :controller  do
       end
     end
   end
+
+  describe 'GET job matches' do
+    login_freelancer
+    
+    let(:freelancer) { subject.current_freelancer } 
+    let(:jobs) { double("jobs") }
+
+    before(:each) do
+      freelancer.update_attribute(:job_types, { 'system_integration' => '1' })
+      freelancer.update_attribute(:city, 'Toronto')
+      freelancer.update_attribute(:state, 'ON')
+      freelancer.update_attribute(:country, 'ca')
+      allow(jobs).to receive(:with_distance).and_return(jobs)
+      allow(Job).to receive(:none).and_return(jobs)
+      allow(jobs).to receive(:or).and_return(jobs)
+      allow(jobs).to receive(:nearby).and_return(jobs)
+      allow(jobs).to receive(:with_distance).and_return(jobs)
+      allow(jobs).to receive(:order).and_return(jobs)
+      allow(jobs).to receive(:page).and_return(jobs)
+      allow(jobs).to receive(:per).and_return(jobs)
+    end
+
+    context 'when job matches exists' do
+      it 'sets @jobs' do
+        get :job_matches
+        expect(assigns(:jobs)).to be_present
+      end
+
+      it 'sets @address' do
+        get :job_matches
+        expect(assigns(:address)).to eq('Toronto, Ontario, Canada')
+      end
+    end
+
+    context 'when distance is present' do
+      let(:parameters) { { search: { distance: '160000' } } }
+
+      it 'defines @distance' do
+        get :job_matches, params: parameters
+        expect(assigns(:distance)).to eq('160000')
+      end
+    end
+  end
 end

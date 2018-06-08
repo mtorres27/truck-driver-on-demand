@@ -60,4 +60,9 @@ $(document).on("turbolinks:load", function () {
             $(".job_us_option").hide();
         }
     });
+
+    // Submit search on distance change
+    $(".company-freelancer-matches__distance").on("change", function() {
+        $("#company-freelancer-matches__form").submit()
+    })
 });

@@ -33,4 +33,9 @@ $(document).on("turbolinks:load", function () {
             $(".search_us_option").hide();
         }
     });
+
+    // Submit search on distance change
+    $(".freelancer-job-matches__distance").on("change", function() {
+        $("#freelancer-job-matches__form").submit()
+    })
 });
