@@ -303,4 +303,20 @@ describe Freelancer, type: :model do
     end
   end
 
+  describe "#name_initials" do
+    subject { freelancer.name_initials }
+
+    context "when freelancer does not have a name" do
+      let(:freelancer) { create(:freelancer, email: "test@test.com", name: nil) }
+
+      it { is_expected.to eq("T") }
+    end
+
+    context "when freelancer has a name" do
+      let(:freelancer) { create(:freelancer, name: "John Doe") }
+
+      it { is_expected.to eq("JD") }
+    end
+  end
+
 end

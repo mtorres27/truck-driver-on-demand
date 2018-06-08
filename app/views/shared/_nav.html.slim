@@ -41,7 +41,10 @@ nav#top-nav.navbar
             li.dropdown
               a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"
                 .dropdown-avatar
-                  = image_tag(current_company.avatar_url, size: "35x35")
+                  - if current_company.avatar_data.nil?
+                    .circle_profile__image.company__image= current_company.name_initials
+                  - else
+                    = image_tag(current_company.avatar_url, size: "35x35")
                 span.caret
               ul class="dropdown-menu"
                 li
