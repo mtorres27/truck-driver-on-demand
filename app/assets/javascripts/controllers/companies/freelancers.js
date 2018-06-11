@@ -64,12 +64,12 @@ var hidePopOver = function() {
   }
 };
 
-var submitInvitation = function() {
+var submitInvitation = function(freelancer_id) {
   if ($("#job_invite_button").hasClass("btn btn--primary btn--primary--disabled")) {
     return;
   }
 
-  $.get("/company/freelancers/#{params[:id]}/invite_to_quote", { job_to_invite: $("#job_to_invite").val()})
+  $.get("/company/freelancers/"+ freelancer_id + "/invite_to_quote", { job_to_invite: $("#job_to_invite").val()})
     .done(function( data ) {
       $(".popover-response--error").html("");
       $(".popover-response--success").html("");
