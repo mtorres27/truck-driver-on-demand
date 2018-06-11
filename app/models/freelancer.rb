@@ -1,72 +1,25 @@
 # == Schema Information
 #
-# Table name: freelancers
+# Table name: users
 #
-#  id                       :integer          not null, primary key
-#  token                    :string
-#  name                     :string
-#  avatar_data              :text
-#  address                  :string
-#  formatted_address        :string
-#  area                     :string
-#  lat                      :decimal(9, 6)
-#  lng                      :decimal(9, 6)
-#  pay_unit_time_preference :string
-#  pay_per_unit_time        :string
-#  tagline                  :string
-#  bio                      :text
-#  job_markets              :citext
-#  years_of_experience      :integer          default(0), not null
-#  profile_views            :integer          default(0), not null
-#  projects_completed       :integer          default(0), not null
-#  available                :boolean          default(TRUE), not null
-#  disabled                 :boolean          default(TRUE), not null
-#  created_at               :datetime         not null
-#  updated_at               :datetime         not null
-#  messages_count           :integer          default(0), not null
-#  freelancer_reviews_count :integer          default(0), not null
-#  technical_skill_tags     :citext
-#  profile_header_data      :text
-#  verified                 :boolean          default(FALSE)
-#  header_color             :string           default("FF6C38")
-#  country                  :string
-#  freelancer_team_size     :string
-#  freelancer_type          :string
-#  header_source            :string           default("color")
-#  stripe_account_id        :string
-#  stripe_account_status    :text
-#  currency                 :string
-#  sales_tax_number         :string
-#  line2                    :string
-#  state                    :string
-#  postal_code              :string
-#  service_areas            :string
-#  city                     :string
-#  phone_number             :string
-#  profile_score            :integer
-#  valid_driver             :boolean
-#  own_tools                :boolean
-#  company_name             :string
-#  job_types                :citext
-#  job_functions            :citext
-#  manufacturer_tags        :citext
-#  special_avj_fees         :decimal(10, 2)
-#  avj_credit               :decimal(10, 2)
-#  registration_step        :string
-#  province                 :string
-#  email                    :citext           not null
-#  encrypted_password       :string           default(""), not null
-#  reset_password_token     :string
-#  reset_password_sent_at   :datetime
-#  remember_created_at      :datetime
-#  sign_in_count            :integer          not null
-#  current_sign_in_at       :datetime
-#  last_sign_in_at          :datetime
-#  current_sign_in_ip       :inet
-#  last_sign_in_ip          :inet
-#  confirmation_token       :string
-#  confirmed_at             :datetime
-#  confirmation_sent_at     :datetime
+#  id                     :integer          not null, primary key
+#  email                  :string           default(""), not null
+#  encrypted_password     :string           default(""), not null
+#  reset_password_token   :string
+#  reset_password_sent_at :datetime
+#  remember_created_at    :datetime
+#  sign_in_count          :integer          default(0), not null
+#  current_sign_in_at     :datetime
+#  last_sign_in_at        :datetime
+#  current_sign_in_ip     :inet
+#  last_sign_in_ip        :inet
+#  created_at             :datetime         not null
+#  updated_at             :datetime         not null
+#  confirmation_token     :string
+#  confirmed_at           :datetime
+#  confirmation_sent_at   :datetime
+#  type                   :string
+#  messages_count         :integer          default(0), not null
 #
 
 require 'net/http'
@@ -136,8 +89,6 @@ class Freelancer < User
   validates :job_types, presence: true, on: :update, if: :step_profile?
   validates :avatar, :tagline, :bio, presence: true, on: :update, if: :confirmed_freelancer?
 
-  scope :new_registrants, -> { where(disabled: true) }
-
   before_save :set_name, if: :step_job_info?
   after_create :check_for_invites
   after_save :add_credit_to_inviters, if: :confirmed_at_changed?
@@ -145,22 +96,17 @@ class Freelancer < User
   after_save :add_to_hubspot
   before_create :set_default_step
 
-  pg_search_scope :search, against: {
-    name: "A",
-    job_types: "B",
-    job_markets: "B",
-    technical_skill_tags: "B",
-    manufacturer_tags: "B",
-    job_functions: "B",
-    tagline: "C",
-    bio: "C"
+  pg_search_scope :search, associated_against: {
+      freelancer_data: [:name, :job_types, :job_types, :job_markets, :technical_skill_tags,
+                        :manufacturer_tags, :job_functions, :tagline, :bio]
   }, using: {
     tsearch: { prefix: true, any_word: true }
   }
 
   pg_search_scope :name_or_email_search, against: {
-      name: "A",
-      email: "A",
+      email: "A"
+  }, associated_against: {
+      freelancer_data: [:name]
   }, using: {
       tsearch: { prefix: true }
   }
@@ -207,8 +153,8 @@ class Freelancer < User
     all_job_markets = I18n.t("enumerize.#{job_type}_job_markets")
     return [] unless all_job_markets.kind_of?(Hash)
     freelancer_job_markets = []
-    unless job_markets.nil?
-      job_markets.each do |index, value|
+    unless freelancer_data.job_markets.nil?
+      freelancer_data.job_markets.each do |index, value|
         if all_job_markets[index.to_sym]
           freelancer_job_markets << all_job_markets[index.to_sym]
         end
@@ -221,8 +167,8 @@ class Freelancer < User
     all_job_functions = I18n.t("enumerize.#{job_type}_job_functions")
     return [] unless all_job_functions.kind_of?(Hash)
     freelancer_job_functions = []
-    unless job_functions.nil?
-      job_functions.each do |index, value|
+    unless freelancer_data.job_functions.nil?
+      freelancer_data.job_functions.each do |index, value|
         if all_job_functions[index.to_sym]
           freelancer_job_functions << all_job_functions[index.to_sym]
         end

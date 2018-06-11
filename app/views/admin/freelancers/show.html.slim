@@ -9,23 +9,23 @@ h1.headin-h1 Freelancer Profile
       a.btn.btn--primary href=admin_freelancers_path
         | Cancel
 
-  - if @freelancer.profile_header_url.include?("missing") or @freelancer.header_source == "color"
-    .profile__wallpaper style="background-color: #{ @freelancer.header_color.include?("#") ? "" : "#"}#{@freelancer.header_color}"
+  - if @freelancer.freelancer_data.profile_header_url.include?("missing") or @freelancer.freelancer_data.header_source == "color"
+    .profile__wallpaper style="background-color: #{ @freelancer.freelancer_data.header_color.include?("#") ? "" : "#"}#{@freelancer.freelancer_data.header_color}"
   - else
-    .profile__wallpaper style="background-image: url(#{@freelancer.profile_header_url.include?("missing") ? "" : @freelancer.profile_header_url});"
-  - if @freelancer.phone_number?
+    .profile__wallpaper style="background-image: url(#{@freelancer.freelancer_data.profile_header_url.include?("missing") ? "" : @freelancer.freelancer_data.profile_header_url});"
+  - if @freelancer.freelancer_data.phone_number?
     h4.heading-h4
       | Phone:
-      = " #{@freelancer.phone_number}"
-      - if @freelancer.address?
+      = " #{@freelancer.freelancer_data.phone_number}"
+      - if @freelancer.freelancer_data.address?
     h4.heading-h4
       | Address:
-      = " #{@freelancer.address}#{@freelancer.line2? ? ", #{@freelancer.line2}" : "" }, #{@freelancer.city}, #{@freelancer.state}, #{@freelancer.country.try(:upcase)}, #{@freelancer.postal_code}"
-  - if @freelancer.user.confirmed_at.nil? && @freelancer.user.confirmation_token.present?
+      = " #{@freelancer.freelancer_data.address}#{@freelancer.freelancer_data.line2? ? ", #{@freelancer.freelancer_data.line2}" : "" }, #{@freelancer.freelancer_data.city}, #{@freelancer.freelancer_data.state}, #{@freelancer.freelancer_data.country.try(:upcase)}, #{@freelancer.freelancer_data.postal_code}"
+  - if @freelancer.confirmed_at.nil? && @freelancer.confirmation_token.present?
     .confirmation_link
       .confirmation_label
         strong<> Confirmation Link:
-        = confirmation_url(@freelancer.user, confirmation_token: @freelancer.user.confirmation_token)
-  - if @freelancer.special_avj_fees?
-    h4.heading-h4= "Special AVJ Fee #{@freelancer.special_avj_fees}"
+        = confirmation_url(@freelancer, confirmation_token: @freelancer.confirmation_token)
+  - if @freelancer.freelancer_data.special_avj_fees?
+    h4.heading-h4= "Special AVJ Fee #{@freelancer.freelancer_data.special_avj_fees}"
   = render "shared/profile-freelancer"

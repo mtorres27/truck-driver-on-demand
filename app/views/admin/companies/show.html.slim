@@ -11,19 +11,19 @@ h1.heading-h1 Company Profile
         | Edit
 
 
-  - if @company.profile_header_url.include?("missing") or @company.header_source == "color"
-    .profile__wallpaper style="background-color: #{ @company.header_color.include?("#") ? "" : "#"}#{@company.header_color}"
+  - if @company.company_data.profile_header_url.include?("missing") or @company.company_data.header_source == "color"
+    .profile__wallpaper style="background-color: #{ @company.company_data.header_color.include?("#") ? "" : "#"}#{@company.company_data.header_color}"
   - else
-    .profile__wallpaper style="background-image: url(#{@company.profile_header_url.include?("missing") ? "" : @company.profile_header_url});"
+    .profile__wallpaper style="background-image: url(#{@company.company_data.profile_header_url.include?("missing") ? "" : @company.company_data.profile_header_url});"
 
-  - if @company.phone_number?
+  - if @company.company_data.phone_number?
     h4.heading-h4
       | Phone:
-      = " #{@company.phone_number}"
-  - if @company.address?
+      = " #{@company.company_data.phone_number}"
+  - if @company.company_data.address?
     h4.heading-h4
       | Address:
-      = " #{@company.address}#{@company.line2? ? ", #{@company.line2}" : "" }, #{@company.city}, #{@company.state}, #{@company.country.try(:upcase)}, #{@company.postal_code}"
+      = " #{@company.company_data.address}#{@company.company_data.line2? ? ", #{@company.company_data.line2}" : "" }, #{@company.company_data.city}, #{@company.company_data.state}, #{@company.company_data.country.try(:upcase)}, #{@company.company_data.postal_code}"
   = render "shared/profile-company"
 
 

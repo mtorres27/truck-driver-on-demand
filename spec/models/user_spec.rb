@@ -19,6 +19,7 @@
 #  confirmed_at           :datetime
 #  confirmation_sent_at   :datetime
 #  type                   :string
+#  messages_count         :integer          default(0), not null
 #
 
 require 'rails_helper'

@@ -1,6 +1,6 @@
 h2
   | Company:
-  = link_to @project.company.name, admin_company_path(@project.company)
+  = link_to @project.company.company_data.name, admin_company_path(@project.company)
 .grid-cell.grid-cell--100
   .header-bar
     h3.heading-h3

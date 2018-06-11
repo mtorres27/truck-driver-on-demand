@@ -1,72 +1,25 @@
 # == Schema Information
 #
-# Table name: companies
+# Table name: users
 #
-#  id                        :integer          not null, primary key
-#  token                     :string
-#  name                      :string
-#  contact_name              :string
-#  address                   :string
-#  formatted_address         :string
-#  area                      :string
-#  lat                       :decimal(9, 6)
-#  lng                       :decimal(9, 6)
-#  hq_country                :string
-#  description               :string
-#  avatar_data               :text
-#  disabled                  :boolean          default(TRUE), not null
-#  created_at                :datetime         not null
-#  updated_at                :datetime         not null
-#  messages_count            :integer          default(0), not null
-#  company_reviews_count     :integer          default(0), not null
-#  profile_header_data       :text
-#  contract_preference       :string           default(NULL)
-#  job_markets               :citext
-#  technical_skill_tags      :citext
-#  profile_views             :integer          default(0), not null
-#  website                   :string
-#  phone_number              :string
-#  number_of_offices         :integer          default(0)
-#  number_of_employees       :string
-#  established_in            :integer
-#  stripe_customer_id        :string
-#  stripe_subscription_id    :string
-#  stripe_plan_id            :string
-#  subscription_cycle        :string
-#  is_subscription_cancelled :boolean          default(FALSE)
-#  subscription_status       :string
-#  billing_period_ends_at    :datetime
-#  last_4_digits             :string
-#  card_brand                :string
-#  exp_month                 :string
-#  exp_year                  :string
-#  header_color              :string           default("FF6C38")
-#  country                   :string
-#  header_source             :string           default("color")
-#  sales_tax_number          :string
-#  line2                     :string
-#  city                      :string
-#  state                     :string
-#  postal_code               :string
-#  job_types                 :citext
-#  manufacturer_tags         :citext
-#  plan_id                   :integer
-#  is_trial_applicable       :boolean          default(TRUE)
-#  waived_jobs               :integer          default(1)
-#  registration_step         :string
-#  email                     :citext           not null
-#  encrypted_password        :string           default(""), not null
-#  reset_password_token      :string
-#  reset_password_sent_at    :datetime
-#  remember_created_at       :datetime
-#  sign_in_count             :integer          not null
-#  current_sign_in_at        :datetime
-#  last_sign_in_at           :datetime
-#  current_sign_in_ip        :inet
-#  last_sign_in_ip           :inet
-#  confirmation_token        :string
-#  confirmed_at              :datetime
-#  confirmation_sent_at      :datetime
+#  id                     :integer          not null, primary key
+#  email                  :string           default(""), not null
+#  encrypted_password     :string           default(""), not null
+#  reset_password_token   :string
+#  reset_password_sent_at :datetime
+#  remember_created_at    :datetime
+#  sign_in_count          :integer          default(0), not null
+#  current_sign_in_at     :datetime
+#  last_sign_in_at        :datetime
+#  current_sign_in_ip     :inet
+#  last_sign_in_ip        :inet
+#  created_at             :datetime         not null
+#  updated_at             :datetime         not null
+#  confirmation_token     :string
+#  confirmed_at           :datetime
+#  confirmation_sent_at   :datetime
+#  type                   :string
+#  messages_count         :integer          default(0), not null
 #
 
 class Company < User
@@ -127,8 +80,6 @@ class Company < User
   accepts_nested_attributes_for :featured_projects, allow_destroy: true, reject_if: :reject_featured_projects
   accepts_nested_attributes_for :company_installs, allow_destroy: true, reject_if: :reject_company_installs
 
-  scope :new_registrants, -> { where(disabled: true) }
-
   before_save :set_name, if: :step_job_info?
   after_save :add_to_hubspot
   before_create :set_default_step
@@ -165,23 +116,18 @@ class Company < User
 
 
   pg_search_scope :search, against: {
-    name: "A",
-    email: "A",
-    contact_name: "B",
-    area: "B",
-    job_types: "B",
-    job_markets: "B",
-    technical_skill_tags: "B",
-    manufacturer_tags: "B",
-    formatted_address: "C",
-    description: "C"
+    email: "A"
+  }, associated_against: {
+      company_data: [:name, :contact_name, :area, :job_types, :job_markets, :technical_skill_tags,
+                     :manufacturer_tags, :formatted_address, :description]
   }, using: {
       tsearch: { prefix: true }
   }
 
   pg_search_scope :name_or_email_search, against: {
-      name: "A",
-      email: "A",
+      email: "A"
+  }, associated_against: {
+      company_data: [:name]
   }, using: {
       tsearch: { prefix: true }
   }
@@ -217,13 +163,13 @@ class Company < User
   def job_markets_for_job_type(job_type)
     all_job_markets = I18n.t("enumerize.#{job_type}_job_markets")
     return [] unless all_job_markets.kind_of?(Hash)
-    freelancer_job_markets = []
-    job_markets.each do |index, value|
+    company_job_markets = []
+    company_data.job_markets.each do |index, _value|
       if all_job_markets[index.to_sym]
-        freelancer_job_markets << all_job_markets[index.to_sym]
+        company_job_markets << all_job_markets[index.to_sym]
       end
     end
-    freelancer_job_markets
+    company_job_markets
   end
 
   def canada_country?

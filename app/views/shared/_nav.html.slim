@@ -22,7 +22,7 @@ nav#top-nav.navbar
   #navbar-lg.collapse.navbar-collapse
     ul.nav.navbar-nav.navbar-right
       - if request.path.index('company') == 1
-        - if current_company.registration_completed? && current_company.confirmed?  || current_company.registration_step.nil?
+        - if current_user && current_user.is_a?(Company) && current_user.registration_completed? && current_user.confirmed?  || current_user.company_data.registration_step.nil?
           li( class=("active" if request.path == company_root_path || is_showing_freelancer(request.path)) )
             = link_to "Search Freelancers", company_root_path
           li( class=("active" if request.path.include?(company_projects_path)) )
@@ -35,13 +35,13 @@ nav#top-nav.navbar
             li( class=("active" if request.path.include?(company_notifications_path)) )
               a href=company_notifications_path
                 | Notifications
-                - if current_company.messages.where(unread: true).count > 0
+                - if current_user.messages.where(unread: true).count > 0
                   span class="new-message__bell fa fa-bell"
 
           li.dropdown
             a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"
               .dropdown-avatar
-                = image_tag(current_company.avatar_url, size: "35x35")
+                = image_tag(current_user.company_data.avatar_url, size: "35x35")
               span.caret
             ul class="dropdown-menu"
               li
@@ -49,11 +49,11 @@ nav#top-nav.navbar
               li
                 = link_to "Subscription", company_plans_path
               li.divider role="separator"
-              li.dropdown-header= current_company.name
+              li.dropdown-header= current_user.company_data.name
               li
                 = link_to "Logout", destroy_user_session_path, method: :delete
       - elsif request.path.index('admin') == 1
-        - if current_admin
+        - if current_user && current_user.is_a?(Admin)
           li( class=("active" if request.path == admin_root_path) )
             = link_to "Dashboard", admin_root_path
           li( class=("active" if request.path.index(/^\/admin\/companies/)) )
@@ -65,7 +65,7 @@ nav#top-nav.navbar
           li
             = link_to "Logout", destroy_user_session_path, method: :delete
       - elsif request.path.index('freelancer') == 1
-        - if current_freelancer.registration_completed? && current_freelancer.confirmed? || current_freelancer.registration_step.nil?
+        - if current_user && current_user.is_a?(Freelancer) && current_user.registration_completed? && current_user.confirmed? || current_user.freelancer_data.registration_step.nil?
           li( class=("active" if request.path == (freelancer_root_path)) )
             a.mobile-nav__menu__item href=freelancer_root_path data-turbolinks="false"
               | search jobs

@@ -250,10 +250,10 @@ ALTER SEQUENCE change_orders_id_seq OWNED BY change_orders.id;
 
 
 --
--- Name: companies; Type: TABLE; Schema: public; Owner: -
+-- Name: company_datas; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE companies (
+CREATE TABLE company_datas (
     id bigint NOT NULL,
     token character varying,
     name character varying,
@@ -305,28 +305,15 @@ CREATE TABLE companies (
     is_trial_applicable boolean DEFAULT true,
     waived_jobs integer DEFAULT 1,
     registration_step character varying,
-    email citext NOT NULL,
-    encrypted_password character varying DEFAULT ''::character varying NOT NULL,
-    reset_password_token character varying,
-    reset_password_sent_at timestamp without time zone,
-    remember_created_at timestamp without time zone,
-    sign_in_count integer NOT NULL,
-    current_sign_in_at timestamp without time zone,
-    last_sign_in_at timestamp without time zone,
-    current_sign_in_ip inet,
-    last_sign_in_ip inet,
-    confirmation_token character varying,
-    confirmed_at timestamp without time zone,
-    confirmation_sent_at timestamp without time zone,
-    messages_count integer DEFAULT 0 NOT NULL
+    company_id integer
 );
 
 
 --
--- Name: companies_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+-- Name: company_datas_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE companies_id_seq
+CREATE SEQUENCE company_datas_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -335,10 +322,10 @@ CREATE SEQUENCE companies_id_seq
 
 
 --
--- Name: companies_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+-- Name: company_datas_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
-ALTER SEQUENCE companies_id_seq OWNED BY companies.id;
+ALTER SEQUENCE company_datas_id_seq OWNED BY company_datas.id;
 
 
 --
@@ -1381,10 +1368,10 @@ ALTER TABLE ONLY change_orders ALTER COLUMN id SET DEFAULT nextval('change_order
 
 
 --
--- Name: companies id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: company_datas id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY companies ALTER COLUMN id SET DEFAULT nextval('companies_id_seq'::regclass);
+ALTER TABLE ONLY company_datas ALTER COLUMN id SET DEFAULT nextval('company_datas_id_seq'::regclass);
 
 
 --
@@ -1611,11 +1598,11 @@ ALTER TABLE ONLY change_orders
 
 
 --
--- Name: companies companies_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: company_datas company_datas_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY companies
-    ADD CONSTRAINT companies_pkey PRIMARY KEY (id);
+ALTER TABLE ONLY company_datas
+    ADD CONSTRAINT company_datas_pkey PRIMARY KEY (id);
 
 
 --
@@ -1890,59 +1877,52 @@ CREATE INDEX index_change_orders_on_job_id ON change_orders USING btree (job_id)
 
 
 --
--- Name: index_companies_on_disabled; Type: INDEX; Schema: public; Owner: -
+-- Name: index_company_datas_on_company_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_companies_on_disabled ON companies USING btree (disabled);
-
-
---
--- Name: index_companies_on_email; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX index_companies_on_email ON companies USING btree (email);
+CREATE INDEX index_company_datas_on_company_id ON company_datas USING btree (company_id);
 
 
 --
--- Name: index_companies_on_job_markets; Type: INDEX; Schema: public; Owner: -
+-- Name: index_company_datas_on_disabled; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_companies_on_job_markets ON companies USING btree (job_markets);
-
-
---
--- Name: index_companies_on_manufacturer_tags; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_companies_on_manufacturer_tags ON companies USING btree (manufacturer_tags);
+CREATE INDEX index_company_datas_on_disabled ON company_datas USING btree (disabled);
 
 
 --
--- Name: index_companies_on_name; Type: INDEX; Schema: public; Owner: -
+-- Name: index_company_datas_on_job_markets; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_companies_on_name ON companies USING btree (name);
-
-
---
--- Name: index_companies_on_plan_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_companies_on_plan_id ON companies USING btree (plan_id);
+CREATE INDEX index_company_datas_on_job_markets ON company_datas USING btree (job_markets);
 
 
 --
--- Name: index_companies_on_reset_password_token; Type: INDEX; Schema: public; Owner: -
+-- Name: index_company_datas_on_manufacturer_tags; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE UNIQUE INDEX index_companies_on_reset_password_token ON companies USING btree (reset_password_token);
+CREATE INDEX index_company_datas_on_manufacturer_tags ON company_datas USING btree (manufacturer_tags);
 
 
 --
--- Name: index_companies_on_technical_skill_tags; Type: INDEX; Schema: public; Owner: -
+-- Name: index_company_datas_on_name; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_companies_on_technical_skill_tags ON companies USING btree (technical_skill_tags);
+CREATE INDEX index_company_datas_on_name ON company_datas USING btree (name);
+
+
+--
+-- Name: index_company_datas_on_plan_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_company_datas_on_plan_id ON company_datas USING btree (plan_id);
+
+
+--
+-- Name: index_company_datas_on_technical_skill_tags; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_company_datas_on_technical_skill_tags ON company_datas USING btree (technical_skill_tags);
 
 
 --
@@ -2110,7 +2090,7 @@ CREATE INDEX index_messages_on_receivable_type_and_receivable_id ON messages USI
 -- Name: index_on_companies_loc; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_on_companies_loc ON companies USING gist (st_geographyfromtext((((('SRID=4326;POINT('::text || lng) || ' '::text) || lat) || ')'::text)));
+CREATE INDEX index_on_companies_loc ON company_datas USING gist (st_geographyfromtext((((('SRID=4326;POINT('::text || lng) || ' '::text) || lat) || ')'::text)));
 
 
 --
@@ -2231,7 +2211,7 @@ ALTER TABLE ONLY company_reviews
 --
 
 ALTER TABLE ONLY payments
-    ADD CONSTRAINT fk_rails_0fc68a9316 FOREIGN KEY (company_id) REFERENCES companies(id);
+    ADD CONSTRAINT fk_rails_0fc68a9316 FOREIGN KEY (company_id) REFERENCES users(id);
 
 
 --
@@ -2251,10 +2231,10 @@ ALTER TABLE ONLY freelancer_reviews
 
 
 --
--- Name: companies fk_rails_2e8c071a79; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: company_datas fk_rails_2e8c071a79; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY companies
+ALTER TABLE ONLY company_datas
     ADD CONSTRAINT fk_rails_2e8c071a79 FOREIGN KEY (plan_id) REFERENCES plans(id);
 
 
@@ -2271,7 +2251,7 @@ ALTER TABLE ONLY applicants
 --
 
 ALTER TABLE ONLY projects
-    ADD CONSTRAINT fk_rails_44a549d7b3 FOREIGN KEY (company_id) REFERENCES companies(id);
+    ADD CONSTRAINT fk_rails_44a549d7b3 FOREIGN KEY (company_id) REFERENCES users(id);
 
 
 --
@@ -2287,7 +2267,7 @@ ALTER TABLE ONLY applicants
 --
 
 ALTER TABLE ONLY company_reviews
-    ADD CONSTRAINT fk_rails_54727610ca FOREIGN KEY (company_id) REFERENCES companies(id);
+    ADD CONSTRAINT fk_rails_54727610ca FOREIGN KEY (company_id) REFERENCES users(id);
 
 
 --
@@ -2295,7 +2275,7 @@ ALTER TABLE ONLY company_reviews
 --
 
 ALTER TABLE ONLY applicants
-    ADD CONSTRAINT fk_rails_7283c3d901 FOREIGN KEY (company_id) REFERENCES companies(id);
+    ADD CONSTRAINT fk_rails_7283c3d901 FOREIGN KEY (company_id) REFERENCES users(id);
 
 
 --
@@ -2303,7 +2283,7 @@ ALTER TABLE ONLY applicants
 --
 
 ALTER TABLE ONLY quotes
-    ADD CONSTRAINT fk_rails_9b32fbc45b FOREIGN KEY (company_id) REFERENCES companies(id);
+    ADD CONSTRAINT fk_rails_9b32fbc45b FOREIGN KEY (company_id) REFERENCES users(id);
 
 
 --
@@ -2311,7 +2291,7 @@ ALTER TABLE ONLY quotes
 --
 
 ALTER TABLE ONLY freelancer_reviews
-    ADD CONSTRAINT fk_rails_ab5db9ea44 FOREIGN KEY (company_id) REFERENCES companies(id);
+    ADD CONSTRAINT fk_rails_ab5db9ea44 FOREIGN KEY (company_id) REFERENCES users(id);
 
 
 --
@@ -2319,7 +2299,7 @@ ALTER TABLE ONLY freelancer_reviews
 --
 
 ALTER TABLE ONLY jobs
-    ADD CONSTRAINT fk_rails_b34da78090 FOREIGN KEY (company_id) REFERENCES companies(id);
+    ADD CONSTRAINT fk_rails_b34da78090 FOREIGN KEY (company_id) REFERENCES users(id);
 
 
 --
@@ -2335,7 +2315,7 @@ ALTER TABLE ONLY payments
 --
 
 ALTER TABLE ONLY change_orders
-    ADD CONSTRAINT fk_rails_b3bebfe084 FOREIGN KEY (company_id) REFERENCES companies(id);
+    ADD CONSTRAINT fk_rails_b3bebfe084 FOREIGN KEY (company_id) REFERENCES users(id);
 
 
 --
@@ -2515,6 +2495,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20180530180210'),
 ('20180606180539'),
 ('20180607204701'),
-('20180607204753');
+('20180607204753'),
+('20180611160634');
 
 

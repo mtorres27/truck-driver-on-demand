@@ -2,16 +2,16 @@
   .grid-cell.grid-cell--50
     .profile__meta__details__1-1
       .profile__meta__image
-        = image_tag(@company.avatar_url, size: "75x75")
+        = image_tag(@company.company_data.avatar_url, size: "75x75")
       .profile__meta__info
         h2.heading-h2
-          - if @company.website?
-            a href=proper_website_link(@company.website) target="_blank"
-              = @company.name
+          - if @company.company_data.website?
+            a href=proper_website_link(@company.company_data.website) target="_blank"
+              = @company.company_data.name
           - else
-            = @company.name
+            = @company.company_data.name
         h3.heading-h3
-          = @company.contact_name
+          = @company.company_data.contact_name
         h4.heading-h4
           | Email:
           a href="mailto:#{@company.email}" target="_blank"
@@ -20,10 +20,10 @@
           i
             = "Member since #{@company.created_at.strftime('%B %d, %Y')}"
         h4.heading-h4
-          - if @company.contract_preference == :no_preference or @company.contract_preference.nil?
+          - if @company.company_data.contract_preference == :no_preference or @company.company_data.contract_preference.nil?
             = t(:has_no_preference)
           - else
-            = "#{t(:prefers)} #{t(@company.contract_preference)}"
+            = "#{t(:prefers)} #{t(@company.company_data.contract_preference)}"
 
         h4.heading-h4
           a href="#reviews" data-turbolinks="false"
@@ -32,22 +32,22 @@
           - @stars = company_avg_rating(@company)
             - @stars.each do |star|
               i class=star
-        - if @company.website?
+        - if @company.company_data.website?
           .h4.heading-h4
-            a href=proper_website_link(@company.website) target="_blank"
-              = @company.website
-        - if @company.phone_number?
+            a href=proper_website_link(@company.company_data.website) target="_blank"
+              = @company.company_data.website
+        - if @company.company_data.phone_number?
           h4.heading-h4
-            a href="tel:#{@company.phone_number}"
-              = "#{@company.phone_number}"
+            a href="tel:#{@company.company_data.phone_number}"
+              = "#{@company.company_data.phone_number}"
 
 
   .grid-cell.grid-cell--50.grid-cell--shrink
     .profile__stats-box
       .profile__stats.profile__stats--33
         h2.heading-h2.heading-h2--no-margin
-          - if !@company.number_of_offices.nil?
-            = @company.number_of_offices
+          - if @company.company_data.number_of_offices.present?
+            = @company.company_data.number_of_offices
           - else
             | N/A
         h4.heading-h4
@@ -55,7 +55,7 @@
 
       .profile__stats.profile__stats--33
         h2.heading-h2.heading-h2--no-margin
-          = @company.established_in ? Time.now.year - @company.established_in : "N/A"
+          = @company.company_data.established_in.present? ? Time.now.year - @company.company_data.established_in : "N/A"
         h4.heading-h4
           | Exp (yrs)
 
@@ -70,25 +70,25 @@
 
       .profile__stats.profile__stats--33
         h2.heading-h2.heading-h2--no-margin
-          = number_to_human(@company.profile_views, :format => '%n%u', :precision => 3, :units => { :thousand => 'K', :million => 'M', :billion => 'B' })
+          = number_to_human(@company.company_data.profile_views, :format => '%n%u', :precision => 3, :units => { :thousand => 'K', :million => 'M', :billion => 'B' })
         h4.heading-h4
           | Views
 
   .grid-cell.grid-cell--50
     h3.heading-h3 About
     p
-      - if @company.description.nil?
+      - if @company.company_data.description.nil?
         | This company has not yet added a description.
       - else
-        = @company.description
+        = @company.company_data.description
 
     h3.heading-h3 Stats
     p
-      = @company.established_in ? "#{Time.now.year - @company.established_in} years in business" : "N/A"
+      = @company.company_data.established_in ? "#{Time.now.year - @company.company_data.established_in} years in business" : "N/A"
 
     h3.heading-h3 Employees
     p
-      = @company.number_of_employees ? "#{t(@company.number_of_employees)} employees" : "N/A"
+      = @company.company_data.number_of_employees ? "#{t(@company.company_data.number_of_employees)} employees" : "N/A"
 
     h3.heading-h3 AV Projects Completed
     p
@@ -128,45 +128,45 @@
 
   .grid-cell.grid-cell--50
     h3.heading-h3 Specialties
-    - if !@company.job_types.nil? and @company.job_types.kind_of?(Hash)
+    - if @company.company_data.job_types.present? and @company.company_data.job_types.kind_of?(Hash)
       h4.heading-h4 Job Types
       div
-        - @company.job_types.each do |index, value|
+        - @company.company_data.job_types.each do |index, value|
           .tag.tag--grey
             = I18n.t("enumerize.job_types.#{index}")
 
-    - if !@company.job_markets.nil? and @company.job_markets.kind_of?(Hash)
+    - if @company.company_data.job_markets.present? and @company.company_data.job_markets.kind_of?(Hash)
       h4.heading-h4 Job Markets
       div
-        - if !@company.job_markets_for_job_type("system_integration").empty? and !@company.job_types.nil? and @company.job_types.include?("system_integration")
+        - if !@company.job_markets_for_job_type("system_integration").empty? and @company.company_data.job_types.present? and @company.company_data.job_types.include?("system_integration")
           h5.heading-h5 System Integration
           - @company.job_markets_for_job_type("system_integration").each do |value|
             .tag.tag--grey
               = value
-        - if !@company.job_markets_for_job_type("live_events_staging_and_rental").empty? and !@company.job_types.nil? and @company.job_types.include?("live_events_staging_and_rental")
+        - if !@company.job_markets_for_job_type("live_events_staging_and_rental").empty? and @company.company_data.job_types.present? and @company.company_data.job_types.include?("live_events_staging_and_rental")
           h5.heading-h5 Live Events Staging & Rental
           - @company.job_markets_for_job_type("live_events_staging_and_rental").each do |value|
             .tag.tag--grey
               = value
 
-    - if !@company.technical_skill_tags.nil? and @company.technical_skill_tags.kind_of?(Hash)
+    - if @company.company_data.technical_skill_tags.present? and @company.company_data.technical_skill_tags.kind_of?(Hash)
       h4.heading-h4 Technical Skill Tags
       div
-        - @company.technical_skill_tags.each do |index, value|
+        - @company.company_data.technical_skill_tags.each do |index, value|
           .tag.tag--grey
             = I18n.t("enumerize.technical_skill_tags.#{index}")
 
-    - if !@company.manufacturer_tags.nil? and @company.manufacturer_tags.kind_of?(Hash)
+    - if @company.company_data.manufacturer_tags.present? and @company.company_data.manufacturer_tags.kind_of?(Hash)
       h4.heading-h4 Manufacturer Tags
       div
-        - @company.manufacturer_tags.each do |index, value|
+        - @company.company_data.manufacturer_tags.each do |index, value|
           .tag.tag--grey
             = I18n.t("enumerize.manufacturer_tags.#{index}")
 
-  - if current_admin.present?
-    - if @company.user.confirmed_at.nil? && @company.user.confirmation_token.present?
+  - if current_user.present? && current_user.is_a?(Admin)
+    - if @company.confirmed_at.nil? && @company.confirmation_token.present?
       .grid-cell.grid-cell--100
         .confirmation_link
           .confirmation_label
           strong<> Confirmation Link:
-          = confirmation_url(@company.user, confirmation_token: @company.user.confirmation_token)
+          = confirmation_url(@company, confirmation_token: @company.confirmation_token)

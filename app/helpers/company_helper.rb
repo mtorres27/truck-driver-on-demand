@@ -4,7 +4,7 @@ module CompanyHelper
       return []
     end
 
-    c = company.rating
+    c = company.company_data.rating
     c = Company.avg_rating(company)
 
     rating = (c*2.0).round / 2.0
