@@ -63,7 +63,7 @@ class RemoveDeviseFromFreelancers < ActiveRecord::Migration[5.1]
 
     add_foreign_key :applicants, :users, column: :freelancer_id
     add_foreign_key :company_reviews, :users, column: :freelancer_id
-    add_foreign_key :freelancer_reviews, :freelancer_datas, column: :freelancer_id
+    add_foreign_key :freelancer_reviews, :users, column: :freelancer_id
   end
 
   def self.down

@@ -69,18 +69,15 @@
 #  confirmation_sent_at      :datetime
 #
 
-class Company < ApplicationRecord
+class Company < User
   extend Enumerize
   include PgSearch
-  include Geocodable
   include Disableable
-  include AvatarUploader[:avatar]
-  include ProfileHeaderUploader[:profile_header]
 
   belongs_to :plan, foreign_key: 'plan_id', optional: true
 
+  has_one :company_data, dependent: :destroy
   has_many :projects, -> { order(updated_at: :desc) }, dependent: :destroy
-  has_many :jobs, dependent: :destroy
   has_many :applicants, dependent: :destroy
   has_many :quotes, dependent: :destroy
   has_many :payments, dependent: :destroy
@@ -205,14 +202,6 @@ class Company < ApplicationRecord
     return company.rating
   end
 
-  after_save :check_if_should_do_geocode
-  def check_if_should_do_geocode
-    if saved_changes.include?("address") or saved_changes.include?("city") or (!address.nil? and lat.nil?) or (!city.nil? and lat.nil?)
-      do_geocode
-      update_columns(lat: lat, lng: lng)
-    end
-  end
-
   def reject_featured_projects(attrs)
     exists = attrs["id"].present?
     empty = attrs["file"].blank? and attrs["name"].blank?
@@ -252,7 +241,7 @@ class Company < ApplicationRecord
   end
 
   def registration_completed?
-    registration_step == "wicked_finish"
+    company_data.registration_step == "wicked_finish" if company_data
   end
 
   def profile_form_filled?
@@ -276,15 +265,15 @@ class Company < ApplicationRecord
   end
 
   def step_profile?
-    registration_step == "profile"
+    company_data.registration_step == "profile" if company_data
   end
 
   def step_job_info?
-    registration_step == "job_info"
+    company_data.registration_step == "job_info" if company_data
   end
 
   def set_default_step
-    self.registration_step ||= "personal"
+    company_data.registration_step ||= "personal" if company_data
   end
 
   def set_name
