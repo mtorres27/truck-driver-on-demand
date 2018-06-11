@@ -26,7 +26,7 @@
               - @jobs.each do |job|
                 option value="#{job.id}"
                   | #{job.title}
-            .btn.btn--primary id="job_invite_button" style="cursor: pointer" onclick="submitInvitation()" class="btn btn--primary btn--primary--disabled"
+            .btn.btn--primary id="job_invite_button" style="cursor: pointer" onclick="submitInvitation(#{@freelancer.id})" class="btn btn--primary btn--primary--disabled"
               div invite
 
             span.popover-response--error
