@@ -1,7 +1,7 @@
 - has_avatar_class = freelancer.avatar_url == "avatar/missing.png"  ? "freelancer_without_avatar" : "freelancer_with_avatar"
 a.list-item.list-item--freelancer href="/company/freelancers/#{freelancer.id}" class="#{has_avatar_class}"
 
-  .list__img class="#{freelancer.avatar_data.present? ? "" : "initials__img"}"
+  .list__img
     - if is_favourite(freelancer)
       .list__fav
         span.zmdi.zmdi-favorite
@@ -10,7 +10,6 @@ a.list-item.list-item--freelancer href="/company/freelancers/#{freelancer.id}" c
       = image_tag(freelancer.avatar_url, size: "75x75")
     - else
       .circle_profile__image.freelancer__image= freelancer.name_initials
-
 
   .list__group
     .list__title
