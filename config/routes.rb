@@ -186,4 +186,6 @@ Rails.application.routes.draw do
 
     resources :new_registrants, only: [:index]
   end
+
+  get "*any", via: :all, to: "errors#not_found"
 end
