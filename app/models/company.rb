@@ -28,6 +28,7 @@ class Company < User
   belongs_to :plan, foreign_key: 'plan_id', optional: true
 
   has_many :projects, -> { order(updated_at: :desc) }, dependent: :destroy
+  has_many :jobs, dependent: :destroy
   has_many :applicants, dependent: :destroy
   has_many :quotes, dependent: :destroy
   has_many :payments, dependent: :destroy
@@ -172,7 +173,7 @@ class Company < User
   end
 
   def name_initials
-    name.blank? ? email[0].upcase : name.split.map(&:first).map(&:upcase).join
+    company_data.name.blank? ? email[0].upcase : company_data.name.split.map(&:first).map(&:upcase).join
   end
 
   private

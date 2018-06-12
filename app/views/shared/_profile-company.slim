@@ -3,7 +3,7 @@
     .profile__meta__details__1-1
       .profile__meta__image
         - if @company.company_data.avatar_data.nil?
-          .circle_profile__image.company__image= @company.company_data.name_initials
+          .circle_profile__image.company__image= @company.name_initials
         - else
           = image_tag(@company.company_data.avatar_url, size: "75x75")
       .profile__meta__info

@@ -29,6 +29,8 @@ class Freelancer::ProfilesController < Freelancer::BaseController
 
   def freelancer_params
     params.require(:freelancer).permit(
+      :id,
+      :email,
       :name,
       :country,
       :verified,
@@ -67,7 +69,6 @@ class Freelancer::ProfilesController < Freelancer::BaseController
       freelancer_insurances_attributes: [:id, :name, :description, :image, :_destroy],
       freelancer_clearances_attributes: [:id, :description, :image, :_destroy],
       freelancer_portfolios_attributes: [:id, :name, :image, :_destroy],
-      user_attributes: [:id, :email]
     )
   end
 end

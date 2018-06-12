@@ -39,12 +39,12 @@ class Admin::CompaniesController < Admin::BaseController
   end
 
   def enable
-    @company.enable!
+    @company.company_data.enable!
     redirect_to admin_companies_path, notice: "Company enabled."
   end
 
   def disable
-    @company.disable!
+    @company.company_data.disable!
     redirect_to admin_companies_path, notice: "Company disabled."
   end
 
@@ -75,6 +75,7 @@ class Admin::CompaniesController < Admin::BaseController
         :id,
         :email,
         company_data_attributes: [
+            :id,
             :name,
             :avatar,
             :contact_name,

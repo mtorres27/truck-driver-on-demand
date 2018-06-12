@@ -26,7 +26,6 @@ require 'net/http'
 require 'uri'
 
 class Freelancer < User
-  extend Enumerize
   include PgSearch
   include EasyPostgis
 
@@ -63,12 +62,6 @@ class Freelancer < User
 
   has_many :company_favourites
   has_many :favourite_companies, through: :company_favourites, source: :company
-
-  serialize :job_types
-  serialize :job_markets
-  serialize :technical_skill_tags
-  serialize :job_functions
-  serialize :manufacturer_tags
 
   validates :years_of_experience, numericality: { only_integer: true }
 
@@ -110,31 +103,6 @@ class Freelancer < User
   }, using: {
       tsearch: { prefix: true }
   }
-
-  enumerize :pay_unit_time_preference, in: [
-    :fixed, :hourly, :daily
-  ]
-
-  enumerize :freelancer_type, in: [
-    :independent, :service_provider
-  ]
-
-  enumerize :freelancer_team_size, in: [
-    :less_than_five,
-    :six_to_ten,
-    :eleven_to_twenty,
-    :twentyone_to_thirty,
-    :more_than_thirty
-  ]
-
-  enumerize :header_source, in: [
-    :color,
-    :wallpaper
-  ]
-
-  enumerize :country, in: [
-    :at, :au, :be, :ca, :ch, :de, :dk, :es, :fi, :fr, :gb, :hk, :ie, :it, :jp, :lu, :nl, :no, :nz, :pt, :se, :sg, :us
-  ]
 
   def rating
     if freelancer_reviews.count > 0
@@ -255,7 +223,7 @@ class Freelancer < User
   end
 
   def name_initials
-    name.blank? ? email[0].upcase : name.split.map(&:first).map(&:upcase).join
+    freelancer_data.name.blank? ? email[0].upcase : freelancer_data.name.split.map(&:first).map(&:upcase).join
   end
 
   private

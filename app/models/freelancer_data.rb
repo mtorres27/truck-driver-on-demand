@@ -61,6 +61,7 @@ require 'uri'
 class FreelancerData < ApplicationRecord
   self.table_name = "freelancer_datas"
 
+  extend Enumerize
   include Geocodable
   include AvatarUploader[:avatar]
   include ProfileHeaderUploader[:profile_header]
@@ -71,6 +72,37 @@ class FreelancerData < ApplicationRecord
   scope :new_registrants, -> { where(disabled: true) }
 
   after_save :check_if_should_do_geocode
+
+  serialize :job_types
+  serialize :job_markets
+  serialize :technical_skill_tags
+  serialize :job_functions
+  serialize :manufacturer_tags
+
+  enumerize :pay_unit_time_preference, in: [
+      :fixed, :hourly, :daily
+  ]
+
+  enumerize :freelancer_type, in: [
+      :independent, :service_provider
+  ]
+
+  enumerize :freelancer_team_size, in: [
+      :less_than_five,
+      :six_to_ten,
+      :eleven_to_twenty,
+      :twentyone_to_thirty,
+      :more_than_thirty
+  ]
+
+  enumerize :header_source, in: [
+      :color,
+      :wallpaper
+  ]
+
+  enumerize :country, in: [
+      :at, :au, :be, :ca, :ch, :de, :dk, :es, :fi, :fr, :gb, :hk, :ie, :it, :jp, :lu, :nl, :no, :nz, :pt, :se, :sg, :us
+  ]
 
   def check_if_should_do_geocode
     if saved_changes.include?("address") or saved_changes.include?("city") or (!address.nil? and lat.nil?) or (!city.nil? and lat.nil?)

@@ -42,7 +42,7 @@ nav#top-nav.navbar
             a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"
               .dropdown-avatar
                 - if current_company.avatar_data.nil?
-                  .circle_profile__image.company__image= current_user.company_data.name_initials
+                  .circle_profile__image.company__image= current_user.name_initials
                 - else
                   = image_tag(current_user.company_data.avatar_url, size: "35x35")
               span.caret

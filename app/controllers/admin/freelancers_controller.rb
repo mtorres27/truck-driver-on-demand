@@ -69,6 +69,7 @@ class Admin::FreelancersController < Admin::BaseController
         :id,
         :email,
         freelancer_data_attributes: [
+            :id,
             :name,
             :address,
             :line2,
@@ -87,6 +88,9 @@ class Admin::FreelancersController < Admin::BaseController
             :disabled,
             :verified,
             :special_avj_fees,
+            :header_color,
+            :profile_header,
+            :header_source,
             job_types: I18n.t("enumerize.job_types").keys,
             job_markets: (I18n.t("enumerize.live_events_staging_and_rental_job_markets").keys + I18n.t("enumerize.system_integration_job_markets").keys).uniq,
             job_functions: (I18n.t("enumerize.system_integration_job_functions").keys + I18n.t("enumerize.live_events_staging_and_rental_job_functions").keys).uniq,
