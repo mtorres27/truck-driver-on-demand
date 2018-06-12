@@ -19,7 +19,7 @@
           .in-progress.tag identity verification In progress
           p
             | Additional fields are required to complete the identity verification process, to keep your account in good standing
-            - if !@connector.account.verification.due_by.empty?
+            - if @connector.account.verification.due_by.present?
               | you need to provide these details by
               b #{Time.at(@connector.account.legal_entity.verification.due_by).to_datetime}
             | .Once this information has been confirmed you will be able to accept payments from AV Companies through AV Junction.
