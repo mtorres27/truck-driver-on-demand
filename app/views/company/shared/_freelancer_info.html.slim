@@ -5,12 +5,11 @@ a.list-item.list-item--freelancer href="/company/freelancers/#{freelancer.id}" c
     - if is_favourite(freelancer)
       .list__fav
         span.zmdi.zmdi-favorite
-    .list__img-overlay
-    - if freelancer.avatar_url
+    - if freelancer.avatar_data.present?
+      .list__img-overlay
       = image_tag(freelancer.avatar_url, size: "75x75")
     - else
-      img src="/assets/avatar/missing.png"
-
+      .circle_profile__image.freelancer__image= freelancer.name_initials
 
   .list__group
     .list__title
