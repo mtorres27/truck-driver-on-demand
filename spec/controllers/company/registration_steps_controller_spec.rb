@@ -2,16 +2,23 @@ require "rails_helper"
 
 RSpec.describe Company::RegistrationStepsController, type: :controller do
   describe "GET #show" do
-    let(:company) { create(:company) }
-
-    before do
-     sign_in company
-    end
-
     describe "step: personal" do
-      it "renders personal template" do
-        get :show, params: { id: :personal }
-        expect(response).to render_template('company/registration_steps/personal')
+      let(:company) { create(:company) }
+
+      context "when current_company exists" do
+        before { sign_in company }
+
+        it "renders personal template" do
+          get :show, params: { id: :personal }
+          expect(response).to render_template('company/registration_steps/personal')
+        end
+      end
+
+      context "when current_company does not exist" do
+        it "renders personal template" do
+          get :show, params: { id: :personal }
+          expect(response).to redirect_to(new_company_session_path)
+        end
       end
     end
   end

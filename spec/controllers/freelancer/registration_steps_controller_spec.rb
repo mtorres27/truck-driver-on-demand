@@ -2,16 +2,23 @@ require "rails_helper"
 
 RSpec.describe Freelancer::RegistrationStepsController, type: :controller do
   describe "GET #show" do
-    let(:freelancer) { create(:freelancer) }
-
-    before do
-      sign_in freelancer
-    end
-
     describe "step: personal" do
-      it "renders personal template" do
-        get :show, params: { id: :personal }
-        expect(response).to render_template('freelancer/registration_steps/personal')
+      let(:freelancer) { create(:freelancer) }
+
+      context "when current_freelancer exists" do
+        before { sign_in freelancer }
+
+        it "renders personal template" do
+          get :show, params: { id: :personal }
+          expect(response).to render_template('freelancer/registration_steps/personal')
+        end
+      end
+
+      context "when current_freelancer does not exist" do
+        it "redirects to freelancer login page" do
+          get :show, params: { id: :personal }
+          expect(response).to redirect_to(new_freelancer_session_path)
+        end
       end
     end
   end
