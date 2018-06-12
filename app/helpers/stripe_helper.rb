@@ -19,6 +19,7 @@ module StripeHelper
     'legal_entity.personal_address.postal_code' => {'title' => 'Postal/ZIP Code' , 'placeholder' => 'Enter your Postal/ZIP Code'},
     'legal_entity.personal_address.state' => {'title' => 'Home State/Province/County' , 'placeholder' => 'Home State/Province/County'},
     'legal_entity.additional_owners' => {'title' => 'Additional Owners' , 'placeholder' => 'Enter any Additional Owners'},
+    'legal_entity.ssn_last_4' => {'title' => 'SSN Last 4', 'placeholder' => 'Enter your Social Secury last 4 digits' },
   }
 
   def pretty_name(field, type='title')

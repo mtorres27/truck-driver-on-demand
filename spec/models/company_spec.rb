@@ -135,4 +135,20 @@ describe Company, type: :model do
       end
     end
   end
+
+  describe "#name_initials" do
+    subject { company.name_initials }
+
+    context "when company does not have a name" do
+      let(:company) { create(:company, email: "company@test.com", name: nil) }
+
+      it { is_expected.to eq("C") }
+    end
+
+    context "when company has a name" do
+      let(:company) { create(:freelancer, name: "ACME Co.") }
+
+      it { is_expected.to eq("AC") }
+    end
+  end
 end

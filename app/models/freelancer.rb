@@ -254,6 +254,10 @@ class Freelancer < User
     freelancer_data.avatar.present? && bio.present? && tagline.present? if freelancer_data
   end
 
+  def name_initials
+    name.blank? ? email[0].upcase : name.split.map(&:first).map(&:upcase).join
+  end
+
   private
 
   def add_to_hubspot

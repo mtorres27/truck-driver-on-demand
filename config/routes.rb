@@ -35,6 +35,7 @@ Rails.application.routes.draw do
       post :add_favourites, on: :collection
       get :my_jobs, on: :collection
       get :my_applications, on: :collection
+      get :job_matches, on: :collection
       post :apply, on: :collection
 
       resources :application, only: [:index, :create]
@@ -130,6 +131,7 @@ Rails.application.routes.draw do
       end
       resource :review, only: [:show, :create]
       get :contract_invoice, on: :member
+      get :freelancer_matches, on: :member
     end
 
     get "jobs/:id/publish", to: "jobs#publish"

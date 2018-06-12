@@ -171,6 +171,10 @@ class Company < User
     number_of_employees.present? && number_of_offices.present? && website.present?
   end
 
+  def name_initials
+    name.blank? ? email[0].upcase : name.split.map(&:first).map(&:upcase).join
+  end
+
   private
 
   def add_to_hubspot
