@@ -1,7 +1,7 @@
 module FreelancerHelper
 
   def freelancer_avg_rating(freelancer)
-    if freelancer.freelancer_reviews_count == 0
+    if freelancer.freelancer_reviews.count == 0
       return []
     end
 
@@ -30,7 +30,7 @@ module FreelancerHelper
 
 
   def company_avg_rating(company)
-    if company.company_reviews_count == 0
+    if company.company_reviews.count == 0
       return []
     end
 
@@ -64,7 +64,7 @@ module FreelancerHelper
 
 
   def freelancer_ratings_link(freelancer)
-    "#{freelancer.freelancer_reviews_count} Review#{freelancer.freelancer_reviews_count == 1 ? '' : 's'}"
+    "#{freelancer.freelancer_reviews.count} Review#{freelancer.freelancer_reviews.count == 1 ? '' : 's'}"
   end
 
 

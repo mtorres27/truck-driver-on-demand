@@ -4,8 +4,9 @@ h1 Editing Company
   = f.error_notification
 
   = render "/company/profiles/edit_company_profile", f: f
-  = f.input :disabled
-  = f.input :waived_jobs
+  = f.simple_fields_for :company_data do |data_form|
+    = data_form.input :disabled
+    = data_form.input :waived_jobs
 
   .form-actions
     = f.button :submit, class: "btn btn-primary"
@@ -39,8 +40,8 @@ javascript:
   }
 
   var updateProfilePicture = function() {
-    $("#edit-company-profile-avatar").click();
-    $("#edit-company-profile-avatar").on('change', function() {
+    $(".edit-company-profile-avatar").click();
+    $(".edit-company-profile-avatar").on('change', function() {
       var imgPath = $(this)[0].value;
       var extn = imgPath.substring(imgPath.lastIndexOf('.') + 1).toLowerCase();
       var image_holder = $("#company-edit-profile__avatar");

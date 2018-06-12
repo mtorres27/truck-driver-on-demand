@@ -1,6 +1,6 @@
 module CompanyHelper
   def company_avg_rating(company)
-    if company.company_reviews_count == 0
+    if company.company_reviews.count == 0
       return []
     end
 
@@ -30,7 +30,7 @@ module CompanyHelper
 
 
   def company_ratings_link(company)
-    "#{company.company_reviews_count} Review#{company.company_reviews_count == 1 ? '' : 's'}"
+    "#{company.company_reviews.count} Review#{company.company_reviews.count == 1 ? '' : 's'}"
   end
 
 

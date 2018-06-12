@@ -15,8 +15,7 @@
           .grid-cell.grid-cell--100
             = f.input :name, required: true, label: "Full Name", placeholder: "Enter your Name."
           .grid-cell.grid-cell--100
-            = f.simple_fields_for :user do |user_form|
-              = user_form.input :email, as: :string, required: true, label: "Email Address", placeholder: "Email"
+            = f.input :email, as: :string, required: true, label: "Email Address", placeholder: "Email"
           .grid-cell.grid-cell--100
             = f.input :phone_number, as: :string, required: true, label: "Phone Number", placeholder: "Phone Number"
   .grid-cell.grid-cell--100
@@ -44,14 +43,14 @@
             - else
               option.freelancer_us_option(value="#{index}")
                 = value
-          = CS.states(:ca).each do |index, value|
-            - selected = (!@freelancer.state.nil? and @freelancer.state == index.to_s)
-            - if selected
-              option.freelancer_ca_option(value="#{index}" selected)
-                = value
-            - else
-              option.freelancer_ca_option(value="#{index}")
-                = value
+              = CS.states(:ca).each do |index, value|
+                - selected = (!@freelancer.state.nil? and @freelancer.state == index.to_s)
+                - if selected
+                  option.freelancer_ca_option(value="#{index}" selected)
+                    = value
+                - else
+                  option.freelancer_ca_option(value="#{index}")
+                    = value
       .grid-cell.grid-cell--50
         = f.input :postal_code, required: true, label: "ZIP/Postal Code", prompt: "ZIP/Postal Code"
       .grid-cell.grid-cell--50
@@ -65,7 +64,7 @@
       .grid-cell.grid-cell--100
         = f.input :tagline, required: true, label: "Describe yourself in one sentence, your \"tagline\"", placeholder: "Tagline"
       .grid-cell.grid-cell--100.grid-cell--expand
-        = f.input :bio, required: true, label: "Close the deal with a killer biography", placeholder: "Write a bio", :input_html => { :class => 'form__profile-bio-textarea' }
+        = f.input :bio, required: true, label: "Close the deal with a killer biography", placeholder: "Write a bio", :input_html => {:class => 'form__profile-bio-textarea'}
       .grid-cell.grid-cell--100
         = f.input :company_name, required: false, label: "Are you working with a company?", placeholder: "Company Name"
       .grid-cell.grid-cell--100
@@ -251,7 +250,7 @@
         = f.simple_fields_for :freelancer_affiliations do |freelancer_affiliation_form|
           = render "/freelancer/profiles/freelancer_affiliation_fields", f: freelancer_affiliation_form
         .links.add-new-affiliation
-          = link_to_add_association 'Add Another', f, :freelancer_affiliations, partial: '/freelancer/profiles/freelancer_affiliation_fields',class: "btn btn--secondary"
+          = link_to_add_association 'Add Another', f, :freelancer_affiliations, partial: '/freelancer/profiles/freelancer_affiliation_fields', class: "btn btn--secondary"
   .grid-cell.grid-cell--100
     hr/
   .grid-cell.grid-cell--33
@@ -263,7 +262,7 @@
         = f.simple_fields_for :freelancer_clearances do |freelancer_clearance_form|
           = render "/freelancer/profiles/freelancer_clearance_fields", f: freelancer_clearance_form
         .links.add-new-clearance
-          = link_to_add_association 'Add Another', f, :freelancer_clearances, partial: '/freelancer/profiles/freelancer_clearance_fields',class: "btn btn--secondary"
+          = link_to_add_association 'Add Another', f, :freelancer_clearances, partial: '/freelancer/profiles/freelancer_clearance_fields', class: "btn btn--secondary"
   .grid-cell.grid-cell--100
     hr/
   .grid-cell.grid-cell--33
@@ -275,7 +274,7 @@
         = f.simple_fields_for :freelancer_portfolios do |freelancer_portfolio_form|
           = render "/freelancer/profiles/freelancer_portfolio_fields", f: freelancer_portfolio_form
         .links.add-new-portfolio
-          = link_to_add_association 'Add Another', f, :freelancer_portfolios, partial: '/freelancer/profiles/freelancer_portfolio_fields',class: "btn btn--secondary"
+          = link_to_add_association 'Add Another', f, :freelancer_portfolios, partial: '/freelancer/profiles/freelancer_portfolio_fields', class: "btn btn--secondary"
   .grid-cell.grid-cell--100
     hr/
   .grid-cell.grid-cell--33
@@ -287,7 +286,7 @@
         = f.simple_fields_for :freelancer_insurances do |freelancer_insurance_form|
           = render "/freelancer/profiles/freelancer_insurance_fields", f: freelancer_insurance_form
         .links.add-new-insurance
-          = link_to_add_association 'Add Another', f, :freelancer_insurances, partial: '/freelancer/profiles/freelancer_insurance_fields',class: "btn btn--secondary"
+          = link_to_add_association 'Add Another', f, :freelancer_insurances, partial: '/freelancer/profiles/freelancer_insurance_fields', class: "btn btn--secondary"
   .grid-cell.grid-cell--100
     hr/
   .grid-cell.grid-cell--33
@@ -306,4 +305,3 @@
       .grid-cell.grid-cell--50
         = f.input :header_source, label: "Display color/wallpaper in header", prompt: "Select"
   .grid-cell.grid-cell--33
-

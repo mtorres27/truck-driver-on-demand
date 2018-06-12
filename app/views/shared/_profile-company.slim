@@ -116,7 +116,7 @@
     h3.heading-h3 Reviews
     a name="reviews"
     .profile__reviews-value
-      - if @company.company_reviews_count > 0
+      - if @company.company_reviews.count > 0
         .profile__reviews__review
         - @company.company_reviews.each do |review|
           .profile__reviews__review-text

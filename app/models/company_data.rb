@@ -59,15 +59,37 @@
 class CompanyData < ApplicationRecord
   self.table_name = "company_datas"
 
+  extend Enumerize
   include Geocodable
   include AvatarUploader[:avatar]
   include ProfileHeaderUploader[:profile_header]
+  include Disableable
 
   belongs_to :company
 
   scope :new_registrants, -> { where(disabled: true) }
 
   after_save :check_if_should_do_geocode
+
+  enumerize :contract_preference, in: [:prefer_fixed, :prefer_hourly, :prefer_daily]
+  enumerize :number_of_employees, in: [
+      :one_to_ten,
+      :eleven_to_one_hundred,
+      :one_hundred_one_to_one_thousand,
+      :more_than_one_thousand
+  ]
+  enumerize :country, in: [
+      :at, :au, :be, :ca, :ch, :de, :dk, :es, :fi, :fr, :gb, :hk, :ie, :it, :jp, :lu, :nl, :no, :nz, :pt, :se, :sg, :us
+  ]
+  enumerize :header_source, in: [
+      :color,
+      :wallpaper
+  ]
+
+  serialize :job_types
+  serialize :job_markets
+  serialize :technical_skill_tags
+  serialize :manufacturer_tags
 
   def check_if_should_do_geocode
     if saved_changes.include?("address") or saved_changes.include?("city") or (!address.nil? and lat.nil?) or (!city.nil? and lat.nil?)

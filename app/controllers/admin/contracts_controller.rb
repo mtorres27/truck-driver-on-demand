@@ -4,8 +4,8 @@ class Admin::ContractsController < Admin::BaseController
   def show
     @accepted_quote = @job.accepted_quote
     # Should be deleted
-    if @job.freelancer.stripe_account_id
-      account = Stripe::Account.retrieve(@job.freelancer.stripe_account_id)
+    if @job.freelancer.freelancer_data.stripe_account_id
+      account = Stripe::Account.retrieve(@job.freelancer.freelancer_data.stripe_account_id)
       account.payout_schedule.interval = 'manual'
       account.save
     else
@@ -32,7 +32,7 @@ class Admin::ContractsController < Admin::BaseController
         @m.authorable = @job.company
         @m.receivable = @job.freelancer
         @m.send_contract = true
-        @m.body = "Hi #{@job.freelancer.name}! This is a note to let you know that we've just sent a work order to you. <a href='/freelancer/jobs/#{@job.id}/work_order'>Click here</a> to view it!"
+        @m.body = "Hi #{@job.freelancer.freelancer_data.name}! This is a note to let you know that we've just sent a work order to you. <a href='/freelancer/jobs/#{@job.id}/work_order'>Click here</a> to view it!"
         @m.save
         FreelancerMailer.notice_work_order_received(@job.company, @job.freelancer, @job).deliver_later
 

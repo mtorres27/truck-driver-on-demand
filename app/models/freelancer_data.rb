@@ -64,6 +64,7 @@ class FreelancerData < ApplicationRecord
   include Geocodable
   include AvatarUploader[:avatar]
   include ProfileHeaderUploader[:profile_header]
+  include Disableable
 
   belongs_to :freelancer
 

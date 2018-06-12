@@ -51,7 +51,7 @@ class StripeAccount < Struct.new( :freelancer )
     end
 
     if @account
-      freelancer.update_attributes(
+      freelancer.freelancer_data.update_attributes(
         currency: @account.default_currency,
         stripe_account_id: @account.id,
         stripe_account_status: account_status(@account)
@@ -90,18 +90,18 @@ class StripeAccount < Struct.new( :freelancer )
       end
     end
 
-    freelancer.update_attributes(
+    freelancer.freelancer_data.update_attributes(
       stripe_account_status: account_status
     )
   end
 
   def add_bank_account(token)
-    account = Stripe::Account.retrieve(freelancer.stripe_account_id)
+    account = Stripe::Account.retrieve(freelancer.freelancer_data.stripe_account_id)
     account.external_accounts.create(external_account: token)
   end
 
   def needs?(field)
-    freelancer.stripe_account_status['fields_needed'].grep(Regexp.new(/#{field}/i)).any?
+    freelancer.freelancer_data.stripe_account_status['fields_needed'].grep(Regexp.new(/#{field}/i)).any?
   end
 
   def account_status(account)
@@ -114,7 +114,7 @@ class StripeAccount < Struct.new( :freelancer )
   end
 
   def account
-    freelancer.stripe_account_id ? Stripe::Account.retrieve(freelancer.stripe_account_id) : nil
+    freelancer.freelancer_data.stripe_account_id ? Stripe::Account.retrieve(freelancer.freelancer_data.stripe_account_id) : nil
   end
 
   def legal_entity
@@ -122,12 +122,12 @@ class StripeAccount < Struct.new( :freelancer )
   end
 
   def country
-    COUNTRIES.find { |hash| hash[:code] == freelancer.country.upcase }
+    COUNTRIES.find { |hash| hash[:code] == freelancer.freelancer_data.country.upcase }
   end
 
   def verified?
-    return false if freelancer.stripe_account_id.nil? || freelancer.stripe_account_id.empty?
-    account = Stripe::Account.retrieve(freelancer.stripe_account_id)
+    return false if freelancer.freelancer_data.stripe_account_id.nil? || freelancer.freelancer_data.stripe_account_id.empty?
+    account = Stripe::Account.retrieve(freelancer.freelancer_data.stripe_account_id)
     account.legal_entity.verification.status == 'verified'
   end
 end

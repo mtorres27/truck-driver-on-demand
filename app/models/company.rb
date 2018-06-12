@@ -23,13 +23,10 @@
 #
 
 class Company < User
-  extend Enumerize
   include PgSearch
-  include Disableable
 
   belongs_to :plan, foreign_key: 'plan_id', optional: true
 
-  has_one :company_data, dependent: :destroy
   has_many :projects, -> { order(updated_at: :desc) }, dependent: :destroy
   has_many :applicants, dependent: :destroy
   has_many :quotes, dependent: :destroy
@@ -41,6 +38,8 @@ class Company < User
   has_many :favourites
   has_many :favourite_freelancers, through: :favourites, source: :freelancer
   has_many :company_installs, dependent: :destroy
+  has_one :company_data, dependent: :destroy
+  accepts_nested_attributes_for :company_data
 
   attr_accessor :accept_terms_of_service, :accept_privacy_policy, :accept_code_of_conduct,
                 :first_name, :last_name, :enforce_profile_edit, :user_type
@@ -53,29 +52,6 @@ class Company < User
   validates :first_name, :last_name, :name, :country, :city, presence: true, on: :update,  if: :step_job_info?
   validates :job_types, presence: true, on: :update, if: :step_profile?
   validates :avatar, :description, :established_in, :number_of_employees, :number_of_offices, :website, :area, presence: true, on: :update, if: :confirmed_company?
-
-  enumerize :contract_preference, in: [:prefer_fixed, :prefer_hourly, :prefer_daily]
-
-  enumerize :number_of_employees, in: [
-    :one_to_ten,
-    :eleven_to_one_hundred,
-    :one_hundred_one_to_one_thousand,
-    :more_than_one_thousand
-  ]
-
-  serialize :job_types
-  serialize :job_markets
-  serialize :technical_skill_tags
-  serialize :manufacturer_tags
-
-  enumerize :country, in: [
-    :at, :au, :be, :ca, :ch, :de, :dk, :es, :fi, :fr, :gb, :hk, :ie, :it, :jp, :lu, :nl, :no, :nz, :pt, :se, :sg, :us
-  ]
-
-  enumerize :header_source, in: [
-    :color,
-    :wallpaper
-  ]
 
   accepts_nested_attributes_for :featured_projects, allow_destroy: true, reject_if: :reject_featured_projects
   accepts_nested_attributes_for :company_installs, allow_destroy: true, reject_if: :reject_company_installs
@@ -141,7 +117,7 @@ class Company < User
   end
 
   def self.avg_rating(company)
-    if company.company_reviews_count == 0
+    if company.company_reviews.count == 0
       return nil
     end
 

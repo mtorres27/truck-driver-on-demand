@@ -28,18 +28,18 @@ require 'uri'
 class Freelancer < User
   extend Enumerize
   include PgSearch
-  include Disableable
   include EasyPostgis
 
   attr_accessor :first_name, :last_name, :accept_terms_of_service, :accept_privacy_policy,
                  :accept_code_of_conduct, :enforce_profile_edit, :user_type
-
-  has_one :freelancer_data, dependent: :destroy
   has_many :applicants, -> { order(updated_at: :desc) }, dependent: :destroy
   has_many :jobs, through: :applicants
   has_many :messages, -> { order(created_at: :desc) }, as: :authorable, dependent: :destroy
   has_many :company_reviews, dependent: :destroy
   has_many :freelancer_reviews, dependent: :nullify
+  has_one :freelancer_data, dependent: :destroy
+  accepts_nested_attributes_for :freelancer_data
+
   has_many :certifications, -> { order(updated_at: :desc) }, dependent: :destroy
   accepts_nested_attributes_for :certifications, allow_destroy: true, reject_if: :reject_certification
 
@@ -209,7 +209,7 @@ class Freelancer < User
   end
 
   def self.avg_rating(freelancer)
-    if freelancer.freelancer_reviews_count == 0
+    if freelancer.freelancer_reviews.count == 0
       return nil
     end
 
