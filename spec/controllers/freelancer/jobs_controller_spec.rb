@@ -84,7 +84,7 @@ describe Freelancer::JobsController, type: :controller  do
   describe 'GET job matches' do
     login_freelancer
     
-    let(:freelancer) { subject.current_freelancer } 
+    let(:freelancer) { subject.current_user }
     let(:jobs) { double("jobs") }
 
     before(:each) do

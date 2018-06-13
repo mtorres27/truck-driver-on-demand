@@ -3,7 +3,7 @@ class Freelancer::ProfilesController < Freelancer::BaseController
     if params[:id]
       @freelancer = Freelancer.find(params[:id])
     else
-      @freelancer = current_freelancer
+      @freelancer = current_user
     end
 
     # @freelancer.profile_views += 1
@@ -11,11 +11,11 @@ class Freelancer::ProfilesController < Freelancer::BaseController
   end
 
   def edit
-    @freelancer = current_freelancer
+    @freelancer = current_user
   end
 
   def update
-    @freelancer = current_freelancer
+    @freelancer = current_user
 
     if @freelancer.update(freelancer_params)
       redirect_to freelancer_profile_path(@freelancer), notice: "Freelancer profile updated."

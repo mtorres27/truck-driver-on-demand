@@ -84,7 +84,7 @@
 
 
 
-    - if @have_applied and @job.freelancer and @job.freelancer.id == current_freelancer
+    - if @have_applied and @job.freelancer&.id == current_user&.id
       .grid-cell.grid-cell--100
         h3.heading-h3 Work Order
         .billboard

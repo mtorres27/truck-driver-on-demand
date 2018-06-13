@@ -45,9 +45,9 @@ class MainController < ApplicationController
     
       if @job.freelancer.nil?
         @job = nil
-      elsif current_freelancer and @job.freelancer.id != current_freelancer.id
+      elsif current_user&.is_a?(Freelancer) and @job.freelancer.id != current_user.id
         @job = nil
-      elsif current_company and @job.company.id != current_company.id
+      elsif current_user&.is_a?(Company) and @job.company.id != current_user.id
         @job = nil
       end
       

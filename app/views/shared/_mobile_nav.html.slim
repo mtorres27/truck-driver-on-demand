@@ -13,7 +13,7 @@
     |
   .mobile-nav__menu
     - if request.path.index('freelancer') == 1
-      - if current_freelancer.nil?
+      - if current_user.nil?
         a.mobile-nav__menu__item href=new_user_session_path data-turbolinks="false"
           | Login
         a.mobile-nav__menu__item href=new_user_registration_path data-turbolinks="false"
@@ -28,7 +28,7 @@
         a.mobile-nav__menu__item href=freelancer_payments_path
           | payments
         a.mobile-nav__menu__item href=freelancer_profile_path data-turbolinks="false"
-          = image_tag current_freelancer.avatar_url
+          = image_tag current_user.freelancer_data.avatar_url
           | my profile
         = link_to "Logout", destroy_user_session_path, method: :delete, class: "mobile-nav__menu__item"
     - elsif request.path.index('company') == 1

@@ -61,8 +61,8 @@ class Freelancer::JobsController < Freelancer::BaseController
   end
 
   def favourites
-    @locations = current_freelancer.favourite_jobs.uniq.pluck(:area)
-    @jobs = current_freelancer.favourite_jobs
+    @locations = current_user.favourite_jobs.uniq.pluck(:area)
+    @jobs = current_user.favourite_jobs
 
     if params[:location] && params[:location] != ""
       @jobs = @jobs.where({ area: params[:location] })
@@ -73,11 +73,11 @@ class Freelancer::JobsController < Freelancer::BaseController
   end
 
   def apply
-    @stripe_connector = StripeAccount.new(current_freelancer)
+    @stripe_connector = StripeAccount.new(current_user)
     @applicant = Applicant.new
     @job = Job.find(params[:id])
 
-    @applicant.freelancer = current_freelancer
+    @applicant.freelancer = current_user
     @applicant.job = @job
     @applicant.company = @job.company
 
@@ -94,7 +94,7 @@ class Freelancer::JobsController < Freelancer::BaseController
             @has_quote = false
           end
         @applicant.messages << Message.create({
-          authorable: current_freelancer,
+          authorable: current_user,
           body: apply_params[:message],
           has_quote: @has_quote
         })
@@ -151,24 +151,24 @@ class Freelancer::JobsController < Freelancer::BaseController
   def show
     @job = Job.find(params[:id])
 
-    if @job.applicants.where({freelancer_id: current_freelancer.id}).count == 0
+    if @job.applicants.where({freelancer_id: current_user.id}).count == 0
       @have_applied = false
     else
       @have_applied = true
     end
 
-    @favourite = current_freelancer.job_favourites.where({job_id: params[:id]}).length > 0 ? true : false
+    @favourite = current_user.job_favourites.where({job_id: params[:id]}).length > 0 ? true : false
     if params.dig(:toggle_favourite) == "true"
       if @favourite == false
-        current_freelancer.favourite_jobs << @job
+        current_user.favourite_jobs << @job
         @favourite = true
       else
-        current_freelancer.job_favourites.where({job_id: @job.id}).destroy_all
+        current_user.job_favourites.where({job_id: @job.id}).destroy_all
         @favourite = false
       end
     end
 
-    @connector = StripeAccount.new(current_freelancer)
+    @connector = StripeAccount.new(current_user)
   end
 
 
@@ -180,12 +180,12 @@ class Freelancer::JobsController < Freelancer::BaseController
 
   def my_jobs
     @applications = []
-    current_freelancer.applicants.where.not({ state: "accepted" }).each do |applicant|
+    current_user.applicants.where.not({ state: "accepted" }).each do |applicant|
       @applications << applicant.job
     end
 
     @jobs = []
-    current_freelancer.applicants.where({ state: "accepted" }).each do |job|
+    current_user.applicants.where({ state: "accepted" }).each do |job|
       @found = false
       @applications.each do |application|
         if job.id == application.id
@@ -202,7 +202,7 @@ class Freelancer::JobsController < Freelancer::BaseController
 
   def my_applications
     @jobs = []
-    current_freelancer.applicants.where.not({state: 'accepted'}).each do |applicant|
+    current_user.applicants.where.not({state: 'accepted'}).each do |applicant|
       @jobs << { job: applicant.job, applicant: applicant }
     end
   end
@@ -230,7 +230,7 @@ class Freelancer::JobsController < Freelancer::BaseController
       c = Company.where({ id: id.to_i })
 
       if f.length > 0
-        current_freelancer.favourite_companies << c.first
+        current_user.favourite_companies << c.first
       end
     end
 
@@ -239,15 +239,15 @@ class Freelancer::JobsController < Freelancer::BaseController
 
   def job_matches
     @jobs = Job.none
-    current_freelancer.job_types.each do |index, _value|
+    current_user.freelancer_data.job_types.each do |index, _value|
       @jobs = @jobs.or(Job.where(job_type: index))
     end
     @distance = params[:search][:distance] if params[:search].present?
     @address = ''
-    @address += "#{current_freelancer.address}, " if current_freelancer.address.present?
-    @address += current_freelancer.city if current_freelancer.city.present?
-    @address += ", #{CS.states(current_freelancer.country.upcase.to_sym)[current_freelancer.state.to_sym]}" if current_freelancer.country.present?
-    @address += ", #{CS.countries[current_freelancer.country.upcase.to_sym]}" if current_freelancer.country.present?
+    @address += "#{current_user.freelancer_data.address}, " if current_user.freelancer_data.address.present?
+    @address += current_user.freelancer_data.city if current_user.freelancer_data.city.present?
+    @address += ", #{CS.states(current_user.freelancer_data.country.upcase.to_sym)[current_user.freelancer_data.state.to_sym]}" if current_user.freelancer_data.country.present?
+    @address += ", #{CS.countries[current_user.freelancer_data.country.upcase.to_sym]}" if current_user.freelancer_data.country.present?
     if @address
       # check for cached version of address
       if Rails.cache.read(@address)

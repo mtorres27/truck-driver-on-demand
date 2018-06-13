@@ -9,12 +9,12 @@ class Freelancer::ApplicationController < Freelancer::BaseController
   private
 
   def set_job
-    @job = current_freelancer.applicants.where({job_id: params[:job_id] }).first.job
+    @job = current_user.applicants.where({job_id: params[:job_id] }).first.job
   end
 
 
   def set_applicant
-    @applicant = @job.applicants.where({ freelancer_id: current_freelancer.id }).first
+    @applicant = @job.applicants.where({ freelancer_id: current_user.id }).first
   end
 
   

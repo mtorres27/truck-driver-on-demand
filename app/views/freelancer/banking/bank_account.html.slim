@@ -77,7 +77,7 @@
             else{
               var stripe = Stripe('#{Rails.configuration.stripe[:publishable_key]}');
               stripe.createToken('bank_account', {
-                country: '#{current_freelancer.country.upcase}',
+                country: '#{current_user.freelancer_data.country&.upcase}',
                 currency: holder_curreny,
                 routing_number: routing_number,
                 account_number: bank_account,

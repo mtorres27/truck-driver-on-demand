@@ -51,8 +51,8 @@ class ApplicationController < ActionController::Base
   end
 
   def redirect_to_registration_step
-    redirect_to company_registration_step_path(current_company.registration_step) if current_company
-    redirect_to freelancer_registration_step_path(current_freelancer.registration_step) if current_freelancer
+    redirect_to company_registration_step_path(current_user.company_data.registration_step) if current_user&.is_a?(Company)
+    redirect_to freelancer_registration_step_path(current_user.freelancer_data.registration_step) if current_user&.is_a?(Freelancer)
   end
 
   def do_geocode(address)

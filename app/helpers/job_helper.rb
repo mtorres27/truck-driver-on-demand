@@ -37,7 +37,7 @@ module JobHelper
     sym = job.state.to_sym
     t = job.state.text
 
-    if current_freelancer and job.applicants.where({freelancer_id: current_freelancer.id, state: "declined"}).count > 0
+    if current_user.is_a?(Freelancer) and job.applicants.where({freelancer_id: current_user.id, state: "declined"}).count > 0
       sym = :declined
       t = "declined"
     end
@@ -49,7 +49,7 @@ module JobHelper
 
 
   def is_favourite_job(job)
-    favourites = current_freelancer.job_favourites.where({job_id: job.id})
+    favourites = current_user.job_favourites.where({job_id: job.id})
 
     if favourites.count == 0
       return false

@@ -2,7 +2,7 @@
 = render partial: "/freelancer/shared/job_shared_nav", locals: { job: @job }
 
 - content_for :secondary do
-  - if @job.freelancer and @job.freelancer.id == current_freelancer.id
+  - if @job.freelancer&.id == current_user&.id
     .result-wrapper
       = simple_form_for(:message, url: freelancer_job_messages_path(@job)) do |f|
         = render partial: "freelancer/shared/new_message", locals: { f: f, n: @job.company.name, type: "message", quotes: []  }

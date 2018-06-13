@@ -10,7 +10,7 @@ class Freelancer::QuotesController < Freelancer::BaseController
 
     @message = @applicant.messages.new(message_params)
     @message.has_quote = true
-    @message.authorable = current_freelancer
+    @message.authorable = current_user
     
     if @message.save
       if params[:message][:status] == "negotiate"
@@ -55,18 +55,18 @@ class Freelancer::QuotesController < Freelancer::BaseController
         @message.quote_id = @new_quote.id
         @message.save
 
-        CompanyMailer.notice_received_negociated_quote_from_freelancer(@job.company, current_freelancer, @new_quote, @job).deliver_later
+        CompanyMailer.notice_received_negociated_quote_from_freelancer(@job.company, current_user, @new_quote, @job).deliver_later
         
       elsif params[:message][:status] == "accept"
         @q = @quotes.where({applicant_id: @applicant.id}).first
         @q.accepted_by_freelancer = true
         @q.save
-        CompanyMailer.notice_received_accepted_quote_from_freelancer(@job.company, current_freelancer, @q, @job).deliver_later
+        CompanyMailer.notice_received_accepted_quote_from_freelancer(@job.company, current_user, @q, @job).deliver_later
       elsif params[:message][:status] == "decline"
         @q = @quotes.where({applicant_id: @applicant.id}).first
         @q.accepted_by_freelancer = false
         @q.save
-        CompanyMailer.notice_received_declined_quote_from_freelancer(@job.company, current_freelancer, @job).deliver_later
+        CompanyMailer.notice_received_declined_quote_from_freelancer(@job.company, current_user, @job).deliver_later
       end
 
       redirect_to freelancer_job_application_index_path(@job, @applicant)
@@ -81,7 +81,7 @@ class Freelancer::QuotesController < Freelancer::BaseController
 
     def set_job
       # @job = current_freelancer.applicants.includes(applicants: [:quotes, :messages]).  find(params[:job_id])
-      @job = current_freelancer.applicants.where({job_id: params[:job_id] }).first.job
+      @job = current_user.applicants.where({job_id: params[:job_id] }).first.job
     end
 
     def set_applicant
@@ -89,7 +89,7 @@ class Freelancer::QuotesController < Freelancer::BaseController
       if params[:applicant_id]
         @applicant = @job.applicants.find(params[:applicant_id])
       else
-        @applicant = @job.applicants.without_state(:ignored).includes(:messages).order("messages.created_at").where({ freelancer_id: current_freelancer.id }).first
+        @applicant = @job.applicants.without_state(:ignored).includes(:messages).order("messages.created_at").where({ freelancer_id: current_user.id }).first
       end
     end
 

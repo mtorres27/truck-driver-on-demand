@@ -40,8 +40,8 @@ class Freelancer::ContractsController < Freelancer::BaseController
     @accepted_quote.save
 
     # Send notice email
-    PaymentsMailer.request_funds_company(@job.company, current_freelancer, @job).deliver_later
-    PaymentsMailer.wait_for_funds_freelancer(@job.company, current_freelancer, @job).deliver_later
+    PaymentsMailer.request_funds_company(@job.company, current_user, @job).deliver_later
+    PaymentsMailer.wait_for_funds_freelancer(@job.company, current_user, @job).deliver_later
     render :show
   end
 end

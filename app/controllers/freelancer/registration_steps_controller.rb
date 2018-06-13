@@ -4,7 +4,7 @@ class Freelancer::RegistrationStepsController < ApplicationController
   steps :personal, :job_info, :profile
 
   def show
-    @freelancer = current_freelancer
+    @freelancer = current_user
     render_wizard
   end
 
@@ -13,7 +13,7 @@ class Freelancer::RegistrationStepsController < ApplicationController
   end
 
   def update
-    @freelancer = current_freelancer
+    @freelancer = current_user
     @freelancer.attributes = params[:freelancer] ? freelancer_params : {}
     @freelancer.registration_step = next_step
 
@@ -23,7 +23,7 @@ class Freelancer::RegistrationStepsController < ApplicationController
   end
 
   def skip
-    @freelancer = current_freelancer
+    @freelancer = current_user
     @freelancer.update_attribute(:registration_step, next_step)
     sign_out @freelancer if next_step == "wicked_finish"
     redirect_to freelancer_registration_step_path(next_step)

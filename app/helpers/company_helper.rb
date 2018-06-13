@@ -35,7 +35,7 @@ module CompanyHelper
 
 
   def _is_favourite(company)
-    favourites = current_freelancer.favourite_companies.where({company_id: company.id})
+    favourites = current_user.favourite_companies.where({company_id: company.id})
 
     if favourites.count == 0
       return false
@@ -46,7 +46,7 @@ module CompanyHelper
   end
 
   def is_favourite_company(company)
-    favourites = current_freelancer.company_favourites.where({company_id: company.id})
+    favourites = current_user.company_favourites.where({company_id: company.id})
 
     if favourites.count == 0
       return false

@@ -54,10 +54,10 @@ class Freelancer::CompaniesController < Freelancer::BaseController
 
 
   def favourites
-    @locations = current_freelancer.favourite_companies.uniq.pluck(:area)
-    @companies = current_freelancer.favourite_companies
+    @locations = current_user.favourite_companies.uniq.pluck(:area)
+    @companies = current_user.favourite_companies
 
-    current_freelancer.favourite_jobs.each do |job|
+    current_user.favourite_jobs.each do |job|
       @locations << job.company.area
       @companies << job.company
     end
@@ -77,13 +77,13 @@ class Freelancer::CompaniesController < Freelancer::BaseController
     @company.profile_views += 1
     @company.save
 
-    @favourite = current_freelancer.company_favourites.where({company_id: params[:id]}).length > 0 ? true : false
+    @favourite = current_user.company_favourites.where({company_id: params[:id]}).length > 0 ? true : false
     if params.dig(:toggle_favourite) == "true"
       if @favourite == false
-        current_freelancer.favourite_companies << @company
+        current_user.favourite_companies << @company
         @favourite = true
       else
-        current_freelancer.company_favourites.where({company_id: @company.id}).destroy_all
+        current_user.company_favourites.where({company_id: @company.id}).destroy_all
         @favourite = false
       end
     end
@@ -95,13 +95,13 @@ class Freelancer::CompaniesController < Freelancer::BaseController
     @companies = []
 
     if params[:location] && params[:location] != ""
-      current_freelancer.applicants.where({ state: "accepted" }).where({ city: params[:location] }).each do |job|
+      current_user.applicants.where({ state: "accepted" }).where({ city: params[:location] }).each do |job|
         @locations << job.company.area
         @companies << job.company
       end
     else
 
-      current_freelancer.applicants.where({ state: "accepted" }).each do |job|
+      current_user.applicants.where({ state: "accepted" }).each do |job|
         @locations << job.company.area
         @companies << job.company
       end
@@ -129,7 +129,7 @@ class Freelancer::CompaniesController < Freelancer::BaseController
       c = Company.where({ id: id.to_i })
 
       if f.length > 0
-        current_freelancer.favourite_companies << c.first
+        current_user.favourite_companies << c.first
       end
     end
 
