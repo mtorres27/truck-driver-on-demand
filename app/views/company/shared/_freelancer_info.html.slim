@@ -18,7 +18,7 @@ a.list-item.list-item--freelancer href="/company/freelancers/#{freelancer.id}" c
         span.list__verified.zmdi.zmdi-check-circle
 
     .list__city
-      - freelancer_address = "#{"#{freelancer.city}, " if freelancer.city.present?}#{"#{freelancer.state}, " if freelancer.state.present?}#{freelancer.country.upcase}"
+      - freelancer_address = "#{"#{freelancer.city}, " if freelancer.city.present?}#{"#{freelancer.state}, " if freelancer.state.present?}#{freelancer.country&.upcase}"
       = "#{freelancer_address}. #{params.dig(:search, :address).present? ? "#{distance_from(freelancer)} miles away" : "" }"
 
     .list__rating
