@@ -2,6 +2,8 @@ class Company::RegistrationStepsController < ApplicationController
   include Wicked::Wizard
   steps :personal, :job_info, :profile
 
+  before_action :verify_current_company
+
   rescue_from Wicked::Wizard::InvalidStepError do
     redirect_to new_company_session_path
   end
@@ -56,5 +58,10 @@ private
       job_types: I18n.t("enumerize.job_types").keys,
       job_markets: (I18n.t("enumerize.live_events_staging_and_rental_job_markets").keys + I18n.t("enumerize.system_integration_job_markets").keys).uniq,
     )
+  end
+
+  def verify_current_company
+    return if current_company.present?
+    redirect_to new_company_session_path
   end
 end
