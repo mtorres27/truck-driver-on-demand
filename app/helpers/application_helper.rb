@@ -46,11 +46,11 @@ module ApplicationHelper
 
 
   def calc_distance_from(freelancer)
-    if current_company.nil? || current_company.lat.nil?
+    if current_user.nil? || (current_user&.is_a?(Company) && current_user.company_data.lat.nil?)
       return "N/A"
     end
 
-    point = OpenStruct.new(:lat => current_company.lat, :lng => current_company.lng)
+    point = OpenStruct.new(:lat => current_user.company_data.lat, :lng => current_user.company_data.lng)
     @freelancer = Freelancer.where({id: freelancer.id}).with_distance(point).first
 
     if @freelancer.lat.nil?

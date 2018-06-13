@@ -17,7 +17,7 @@
                   a.btn.btn--primary href=company_plans_path
                     | View plans
       - elsif @all_quotes.where({state: "accepted"}).length == 0
-        - if current_company
+        - if current_user&.is_a?(Company)
           = render partial: "company/shared/new_message", locals: { f: f, n: @applicant.freelancer.name, type: "quote", quotes: @quotes }
       - else
         .new-message--wrapper

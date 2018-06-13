@@ -32,12 +32,12 @@ class Company::JobsController < Company::BaseController
   end
 
   def create
-    if (!['trialing', 'active'].include?(current_company.subscription_status))
+    if (!['trialing', 'active'].include?(current_user.company_data.subscription_status))
       flash[:notice] = "You need to subscribe to be able to post new jobs."
       redirect_to company_projects_path
     end
     @job = Job.new(job_params)
-    @job.company = current_company
+    @job.company = current_user
 
     validate_ownership
     if @job.errors.size > 0
@@ -61,7 +61,7 @@ class Company::JobsController < Company::BaseController
   end
 
   def publish
-    if @job.company.id != current_company.id
+    if @job.company.id != current_user.id
       redirect_to company_job_path(@job)
       return
     end
@@ -142,15 +142,15 @@ class Company::JobsController < Company::BaseController
   private
 
   def set_company
-    @company = current_company
+    @company = current_user
   end
 
   def set_job
-    @job = current_company.jobs.find(params[:id])
+    @job = current_user.jobs.find(params[:id])
   end
 
   def validate_ownership
-    unless job_params[:project_id].present? && current_company.projects.find(job_params[:project_id])
+    unless job_params[:project_id].present? && current_user.projects.find(job_params[:project_id])
       @job.errors[:project_id] << "Invalid project selected"
     end
   end

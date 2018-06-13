@@ -43,12 +43,12 @@ class Company::JobPaymentsController < Company::BaseController
       @payment.mark_as_paid!
 
       # Send notice email
-      PaymentsMailer.notice_payout_freelancer(current_company, freelancer, @job, @payment).deliver_later
+      PaymentsMailer.notice_payout_freelancer(current_user, freelancer, @job, @payment).deliver_later
 
       if @job.payments.outstanding.empty?
         @job.update(state: :completed)
-        FreelancerMailer.notice_job_complete_freelancer(current_company, freelancer, @job).deliver_later
-        CompanyMailer.notice_job_complete_company(current_company, freelancer, @job).deliver_later
+        FreelancerMailer.notice_job_complete_freelancer(current_user, freelancer, @job).deliver_later
+        CompanyMailer.notice_job_complete_company(current_user, freelancer, @job).deliver_later
         redirect_to company_job_review_path(@job)
       else
         redirect_to company_job_payments_path(@job)
@@ -62,7 +62,7 @@ class Company::JobPaymentsController < Company::BaseController
   private
 
     def set_job
-      @job = current_company.jobs.includes(:payments).find(params[:job_id])
+      @job = current_user.jobs.includes(:payments).find(params[:job_id])
     end
 
     def set_payment

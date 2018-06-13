@@ -2,7 +2,7 @@ require 'rails_helper'
 
 describe Company::SubscriptionController, type: :controller  do
   login_company
-  let(:company) { subject.current_company }
+  let(:company) { subject.current_user }
 
   describe 'GET plans' do
     context 'when canadian company' do

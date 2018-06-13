@@ -2,11 +2,11 @@
   = render "shared/avj_logo_and_address"
 
 .grid-cell.grid-cell--33
-  h4.heading-h4= "To: #{current_company.name}"
-  div= current_company.address
-  div #{current_company.city}, #{current_company.state}
-  div= current_company.postal_code
-  div BN Tax No. #{current_company.sales_tax_number}
+  h4.heading-h4= "To: #{current_user.company_data.name}"
+  div= current_user.company_data.address
+  div #{current_user.company_data.city}, #{current_user.company_data.state}
+  div= current_user.company_data.postal_code
+  div BN Tax No. #{current_user.company_data.sales_tax_number}
 .grid-cell.grid-cell--33
   h4.heading-h4= "Inv #: #{@subscription[:id]}"
   div= "Date: #{Time.at(@subscription[:created_at]).strftime('%b %-d, %Y')}"
@@ -20,7 +20,7 @@
       .invoice__table-text.invoice__table-text--right
         | $#{(@subscription[:amount])}USD
     .invoice__table-row
-      .invoice__table-text Tax (%#{current_company.canada_country? ? Subscription::CANADA_SALES_TAX_PERCENT : 0})
+      .invoice__table-text Tax (%#{current_user.canada_country? ? Subscription::CANADA_SALES_TAX_PERCENT : 0})
       .invoice__table-text.invoice__table-text--right
         | $#{@subscription[:tax]}USD
     .invoice__table-row.invoice__table-row--total

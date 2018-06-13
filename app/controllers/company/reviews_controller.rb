@@ -7,16 +7,16 @@ class Company::ReviewsController < Company::BaseController
       @job.build_freelancer_review
 
     @review.freelancer = @job.freelancer
-    @review.company = current_company
+    @review.company = current_user
   end
 
   def create
     @review = @job.build_freelancer_review(review_params)
     @review.freelancer = @job.freelancer
-    @review.company = current_company
+    @review.company = current_user
 
     if @review.save
-      FreelancerMailer.notice_company_review(current_company, @job.freelancer, @review).deliver_later
+      FreelancerMailer.notice_company_review(current_user, @job.freelancer, @review).deliver_later
       redirect_to company_job_review_path(@job)
     else
       render :show
@@ -26,7 +26,7 @@ class Company::ReviewsController < Company::BaseController
   private
 
     def set_job
-      @job = current_company.jobs.find(params[:job_id])
+      @job = current_user.jobs.find(params[:job_id])
     end
 
     def review_params

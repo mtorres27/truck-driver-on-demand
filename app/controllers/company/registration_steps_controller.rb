@@ -3,7 +3,7 @@ class Company::RegistrationStepsController < ApplicationController
   steps :personal, :job_info, :profile
 
   def show
-    @company = current_company
+    @company = current_user
     render_wizard
   end
 
@@ -12,7 +12,7 @@ class Company::RegistrationStepsController < ApplicationController
   end
 
   def update
-    @company = current_company
+    @company = current_user
     @company.attributes = params[:company] ? company_params : {}
     @company.registration_step = next_step
 
@@ -22,7 +22,7 @@ class Company::RegistrationStepsController < ApplicationController
   end
 
   def skip
-    @company = current_company
+    @company = current_user
     @company.update_attribute(:registration_step, next_step)
     sign_out @company if next_step == "wicked_finish"
     redirect_to company_registration_step_path(next_step)

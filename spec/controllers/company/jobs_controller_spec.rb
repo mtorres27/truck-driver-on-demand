@@ -2,7 +2,7 @@ require 'rails_helper'
 
 describe Company::JobsController, type: :controller  do
   login_company
-  let(:company) { subject.current_company }
+  let(:company) { subject.current_user }
   let(:job) { create(:job, project: create(:project, company: company), company: company, address: 'Toronto', state_province: 'ON', country: 'ca' ) }
   let(:freelancers) { double('Freelancers') }
 

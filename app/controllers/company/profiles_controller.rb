@@ -4,7 +4,7 @@ class Company::ProfilesController < Company::BaseController
     if params[:id]
       @company = Company.find(params[:id])
     else
-      @company = current_company
+      @company = current_user
     end
 
     # @company.profile_views += 1
@@ -12,12 +12,12 @@ class Company::ProfilesController < Company::BaseController
   end
 
   def edit
-    @company = current_company
-    logger.debug current_company.inspect
+    @company = current_user
+    logger.debug current_user.inspect
   end
 
   def update
-    @company = current_company
+    @company = current_user
     if @company.update(company_params)
       redirect_to company_profile_path(@company), notice: "Company profile updated."
     else

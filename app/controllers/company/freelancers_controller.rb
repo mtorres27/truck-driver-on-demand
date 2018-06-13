@@ -68,8 +68,8 @@ class Company::FreelancersController < Company::BaseController
   end
 
   def hired
-    @locations = current_company.freelancers.uniq.pluck(:city)
-    @freelancers = current_company.freelancers.distinct
+    @locations = current_user.freelancers.uniq.pluck(:city)
+    @freelancers = current_user.freelancers.distinct
 
     if params[:location] && params[:location] != ""
       @freelancers = @freelancers.where({ city: params[:location] })
@@ -79,8 +79,8 @@ class Company::FreelancersController < Company::BaseController
   end
 
   def favourites
-    @locations = current_company.favourite_freelancers.uniq.pluck(:city)
-    @freelancers = current_company.favourite_freelancers
+    @locations = current_user.favourite_freelancers.uniq.pluck(:city)
+    @freelancers = current_user.favourite_freelancers
 
     if params[:location] && params[:location] != ""
       @freelancers = @freelancers.where({ city: params[:location] })
@@ -139,7 +139,7 @@ class Company::FreelancersController < Company::BaseController
   def show
     @freelancer = Freelancer.find(params[:id])
     @jobs = []
-    @jobs_master = current_company.jobs.where({ state: "published" }).order('title ASC').distinct
+    @jobs_master = current_user.jobs.where({ state: "published" }).order('title ASC').distinct
     @jobs_master.each do |job|
       @found = false
       job.applicants.each do |applicant|
@@ -166,13 +166,13 @@ class Company::FreelancersController < Company::BaseController
     end
     @freelancer.save
 
-    @favourite = current_company.favourites.where({freelancer_id: params[:id]}).length > 0 ? true : false
+    @favourite = current_user.favourites.where({freelancer_id: params[:id]}).length > 0 ? true : false
     if params.dig(:toggle_favourite) == "true"
       if @favourite == false
-        current_company.favourite_freelancers << @freelancer
+        current_user.favourite_freelancers << @freelancer
         @favourite = true
       else
-        current_company.favourites.where({freelancer_id: @freelancer.id}).destroy_all
+        current_user.favourites.where({freelancer_id: @freelancer.id}).destroy_all
         @favourite = false
       end
     end
@@ -189,7 +189,7 @@ class Company::FreelancersController < Company::BaseController
   end
 
   def add_favourites
-    id = current_company.id
+    id = current_user.id
     if params[:freelancers].nil?
       render json: { status: 'parameter missing' }
       return
@@ -199,7 +199,7 @@ class Company::FreelancersController < Company::BaseController
       f = Freelancer.where({ id: id.to_i })
 
       if f.length > 0
-        current_company.favourite_freelancers << f.first
+        current_user.favourite_freelancers << f.first
       end
     end
 

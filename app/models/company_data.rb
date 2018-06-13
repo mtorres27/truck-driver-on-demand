@@ -66,6 +66,7 @@ class CompanyData < ApplicationRecord
   include Disableable
 
   belongs_to :company
+  belongs_to :plan, foreign_key: 'plan_id', optional: true
 
   scope :new_registrants, -> { where(disabled: true) }
 

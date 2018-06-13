@@ -25,8 +25,6 @@
 class Company < User
   include PgSearch
 
-  belongs_to :plan, foreign_key: 'plan_id', optional: true
-
   has_many :projects, -> { order(updated_at: :desc) }, dependent: :destroy
   has_many :jobs, dependent: :destroy
   has_many :applicants, dependent: :destroy
@@ -150,7 +148,7 @@ class Company < User
   end
 
   def canada_country?
-    country == 'ca'
+    company_data.country == 'ca'
   end
 
   def self.do_all_geocodes

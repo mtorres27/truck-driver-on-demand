@@ -2,26 +2,20 @@ class Company::ProjectsController < Company::BaseController
   before_action :set_project, only: [:show, :edit, :update, :destroy]
 
   def index
-    @projects =
-      current_company.
-      projects.
-      includes(jobs: :payments).
-      order({ external_project_id: :desc, id: :desc }).
-      page(params[:page]).
-      per(50)
+    @projects = current_user.projects.includes(jobs: :payments).order({ external_project_id: :desc, id: :desc }).page(params[:page]).per(50)
 
     @job_count = Job.joins(:project).where(
       projects: {
-        company_id: current_company.id
+        company_id: current_user.id
       }).count
   end
 
   def new
-    @project = current_company.projects.new
+    @project = current_user.projects.new
   end
 
   def create
-    @project = current_company.projects.new(project_params)
+    @project = current_user.projects.new(project_params)
 
     if @project.save
       respond_to do |format|
@@ -63,7 +57,7 @@ class Company::ProjectsController < Company::BaseController
   private
 
     def set_project
-      @project = current_company.projects.find(params[:id])
+      @project = current_user.projects.find(params[:id])
     end
 
     def project_params

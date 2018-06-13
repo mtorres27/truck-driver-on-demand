@@ -1,9 +1,9 @@
 .grid-cell.grid-cell--33
   h4.heading-h4= "From: #{@job.company.name}"
   div= @job.company.address
-  div #{current_company.city}, #{current_company.state}
-  div= current_company.postal_code
-  div BN Tax No. #{current_company.sales_tax_number}
+  div #{current_user.company_data.city}, #{current_user.company_data.state}
+  div= current_user.company_data.postal_code
+  div BN Tax No. #{current_user.company_data.sales_tax_number}
 .grid-cell.grid-cell--33
   h4.heading-h4= "To: #{@job.freelancer&.name}"
   div= @job.freelancer&.formatted_address
