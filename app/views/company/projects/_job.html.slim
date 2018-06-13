@@ -1,5 +1,5 @@
 .grid-cell.grid-cell--50
-  - path = current_admin.nil? ? stateful_company_job_path(job) : admin_job_path(job)
+  - path = current_user&.is_a?(Admin) ? admin_job_path(job) : stateful_company_job_path(job)
   a.job-box href=path
     = job_state_label(job)
     h4.heading-h4.heading-h4--job-box= job.title

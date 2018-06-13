@@ -1,4 +1,4 @@
-- controller = current_admin.nil? ? :company : :admin
+- controller = current_user&.is_a?(Company) ? :company : :admin
 = simple_form_for([controller, @job]) do |f|
   .grid-h
     .grid-cell.grid-cell--67

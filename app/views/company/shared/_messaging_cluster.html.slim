@@ -13,7 +13,7 @@
                   = "Click the button below to check the available plans and subscribe."
 
                 div
-                - if current_admin.nil?
+                - if current_user&.is_a?(Company)
                   a.btn.btn--primary href=company_plans_path
                     | View plans
       - elsif @all_quotes.where({state: "accepted"}).length == 0
@@ -34,7 +34,7 @@
                   = "Simply click the button below to proceed to creating a work order."
 
                 div
-                - path = current_admin.nil? ? company_job_work_order_path(@job) : admin_job_work_order_path(@job)
+                - path = current_user&.is_a?(Admin) ? admin_job_work_order_path(@job) : company_job_work_order_path(@job)
                 a.btn.btn--primary href=path
                   | view Work Order
       .applicant-messages__messages--inner class=("applicant-messages__messages--inner--inactive" if @applicant_accepted == true)

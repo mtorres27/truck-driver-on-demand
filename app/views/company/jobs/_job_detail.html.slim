@@ -3,7 +3,7 @@
     h2.heading-h2.heading-h2--action-bar Job Detail
     .action-bar__actions
       - if @job.pre_contracted?
-        - path = current_admin.nil? ? edit_company_job_path(@job) : edit_admin_job_path(@job)
+        - path = current_user&.is_a?(Admin) ? edit_admin_job_path(@job) : edit_company_job_path(@job)
         a.btn.btn--primary href=path
           | Edit
 
@@ -15,7 +15,7 @@
     .grid-cell.grid-cell--50
       h3.heading-h3 Project Reference
       h2.heading-h2
-        - if current_admin.nil?
+        - if current_user&.is_a?(Company)
           a href=company_projects_path()
             = project_reference(@job.project)
         - else
@@ -46,11 +46,11 @@
           - elsif @job.contracted?
             | Work order accepted by Freelancer.
         - if @job.freelancer && @job.pre_contracted?
-          - path = current_admin.nil? ? edit_company_job_work_order_path(@job) : edit_admin_job_work_order_path(@job)
+          - path = current_user&.is_a?(Admin) ? edit_admin_job_work_order_path(@job) : edit_company_job_work_order_path(@job)
           a.btn.btn--primary href=path
             | Create Work Order
         - elsif @job.freelancer && @job.contracted?
-          - path = current_admin.nil? ? company_job_work_order_path(@job) : admin_job_work_order_path(@job)
+          - path = current_user&.is_a?(Admin) ? admin_job_work_order_path(@job) : company_job_work_order_path(@job)
           a.btn.btn--primary href=path
             | View Work Order
         - else

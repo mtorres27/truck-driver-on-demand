@@ -20,7 +20,7 @@
       .payments__status
         | For this project to be started, it must be fully funded. This shows the AV Freelancer that funds are available but will not be accessible until the milestones are met and you authorize the payout.
       .payments_status
-        - if current_admin.nil?
+        - if current_user&.is_a?(Company)
           = render partial: 'company/shared/fund_this_job_button', locals: { job: job, accepted_quote: accepted_quote }
 
     .grid-cell.grid-cell--50
@@ -49,7 +49,7 @@
         .payments__status
           strong<
             | #{number_with_precision((accepted_quote.amount.floor + job.company_plan_fees + (accepted_quote.amount * job.applicable_sales_tax/100)), precision: 2) } #{job.currency.upcase}
-      - if current_admin.nil?
+      - if current_user&.is_a?(Company)
         .payments__flexbox
           .payments__status
             = link_to contract_invoice_company_job_path(job), class: 'btn-primary--active top-margin w-inline-block'
@@ -72,7 +72,7 @@
       .payments__total-group
         .payments__total-amt #{number_with_precision(job.gpayments_sum_paid, precision: 2)} #{job.currency.upcase}
         .payments__payout-label Total
-    - if current_admin.nil?
+    - if current_user&.is_a?(Company)
       = link_to contract_invoice_company_job_path(job), class: 'btn-primary--active top-margin w-inline-block'
         div View receipt
     .payments__status You have secured funds for this project. AV Junction will hold these payments on your behalf until each of the milestones listed below are met.
@@ -88,9 +88,9 @@
         - elsif payment.issued_on.present?
           .payments__date Requested from #{job.freelancer.name} on #{payment.issued_on}
       - if !payment.paid_on.blank? || (!connector.nil? && !connector.account.nil? && connector.account.external_accounts.data.any? && accepted_quote.present? && accepted_quote.paid_by_company && job.funds_available)
-        - path = current_admin.nil? ? company_job_payment_path(job, payment) : admin_job_payment_path(job, payment)
+        - path = !current_user&.is_a?(Admin) ? company_job_payment_path(job, payment) : admin_job_payment_path(job, payment)
         = link_to path, class: 'btn-primary--active top-margin w-inline-block'
-          div #{((payment.paid_on.blank? && current_admin.nil?) ? "Issue Payout" : "View Invoice")}
+          div #{((payment.paid_on.blank? && current_user&.is_a?(Company) ? "Issue Payout" : "View Invoice")}
       - else
         .btn-primary--disabled.top-margin.w-inline-block
           div Issue Payout
