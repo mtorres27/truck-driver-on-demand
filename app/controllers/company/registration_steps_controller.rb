@@ -4,6 +4,10 @@ class Company::RegistrationStepsController < ApplicationController
 
   before_action :verify_current_company
 
+  rescue_from Wicked::Wizard::InvalidStepError do
+    redirect_to new_company_session_path
+  end
+
   def show
     @company = current_company
     render_wizard
