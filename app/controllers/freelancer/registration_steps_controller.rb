@@ -3,6 +3,10 @@ class Freelancer::RegistrationStepsController < ApplicationController
 
   steps :personal, :job_info, :profile
 
+  rescue_from Wicked::Wizard::InvalidStepError do
+    redirect_to new_freelancer_session_path
+  end
+
   def show
     @freelancer = current_freelancer
     render_wizard

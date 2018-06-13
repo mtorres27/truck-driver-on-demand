@@ -2,6 +2,10 @@ class Company::RegistrationStepsController < ApplicationController
   include Wicked::Wizard
   steps :personal, :job_info, :profile
 
+  rescue_from Wicked::Wizard::InvalidStepError do
+    redirect_to new_company_session_path
+  end
+
   def show
     @company = current_company
     render_wizard
