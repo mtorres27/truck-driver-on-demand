@@ -3,10 +3,10 @@ h1 Editing Company
 = simple_form_for([:admin, @company], html: { multipart: true }) do |f|
   = f.error_notification
 
-  = render "/company/profiles/edit_company_profile", f: f
-  = f.simple_fields_for :company_data do |data_form|
-    = data_form.input :disabled
-    = data_form.input :waived_jobs
+  = render "/company/profiles/edit_company_profile", f: f, company: @company
+  = f.input :disabled
+  = f.input :waived_jobs
+  br
 
   .form-actions
     = f.button :submit, class: "btn btn-primary"

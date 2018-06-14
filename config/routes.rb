@@ -1,11 +1,15 @@
 Rails.application.routes.draw do
-  devise_for :users
+  devise_for :users, skip: [:registrations]
 
-  devise_scope :user do
-    get "/company/login" => "devise/sessions#new", :as => "/company/login"
-    get "/freelancer/login" => "devise/sessions#new", :as => "/freelancer/login"
-    get "/admin/login" => "devise/sessions#new", :as => "/admin/login"
-  end
+  devise_for :company_users, path: 'company',
+                             path_names: { sign_up: "register" },
+                             controllers: { registrations: "company/registrations" },
+                             skip: [:sessions, :passwords, :confirmations]
+
+  devise_for :freelancers, path: 'freelancer',
+                           path_names: { sign_up: "register" },
+                           controllers: { registrations: "freelancer/registrations" },
+                           skip: [:sessions, :passwords, :confirmations]
 
   root "main#index"
 
@@ -186,4 +190,5 @@ Rails.application.routes.draw do
   end
 
   get "*any", via: :all, to: "errors#not_found"
+  get "*any", via: :all, to: "errors#unauthorized"
 end

@@ -2,8 +2,8 @@ module ControllerMacros
   def login_freelancer
     before(:each) do
       @request.env["devise.mapping"] = Devise.mappings[:freelancer]
-      freelancer = FactoryBot.create(:freelancer, registration_step: "wicked_finish")
-      freelancer.user.confirm
+      freelancer = FactoryBot.create(:freelancer)
+      freelancer.confirm
       sign_in freelancer
     end
   end
@@ -12,8 +12,9 @@ module ControllerMacros
     before(:each) do
       @request.env["devise.mapping"] = Devise.mappings[:company]
       company = FactoryBot.create(:company)
-      company.user.confirm
-      sign_in company.user
+      company_user = FactoryBot.create(:company_user, company: company)
+      company_user.confirm
+      sign_in company_user
     end
   end
 
@@ -21,7 +22,7 @@ module ControllerMacros
     before(:each) do
       @request.env["devise.mapping"] = Devise.mappings[:admin]
       admin = FactoryBot.create(:admin)
-      sign_in admin.user
+      sign_in admin
     end
   end
 end

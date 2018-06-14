@@ -27,8 +27,18 @@
 #  stripe_fees            :decimal(10, 2)
 #  net_avj_fees           :decimal(10, 2)
 #  accepted_at            :datetime
-#  plan_fee               :decimal(10, 2)   default(0.0)
 #  avj_credit             :decimal(10, 2)
+#  plan_fee               :decimal(10, 2)   default(0.0)
+#
+# Indexes
+#
+#  index_quotes_on_applicant_id  (applicant_id)
+#  index_quotes_on_company_id    (company_id)
+#
+# Foreign Keys
+#
+#  fk_rails_...  (applicant_id => applicants.id)
+#  fk_rails_...  (company_id => companies.id)
 #
 
 class Quote < ApplicationRecord

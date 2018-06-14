@@ -4,7 +4,7 @@ module CompanyHelper
       return []
     end
 
-    c = company.company_data.rating
+    c = company.rating
     c = Company.avg_rating(company)
 
     rating = (c*2.0).round / 2.0
@@ -66,7 +66,7 @@ module CompanyHelper
   end
 
 
-  def distance_from(company)
-    return (((company.distance / 1609.344)*10.0)/10.0).round(2)
+  def distance_from(company, company_datas_with_distances)
+    return (((company_datas_with_distances.where(company_id: company.id).first.distance / 1609.344)*10.0)/10.0).round(2) if company_datas_with_distances.present?
   end
 end

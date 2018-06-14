@@ -13,28 +13,28 @@
                   = "Click the button below to check the available plans and subscribe."
 
                 div
-                - if current_user&.is_a?(Company)
+                - if current_user.company_user?
                   a.btn.btn--primary href=company_plans_path
                     | View plans
       - elsif @all_quotes.where({state: "accepted"}).length == 0
-        - if current_user&.is_a?(Company)
-          = render partial: "company/shared/new_message", locals: { f: f, n: @applicant.freelancer.name, type: "quote", quotes: @quotes }
+        - if current_user.company_user?
+          = render partial: "company/shared/new_message", locals: { f: f, n: @applicant.freelancer.full_name, type: "quote", quotes: @quotes }
       - else
         .new-message--wrapper
           .new-message_amount
             .new-message__freelancer-selected
               .new-message__freelancer-selected__avatar
-                = image_tag(@job.freelancer.avatar_url, size: "65x65")
+                = image_tag(@job.freelancer.freelancer_profile.avatar_url, size: "65x65")
 
               .new-message__freelancer-selected__text
                 b
-                  = "Congratulations, you've selected #{@job.freelancer.name} for this job."
+                  = "Congratulations, you've selected #{@job.freelancer.full_name} for this job."
                 p
-                  = "The next step is to create a work order with #{@job.freelancer.name}. We've made this super simple by doing all the hard work for you. "
+                  = "The next step is to create a work order with #{@job.freelancer.full_name}. We've made this super simple by doing all the hard work for you. "
                   = "Simply click the button below to proceed to creating a work order."
 
                 div
-                - path = current_user&.is_a?(Admin) ? admin_job_work_order_path(@job) : company_job_work_order_path(@job)
+                - path = current_user.admin? ? admin_job_work_order_path(@job) : company_job_work_order_path(@job)
                 a.btn.btn--primary href=path
                   | view Work Order
       .applicant-messages__messages--inner class=("applicant-messages__messages--inner--inactive" if @applicant_accepted == true)
@@ -42,10 +42,10 @@
           - if item[:type] == "message"
             .list-item.list-item--message class=(".list-item.list-item--message.list-item--message-has-quote" if item[:payload].has_quote == true)
               .list__info
-                = image_tag(item[:payload].authorable.avatar_url, size: "40x40")
+                = image_tag(item[:payload].authorable.user_data.avatar_url, size: "40x40")
               .list__info.list__info--expand.list__info--with-padding
                 .list-bar.list-bar--left
-                  h4.heading-h4.heading-h4--no-margin #{item[:payload].authorable.name}
+                  h4.heading-h4.heading-h4--no-margin #{item[:payload].authorable.full_name}
                   | &nbsp;
                   - if !item[:payload].created_at.nil?
                     h5.heading-h5 #{time_ago_in_words(item[:payload].created_at)} ago
@@ -60,8 +60,8 @@
                             span class="zmdi zmdi-image"
                           - else
                             span class="zmdi zmdi-file-text"
-                          |  
-                          = eval(item[:payload].attachment_data)[:metadata][:filename]   
+                          |
+                          = eval(item[:payload].attachment_data)[:metadata][:filename]
               - if item[:payload].has_quote == true and !item[:payload].quote_id.nil?
                 - @quote = Quote.find(item[:payload].quote_id)
                 .list__info
@@ -106,11 +106,11 @@
           b
             | CONGRATULATIONS, YOU'VE FOUND YOUR FREELANCER.
           p
-            = "The next step is to create a work order with #{@applicant.freelancer.name}. We've made this super simple by doing all the hard work for you. "
+            = "The next step is to create a work order with #{@applicant.freelancer.full_name}. We've made this super simple by doing all the hard work for you. "
             | "Simply click the button below to proceed to creating a work worder. If you don't have the time right now you can find this in the job details section."
           p
             em
-              = "Remember, by accepting this quote of #{number_with_precision(@quotes.where({applicant_id: @applicant.id}).first.amount, precision: 2)} #{(job.currency ? job.currency.upcase : "")}  with #{@applicant.freelancer.name}, all other applications for this"
+              = "Remember, by accepting this quote of #{number_with_precision(@quotes.where({applicant_id: @applicant.id}).first.amount, precision: 2)} #{(job.currency ? job.currency.upcase : "")}  with #{@applicant.freelancer.full_name}, all other applications for this"
               = " job will automatically be declined, and receive a general notification informing them the job has been filled. Details of who you've selected will not be shared."
           .buttons
             .accept_button.btn.btn--primary

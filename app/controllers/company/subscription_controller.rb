@@ -1,39 +1,45 @@
 class Company::SubscriptionController < Company::BaseController
   include TaxHelper
+
   before_action :amount_to_be_charged, :set_description
   protect_from_forgery except: :webhook
 
   def cancel
-    # logger.debug current_company.inspect
-    plan = current_user.company_data.plan
-    StripeTool.cancel_subscription(company: current_user)
-    SubscriptionMailer.notice_company_subscription_canceled(current_user, plan).deliver_later
+    authorize current_company, :cancel_subscription?
+
+    plan = current_company.plan
+    StripeTool.cancel_subscription(company: current_company)
+    SubscriptionMailer.notice_company_subscription_canceled(current_company, plan).deliver_later
     flash[:notice] = "Your just cancelled your company subscription!"
     redirect_to company_plans_path
   end
 
   def invoices
-    @subscriptions = Subscription.where(company_id: current_user.id)
+    authorize current_company
+    @subscriptions = Subscription.where(company_id: current_company.id)
   end
 
   def invoice
     # raise exception if company is not the invoice owner
     @subscription = Subscription.find_by(stripe_subscription_id: params[:subscription])
-    if @subscription.nil? || @subscription.company_id != current_user.id
+    authorize @subscription
+
+    if @subscription.nil? || @subscription.company_id != current_company.id
       flash[:error] = "You can't see this invoice!"
       redirect_to company_invoices_path
     end
   end
 
   def plans
+    authorize current_company
     # redirect to profile edit if no province canadian company
-    if current_user.canada_country? && current_user.company_data.state.nil?
+    if current_company.canada_country? && current_company.state.nil?
       flash[:notice] = 'You must update your profile with the province!'
       redirect_to edit_company_profile_path
     end
     @plans = Plan.order(name: :asc)
     begin
-      @subscription = Stripe::Subscription.retrieve(current_user.company_data.stripe_subscription_id) if current_user.company_data.stripe_subscription_id
+      @subscription = Stripe::Subscription.retrieve(current_company.stripe_subscription_id) if current_company.stripe_subscription_id.present?
     rescue Stripe::InvalidRequestError => ex
       flash[:alert] = 'Please subscribe to one of the following plans'
     rescue Exception => ex
@@ -43,32 +49,35 @@ class Company::SubscriptionController < Company::BaseController
   end
 
   def reset_company
-    current_user.created_at                = 3.months.ago - 5.day #2.days.ago 3.months.ago-5.day
-    current_user.company_data.billing_period_ends_at    = nil
-    current_user.company_data.stripe_customer_id        = nil
-    current_user.company_data.stripe_subscription_id    = nil
-    current_user.company_data.stripe_plan_id            = nil
-    current_user.company_data.subscription_cycle        = nil
-    current_user.company_data.subscription_status       = nil
-    current_user.company_data.is_subscription_cancelled = false
-    current_user.company_data.last_4_digits             = nil
-    current_user.company_data.card_brand                = nil
-    current_user.company_data.exp_month                 = nil
-    current_user.company_data.exp_year                  = nil
-    current_user.company_data.plan_id                   = nil
-    current_user.company_data.is_subscription_cancelled = true
-    current_user.company_data.save
-    current_user.save
+    authorize current_company
+
+    current_company.created_at                             = 3.months.ago - 5.day
+    current_company.billing_period_ends_at    = nil
+    current_company.stripe_customer_id        = nil
+    current_company.stripe_subscription_id    = nil
+    current_company.stripe_plan_id            = nil
+    current_company.subscription_cycle        = nil
+    current_company.subscription_status       = nil
+    current_company.is_subscription_cancelled = false
+    current_company.last_4_digits             = nil
+    current_company.card_brand                = nil
+    current_company.exp_month                 = nil
+    current_company.exp_year                  = nil
+    current_company.plan_id                   = nil
+    current_company.is_subscription_cancelled = true
+    current_company.save
     flash[:notice] = "Your just reset your company Successfully"
     redirect_to company_plans_path
   end
 
   def update_card_info
+    authorize current_company
+
     if params[:stripeToken]
-      customer = Stripe::Customer.retrieve(current_user.company_data.stripe_customer_id)
+      customer = Stripe::Customer.retrieve(current_company.stripe_customer_id)
       customer.source = params[:stripeToken]
       customer.save
-      StripeTool.update_company_card_info(company: current_user,
+      StripeTool.update_company_card_info(company: current_company,
                                           last_4_digits: customer.sources.data[0].last4,
                                           card_brand: customer.sources.data[0].brand,
                                           exp_month: customer.sources.data[0].exp_month,
@@ -79,26 +88,26 @@ class Company::SubscriptionController < Company::BaseController
   end
 
   def subscription_checkout
+    authorize current_company
+
     plan = Plan.find_by(code: params[:plan_id])
-    # logger.debug params[:stripeToken]
-    # logger.debug plan.inspect
-    # exit
     customer = StripeTool.create_customer(email: params[:stripeEmail],
                                           stripe_token: params[:stripeToken])
     subscription = StripeTool.subscribe(customer: customer,
-                                        tax: current_user.canada_country? ? Subscription::CANADA_SALES_TAX_PERCENT : 0,
+                                        tax: current_company.canada_country? ? Subscription::CANADA_SALES_TAX_PERCENT : 0,
                                         plan: plan,
-                                        is_new: current_user.is_trial_applicable
+                                        is_new: current_company.is_trial_applicable
                                         )
-    StripeTool.update_company_info_with_subscription(company: current_user, customer: customer, subscription: subscription, plan: plan)
+    StripeTool.update_company_info_with_subscription(company: current_company, customer: customer, subscription: subscription, plan: plan)
 
-    SubscriptionMailer.notice_company_subscribed_to_plan(current_user, plan).deliver_later
+    SubscriptionMailer.notice_company_subscribed_to_plan(current_company, plan).deliver_later
     flash[:notice] = 'Successfully subscribed to "' + subscription.plan.name.upcase + '" Plan'
     redirect_to company_plans_path
   end
 
   def webhook
     begin
+      authorize current_company
       event_json = JSON.parse(request.body.read)
       event_object = event_json['data']['object']
       case event_json['type']
@@ -120,14 +129,15 @@ class Company::SubscriptionController < Company::BaseController
   end
 
   def new
-
+    authorize current_company
   end
 
   def thanks
-
+    authorize current_company
   end
 
   def create
+    authorize current_company
     begin
     # Amount in cents
       customer = StripeTool.create_customer(email: params[:stripeEmail],
@@ -145,11 +155,12 @@ class Company::SubscriptionController < Company::BaseController
 
   private
 
-    def amount_to_be_charged
-      @amount = 15000
-    end
+  def amount_to_be_charged
+    @amount = 15000
+  end
 
-    def set_description
-      @description = "AVJunction Monthly Subscription"
-    end
+  def set_description
+    @description = "AVJunction Monthly Subscription"
+  end
+
 end

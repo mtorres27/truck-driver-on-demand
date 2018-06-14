@@ -19,4 +19,6 @@
 
 class Subscription < ApplicationRecord
   CANADA_SALES_TAX_PERCENT = 13.to_f
+
+  belongs_to :company
 end

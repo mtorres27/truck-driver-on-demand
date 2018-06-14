@@ -1,4 +1,5 @@
 class MainController < ApplicationController
+
   def index
   end
 
@@ -42,17 +43,18 @@ class MainController < ApplicationController
 
 
       @job_start_year = @job.starts_on.year
-    
+
       if @job.freelancer.nil?
         @job = nil
-      elsif current_user&.is_a?(Freelancer) and @job.freelancer.id != current_user.id
+      elsif current_user.freelancer? && @job.freelancer.id != current_user.id
         @job = nil
-      elsif current_user&.is_a?(Company) and @job.company.id != current_user.id
+      elsif current_user.company_user? && @job.company.id != current_user.id
         @job = nil
       end
-      
+
     else
       @job = nil
     end
   end
+
 end

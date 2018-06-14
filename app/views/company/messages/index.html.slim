@@ -10,7 +10,7 @@
       - if @job.freelancer.nil?
         - n = ""
       - else
-        - n = @job.freelancer.name
+        - n = @job.freelancer.full_name
       = render partial: "company/shared/new_message", locals: {f: f, n: n, type: "message", quotes: []}
       .freelancer-job__message-history
         = render "messages_info"

@@ -12,7 +12,7 @@ h2 Dashboard
       a href="/admin/new_registrants"
         .col-xs-12.col-sm-6.col-md-4.col-lg-3
           .bs-callout.bs-callout-primary
-            h2= CompanyData.new_registrants.count + FreelancerData.new_registrants.count
+            h2= Company.new_registrants.count + FreelancerProfile.new_registrants.count
             p= klass.pluralize
     - else
       .col-xs-12.col-sm-6.col-md-4.col-lg-3

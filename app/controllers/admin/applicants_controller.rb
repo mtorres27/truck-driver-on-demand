@@ -1,6 +1,7 @@
 class Admin::ApplicantsController < Admin::BaseController
   before_action :set_job
   before_action :set_applicant, except: [:index]
+  before_action :authorize_job
 
   def index
     @applicants = @job.applicants.includes(:quotes, :freelancer).without_state(:ignored).order(created_at: :desc)
@@ -58,6 +59,10 @@ class Admin::ApplicantsController < Admin::BaseController
 
   def set_applicant
     @applicant = @job.applicants.find(params[:id])
+  end
+
+  def authorize_job
+    authorize @job
   end
 
   def set_collections

@@ -1,4 +1,4 @@
-- controller = current_user&.is_a?(Company) ? :company : :admin
+- controller = current_user.company_user? ? :company : :admin
 = simple_form_for([controller, @job]) do |f|
   .grid-h
     .grid-cell.grid-cell--67
@@ -6,7 +6,7 @@
         .grid-cell.grid-cell--100
           .grid-h.grid-h--no-margin
             .grid-cell.grid-cell--75
-              = f.association :project, collection: @company.projects, prompt: "Select"
+              = f.association :project, collection: company.projects, prompt: "Select"
             .grid-cell.grid-cell--25.grid-cell--span25
               br
               .form-button
@@ -164,7 +164,7 @@
 .modal#new_project role="dialog" tabindex="-1"
   .modal-dialog role="document"
     .modal-content
-      = simple_form_for([:company, @company.projects.new], remote: true) do |f|
+      = simple_form_for([:company, company.projects.new], remote: true) do |f|
         .modal-header
           h2 Create a New Project
         .container

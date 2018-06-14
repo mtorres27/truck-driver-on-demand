@@ -8,6 +8,10 @@
 #  freelancer_id :integer          not null
 #  accepted      :boolean          default(FALSE)
 #
+# Indexes
+#
+#  index_friend_invites_on_freelancer_id  (freelancer_id)
+#
 
 class FriendInvite < ApplicationRecord
   belongs_to :freelancer, class_name: 'User', foreign_key: 'freelancer_id'

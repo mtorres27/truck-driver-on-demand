@@ -18,35 +18,54 @@
 #  confirmation_token     :string
 #  confirmed_at           :datetime
 #  confirmation_sent_at   :datetime
+#  first_name             :string
+#  last_name              :string
 #  type                   :string
 #  messages_count         :integer          default(0), not null
+#  company_id             :integer
+#
+# Indexes
+#
+#  index_users_on_company_id            (company_id)
+#  index_users_on_confirmation_token    (confirmation_token) UNIQUE
+#  index_users_on_email                 (email) UNIQUE
+#  index_users_on_reset_password_token  (reset_password_token) UNIQUE
 #
 
 class User < ApplicationRecord
-  # Include default devise modules. Others available are:
-  # :confirmable, :lockable, :timeoutable and :omniauthable
+
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable, :confirmable
 
-  after_save :add_credit_to_inviters
+  validates :email, uniqueness: { case_sensitive: false }
+  validates :first_name, :last_name, presence: true
 
-  private
+  def full_name
+    "#{first_name} #{last_name}"
+  end
 
-  def add_credit_to_inviters
-    return if type != 'Freelancer' || !confirmed_at_changed? || FriendInvite.by_email(email).count.zero?
-    FriendInvite.by_email(email).each do |invite|
-      freelancer = invite.freelancer
-      if freelancer.avj_credit.nil?
-        credit_earned = 20
-      elsif freelancer.avj_credit + 20 <= 200
-        credit_earned = 20
-      else
-        credit_earned = 200 - freelancer.avj_credit
-      end
-      freelancer.avj_credit = freelancer.avj_credit.to_f + credit_earned
-      freelancer.save!
-      invite.update_attribute(:accepted, true)
-      FreelancerMailer.notice_credit_earned(freelancer, credit_earned).deliver_later if credit_earned > 0
+  def name_initials
+    "#{first_name.first}#{last_name.first}"
+  end
+
+  def admin?
+    is_a?(Admin)
+  end
+
+  def freelancer?
+    is_a?(Freelancer)
+  end
+
+  def company_user?
+    is_a?(CompanyUser)
+  end
+
+  def user_data
+    if is_a?(CompanyUser)
+      company
+    elsif is_a?(Freelancer)
+      freelancer_profile
     end
   end
+
 end

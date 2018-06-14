@@ -5,7 +5,6 @@
 #  id                        :integer          not null, primary key
 #  token                     :string
 #  name                      :string
-#  contact_name              :string
 #  address                   :string
 #  formatted_address         :string
 #  area                      :string
@@ -29,6 +28,8 @@
 #  number_of_offices         :integer          default(0)
 #  number_of_employees       :string
 #  established_in            :integer
+#  header_color              :string           default("FF6C38")
+#  country                   :string
 #  stripe_customer_id        :string
 #  stripe_subscription_id    :string
 #  stripe_plan_id            :string
@@ -40,8 +41,6 @@
 #  card_brand                :string
 #  exp_month                 :string
 #  exp_year                  :string
-#  header_color              :string           default("FF6C38")
-#  country                   :string
 #  header_source             :string           default("color")
 #  sales_tax_number          :string
 #  line2                     :string
@@ -54,29 +53,27 @@
 #  is_trial_applicable       :boolean          default(TRUE)
 #  waived_jobs               :integer          default(1)
 #  registration_step         :string
-#  email                     :citext           not null
-#  encrypted_password        :string           default(""), not null
-#  reset_password_token      :string
-#  reset_password_sent_at    :datetime
-#  remember_created_at       :datetime
-#  sign_in_count             :integer          not null
-#  current_sign_in_at        :datetime
-#  last_sign_in_at           :datetime
-#  current_sign_in_ip        :inet
-#  last_sign_in_ip           :inet
-#  confirmation_token        :string
-#  confirmed_at              :datetime
-#  confirmation_sent_at      :datetime
+#
+# Indexes
+#
+#  index_companies_on_disabled              (disabled)
+#  index_companies_on_job_markets           (job_markets)
+#  index_companies_on_manufacturer_tags     (manufacturer_tags)
+#  index_companies_on_name                  (name)
+#  index_companies_on_plan_id               (plan_id)
+#  index_companies_on_technical_skill_tags  (technical_skill_tags)
+#  index_on_companies_loc                   (st_geographyfromtext((((('SRID=4326;POINT('::text || lng) || ' '::text) || lat) || ')'::text)))
+#
+# Foreign Keys
+#
+#  fk_rails_...  (plan_id => plans.id)
 #
 
 FactoryBot.define do
   factory :company do
     name { Faker::Company.unique.name }
-    first_name { Faker::Name.unique.name }
-    last_name { Faker::Name.unique.name }
     country [:es, :fi, :fr, :gb, :pt, :us].sample
     city { Faker::Address.city }
-    user { FactoryBot.build(:user) }
     state { Faker::Address.state}
     avatar { fixture_file_upload(Rails.root.join("spec", "fixtures", "image.png"), "image/png") }
     description { Faker::Lorem.sentence }
@@ -85,5 +82,13 @@ FactoryBot.define do
     number_of_offices { Faker::Number.number(1) }
     website { Faker::Lorem.word }
     area { "USA" }
+
+    after(:build) do |company|
+      company.company_user ||= FactoryBot.build(:company_user, :confirmed)
+    end
+
+    trait :registration_completed do
+      registration_step "wicked_finish"
+    end
   end
 end

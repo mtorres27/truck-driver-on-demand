@@ -9,23 +9,23 @@ h1.headin-h1 Freelancer Profile
       a.btn.btn--primary href=admin_freelancers_path
         | Cancel
 
-  - if @freelancer.freelancer_data.profile_header_url.include?("missing") or @freelancer.freelancer_data.header_source == "color"
-    .profile__wallpaper style="background-color: #{ @freelancer.freelancer_data.header_color.include?("#") ? "" : "#"}#{@freelancer.freelancer_data.header_color}"
+  - if @freelancer.freelancer_profile.profile_header_url.include?("missing") or @freelancer.freelancer_profile.header_source == "color"
+    .profile__wallpaper style="background-color: #{ @freelancer.freelancer_profile.header_color.include?("#") ? "" : "#"}#{@freelancer.freelancer_profile.header_color}"
   - else
-    .profile__wallpaper style="background-image: url(#{@freelancer.freelancer_data.profile_header_url.include?("missing") ? "" : @freelancer.freelancer_data.profile_header_url});"
-  - if @freelancer.freelancer_data.phone_number?
+    .profile__wallpaper style="background-image: url(#{@freelancer.freelancer_profile.profile_header_url.include?("missing") ? "" : @freelancer.freelancer_profile.profile_header_url});"
+  - if @freelancer.freelancer_profile.phone_number?
     h4.heading-h4
       | Phone:
-      = " #{@freelancer.freelancer_data.phone_number}"
-      - if @freelancer.freelancer_data.address?
+      = " #{@freelancer.freelancer_profile.phone_number}"
+      - if @freelancer.freelancer_profile.address?
     h4.heading-h4
       | Address:
-      = " #{@freelancer.freelancer_data.address}#{@freelancer.freelancer_data.line2? ? ", #{@freelancer.freelancer_data.line2}" : "" }, #{@freelancer.freelancer_data.city}, #{@freelancer.freelancer_data.state}, #{@freelancer.freelancer_data.country.try(:upcase)}, #{@freelancer.freelancer_data.postal_code}"
+      = " #{@freelancer.freelancer_profile.address}#{@freelancer.freelancer_profile.line2? ? ", #{@freelancer.freelancer_profile.line2}" : "" }, #{@freelancer.freelancer_profile.city}, #{@freelancer.freelancer_profile.state}, #{@freelancer.freelancer_profile.country.try(:upcase)}, #{@freelancer.freelancer_profile.postal_code}"
   - if @freelancer.confirmed_at.nil? && @freelancer.confirmation_token.present?
     .confirmation_link
       .confirmation_label
         strong<> Confirmation Link:
         = confirmation_url(@freelancer, confirmation_token: @freelancer.confirmation_token)
-  - if @freelancer.freelancer_data.special_avj_fees?
-    h4.heading-h4= "Special AVJ Fee #{@freelancer.freelancer_data.special_avj_fees}"
+  - if @freelancer.freelancer_profile.special_avj_fees?
+    h4.heading-h4= "Special AVJ Fee #{@freelancer.freelancer_profile.special_avj_fees}"
   = render "shared/profile-freelancer"

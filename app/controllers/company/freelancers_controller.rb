@@ -2,6 +2,7 @@ class Company::FreelancersController < Company::BaseController
   include FreelancerHelper
 
   def index
+    authorize current_company
     @keywords = params.dig(:search, :keywords).presence
     @address = params.dig(:search, :address).presence
     @country = params.dig(:search, :country).presence
@@ -9,7 +10,7 @@ class Company::FreelancersController < Company::BaseController
 
     if params.has_key?(:search) and !@keywords and !@address and !@country
       flash[:error] = "You'll need to add some search criteria to narrow your search results!"
-      redirect_to company_freelancers_path
+      redirect_to company_freelancers_path && return
     end
 
     @sort = params.dig(:search, :sort).presence
@@ -24,12 +25,13 @@ class Company::FreelancersController < Company::BaseController
     end
 
     if sort != nil
-      @freelancers = Freelancer.where(disabled: false).order(name: sort)
+      @freelancer_profiles = FreelancerProfile.where(disabled: false)
     else
-      @freelancers = Freelancer.where(disabled: false)
+      @freelancer_profiles = FreelancerProfile.where(disabled: false)
     end
 
-    @freelancers = @freelancers.order("verified DESC")
+    @freelancer_profiles = @freelancer_profiles.order("verified DESC")
+    @freelancers = Freelancer.where(id: @freelancer_profiles.map(&:freelancer_id))
 
     if @address
       # check for cached version of address
@@ -46,7 +48,9 @@ class Company::FreelancersController < Company::BaseController
         if @distance.nil?
           @distance = 60000
         end
-        @freelancers = @freelancers.nearby(@geocode[:lat], @geocode[:lng], @distance).with_distance(point).order("distance")
+        @freelancer_profiles = @freelancer_profiles.where(freelancer_id: @freelancers.map(&:id))
+        @freelancer_profiles = @freelancer_profiles.nearby(@geocode[:lat], @geocode[:lng], @distance).with_distance(point).order("distance")
+        @freelancers = Freelancer.where(id: @freelancer_profiles.map(&:freelancer_id))
       else
         @freelancers = Freelancer.none
       end
@@ -61,33 +65,40 @@ class Company::FreelancersController < Company::BaseController
     end
 
     if @country
-      @freelancers = @freelancers.where(country: @country)
+      @freelancer_profiles = @freelancer_profiles.where(freelancer_id: @freelancers.map(&:id))
+      @freelancer_profiles = @freelancer_profiles.where(country: @country)
+      @freelancers = Freelancer.where(id: @freelancer_profiles.map(&:freelancer_id))
     end
 
     @freelancers = @freelancers.page(params[:page]).per(10)
   end
 
   def hired
-    @locations = current_user.freelancers.uniq.pluck(:city)
-    @freelancers = current_user.freelancers.distinct
+    authorize current_company, :index?
+    @locations = current_company.freelancers.uniq.pluck(:city)
+    @freelancers = current_company.freelancers.distinct
 
-    if params[:location] && params[:location] != ""
-      @freelancers = @freelancers.where({ city: params[:location] })
+    if params[:location].present?
+      freelancer_profiles = FreelancerProfile.where(freelancer_id: @freelancers.map(&:id))
+      freelancer_profiles = freelancer_profiles.where(city: params[:location])
+      @freelancers = Freelancer.where(id: freelancer_profiles.map(&:freelancer_id))
     end
 
     @freelancers = @freelancers.page(params[:page]).per(10)
   end
 
   def favourites
-    @locations = current_user.favourite_freelancers.uniq.pluck(:city)
-    @freelancers = current_user.favourite_freelancers
+    authorize current_company, :index?
+    @locations = current_company.favourite_freelancers.uniq.pluck(:city)
+    @freelancers = current_company.favourite_freelancers
 
     if params[:location] && params[:location] != ""
-      @freelancers = @freelancers.where({ city: params[:location] })
+      freelancer_profiles = FreelancerProfile.where(freelancer_id: @freelancers.map(&:id))
+      freelancer_profiles = freelancer_profiles.where(city: params[:location])
+      @freelancers = Freelancer.where(id: freelancer_profiles.map(&:freelancer_id))
     end
 
-    @freelancers = @freelancers.page(params[:page]).
-      per(50)
+    @freelancers = @freelancers.page(params[:page]).per(50)
   end
 
   def invite_to_quote
@@ -99,6 +110,8 @@ class Company::FreelancersController < Company::BaseController
         result = 0
       else
         @job = Job.find(@job_id)
+        authorize @job
+
         @freelancer = Freelancer.find(params[:id])
 
         if @job.applicants.where({ freelancer_id: params[:id] }).count > 0
@@ -138,8 +151,10 @@ class Company::FreelancersController < Company::BaseController
 
   def show
     @freelancer = Freelancer.find(params[:id])
+    authorize @freelancer
+
     @jobs = []
-    @jobs_master = current_user.jobs.where({ state: "published" }).order('title ASC').distinct
+    @jobs_master = current_company.jobs.where(state: "published").order(title: :asc).distinct
     @jobs_master.each do |job|
       @found = false
       job.applicants.each do |applicant|
@@ -158,21 +173,19 @@ class Company::FreelancersController < Company::BaseController
       end
     end
 
-
-
     # analytic
     if params.dig(:toggle_favourite) != "true" and params.dig(:invite_to_quote) != "true"
-      @freelancer.profile_views += 1
+      @freelancer.freelancer_profile.profile_views += 1
     end
-    @freelancer.save
+    @freelancer.freelancer_profile.save
 
-    @favourite = current_user.favourites.where({freelancer_id: params[:id]}).length > 0 ? true : false
+    @favourite = current_company.favourites.where(freelancer_id: params[:id]).length > 0 ? true : false
     if params.dig(:toggle_favourite) == "true"
       if @favourite == false
-        current_user.favourite_freelancers << @freelancer
+        current_company.favourite_freelancers << @freelancer
         @favourite = true
       else
-        current_user.favourites.where({freelancer_id: @freelancer.id}).destroy_all
+        current_company.favourites.where({freelancer_id: @freelancer.id}).destroy_all
         @favourite = false
       end
     end
@@ -189,6 +202,7 @@ class Company::FreelancersController < Company::BaseController
   end
 
   def add_favourites
+    authorize current_company
     id = current_user.id
     if params[:freelancers].nil?
       render json: { status: 'parameter missing' }
@@ -199,12 +213,11 @@ class Company::FreelancersController < Company::BaseController
       f = Freelancer.where({ id: id.to_i })
 
       if f.length > 0
-        current_user.favourite_freelancers << f.first
+        current_user.company.favourite_freelancers << f.first
       end
     end
 
     render json: { status: 'success', freelancers: params[:freelancers] }
-
   end
 
 end

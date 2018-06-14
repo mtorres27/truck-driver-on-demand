@@ -1,17 +1,17 @@
 .container.container--header
-  - if @freelancer.profile_header_url.include?("missing") or @freelancer.header_source == "color"
-    .profile__wallpaper.profile__wallpaper--wide style="background-color: #{ @freelancer.header_color.include?("#") ? "" : "#"}#{@freelancer.header_color}"
+  - if @freelancer.freelancer_profile.profile_header_url.include?("missing") or @freelancer.freelancer_profile.header_source == "color"
+    .profile__wallpaper.profile__wallpaper--wide style="background-color: #{ @freelancer.freelancer_profile.header_color.include?("#") ? "" : "#"}#{@freelancer.freelancer_profile.header_color}"
   - else
-    .profile__wallpaper.profile__wallpaper--wide style="background-image: url(#{@freelancer.profile_header_url.include?("missing") ? "" : @freelancer.profile_header_url});"
+    .profile__wallpaper.profile__wallpaper--wide style="background-image: url(#{@freelancer.freelancer_profile.profile_header_url.include?("missing") ? "" : @freelancer.freelancer_profile.profile_header_url});"
 
 
 .container.container--profile
   .frame
     .action-bar
       h2.heading-h2.heading-h2--action-bar
-        = @freelancer.name
+        = @freelancer.full_name
       .action-bar__actions
-        - if @freelancer.available
+        - if @freelancer.freelancer_profile.available
           .tag.tag--success
             | Available
           div.btn-icon-link style="cursor: pointer" onclick="togglePopOver()"

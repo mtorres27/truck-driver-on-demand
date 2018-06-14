@@ -16,9 +16,9 @@
 
     tbody
       - @new_registrants.each do |registrant|
-        - if registrant.class == FreelancerData
+        - if registrant.class == FreelancerProfile
           tr
-            td= link_to registrant.name, admin_freelancer_path(registrant.freelancer)
+            td= link_to registrant.freelancer.full_name, admin_freelancer_path(registrant.freelancer)
             td Freelancer
             td= mail_to registrant.freelancer.email
             td= registrant.state
@@ -30,18 +30,18 @@
               = link_to 'Enable', enable_admin_freelancer_path(registrant.freelancer)
               '  |
               = link_to 'Delete', admin_freelancer_path(registrant.freelancer), data: {confirm: "Are you sure?"}, method: :delete
-        - elsif registrant.class == CompanyData
+        - elsif registrant.class == Company
           tr
-            td= link_to registrant.name, admin_company_path(registrant.company)
+            td= link_to registrant.name, admin_company_path(registrant.company_user)
             td Company
-            td= mail_to registrant.company.email
+            td= mail_to registrant.company_user.email
             td= registrant.state
             td= registrant.country.try(:upcase)
             td= registrant.created_at.strftime('%b %-d, %Y')
             td.text-right
-              = link_to 'Edit', edit_admin_company_path(registrant.company)
+              = link_to 'Edit', edit_admin_company_path(registrant.company_user)
               '  |
-              = link_to 'Enable', enable_admin_company_path(registrant.company)
+              = link_to 'Enable', enable_admin_company_path(registrant.company_user)
               '  |
-              = link_to 'Delete', admin_company_path(registrant.company), data: { confirm: "Are you sure?" }, method: :delete
+              = link_to 'Delete', admin_company_path(registrant.company_user), data: { confirm: "Are you sure?" }, method: :delete
 

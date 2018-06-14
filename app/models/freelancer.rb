@@ -18,8 +18,18 @@
 #  confirmation_token     :string
 #  confirmed_at           :datetime
 #  confirmation_sent_at   :datetime
+#  first_name             :string
+#  last_name              :string
 #  type                   :string
 #  messages_count         :integer          default(0), not null
+#  company_id             :integer
+#
+# Indexes
+#
+#  index_users_on_company_id            (company_id)
+#  index_users_on_confirmation_token    (confirmation_token) UNIQUE
+#  index_users_on_email                 (email) UNIQUE
+#  index_users_on_reset_password_token  (reset_password_token) UNIQUE
 #
 
 require 'net/http'
@@ -27,82 +37,74 @@ require 'uri'
 
 class Freelancer < User
   include PgSearch
-  include EasyPostgis
 
-  attr_accessor :first_name, :last_name, :accept_terms_of_service, :accept_privacy_policy,
-                 :accept_code_of_conduct, :enforce_profile_edit, :user_type
+  audited
+
+  has_one :freelancer_profile, dependent: :destroy
   has_many :applicants, -> { order(updated_at: :desc) }, dependent: :destroy
   has_many :jobs, through: :applicants
   has_many :messages, -> { order(created_at: :desc) }, as: :authorable, dependent: :destroy
   has_many :company_reviews, dependent: :destroy
   has_many :freelancer_reviews, dependent: :nullify
-  has_one :freelancer_data, dependent: :destroy
-  accepts_nested_attributes_for :freelancer_data
-
   has_many :certifications, -> { order(updated_at: :desc) }, dependent: :destroy
-  accepts_nested_attributes_for :certifications, allow_destroy: true, reject_if: :reject_certification
-
   has_many :freelancer_affiliations
-  accepts_nested_attributes_for :freelancer_affiliations, :reject_if => :all_blank, :allow_destroy => true
-
   has_many :freelancer_clearances
-  accepts_nested_attributes_for :freelancer_clearances, :reject_if => :all_blank, :allow_destroy => true
-
   has_many :freelancer_portfolios
-  accepts_nested_attributes_for :freelancer_portfolios, :reject_if => :all_blank, :allow_destroy => true
-
   has_many :freelancer_insurances
-  accepts_nested_attributes_for :freelancer_insurances, :reject_if => :all_blank, :allow_destroy => true
-
   has_many :friend_invites
-  accepts_nested_attributes_for :friend_invites, :reject_if => :all_blank, :allow_destroy => true
-
   has_many :job_favourites
   has_many :favourite_jobs, through: :job_favourites, source: :job
-
   has_many :company_favourites
   has_many :favourite_companies, through: :company_favourites, source: :company
 
-  validates :years_of_experience, numericality: { only_integer: true }
-
-  validates :phone_number, length: { minimum: 7 }, allow_blank: true
-
-  validates :phone_number, length: { minimum: 7 }, on: :update, allow_blank: true
-
-  audited
-
-  def connected?; !stripe_account_id.nil?; end
-
-  # validates_acceptance_of :accept_terms_of_service
-  # validates_acceptance_of :accept_privacy_policy
-  # validates_acceptance_of :accept_code_of_conduct
+  attr_accessor :accept_terms_of_service, :accept_privacy_policy,
+                :accept_code_of_conduct, :enforce_profile_edit, :user_type
 
   validates :email, :address, :city, :postal_code, :country, :freelancer_type, :service_areas, :bio, :years_of_experience, :pay_unit_time_preference, presence: true, if: :enforce_profile_edit
-  validates :first_name, :last_name, :country, :city, presence: true, on: :update, if: :step_job_info?
-  validates :job_types, presence: true, on: :update, if: :step_profile?
-  validates :avatar, :tagline, :bio, presence: true, on: :update, if: :confirmed_freelancer?
+  validates :first_name, :last_name, presence: true, on: :update, if: :step_job_info?
+  validates :freelancer_profile, presence: true
+  validates_associated :freelancer_profile
 
-  before_save :set_name, if: :step_job_info?
+  validates_acceptance_of :accept_terms_of_service
+  validates_acceptance_of :accept_privacy_policy
+  validates_acceptance_of :accept_code_of_conduct
+
+  before_validation :initialize_freelancer_profile
   after_create :check_for_invites
   after_save :add_credit_to_inviters, if: :confirmed_at_changed?
-  after_save :send_welcome_email, if: :registration_step_changed?
-  after_save :add_to_hubspot
-  before_create :set_default_step
 
-  pg_search_scope :search, associated_against: {
-      freelancer_data: [:name, :job_types, :job_types, :job_markets, :technical_skill_tags,
-                        :manufacturer_tags, :job_functions, :tagline, :bio]
+  accepts_nested_attributes_for :freelancer_profile
+  accepts_nested_attributes_for :certifications, allow_destroy: true, reject_if: :reject_certification
+  accepts_nested_attributes_for :freelancer_affiliations, reject_if: :all_blank, allow_destroy: true
+  accepts_nested_attributes_for :freelancer_clearances, reject_if: :all_blank, allow_destroy: true
+  accepts_nested_attributes_for :freelancer_portfolios, reject_if: :all_blank, allow_destroy: true
+  accepts_nested_attributes_for :freelancer_insurances, reject_if: :all_blank, allow_destroy: true
+  accepts_nested_attributes_for :friend_invites, reject_if: :all_blank, allow_destroy: true
+
+  pg_search_scope :search, against: {
+    first_name: "A",
+    last_name: "A"
+  }, associated_against: {
+    freelancer_profile: [
+      :job_types, :job_markets, :technical_skill_tags, :manufacturer_tags, :job_functions, :tagline, :bio
+    ]
   }, using: {
     tsearch: { prefix: true, any_word: true }
   }
 
   pg_search_scope :name_or_email_search, against: {
-      email: "A"
-  }, associated_against: {
-      freelancer_data: [:name]
+    email: "A",
+    first_name: "A",
+    last_name: "A"
   }, using: {
-      tsearch: { prefix: true }
+    tsearch: { prefix: true }
   }
+
+  delegate :registration_completed?, to: :freelancer_profile, allow_nil: true
+
+  def connected?
+    freelancer_profile.stripe_account_id.present?
+  end
 
   def rating
     if freelancer_reviews.count > 0
@@ -112,17 +114,12 @@ class Freelancer < User
     end
   end
 
-
-  def registration_completed?
-    freelancer_data.registration_step == "wicked_finish" if freelancer_data
-  end
-
   def job_markets_for_job_type(job_type)
     all_job_markets = I18n.t("enumerize.#{job_type}_job_markets")
     return [] unless all_job_markets.kind_of?(Hash)
     freelancer_job_markets = []
-    unless freelancer_data.job_markets.nil?
-      freelancer_data.job_markets.each do |index, value|
+    unless freelancer_profile.job_markets.nil?
+      freelancer_profile.job_markets.each do |index, _|
         if all_job_markets[index.to_sym]
           freelancer_job_markets << all_job_markets[index.to_sym]
         end
@@ -135,8 +132,8 @@ class Freelancer < User
     all_job_functions = I18n.t("enumerize.#{job_type}_job_functions")
     return [] unless all_job_functions.kind_of?(Hash)
     freelancer_job_functions = []
-    unless freelancer_data.job_functions.nil?
-      freelancer_data.job_functions.each do |index, value|
+    unless freelancer_profile.job_functions.nil?
+      freelancer_profile.job_functions.each do |index, _|
         if all_job_functions[index.to_sym]
           freelancer_job_functions << all_job_functions[index.to_sym]
         end
@@ -151,23 +148,20 @@ class Freelancer < User
 
   def score
     score = 0
-    score += 1 if self.name.present?
-    score += 5 if self.avatar_data.present?
+    score += 1 if self.full_name.present?
+    score += 5 if self.freelancer_profile.avatar_data.present?
     score += 1 if self.email.present?
-    score += 1 if self.address.present?
-    score += 1 if self.area.present?
-    score += 1 if self.city.present?
-    score += 1 if self.state.present?
-    score += 1 if self.postal_code.present?
-    score += 1 if self.phone_number.present?
-
-    score += 1 if self.bio.present?
-    score += 1 if self.tag_line.present?
-    score += 1 if self.company_name.present?
-    score += 1 if self.valid_driver
-
-    score += 1 if self.available
-
+    score += 1 if self.freelancer_profile.address.present?
+    score += 1 if self.freelancer_profile.area.present?
+    score += 1 if self.freelancer_profile.city.present?
+    score += 1 if self.freelancer_profile.state.present?
+    score += 1 if self.freelancer_profile.postal_code.present?
+    score += 1 if self.freelancer_profile.phone_number.present?
+    score += 1 if self.freelancer_profile.bio.present?
+    score += 1 if self.freelancer_profile.tag_line.present?
+    score += 1 if self.freelancer_profile.company_name.present?
+    score += 1 if self.freelancer_profile.valid_driver
+    score += 1 if self.freelancer_profile.available
     score += 5 * self.certifications.count
     score += 2 * self.freelancer_affiliations.count
     score += 2 * self.freelancer_clearances.count
@@ -210,44 +204,23 @@ class Freelancer < User
 
   def self.do_all_geocodes
     Freelancer.all.each do |f|
-      p "Doing geocode for " + f.id.to_s + "(#{f.compile_address})"
-      f.do_geocode
-      f.update_columns(lat: f.lat, lng: f.lng)
-
+      data = f.freelancer_profile
+      p "Doing geocode for " + f.id.to_s + "(#{data.compile_address})"
+      data.do_geocode
+      data.update_columns(lat: f.lat, lng: f.lng)
       sleep 1
     end
   end
 
-  def profile_form_filled?
-    freelancer_data.avatar.present? && bio.present? && tagline.present? if freelancer_data
-  end
-
-  def name_initials
-    freelancer_data.name.blank? ? email[0].upcase : freelancer_data.name.split.map(&:first).map(&:upcase).join
-  end
-
   private
 
-  def add_to_hubspot
-    return unless Rails.application.secrets.enabled_hubspot
-    return if !registration_completed? || changes[:registration_step].nil?
-
-    Hubspot::Contact.createOrUpdate(email,
-      firstname: name.split(" ")[0],
-      lastname: name.split(" ")[1],
-      lifecyclestage: "customer",
-      im_an: "AV Freelancer",
-    )
-  end
-
-  def send_welcome_email
-    return if confirmed? || !registration_completed? || confirmation_sent_at.present?
-    self.send_confirmation_instructions
+  def initialize_freelancer_profile
+    self.freelancer_profile ||= build_freelancer_profile
   end
 
   def check_for_invites
-    return if FriendInvite.by_email(email).count.zero?
-    self.avj_credit = 10
+    return if FriendInvite.by_email(email).count.zero? || freelancer_profile.nil?
+    self.freelancer_profile.avj_credit = 10
     save!
     FreelancerMailer.notice_credit_earned(self, 10).deliver_later
   end
@@ -256,38 +229,26 @@ class Freelancer < User
     return if FriendInvite.by_email(email).count.zero?
     FriendInvite.by_email(email).each do |invite|
       freelancer = invite.freelancer
-      if freelancer.avj_credit.nil?
+      if freelancer.freelancer_profile.avj_credit.nil?
         credit_earned = 20
-      elsif freelancer.avj_credit + 20 <= 200
+      elsif freelancer.freelancer_profile.avj_credit + 20 <= 200
         credit_earned = 20
       else
-        credit_earned = 200 - freelancer.avj_credit
+        credit_earned = 200 - freelancer.freelancer_profile.avj_credit
       end
-      freelancer.avj_credit = freelancer.avj_credit.to_f + credit_earned
-      freelancer.save!
+      freelancer.freelancer_profile.avj_credit = freelancer.freelancer_profile.avj_credit.to_f + credit_earned
+      freelancer.freelancer_profile.save!
       invite.update_attribute(:accepted, true)
       FreelancerMailer.notice_credit_earned(freelancer, credit_earned).deliver_later if credit_earned > 0
     end
   end
 
   def step_profile?
-    freelancer_data.registration_step == "profile" if freelancer_data
+    freelancer_profile&.registration_step == "profile"
   end
 
   def step_job_info?
-    freelancer_data.registration_step == "job_info" if freelancer_data
-  end
-
-  def set_default_step
-    freelancer_data.registration_step ||= "personal" if freelancer_data
-  end
-
-  def set_name
-    self.name ||= "#{first_name} #{last_name}"
-  end
-
-  def confirmed_freelancer?
-    registration_completed? && self.confirmed? == false
+    freelancer_profile&.registration_step == "job_info"
   end
 
   protected
@@ -297,6 +258,6 @@ class Freelancer < User
   end
 
   def registration_step_changed?
-    freelancer_data.registration_step_changed? if freelancer_data
+    freelancer_profile&.registration_step_changed?
   end
 end

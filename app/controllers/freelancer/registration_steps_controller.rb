@@ -1,17 +1,23 @@
-class Freelancer::RegistrationStepsController < ApplicationController
+class Freelancer::RegistrationStepsController < Freelancer::BaseController
   include Wicked::Wizard
+
+  skip_before_action :authenticate_user!, only: [:show]
+  skip_before_action :redirect_if_not_freelancer, only: [:show]
 
   steps :personal, :job_info, :profile
 
-  before_action :verify_current_freelancer
-
   rescue_from Wicked::Wizard::InvalidStepError do
-    redirect_to new_freelancer_session_path
+    redirect_to new_user_session_path
   end
 
   def show
-    @freelancer = current_user
-    render_wizard
+    if params[:id] == "wicked_finish"
+      redirect_to finish_wizard_path
+    elsif current_freelancer_profile.nil?
+      redirect_to root_path
+    else
+      render_wizard
+    end
   end
 
   def index
@@ -19,19 +25,17 @@ class Freelancer::RegistrationStepsController < ApplicationController
   end
 
   def update
-    @freelancer = current_user
-    @freelancer.attributes = params[:freelancer] ? freelancer_params : {}
-    @freelancer.registration_step = next_step
+    current_freelancer_profile.attributes = params[:freelancer_profile].present? ? freelancer_profile_params : {}
+    current_freelancer_profile.registration_step = next_step
 
-    sign_out @freelancer if next_step == "wicked_finish" && @freelancer.profile_form_filled?
+    sign_out current_user if next_step == "wicked_finish" && current_freelancer_profile.profile_form_filled?
 
-    render_wizard @freelancer
+    render_wizard current_freelancer_profile
   end
 
   def skip
-    @freelancer = current_user
-    @freelancer.update_attribute(:registration_step, next_step)
-    sign_out @freelancer if next_step == "wicked_finish"
+    current_freelancer_profile.update_attribute(:registration_step, next_step)
+    sign_out current_user if next_step == "wicked_finish"
     redirect_to freelancer_registration_step_path(next_step)
   end
 
@@ -41,10 +45,8 @@ class Freelancer::RegistrationStepsController < ApplicationController
     confirm_email_path
   end
 
-  def freelancer_params
-    params.require(:freelancer).permit(
-      :first_name,
-      :last_name,
+  def freelancer_profile_params
+    params.require(:freelancer_profile).permit(
       :city,
       :company_name,
       :country,
@@ -54,13 +56,12 @@ class Freelancer::RegistrationStepsController < ApplicationController
       :tagline,
       job_types: I18n.t("enumerize.job_types").keys,
       job_markets: (I18n.t("enumerize.live_events_staging_and_rental_job_markets").keys + I18n.t("enumerize.system_integration_job_markets").keys).uniq,
-      job_functions: (I18n.t("enumerize.system_integration_job_functions").keys + I18n.t("enumerize.live_events_staging_and_rental_job_functions").keys).uniq,
+      job_functions: (I18n.t("enumerize.system_integration_job_functions").keys + I18n.t("enumerize.live_events_staging_and_rental_job_functions").keys).uniq
     )
   end
 
   def verify_current_freelancer
-    return if current_freelancer.present?
+    return if current_user.freelancer?
     redirect_to new_freelancer_session_path
   end
-
 end

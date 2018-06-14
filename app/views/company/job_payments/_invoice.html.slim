@@ -1,13 +1,13 @@
 .grid-cell.grid-cell--33
   h4.heading-h4= "From: #{@job.company.name}"
   div= @job.company.address
-  div #{current_user.company_data.city}, #{current_user.company_data.state}
-  div= current_user.company_data.postal_code
-  div BN Tax No. #{current_user.company_data.sales_tax_number}
+  div #{current_user.user_data.city}, #{current_user.user_data.state}
+  div= current_user.user_data.postal_code
+  div BN Tax No. #{current_user.user_data.sales_tax_number}
 .grid-cell.grid-cell--33
-  h4.heading-h4= "To: #{@job.freelancer&.name}"
-  div= @job.freelancer&.formatted_address
-  div= @job.freelancer&.sales_tax_number
+  h4.heading-h4= "To: #{@job.freelancer&.full_name}"
+  div= @job.freelancer&.freelancer_profile&.formatted_address
+  div= @job.freelancer&.freelancer_profile&.sales_tax_number
 .grid-cell.grid-cell--33
   h4.heading-h4= "Job: #{@job.title}"
   div= "Phase: #{@payment.description}"

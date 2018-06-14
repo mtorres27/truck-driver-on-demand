@@ -1,6 +1,6 @@
 class Company::JobsController < Company::BaseController
   before_action :set_job, except: [:job_countries, :new, :create]
-  before_action :set_company, only: [:edit, :new, :create, :update]
+  before_action :authorize_job, except: [:job_countries, :new, :create]
 
   def avj_invoice
 
@@ -16,10 +16,12 @@ class Company::JobsController < Company::BaseController
 
   def new
     if params[:job]
-      @job = Job.new(job_params)
+      @job = current_company.jobs.build(job_params)
     else
-      @job = Job.new(project_id: params[:project_id])
+      @job = current_company.jobs.build(project_id: params[:project_id])
     end
+
+    authorize @job
 
     @currencies = [
       ["Canadian Dollars", "cad"],
@@ -32,12 +34,15 @@ class Company::JobsController < Company::BaseController
   end
 
   def create
-    if (!['trialing', 'active'].include?(current_user.company_data.subscription_status))
+    if (!['trialing', 'active'].include?(current_company.subscription_status))
       flash[:notice] = "You need to subscribe to be able to post new jobs."
-      redirect_to company_projects_path
+      redirect_to company_projects_path && return
     end
+
     @job = Job.new(job_params)
-    @job.company = current_user
+    @job.company = current_company
+
+    authorize @job
 
     validate_ownership
     if @job.errors.size > 0
@@ -61,7 +66,7 @@ class Company::JobsController < Company::BaseController
   end
 
   def publish
-    if @job.company.id != current_user.id
+    if @job.company.id != current_company.id
       redirect_to company_job_path(@job)
       return
     end
@@ -112,7 +117,8 @@ class Company::JobsController < Company::BaseController
   def freelancer_matches
     @jobs = @job.company.jobs
     @distance = params[:search][:distance] if params[:search].present?
-    @freelancers = Freelancer.where(disabled: false).where("job_types like ?", "%#{@job.job_type}%").order(:name)
+    @freelancer_profiles = FreelancerProfile.where(disabled: false).where("job_types like ?", "%#{@job.job_type}%")
+    @freelancers = Freelancer.where(id: @freelancer_profiles.map(&:freelancer_id))
     @address_for_geocode = @job.address
     @address_for_geocode += ", #{CS.states(@job.country.to_sym)[@job.state_province.to_sym]}" if @job.state_province.present?
     @address_for_geocode += ", #{CS.countries[@job.country.upcase.to_sym]}" if @job.country.present?
@@ -131,7 +137,9 @@ class Company::JobsController < Company::BaseController
       if @distance.nil?
         @distance = 160934
       end
-      @freelancers = @freelancers.nearby(@geocode[:lat], @geocode[:lng], @distance).with_distance(point).order("distance")
+      @freelancer_profiles = FreelancerProfile.where(freelancer_id: @freelancers.map(&:id))
+      @freelancer_profiles = @freelancer_profiles.nearby(@geocode[:lat], @geocode[:lng], @distance).with_distance(point).order("distance")
+      @freelancers = Freelancer.where(id: @freelancer_profiles.map(&:freelancer_id))
     else
       flash[:error] = "Unable to search geocode. Please try again."
       @freelancers = Freelancer.none
@@ -141,16 +149,16 @@ class Company::JobsController < Company::BaseController
 
   private
 
-  def set_company
-    @company = current_user
+  def set_job
+    @job = current_company.jobs.find(params[:id])
   end
 
-  def set_job
-    @job = current_user.jobs.find(params[:id])
+  def authorize_job
+    authorize @job
   end
 
   def validate_ownership
-    unless job_params[:project_id].present? && current_user.projects.find(job_params[:project_id])
+    unless job_params[:project_id].present? && current_company.projects.find(job_params[:project_id])
       @job.errors[:project_id] << "Invalid project selected"
     end
   end

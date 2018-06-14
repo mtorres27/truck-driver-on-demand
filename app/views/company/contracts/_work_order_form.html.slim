@@ -3,7 +3,7 @@
     h2.heading-h2.heading-h2--action-bar Edit Work Order
     .action-bar__actions
 
-  - path = current_user&.is_a?(Admin) ? admin_job_work_order_path(@job) : company_job_work_order_path(@job)
+  - path = current_user.admin? ? admin_job_work_order_path(@job) : company_job_work_order_path(@job)
   = simple_form_for(@job, url: path) do |f|
     .grid-h
       .grid-cell.grid-cell--33
@@ -12,7 +12,7 @@
       .grid-cell.grid-cell--33
         h3.heading-h3 Project Reference
         p
-          - if current_user&.is_a?(Company)
+          - if current_user.company_user?
             a href=company_projects_path()
               = project_reference(@job.project)
           - else
@@ -20,7 +20,7 @@
       .grid-cell.grid-cell--expand
         h3.heading-h3 Job Title
         p
-          - path = current_user&.is_a?(Company) ? company_jobs_path(@job) : admin_jobs_path(@job)
+          - path = current_user.company_user? ? company_jobs_path(@job) : admin_jobs_path(@job)
           a href=path
             = @job.title
 

@@ -18,8 +18,18 @@
 #  confirmation_token     :string
 #  confirmed_at           :datetime
 #  confirmation_sent_at   :datetime
+#  first_name             :string
+#  last_name              :string
 #  type                   :string
 #  messages_count         :integer          default(0), not null
+#  company_id             :integer
+#
+# Indexes
+#
+#  index_users_on_company_id            (company_id)
+#  index_users_on_confirmation_token    (confirmation_token) UNIQUE
+#  index_users_on_email                 (email) UNIQUE
+#  index_users_on_reset_password_token  (reset_password_token) UNIQUE
 #
 
 require 'rails_helper'
@@ -27,12 +37,10 @@ require 'rails_helper'
 describe Company, type: :model do
   describe "hooks" do
     describe "after create" do
-      describe "confirm_user" do
-        let(:admin) { create(:admin, user: build(:user)) }
+      describe "confirms the user" do
+        subject(:admin) { create(:admin) }
 
-        it "confirms the user" do
-          expect(admin.user.confirmed_at).to be_present
-        end
+        it { is_expected.to be_confirmed }
       end
     end
   end

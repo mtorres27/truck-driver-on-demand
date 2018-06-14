@@ -1,6 +1,7 @@
 class Company::JobPaymentsController < Company::BaseController
   before_action :set_job
   before_action :set_payment, except: [:index]
+  before_action :authorize_job
 
   def index
     @payments = @job.payments.order(:created_at)
@@ -8,7 +9,7 @@ class Company::JobPaymentsController < Company::BaseController
     @connector = StripeAccount.new(@job.freelancer)
 
     if @accepted_quote.paid_by_company && !@job.funds_available && @job.stripe_balance_transaction_id.present?
-      balance_transaction = Stripe::BalanceTransaction.retrieve(@job.stripe_balance_transaction_id, stripe_account: @job.freelancer.stripe_account_id)
+      balance_transaction = Stripe::BalanceTransaction.retrieve(@job.stripe_balance_transaction_id, stripe_account: @job.freelancer.freelancer_profile.stripe_account_id)
       if balance_transaction[:status] == 'pending'
         @job.funds_available_on = balance_transaction[:available_on]
       else
@@ -32,12 +33,11 @@ class Company::JobPaymentsController < Company::BaseController
       raise Exception.new('You didn\'t pay this work order yet!') if !quote.paid_by_company
       money = @payment.total_amount - @payment.avj_fees
 
-
       Stripe::Payout.create({
         amount: (money * 100).floor,
         currency: @job.currency
       },{
-        stripe_account: freelancer.stripe_account_id
+        stripe_account: freelancer.freelancer_profile.stripe_account_id
       })
 
       @payment.mark_as_paid!
@@ -61,11 +61,15 @@ class Company::JobPaymentsController < Company::BaseController
 
   private
 
-    def set_job
-      @job = current_user.jobs.includes(:payments).find(params[:job_id])
-    end
+  def set_job
+    @job = current_company.jobs.includes(:payments).find(params[:job_id])
+  end
 
-    def set_payment
-      @payment = @job.payments.find(params[:id])
-    end
+  def set_payment
+    @payment = @job.payments.find(params[:id])
+  end
+
+  def authorize_job
+    authorize @job
+  end
 end

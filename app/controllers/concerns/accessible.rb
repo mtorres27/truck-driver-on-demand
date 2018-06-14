@@ -7,7 +7,7 @@ module Accessible
   protected
   def check_user
     flash.clear
-    if current_user&.is_a?(Admin)
+    if current_user.admin?
       # if you have rails_admin. You can redirect anywhere really
       redirect_to(rails_admin.dashboard_path) && return
     elsif current_user.present?

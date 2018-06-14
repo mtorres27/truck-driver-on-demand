@@ -1,25 +1,25 @@
-- has_avatar_class = freelancer.avatar_url == "avatar/missing.png"  ? "freelancer_without_avatar" : "freelancer_with_avatar"
+- has_avatar_class = freelancer.freelancer_profile.avatar_url == "avatar/missing.png"  ? "freelancer_without_avatar" : "freelancer_with_avatar"
 a.list-item.list-item--freelancer href="/company/freelancers/#{freelancer.id}" class="#{has_avatar_class}"
 
   .list__img
     - if is_favourite(freelancer)
       .list__fav
         span.zmdi.zmdi-favorite
-    - if freelancer.avatar_data.present?
+    - if freelancer.freelancer_profile.avatar_data.present?
       .list__img-overlay
-      = image_tag(freelancer.avatar_url, size: "75x75")
+      = image_tag(freelancer.freelancer_profile.avatar_url, size: "75x75")
     - else
       .circle_profile__image.freelancer__image= freelancer.name_initials
 
   .list__group
     .list__title
-      = "#{freelancer.name} "
+      = "#{freelancer.full_name} "
       - if is_verified(freelancer)
         span.list__verified.zmdi.zmdi-check-circle
 
     .list__city
-      - freelancer_address = "#{"#{freelancer.city}, " if freelancer.city.present?}#{"#{freelancer.state}, " if freelancer.state.present?}#{freelancer.country&.upcase}"
-      = "#{freelancer_address}. #{params.dig(:search, :address).present? ? "#{distance_from(freelancer)} miles away" : "" }"
+      - freelancer_address = "#{"#{freelancer.freelancer_profile.city}, " if freelancer.freelancer_profile.city.present?}#{"#{freelancer.freelancer_profile.state}, " if freelancer.freelancer_profile.state.present?}#{freelancer.freelancer_profile.country&.upcase}"
+      = "#{freelancer_address}. #{params.dig(:search, :address).present? ? "#{distance_from(freelancer, @freelancer_profiles)} miles away" : "" }"
 
     .list__rating
     - @stars = freelancer_avg_rating(freelancer)
@@ -30,11 +30,11 @@ a.list-item.list-item--freelancer href="/company/freelancers/#{freelancer.id}" c
     /     = freelancer_ratings_link(freelancer)
 
     .list__desc
-      = freelancer.tagline
+      = freelancer.freelancer_profile.tagline
 
     .tags
-      - if !freelancer.job_types.nil? and freelancer.job_types.kind_of?(Hash)
-        - freelancer.job_types.each do |index, value|
+      - if freelancer.freelancer_profile.job_types.present? and freelancer.freelancer_profile.job_types.kind_of?(Hash)
+        - freelancer.freelancer_profile.job_types.each do |index, value|
           .tag.tag--hollow
             = I18n.t("enumerize.job_types.#{index}")
           - freelancer.job_functions_for_job_type(index).first(2).each do |job_function|

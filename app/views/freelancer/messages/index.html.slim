@@ -9,9 +9,9 @@
         .freelancer-job__message-history
           - @messages.each do |message|
             .freelancer-job__quote-msg
-              .common__user-avatar style="background-image: url(#{message.authorable.avatar_url})"
+              .common__user-avatar style="background-image: url(#{message.authorable.user_data.avatar_url})"
               .freelancer-job__msg-cont.w-clearfix
-                .freelancer-job__msg-user-name= message.authorable.name
+                .freelancer-job__msg-user-name= message.authorable.full_name
                 .freelancer-job__msg-created-at= "#{time_ago_in_words(message.created_at)} ago"
                 p.freelancer-job__msg-text
                   - if message.send_contract != true

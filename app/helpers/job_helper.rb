@@ -8,7 +8,7 @@ module JobHelper
       company_job_applicants_path(job)
     elsif job.negotiated?
       if job.contract_sent != true
-        if job.company.plan_id.nil?
+        if job.company.plan_id.blank?
           company_job_applicants_path(job)
         else
           edit_company_job_work_order_path(job)
@@ -37,7 +37,7 @@ module JobHelper
     sym = job.state.to_sym
     t = job.state.text
 
-    if current_user.is_a?(Freelancer) and job.applicants.where({freelancer_id: current_user.id, state: "declined"}).count > 0
+    if current_user.freelancer? && job.applicants.where({freelancer_id: current_user.id, state: "declined"}).count > 0
       sym = :declined
       t = "declined"
     end

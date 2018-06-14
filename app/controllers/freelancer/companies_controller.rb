@@ -2,6 +2,8 @@ class Freelancer::CompaniesController < Freelancer::BaseController
   include CompanyHelper
 
   def index
+    authorize current_user
+
     @keywords = params.dig(:search, :keywords).presence
     @address = params.dig(:search, :address).presence
 
@@ -54,6 +56,8 @@ class Freelancer::CompaniesController < Freelancer::BaseController
 
 
   def favourites
+    authorize current_user
+
     @locations = current_user.favourite_companies.uniq.pluck(:area)
     @companies = current_user.favourite_companies
 
@@ -64,14 +68,12 @@ class Freelancer::CompaniesController < Freelancer::BaseController
 
     @locations = @locations.uniq
     @companies = @companies.uniq
-
-    # @companies = @companies.page(params[:page]).
-    #   per(50)
   end
 
 
   def show
-    @company = Company.find(params[:id])
+    @company = CompanyUser.find(params[:id])&.company
+    authorize @company
 
     # analytic
     @company.profile_views += 1
@@ -91,6 +93,8 @@ class Freelancer::CompaniesController < Freelancer::BaseController
 
 
   def av_companies
+    authorize current_user
+
     @locations = []
     @companies = []
 
@@ -110,21 +114,21 @@ class Freelancer::CompaniesController < Freelancer::BaseController
 
     @locations = @locations.uniq
     @companies = @companies.uniq
-
   end
 
 
   def show_job
     @job = Job.find(params[:id])
+    authorize @job, :show?
   end
 
 
   def add_favourites
+    authorize current_user
     if params[:companies].nil?
       render json: { status: 'parameter missing' }
       return
     end
-
     params[:companies].each do |id|
       c = Company.where({ id: id.to_i })
 
@@ -134,7 +138,5 @@ class Freelancer::CompaniesController < Freelancer::BaseController
     end
 
     render json: { status: 'success', companies: params[:companies] }
-
   end
-
 end

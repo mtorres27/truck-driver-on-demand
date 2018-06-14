@@ -18,7 +18,7 @@
       - @projects.each do |project|
         tr
           td= link_to project.name, admin_project_path(project)
-          td= link_to project.company.company_data.name, admin_company_path(project.company)
+          td= link_to project.company.name, admin_company_path(project.company)
           td.text-right
             = link_to 'Edit', edit_admin_project_path(project)
             '  |

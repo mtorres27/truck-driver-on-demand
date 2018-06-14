@@ -15,19 +15,19 @@
     a href=company_job_applicant_quotes_path(job, applicant)
       .list-item.list-item--applicant class=("list-item--active" if applicant.id == current_applicant_id)
         .list__info
-          = image_tag(applicant.freelancer.avatar_url, size: "40x40")
+          = image_tag(applicant.freelancer.freelancer_profile.avatar_url, size: "40x40")
           - if is_verified(applicant.freelancer)
             span class="freelancer-verified fa fa-check-circle"
         .list__info.list__info--with-padding.list__info--expand
           - applicant.freelancer.tap do |freelancer|
             h4.heading-h4.heading-h4--no-margin
-              = freelancer.name
+              = freelancer.full_name
             h5.heading-h5.heading-h5--no-margin
               - distance = calc_distance_from(freelancer)
               - if distance == "N/A"
-                = "#{freelancer.city}"
+                = "#{freelancer.freelancer_profile.city}"
               - else
-                = "#{freelancer.city}"
+                = "#{freelancer.freelancer_profile.city}"
         .list__info
           = applicant_state_label(applicant)
 

@@ -1,21 +1,21 @@
 class Company::ProjectsController < Company::BaseController
   before_action :set_project, only: [:show, :edit, :update, :destroy]
+  before_action :authorize_project, only: [:show, :edit, :update, :destroy]
 
   def index
-    @projects = current_user.projects.includes(jobs: :payments).order({ external_project_id: :desc, id: :desc }).page(params[:page]).per(50)
-
-    @job_count = Job.joins(:project).where(
-      projects: {
-        company_id: current_user.id
-      }).count
+    authorize current_company
+    @projects = current_company.projects.includes(jobs: :payments).order({ external_project_id: :desc, id: :desc }).page(params[:page]).per(50)
+    @job_count = Job.joins(:project).where(projects: { company_id: current_company.id }).count
   end
 
   def new
-    @project = current_user.projects.new
+    @project = current_company.projects.new
+    authorize @project
   end
 
   def create
-    @project = current_user.projects.new(project_params)
+    @project = current_company.projects.new(project_params)
+    authorize @project
 
     if @project.save
       respond_to do |format|
@@ -29,8 +29,6 @@ class Company::ProjectsController < Company::BaseController
         format.js
         format.json { render json: @project, status: :unprocessable_entity }
       end
-
-      p @project.errors.full_messages
     end
   end
 
@@ -56,11 +54,15 @@ class Company::ProjectsController < Company::BaseController
 
   private
 
-    def set_project
-      @project = current_user.projects.find(params[:id])
-    end
+  def set_project
+    @project = current_company.projects.find(params[:id])
+  end
 
-    def project_params
-      params.require(:project).permit(:name, :external_project_id)
-    end
+  def authorize_project
+    authorize @project
+  end
+
+  def project_params
+    params.require(:project).permit(:name, :external_project_id)
+  end
 end

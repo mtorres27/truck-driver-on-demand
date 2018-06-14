@@ -9,6 +9,10 @@
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
 #
+# Indexes
+#
+#  index_pages_on_slug  (slug)
+#
 
 FactoryBot.define do
   factory :page do

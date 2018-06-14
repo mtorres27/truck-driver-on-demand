@@ -1,5 +1,6 @@
 class Company::QuotesController < Company::BaseController
   before_action :set_applicant
+  before_action :authorize_job
   before_action :set_quote, only: [:accept, :decline]
 
   def index
@@ -17,7 +18,7 @@ class Company::QuotesController < Company::BaseController
     end
 
     @message = @applicant.messages.new({ body: params[:message][:body], attachment: params[:message][:attachment], has_quote: true })
-    @message.authorable = current_user
+    @message.authorable = current_company
 
     if @message.save
       if @status == "accept"
@@ -91,7 +92,7 @@ class Company::QuotesController < Company::BaseController
       if applicant.state != "declined" and applicant.state != "accepted"
         # send message
         message = Message.new
-        message.authorable = current_user
+        message.authorable = current_company
         message.receivable = applicant
         message.body = "We have decided to go with another provider. Thanks for your interest!"
         message.save
@@ -116,79 +117,83 @@ class Company::QuotesController < Company::BaseController
 
   private
 
-    def set_job
-      @job = current_user.jobs.includes(applicants: [:quotes, :messages]).find(params[:job_id])
+  def set_job
+    @job = current_company.jobs.includes(applicants: [:quotes, :messages]).find(params[:job_id])
+  end
+
+  def set_applicant
+    set_job
+    if params[:applicant_id]
+      @applicant = @job.applicants.find(params[:applicant_id])
+    else
+      @applicant = @job.applicants.without_state(:ignored).includes(:messages).order("messages.created_at").first
+    end
+  end
+
+  def authorize_job
+    authorize @job
+  end
+
+  def set_quote
+    @quote = @applicant.quotes.find(params[:id])
+  end
+
+  def set_collections
+    @messages = @applicant.messages
+    @quotes = @applicant.quotes
+    @all_quotes = @applicant.job.quotes
+    @applicants = @applicant.job.applicants.without_state(:ignored)
+    @combined_items = []
+    @harmonized_items = []
+    @harmonized_indices = []
+
+    if @applicants.where({state: "accepted"}).length > 0
+      @applicant_accepted = true
+    else
+      @applicant_accepted = false
     end
 
-    def set_applicant
-      set_job
-      if params[:applicant_id]
-        @applicant = @job.applicants.find(params[:applicant_id])
-      else
-        @applicant = @job.applicants.without_state(:ignored).includes(:messages).order("messages.created_at").first
-      end
+    @messages.each do |message|
+      @combined_items.push({ type: "message", payload: message, date: message.created_at.to_i })
+      @harmonized_indices.push(message.created_at.to_i)
     end
 
-    def set_quote
-      @quote = @applicant.quotes.find(params[:id])
+    @quotes.each do |quote|
+      @combined_items.push({ type: "quote", payload: quote, date: quote.created_at.to_i })
+      @harmonized_indices.push(quote.created_at.to_i)
     end
 
-    def set_collections
-      @messages = @applicant.messages
-      @quotes = @applicant.quotes
-      @all_quotes = @applicant.job.quotes
-      @applicants = @applicant.job.applicants.without_state(:ignored)
-      @combined_items = []
-      @harmonized_items = []
-      @harmonized_indices = []
+    @harmonized_indices = @harmonized_indices.sort.reverse()
 
-      if @applicants.where({state: "accepted"}).length > 0
-        @applicant_accepted = true
-      else
-        @applicant_accepted = false
-      end
-
-      @messages.each do |message|
-        @combined_items.push({ type: "message", payload: message, date: message.created_at.to_i })
-        @harmonized_indices.push(message.created_at.to_i)
-      end
-
-      @quotes.each do |quote|
-        @combined_items.push({ type: "quote", payload: quote, date: quote.created_at.to_i })
-        @harmonized_indices.push(quote.created_at.to_i)
-      end
-
-      @harmonized_indices = @harmonized_indices.sort.reverse()
-
-      @harmonized_indices.each do |index|
-        search_in_combined(@combined_items, index)
-      end
-
-      if params[:filter].presence
-        @applicants = @applicants.where({state: params[:filter]})
-      end
-
-      @current_applicant_id = @applicant.id
-
+    @harmonized_indices.each do |index|
+      search_in_combined(@combined_items, index)
     end
 
-    def search_in_combined(haystack, needle)
-      index = 0
-      haystack.each do |item|
-        if needle == item[:date]
-          @harmonized_items.push(item)
-          haystack.delete_at(index)
-          return
-        end
-        index += 1
+    if params[:filter].presence
+      @applicants = @applicants.where({state: params[:filter]})
+    end
+
+    @current_applicant_id = @applicant.id
+
+  end
+
+  def search_in_combined(haystack, needle)
+    index = 0
+    haystack.each do |item|
+      if needle == item[:date]
+        @harmonized_items.push(item)
+        haystack.delete_at(index)
+        return
       end
+      index += 1
     end
+  end
 
-    def message_params
-      params.require(:message).permit(:body, :attachment)
-    end
+  def message_params
+    params.require(:message).permit(:body, :attachment)
+  end
 
-    def quote_params
-      params.require(:message).permit(:attachment)
-    end
+  def quote_params
+    params.require(:message).permit(:attachment)
+  end
 end

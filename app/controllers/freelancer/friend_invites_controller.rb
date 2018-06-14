@@ -1,11 +1,13 @@
 class Freelancer::FriendInvitesController < Freelancer::BaseController
   def show
+    authorize current_user
     @friend_invites = current_user.friend_invites
-    @avj_credit = current_user.freelancer_data.avj_credit.to_f
+    @avj_credit = current_user.freelancer_profile.avj_credit.to_f
   end
 
   def update
     @freelancer = current_user
+    authorize @freelancer
 
     if @freelancer.update(friend_invites_params)
       FreelancerMailer.notice_invites_sent(@freelancer).deliver_later

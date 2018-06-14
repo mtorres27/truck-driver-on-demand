@@ -5,6 +5,7 @@ class FreelancerClearanceUploader < Shrine
   plugin :store_dimensions
   plugin :processing
   plugin :default_url
+  plugin :determine_mime_type
 
   process(:store) do |io, context|
     if self::image?(io)

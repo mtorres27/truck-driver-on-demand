@@ -1,6 +1,7 @@
 class Freelancer::JobPaymentsController < Freelancer::BaseController
   before_action :set_job
   before_action :set_payment, except: [:index]
+  before_action :authorize_job
 
   def index
     # @job = Job.find(params[:job_id])
@@ -36,11 +37,15 @@ class Freelancer::JobPaymentsController < Freelancer::BaseController
   end
 
   private
-    def set_job
-      @job = current_user.jobs.includes(:payments).find(params[:job_id])
-    end
+  def set_job
+    @job = current_user.jobs.includes(:payments).find(params[:job_id])
+  end
 
-    def set_payment
-      @payment = @job.payments.find(params[:id])
-    end
+  def set_payment
+    @payment = @job.payments.find(params[:id])
+  end
+
+  def authorize_job
+    authorize @job
+  end
 end

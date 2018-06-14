@@ -29,7 +29,7 @@ describe Freelancer::FriendInvitesController, type: :controller  do
 
     context 'when invites and credit' do
       before(:each) do
-        subject.current_user.freelancer_data.update_attribute(:avj_credit, 50)
+        subject.current_user.freelancer_profile.update_attribute(:avj_credit, 50)
         create(:friend_invite, freelancer: subject.current_user)
         get :show
       end

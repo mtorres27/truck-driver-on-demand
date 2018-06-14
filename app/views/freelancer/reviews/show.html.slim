@@ -4,7 +4,7 @@
 - content_for :secondary do
   .action-bar
     h2.heading-h2.heading-h2--action-bar Add a review
-  - if current_user&.is_a?(Admin) || (current_user&.is_a?(Freelancer) && @job.freelancer&.id == current_user&.id)
+  - if current_user.admin? || (current_user.freelancer? && @job.freelancer&.id == current_user.id)
     - if @review.new_record?
       = render partial: "review_form", locals: {review: @review, job: @job}
     - else

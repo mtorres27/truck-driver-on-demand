@@ -1,10 +1,9 @@
 # == Schema Information
 #
-# Table name: freelancer_datas
+# Table name: freelancer_profiles
 #
 #  id                       :integer          not null, primary key
 #  token                    :string
-#  name                     :string
 #  avatar_data              :text
 #  address                  :string
 #  formatted_address        :string
@@ -46,68 +45,36 @@
 #  valid_driver             :boolean
 #  own_tools                :boolean
 #  company_name             :string
-#  special_avj_fees         :decimal(10, 2)
 #  job_types                :citext
 #  job_functions            :citext
 #  manufacturer_tags        :citext
+#  special_avj_fees         :decimal(10, 2)
 #  avj_credit               :decimal(10, 2)
 #  registration_step        :string
+#  province                 :string
 #  freelancer_id            :integer
 #
+# Indexes
+#
+#  index_freelancer_profiles_on_area                  (area)
+#  index_freelancer_profiles_on_available             (available)
+#  index_freelancer_profiles_on_disabled              (disabled)
+#  index_freelancer_profiles_on_freelancer_id         (freelancer_id)
+#  index_freelancer_profiles_on_job_functions         (job_functions)
+#  index_freelancer_profiles_on_job_markets           (job_markets)
+#  index_freelancer_profiles_on_manufacturer_tags     (manufacturer_tags)
+#  index_freelancer_profiles_on_technical_skill_tags  (technical_skill_tags)
+#  index_on_freelancer_profiles_loc                   (st_geographyfromtext((((('SRID=4326;POINT('::text || lng) || ' '::text) || lat) || ')'::text)))
+#  index_on_freelancers_loc                           (st_geographyfromtext((((('SRID=4326;POINT('::text || lng) || ' '::text) || lat) || ')'::text)))
+#
 
-require 'net/http'
-require 'uri'
-
-class FreelancerData < ApplicationRecord
-  self.table_name = "freelancer_datas"
-
-  extend Enumerize
-  include Geocodable
-  include AvatarUploader[:avatar]
-  include ProfileHeaderUploader[:profile_header]
-  include Disableable
-
-  belongs_to :freelancer
-
-  scope :new_registrants, -> { where(disabled: true) }
-
-  after_save :check_if_should_do_geocode
-
-  serialize :job_types
-  serialize :job_markets
-  serialize :technical_skill_tags
-  serialize :job_functions
-  serialize :manufacturer_tags
-
-  enumerize :pay_unit_time_preference, in: [
-      :fixed, :hourly, :daily
-  ]
-
-  enumerize :freelancer_type, in: [
-      :independent, :service_provider
-  ]
-
-  enumerize :freelancer_team_size, in: [
-      :less_than_five,
-      :six_to_ten,
-      :eleven_to_twenty,
-      :twentyone_to_thirty,
-      :more_than_thirty
-  ]
-
-  enumerize :header_source, in: [
-      :color,
-      :wallpaper
-  ]
-
-  enumerize :country, in: [
-      :at, :au, :be, :ca, :ch, :de, :dk, :es, :fi, :fr, :gb, :hk, :ie, :it, :jp, :lu, :nl, :no, :nz, :pt, :se, :sg, :us
-  ]
-
-  def check_if_should_do_geocode
-    if saved_changes.include?("address") or saved_changes.include?("city") or (!address.nil? and lat.nil?) or (!city.nil? and lat.nil?)
-      do_geocode
-      update_columns(lat: lat, lng: lng)
-    end
+FactoryBot.define do
+  factory :freelancer_profile do
+    country [:es, :fi, :fr, :gb, :pt, :us].sample
+    city { Faker::Address.city }
+    state { Faker::Address.state }
+    bio { Faker::Lorem }
+    tagline { Faker::Lorem }
+    avatar { fixture_file_upload(Rails.root.join("spec", "fixtures", "image.png"), "image/png") }
   end
 end

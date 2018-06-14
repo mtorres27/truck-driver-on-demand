@@ -33,17 +33,17 @@
     tbody
       - @freelancers.each do |freelancer|
         tr
-          td= link_to freelancer.freelancer_data.name, admin_freelancer_path(freelancer)
+          td= link_to freelancer.full_name, admin_freelancer_path(freelancer)
           td= mail_to freelancer.email
-          td= freelancer.freelancer_data.state
-          td= freelancer.freelancer_data.country.try(:upcase)
+          td= freelancer.freelancer_profile.state
+          td= freelancer.freelancer_profile.country.try(:upcase)
           td= freelancer.created_at.strftime('%b %-d, %Y')
           td= !freelancer.confirmed_at.nil?
-          td= freelancer.freelancer_data.disabled
+          td= freelancer.freelancer_profile.disabled
           td.text-right
             = link_to 'Edit', edit_admin_freelancer_path(freelancer)
             '  |
-            - if freelancer.freelancer_data.disabled?
+            - if freelancer.freelancer_profile.disabled?
               = link_to 'Enable', enable_admin_freelancer_path(freelancer)
               '  |
               = link_to 'Delete', admin_freelancer_path(freelancer), data: { confirm: 'Are you sure?' }, method: :delete
