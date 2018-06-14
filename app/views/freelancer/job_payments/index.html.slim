@@ -29,7 +29,7 @@
           .tag.tag--in-progress Freelancer has no bank account
         .payments__total-group
           .payments__total-amt #{number_with_precision(@job.gpayments_sum_paid, precision: 2)}  #{@job.currency ? @job.currency.upcase : ''}
-          .payments__payout-label Balance
+          .payments__payout-label Total Payouts Received
       .payments__status #{@job.company.name}  has secured funds for this project. AV Junction will hold these payments on your behalf until each of the milestones listed below are met.
   - @payments.each do |payment|
     div class="payments #{ "milestone--inactive" if !@accepted_quote.paid_by_company}"
