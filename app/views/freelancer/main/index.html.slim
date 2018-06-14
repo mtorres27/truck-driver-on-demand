@@ -36,12 +36,13 @@ h1.heading-h1
               - @companies.each do |company|
                 .grid-cell.grid-cell--25
                   a.homepage__avatar href=freelancer_company_path(company)
-                    = image_tag(company.avatar_url, size: "75x75")
+                    - if company.avatar_data.present?
+                      = image_tag(company.avatar_url, size: "75x75")
+                    - else
+                      .circle_profile__image.company__image= company.name_initials
                   h4.heading-h4
-                    = company.name 
-                    //= company.id
-                                   
-                  
+                    = company.name
+
         .grid-cell.grid-cell--100
           .callout
             h2.heading-h2 FAQ
@@ -49,36 +50,36 @@ h1.heading-h1
             p We charge up to an 8% commission on the total contract price.
 
             h3.heading-h3 How does payment work?
-            p You and the company agree a price for the job.  The total price is divided into milestone payments.  The job is funded by the company and AV Junction holds those funds until you complete the work.  Once completed simply request payout.  
+            p You and the company agree a price for the job.  The total price is divided into milestone payments.  The job is funded by the company and AV Junction holds those funds until you complete the work.  Once completed simply request payout.
 
-            h3.heading-h3 How do I get started? 
-            p Set up up your profile in full and connect your banking details to our secure payment processor.  Then search for jobs or be invited to quote. 
+            h3.heading-h3 How do I get started?
+            p Set up up your profile in full and connect your banking details to our secure payment processor.  Then search for jobs or be invited to quote.
 
-            a.btn-link href="https://www.avjunction.com/faq" target="_blank" 
+            a.btn-link href="https://www.avjunction.com/faq" target="_blank"
               | More FAQ’s…
-           
+
 
     .grid-cell.grid-cell--33
-      .homepage__sidebar 
+      .homepage__sidebar
         .grid-v
           .grid-cell
             h2.heading-h2 How it Works
           .grid-cell
             h3.heading-h3 Complete Your Profile
-            p 
-              | Showcase your skills and experience on your dedicated profile. This is what companies will be looking at when they want to hire. Completed profiles with profile pictures get better results.  
+            p
+              | Showcase your skills and experience on your dedicated profile. This is what companies will be looking at when they want to hire. Completed profiles with profile pictures get better results.
             .buttons
               a.btn-link href="https://www.avjunction.com/creating-a-profile" target="_blank"
-                | Learn more 
+                | Learn more
           .grid-cell
             h3.heading-h3 Connect Your Banking Details
-            p 
+            p
               | To be able to apply to a job you need to connect your banking details. First verify your identity and then connect a bank account so you can receive payments.
             a.btn-link href="https://www.avjunction.com/creating-a-profile" target="_blank"
                 | Learn more
           .grid-cell
             h3.heading-h3 Find Jobs or Get Invited
-            p 
+            p
               | Search for jobs or we will let you know if you have been invited to quote. Negotiate quotes, build a work order, and set payment milestones.
             a.btn-link href="https://www.avjunction.com/how-to-guide-av-freelancer" target="_blank"
                 | Learn more
@@ -90,13 +91,13 @@ h1.heading-h1
                 | Learn more
           .grid-cell
             h3.heading-h3 Approve Payments & Rate Experience
-            p 
+            p
               | Request payouts on completed milestones. Rate your experience with your employer.
             a.btn-link href="https://www.avjunction.com/how-to-guide-av-freelancer" target="_blank"
                 | Learn more
-          .grid-cell  
+          .grid-cell
             h3.heading-h3 Visit the Knowledge Center for more
-            p  
+            p
               a.btn-link href="https://www.avjunction.com/how-to-guide-av-freelancer" target="_blank"
-                | To the Knowledge Center 
+                | To the Knowledge Center
 

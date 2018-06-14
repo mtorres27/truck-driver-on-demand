@@ -36,12 +36,13 @@ h1.heading-h1
               - @freelancers.each do |freelancer|
                 .grid-cell.grid-cell--25
                   a.homepage__avatar href=company_freelancer_path(freelancer)
-                    = image_tag(freelancer.avatar_url, size: "75x75")
+                    - if freelancer.avatar_data.present?
+                      = image_tag(freelancer.avatar_url, size: "75x75")
+                    - else
+                      .circle_profile__image.freelancer__image= freelancer.name_initials
                   h4.heading-h4
-                    = freelancer.name 
-                    //= freelancer.id
-                                   
-                  
+                    = freelancer.name
+
         .grid-cell.grid-cell--100
           .callout
             h2.heading-h2 FAQ
@@ -49,47 +50,47 @@ h1.heading-h1
             p We charge a flat fee starting at $90 USD per hire depending on the size of the job and subscription plan.
 
             h3.heading-h3 How does payment work?
-            p You and the freelancer agree a price for the job. The total price is divided into milestone payments.  You fund the total job and AV Junction holds those funds until you approve payout on completed milestones.  
+            p You and the freelancer agree a price for the job. The total price is divided into milestone payments.  You fund the total job and AV Junction holds those funds until you approve payout on completed milestones.
 
-            h3.heading-h3 How do I get started? 
-            p Creating a job posting is the first step.  You can invite freelancers to quote or receive quotes automatically from freelancers who find your job through our search tool. 
+            h3.heading-h3 How do I get started?
+            p Creating a job posting is the first step.  You can invite freelancers to quote or receive quotes automatically from freelancers who find your job through our search tool.
 
             h3.heading-h3 Need Help?
-            p 
-              | Contact us at 
+            p
+              | Contact us at
               a href="mailto:info@avjunction.com"
-                | info@avjunction.com 
-            p 
-              | Call us at 
+                | info@avjunction.com
+            p
+              | Call us at
               a href="tel:1-844-602-2000"
                 | 1-844-602-2000
 
-            a.btn-link href="https://www.avjunction.com/faq" target="_blank" 
+            a.btn-link href="https://www.avjunction.com/faq" target="_blank"
               | More FAQ’s…
 
-           
+
 
     .grid-cell.grid-cell--33
-      .homepage__sidebar 
+      .homepage__sidebar
         .grid-v
           .grid-cell
             h2.heading-h2 How it Works
           .grid-cell
             h3.heading-h3 Post a Job
-            p 
-              | Enter in a job summary, the location and type of freelancer you are looking for.  
+            p
+              | Enter in a job summary, the location and type of freelancer you are looking for.
             .buttons
               a.btn-link href="https://www.avjunction.com/how-to-guide-av-company" target="_blank"
-                | Learn more 
+                | Learn more
           .grid-cell
             h3.heading-h3 Find Quality AV Freelancers
-            p 
+            p
               | Browse our database, review profiles and invite to quote.
             a.btn-link href="https://www.avjunction.com/how-to-guide-av-company" target="_blank"
                 | Learn more
           .grid-cell
             h3.heading-h3 Hire and Work Together
-            p 
+            p
               | Negotiate quotes, build a work order, fund job and set payment milestones.
             a.btn-link href="https://www.avjunction.com/how-to-guide-av-company" target="_blank"
                 | Learn more
@@ -101,12 +102,12 @@ h1.heading-h1
                 | Learn more
           .grid-cell
             h3.heading-h3 Approve Payments & Rate Experience
-            p 
+            p
               | Approve payments on completed milestones.  Rate your experience with your hire.
             a.btn-link href="https://www.avjunction.com/how-to-guide-av-company" target="_blank"
                 | Learn more
-          .grid-cell  
+          .grid-cell
             h3.heading-h3 Visit the Knowledge Center for more
-            p  
+            p
               a.btn-link href="https://www.avjunction.com/how-to-guide-av-company " target="_blank"
-                | To the Knowledge Center 
+                | To the Knowledge Center

@@ -71,7 +71,7 @@
         .tag.tag--in-progress Freelancer has no bank account
       .payments__total-group
         .payments__total-amt #{number_with_precision(job.gpayments_sum_paid, precision: 2)} #{job.currency.upcase}
-        .payments__payout-label Total
+        .payments__payout-label Total Payouts
     - if current_user&.is_a?(Company)
       = link_to contract_invoice_company_job_path(job), class: 'btn-primary--active top-margin w-inline-block'
         div View receipt

@@ -13,6 +13,12 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  unless Rails.application.config.consider_all_requests_local
+    rescue_from ActionController::RoutingError, with: :render_404
+    rescue_from ActiveRecord::RecordNotFound, with: :render_404
+    rescue_from ActionView::MissingTemplate, with: :render_404
+  end
+
   def after_inactive_sign_up_path_for(resource)
     cookies.delete(:onboarding)
     '/confirm_email'
@@ -71,6 +77,12 @@ class ApplicationController < ActionController::Base
       puts e
       logger.error e
       return false
+    end
+  end
+
+  def render_404
+    respond_to do |format|
+      format.html { render template: "errors/not_found", status: :not_found }
     end
   end
 
