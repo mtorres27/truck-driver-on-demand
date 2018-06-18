@@ -15,8 +15,10 @@
             .common__text-field-group
               label.common__field-label for="account[type]"  Account type
               select#account_type.common__select-field.w-select name="account[type]"
-                option value="individual" selected=("selected" if @post_data && @post_data['type']=='individual') Individual
-                option value="company" selected=("selected" if @post_data && @post_data['type']=='company')  Company
+                option value="individual" selected=("selected" if @post_data && @post_data['type']=='individual')
+                  | Individual
+                option value="company" selected=("selected" if @post_data && @post_data['type']=='company')
+                  | Company
             - ['individual', 'company'].each do |type|
               div.account_fields id="form_#{type}_fields" style="#{((@post_data && @post_data['type']!= type) || (!@post_data && type=='company'))? 'display:none' :''}"
                 - @country_spec.verification_fields[type].minimum.select{|field| field["legal_entity"] && !field["type"] }.each do |field|

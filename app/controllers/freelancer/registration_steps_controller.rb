@@ -3,6 +3,12 @@ class Freelancer::RegistrationStepsController < ApplicationController
 
   steps :personal, :job_info, :profile
 
+  before_action :verify_current_freelancer
+
+  rescue_from Wicked::Wizard::InvalidStepError do
+    redirect_to new_freelancer_session_path
+  end
+
   def show
     @freelancer = current_freelancer
     render_wizard
@@ -50,6 +56,11 @@ class Freelancer::RegistrationStepsController < ApplicationController
       job_markets: (I18n.t("enumerize.live_events_staging_and_rental_job_markets").keys + I18n.t("enumerize.system_integration_job_markets").keys).uniq,
       job_functions: (I18n.t("enumerize.system_integration_job_functions").keys + I18n.t("enumerize.live_events_staging_and_rental_job_functions").keys).uniq,
     )
+  end
+
+  def verify_current_freelancer
+    return if current_freelancer.present?
+    redirect_to new_freelancer_session_path
   end
 
 end

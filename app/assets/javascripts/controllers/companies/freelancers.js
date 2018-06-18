@@ -24,6 +24,16 @@ document.addEventListener("turbolinks:load", function(){
     });
 
     updateFreelancers();
+
+    $("#job_to_invite").change(function() {
+        var val = $("#job_to_invite").val();
+
+        if (val == "") {
+          $("#job_invite_button").addClass("btn--primary--disabled")
+        } else {
+          $("#job_invite_button").removeClass("btn--primary--disabled");
+        }
+    });
 });
 
 function updateFreelancers() {
@@ -35,4 +45,41 @@ function updateFreelancers() {
         $(".freelancer_without_avatar").show();
         $(".freelancer_with_avatar").show();
     }
+}
+
+var togglePopOver = function() {
+  if ($(".popover").hasClass("popover--visible")) {
+    $(".popover").removeClass("popover--visible");
+    $(".popover--blanket").removeClass("popover--visible");
+  } else {
+    $(".popover").addClass("popover--visible");
+    $(".popover--blanket").addClass("popover--visible");
+  }
+};
+
+var hidePopOver = function() {
+  if ($(".popover").hasClass("popover--visible")) {
+    $(".popover").removeClass("popover--visible");
+    $(".popover--blanket").removeClass("popover--visible");
+  }
+};
+
+var submitInvitation = function(freelancer_id) {
+  if ($("#job_invite_button").hasClass("btn btn--primary btn--primary--disabled")) {
+    return;
+  }
+
+  $.get("/company/freelancers/"+ freelancer_id + "/invite_to_quote", { job_to_invite: $("#job_to_invite").val()})
+    .done(function( data ) {
+      $(".popover-response--error").html("");
+      $(".popover-response--success").html("");
+      if (data.success == 1) {
+        $(".popover-response--success").html(data.message);
+      } else {
+        $(".popover-response--error").html(data.message);
+      }
+
+      var select = $('#job_currency');
+      select.empty().append(data);
+    });
 }

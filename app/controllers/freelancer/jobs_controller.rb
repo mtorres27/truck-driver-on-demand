@@ -237,6 +237,40 @@ class Freelancer::JobsController < Freelancer::BaseController
     render json: { status: 'success', companies: params[:companies] }
   end
 
+  def job_matches
+    @jobs = Job.none
+    current_freelancer.job_types.each do |index, _value|
+      @jobs = @jobs.or(Job.where(job_type: index))
+    end
+    @distance = params[:search][:distance] if params[:search].present?
+    @address = ''
+    @address += "#{current_freelancer.address}, " if current_freelancer.address.present?
+    @address += current_freelancer.city if current_freelancer.city.present?
+    @address += ", #{CS.states(current_freelancer.country.upcase.to_sym)[current_freelancer.state.to_sym]}" if current_freelancer.country.present?
+    @address += ", #{CS.countries[current_freelancer.country.upcase.to_sym]}" if current_freelancer.country.present?
+    if @address
+      # check for cached version of address
+      if Rails.cache.read(@address)
+        @geocode = Rails.cache.read(@address)
+      else
+        # save cached version of address
+        @geocode = do_geocode(@address)
+        Rails.cache.write(@address, @geocode)
+      end
+
+      if @geocode
+        point = OpenStruct.new(:lat => @geocode[:lat], :lng => @geocode[:lng])
+        if @distance.nil?
+          @distance = 160000
+        end
+        @jobs = @jobs.nearby(@geocode[:lat], @geocode[:lng], @distance).with_distance(point).order("distance")
+      else
+        @jobs = Job.none
+      end
+    end
+    @jobs = @jobs.page(params[:page]).per(10)
+  end
+
   private
 
     def apply_params

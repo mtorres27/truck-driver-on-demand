@@ -12,12 +12,14 @@
             .attachment.common__text-field-group
               label.common__field-label for="name-4"  Account type
               select.common__select-field.w-select name="bank[holder_type]"  id="bank_holder_type"
-                option value="Individual"  Individual
-                option value="Company"  Company
+                option value="Individual"
+                  | Individual
+                option value="Company"
+                  | Company
             .common__text-field-group
               label.common__field-label for="name-4"  Routing Number (optional)
               input.w-input data-name=("Name 3") maxlength="256" id="bank_account_routing_number" name="bank[account][routing_number]" placeholder=("Routing number for your account") type="text" /
-              .common_form-field-helper-text 
+              .common_form-field-helper-text
                 | For the USA and Canada the routing number is the 4 digits of your banking institution together with the branch transit number. You can find it on a cheque.
               img src="/assets/banking/cheque.png"
             .common__text-field-group
@@ -30,7 +32,8 @@
               label.common__field-label for="name-4"  Account Currency
               select.common__select-field.w-select name="bank[currency]" id="bank_currency"
                 - @country_spec.supported_bank_account_currencies.each do |val, arr |
-                  option[value="#{val}"] #{arr[0]}
+                  option[value="#{val}"]
+                    = arr[0]
             input type="hidden" name="bank[btok]" id="bank_btok"
             input type="hidden" name="bank[acc_id]" id="bank_acc_id"
             a#btn-primary.btn-primary--active.w-inline-block.width-100 href=""
@@ -74,7 +77,7 @@
             else{
               var stripe = Stripe('#{Rails.configuration.stripe[:publishable_key]}');
               stripe.createToken('bank_account', {
-                country: '#{current_freelancer.country.upcase}',
+                country: '#{current_freelancer.country&.upcase}',
                 currency: holder_curreny,
                 routing_number: routing_number,
                 account_number: bank_account,

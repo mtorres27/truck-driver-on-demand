@@ -1,0 +1,5 @@
+option value="" selected=("selected" if params.dig(:location) == "" || !params.dig(:location).presence)
+  | All
+- @locations.each do |location|
+  option value="#{location}" selected=("selected" if params.dig(:location) == location)
+    = location

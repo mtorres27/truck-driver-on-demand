@@ -5,12 +5,11 @@ a.list-item.list-item--freelancer href="/company/freelancers/#{freelancer.id}" c
     - if is_favourite(freelancer)
       .list__fav
         span.zmdi.zmdi-favorite
-    .list__img-overlay
-    - if freelancer.avatar_url
+    - if freelancer.avatar_data.present?
+      .list__img-overlay
       = image_tag(freelancer.avatar_url, size: "75x75")
     - else
-      img src="/assets/avatar/missing.png"
-
+      .circle_profile__image.freelancer__image= freelancer.name_initials
 
   .list__group
     .list__title
@@ -19,7 +18,7 @@ a.list-item.list-item--freelancer href="/company/freelancers/#{freelancer.id}" c
         span.list__verified.zmdi.zmdi-check-circle
 
     .list__city
-      - freelancer_address = "#{freelancer.city}, #{freelancer.state}, #{freelancer.country.upcase}"
+      - freelancer_address = "#{"#{freelancer.city}, " if freelancer.city.present?}#{"#{freelancer.state}, " if freelancer.state.present?}#{freelancer.country&.upcase}"
       = "#{freelancer_address}. #{params.dig(:search, :address).present? ? "#{distance_from(freelancer)} miles away" : "" }"
 
     .list__rating
