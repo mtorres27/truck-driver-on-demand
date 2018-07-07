@@ -13,12 +13,12 @@
     |
   .mobile-nav__menu
     - if request.path.index('freelancer') == 1
-      - if current_freelancer.nil?
-        a.mobile-nav__menu__item href=new_freelancer_session_path data-turbolinks="false"
+      - if current_user.nil?
+        a.mobile-nav__menu__item href=new_user_session_path data-turbolinks="false"
           | Login
         a.mobile-nav__menu__item href=new_freelancer_registration_path data-turbolinks="false"
           | Register
-      - else
+      - elsif current_user.freelancer? && current_user.freelancer_profile.present?
         a.mobile-nav__menu__item href=freelancer_root_path data-turbolinks="false"
           | search for jobs
         a.mobile-nav__menu__item href=my_jobs_freelancer_jobs_path data-turbolinks="false"
@@ -28,16 +28,16 @@
         a.mobile-nav__menu__item href=freelancer_payments_path
           | payments
         a.mobile-nav__menu__item href=freelancer_profile_path data-turbolinks="false"
-          = image_tag current_freelancer.avatar_url
+          = image_tag current_user.freelancer_profile.avatar_url
           | my profile
-        = link_to "Logout", destroy_freelancer_session_path, method: :delete, class: "mobile-nav__menu__item"
+        = link_to "Logout", destroy_user_session_path, method: :delete, class: "mobile-nav__menu__item"
     - elsif request.path.index('company') == 1
-      - if current_company.nil?
-        a.mobile-nav__menu__item href=new_company_session_path data-turbolinks="false"
+      - if current_user.nil?
+        a.mobile-nav__menu__item href=new_user_session_path data-turbolinks="false"
           | Login
-        a.mobile-nav__menu__item href=new_company_registration_path data-turbolinks="false"
+        a.mobile-nav__menu__item href=new_company_user_registration_path data-turbolinks="false"
           | Register
-      - else
+      - elsif current_user.company_user?
         a.mobile-nav__menu__item href=company_root_path data-turbolinks="false"
           | Search for AV Freelancers
         a.mobile-nav__menu__item href=company_projects_path data-turbolinks="false"
@@ -47,19 +47,20 @@
         a.mobile-nav__menu__item href=company_payments_path data-turbolinks="false"
           | Payments
         a.mobile-nav__menu__item href=company_profile_path data-turbolinks="false"
-          = image_tag current_company.avatar_url
+          = image_tag current_user.company.avatar_url
           | my profile
-        = link_to "Logout", destroy_company_session_path, method: :delete, class: "mobile-nav__menu__item"
+        = link_to "Logout", destroy_user_session_path, method: :delete, class: "mobile-nav__menu__item"
     - elsif request.path.index('admin') == 1
-      a.mobile-nav__menu__item href=admin_root_path data-turbolinks="false"
-        Dashboard
-      a.mobile-nav__menu__item href=admin_companies_path data-turbolinks="false"
-        | Companies
-      a.mobile-nav__menu__item href=admin_freelancers_path data-turbolinks="false"
-        | Freelancers
-      a.mobile-nav__menu__item href=admin_pages_path data-turbolinks="false"
-        | Pages
-      = link_to "Logout", destroy_admin_session_path, method: :delete, class: "mobile-nav__menu__item"
+      - if current_user&.admin?
+        a.mobile-nav__menu__item href=admin_root_path data-turbolinks="false"
+          Dashboard
+        a.mobile-nav__menu__item href=admin_companies_path data-turbolinks="false"
+          | Companies
+        a.mobile-nav__menu__item href=admin_freelancers_path data-turbolinks="false"
+          | Freelancers
+        a.mobile-nav__menu__item href=admin_pages_path data-turbolinks="false"
+          | Pages
+        = link_to "Logout", destroy_user_session_path, method: :delete, class: "mobile-nav__menu__item"
 
 
 javascript:

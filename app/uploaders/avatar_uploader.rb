@@ -8,6 +8,7 @@ class AvatarUploader < Shrine
   plugin :default_url
   plugin :validation_helpers
   plugin :remove_invalid
+  plugin :determine_mime_type
 
   process(:store) do |io, context|
     resize_to_fill(io.download, 150, 150)

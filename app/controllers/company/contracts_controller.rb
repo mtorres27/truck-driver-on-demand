@@ -1,5 +1,6 @@
 class Company::ContractsController < Company::BaseController
   before_action :set_job
+  before_action :authorize_job
 
   # TODO: Refactor this action
   def contract_pay
@@ -7,18 +8,18 @@ class Company::ContractsController < Company::BaseController
       quote = @job.accepted_quote
       freelancer = @job.freelancer
       payments = @job.payments
-      avj_fees = freelancer.special_avj_fees || Rails.configuration.avj_fees
+      avj_fees = freelancer.freelancer_profile&.special_avj_fees || Rails.configuration.avj_fees
       currency_rate = CurrencyExchange.get_currency_rate(@job.currency)
-      avj_credit_available = @job.currency == 'usd' ? freelancer.avj_credit.to_f : freelancer.avj_credit.to_f * currency_rate
+      avj_credit_available = @job.currency == 'usd' ? freelancer.freelancer_profile&.avj_credit.to_f : freelancer.freelancer_profile&.avj_credit.to_f * currency_rate
       if quote.amount * avj_fees <= avj_credit_available
         avj_credit_used = quote.amount * avj_fees
       else
         avj_credit_used = avj_credit_available
       end
       if @job.currency == 'usd'
-        freelancer.update_attribute(:avj_credit, freelancer.avj_credit.to_f - avj_credit_used)
+        freelancer.freelancer_profile.update_attribute(:avj_credit, freelancer.freelancer_profile.avj_credit.to_f - avj_credit_used)
       else
-        freelancer.update_attribute(:avj_credit, freelancer.avj_credit.to_f - (avj_credit_used / currency_rate))
+        freelancer.freelancer_profile.update_attribute(:avj_credit, freelancer.freelancer_profile.avj_credit.to_f - (avj_credit_used / currency_rate))
       end
       amount = (quote.amount * (1 + (@job.applicable_sales_tax / 100)))
       # Stripe fees equals to 2.9% of the total amount plus 30 cents USD
@@ -35,13 +36,13 @@ class Company::ContractsController < Company::BaseController
         source: params[:stripeToken],
         statement_descriptor: "AV Junction - (stripe)",
         application_fee: (platform_fees * 100).floor
-        }, stripe_account: freelancer.stripe_account_id)
+        }, stripe_account: freelancer.freelancer_profile&.stripe_account_id)
 
       @job.stripe_charge_id = charge[:id]
       @job.stripe_balance_transaction_id = charge[:balance_transaction]
       @job.save
 
-      quote.avj_fees = (quote.amount * Rails.configuration.avj_fees)
+      quote.avj_fees = (quote.amount * avj_fees)
       quote.stripe_fees = stripe_fees
       quote.net_avj_fees = platform_fees
       quote.avj_credit = avj_credit_used
@@ -69,8 +70,8 @@ class Company::ContractsController < Company::BaseController
       end
 
       # Send notice emails
-      PaymentsMailer.notice_funds_freelancer(current_company, freelancer, @job).deliver_later
-      PaymentsMailer.notice_funds_company(current_company, freelancer, @job).deliver_later
+      PaymentsMailer.notice_funds_freelancer(current_user, freelancer, @job).deliver_later
+      PaymentsMailer.notice_funds_company(current_user, freelancer, @job).deliver_later
       if avj_credit_used > 0
         if @job.currency != 'usd'
           avj_credit_used = (avj_credit_used / currency_rate)
@@ -89,8 +90,8 @@ class Company::ContractsController < Company::BaseController
   def show
     @accepted_quote = @job.accepted_quote
     # Should be deleted
-    if @job.freelancer.stripe_account_id
-      account = Stripe::Account.retrieve(@job.freelancer.stripe_account_id)
+    if @job.freelancer.freelancer_profile&.stripe_account_id
+      account = Stripe::Account.retrieve(@job.freelancer.freelancer_profile&.stripe_account_id)
       account.payout_schedule.interval = 'manual'
       account.save
     else
@@ -117,9 +118,9 @@ class Company::ContractsController < Company::BaseController
         @m.authorable = @job.company
         @m.receivable = @job.freelancer
         @m.send_contract = true
-        @m.body = "Hi #{@job.freelancer.name}! This is a note to let you know that we've just sent a work order to you. <a href='/freelancer/jobs/#{@job.id}/work_order'>Click here</a> to view it!"
+        @m.body = "Hi #{@job.freelancer.full_name}! This is a note to let you know that we've just sent a work order to you. <a href='/freelancer/jobs/#{@job.id}/work_order'>Click here</a> to view it!"
         @m.save
-        FreelancerMailer.notice_work_order_received(current_company, @job.freelancer, @job).deliver_later
+        FreelancerMailer.notice_work_order_received(current_user, @job.freelancer, @job).deliver_later
 
         @job.messages << @m
 
@@ -163,38 +164,42 @@ class Company::ContractsController < Company::BaseController
 
   private
 
-    def set_job
-      @job = current_company.jobs.find(params[:job_id])
-    end
+  def set_job
+    @job = current_user.company.jobs.find(params[:job_id])
+  end
 
-    def job_params
-      params.require(:job).permit(
-        :scope_of_work,
-        :scope_file,
-        :addendums,
-        :contract_price,
-        :send_contract,
-        :starts_on,
-        :ends_on,
-        :pay_type,
-        :applicable_sales_tax,
-        :freelancer_type,
-        :working_time,
-        :state,
-        :reporting_frequency,
-        :require_photos_on_updates,
-        :require_checkin,
-        :require_uniform,
-        :opt_out_of_freelance_service_agreement,
-        attachments_attributes: [:id, :file, :title, :_destroy],
-        payments_attributes: [:id, :description, :company_id, :amount, :_destroy]
-      )
-    end
+  def authorize_job
+    authorize @job
+  end
 
-    def build_payments
-      payments_to_build = [(3 - @job.payments.size), 1].max
-      payments_to_build.times do
-        @job.payments.build
-      end
+  def job_params
+    params.require(:job).permit(
+      :scope_of_work,
+      :scope_file,
+      :addendums,
+      :contract_price,
+      :send_contract,
+      :starts_on,
+      :ends_on,
+      :pay_type,
+      :applicable_sales_tax,
+      :freelancer_type,
+      :working_time,
+      :state,
+      :reporting_frequency,
+      :require_photos_on_updates,
+      :require_checkin,
+      :require_uniform,
+      :opt_out_of_freelance_service_agreement,
+      attachments_attributes: [:id, :file, :title, :_destroy],
+      payments_attributes: [:id, :description, :company_id, :amount, :_destroy]
+    )
+  end
+
+  def build_payments
+    payments_to_build = [(3 - @job.payments.size), 1].max
+    payments_to_build.times do
+      @job.payments.build
     end
+  end
 end

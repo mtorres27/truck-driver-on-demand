@@ -1,10 +1,11 @@
 class Admin::ProjectsController < Admin::BaseController
 
   before_action :set_project, only: [:show, :edit, :update, :destroy, :enable, :disable, :login_as]
+  before_action :authorize_project, only: [:show, :edit, :update, :destroy, :enable, :disable, :login_as]
 
   def index
+    authorize current_user
     @keywords = params.dig(:search, :keywords).presence
-
     @projects = Project.order(:name)
     if @keywords
       @projects = @projects.search(@keywords)
@@ -37,20 +38,24 @@ class Admin::ProjectsController < Admin::BaseController
   end
 
   def disable
-    @projects.disable!
+    @project.disable!
     redirect_to admin_projects_path, notice: "Project disabled."
   end
 
   private
 
-    def set_project
-      @project = Project.find(params[:id])
-    end
+  def set_project
+    @project = Project.find(params[:id])
+  end
 
-    def project_params
-      params.require(:project).permit(
-        :name,
-        :external_project_id,
-      )
-    end
+  def authorize_project
+    authorize @project
+  end
+
+  def project_params
+    params.require(:project).permit(
+      :name,
+      :external_project_id,
+    )
+  end
 end

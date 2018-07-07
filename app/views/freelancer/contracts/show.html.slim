@@ -131,7 +131,7 @@
                   =attachment.title
 
       .grid-cell.grid-cell--100
-        - if @job.freelancer and @job.freelancer.id == current_freelancer.id
+        - if @job.freelancer&.id == current_user.id
           h3.heading-h3
             | Freelance Service Agreement
           p
@@ -140,7 +140,7 @@
             - else
               a href="/freelance-service-agreement?job=#{@job.id}#{random_append}" target="_blank"
                 | Click here to view the Freelance Service Agreement for this project.
-              - if @job.state != :contracted and @job.freelancer.id == current_freelancer.id
+              - if @job.state != :contracted and @job.freelancer.id == current_user.id
                 br
                 input type='checkbox' id='accept_agreement' onclick="toggleAccept()"
                 |  I accept the Freelance Services Agreement
@@ -151,7 +151,7 @@
           | Please be advised that AV Junction does not provide any insurance for AV Companies or Freelancers. Each User, at its sole cost and expense, will maintain appropriate insurance.
 
 
-        - if @job.state != :contracted and @job.freelancer.id == current_freelancer.id
+        - if @job.state != :contracted and @job.freelancer.id == current_user.id
           .buttons
             - disabled = !@job.opt_out_of_freelance_service_agreement
             a.btn.btn--primary href="#" data-link="/freelancer/jobs/#{@job.id}/work_order/accept" id="accept_work_order_button" disabled=disabled
@@ -162,7 +162,7 @@
             a href=freelancer_job_messages_path(@job)
               | Progress 
             |  view
-        - elsif @job.state == :contracted and @job.freelancer.id == current_freelancer.id
+        - elsif @job.state == :contracted and @job.freelancer.id == current_user.id
           p
             | You have accepted the terms of this work order.
 

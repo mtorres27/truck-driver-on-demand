@@ -3,10 +3,10 @@ require "rails_helper"
 RSpec.describe Company::RegistrationStepsController, type: :controller do
   describe "GET #show" do
     describe "step: personal" do
-      let(:company) { create(:company) }
+      let(:company_user) { create(:company_user) }
 
       context "when current_company exists" do
-        before { sign_in company }
+        before { sign_in company_user }
 
         it "renders personal template" do
           get :show, params: { id: :personal }
@@ -17,7 +17,7 @@ RSpec.describe Company::RegistrationStepsController, type: :controller do
       context "when current_company does not exist" do
         it "renders personal template" do
           get :show, params: { id: :personal }
-          expect(response).to redirect_to(new_company_session_path)
+          expect(response).to redirect_to(root_path)
         end
       end
     end
@@ -25,18 +25,19 @@ RSpec.describe Company::RegistrationStepsController, type: :controller do
 
   describe "PUT #update" do
     let(:company) { create(:company) }
+    let(:company_user) { company.company_user }
 
     before do
-      sign_in company
+      sign_in company_user
     end
 
     describe "step: personal" do
       context "when the fields are filled" do
-        let(:company_params) { { first_name: "Test", last_name: "Testerson", name: "AV Junction", city: "Chicago", state: "Illinois", country: "us" } }
+        let(:company_params) { { name: "AV Junction", city: "Chicago", state: "Illinois", country: "us" } }
 
         it "updates personal information" do
           put :update, params: { id: :personal, company: company_params }
-          expect(company.reload).to have_attributes( { contact_name: "Test Testerson", name: "AV Junction", city: "Chicago", state: "Illinois", country: "us" })
+          expect(company_user.company.reload).to have_attributes( { name: "AV Junction", city: "Chicago", state: "Illinois", country: "us" })
         end
 
         it "redirects to job info path" do
@@ -46,22 +47,21 @@ RSpec.describe Company::RegistrationStepsController, type: :controller do
       end
 
       context "when the fields are not filled" do
-        let(:company) { create(:company, name: nil, last_name: nil, city: nil, country: nil) }
+        let(:company_user) { create(:company_user, company: create(:company, name: nil, city: nil, country: nil)) }
         let(:company_params) { {} }
 
         it "does not update personal information" do
           put :update, params: { id: :personal, company: company_params }
-          expect(company.name).to be_nil
-          expect(company.last_name).to be_nil
-          expect(company.city).to be_nil
-          expect(company.country).to be_nil
+          expect(company_user.company.name).to be_nil
+          expect(company_user.company.city).to be_nil
+          expect(company_user.company.country).to be_nil
         end
       end
     end
 
     describe "step :job_info" do
       before do
-        company.update(registration_step: "job_info")
+        company_user.company.update(registration_step: "job_info")
       end
 
       context "when job types are not selected" do
@@ -69,12 +69,7 @@ RSpec.describe Company::RegistrationStepsController, type: :controller do
 
         it "does not update the company" do
           put :update, params: { id: :job_info, company: company_params }
-          expect(company.reload.job_types).to be_nil
-        end
-
-        it "includes expected errors on the company" do
-          put :update, params: { id: :job_info, company: company_params }
-          expect(assigns(:company).errors[:job_types]).not_to be_empty
+          expect(company_user.company.reload.job_types).to be_nil
         end
       end
 
@@ -92,14 +87,14 @@ RSpec.describe Company::RegistrationStepsController, type: :controller do
 
         it "updates the company with the correct params" do
           put :update, params: { id: :job_info, company: company_params }
-          expect(company.reload).to have_attributes(company_params)
+          expect(company_user.company.reload).to have_attributes(company_params)
         end
       end
     end
 
     describe "step :profile" do
       before do
-        company.update_attribute(:registration_step, "profile")
+        company_user.company.update_attribute(:registration_step, "profile")
       end
 
       context "when user does not fill the fields" do
@@ -107,12 +102,12 @@ RSpec.describe Company::RegistrationStepsController, type: :controller do
 
         it "does not update the company" do
           put :update, params: { id: :profile, company: company_params }
-          expect(company.reload.description).not_to be_empty
-          expect(company.established_in).not_to be_nil
-          expect(company.number_of_employees).not_to be_empty
-          expect(company.number_of_offices).not_to be_nil
-          expect(company.website).not_to be_empty
-          expect(company.area).not_to be_empty
+          expect(company_user.company.reload.description).not_to be_empty
+          expect(company_user.company.established_in).not_to be_nil
+          expect(company_user.company.number_of_employees).not_to be_empty
+          expect(company_user.company.number_of_offices).not_to be_nil
+          expect(company_user.company.website).not_to be_empty
+          expect(company_user.company.area).not_to be_empty
         end
       end
 
@@ -130,7 +125,7 @@ RSpec.describe Company::RegistrationStepsController, type: :controller do
 
         it "updates profile information" do
           put :update, params: { id: :profile, company: company_params }
-          expect(company.reload).to have_attributes(company_params)
+          expect(company_user.company.reload).to have_attributes(company_params)
         end
       end
     end

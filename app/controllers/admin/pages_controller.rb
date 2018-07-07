@@ -1,8 +1,9 @@
 class Admin::PagesController < Admin::BaseController
-
   before_action :set_page, only: [:edit, :update]
+  before_action :authorize_page, only: [:edit, :update]
 
   def index
+    authorize current_user
     @pages = Page.order(:title)
   end
 
@@ -19,12 +20,15 @@ class Admin::PagesController < Admin::BaseController
 
   private
 
-    def set_page
-      @page = Page.find(params[:id])
-    end
+  def set_page
+    @page = Page.find(params[:id])
+  end
 
-    def page_params
-      params.require(:page).permit(:title, :body)
-    end
+  def authorize_page
+    authorize @page
+  end
 
+  def page_params
+    params.require(:page).permit(:title, :body)
+  end
 end

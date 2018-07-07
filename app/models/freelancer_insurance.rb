@@ -17,7 +17,7 @@ include ImageProcessing::MiniMagick
 
 class FreelancerInsurance < ApplicationRecord
   include FreelancerInsuranceUploader[:image]
-  belongs_to :freelancer
+  belongs_to :freelancer, class_name: 'User', foreign_key: 'freelancer_id'
 
   after_save :generate_thumbnail
 

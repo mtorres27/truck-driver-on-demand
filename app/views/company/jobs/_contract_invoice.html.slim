@@ -2,11 +2,11 @@
   = render "shared/avj_logo_and_address"
 
 .grid-cell.grid-cell--33
-  h4.heading-h4= "To: #{current_company.name}"
-  div= current_company.address
-  div #{current_company.city}, #{current_company.state}
-  div= current_company.postal_code
-  div BN Tax No. #{current_company.sales_tax_number}
+  h4.heading-h4= "To: #{current_user.full_name}"
+  div= current_user.user_data.address
+  div #{current_user.user_data.city}, #{current_user.user_data.state}
+  div= current_user.user_data.postal_code
+  div BN Tax No. #{current_user.user_data.sales_tax_number}
 .grid-cell.grid-cell--33
   h4.heading-h4= "Inv #: #{@job.id}"
   - if !@accepted_quote.paid_at.nil?
@@ -30,11 +30,11 @@
     .invoice__table-row
       .invoice__table-text AV Junction fees #{ @accepted_quote.plan_fee.positive? ? "($"+@accepted_quote.plan_fee.to_i.to_s+" USD)" : ""}
       .invoice__table-text.invoice__table-text--right
-        | #{ @job.company_plan_fees.positive? ? number_with_precision(@job.company_plan_fees * (current_company.canada_country? ? (1 - (Subscription::CANADA_SALES_TAX_PERCENT/100)) : 1), precision: 2) : "Waived"} #{ @job.company_plan_fees.positive? ? @job.currency.upcase : ''}
+        | #{ @job.company_plan_fees.positive? ? number_with_precision(@job.company_plan_fees * (current_user.company.canada_country? ? (1 - (Subscription::CANADA_SALES_TAX_PERCENT/100)) : 1), precision: 2) : "Waived"} #{ @job.company_plan_fees.positive? ? @job.currency.upcase : ''}
     .invoice__table-row
       .invoice__table-text AV Junction sales tax
       .invoice__table-text.invoice__table-text--right
-        | #{ @job.company_plan_fees.positive? ? number_with_precision((current_company.canada_country? ? @job.company_plan_fees * (Subscription::CANADA_SALES_TAX_PERCENT/100) : 0), precision: 2) : "Waived"} #{ @job.company_plan_fees.positive? ? @job.currency.upcase : ''}
+        | #{ @job.company_plan_fees.positive? ? number_with_precision((current_user.company.canada_country? ? @job.company_plan_fees * (Subscription::CANADA_SALES_TAX_PERCENT/100) : 0), precision: 2) : "Waived"} #{ @job.company_plan_fees.positive? ? @job.currency.upcase : ''}
     .invoice__table-row
     .invoice__table-row.invoice__table-row--total
       - if @accepted_quote && !@accepted_quote.paid_by_company

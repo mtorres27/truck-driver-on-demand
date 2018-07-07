@@ -36,12 +36,12 @@ h1.heading-h1
               - @freelancers.each do |freelancer|
                 .grid-cell.grid-cell--25
                   a.homepage__avatar href=company_freelancer_path(freelancer)
-                    - if freelancer.avatar_data.present?
-                      = image_tag(freelancer.avatar_url, size: "75x75")
+                    - if freelancer.freelancer_profile.avatar_data.present?
+                      = image_tag(freelancer.freelancer_profile.avatar_url, size: "75x75")
                     - else
                       .circle_profile__image.freelancer__image= freelancer.name_initials
                   h4.heading-h4
-                    = freelancer.name
+                    = freelancer.full_name
 
         .grid-cell.grid-cell--100
           .callout
@@ -59,11 +59,11 @@ h1.heading-h1
             p
               | Contact us at
               a href="mailto:info@avjunction.com"
-                | info@avjunction.com
+                |   info@avjunction.com
             p
               | Call us at
               a href="tel:1-844-602-2000"
-                | 1-844-602-2000
+                |   1-844-602-2000
 
             a.btn-link href="https://www.avjunction.com/faq" target="_blank"
               | More FAQ’s…

@@ -1,7 +1,9 @@
 class Admin::PlansController < Admin::BaseController
   before_action :set_plan, except: [:index]
+  before_action :authorize_plan, except: [:index]
 
   def index
+    authorize current_user
     @plans = Plan.order(:name)
     @plans = @plans.page(params[:page])
   end
@@ -29,6 +31,10 @@ class Admin::PlansController < Admin::BaseController
 
   def set_plan
     @plan = Plan.find(params[:id])
+  end
+
+  def authorize_plan
+    authorize @plan
   end
 
   def plan_params

@@ -56,48 +56,6 @@ SET default_tablespace = '';
 SET default_with_oids = false;
 
 --
--- Name: admins; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE admins (
-    id bigint NOT NULL,
-    token character varying,
-    email citext NOT NULL,
-    name character varying NOT NULL,
-    created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL,
-    encrypted_password character varying DEFAULT ''::character varying NOT NULL,
-    reset_password_token character varying,
-    reset_password_sent_at timestamp without time zone,
-    remember_created_at timestamp without time zone,
-    sign_in_count integer DEFAULT 0 NOT NULL,
-    current_sign_in_at timestamp without time zone,
-    last_sign_in_at timestamp without time zone,
-    current_sign_in_ip inet,
-    last_sign_in_ip inet
-);
-
-
---
--- Name: admins_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE admins_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: admins_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE admins_id_seq OWNED BY admins.id;
-
-
---
 -- Name: applicants; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -298,9 +256,7 @@ ALTER SEQUENCE change_orders_id_seq OWNED BY change_orders.id;
 CREATE TABLE companies (
     id bigint NOT NULL,
     token character varying,
-    email citext NOT NULL,
     name character varying,
-    contact_name character varying,
     address character varying,
     formatted_address character varying,
     area character varying,
@@ -324,15 +280,8 @@ CREATE TABLE companies (
     number_of_offices integer DEFAULT 0,
     number_of_employees character varying,
     established_in integer,
-    encrypted_password character varying DEFAULT ''::character varying NOT NULL,
-    reset_password_token character varying,
-    reset_password_sent_at timestamp without time zone,
-    remember_created_at timestamp without time zone,
-    sign_in_count integer DEFAULT 0 NOT NULL,
-    current_sign_in_at timestamp without time zone,
-    last_sign_in_at timestamp without time zone,
-    current_sign_in_ip inet,
-    last_sign_in_ip inet,
+    header_color character varying DEFAULT 'FF6C38'::character varying,
+    country character varying,
     stripe_customer_id character varying,
     stripe_subscription_id character varying,
     stripe_plan_id character varying,
@@ -344,11 +293,6 @@ CREATE TABLE companies (
     card_brand character varying,
     exp_month character varying,
     exp_year character varying,
-    header_color character varying DEFAULT 'FF6C38'::character varying,
-    country character varying,
-    confirmation_token character varying,
-    confirmed_at timestamp without time zone,
-    confirmation_sent_at timestamp without time zone,
     header_source character varying DEFAULT 'color'::character varying,
     sales_tax_number character varying,
     line2 character varying,
@@ -724,6 +668,84 @@ ALTER SEQUENCE freelancer_portfolios_id_seq OWNED BY freelancer_portfolios.id;
 
 
 --
+-- Name: freelancer_profiles; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE freelancer_profiles (
+    id bigint NOT NULL,
+    token character varying,
+    avatar_data text,
+    address character varying,
+    formatted_address character varying,
+    area character varying,
+    lat numeric(9,6),
+    lng numeric(9,6),
+    pay_unit_time_preference character varying,
+    pay_per_unit_time character varying,
+    tagline character varying,
+    bio text,
+    job_markets citext,
+    years_of_experience integer DEFAULT 0 NOT NULL,
+    profile_views integer DEFAULT 0 NOT NULL,
+    projects_completed integer DEFAULT 0 NOT NULL,
+    available boolean DEFAULT true NOT NULL,
+    disabled boolean DEFAULT true NOT NULL,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL,
+    freelancer_reviews_count integer DEFAULT 0 NOT NULL,
+    technical_skill_tags citext,
+    profile_header_data text,
+    verified boolean DEFAULT false,
+    header_color character varying DEFAULT 'FF6C38'::character varying,
+    country character varying,
+    freelancer_team_size character varying,
+    freelancer_type character varying,
+    header_source character varying DEFAULT 'color'::character varying,
+    stripe_account_id character varying,
+    stripe_account_status text,
+    currency character varying,
+    sales_tax_number character varying,
+    line2 character varying,
+    state character varying,
+    postal_code character varying,
+    service_areas character varying,
+    city character varying,
+    phone_number character varying,
+    profile_score smallint,
+    valid_driver boolean,
+    own_tools boolean,
+    company_name character varying,
+    job_types citext,
+    job_functions citext,
+    manufacturer_tags citext,
+    special_avj_fees numeric(10,2),
+    avj_credit numeric(10,2) DEFAULT NULL::numeric,
+    registration_step character varying,
+    province character varying,
+    freelancer_id integer
+);
+
+
+--
+-- Name: freelancer_profiles_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE freelancer_profiles_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: freelancer_profiles_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE freelancer_profiles_id_seq OWNED BY freelancer_profiles.id;
+
+
+--
 -- Name: freelancer_reviews; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -760,97 +782,6 @@ CREATE SEQUENCE freelancer_reviews_id_seq
 --
 
 ALTER SEQUENCE freelancer_reviews_id_seq OWNED BY freelancer_reviews.id;
-
-
---
--- Name: freelancers; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE freelancers (
-    id bigint NOT NULL,
-    token character varying,
-    email citext NOT NULL,
-    name character varying,
-    avatar_data text,
-    address character varying,
-    formatted_address character varying,
-    area character varying,
-    lat numeric(9,6),
-    lng numeric(9,6),
-    pay_unit_time_preference character varying,
-    pay_per_unit_time character varying,
-    tagline character varying,
-    bio text,
-    job_markets citext,
-    years_of_experience integer DEFAULT 0 NOT NULL,
-    profile_views integer DEFAULT 0 NOT NULL,
-    projects_completed integer DEFAULT 0 NOT NULL,
-    available boolean DEFAULT true NOT NULL,
-    disabled boolean DEFAULT true NOT NULL,
-    created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL,
-    messages_count integer DEFAULT 0 NOT NULL,
-    freelancer_reviews_count integer DEFAULT 0 NOT NULL,
-    technical_skill_tags citext,
-    profile_header_data text,
-    verified boolean DEFAULT false,
-    encrypted_password character varying DEFAULT ''::character varying NOT NULL,
-    reset_password_token character varying,
-    reset_password_sent_at timestamp without time zone,
-    remember_created_at timestamp without time zone,
-    sign_in_count integer DEFAULT 0 NOT NULL,
-    current_sign_in_at timestamp without time zone,
-    last_sign_in_at timestamp without time zone,
-    current_sign_in_ip inet,
-    last_sign_in_ip inet,
-    header_color character varying DEFAULT 'FF6C38'::character varying,
-    country character varying,
-    confirmation_token character varying,
-    confirmed_at timestamp without time zone,
-    confirmation_sent_at timestamp without time zone,
-    freelancer_team_size character varying,
-    freelancer_type character varying,
-    header_source character varying DEFAULT 'color'::character varying,
-    stripe_account_id character varying,
-    stripe_account_status text,
-    currency character varying,
-    sales_tax_number character varying,
-    line2 character varying,
-    state character varying,
-    postal_code character varying,
-    service_areas character varying,
-    city character varying,
-    phone_number character varying,
-    profile_score smallint,
-    valid_driver boolean,
-    own_tools boolean,
-    company_name character varying,
-    special_avj_fees numeric(10,2),
-    job_types citext,
-    job_functions citext,
-    manufacturer_tags citext,
-    avj_credit numeric(10,2) DEFAULT NULL::numeric,
-    registration_step character varying
-);
-
-
---
--- Name: freelancers_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE freelancers_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: freelancers_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE freelancers_id_seq OWNED BY freelancers.id;
 
 
 --
@@ -1372,7 +1303,15 @@ CREATE TABLE users (
     current_sign_in_ip inet,
     last_sign_in_ip inet,
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+    updated_at timestamp without time zone NOT NULL,
+    confirmation_token character varying,
+    confirmed_at timestamp without time zone,
+    confirmation_sent_at timestamp without time zone,
+    first_name character varying,
+    last_name character varying,
+    type character varying,
+    messages_count integer DEFAULT 0 NOT NULL,
+    company_id bigint
 );
 
 
@@ -1393,13 +1332,6 @@ CREATE SEQUENCE users_id_seq
 --
 
 ALTER SEQUENCE users_id_seq OWNED BY users.id;
-
-
---
--- Name: admins id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY admins ALTER COLUMN id SET DEFAULT nextval('admins_id_seq'::regclass);
 
 
 --
@@ -1515,17 +1447,17 @@ ALTER TABLE ONLY freelancer_portfolios ALTER COLUMN id SET DEFAULT nextval('free
 
 
 --
+-- Name: freelancer_profiles id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY freelancer_profiles ALTER COLUMN id SET DEFAULT nextval('freelancer_profiles_id_seq'::regclass);
+
+
+--
 -- Name: freelancer_reviews id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY freelancer_reviews ALTER COLUMN id SET DEFAULT nextval('freelancer_reviews_id_seq'::regclass);
-
-
---
--- Name: freelancers id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY freelancers ALTER COLUMN id SET DEFAULT nextval('freelancers_id_seq'::regclass);
 
 
 --
@@ -1617,14 +1549,6 @@ ALTER TABLE ONLY subscriptions ALTER COLUMN id SET DEFAULT nextval('subscription
 --
 
 ALTER TABLE ONLY users ALTER COLUMN id SET DEFAULT nextval('users_id_seq'::regclass);
-
-
---
--- Name: admins admins_pkey; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY admins
-    ADD CONSTRAINT admins_pkey PRIMARY KEY (id);
 
 
 --
@@ -1764,19 +1688,19 @@ ALTER TABLE ONLY freelancer_portfolios
 
 
 --
+-- Name: freelancer_profiles freelancer_profiles_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY freelancer_profiles
+    ADD CONSTRAINT freelancer_profiles_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: freelancer_reviews freelancer_reviews_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY freelancer_reviews
     ADD CONSTRAINT freelancer_reviews_pkey PRIMARY KEY (id);
-
-
---
--- Name: freelancers freelancers_pkey; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY freelancers
-    ADD CONSTRAINT freelancers_pkey PRIMARY KEY (id);
 
 
 --
@@ -1906,20 +1830,6 @@ CREATE INDEX auditable_index ON audits USING btree (auditable_id, auditable_type
 
 
 --
--- Name: index_admins_on_email; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX index_admins_on_email ON admins USING btree (email);
-
-
---
--- Name: index_admins_on_reset_password_token; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX index_admins_on_reset_password_token ON admins USING btree (reset_password_token);
-
-
---
 -- Name: index_applicants_on_company_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -1969,24 +1879,10 @@ CREATE INDEX index_change_orders_on_job_id ON change_orders USING btree (job_id)
 
 
 --
--- Name: index_companies_on_confirmation_token; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX index_companies_on_confirmation_token ON companies USING btree (confirmation_token);
-
-
---
 -- Name: index_companies_on_disabled; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_companies_on_disabled ON companies USING btree (disabled);
-
-
---
--- Name: index_companies_on_email; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX index_companies_on_email ON companies USING btree (email);
 
 
 --
@@ -2018,13 +1914,6 @@ CREATE INDEX index_companies_on_plan_id ON companies USING btree (plan_id);
 
 
 --
--- Name: index_companies_on_reset_password_token; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX index_companies_on_reset_password_token ON companies USING btree (reset_password_token);
-
-
---
 -- Name: index_companies_on_technical_skill_tags; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -2053,6 +1942,62 @@ CREATE INDEX index_company_reviews_on_job_id ON company_reviews USING btree (job
 
 
 --
+-- Name: index_freelancer_profiles_on_area; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_freelancer_profiles_on_area ON freelancer_profiles USING btree (area);
+
+
+--
+-- Name: index_freelancer_profiles_on_available; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_freelancer_profiles_on_available ON freelancer_profiles USING btree (available);
+
+
+--
+-- Name: index_freelancer_profiles_on_disabled; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_freelancer_profiles_on_disabled ON freelancer_profiles USING btree (disabled);
+
+
+--
+-- Name: index_freelancer_profiles_on_freelancer_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_freelancer_profiles_on_freelancer_id ON freelancer_profiles USING btree (freelancer_id);
+
+
+--
+-- Name: index_freelancer_profiles_on_job_functions; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_freelancer_profiles_on_job_functions ON freelancer_profiles USING btree (job_functions);
+
+
+--
+-- Name: index_freelancer_profiles_on_job_markets; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_freelancer_profiles_on_job_markets ON freelancer_profiles USING btree (job_markets);
+
+
+--
+-- Name: index_freelancer_profiles_on_manufacturer_tags; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_freelancer_profiles_on_manufacturer_tags ON freelancer_profiles USING btree (manufacturer_tags);
+
+
+--
+-- Name: index_freelancer_profiles_on_technical_skill_tags; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_freelancer_profiles_on_technical_skill_tags ON freelancer_profiles USING btree (technical_skill_tags);
+
+
+--
 -- Name: index_freelancer_reviews_on_company_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -2071,83 +2016,6 @@ CREATE INDEX index_freelancer_reviews_on_freelancer_id ON freelancer_reviews USI
 --
 
 CREATE INDEX index_freelancer_reviews_on_job_id ON freelancer_reviews USING btree (job_id);
-
-
---
--- Name: index_freelancers_on_area; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_freelancers_on_area ON freelancers USING btree (area);
-
-
---
--- Name: index_freelancers_on_available; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_freelancers_on_available ON freelancers USING btree (available);
-
-
---
--- Name: index_freelancers_on_confirmation_token; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX index_freelancers_on_confirmation_token ON freelancers USING btree (confirmation_token);
-
-
---
--- Name: index_freelancers_on_disabled; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_freelancers_on_disabled ON freelancers USING btree (disabled);
-
-
---
--- Name: index_freelancers_on_email; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX index_freelancers_on_email ON freelancers USING btree (email);
-
-
---
--- Name: index_freelancers_on_job_functions; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_freelancers_on_job_functions ON freelancers USING btree (job_functions);
-
-
---
--- Name: index_freelancers_on_job_markets; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_freelancers_on_job_markets ON freelancers USING btree (job_markets);
-
-
---
--- Name: index_freelancers_on_manufacturer_tags; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_freelancers_on_manufacturer_tags ON freelancers USING btree (manufacturer_tags);
-
-
---
--- Name: index_freelancers_on_name; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_freelancers_on_name ON freelancers USING btree (name);
-
-
---
--- Name: index_freelancers_on_reset_password_token; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX index_freelancers_on_reset_password_token ON freelancers USING btree (reset_password_token);
-
-
---
--- Name: index_freelancers_on_technical_skill_tags; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_freelancers_on_technical_skill_tags ON freelancers USING btree (technical_skill_tags);
 
 
 --
@@ -2214,10 +2082,17 @@ CREATE INDEX index_on_companies_loc ON companies USING gist (st_geographyfromtex
 
 
 --
+-- Name: index_on_freelancer_profiles_loc; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_on_freelancer_profiles_loc ON freelancer_profiles USING gist (st_geographyfromtext((((('SRID=4326;POINT('::text || lng) || ' '::text) || lat) || ')'::text)));
+
+
+--
 -- Name: index_on_freelancers_loc; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_on_freelancers_loc ON freelancers USING gist (st_geographyfromtext((((('SRID=4326;POINT('::text || lng) || ' '::text) || lat) || ')'::text)));
+CREATE INDEX index_on_freelancers_loc ON freelancer_profiles USING gist (st_geographyfromtext((((('SRID=4326;POINT('::text || lng) || ' '::text) || lat) || ')'::text)));
 
 
 --
@@ -2284,6 +2159,20 @@ CREATE INDEX index_quotes_on_company_id ON quotes USING btree (company_id);
 
 
 --
+-- Name: index_users_on_company_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_users_on_company_id ON users USING btree (company_id);
+
+
+--
+-- Name: index_users_on_confirmation_token; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX index_users_on_confirmation_token ON users USING btree (confirmation_token);
+
+
+--
 -- Name: index_users_on_email; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -2333,7 +2222,7 @@ ALTER TABLE ONLY jobs
 --
 
 ALTER TABLE ONLY freelancer_reviews
-    ADD CONSTRAINT fk_rails_2d750cb05f FOREIGN KEY (freelancer_id) REFERENCES freelancers(id);
+    ADD CONSTRAINT fk_rails_2d750cb05f FOREIGN KEY (freelancer_id) REFERENCES users(id);
 
 
 --
@@ -2365,7 +2254,7 @@ ALTER TABLE ONLY projects
 --
 
 ALTER TABLE ONLY applicants
-    ADD CONSTRAINT fk_rails_4b7bc91392 FOREIGN KEY (freelancer_id) REFERENCES freelancers(id);
+    ADD CONSTRAINT fk_rails_4b7bc91392 FOREIGN KEY (freelancer_id) REFERENCES users(id);
 
 
 --
@@ -2445,7 +2334,7 @@ ALTER TABLE ONLY change_orders
 --
 
 ALTER TABLE ONLY company_reviews
-    ADD CONSTRAINT fk_rails_dfd5a40d4e FOREIGN KEY (freelancer_id) REFERENCES freelancers(id);
+    ADD CONSTRAINT fk_rails_dfd5a40d4e FOREIGN KEY (freelancer_id) REFERENCES users(id);
 
 
 --
@@ -2593,9 +2482,15 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20180420173017'),
 ('20180424155938'),
 ('20180424190619'),
+('20180504205104'),
 ('20180506150209'),
+('20180508222720'),
 ('20180509110048'),
 ('20180525003348'),
-('20180530180210');
+('20180530180210'),
+('20180606180539'),
+('20180607204753'),
+('20180611160634'),
+('20180619175806');
 
 

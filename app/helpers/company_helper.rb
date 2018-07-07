@@ -1,6 +1,6 @@
 module CompanyHelper
   def company_avg_rating(company)
-    if company.company_reviews_count == 0
+    if company.company_reviews.count == 0
       return []
     end
 
@@ -30,12 +30,12 @@ module CompanyHelper
 
 
   def company_ratings_link(company)
-    "#{company.company_reviews_count} Review#{company.company_reviews_count == 1 ? '' : 's'}"
+    "#{company.company_reviews.count} Review#{company.company_reviews.count == 1 ? '' : 's'}"
   end
 
 
   def _is_favourite(company)
-    favourites = current_freelancer.favourite_companies.where({company_id: company.id})
+    favourites = current_user.favourite_companies.where({company_id: company.id})
 
     if favourites.count == 0
       return false
@@ -46,7 +46,7 @@ module CompanyHelper
   end
 
   def is_favourite_company(company)
-    favourites = current_freelancer.company_favourites.where({company_id: company.id})
+    favourites = current_user.company_favourites.where({company_id: company.id})
 
     if favourites.count == 0
       return false
@@ -66,7 +66,7 @@ module CompanyHelper
   end
 
 
-  def distance_from(company)
-    return (((company.distance / 1609.344)*10.0)/10.0).round(2)
+  def distance_from(company, company_datas_with_distances)
+    return (((company_datas_with_distances.where(company_id: company.id).first.distance / 1609.344)*10.0)/10.0).round(2) if company_datas_with_distances.present?
   end
 end

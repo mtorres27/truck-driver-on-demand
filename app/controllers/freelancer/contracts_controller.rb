@@ -1,12 +1,13 @@
 class Freelancer::ContractsController < Freelancer::BaseController
   def show
     @job = Job.find(params[:job_id])
+    authorize @job
     @accepted_quote = @job.accepted_quote
   end
 
   def accept
     @job = Job.find(params[:id])
-
+    authorize @job
     @job.state = "contracted"
     @job.contracted_at = Time.zone.today
     @job.save
@@ -27,7 +28,7 @@ class Freelancer::ContractsController < Freelancer::BaseController
 
     if @job.company.waived_jobs.positive?
       plan_fees = 0
-      @job.company.waived_jobs = @job.company.waived_jobs - 1
+      @job.company.waived_jobs -= 1
       @job.company.save
     else
       plan_tax = @job.company.canada_country? ? 1 + (Subscription::CANADA_SALES_TAX_PERCENT/100) : 1
@@ -40,8 +41,8 @@ class Freelancer::ContractsController < Freelancer::BaseController
     @accepted_quote.save
 
     # Send notice email
-    PaymentsMailer.request_funds_company(@job.company, current_freelancer, @job).deliver_later
-    PaymentsMailer.wait_for_funds_freelancer(@job.company, current_freelancer, @job).deliver_later
+    PaymentsMailer.request_funds_company(@job.company, current_user, @job).deliver_later
+    PaymentsMailer.wait_for_funds_freelancer(@job.company, current_user, @job).deliver_later
     render :show
   end
 end

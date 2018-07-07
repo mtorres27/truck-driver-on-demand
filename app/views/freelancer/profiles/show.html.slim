@@ -14,9 +14,9 @@
 
 
 
-  - if @freelancer.profile_header_url.include?("missing") or @freelancer.header_source == "color"
-    .profile__wallpaper style="background-color: #{ @freelancer.header_color.include?("#") ? "" : "#"}#{@freelancer.header_color}"
+  - if @freelancer.freelancer_profile.profile_header_url.include?("missing") or @freelancer.freelancer_profile.header_source == "color"
+    .profile__wallpaper style="background-color: #{ @freelancer.freelancer_profile.header_color.include?("#") ? "" : "#"}#{@freelancer.freelancer_profile.header_color}"
   - else
-    .profile__wallpaper style="background-image: url(#{@freelancer.profile_header_url.include?("missing") ? "" : @freelancer.profile_header_url});"
+    .profile__wallpaper style="background-image: url(#{@freelancer.freelancer_profile.profile_header_url.include?("missing") ? "" : @freelancer.freelancer_profile.profile_header_url});"
 
   = render "shared/profile-freelancer"

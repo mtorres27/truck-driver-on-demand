@@ -2,6 +2,8 @@ class Freelancer::JobsController < Freelancer::BaseController
   include JobHelper
 
   def index
+    authorize current_user
+
     if params[:search].nil? || (params[:search][:keywords].blank? && params[:search][:country].blank? && params[:search][:state_province].blank? && params[:search][:address].blank?)
       flash[:error] = "You'll need to add some search criteria to narrow your search results!"
       redirect_to freelancer_root_path
@@ -24,9 +26,9 @@ class Freelancer::JobsController < Freelancer::BaseController
     end
 
     if sort != nil
-      @jobs = Job.joins(:company).where(:companies => {disabled: false}).where.not(:companies => {plan_id: nil}).where({ state: "published" }).order(name: sort)
+      @jobs = Job.joins(:company).where(companies: { disabled: false }).where.not(companies: { plan_id: nil }).where(state: "published").order(name: sort)
     else
-      @jobs = Job.joins(:company).where(:companies => {disabled: false}).where.not(:companies => {plan_id: nil}).where({ state: "published" }).all
+      @jobs = Job.joins(:company).where(companies: { disabled: false }).where.not(companies: { plan_id: nil }).where(state: "published").all
     end
 
     if @address
@@ -61,8 +63,10 @@ class Freelancer::JobsController < Freelancer::BaseController
   end
 
   def favourites
-    @locations = current_freelancer.favourite_jobs.uniq.pluck(:area)
-    @jobs = current_freelancer.favourite_jobs
+    authorize current_user
+
+    @locations = current_user.favourite_jobs.uniq.pluck(:area)
+    @jobs = current_user.favourite_jobs
 
     if params[:location] && params[:location] != ""
       @jobs = @jobs.where({ area: params[:location] })
@@ -73,11 +77,12 @@ class Freelancer::JobsController < Freelancer::BaseController
   end
 
   def apply
-    @stripe_connector = StripeAccount.new(current_freelancer)
+    @stripe_connector = StripeAccount.new(current_user)
     @applicant = Applicant.new
     @job = Job.find(params[:id])
+    authorize @job
 
-    @applicant.freelancer = current_freelancer
+    @applicant.freelancer = current_user
     @applicant.job = @job
     @applicant.company = @job.company
 
@@ -94,7 +99,7 @@ class Freelancer::JobsController < Freelancer::BaseController
             @has_quote = false
           end
         @applicant.messages << Message.create({
-          authorable: current_freelancer,
+          authorable: current_user,
           body: apply_params[:message],
           has_quote: @has_quote
         })
@@ -106,7 +111,7 @@ class Freelancer::JobsController < Freelancer::BaseController
             amount: apply_params[:amount],
             attachment: apply_params[:attachment]
           })
-          
+
           @message = @applicant.messages.last
           @message.quote_id = @applicant.quotes.last.id
           @message.save
@@ -150,42 +155,46 @@ class Freelancer::JobsController < Freelancer::BaseController
 
   def show
     @job = Job.find(params[:id])
+    authorize @job
 
-    if @job.applicants.where({freelancer_id: current_freelancer.id}).count == 0
+    if @job.applicants.where({freelancer_id: current_user.id}).count == 0
       @have_applied = false
     else
       @have_applied = true
     end
 
-    @favourite = current_freelancer.job_favourites.where({job_id: params[:id]}).length > 0 ? true : false
+    @favourite = current_user.job_favourites.where({job_id: params[:id]}).length > 0 ? true : false
     if params.dig(:toggle_favourite) == "true"
       if @favourite == false
-        current_freelancer.favourite_jobs << @job
+        current_user.favourite_jobs << @job
         @favourite = true
       else
-        current_freelancer.job_favourites.where({job_id: @job.id}).destroy_all
+        current_user.job_favourites.where({job_id: @job.id}).destroy_all
         @favourite = false
       end
     end
 
-    @connector = StripeAccount.new(current_freelancer)
+    @connector = StripeAccount.new(current_user)
   end
 
 
   def my_job
     @job = Job.find(params[:id])
+    authorize @job, :show?
     render :json => { status: @job.title }
   end
 
 
   def my_jobs
+    authorize current_user
+
     @applications = []
-    current_freelancer.applicants.where.not({ state: "accepted" }).each do |applicant|
+    current_user.applicants.where.not({ state: "accepted" }).each do |applicant|
       @applications << applicant.job
     end
 
     @jobs = []
-    current_freelancer.applicants.where({ state: "accepted" }).each do |job|
+    current_user.applicants.where({ state: "accepted" }).each do |job|
       @found = false
       @applications.each do |application|
         if job.id == application.id
@@ -201,8 +210,9 @@ class Freelancer::JobsController < Freelancer::BaseController
 
 
   def my_applications
+    authorize current_user
     @jobs = []
-    current_freelancer.applicants.where.not({state: 'accepted'}).each do |applicant|
+    current_user.applicants.where.not({state: 'accepted'}).each do |applicant|
       @jobs << { job: applicant.job, applicant: applicant }
     end
   end
@@ -211,16 +221,20 @@ class Freelancer::JobsController < Freelancer::BaseController
   def my_application
     @applicant = Applicant.find(params[:id])
     @job = @applicant.job
+    authorize @job
     render :json => { status: @job.title }
   end
 
 
   def show_job
     @job = Job.find(params[:id])
+    authorize @job, :show?
   end
 
 
   def add_favourites
+    authorize current_user
+
     if params[:companies].nil?
       render json: { status: 'parameter missing' }
       return
@@ -230,7 +244,7 @@ class Freelancer::JobsController < Freelancer::BaseController
       c = Company.where({ id: id.to_i })
 
       if f.length > 0
-        current_freelancer.favourite_companies << c.first
+        current_user.favourite_companies << c.first
       end
     end
 
@@ -238,16 +252,17 @@ class Freelancer::JobsController < Freelancer::BaseController
   end
 
   def job_matches
+    authorize current_user
     @jobs = Job.none
-    current_freelancer.job_types.each do |index, _value|
+    current_user.freelancer_profile.job_types.each do |index, _value|
       @jobs = @jobs.or(Job.where(job_type: index))
     end
     @distance = params[:search][:distance] if params[:search].present?
     @address = ''
-    @address += "#{current_freelancer.address}, " if current_freelancer.address.present?
-    @address += current_freelancer.city if current_freelancer.city.present?
-    @address += ", #{CS.states(current_freelancer.country.upcase.to_sym)[current_freelancer.state.to_sym]}" if current_freelancer.country.present?
-    @address += ", #{CS.countries[current_freelancer.country.upcase.to_sym]}" if current_freelancer.country.present?
+    @address += "#{current_user.freelancer_profile.address}, " if current_user.freelancer_profile.address.present?
+    @address += current_user.freelancer_profile.city if current_user.freelancer_profile.city.present?
+    @address += ", #{CS.states(current_user.freelancer_profile.country.upcase.to_sym)[current_user.freelancer_profile.state.to_sym]}" if current_user.freelancer_profile.country.present?
+    @address += ", #{CS.countries[current_user.freelancer_profile.country.upcase.to_sym]}" if current_user.freelancer_profile.country.present?
     if @address
       # check for cached version of address
       if Rails.cache.read(@address)
@@ -273,18 +288,18 @@ class Freelancer::JobsController < Freelancer::BaseController
 
   private
 
-    def apply_params
-      params.require(:freelancer_job_apply_path).permit(
-        :pay_type,
-        :job,
-        :amount,
-        :number_of_hours,
-        :hourly_rate,
-        :message,
-        :attachment,
-        :daily_rate,
-        :number_of_days,
-        :body
-      )
-    end
+  def apply_params
+    params.require(:freelancer_job_apply_path).permit(
+      :pay_type,
+      :job,
+      :amount,
+      :number_of_hours,
+      :hourly_rate,
+      :message,
+      :attachment,
+      :daily_rate,
+      :number_of_days,
+      :body
+    )
+  end
 end

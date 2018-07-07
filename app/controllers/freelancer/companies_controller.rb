@@ -2,6 +2,8 @@ class Freelancer::CompaniesController < Freelancer::BaseController
   include CompanyHelper
 
   def index
+    authorize current_user
+
     @keywords = params.dig(:search, :keywords).presence
     @address = params.dig(:search, :address).presence
 
@@ -54,36 +56,36 @@ class Freelancer::CompaniesController < Freelancer::BaseController
 
 
   def favourites
-    @locations = current_freelancer.favourite_companies.uniq.pluck(:area)
-    @companies = current_freelancer.favourite_companies
+    authorize current_user
 
-    current_freelancer.favourite_jobs.each do |job|
+    @locations = current_user.favourite_companies.uniq.pluck(:area)
+    @companies = current_user.favourite_companies
+
+    current_user.favourite_jobs.each do |job|
       @locations << job.company.area
       @companies << job.company
     end
 
     @locations = @locations.uniq
     @companies = @companies.uniq
-
-    # @companies = @companies.page(params[:page]).
-    #   per(50)
   end
 
 
   def show
-    @company = Company.find(params[:id])
+    @company = CompanyUser.find(params[:id])&.company
+    authorize @company
 
     # analytic
     @company.profile_views += 1
     @company.save
 
-    @favourite = current_freelancer.company_favourites.where({company_id: params[:id]}).length > 0 ? true : false
+    @favourite = current_user.company_favourites.where({company_id: params[:id]}).length > 0 ? true : false
     if params.dig(:toggle_favourite) == "true"
       if @favourite == false
-        current_freelancer.favourite_companies << @company
+        current_user.favourite_companies << @company
         @favourite = true
       else
-        current_freelancer.company_favourites.where({company_id: @company.id}).destroy_all
+        current_user.company_favourites.where({company_id: @company.id}).destroy_all
         @favourite = false
       end
     end
@@ -91,17 +93,19 @@ class Freelancer::CompaniesController < Freelancer::BaseController
 
 
   def av_companies
+    authorize current_user
+
     @locations = []
     @companies = []
 
     if params[:location] && params[:location] != ""
-      current_freelancer.applicants.where({ state: "accepted" }).where({ city: params[:location] }).each do |job|
+      current_user.applicants.where({ state: "accepted" }).where({ city: params[:location] }).each do |job|
         @locations << job.company.area
         @companies << job.company
       end
     else
 
-      current_freelancer.applicants.where({ state: "accepted" }).each do |job|
+      current_user.applicants.where({ state: "accepted" }).each do |job|
         @locations << job.company.area
         @companies << job.company
       end
@@ -110,31 +114,29 @@ class Freelancer::CompaniesController < Freelancer::BaseController
 
     @locations = @locations.uniq
     @companies = @companies.uniq
-
   end
 
 
   def show_job
     @job = Job.find(params[:id])
+    authorize @job, :show?
   end
 
 
   def add_favourites
+    authorize current_user
     if params[:companies].nil?
       render json: { status: 'parameter missing' }
       return
     end
-
     params[:companies].each do |id|
       c = Company.where({ id: id.to_i })
 
       if f.length > 0
-        current_freelancer.favourite_companies << c.first
+        current_user.favourite_companies << c.first
       end
     end
 
     render json: { status: 'success', companies: params[:companies] }
-
   end
-
 end

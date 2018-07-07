@@ -50,9 +50,20 @@
 #  job_type                               :citext
 #  job_market                             :citext
 #  manufacturer_tags                      :citext
-#  contracted_at                          :datetime
 #  company_plan_fees                      :decimal(10, 2)   default(0.0)
+#  contracted_at                          :datetime
 #  state_province                         :string
+#
+# Indexes
+#
+#  index_jobs_on_company_id         (company_id)
+#  index_jobs_on_manufacturer_tags  (manufacturer_tags)
+#  index_jobs_on_project_id         (project_id)
+#
+# Foreign Keys
+#
+#  fk_rails_...  (company_id => companies.id)
+#  fk_rails_...  (project_id => projects.id)
 #
 
 class Job < ApplicationRecord
@@ -193,7 +204,7 @@ class Job < ApplicationRecord
   ]
 
   validates :budget, numericality: true, sane_price: true
-  validates :duration, numericality: { only_integer: true }
+  validates :duration, numericality: { only_integer: true, greater_than_or_equal_to: 1 }
   validates :pay_type, inclusion: { in: pay_type.values }, allow_blank: true
   validates :freelancer_type, inclusion: { in: freelancer_type.values }
   validate :scope_or_file

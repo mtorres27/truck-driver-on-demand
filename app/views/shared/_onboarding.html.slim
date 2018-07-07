@@ -1,14 +1,14 @@
-- if !current_company.nil?
-  - sign_in_count = current_company.sign_in_count
-- elsif !current_freelancer.nil?
-  - sign_in_count = current_freelancer.sign_in_count
-- elsif !current_admin.nil?
+- if current_user&.company_user?
+  - sign_in_count = current_user.sign_in_count
+- elsif current_user&.freelancer?
+  - sign_in_count = current_user.sign_in_count
+- elsif current_user&.admin?
   - sign_in_count = -1
 - else
   - sign_in_count = -1
 
 - if sign_in_count <= 1000000000 and sign_in_count > -1 and has_seen_onboarding == false
-  - if current_freelancer&.registration_completed?
+  - if current_user && current_user.freelancer? && current_user.registration_completed?
       - set_has_seen_onboarding
         .onboarding-container
           .onboarding-navbar
@@ -23,7 +23,7 @@
               .btn.btn--primary onClick="showFreelancerProfile()"
                 | Build a killer profile
 
-  - elsif current_company&.registration_completed?
+  - elsif current_user && current_user.company_user? && current_user&.registration_completed?
     - set_has_seen_onboarding
       .onboarding-container
         .onboarding-navbar

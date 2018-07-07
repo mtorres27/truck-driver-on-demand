@@ -8,9 +8,13 @@
 #  freelancer_id :integer          not null
 #  accepted      :boolean          default(FALSE)
 #
+# Indexes
+#
+#  index_friend_invites_on_freelancer_id  (freelancer_id)
+#
 
 class FriendInvite < ApplicationRecord
-  belongs_to :freelancer
+  belongs_to :freelancer, class_name: 'User', foreign_key: 'freelancer_id'
 
   validates :name, :email, :freelancer_id, presence: true
   validate :number_of_invites_below_six
@@ -43,7 +47,7 @@ class FriendInvite < ApplicationRecord
   end
 
   def freelancer_does_not_exist
-    return if Freelancer.where(email: email).count.zero?
+    return if User.where(email: email, type: 'Freelancer').count.zero?
     errors.add(:email, "#{email} is already registered to AV Junction.")
   end
 

@@ -1,6 +1,6 @@
 h1 Editing Job
 
-= render "company/jobs/edit_job_form"
+= render "company/jobs/edit_job_form", company: @company
 
 hr
 = link_to 'Show', admin_job_path(@job)

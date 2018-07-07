@@ -17,14 +17,14 @@ RSpec.describe Freelancer::RegistrationStepsController, type: :controller do
       context "when current_freelancer does not exist" do
         it "redirects to freelancer login page" do
           get :show, params: { id: :personal }
-          expect(response).to redirect_to(new_freelancer_session_path)
+          expect(response).to redirect_to(root_path)
         end
       end
     end
   end
 
   describe "PUT #update" do
-    let(:freelancer) { create(:freelancer, name: nil) }
+    let(:freelancer) { create(:freelancer) }
 
     before do
       sign_in freelancer
@@ -32,49 +32,42 @@ RSpec.describe Freelancer::RegistrationStepsController, type: :controller do
 
     describe "step: personal" do
       context "when the fields are filled" do
-        let(:freelancer_params) { { first_name: "Test", last_name: "Testerson", city: "Chicago", state: "Illinois", country: "us" } }
+        let(:freelancer_params) { { city: "Chicago", state: "Illinois", country: "us" } }
 
         it "updates personal information" do
-          put :update, params: { id: :personal, freelancer: freelancer_params }
-          expect(freelancer.reload).to have_attributes( { name: "Test Testerson", city: "Chicago", state: "Illinois", country: "us" })
+          put :update, params: { id: :personal, freelancer_profile: freelancer_params }
+          expect(freelancer.freelancer_profile.reload).to have_attributes( { city: "Chicago", state: "Illinois", country: "us" })
         end
 
         it "redirects to job info path" do
-          put :update, params: { id: :personal, freelancer: freelancer_params }
+          put :update, params: { id: :personal, freelancer_profile: freelancer_params }
           expect(response).to redirect_to(freelancer_registration_step_path(:job_info))
         end
       end
 
       context "when the fields are not filled" do
-        let(:freelancer) { create(:freelancer, name: nil, last_name: nil, city: nil, country: nil) }
+        let(:freelancer) { create(:freelancer, freelancer_profile: create(:freelancer_profile, city: nil, country: nil)) }
         let(:freelancer_params) { {} }
 
         it "does not update personal information" do
-          put :update, params: { id: :personal, freelancer: freelancer_params }
-          expect(freelancer.reload.name).to be_nil
-          expect(freelancer.reload.last_name).to be_nil
-          expect(freelancer.reload.city).to be_nil
-          expect(freelancer.reload.country).to be_nil
+          put :update, params: { id: :personal, freelancer_profile: freelancer_params }
+          expect(freelancer.freelancer_profile.reload.city).to be_nil
+          expect(freelancer.freelancer_profile.reload.country).to be_nil
         end
       end
     end
 
     describe "step :job_info" do
       before do
-        freelancer.update(registration_step: "job_info")
+        freelancer.freelancer_profile.update(registration_step: "job_info")
       end
 
       context "when job types are not selected" do
         let(:freelancer_params) { {} }
 
         it "does not update the freelancer" do
-          put :update, params: { id: :job_info, freelancer: freelancer_params }
-          expect(freelancer.reload.job_types).to be_nil
-        end
-
-        it "includes expected errors on the freelancer" do
-          put :update, params: { id: :job_info, freelancer: freelancer_params }
-          expect(assigns(:freelancer).errors[:job_types]).not_to be_empty
+          put :update, params: { id: :job_info, freelancer_profile: freelancer_params }
+          expect(freelancer.freelancer_profile.reload.job_types).to be_nil
         end
       end
 
@@ -91,27 +84,27 @@ RSpec.describe Freelancer::RegistrationStepsController, type: :controller do
         end
 
         it "updates the freelancer with the correct params" do
-          put :update, params: { id: :job_info, freelancer: freelancer_params }
-          expect(freelancer.reload).to have_attributes(freelancer_params)
+          put :update, params: { id: :job_info, freelancer_profile: freelancer_params }
+          expect(freelancer.freelancer_profile.reload).to have_attributes(freelancer_params)
         end
       end
     end
 
     describe "step :profile" do
       before do
-        freelancer.update_attribute(:registration_step, "profile")
+        freelancer.freelancer_profile.update_attribute(:registration_step, "profile")
       end
 
       context "when user does not fill the fields" do
         let(:freelancer_params) { { bio: nil, tagline: nil } }
 
         it "does not update the freelancer" do
-          put :update, params: { id: :profile, freelancer: freelancer_params }
+          put :update, params: { id: :profile, freelancer_profile: freelancer_params }
 
-          freelancer.reload
+          freelancer.freelancer_profile.reload
 
-          expect(freelancer.bio).not_to be_empty
-          expect(freelancer.tagline).not_to be_empty
+          expect(freelancer.freelancer_profile.bio).not_to be_empty
+          expect(freelancer.freelancer_profile.tagline).not_to be_empty
         end
       end
 
@@ -125,10 +118,10 @@ RSpec.describe Freelancer::RegistrationStepsController, type: :controller do
         }
 
         it "updates profile information" do
-          put :update, params: { id: :profile, freelancer: freelancer_params }
-          expect(freelancer.reload.bio).to eq("my bio")
-          expect(freelancer.tagline).to eq("my tagline")
-          expect(freelancer.avatar).not_to be_nil
+          put :update, params: { id: :profile, freelancer_profile: freelancer_params }
+          expect(freelancer.freelancer_profile.reload.bio).to eq("my bio")
+          expect(freelancer.freelancer_profile.tagline).to eq("my tagline")
+          expect(freelancer.freelancer_profile.avatar).not_to be_nil
         end
       end
     end

@@ -5,9 +5,9 @@
   div= @job.company.postal_code
   div BN Tax No. #{@job.company.sales_tax_number}
 .grid-cell.grid-cell--33
-  h4.heading-h4= "To: #{@job.freelancer&.name}"
-  div= @job.freelancer&.formatted_address
-  div= @job.freelancer&.sales_tax_number
+  h4.heading-h4= "To: #{@job.freelancer&.full_name}"
+  div= @job.freelancer&.freelancer_profile.formatted_address
+  div= @job.freelancer&.freelancer_profile.sales_tax_number
 .grid-cell.grid-cell--33
   h4.heading-h4= "Inv #: #{@payment.id}"
   div= "Date: #{@payment.paid_on}"

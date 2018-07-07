@@ -1,6 +1,7 @@
 class Freelancer::ApplicationController < Freelancer::BaseController
   before_action :set_job
   before_action :set_applicant
+  before_action :authorize_freelancer
 
   def index
     set_collections
@@ -9,14 +10,17 @@ class Freelancer::ApplicationController < Freelancer::BaseController
   private
 
   def set_job
-    @job = current_freelancer.applicants.where({job_id: params[:job_id] }).first.job
+    @job = current_user.applicants.where({job_id: params[:job_id] }).first.job
   end
 
 
   def set_applicant
-    @applicant = @job.applicants.where({ freelancer_id: current_freelancer.id }).first
+    @applicant = @job.applicants.where({ freelancer_id: current_user.id }).first
   end
 
+  def authorize_freelancer
+    authorize current_user
+  end
   
   def set_collections
     @messages = @applicant.messages

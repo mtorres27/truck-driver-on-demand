@@ -1,308 +1,310 @@
 .grid-h
-  .grid-cell.grid-cell--33
-    h2.heading-h2 Did you know? A profile pic says a 1000 words.
-  .grid-cell.grid-cell--67
-    .grid-h.grid-h--no-margin
-      .grid-cell.grid-cell--33
-        .freelancer-profile__image style="width: 200px; height: 200px; margin: auto"
-          = image_tag(@freelancer.avatar_url, id: "freelancer-edit-profile__avatar")
-          .freelancer-profile__image-upload onclick="updateProfilePicture()"
-            span class="zmdi zmdi-camera-add"
-        = f.file_field :avatar, label: false, :accept => 'image/png,image/gif,image/jpeg', id: "edit-freelancer-profile-avatar", class: "file-input--hidden"
+  = f.simple_fields_for :freelancer_profile do |df|
+    .grid-cell.grid-cell--33
+      h2.heading-h2 Did you know? A profile pic says a 1000 words.
+    .grid-cell.grid-cell--67
+      .grid-h.grid-h--no-margin
+        .grid-cell.grid-cell--33
+          .freelancer-profile__image style="width: 200px; height: 200px; margin: auto"
+            = image_tag(@freelancer.freelancer_profile.avatar_url, id: "freelancer-edit-profile__avatar")
+            .freelancer-profile__image-upload onclick="updateProfilePicture()"
+              span class="zmdi zmdi-camera-add"
+          = df.file_field :avatar, label: false, :accept => 'image/png,image/gif,image/jpeg', id: "edit-freelancer-profile-avatar", class: "file-input--hidden"
 
-      .grid-cell.grid-cell--67
-        .grid-h.grid-h--no-margin
-          .grid-cell.grid-cell--100
-            = f.input :name, required: true, label: "Full Name", placeholder: "Enter your Name."
-          .grid-cell.grid-cell--100
-            = f.input :email, as: :string, required: true, label: "Email Address", placeholder: "Email"
-          .grid-cell.grid-cell--100
-            = f.input :phone_number, as: :string, required: true, label: "Phone Number", placeholder: "Phone Number"
-  .grid-cell.grid-cell--100
-    hr/
-  .grid-cell.grid-cell--33
-    h2.heading-h2 Enter your address so we can find you the closest jobs.
-  .grid-cell.grid-cell--67
-    .grid-h.grid-h--no-margin
-      .grid-cell.grid-cell--100
-        = f.input :address, required: true, label: "Address", placeholder: "Address"
-      .grid-cell.grid-cell--100
-        = f.input :line2, required: false, label: "Address Line 2, Unit/Apt #", placeholder: "Address Line 2, Unit/Apt #"
-      .grid-cell.grid-cell--50
-        = f.input :city, as: :string, required: true, label: "City", placeholder: "City"
-      .grid-cell.grid-cell--50
-        = f.label "State/Province"
-        select#freelancer_state.form-control.select(name='freelancer[state]')
-          option(value='')
-            | Select
-          = CS.states(:us).each do |index, value|
-            - selected = (!@freelancer.state.nil? and @freelancer.state == index.to_s)
-            - if selected
-              option.freelancer_us_option(value="#{index}" selected)
-                = value
-            - else
-              option.freelancer_us_option(value="#{index}")
-                = value
-          = CS.states(:ca).each do |index, value|
-            - selected = (!@freelancer.state.nil? and @freelancer.state == index.to_s)
-            - if selected
-              option.freelancer_ca_option(value="#{index}" selected)
-                = value
-            - else
-              option.freelancer_ca_option(value="#{index}")
-                = value
-      .grid-cell.grid-cell--50
-        = f.input :postal_code, required: true, label: "ZIP/Postal Code", prompt: "ZIP/Postal Code"
-      .grid-cell.grid-cell--50
-        = f.input :country, required: true, label: "Select Country", prompt: "Select Country"
-  .grid-cell.grid-cell--100
-    hr/
-  .grid-cell.grid-cell--33
-    h2.heading-h2 Tell us about yourself, your skills and experience. AV Companies can't just hire a pretty face.
-  .grid-cell.grid-cell--67
-    .grid-v
-      .grid-cell.grid-cell--100
-        = f.input :tagline, required: true, label: "Describe yourself in one sentence, your \"tagline\"", placeholder: "Tagline"
-      .grid-cell.grid-cell--100.grid-cell--expand
-        = f.input :bio, required: true, label: "Close the deal with a killer biography", placeholder: "Write a bio", :input_html => { :class => 'form__profile-bio-textarea' }
-      .grid-cell.grid-cell--100
-        = f.input :company_name, required: false, label: "Are you working with a company?", placeholder: "Company Name"
-      .grid-cell.grid-cell--100
-        .form__field-label Do you have a valid drivers license?
-        .form__radio-group
-          = f.radio_button(:valid_driver, true)
-          | Yes
-        .form__radio-group
-          = f.radio_button(:valid_driver, false)
-          | No
-  .grid-cell.grid-cell--100
-    hr/
-  .grid-cell.grid-cell--33
-    h2.heading-h2 Details on how you operate your business will help cut through the clutter.
-  .grid-cell.grid-cell--67
-    .grid-h.grid-h--no-margin
-      .grid-cell.grid-cell--100
-        .form__field-label Availability for work
-        .form__radio-group
-          = f.radio_button(:available, true)
-          | I am available for work
-        .form__radio-group
-          = f.radio_button(:available, false)
-          | I am not available for work
-      .grid-cell.grid-cell--100
-        = f.input :service_areas, required: true, label: "Service regions", placeholder: "List the cites, boroughs, or towns you service (separate with commas)"
-      .grid-cell.grid-cell--50
-        = f.input :freelancer_type, required: true, label: "Freelancer Type", prompt: "Freelancer Type"
-      .grid-cell.grid-cell--50
-        = f.input :freelancer_team_size, required: true, label: "Team Size", prompt: "Team Size"
+        .grid-cell.grid-cell--67
+          .grid-h.grid-h--no-margin
+            .grid-cell.grid-cell--50
+              = f.input :first_name, required: true, label: "First Name", placeholder: "Enter your First Name."
+            .grid-cell.grid-cell--50
+              = f.input :last_name, required: true, label: "Last Name", placeholder: "Enter your Last Name."
+            .grid-cell.grid-cell--100
+              = f.input :email, as: :string, required: true, label: "Email Address", placeholder: "Email"
+            .grid-cell.grid-cell--100
+              = df.input :phone_number, as: :string, required: true, label: "Phone Number", placeholder: "Phone Number"
+    .grid-cell.grid-cell--100
+      hr/
+    .grid-cell.grid-cell--33
+      h2.heading-h2 Enter your address so we can find you the closest jobs.
+    .grid-cell.grid-cell--67
+      .grid-h.grid-h--no-margin
+        .grid-cell.grid-cell--100
+          = df.input :address, required: true, label: "Address", placeholder: "Address"
+        .grid-cell.grid-cell--100
+          = df.input :line2, required: false, label: "Address Line 2, Unit/Apt #", placeholder: "Address Line 2, Unit/Apt #"
+        .grid-cell.grid-cell--50
+          = df.input :city, as: :string, required: true, label: "City", placeholder: "City"
+        .grid-cell.grid-cell--50
+          = df.label "State/Province"
+          select#freelancer_freelancer_profile_attributes_state.form-control.select(name='freelancer[freelancer_profile_attributes][state]')
+            option(value='')
+              | Select
+            = CS.states(:us).each do |index, value|
+              - selected = (@freelancer.freelancer_profile.state.present? && @freelancer.freelancer_profile.state == index.to_s)
+              - if selected
+                option.freelancer_us_option(value="#{index}" selected)
+                  = value
+              - else
+                option.freelancer_us_option(value="#{index}")
+                  = value
+            = CS.states(:ca).each do |index, value|
+              - selected = (@freelancer.freelancer_profile.state.present? and @freelancer.freelancer_profile.state == index.to_s)
+              - if selected
+                option.freelancer_ca_option(value="#{index}" selected)
+                  = value
+              - else
+                option.freelancer_ca_option(value="#{index}")
+                  = value
+        .grid-cell.grid-cell--50
+          = df.input :postal_code, required: true, label: "ZIP/Postal Code", prompt: "ZIP/Postal Code"
+        .grid-cell.grid-cell--50
+          = df.input :country, required: true, label: "Select Country", prompt: "Select Country"
+    .grid-cell.grid-cell--100
+      hr/
+    .grid-cell.grid-cell--33
+      h2.heading-h2 Tell us about yourself, your skills and experience. AV Companies can't just hire a pretty face.
+    .grid-cell.grid-cell--67
+      .grid-v
+        .grid-cell.grid-cell--100
+          = df.input :tagline, required: true, label: "Describe yourself in one sentence, your \"tagline\"", placeholder: "Tagline"
+        .grid-cell.grid-cell--100.grid-cell--expand
+          = df.input :bio, required: true, label: "Close the deal with a killer biography", placeholder: "Write a bio", :input_html => {:class => 'form__profile-bio-textarea'}
+        .grid-cell.grid-cell--100
+          = df.input :company_name, required: false, label: "Are you working with a company?", placeholder: "Company Name"
+        .grid-cell.grid-cell--100
+          .form__field-label Do you have a valid drivers license?
+          .form__radio-group
+            = df.radio_button(:valid_driver, true)
+            | Yes
+          .form__radio-group
+            = df.radio_button(:valid_driver, false)
+            | No
+    .grid-cell.grid-cell--100
+      hr/
+    .grid-cell.grid-cell--33
+      h2.heading-h2 Details on how you operate your business will help cut through the clutter.
+    .grid-cell.grid-cell--67
+      .grid-h.grid-h--no-margin
+        .grid-cell.grid-cell--100
+          .form__field-label Availability for work
+          .form__radio-group
+            = df.radio_button(:available, true)
+            | I am available for work
+          .form__radio-group
+            = df.radio_button(:available, false)
+            | I am not available for work
+        .grid-cell.grid-cell--100
+          = df.input :service_areas, required: true, label: "Service regions", placeholder: "List the cites, boroughs, or towns you service (separate with commas)"
+        .grid-cell.grid-cell--50
+          = df.input :freelancer_type, required: true, label: "Freelancer Type", prompt: "Freelancer Type"
+        .grid-cell.grid-cell--50
+          = df.input :freelancer_team_size, required: true, label: "Team Size", prompt: "Team Size"
 
-      .grid-cell.grid-cell--50
-        = f.input :years_of_experience, label: "Years of Experience"
+        .grid-cell.grid-cell--50
+          = df.input :years_of_experience, label: "Years of Experience"
 
-      .grid-cell.grid-cell--50
-        = f.input :pay_per_unit_time, label: "Hourly Rate Range", placeholder: "Enter your rate range, for ex 25-35"
-      .grid-cell.grid-cell--50
-        = f.input :pay_unit_time_preference, label: "Pay Preference", prompt: "Select"
-      .grid-cell.grid-cell--50
-        = f.input :sales_tax_number, required: false, label: "Sales tax number", placeholder: "Sales Tax No."
-      .grid-cell.grid-cell--50
-        .form__field-label Do you have you own tools?
-        .form__radio-group
-          = f.radio_button(:own_tools, true)
-          | Yes
-        .form__radio-group
-          = f.radio_button(:own_tools, false)
-          | No
-  .grid-cell.grid-cell--100
-    hr/
-  .grid-cell.grid-cell--33
-    h2.heading-h2
-      | You've got skills!
-      br
-      | Check all that apply.
-  .grid-cell.grid-cell--67
-    .grid-v
-      .grid-cell.grid-cell--100
-        .form__field-label Technical Skill Tags
-        - if @freelancer.errors.full_messages.include?("Technical skill tags can't be blank")
-          .has-error
-            .help-block
-              | One skill tag must be selected.
-        .freelancer-profile__checkboxes
-          - I18n.t('enumerize.technical_skill_tags').each do |index, value|
-            - tag_name = "freelancer[technical_skill_tags][#{index.to_s}]"
-            - if !@freelancer.technical_skill_tags.nil? and @freelancer.technical_skill_tags.include?(index.to_s)
-              - checked = true
-            - else
-              - checked = false
-            .freelancer-profile__checkbox
-              = check_box_tag tag_name, "1", checked
-              = " #{value}"
-      .grid-cell.grid-cell--100
-        .form__field-label Manufacturer Tags
-        - if @freelancer.errors.full_messages.include?("Manufacturer tags can't be blank")
-          .has-error
-            .help-block
-              | One manufacturer tag must be selected.
-        .freelancer-profile__checkboxes
-          - I18n.t('enumerize.manufacturer_tags').each do |index, value|
-            - tag_name = "freelancer[manufacturer_tags][#{index.to_s}]"
-            - if !@freelancer.manufacturer_tags.nil? and @freelancer.manufacturer_tags.include?(index.to_s)
-              - checked = true
-            - else
-              - checked = false
-            .freelancer-profile__checkbox
-              = check_box_tag tag_name, "1", checked
-              = " #{value}"
-  .grid-cell.grid-cell--100
-    hr/
-  .grid-cell.grid-cell--33
-    h2.heading-h2
-      | You've got skills!
-      br
-      | Check all that apply.
-  .grid-cell.grid-cell--67
-    .grid-v
-      .grid-cell.grid-cell--100
-        .form__field-label Job Types
-        - if @freelancer.errors.full_messages.include?("Job types can't be blank")
-          .has-error
-            .help-block
-              | One job type must be selected.
-        .freelancer-profile__checkboxes
-          - I18n.t('enumerize.job_types').each do |index, value|
-            - tag_name = "freelancer[job_types][#{index.to_s}]"
-            - if !@freelancer.job_types.nil? and @freelancer.job_types.include?(index.to_s)
-              - checked = true
-            - else
-              - checked = false
-            .freelancer-profile__checkbox
-              = check_box_tag tag_name, "1", checked
-              = " #{value}"
-        .freelancer-profile__checkboxes.freelancer_please_select_job_type_message
-          | Please select a Job type
-      .grid-cell.grid-cell--100
-        .form__field-label.freelancer_system_integration_checkboxes Job Markets / System Integration
-        .freelancer_system_integration_checkboxes.freelancer-profile__checkboxes
-          - I18n.t('enumerize.system_integration_job_markets').each do |index, value|
-            - tag_name = "freelancer[job_markets][#{index.to_s}]"
-            - if !@freelancer.job_markets.nil? and @freelancer.job_markets.include?(index.to_s) and !@freelancer.job_types.nil? and @freelancer.job_types.include?('system_integration')
-              - checked = true
-            - else
-              - checked = false
-            .freelancer-profile__checkbox
-              = check_box_tag tag_name, "1", checked, class: 'freelancer_system_integration_check_box'
-              = " #{value}"
-        .form__field-label.freelancer_live_events_staging_and_rental_checkboxes Job Markets / Live Events Staging & Rental
-        .freelancer_live_events_staging_and_rental_checkboxes.freelancer-profile__checkboxes
-          - I18n.t('enumerize.live_events_staging_and_rental_job_markets').each do |index, value|
-            - tag_name = "freelancer[job_markets][#{index.to_s}]"
-            - if !@freelancer.job_markets.nil? and @freelancer.job_markets.include?(index.to_s) and !@freelancer.job_types.nil? and @freelancer.job_types.include?('live_events_staging_and_rental')
-              - checked = true
-            - else
-              - checked = false
-            .freelancer-profile__checkbox
-              = check_box_tag tag_name, "1", checked, class: 'freelancer_live_events_staging_and_rental_check_box'
-              = " #{value}"
-      .grid-cell.grid-cell--100
-        .form__field-label.freelancer_system_integration_checkboxes Job Functions / System Integration
-        .freelancer_system_integration_checkboxes.freelancer-profile__checkboxes
-          - I18n.t('enumerize.system_integration_job_functions').each do |index, value|
-            - tag_name = "freelancer[job_functions][#{index.to_s}]"
-            - if !@freelancer.job_functions.nil? and @freelancer.job_functions.include?(index.to_s) and !@freelancer.job_types.nil? and @freelancer.job_types.include?('system_integration')
-              - checked = true
-            - else
-              - checked = false
-            .freelancer-profile__checkbox
-              = check_box_tag tag_name, "1", checked, class: 'freelancer_system_integration_check_box'
-              = " #{value}"
-        .form__field-label.freelancer_live_events_staging_and_rental_checkboxes Job Functions / Live Events Staging & Rental
-        .freelancer_live_events_staging_and_rental_checkboxes.freelancer-profile__checkboxes
-          - I18n.t('enumerize.live_events_staging_and_rental_job_functions').each do |index, value|
-            - tag_name = "freelancer[job_functions][#{index.to_s}]"
-            - if !@freelancer.job_functions.nil? and @freelancer.job_functions.include?(index.to_s) and !@freelancer.job_types.nil? and @freelancer.job_types.include?('live_events_staging_and_rental')
-              - checked = true
-            - else
-              - checked = false
-            .freelancer-profile__checkbox
-              = check_box_tag tag_name, "1", checked, class: 'freelancer_live_events_staging_and_rental_check_box'
-              = " #{value}"
-  .grid-cell.grid-cell--100
-    hr/
-  .grid-cell.grid-cell--33
-    h2.heading-h2 A virtual wall for all the certificates you've earned.
-  .grid-cell.grid-cell--67
-    .grid-v
-      .grid-cell.grid-cell--100
-        .form__field-label Accreditation
-        = f.simple_fields_for :certifications do |certification_form|
-          = render "/freelancer/profiles/certification_fields", f: certification_form
-        .links.add-new-certificate
-          = link_to_add_association 'Add Another', f, :certifications, partial: '/freelancer/profiles/certification_fields', class: "btn btn--secondary"
-  .grid-cell.grid-cell--100
-    hr/
-  .grid-cell.grid-cell--33
-    h2.heading-h2 Add Affiliate
-  .grid-cell.grid-cell--67
-    .grid-v
-      .grid-cell.grid-cell--100
-        .form__field-label Affilate
-        = f.simple_fields_for :freelancer_affiliations do |freelancer_affiliation_form|
-          = render "/freelancer/profiles/freelancer_affiliation_fields", f: freelancer_affiliation_form
-        .links.add-new-affiliation
-          = link_to_add_association 'Add Another', f, :freelancer_affiliations, partial: '/freelancer/profiles/freelancer_affiliation_fields',class: "btn btn--secondary"
-  .grid-cell.grid-cell--100
-    hr/
-  .grid-cell.grid-cell--33
-    h2.heading-h2 Add Security Clearance
-  .grid-cell.grid-cell--67
-    .grid-v
-      .grid-cell.grid-cell--100
-        .form__field-label Security Clearance
-        = f.simple_fields_for :freelancer_clearances do |freelancer_clearance_form|
-          = render "/freelancer/profiles/freelancer_clearance_fields", f: freelancer_clearance_form
-        .links.add-new-clearance
-          = link_to_add_association 'Add Another', f, :freelancer_clearances, partial: '/freelancer/profiles/freelancer_clearance_fields',class: "btn btn--secondary"
-  .grid-cell.grid-cell--100
-    hr/
-  .grid-cell.grid-cell--33
-    h2.heading-h2 Portfolio
-  .grid-cell.grid-cell--67
-    .grid-v
-      .grid-cell.grid-cell--100
-        .form__field-label Gallery
-        = f.simple_fields_for :freelancer_portfolios do |freelancer_portfolio_form|
-          = render "/freelancer/profiles/freelancer_portfolio_fields", f: freelancer_portfolio_form
-        .links.add-new-portfolio
-          = link_to_add_association 'Add Another', f, :freelancer_portfolios, partial: '/freelancer/profiles/freelancer_portfolio_fields',class: "btn btn--secondary"
-  .grid-cell.grid-cell--100
-    hr/
-  .grid-cell.grid-cell--33
-    h2.heading-h2 Add Insurance
-  .grid-cell.grid-cell--67
-    .grid-v
-      .grid-cell.grid-cell--100
-        .form__field-label Insurance
-        = f.simple_fields_for :freelancer_insurances do |freelancer_insurance_form|
-          = render "/freelancer/profiles/freelancer_insurance_fields", f: freelancer_insurance_form
-        .links.add-new-insurance
-          = link_to_add_association 'Add Another', f, :freelancer_insurances, partial: '/freelancer/profiles/freelancer_insurance_fields',class: "btn btn--secondary"
-  .grid-cell.grid-cell--100
-    hr/
-  .grid-cell.grid-cell--33
-    h2.heading-h2 Make it personal with a background image that captures you best.
-  .grid-cell.grid-cell--67
-    .grid-h.grid-h--no-margin
-      .grid-cell.grid-cell--100
-        .form__field-label Wallpaper
-        .freelancer-profile__image--header
-          = image_tag(@freelancer.profile_header_url, id: "freelancer-edit-profile__header")
-          .freelancer-profile__image-upload onclick="updateHeaderImage()"
-            span class="zmdi zmdi-camera-add"
-        = f.file_field :profile_header, label: false, :accept => 'image/png,image/gif,image/jpeg', id: "edit-freelancer-profile-header", class: "file-input--hidden"
-      .grid-cell.grid-cell--50
-        = f.input :header_color, required: true, placeholder: "Use a hex color", label: "Wallpaper Color"
-      .grid-cell.grid-cell--50
-        = f.input :header_source, label: "Display color/wallpaper in header", prompt: "Select"
-  .grid-cell.grid-cell--33
-
+        .grid-cell.grid-cell--50
+          = df.input :pay_per_unit_time, label: "Hourly Rate Range", placeholder: "Enter your rate range, for ex 25-35"
+        .grid-cell.grid-cell--50
+          = df.input :pay_unit_time_preference, label: "Pay Preference", prompt: "Select"
+        .grid-cell.grid-cell--50
+          = df.input :sales_tax_number, required: false, label: "Sales tax number", placeholder: "Sales Tax No."
+        .grid-cell.grid-cell--50
+          .form__field-label Do you have you own tools?
+          .form__radio-group
+            = df.radio_button(:own_tools, true)
+            | Yes
+          .form__radio-group
+            = df.radio_button(:own_tools, false)
+            | No
+    .grid-cell.grid-cell--100
+      hr/
+    .grid-cell.grid-cell--33
+      h2.heading-h2
+        | You've got skills!
+        br
+        | Check all that apply.
+    .grid-cell.grid-cell--67
+      .grid-v
+        .grid-cell.grid-cell--100
+          .form__field-label Technical Skill Tags
+          - if @freelancer.freelancer_profile.errors.full_messages.include?("Technical skill tags can't be blank")
+            .has-error
+              .help-block
+                | One skill tag must be selected.
+          .freelancer-profile__checkboxes
+            - I18n.t('enumerize.technical_skill_tags').each do |index, value|
+              - tag_name = "freelancer[freelancer_profile_attributes][technical_skill_tags][#{index.to_s}]"
+              - if @freelancer.freelancer_profile.technical_skill_tags.present? && @freelancer.freelancer_profile.technical_skill_tags.include?(index.to_s)
+                - checked = true
+              - else
+                - checked = false
+              .freelancer-profile__checkbox
+                = check_box_tag tag_name, "1", checked
+                = " #{value}"
+        .grid-cell.grid-cell--100
+          .form__field-label Manufacturer Tags
+          - if @freelancer.freelancer_profile.errors.full_messages.include?("Manufacturer tags can't be blank")
+            .has-error
+              .help-block
+                | One manufacturer tag must be selected.
+          .freelancer-profile__checkboxes
+            - I18n.t('enumerize.manufacturer_tags').each do |index, value|
+              - tag_name = "freelancer[freelancer_profile_attributes][manufacturer_tags][#{index.to_s}]"
+              - if @freelancer.freelancer_profile.manufacturer_tags.present? && @freelancer.freelancer_profile.manufacturer_tags.include?(index.to_s)
+                - checked = true
+              - else
+                - checked = false
+              .freelancer-profile__checkbox
+                = check_box_tag tag_name, "1", checked
+                = " #{value}"
+    .grid-cell.grid-cell--100
+      hr/
+    .grid-cell.grid-cell--33
+      h2.heading-h2
+        | You've got skills!
+        br
+        | Check all that apply.
+    .grid-cell.grid-cell--67
+      .grid-v
+        .grid-cell.grid-cell--100
+          .form__field-label Job Types
+          - if @freelancer.freelancer_profile.errors.full_messages.include?("Job types can't be blank")
+            .has-error
+              .help-block
+                | One job type must be selected.
+          .freelancer-profile__checkboxes
+            - I18n.t('enumerize.job_types').each do |index, value|
+              - tag_name = "freelancer[freelancer_profile_attributes][job_types][#{index.to_s}]"
+              - if @freelancer.freelancer_profile.job_types.present? && @freelancer.freelancer_profile.job_types.include?(index.to_s)
+                - checked = true
+              - else
+                - checked = false
+              .freelancer-profile__checkbox
+                = check_box_tag tag_name, "1", checked
+                = " #{value}"
+          .freelancer-profile__checkboxes.freelancer_please_select_job_type_message
+            | Please select a Job type
+        .grid-cell.grid-cell--100
+          .form__field-label.freelancer_system_integration_checkboxes Job Markets / System Integration
+          .freelancer_system_integration_checkboxes.freelancer-profile__checkboxes
+            - I18n.t('enumerize.system_integration_job_markets').each do |index, value|
+              - tag_name = "freelancer[freelancer_profile_attributes][job_markets][#{index.to_s}]"
+              - if @freelancer.freelancer_profile.job_markets.present? && @freelancer.freelancer_profile.job_markets.include?(index.to_s) && @freelancer.freelancer_profile.job_types.present? && @freelancer.freelancer_profile.job_types.include?('system_integration')
+                - checked = true
+              - else
+                - checked = false
+              .freelancer-profile__checkbox
+                = check_box_tag tag_name, "1", checked, class: 'freelancer_system_integration_check_box'
+                = " #{value}"
+          .form__field-label.freelancer_live_events_staging_and_rental_checkboxes Job Markets / Live Events Staging & Rental
+          .freelancer_live_events_staging_and_rental_checkboxes.freelancer-profile__checkboxes
+            - I18n.t('enumerize.live_events_staging_and_rental_job_markets').each do |index, value|
+              - tag_name = "freelancer[freelancer_profile_attributes][job_markets][#{index.to_s}]"
+              - if @freelancer.freelancer_profile.job_markets.present? && @freelancer.freelancer_profile.job_markets.include?(index.to_s) && @freelancer.freelancer_profile.job_types.present? and @freelancer.freelancer_profile.job_types.include?('live_events_staging_and_rental')
+                - checked = true
+              - else
+                - checked = false
+              .freelancer-profile__checkbox
+                = check_box_tag tag_name, "1", checked, class: 'freelancer_live_events_staging_and_rental_check_box'
+                = " #{value}"
+        .grid-cell.grid-cell--100
+          .form__field-label.freelancer_system_integration_checkboxes Job Functions / System Integration
+          .freelancer_system_integration_checkboxes.freelancer-profile__checkboxes
+            - I18n.t('enumerize.system_integration_job_functions').each do |index, value|
+              - tag_name = "freelancer[freelancer_profile_attributes][job_functions][#{index.to_s}]"
+              - if @freelancer.freelancer_profile.job_functions.present? && @freelancer.freelancer_profile.job_functions.include?(index.to_s) && @freelancer.freelancer_profile.job_types.present? && @freelancer.freelancer_profile.job_types.include?('system_integration')
+                - checked = true
+              - else
+                - checked = false
+              .freelancer-profile__checkbox
+                = check_box_tag tag_name, "1", checked, class: 'freelancer_system_integration_check_box'
+                = " #{value}"
+          .form__field-label.freelancer_live_events_staging_and_rental_checkboxes Job Functions / Live Events Staging & Rental
+          .freelancer_live_events_staging_and_rental_checkboxes.freelancer-profile__checkboxes
+            - I18n.t('enumerize.live_events_staging_and_rental_job_functions').each do |index, value|
+              - tag_name = "freelancer[freelancer_profile_attributes][job_functions][#{index.to_s}]"
+              - if @freelancer.freelancer_profile.job_functions.present? && @freelancer.freelancer_profile.job_functions.include?(index.to_s) && @freelancer.freelancer_profile.job_types.present? && @freelancer.freelancer_profile.job_types.include?('live_events_staging_and_rental')
+                - checked = true
+              - else
+                - checked = false
+              .freelancer-profile__checkbox
+                = check_box_tag tag_name, "1", checked, class: 'freelancer_live_events_staging_and_rental_check_box'
+                = " #{value}"
+    .grid-cell.grid-cell--100
+      hr/
+    .grid-cell.grid-cell--33
+      h2.heading-h2 A virtual wall for all the certificates you've earned.
+    .grid-cell.grid-cell--67
+      .grid-v
+        .grid-cell.grid-cell--100
+          .form__field-label Accreditation
+          = f.simple_fields_for :certifications do |certification_form|
+            = render "/freelancer/profiles/certification_fields", f: certification_form
+          .links.add-new-certificate
+            = link_to_add_association 'Add Another', f, :certifications, partial: '/freelancer/profiles/certification_fields', class: "btn btn--secondary"
+    .grid-cell.grid-cell--100
+      hr/
+    .grid-cell.grid-cell--33
+      h2.heading-h2 Add Affiliate
+    .grid-cell.grid-cell--67
+      .grid-v
+        .grid-cell.grid-cell--100
+          .form__field-label Affilate
+          = f.simple_fields_for :freelancer_affiliations do |freelancer_affiliation_form|
+            = render "/freelancer/profiles/freelancer_affiliation_fields", f: freelancer_affiliation_form
+          .links.add-new-affiliation
+            = link_to_add_association 'Add Another', f, :freelancer_affiliations, partial: '/freelancer/profiles/freelancer_affiliation_fields', class: "btn btn--secondary"
+    .grid-cell.grid-cell--100
+      hr/
+    .grid-cell.grid-cell--33
+      h2.heading-h2 Add Security Clearance
+    .grid-cell.grid-cell--67
+      .grid-v
+        .grid-cell.grid-cell--100
+          .form__field-label Security Clearance
+          = f.simple_fields_for :freelancer_clearances do |freelancer_clearance_form|
+            = render "/freelancer/profiles/freelancer_clearance_fields", f: freelancer_clearance_form
+          .links.add-new-clearance
+            = link_to_add_association 'Add Another', f, :freelancer_clearances, partial: '/freelancer/profiles/freelancer_clearance_fields', class: "btn btn--secondary"
+    .grid-cell.grid-cell--100
+      hr/
+    .grid-cell.grid-cell--33
+      h2.heading-h2 Portfolio
+    .grid-cell.grid-cell--67
+      .grid-v
+        .grid-cell.grid-cell--100
+          .form__field-label Gallery
+          = f.simple_fields_for :freelancer_portfolios do |freelancer_portfolio_form|
+            = render "/freelancer/profiles/freelancer_portfolio_fields", f: freelancer_portfolio_form
+          .links.add-new-portfolio
+            = link_to_add_association 'Add Another', f, :freelancer_portfolios, partial: '/freelancer/profiles/freelancer_portfolio_fields', class: "btn btn--secondary"
+    .grid-cell.grid-cell--100
+      hr/
+    .grid-cell.grid-cell--33
+      h2.heading-h2 Add Insurance
+    .grid-cell.grid-cell--67
+      .grid-v
+        .grid-cell.grid-cell--100
+          .form__field-label Insurance
+          = f.simple_fields_for :freelancer_insurances do |freelancer_insurance_form|
+            = render "/freelancer/profiles/freelancer_insurance_fields", f: freelancer_insurance_form
+          .links.add-new-insurance
+            = link_to_add_association 'Add Another', f, :freelancer_insurances, partial: '/freelancer/profiles/freelancer_insurance_fields', class: "btn btn--secondary"
+    .grid-cell.grid-cell--100
+      hr/
+    .grid-cell.grid-cell--33
+      h2.heading-h2 Make it personal with a background image that captures you best.
+    .grid-cell.grid-cell--67
+      .grid-h.grid-h--no-margin
+        .grid-cell.grid-cell--100
+          .form__field-label Wallpaper
+          .freelancer-profile__image--header
+            = image_tag(@freelancer.freelancer_profile.profile_header_url, id: "freelancer-edit-profile__header")
+            .freelancer-profile__image-upload onclick="updateHeaderImage()"
+              span class="zmdi zmdi-camera-add"
+          = df.file_field :profile_header, label: false, :accept => 'image/png,image/gif,image/jpeg', id: "edit-freelancer-profile-header", class: "file-input--hidden"
+        .grid-cell.grid-cell--50
+          = df.input :header_color, required: true, placeholder: "Use a hex color", label: "Wallpaper Color"
+        .grid-cell.grid-cell--50
+          = df.input :header_source, label: "Display color/wallpaper in header", prompt: "Select"
+    .grid-cell.grid-cell--33

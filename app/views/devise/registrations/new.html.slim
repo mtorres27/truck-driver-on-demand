@@ -1,31 +1,32 @@
 - content_for :secondary do
-  h1.center.heading-h1 = "Register as a #{resource.class}"
+  - resource_class_name = resource.class == CompanyUser ? "Company" : "Freelancer"
+  h1.center.heading-h1 = "Register as a #{resource_class_name}"
   = render partial: "shared/registration_progress_bar", locals: { step: 1 }
   = simple_form_for(resource, url: registration_path(resource_name)) do |f|
     .grid-h
+      .grid-cell.grid-cell--50
+        = f.input :first_name, required: true, label: "First Name", placeholder: "Enter your first name", autofocus: true
+      .grid-cell.grid-cell--50
+        = f.input :last_name, required: true, label: "Last Name", placeholder: "Enter your last name"
       .grid-cell.grid-cell--100
-        = f.input :email, as: :string, label: "Email Address", required: true, autofocus: true, placeholder: "Enter your email address"
+        = f.input :email, as: :string, label: "Email Address", required: true, placeholder: "Enter your email address"
       .grid-cell.grid-cell--50
         = f.input :password, required: true, label: "Enter a password", placeholder: "Enter a password"
       .grid-cell.grid-cell--50
         = f.input :password_confirmation, label: "Confirm password", required: true, placeholder: "Confirm your password"
+
       - privacy_policy_error = false
       - terms_of_service_error = false
       - code_of_conduct_error = false
-      - if resource.class.name.downcase == "freelancer"
-        - obj = @freelancer
-      - elsif resource.class.name.downcase == "company"
-        - obj = @company
-      - else
-        - obj = @admin
 
-      - obj.errors.full_messages.each do |error|
+      - resource.errors.full_messages.each do |error|
         - if error.include?("privacy policy")
           - privacy_policy_error = true
         - elsif error.include?("terms of service")
           - terms_of_service_error = true
         - elsif error.include?("code of conduct")
           - code_of_conduct_error = true
+
       .grid-cell.grid-cell--100
         span class=(terms_of_service_error == true ? "validation-error" : "")
           = f.check_box :accept_terms_of_service, required: true

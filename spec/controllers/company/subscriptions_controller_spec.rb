@@ -2,7 +2,7 @@ require 'rails_helper'
 
 describe Company::SubscriptionController, type: :controller  do
   login_company
-  let(:company) { subject.current_company }
+  let(:company) { subject.current_user.company }
 
   describe 'GET plans' do
     context 'when canadian company' do
@@ -72,12 +72,8 @@ describe Company::SubscriptionController, type: :controller  do
         get :invoice, params: { subscription: subscription.stripe_subscription_id }
       end
 
-      it 'redirects to invoices' do
-        expect(response).to redirect_to(company_invoices_path)
-      end
-
-      it 'shows error message' do
-        expect(flash[:error]).to be_present
+      it 'be a 401 Unauthorized' do
+        expect(response.status).to eq(401)
       end
     end
   end

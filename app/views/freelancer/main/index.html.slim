@@ -6,7 +6,7 @@
 /     | New job postings are created everyday. Your next AV Job is just a search away. What are you waiting for?
 
 h1.heading-h1
-  | Hi #{current_freelancer.name}, welcome to AV Junction
+  | Hi #{current_user.full_name}, welcome to AV Junction
 
 - content_for :secondary do
   .grid-h.grid-h--no-margin
@@ -39,7 +39,7 @@ h1.heading-h1
                     - if company.avatar_data.present?
                       = image_tag(company.avatar_url, size: "75x75")
                     - else
-                      .circle_profile__image.company__image= company.name_initials
+                      .circle_profile__image.company__image= company.company_user.name_initials
                   h4.heading-h4
                     = company.name
 

@@ -1,19 +1,21 @@
 Rails.application.routes.draw do
-  devise_for :companies, path: 'company', path_names: { sign_in: "login", sign_up: "register" }, controllers: { registrations: "registrations" }
-  devise_for :freelancers, path: 'freelancer', path_names: { sign_in: "login", sign_up: "register" }, controllers: { registrations: "registrations" }
-  devise_for :admins, path: 'admin', path_names: { sign_in: "login" }, skip: [:registrations]
+  devise_for :users, skip: [:registrations]
 
+  devise_for :company_users, path: 'company',
+                             path_names: { sign_up: "register" },
+                             controllers: { registrations: "company/registrations" },
+                             skip: [:sessions, :passwords, :confirmations]
+
+  devise_for :freelancers, path: 'freelancer',
+                           path_names: { sign_up: "register" },
+                           controllers: { registrations: "freelancer/registrations" },
+                           skip: [:sessions, :passwords, :confirmations]
 
   root "main#index"
 
-  get "company/login", to: "devise/session#new"
   get "freelance-service-agreement", to: "main#freelance_service_agreement"
-
-
   get "confirm_email", to: "main#confirm_email"
-
-  get 'job_country_currency', to: 'main#job_countries', as: 'job_country_currency'
-
+  get "job_country_currency", to: "main#job_countries", as: "job_country_currency"
 
   namespace :freelancer do
 
@@ -188,4 +190,5 @@ Rails.application.routes.draw do
   end
 
   get "*any", via: :all, to: "errors#not_found"
+  get "*any", via: :all, to: "errors#unauthorized"
 end

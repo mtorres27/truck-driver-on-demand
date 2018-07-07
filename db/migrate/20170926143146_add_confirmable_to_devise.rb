@@ -8,8 +8,6 @@ class AddConfirmableToDevise < ActiveRecord::Migration[5.1]
     # User.reset_column_information # Need for some types of updates, but not for update_all.
     # To avoid a short time window between running the migration and updating all existing
     # users as confirmed, do the following
-    Freelancer.all.update_all confirmed_at: DateTime.now
-    # All existing user accounts should be able to log in after this.
 
     add_column :companies, :confirmation_token, :string
     add_column :companies, :confirmed_at, :datetime

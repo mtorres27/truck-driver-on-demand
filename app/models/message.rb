@@ -19,6 +19,11 @@
 #  lat             :decimal(9, 6)
 #  lng             :decimal(9, 6)
 #
+# Indexes
+#
+#  index_messages_on_authorable_type_and_authorable_id  (authorable_type,authorable_id)
+#  index_messages_on_receivable_type_and_receivable_id  (receivable_type,receivable_id)
+#
 
 class Message < ApplicationRecord
   include AttachmentUploader[:attachment]

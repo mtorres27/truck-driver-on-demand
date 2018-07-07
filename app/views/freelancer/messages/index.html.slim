@@ -2,16 +2,16 @@
 = render partial: "/freelancer/shared/job_shared_nav", locals: { job: @job }
 
 - content_for :secondary do
-  - if @job.freelancer and @job.freelancer.id == current_freelancer.id
+  - if @job.freelancer&.id == current_user&.id
     .result-wrapper
       = simple_form_for(:message, url: freelancer_job_messages_path(@job)) do |f|
         = render partial: "freelancer/shared/new_message", locals: { f: f, n: @job.company.name, type: "message", quotes: []  }
         .freelancer-job__message-history
           - @messages.each do |message|
             .freelancer-job__quote-msg
-              .common__user-avatar style="background-image: url(#{message.authorable.avatar_url})"
+              .common__user-avatar style="background-image: url(#{message.authorable.user_data.avatar_url})"
               .freelancer-job__msg-cont.w-clearfix
-                .freelancer-job__msg-user-name= message.authorable.name
+                .freelancer-job__msg-user-name= message.authorable.full_name
                 .freelancer-job__msg-created-at= "#{time_ago_in_words(message.created_at)} ago"
                 p.freelancer-job__msg-text
                   - if message.send_contract != true

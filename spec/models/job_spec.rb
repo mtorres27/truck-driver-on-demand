@@ -54,6 +54,17 @@
 #  contracted_at                          :datetime
 #  state_province                         :string
 #
+# Indexes
+#
+#  index_jobs_on_company_id         (company_id)
+#  index_jobs_on_manufacturer_tags  (manufacturer_tags)
+#  index_jobs_on_project_id         (project_id)
+#
+# Foreign Keys
+#
+#  fk_rails_...  (company_id => companies.id)
+#  fk_rails_...  (project_id => projects.id)
+#
 
 require 'rails_helper'
 

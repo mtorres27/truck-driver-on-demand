@@ -15,7 +15,7 @@
         a href="/freelancer/profile/bank_info"
           | Set up your banking details to apply.
 
-  
+
   .grid-h
     .grid-cell.grid-cell--33.grid-cell--span33
       h3.heading-h3 Job Type
@@ -73,7 +73,7 @@
           = "N/A"
         - else
           = t("enumerize.job.freelancer_type.#{@job.freelancer_type}")
-    
+
     - if @job.budget_is_public
       .grid-cell.grid-cell--33.grid-cell--span33
         h3.heading-h3 Job Budget
@@ -84,11 +84,11 @@
 
 
 
-    - if @have_applied and @job.freelancer and @job.freelancer.id == current_freelancer
+    - if @have_applied and @job.freelancer&.id == current_user&.id
       .grid-cell.grid-cell--100
         h3.heading-h3 Work Order
         .billboard
-          p 
+          p
             - if @job.contract_sent == false
                 = "Your work order #{@job.work_order} is still being created."
             - else
@@ -97,7 +97,8 @@
               - elsif @job.contracted?
                 = "You have accepted the work order #{@job.work_order}."
           - if @job.contract_sent == true
-            a.btn.btn--primary href="#"
+            - path = current_user.admin? ? admin_job_work_order_path(@job) : freelancer_job_work_order_path(@job)
+            a.btn.btn--primary href=path
               div View Work Order
 
     .grid-cell.grid-cell--50
@@ -122,7 +123,7 @@
         p= @job.scope_of_work
       - if !@job.scope_file.nil?
         h4.heading-h4 Download Attachements
-        p  
+        p
           a href=@job.scope_file_url target="_blank"
             = @job.scope_file.original_filename
 
@@ -152,17 +153,17 @@
               = f.radio_button :pay_type, "hourly", class: "w-radio-input"
               = f.label :pay_type_hourly, "hourly", class: "common__field-label"
 
-          .grid-cell.grid-cell--100.freelancer-job__apply-modal__content-amount--fixed  
+          .grid-cell.grid-cell--100.freelancer-job__apply-modal__content-amount--fixed
             .common__text-field-group
               = f.label :amount, "Amount", class: "common__field-label required-field"
               = f.input :amount, type: "text", id: "quote-amount-fixed", placeholder: "Your quote", class: "common__text-field w-input", label: false, required: false
 
-          .grid-cell.grid-cell--50.freelancer-job__apply-modal__content-amount--hourly 
+          .grid-cell.grid-cell--50.freelancer-job__apply-modal__content-amount--hourly
             .common__text-field-group
               = f.label :number_of_hours, "Number of Hours", class: "common__field-label required-field"
               = f.input :number_of_hours, type: "text", id: "quote-amount-hourly", placeholder: "No. of Hrs", class: "common__text-field w-input", label: false, required: false
 
-          .grid-cell.grid-cell--50.freelancer-job__apply-modal__content-amount--hourly  
+          .grid-cell.grid-cell--50.freelancer-job__apply-modal__content-amount--hourly
             .common__text-field-group
               = f.label :hourly_rate, "Hourly Rate", class: "common__field-label required-field"
               = f.input :hourly_rate, type: "text", id: "quote-amount-hourly-rate", placeholder: "Hourly Rate", class: "common__text-field w-input", label: false, required: false
@@ -182,9 +183,9 @@
                 = "Send a message to #{@job.company.name}"
               = f.file_field :attachment, as: :file, id: "message_attachment", label: false, :accept => 'document/pdf,application/pdf,application/x-pdf,image/png,image/jpg,image/jpeg,image/gif',  class: "file-input--hidden"
               = f.text_area :message, as: :string, placeholder: "Enter your message", label: false, maxlength: 5000, class: "w-input"
-          .grid-cell.grid-cell--100  
+          .grid-cell.grid-cell--100
             = f.input :attachment, as: :file, label: "Attachments", required: false
-          .grid-cell.grid-cell--100 
+          .grid-cell.grid-cell--100
             .buttons
               .freelancer-job__apply-modal__errors
               = f.button :submit, prompt: "Submit Quote", value: "Submit Quote", data: { disable_with: "Submitting..." }, class: "btn btn-primary", onClick: "return validateQuote()"

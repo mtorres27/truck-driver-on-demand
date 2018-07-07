@@ -8,7 +8,7 @@ module JobHelper
       company_job_applicants_path(job)
     elsif job.negotiated?
       if job.contract_sent != true
-        if job.company.plan_id.nil?
+        if job.company.plan_id.blank?
           company_job_applicants_path(job)
         else
           edit_company_job_work_order_path(job)
@@ -37,7 +37,7 @@ module JobHelper
     sym = job.state.to_sym
     t = job.state.text
 
-    if current_freelancer and job.applicants.where({freelancer_id: current_freelancer.id, state: "declined"}).count > 0
+    if current_user.freelancer? && job.applicants.where({freelancer_id: current_user.id, state: "declined"}).count > 0
       sym = :declined
       t = "declined"
     end
@@ -49,7 +49,7 @@ module JobHelper
 
 
   def is_favourite_job(job)
-    favourites = current_freelancer.job_favourites.where({job_id: job.id})
+    favourites = current_user.job_favourites.where({job_id: job.id})
 
     if favourites.count == 0
       return false

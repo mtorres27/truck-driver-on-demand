@@ -46,17 +46,18 @@ module ApplicationHelper
 
 
   def calc_distance_from(freelancer)
-    if current_company.nil? || current_company.lat.nil?
+    if current_user.nil? || current_user.admin? || (current_user.company_user? && current_user.company.lat.nil?)
       return "N/A"
     end
 
-    point = OpenStruct.new(:lat => current_company.lat, :lng => current_company.lng)
-    @freelancer = Freelancer.where({id: freelancer.id}).with_distance(point).first
+    point = OpenStruct.new(lat: current_company.lat, lng: current_company.lng)
+    @freelancer_profiles = FreelancerProfile.where(freelancer_id: freelancer.id).with_distance(point)
+    @freelancer = freelancer
 
-    if @freelancer.lat.nil?
+    if @freelancer.freelancer_profile.lat.nil?
       return "N/A"
     end
-    return distance_from(@freelancer)
+    return distance_from(@freelancer, @freelancer_profiles)
   end
 
   def proper_website_link(url)

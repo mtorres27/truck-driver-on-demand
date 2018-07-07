@@ -1,37 +1,31 @@
 class Company::ProfilesController < Company::BaseController
 
   def show
-    if params[:id]
-      @company = Company.find(params[:id])
-    else
-      @company = current_company
-    end
-
-    # @company.profile_views += 1
-    # @company.save
+    authorize current_company
   end
 
   def edit
-    @company = current_company
-    logger.debug current_company.inspect
+    authorize current_company
   end
 
   def update
-    @company = current_company
-    if @company.update(company_params)
-      redirect_to company_profile_path(@company), notice: "Company profile updated."
+    authorize current_company
+
+    if current_company.update(company_params)
+      redirect_to company_profile_path, notice: "Company profile updated."
     else
       flash[:error] = 'There are errors with the form, please review and resubmit.'
       render :edit
     end
   end
 
+  private
+
   def company_params
-    # params.fetch(:freelancer, {})
     params.require(:company).permit(
+      :id,
+      :enforce_profile_edit,
       :name,
-      :contact_name,
-      :email,
       :country,
       :area,
       :line2,
@@ -51,14 +45,12 @@ class Company::ProfilesController < Company::BaseController
       :established_in,
       :website,
       :header_source,
-      :enforce_profile_edit,
-      company_installs_attributes: [:id, :year, :installs, :_destroy],
-      featured_projects_attributes: [:id, :file, :name, :_destroy],
       job_types: I18n.t("enumerize.job_types").keys,
       job_markets: (I18n.t("enumerize.live_events_staging_and_rental_job_markets").keys + I18n.t("enumerize.system_integration_job_markets").keys).uniq,
       technical_skill_tags:  I18n.t("enumerize.technical_skill_tags").keys,
       manufacturer_tags:  I18n.t("enumerize.manufacturer_tags").keys,
+      company_installs_attributes: [:id, :year, :installs, :_destroy],
+      featured_projects_attributes: [:id, :file, :name, :_destroy],
     )
   end
-
 end

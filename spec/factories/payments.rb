@@ -17,6 +17,16 @@
 #  avj_fees        :decimal(10, 2)
 #  avj_credit      :decimal(10, 2)
 #
+# Indexes
+#
+#  index_payments_on_company_id  (company_id)
+#  index_payments_on_job_id      (job_id)
+#
+# Foreign Keys
+#
+#  fk_rails_...  (company_id => companies.id)
+#  fk_rails_...  (job_id => jobs.id)
+#
 
 FactoryBot.define do
   factory :payment do

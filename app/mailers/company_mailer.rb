@@ -7,7 +7,7 @@ class CompanyMailer < ApplicationMailer
     headers 'X-SMTPAPI' => {
         sub: {
             '%company_name%' => [@company.name],
-            '%freelancer_name%' => [@freelancer.name],
+            '%freelancer_name%' => [@freelancer.full_name],
             '%job_title%' => [@job.title],
             '%job_id%' => [@job.id],
             '%root_url%' => [root_url]
@@ -32,7 +32,7 @@ class CompanyMailer < ApplicationMailer
     headers 'X-SMTPAPI' => {
         sub: {
             '%company_name%' => [@company.name],
-            '%freelancer_name%' => [@freelancer.name],
+            '%freelancer_name%' => [@freelancer.full_name],
             '%quote_pay_type%' => [@quote.pay_type],
             '%quote_amount%' => [@quote.amount],
             '%job_currency%' => [@job.currency.upcase],
@@ -60,7 +60,7 @@ class CompanyMailer < ApplicationMailer
     headers 'X-SMTPAPI' => {
         sub: {
             '%company_name%' => [@company.name],
-            '%freelancer_name%' => [@freelancer.name],
+            '%freelancer_name%' => [@freelancer.full_name],
             '%quote_pay_type%' => [@quote.pay_type],
             '%quote_amount%' => [@quote.amount],
             '%job_currency%' => [@job.currency.upcase],
@@ -88,7 +88,7 @@ class CompanyMailer < ApplicationMailer
     headers 'X-SMTPAPI' => {
         sub: {
             '%company_name%' => [@company.name],
-            '%freelancer_name%' => [@freelancer.name],
+            '%freelancer_name%' => [@freelancer.full_name],
             '%quote_pay_type%' => [@quote.pay_type],
             '%quote_amount%' => [@quote.amount],
             '%job_currency%' => [@job.currency.upcase],
@@ -111,12 +111,11 @@ class CompanyMailer < ApplicationMailer
   def notice_received_declined_quote_from_freelancer(company, freelancer, job)
     @company = company
     @freelancer = freelancer
-    @quote = quote
     @job = job
     headers 'X-SMTPAPI' => {
         sub: {
             '%company_name%' => [@company.name],
-            '%freelancer_name%' => [@freelancer.name],
+            '%freelancer_name%' => [@freelancer.full_name],
             '%job_title%' => [@job.title],
             '%root_url%' => [root_url]
         },
@@ -140,7 +139,7 @@ class CompanyMailer < ApplicationMailer
     headers 'X-SMTPAPI' => {
         sub: {
             '%company_name%' => [@company.name],
-            '%freelancer_name%' => [@freelancer.name],
+            '%freelancer_name%' => [@freelancer.full_name],
             '%message_body%' => [@message.body],
             '%job_id%' => [@job.id],
             '%root_url%' => [root_url]
@@ -164,7 +163,7 @@ class CompanyMailer < ApplicationMailer
     headers 'X-SMTPAPI' => {
         sub: {
             '%sender_name%' => [@company.name],
-            '%recipient_name%' => [@freelancer.name],
+            '%recipient_name%' => [@freelancer.full_name],
             '%message_body%' => [@message.body]
         },
         filters: {
@@ -186,7 +185,7 @@ class CompanyMailer < ApplicationMailer
     headers 'X-SMTPAPI' => {
         sub: {
             '%company_name%' => [@company.name],
-            '%freelancer_name%' => [@freelancer.name],
+            '%freelancer_name%' => [@freelancer.full_name],
             '%root_url%' => [root_url]
         },
         filters: {

@@ -1,211 +1,212 @@
 .grid-h
+  .grid-cell.grid-cell--33
+    h2.heading-h2 A profile pic says a 1000 words.
+  .grid-cell.grid-cell--67
+    .grid-h.grid-h--no-margin
       .grid-cell.grid-cell--33
-        h2.heading-h2 A profile pic says a 1000 words.
-      .grid-cell.grid-cell--67
-        .grid-h.grid-h--no-margin
-          .grid-cell.grid-cell--33
-            .company-profile__image style="width: 200px; height: 200px; margin: auto"
-              =image_tag(@company.avatar_url, id: "company-edit-profile__avatar")
-              .freelancer-profile__image-upload onclick="updateProfilePicture()"
-                span class="zmdi zmdi-camera-add"
-            = f.file_field :avatar, label: false, :accept => 'image/png,image/gif,image/jpeg', class: "file-input--hidden", id: "edit-company-profile-avatar"
+        .company-profile__image style="width: 200px; height: 200px; margin: auto"
+          = image_tag(company.avatar_url, id: "company-edit-profile__avatar")
+          .freelancer-profile__image-upload onclick="updateProfilePicture()"
+            span class="zmdi zmdi-camera-add"
+        = f.file_field :avatar, label: false, :accept => 'image/png,image/gif,image/jpeg', class: "file-input--hidden edit-company-profile-avatar"
 
-          .grid-cell.grid-cell--67
-            .grid-h.grid-h--no-margin
-              .grid-cell.grid-cell--100
-                = f.input :name, required: true, label: "Company Name", placeholder: "Enter a Company Name."
-              .grid-cell.grid-cell--100
-                = f.input :contact_name, required: true, label: "Contact Name", placeholder: "Enter your preferred Company Contact Name."
-              .grid-cell.grid-cell--100
-                = f.input :phone_number, as: :string, label: "Phone Number", placeholder: "Your Contact's Phone Number"
-              .grid-cell.grid-cell--100
-                = f.input :email, required: true, as: :string, label: "Email Address", placeholder: "Enter your preferred Email Address."
+      .grid-cell.grid-cell--67
+        .grid-h.grid-h--no-margin
+          .grid-cell.grid-cell--100
+            = f.input :name, required: true, label: "Company Name", placeholder: "Enter a Company Name."
+          / TODO: Do we need contact_name or just company owner name?
+          / .grid-cell.grid-cell--100
+          /   = f.input :contact_name, required: true, label: "Contact Name", placeholder: "Enter your preferred Company Contact Name."
+          .grid-cell.grid-cell--100
+            = f.input :phone_number, as: :string, label: "Phone Number", placeholder: "Your Contact's Phone Number"
+          / TODO: Same as contact_name
+          / .grid-cell.grid-cell--100
+          /   = f.input :email, required: true, as: :string, label: "Email Address", placeholder: "Enter your preferred Email Address."
 
+  .grid-cell.grid-cell--100
+    hr/
+  .grid-cell.grid-cell--33
+    h2.heading-h2 Enter your address so we can find you the closest freelancers.
+  .grid-cell.grid-cell--67
+    .grid-h.grid-h--no-margin
       .grid-cell.grid-cell--100
-        hr/
-      .grid-cell.grid-cell--33
-        h2.heading-h2 Enter your address so we can find you the closest freelancers.
-      .grid-cell.grid-cell--67
-        .grid-h.grid-h--no-margin
-          .grid-cell.grid-cell--100
-            = f.input :address, as: :string, label: "HQ Address", placeholder: "Enter the address of your company's Headquarters."
-          .grid-cell.grid-cell--100
-            = f.input :line2, as: :string, label: "Address Line 2", placeholder: "Enter line 2 address of your company's Headquarters."
-          .grid-cell.grid-cell--50
-            = f.input :city, as: :string, label: "City", placeholder: "Enter the city of your company's Headquarters."
-          .grid-cell.grid-cell--50
-            = f.label "State/Province"
-            select#company_state.form-control.select(name='company[state]')
-              option(value='')
-                | Select
-              = CS.states(:us).each do |index, value|
-                - selected = (!@company.state.nil? and @company.state == index.to_s)
-                - if selected
-                  option.company_us_option(value="#{index}" selected)
-                    = value
-                - else
-                  option.company_us_option(value="#{index}")
-                    = value
-              = CS.states(:ca).each do |index, value|
-                - selected = (!@company.state.nil? and @company.state == index.to_s)
-                - if selected
-                  option.company_ca_option(value="#{index}" selected)
-                    = value
-                - else
-                  option.company_ca_option(value="#{index}")
-                    = value
-          .grid-cell.grid-cell--50
-            = f.input :postal_code, as: :string, label: "ZIP/Postal Code", placeholder: "Enter the zip / postal code of your company's Headquarters."
-          .grid-cell.grid-cell--50
-            = f.input :country, required: true, label: "Country", prompt: "Select Country"
-          .grid-cell.grid-cell--50
-            = f.input :sales_tax_number, required: false, label: "Business Tax Number", placeholder: "Enter the company tax number."
-          .grid-cell.grid-cell--50
-            = f.input :contract_preference, required: true, prompt: "Select", label: "Work Order Preference"
+        = f.input :address, as: :string, label: "HQ Address", placeholder: "Enter the address of your company's Headquarters."
       .grid-cell.grid-cell--100
-        hr/
-      .grid-cell.grid-cell--33
-        h2.heading-h2 Tell them about your company. To attract the best talent you have to put your best foot forward.
-      .grid-cell.grid-cell--67
-        .grid-h.grid-h--no-margin
-          .grid-cell.grid-cell--100
-            = f.input :description, as: :text, label: "About the company", placeholder: "Describe your company", :input_html => { :class => 'form__profile-bio-textarea' }
-          .grid-cell.grid-cell--50
-            = f.input :established_in, as: :integer, label: "Year Est"
-          .grid-cell.grid-cell--50
-            = f.input :number_of_employees, required: true, prompt: "Select", label: "# Employees"
-          .grid-cell.grid-cell--50
-            = f.input :number_of_offices, as: :integer, label: "# Offices"
-          .grid-cell.grid-cell--50
-            = f.input :website, as: :string, label: "Website", placeholder: "Enter Company's Website URL"
-          .grid-cell.grid-cell--100
-            = f.input :area, as: :string, label: "Service Areas", placeholder: "Enter the areas your company services (separate multiple areas with commas)."
+        = f.input :line2, as: :string, label: "Address Line 2", placeholder: "Enter line 2 address of your company's Headquarters."
+      .grid-cell.grid-cell--50
+        = f.input :city, as: :string, label: "City", placeholder: "Enter the city of your company's Headquarters."
+      .grid-cell.grid-cell--50
+        = f.label "State/Province"
+        select#company_state.form-control.select(name='company[state]')
+          option(value='')
+            | Select
+          = CS.states(:us).each do |index, value|
+            - selected = (company.state == index.to_s)
+            - if selected
+              option.company_us_option(value="#{index}" selected)
+                = value
+            - else
+              option.company_us_option(value="#{index}")
+                = value
+          = CS.states(:ca).each do |index, value|
+            - selected = (company.state == index.to_s)
+            - if selected
+              option.company_ca_option(value="#{index}" selected)
+                = value
+            - else
+              option.company_ca_option(value="#{index}")
+                = value
+      .grid-cell.grid-cell--50
+        = f.input :postal_code, as: :string, label: "ZIP/Postal Code", placeholder: "Enter the zip / postal code of your company's Headquarters."
+      .grid-cell.grid-cell--50
+        = f.input :country, required: true, label: "Country", prompt: "Select Country"
+      .grid-cell.grid-cell--50
+        = f.input :sales_tax_number, required: false, label: "Business Tax Number", placeholder: "Enter the company tax number."
+      .grid-cell.grid-cell--50
+        = f.input :contract_preference, required: true, prompt: "Select", label: "Work Order Preference"
+  .grid-cell.grid-cell--100
+    hr/
+  .grid-cell.grid-cell--33
+    h2.heading-h2 Tell them about your company. To attract the best talent you have to put your best foot forward.
+  .grid-cell.grid-cell--67
+    .grid-h.grid-h--no-margin
       .grid-cell.grid-cell--100
-        hr/
-      .grid-cell.grid-cell--33
-        h2.heading-h2 Select the specialities of your company
-      .grid-cell.grid-cell--67
-        .grid-h.grid-h--no-margin
-          .grid-cell.grid-cell--100
-            .form__field-label Special Skills
-            - if @company.errors.full_messages.include?("Technical skill tags can't be blank")
-              .has-error
-                .help-block
-                  | One skill tag must be selected.
-            .company-profile__checkboxes
-              - I18n.t('enumerize.technical_skill_tags').each do |index, value|
-                - tag_name = "company[technical_skill_tags][#{index.to_s}]"
-                - if !@company.technical_skill_tags.nil? and @company.technical_skill_tags.include?(index.to_s)
-                  - checked = true
-                - else
-                  - checked = false
-                .company-profile__checkbox
-                  = check_box_tag tag_name, "1", checked
-                  = " #{value}"
-          .grid-cell.grid-cell--100
-            .form__field-label Manufacturer tags
-            - if @company.errors.full_messages.include?("Manufacturer tags can't be blank")
-              .has-error
-                .help-block
-                  | One manufacturer tag must be selected.
-            .company-profile__checkboxes
-              - I18n.t('enumerize.manufacturer_tags').each do |index, value|
-                - tag_name = "company[manufacturer_tags][#{index.to_s}]"
-                - if !@company.manufacturer_tags.nil? and @company.manufacturer_tags.include?(index.to_s)
-                  - checked = true
-                - else
-                  - checked = false
-                .company-profile__checkbox
-                  = check_box_tag tag_name, "1", checked
-                  = value
+        = f.input :description, as: :text, label: "About the company", placeholder: "Describe your company", :input_html => {:class => 'form__profile-bio-textarea'}
+      .grid-cell.grid-cell--50
+        = f.input :established_in, as: :integer, label: "Year Est"
+      .grid-cell.grid-cell--50
+        = f.input :number_of_employees, required: true, prompt: "Select", label: "# Employees"
+      .grid-cell.grid-cell--50
+        = f.input :number_of_offices, as: :integer, label: "# Offices"
+      .grid-cell.grid-cell--50
+        = f.input :website, as: :string, label: "Website", placeholder: "Enter Company's Website URL"
       .grid-cell.grid-cell--100
-        hr/
-      .grid-cell.grid-cell--33
-        h2.heading-h2 Select the job types and markets of your company
-      .grid-cell.grid-cell--67
-        .grid-h.grid-h--no-margin
-          .grid-cell.grid-cell--100
-            .form__field-label Job Types
-            - if @company.errors.full_messages.include?("Job types can't be blank")
-              .has-error
-                .help-block
-                  | One job type must be selected.
-            .company-profile__checkboxes
-              - I18n.t('enumerize.job_types').each do |index, value|
-                - tag_name = "company[job_types][#{index.to_s}]"
-                - if !@company.job_types.nil? and @company.job_types.include?(index.to_s)
-                  - checked = true
-                - else
-                  - checked = false
-                .company-profile__checkbox
-                  = check_box_tag tag_name, "1", checked
-                  = " #{value}"
-          .grid-cell.grid-cell--100
-            .company_please_select_job_type_message.company-profile__checkboxes
-              | Please select a Job type
-          .grid-cell.grid-cell--100
-            .form__field-label.company_system_integration_checkboxes Job Markets / System Integration
-            .company_system_integration_checkboxes.company-profile__checkboxes
-              - I18n.t('enumerize.system_integration_job_markets').each do |index, value|
-                - tag_name = "company[job_markets][#{index.to_s}]"
-                - if !@company.job_markets.nil? and @company.job_markets.include?(index.to_s) and !@company.job_types.nil? and @company.job_types.include?('system_integration')
-                  - checked = true
-                - else
-                  - checked = false
-                .company-profile__checkbox
-                  = check_box_tag tag_name, "1", checked, class: 'company_system_integration_check_box'
-                  = " #{value}"
-            .form__field-label.company_live_events_staging_and_rental_checkboxes Job Markets / Live Events Staging & Rental
-            .company_live_events_staging_and_rental_checkboxes.company-profile__checkboxes
-              - I18n.t('enumerize.live_events_staging_and_rental_job_markets').each do |index, value|
-                - tag_name = "company[job_markets][#{index.to_s}]"
-                - if !@company.job_markets.nil? and @company.job_markets.include?(index.to_s) and !@company.job_types.nil? and @company.job_types.include?('live_events_staging_and_rental')
-                  - checked = true
-                - else
-                  - checked = false
-                .freelancer-profile__checkbox
-                  = check_box_tag tag_name, "1", checked, class: 'company_live_events_staging_and_rental_check_box'
-                  = " #{value}"
+        = f.input :area, as: :string, label: "Service Areas", placeholder: "Enter the areas your company services (separate multiple areas with commas)."
+  .grid-cell.grid-cell--100
+    hr/
+  .grid-cell.grid-cell--33
+    h2.heading-h2 Select the specialities of your company
+  .grid-cell.grid-cell--67
+    .grid-h.grid-h--no-margin
       .grid-cell.grid-cell--100
-        hr/
-      .grid-cell.grid-cell--33
-        h2.heading-h2 A portfolio of successful projects gives your company credibility with freelancers
-      .grid-cell.grid-cell--67
-        .grid-h.grid-h--no-margin
-          .grid-cell.grid-cell--50
-            #company_installs
-              h3.heading-h3 # of AV Projects Completed
-              = f.simple_fields_for :company_installs do |install_form|
-                = render "/company/profiles/company_install_fields", f: install_form
-            .buttons
-              = link_to_add_association 'Add # of Projects', f, :company_installs, partial: '/company/profiles/company_install_fields', class: "btn btn--secondary"
-          .grid-cell.grid-cell--50
-            #featured_projects
-              h3.heading-h3 Featured AV Projects
-              = f.simple_fields_for :featured_projects do |project_form|
-                = render "/company/profiles/featured_project_fields", f: project_form
-            .buttons.add-new-project
-              = link_to_add_association 'Add Project', f, :featured_projects, partial: '/company/profiles/featured_project_fields', class: "btn btn--secondary"
+        .form__field-label Special Skills
+        - if company.errors.full_messages.include?("Technical skill tags can't be blank")
+          .has-error
+            .help-block
+              | One skill tag must be selected.
+        .company-profile__checkboxes
+          - I18n.t('enumerize.technical_skill_tags').each do |index, value|
+            - tag_name = "company[technical_skill_tags][#{index.to_s}]"
+            - if company.technical_skill_tags.present? && company.technical_skill_tags.include?(index.to_s)
+              - checked = true
+            - else
+              - checked = false
+            .company-profile__checkbox
+              = check_box_tag tag_name, "1", checked
+              = " #{value}"
       .grid-cell.grid-cell--100
-        hr/
-      .grid-cell.grid-cell--33
-        h2.heading-h2 Give your company profile some personality with a custom background
-      .grid-cell.grid-cell--67
-        .grid-h.grid-h--no-margin
-          .grid-cell.grid-cell--100
-            .form__field-label Profile Header
-            .company-profile__image--header
-              = image_tag(@company.profile_header_url, id: "company-edit-profile__header")
-              .freelancer-profile__image-upload onclick="updateHeaderImage()"
-                span class="zmdi zmdi-camera-add"
-            = f.file_field :profile_header, label: false, :accept => 'image/png,image/gif,image/jpeg', class: "file-input--hidden", id: "edit-company-profile-header"
-          .grid-cell.grid-cell--50
-            = f.input :header_color, required: true, label: "Wallpaper Color", placeholder: "FF6C38"
-          .grid-cell.grid-cell--50
-            = f.input :header_source, label: "Display color/wallpaper in header", prompt: "Select"
+        .form__field-label Manufacturer tags
+        - if company.errors.full_messages.include?("Manufacturer tags can't be blank")
+          .has-error
+            .help-block
+              | One manufacturer tag must be selected.
+        .company-profile__checkboxes
+          - I18n.t('enumerize.manufacturer_tags').each do |index, value|
+            - tag_name = "company[manufacturer_tags][#{index.to_s}]"
+            - if company.manufacturer_tags.present? && company.manufacturer_tags.include?(index.to_s)
+              - checked = true
+            - else
+              - checked = false
+            .company-profile__checkbox
+              = check_box_tag tag_name, "1", checked
+              = value
+  .grid-cell.grid-cell--100
+    hr/
+  .grid-cell.grid-cell--33
+    h2.heading-h2 Select the job types and markets of your company
+  .grid-cell.grid-cell--67
+    .grid-h.grid-h--no-margin
+      .grid-cell.grid-cell--100
+        .form__field-label Job Types
+        - if company.errors.full_messages.include?("Job types can't be blank")
+          .has-error
+            .help-block
+              | One job type must be selected.
+        .company-profile__checkboxes
+          - I18n.t('enumerize.job_types').each do |index, value|
+            - tag_name = "company[job_types][#{index.to_s}]"
+            - if company.job_types.present? && company.job_types.include?(index.to_s)
+              - checked = true
+            - else
+              - checked = false
+            .company-profile__checkbox
+              = check_box_tag tag_name, "1", checked
+              = " #{value}"
+      .grid-cell.grid-cell--100
+        .company_please_select_job_type_message.company-profile__checkboxes
+          | Please select a Job type
+      .grid-cell.grid-cell--100
+        .form__field-label.company_system_integration_checkboxes Job Markets / System Integration
+        .company_system_integration_checkboxes.company-profile__checkboxes
+          - I18n.t('enumerize.system_integration_job_markets').each do |index, value|
+            - tag_name = "company[job_markets][#{index.to_s}]"
+            - if company.job_markets.present? && company.job_markets.include?(index.to_s) && company.job_types.present? && company.job_types.include?('system_integration')
+              - checked = true
+            - else
+              - checked = false
+            .company-profile__checkbox
+              = check_box_tag tag_name, "1", checked, class: 'company_system_integration_check_box'
+              = " #{value}"
+        .form__field-label.company_live_events_staging_and_rental_checkboxes Job Markets / Live Events Staging & Rental
+        .company_live_events_staging_and_rental_checkboxes.company-profile__checkboxes
+          - I18n.t('enumerize.live_events_staging_and_rental_job_markets').each do |index, value|
+            - tag_name = "company[job_markets][#{index.to_s}]"
+            - if company.job_markets.present? && company.job_markets.include?(index.to_s) && company.job_types.present? && company.job_types.include?('live_events_staging_and_rental')
+              - checked = true
+            - else
+              - checked = false
+            .freelancer-profile__checkbox
+              = check_box_tag tag_name, "1", checked, class: 'company_live_events_staging_and_rental_check_box'
+              = " #{value}"
+  .grid-cell.grid-cell--100
+    hr/
+  .grid-cell.grid-cell--33
+    h2.heading-h2 A portfolio of successful projects gives your company credibility with freelancers
+  .grid-cell.grid-cell--67
+    .grid-h.grid-h--no-margin
+      .grid-cell.grid-cell--50
+        #company_installs
+          h3.heading-h3 # of AV Projects Completed
+          = f.simple_fields_for :company_installs do |install_form|
+            = render "/company/profiles/company_install_fields", f: install_form
+        .buttons
+          = link_to_add_association 'Add # of Projects', f, :company_installs, partial: '/company/profiles/company_install_fields', class: "btn btn--secondary"
+      .grid-cell.grid-cell--50
+        #featured_projects
+          h3.heading-h3 Featured AV Projects
+          = f.simple_fields_for :featured_projects do |project_form|
+            = render "/company/profiles/featured_project_fields", f: project_form
+        .buttons.add-new-project
+          = link_to_add_association 'Add Project', f, :featured_projects, partial: '/company/profiles/featured_project_fields', class: "btn btn--secondary"
+  .grid-cell.grid-cell--100
+    hr/
+  .grid-cell.grid-cell--33
+    h2.heading-h2 Give your company profile some personality with a custom background
+  .grid-cell.grid-cell--67
+    .grid-h.grid-h--no-margin
+      .grid-cell.grid-cell--100
+        .form__field-label Profile Header
+        .company-profile__image--header
+          = image_tag(company.profile_header_url, id: "company-edit-profile__header")
+          .freelancer-profile__image-upload onclick="updateHeaderImage()"
+            span class="zmdi zmdi-camera-add"
+        = f.file_field :profile_header, label: false, :accept => 'image/png,image/gif,image/jpeg', class: "file-input--hidden", id: "edit-company-profile-header"
+      .grid-cell.grid-cell--50
+        = f.input :header_color, required: true, label: "Wallpaper Color", placeholder: "FF6C38"
+      .grid-cell.grid-cell--50
+        = f.input :header_source, label: "Display color/wallpaper in header", prompt: "Select"
 
 
-
-      .grid-cell.grid-cell--100
-        hr/
-      .grid-cell.grid-cell--33
+  .grid-cell.grid-cell--100
+    hr/
+  .grid-cell.grid-cell--33

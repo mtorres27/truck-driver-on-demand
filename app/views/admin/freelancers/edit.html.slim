@@ -3,9 +3,10 @@ h1 Editing Freelancer
 = simple_form_for([:admin, @freelancer]) do |f|
   = f.error_notification
   = render "/freelancer/profiles/edit_freelancer_profile", f: f
-  = f.input :special_avj_fees, label: 'Special AVJ fee'
-  = f.input :verified
-  = f.input :disabled
+  = f.simple_fields_for :freelancer_profile do |df|
+    = df.input :special_avj_fees, label: 'Special AVJ fee'
+    = df.input :verified
+    = df.input :disabled
   .form-actions
     = f.button :submit, class: "btn btn--primary", prompt: "Select"
 

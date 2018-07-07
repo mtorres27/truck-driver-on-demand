@@ -4,10 +4,10 @@ h1.heading-h1 Company Profile
   .action-bar
     h2.heading-h2.heading-h2--action-bar Profile Info
     .action-bar--actions.margin-right
-      a.btn.btn--primary href=admin_company_jobs_path(@company)
+      a.btn.btn--primary href=admin_company_jobs_path(@company.company_user)
         | Jobs
     .action-bar--actions
-      a.btn.btn--primary href=edit_admin_company_path(@company)
+      a.btn.btn--primary href=edit_admin_company_path(@company.company_user)
         | Edit
 
 
@@ -24,7 +24,7 @@ h1.heading-h1 Company Profile
     h4.heading-h4
       | Address:
       = " #{@company.address}#{@company.line2? ? ", #{@company.line2}" : "" }, #{@company.city}, #{@company.state}, #{@company.country.try(:upcase)}, #{@company.postal_code}"
-  = render "shared/profile-company"
+  = render "shared/profile_company", company: @company
 
 
 / .profile__wrapper

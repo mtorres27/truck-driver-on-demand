@@ -33,19 +33,19 @@
     tbody
       - @companies.each do |company|
         tr
-          td= link_to company.name, admin_company_path(company)
+          td= link_to company.name, admin_company_path(company.company_user)
           td= mail_to company.email
           td= company.state
           td= company.country.try(:upcase)
           td= company.created_at.strftime('%b %-d, %Y')
-          td= !company.confirmed_at.nil?
+          td= company.company_user.confirmed?
           td= company.disabled
           td.text-right
-            = link_to 'Edit', edit_admin_company_path(company)
+            = link_to 'Edit', edit_admin_company_path(company.company_user)
             '  |
             - if company.disabled?
-              = link_to 'Enable', enable_admin_company_path(company)
+              = link_to 'Enable', enable_admin_company_path(company.company_user)
               '  |
-              = link_to 'Delete', admin_company_path(company), data: { confirm: "Are you sure?" }, method: :delete
+              = link_to 'Delete', admin_company_path(company.company_user), data: { confirm: "Are you sure?" }, method: :delete
             - else
-              = link_to 'Disable', disable_admin_company_path(company)
+              = link_to 'Disable', disable_admin_company_path(company.company_user)

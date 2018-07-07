@@ -27,7 +27,7 @@
     .invoice__meta-1
       .invoice__text--right To:
       .invoice__to-name-addy
-        div= @current_company.name
+        div= @job.company.name
     .invoice__meta-1
       .invoice__text--right Job:
       .invoice__to-name-addy
@@ -38,10 +38,10 @@
       .invoice__table-text.invoice__table-text--right Amount
     .invoice__table-row
       .invoice__table-text.invoice__table-text--left AV Junction Fee
-      .invoice__table-text.invoice__table-text--right= number_with_precision(@job.company_plan_fees * (current_company.canada_country? ? (1 - (Subscription::CANADA_SALES_TAX_PERCENT/100)) : 1), precision: 2).to_s + " " + @job.currency.upcase
+      .invoice__table-text.invoice__table-text--right= number_with_precision(@job.company_plan_fees * (current_user.company.canada_country? ? (1 - (Subscription::CANADA_SALES_TAX_PERCENT/100)) : 1), precision: 2).to_s + " " + @job.currency.upcase
     .invoice__table-row
-      .invoice__table-text.invoice__table-text--left Applicable Taxes @ #{ current_company.canada_country? ? Subscription::CANADA_SALES_TAX_PERCENT : 0 }%
-      .invoice__table-text.invoice__table-text--right= number_with_precision((current_company.canada_country? ? (@job.company_plan_fees * (Subscription::CANADA_SALES_TAX_PERCENT/100) : 0), precision: 2).to_s + " " + @job.currency.upcase
+      .invoice__table-text.invoice__table-text--left Applicable Taxes @ #{ current_user.company.canada_country? ? Subscription::CANADA_SALES_TAX_PERCENT : 0 }%
+      .invoice__table-text.invoice__table-text--right= number_with_precision(@job.company_plan_fees * (current_user.company.canada_country? ? Subscription::CANADA_SALES_TAX_PERCENT/100 : 0), precision: 2).to_s + " " + @job.currency.upcase
     .invoice__table-row.invoice__table-row--total
       .invoice__table-text.invoice__table-text--left Total Payout
       .invoice__table-text.invoice__table-text--right= number_with_precision(@job.company_plan_fees, precision: 2).to_s + " " + @job.currency.upcase

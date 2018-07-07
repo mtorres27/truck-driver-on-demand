@@ -3,7 +3,7 @@
     h2.heading-h2.heading-h2--action-bar Job Detail
     .action-bar__actions
       - if @job.pre_contracted?
-        - path = current_admin.nil? ? edit_company_job_path(@job) : edit_admin_job_path(@job)
+        - path = current_user.admin? ? edit_admin_job_path(@job) : edit_company_job_path(@job)
         a.btn.btn--primary href=path
           | Edit
 
@@ -15,7 +15,7 @@
     .grid-cell.grid-cell--50
       h3.heading-h3 Project Reference
       h2.heading-h2
-        - if current_admin.nil?
+        - if current_user.company_user?
           a href=company_projects_path()
             = project_reference(@job.project)
         - else
@@ -37,7 +37,7 @@
       h3.heading-h3 Work Order
       .billboard.billboard--no-margin
         p
-          - if !@job.freelancer
+          - if @job.freelancer.nil?
             | A Freelancer has not been selected for this job.
           - elsif @job.pre_contracted? and @job.contract_sent != true
             | Congrats a Freelencer has been selected! Work order pending.
@@ -45,12 +45,12 @@
             | Work order sent to Freelancer. Awaiting response.
           - elsif @job.contracted?
             | Work order accepted by Freelancer.
-        - if @job.freelancer && @job.pre_contracted?
-          - path = current_admin.nil? ? edit_company_job_work_order_path(@job) : edit_admin_job_work_order_path(@job)
+        - if @job.freelancer.present? && @job.pre_contracted?
+          - path = current_user.admin? ? edit_admin_job_work_order_path(@job) : edit_company_job_work_order_path(@job)
           a.btn.btn--primary href=path
             | Create Work Order
-        - elsif @job.freelancer && @job.contracted?
-          - path = current_admin.nil? ? company_job_work_order_path(@job) : admin_job_work_order_path(@job)
+        - elsif @job.freelancer.present? && @job.contracted?
+          - path = current_user.admin? ? admin_job_work_order_path(@job) : company_job_work_order_path(@job)
           a.btn.btn--primary href=path
             | View Work Order
         - else
@@ -59,7 +59,7 @@
 
 
 
-    - if !@job.freelancer.nil?
+    - if @job.freelancer.present?
       .grid-cell.grid-cell--100
         = render partial: "company/shared/contract_meta", locals: { job: @job }
 

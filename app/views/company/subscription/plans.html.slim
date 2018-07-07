@@ -6,7 +6,7 @@
   .action-bar
     h2.heading-h2.heading-h2--action-bar
       - if current_company.plan.present?
-        | You're currently subscribed to the #{current_company.plan.present? ? current_company.plan.name : ''} plan
+        | You're currently subscribed to the #{current_company.plan&.name.presence || ''} plan
       - else
         | You'll need to subscribe to a plan to post a job.
   .grid-h
@@ -34,7 +34,7 @@
               .plans__tax Expires #{current_company.exp_month} / #{current_company.exp_year}
             div style="text-align: center"
               = form_tag '/company/update_card_info', method: 'post' do
-                script.stripe-button  data-email=("#{current_company.email}") src="https://checkout.stripe.com/checkout.js" class="stripe-button" data-key="#{Rails.configuration.stripe[:publishable_key]}" data-image="/assets/stripe-logo.png" data-name="Update Card Details" data-panel-label="Update Card Details" data-label="Update Card Details" data-allow-remember-me=false data-locale="auto"
+                script.stripe-button  data-email=("#{current_user.email}") src="https://checkout.stripe.com/checkout.js" class="stripe-button" data-key="#{Rails.configuration.stripe[:publishable_key]}" data-image="/assets/stripe-logo.png" data-name="Update Card Details" data-panel-label="Update Card Details" data-label="Update Card Details" data-allow-remember-me=false data-locale="auto"
           / - else
           /   h3.plans__title
           /     | No Card provided yet.
@@ -78,7 +78,7 @@
                 /   div Subscribe
                 input type="hidden" name="plan_id" value=plan[:code]
                 div.hidden
-                  script.stripe-button.w-inline-block data-label="Pay" data-image="/assets/stripe-logo.png" data-amount=(current_company.canada_country? ? (plan[:subscription_fee] +(plan[:subscription_fee] * province_tax(current_company.state.upcase))) *100 : plan[:subscription_fee]*100) data-email=("#{current_company.email}") data-description="#{plan[:name]} Plan"  data-key=("#{Rails.configuration.stripe[:publishable_key]}") data-locale="auto" src="https://checkout.stripe.com/checkout.js" data-currency = 'usd' data-panel-label="Pay"
+                  script.stripe-button.w-inline-block data-label="Pay" data-image="/assets/stripe-logo.png" data-amount=(current_company.canada_country? ? (plan[:subscription_fee] +(plan[:subscription_fee] * province_tax(current_company.state.upcase))) *100 : plan[:subscription_fee]*100) data-email=("#{current_user.email}") data-description="#{plan[:name]} Plan"  data-key=("#{Rails.configuration.stripe[:publishable_key]}") data-locale="auto" src="https://checkout.stripe.com/checkout.js" data-currency = 'usd' data-panel-label="Pay"
 
 javascript:
   $(document).ready(function() {
