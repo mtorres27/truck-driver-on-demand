@@ -14,52 +14,8 @@ class Company::JobsController < Company::BaseController
     @accepted_quote = @job.accepted_quote
   end
 
-  def new
-    if params[:job]
-      @job = current_company.jobs.build(job_params)
-    else
-      @job = current_company.jobs.build(project_id: params[:project_id])
-    end
-
-    authorize @job
-
-    @currencies = [
-      ["Canadian Dollars", "cad"],
-      ["Euro", "euro"],
-      ["Ruble", "ruble"],
-      ["Rupee", "rupee"],
-      ["US Dollars", "usd"],
-      ["Yen", "yen"]
-    ]
-  end
-
-  def create
-    if (!['trialing', 'active'].include?(current_company.subscription_status))
-      flash[:notice] = "You need to subscribe to be able to post new jobs."
-      redirect_to company_projects_path && return
-    end
-
-    @job = Job.new(job_params)
-    @job.company = current_company
-
-    authorize @job
-
-    validate_ownership
-    if @job.errors.size > 0
-      render :new
-      return
-    end
-
-    @job.published = true if job_params[:published]
-
-    if @job.save
-      redirect_to company_job_path(@job)
-    else
-      render :new
-    end
-  end
-
   def show
+    redirect_to "/company/job_steps/#{@job.creation_step}/#{@job.id}" if @job.creation_step != "wicked_finish"
   end
 
   def edit

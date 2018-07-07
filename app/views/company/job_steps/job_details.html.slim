@@ -1,0 +1,107 @@
+.header-bar
+  h1.heading-h1 Post a New Job
+- content_for :secondary do
+  = simple_form_for(@job, url: wizard_path, method: :put) do |f|
+    .action-bar
+      h2.heading-h2.heading-h2--action-bar Step 1 of 2 - Enter the job details
+      .action-bar__actions
+        = f.button :submit, "Next", class: "btn btn--primary"
+
+    .grid-h
+      .grid-cell.grid-cell--50
+        h2.heading-h2 Enter the details of the job you wish to post. Be as descriptive and specific as possible while excluding specifics like client names, etc.
+      .grid-cell.grid-cell--50
+        .grid-h.grid-h--no-margin
+          .grid-cell.grid-cell--75
+            = f.association :project, collection: current_company.projects, prompt: "Select"
+          .grid-cell.grid-cell--25.grid-cell--span25
+            br
+            .form-button
+              .btn.btn--secondary type="button" data-toggle="modal" data-target="#new_project"
+                | New Project
+          .grid-cell.grid-cell--100
+            = f.input :title, placeholder: "Enter the job title"
+          .grid-cell.grid-cell--50
+            = f.input :starts_on, html5: true
+          .grid-cell.grid-cell--50
+            = f.input :duration, placeholder: "Number of days"
+          .grid-cell.grid-cell--100
+            span
+              abbr title="required"= "*"
+              = " "
+              = f.label :summary, "Summary"
+            = f.input :summary, label: false, placeholder: "Enter the description of the job"
+          .grid-cell.grid-cell--100
+            span
+              abbr title="required"= "*"
+              = " "
+              = f.label :summary, "Scope of Work"
+            = f.input :scope_of_work, label: false, placeholder: "Please enter in more details about the job to receive a better quote. If you already have this documents please attach them here."
+          .grid-cell.grid-cell--100
+            = f.input :scope_file, as: :file, label: "Scope of Work File"
+            - if !@job.scope_file.nil?
+              | Currently Selected:
+              a href=@job.scope_file_url target="_blank"
+                = @job.scope_file.original_filename
+
+      .grid-cell.grid-cell--100
+        hr/
+
+      .grid-cell.grid-cell--50
+        h2.heading-h2 Enter the location of the job. Freelancers looking for work in your area will find it based on this information.
+      .grid-cell.grid-cell--50
+        .grid-h.grid-h--no-margin
+          .grid-cell.grid-cell--50
+            = f.input :country, prompt: "Select"
+          .grid-cell.grid-cell--50
+            = f.label "State/Province"
+            select#job_state_province.form-control.select(name='job[state_province]')
+              option(value='')
+                | Select
+              = CS.states(:us).each do |index, value|
+                - selected = (!@job.state_province.nil? and @job.state_province == index.to_s)
+                - if selected
+                  option.job_us_option(value="#{index}" selected)
+                    = value
+                - else
+                  option.job_us_option(value="#{index}")
+                    = value
+              = CS.states(:ca).each do |index, value|
+                - selected = (!@job.state_province.nil? and @job.state_province == index.to_s)
+                - if selected
+                  option.job_ca_option(value="#{index}" selected)
+                    = value
+                - else
+                  option.job_ca_option(value="#{index}")
+                    = value
+          .grid-cell.grid-cell--100
+            = f.input :address, placeholder: "Enter City", label: "City"
+          .grid-cell.grid-cell--100
+            = f.input :budget, placeholder: "Enter a budget", input_html: {value: number_with_precision(f.object.budget, precision: 2)}
+          .grid-cell.grid-cell--100
+            = f.input :budget_is_public
+          .grid-cell.grid-cell--100
+            = f.input :currency, required: true, as: :select
+
+      .grid-cell.grid-cell--75
+      .grid-cell.grid-cell--25
+        .buttons
+          = f.button :submit, "Next", class: "btn btn--primary"
+
+.modal#new_project role="dialog" tabindex="-1"
+  .modal-dialog role="document"
+    .modal-content
+      = simple_form_for([:company, current_company.projects.new], remote: true) do |f|
+        .modal-header
+          h2 Create a New Project
+        .container
+          .grid-h
+            .grid-cell.grid-cell--100
+              = f.input :name, placeholder: "Enter the project name"
+            .grid-cell.grid-cell--100
+              = f.input :external_project_id, placeholder: "Enter the project number"
+            .grid-cell.grid-cell--100
+              .buttons
+                = f.button :submit, class: "btn btn--primary"
+                a.btn.btn--secondary data-dismiss="modal" href="#"
+                  | Cancel

@@ -65,4 +65,19 @@ $(document).on("turbolinks:load", function () {
     $(".company-freelancer-matches__distance").on("change", function() {
         $("#company-freelancer-matches__form").submit()
     })
+
+    if ($('#job_country').val() != "") {
+        get_currencies($('#job_country').val())
+    }
+    $('#job_country').on('change', function () {
+        get_currencies($(this).val())
+    });
 });
+
+function get_currencies(country) {
+    $.get("/job_country_currency", {country: country})
+        .done(function (data) {
+            var select = $('#job_currency');
+            select.empty().append(data);
+        });
+}

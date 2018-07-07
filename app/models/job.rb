@@ -10,12 +10,12 @@
 #  summary                                :text             not null
 #  scope_of_work                          :text
 #  budget                                 :decimal(10, 2)   not null
-#  job_function                           :string           not null
+#  job_function                           :string
 #  starts_on                              :date             not null
 #  ends_on                                :date
 #  duration                               :integer          not null
 #  pay_type                               :string
-#  freelancer_type                        :string           not null
+#  freelancer_type                        :string
 #  technical_skill_tags                   :text
 #  invite_only                            :boolean          default(FALSE), not null
 #  scope_is_public                        :boolean          default(TRUE), not null
@@ -53,6 +53,7 @@
 #  company_plan_fees                      :decimal(10, 2)   default(0.0)
 #  contracted_at                          :datetime
 #  state_province                         :string
+#  creation_step                          :string
 #
 # Indexes
 #
@@ -206,7 +207,7 @@ class Job < ApplicationRecord
   validates :budget, numericality: true, sane_price: true
   validates :duration, numericality: { only_integer: true, greater_than_or_equal_to: 1 }
   validates :pay_type, inclusion: { in: pay_type.values }, allow_blank: true
-  validates :freelancer_type, inclusion: { in: freelancer_type.values }
+  validates :freelancer_type, inclusion: { in: freelancer_type.values }, allow_blank: true
   validate :scope_or_file
   validates :address, :currency, :country, presence: true
 

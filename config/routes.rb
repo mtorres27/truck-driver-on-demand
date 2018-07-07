@@ -89,6 +89,13 @@ Rails.application.routes.draw do
         post :skip
       end
     end
+    resources :job_steps, only: [:index, :show, :update] do
+      member do
+        get ":job_id", to: "job_steps#show"
+        put ":job_id", to: "job_steps#update"
+        patch ":job_id", to: "job_steps#update"
+      end
+    end
     resources :freelancers, only: [:index, :show] do
       get :hired, on: :collection
       get :favourites, on: :collection
