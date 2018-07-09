@@ -89,6 +89,8 @@ class Job < ApplicationRecord
   accepts_nested_attributes_for :payments, allow_destroy: true, reject_if: :reject_payments
   accepts_nested_attributes_for :attachments, allow_destroy: true, reject_if: :reject_attachments
 
+  after_save :check_if_should_do_geocode
+
   schema_validations except: :working_days
 
   serialize :technical_skill_tags
@@ -262,32 +264,30 @@ class Job < ApplicationRecord
 
   private
 
-    def scope_or_file
-      if scope_of_work.blank? and scope_file_url.nil?
-        errors.add(:scope_of_work, "Either a scope of work or a scope file attachment is required")
-      end
+  def scope_or_file
+    if scope_of_work.blank? and scope_file_url.nil?
+      errors.add(:scope_of_work, "Either a scope of work or a scope file attachment is required")
     end
+  end
 
-    def reject_payments(attrs)
-      exists = attrs["id"].present?
-      empty = attrs["description"].blank? && attrs["amount"].blank?
-      attrs.merge!({ _destroy: 1 }) if exists && empty
-      !exists and empty
+  def reject_payments(attrs)
+    exists = attrs["id"].present?
+    empty = attrs["description"].blank? && attrs["amount"].blank?
+    attrs.merge!({ _destroy: 1 }) if exists && empty
+    !exists and empty
+  end
+
+  def reject_attachments(attrs)
+    exists = attrs["id"].present?
+    empty = attrs["file"].blank? && attrs["title"].blank?
+    attrs.merge!({ _destroy: 1 }) if exists && empty
+    !exists and empty
+  end
+
+  def check_if_should_do_geocode
+    if saved_changes.include?("address") or (!address.nil? and lat.nil?)
+      do_geocode
+      update_columns(lat: lat, lng: lng)
     end
-
-    def reject_attachments(attrs)
-      exists = attrs["id"].present?
-      empty = attrs["file"].blank? && attrs["title"].blank?
-      attrs.merge!({ _destroy: 1 }) if exists && empty
-      !exists and empty
-    end
-
-    after_save :check_if_should_do_geocode
-    def check_if_should_do_geocode
-      if saved_changes.include?("address") or (!address.nil? and lat.nil?)
-        do_geocode
-        update_columns(lat: lat, lng: lng)
-      end
-    end
-
+  end
 end
