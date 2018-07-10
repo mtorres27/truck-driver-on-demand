@@ -66,10 +66,10 @@ $(document).on("turbolinks:load", function () {
         $("#company-freelancer-matches__form").submit()
     })
 
-    if ($('#job_country').val() != "") {
+    if ($('.js--country-select').val() != "") {
         get_currencies($('#job_country').val())
     }
-    $('#job_country').on('change', function () {
+    $('.js--country-select').on('change', function () {
         get_currencies($(this).val())
     });
 });

@@ -285,9 +285,8 @@ class Job < ApplicationRecord
   end
 
   def check_if_should_do_geocode
-    if saved_changes.include?("address") or (!address.nil? and lat.nil?)
-      do_geocode
-      update_columns(lat: lat, lng: lng)
-    end
+    return unless saved_changes.include?("address") || (!address.nil? && lat.nil?)
+    do_geocode
+    update_columns(lat: lat, lng: lng)
   end
 end

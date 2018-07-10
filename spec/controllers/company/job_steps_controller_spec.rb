@@ -72,17 +72,20 @@ RSpec.describe Company::JobStepsController, type: :controller do
     describe "step: job_details" do
       context "when the fields are filled" do
         let(:project) { create(:project, company: company) }
-        let(:job_params) { { project_id: project.id,
-                             title: "Title",
-                             starts_on: Date.today,
-                             duration: 10,
-                             summary: "Summary",
-                             scope_of_work: "Scope",
-                             country: "es",
-                             address: "Madrid",
-                             budget: 5000,
-                             currency: "EUR"
-        } }
+        let(:job_params) do
+          {
+            project_id: project.id,
+            title: "Title",
+            starts_on: Date.today,
+            duration: 10,
+            summary: "Summary",
+            scope_of_work: "Scope",
+            country: "es",
+            address: "Madrid",
+            budget: 5000,
+            currency: "EUR"
+          }
+        end
 
         before do
           put :update, params: { id: :job_details, job: job_params }

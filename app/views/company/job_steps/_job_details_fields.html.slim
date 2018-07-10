@@ -42,7 +42,7 @@
 .grid-cell.grid-cell--50
   .grid-h.grid-h--no-margin
     .grid-cell.grid-cell--50
-      = f.input :country, prompt: "Select"
+      = f.input :country, prompt: "Select", input_html: { class: "js--country-select" }
     .grid-cell.grid-cell--50
       = f.label "State/Province"
       select#job_state_province.form-control.select(name='job[state_province]')

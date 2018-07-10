@@ -24,7 +24,7 @@ class Company::JobStepsController < Company::BaseController
   end
 
   def update
-    @job.attributes = params[:job] ? job_params : {}
+    @job.attributes = job_params
     @job.creation_step = next_step
 
     @job.state = "published" if @job.creation_step == "wicked_finish"
@@ -39,6 +39,7 @@ class Company::JobStepsController < Company::BaseController
   end
 
   def set_job
+    # If the step is job details we need to build a job from scratch, if not we grab the last created job. If the job_id is specified we grab the job with that id
     if params[:id] == "job_details"
       @job = params[:job_id].present? ? current_company.jobs.find(params[:job_id]) : current_company.jobs.build
     else
@@ -48,12 +49,6 @@ class Company::JobStepsController < Company::BaseController
 
   def authorize_job
     authorize @job
-  end
-
-  def validate_ownership
-    unless job_params[:project_id].present? && current_company.projects.find(job_params[:project_id])
-      @job.errors[:project_id] << "Invalid project selected"
-    end
   end
 
   def job_params
