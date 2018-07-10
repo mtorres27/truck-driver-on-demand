@@ -117,6 +117,7 @@ group :test do
   gem "webmock"
   gem "cucumber"
   gem "rspec_junit_formatter"
+  gem "launchy"
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem

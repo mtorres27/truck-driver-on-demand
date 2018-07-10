@@ -68,11 +68,20 @@ jobs:
           environment:
             DATABASE_URL: "postgres://postgres@localhost:5432/avj_test"
 
+      # run feature tests!
+      - run:
+          name: Run cucumber tests
+          command: |
+            mkdir -p /tmp/test-results
+
+            bundle exec cucumber --out /tmp/test-results/cucumber.xml \
+                                $TEST_FILES
+
       # run tests!
       - run:
           name: Run rspec tests
           command: |
-            mkdir /tmp/test-results
+            mkdir -p /tmp/test-results
             TEST_FILES="$(circleci tests glob "spec/**/*_spec.rb" | circleci tests split --split-by=timings)"
 
             bundle exec rspec --format documentation \

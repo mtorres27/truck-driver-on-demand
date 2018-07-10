@@ -69,6 +69,8 @@
 #  fk_rails_...  (plan_id => plans.id)
 #
 
+include ActionDispatch::TestProcess
+
 FactoryBot.define do
   factory :company do
     name { Faker::Company.unique.name }

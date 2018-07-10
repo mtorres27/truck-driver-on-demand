@@ -76,5 +76,9 @@ FactoryBot.define do
     bio { Faker::Lorem }
     tagline { Faker::Lorem }
     avatar { fixture_file_upload(Rails.root.join("spec", "fixtures", "image.png"), "image/png") }
+
+    trait :registration_completed do
+      registration_step "wicked_finish"
+    end
   end
 end

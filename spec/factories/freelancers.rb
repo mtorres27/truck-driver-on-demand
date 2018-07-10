@@ -40,5 +40,9 @@ FactoryBot.define do
     password "password"
     password_confirmation "password"
     freelancer_profile
+
+    trait :confirmed do
+      confirmed_at Time.current
+    end
   end
 end
