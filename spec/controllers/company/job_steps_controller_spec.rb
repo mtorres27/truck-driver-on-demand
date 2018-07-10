@@ -101,7 +101,20 @@ RSpec.describe Company::JobStepsController, type: :controller do
       end
 
       context "when the fields are not filled" do
-        let(:job_params) { { } }
+        let(:job_params) do
+          {
+            project_id: nil,
+            title: "",
+            starts_on: nil,
+            duration: nil,
+            summary: "",
+            scope_of_work: "",
+            country: "",
+            address: "",
+            budget: nil,
+            currency: ""
+          }
+        end
 
         it "does not create a job" do
           put :update, params: { id: :job_details, job: job_params }
@@ -111,13 +124,15 @@ RSpec.describe Company::JobStepsController, type: :controller do
     end
 
     describe "step :candidate_details" do
-      let!(:job) { create(:job, company: company, project: create(:project, company: company), creation_step: "candidate_details") }
+      let!(:job) { create(:job, company: company, project: create(:project, company: company), state: "created", creation_step: "candidate_details") }
       let(:job_params) { job.attributes }
 
+      before do
+        put :update, params: { id: :candidate_details, job: job_params }
+      end
+
       it "publishes the job" do
-        put :update, params: { id: :candidate_details, company: job_params }
-        job.reload
-        expect(job.state).to eq("published")
+        expect(job.reload.state).to eq("published")
       end
     end
   end
