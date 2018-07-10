@@ -1,9 +1,9 @@
-class Company::JobStepsController < Company::BaseController
+class Company::JobBuildController < Company::BaseController
 
   include Wicked::Wizard
 
-  before_action :set_job, except: [:index]
-  before_action :authorize_job, except: [:index]
+  before_action :set_job, except: [:index, :create]
+  before_action :authorize_job, except: [:index, :create]
 
   steps :job_details, :candidate_details
 
@@ -13,10 +13,6 @@ class Company::JobStepsController < Company::BaseController
 
   def show
     if params[:id] == "wicked_finish"
-      if @job.creation_step != "wicked_finish"
-        @job.update_attribute(:creation_step, "wicked_finish")
-        flash[:notice] = "You need to publish this job in order to make it visible to freelancers"
-      end
       redirect_to finish_wizard_path
     else
       render_wizard
@@ -27,24 +23,32 @@ class Company::JobStepsController < Company::BaseController
     @job.attributes = job_params
     @job.creation_step = next_step
 
-    @job.state = "published" if @job.creation_step == "wicked_finish"
+    @job.state = "published" if @job.creation_step == "wicked_finish" && @job.candidate_details_form_filled
 
     render_wizard @job
+  end
+
+  def create
+    @job = current_company.jobs.create
+    @job.update_attribute(:creation_step, steps.first)
+    authorize_job
+    redirect_to wizard_path(steps.first, job_id: @job.id)
+  end
+
+  def skip
+    @job.update_attribute(:creation_step, next_step)
+    flash[:notice] = "You need to publish this job in order to make it visible to freelancers"
+    redirect_to company_job_job_build_path(next_step, job_id: @job.id)
   end
 
   private
 
   def finish_wizard_path
-    company_job_path(current_company.jobs.order(:updated_at).last)
+    company_job_path(@job)
   end
 
   def set_job
-    # If the step is job details we need to build a job from scratch, if not we grab the last created job. If the job_id is specified we grab the job with that id
-    if params[:id] == "job_details"
-      @job = params[:job_id].present? ? current_company.jobs.find(params[:job_id]) : current_company.jobs.build
-    else
-      @job = params[:job_id].present? ? current_company.jobs.find(params[:job_id]) : current_company.jobs.last
-    end
+    @job = current_company.jobs.find(params[:job_id])
   end
 
   def authorize_job

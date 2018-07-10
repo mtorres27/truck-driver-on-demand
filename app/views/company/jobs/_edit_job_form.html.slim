@@ -2,10 +2,10 @@
 = simple_form_for([controller, @job]) do |f|
   .grid-h
 
-    = render "company/job_steps/job_details_fields", f: f
+    = render "company/job_build/job_details_fields", f: f
     .grid-cell.grid-cell--100
       hr/
-    = render "company/job_steps/candidate_details_fields", f: f
+    = render "company/job_build/candidate_details_fields", f: f
 
     .grid-cell.grid-cell--expand
     .grid-cell
@@ -21,21 +21,3 @@
 
 
 = render "new_project_modal", company: company
-
-  javascript:
-    function get_currencies(country) {
-      $.get("#{job_country_currency_path}", {country: country})
-              .done(function (data) {
-                var select = $('#job_currency');
-                select.empty().append(data);
-              });
-    }
-
-    $(document).ready(function () {
-      if ($('#job_country').val() != "") {
-        get_currencies($('#job_country').val())
-      }
-      $('#job_country').on('change', function () {
-        get_currencies($(this).val())
-      });
-    });

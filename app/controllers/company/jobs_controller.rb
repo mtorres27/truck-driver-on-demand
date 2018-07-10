@@ -15,7 +15,7 @@ class Company::JobsController < Company::BaseController
   end
 
   def show
-    redirect_to "/company/job_steps/#{@job.creation_step}/#{@job.id}" if @job.creation_step != "wicked_finish"
+    redirect_to company_job_job_build_path(@job.creation_step, job_id: @job.id) unless @job.creation_completed?
   end
 
   def edit

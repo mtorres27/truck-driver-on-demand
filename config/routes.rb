@@ -89,13 +89,7 @@ Rails.application.routes.draw do
         post :skip
       end
     end
-    resources :job_steps, only: [:index, :show, :update] do
-      member do
-        get ":job_id", to: "job_steps#show"
-        put ":job_id", to: "job_steps#update"
-        patch ":job_id", to: "job_steps#update"
-      end
-    end
+
     resources :freelancers, only: [:index, :show] do
       get :hired, on: :collection
       get :favourites, on: :collection
@@ -124,6 +118,11 @@ Rails.application.routes.draw do
     get '/:id/avj-invoice', to: 'jobs#avj_invoice', as: 'job_avj_invoice'
     get '/:id/print-avj-invoice', to: 'jobs#print_avj_invoice', as: 'job_avj_invoice_print'
     resources :jobs, except: [:index] do
+      resources :job_build, only: [:index, :show, :update, :create] do
+        member do
+          post :skip
+        end
+      end
       resources :applicants do
         get :request_quote, on: :member
         get :ignore, on: :member

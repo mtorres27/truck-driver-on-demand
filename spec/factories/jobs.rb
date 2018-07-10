@@ -4,16 +4,16 @@
 #
 #  id                                     :integer          not null, primary key
 #  company_id                             :integer          not null
-#  project_id                             :integer          not null
-#  title                                  :string           not null
+#  project_id                             :integer
+#  title                                  :string
 #  state                                  :string           default("created"), not null
-#  summary                                :text             not null
+#  summary                                :text
 #  scope_of_work                          :text
-#  budget                                 :decimal(10, 2)   not null
+#  budget                                 :decimal(10, 2)
 #  job_function                           :string
-#  starts_on                              :date             not null
+#  starts_on                              :date
 #  ends_on                                :date
-#  duration                               :integer          not null
+#  duration                               :integer
 #  pay_type                               :string
 #  freelancer_type                        :string
 #  technical_skill_tags                   :text

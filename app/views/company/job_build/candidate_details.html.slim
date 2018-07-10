@@ -5,8 +5,8 @@
     .action-bar
       h2.heading-h2.heading-h2--action-bar Step 2 of 2 - Attract qualified candidates
       .action-bar__actions
-        a.btn.btn--secondary href="/company/job_steps/job_details/#{@job.id}" Back
-        a.btn.btn--secondary href=next_wizard_path Save as Draft
+        a.btn.btn--secondary href=company_job_job_build_path(:job_details, job_id: @job.id) Back
+        = link_to "Save as Draft", skip_company_job_job_build_path(:candidate_details, job_id: @job.id), method: :post, class: "btn btn--secondary"
         = f.button :submit, "Publish", class: "btn btn--primary"
 
     .grid-h
@@ -15,6 +15,6 @@
       .grid-cell.grid-cell--expand
       .grid-cell
         .buttons
-          a.btn.btn--secondary href="/company/job_steps/job_details/#{@job.id}" Back
-          a.btn.btn--secondary href=next_wizard_path Save as Draft
+          a.btn.btn--secondary href=company_job_job_build_path(:job_details, job_id: @job.id) Back
+          = link_to "Save as Draft", skip_company_job_job_build_path(:candidate_details, job_id: @job.id), method: :post, class: "btn btn--secondary"
           = f.button :submit, "Publish", class: "btn btn--primary"

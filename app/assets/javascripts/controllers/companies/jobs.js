@@ -67,7 +67,7 @@ $(document).on("turbolinks:load", function () {
     })
 
     if ($('.js--country-select').val() != "") {
-        get_currencies($('#job_country').val())
+        get_currencies($('.js--country-select').val())
     }
     $('.js--country-select').on('change', function () {
         get_currencies($(this).val())

@@ -12,6 +12,10 @@ class JobPolicy < ApplicationPolicy
     (company_user? && company_owner?) || freelancer?
   end
 
+  def skip?
+    (company_user? && company_owner?)
+  end
+
   def invite_to_quote?
     company_user? && company_owner?
   end

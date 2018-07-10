@@ -4,16 +4,16 @@
 #
 #  id                                     :integer          not null, primary key
 #  company_id                             :integer          not null
-#  project_id                             :integer          not null
-#  title                                  :string           not null
+#  project_id                             :integer
+#  title                                  :string
 #  state                                  :string           default("created"), not null
-#  summary                                :text             not null
+#  summary                                :text
 #  scope_of_work                          :text
-#  budget                                 :decimal(10, 2)   not null
+#  budget                                 :decimal(10, 2)
 #  job_function                           :string
-#  starts_on                              :date             not null
+#  starts_on                              :date
 #  ends_on                                :date
-#  duration                               :integer          not null
+#  duration                               :integer
 #  pay_type                               :string
 #  freelancer_type                        :string
 #  technical_skill_tags                   :text
@@ -75,7 +75,7 @@ class Job < ApplicationRecord
   include ScopeFileUploader[:scope_file]
 
   belongs_to :company
-  belongs_to :project
+  belongs_to :project, optional: true
   has_many :applicants, -> { includes(:freelancer).order(updated_at: :desc) }, dependent: :destroy
   has_many :quotes, -> { order(created_at: :desc) }, through: :applicants
   has_many :messages, -> { order(created_at: :desc) }, as: :receivable
@@ -91,6 +91,43 @@ class Job < ApplicationRecord
 
   after_save :check_if_should_do_geocode
 
+  enumerize :job_type, in: I18n.t('enumerize.job_types').keys
+
+  enumerize :working_time, in: [
+      :standard_workday,
+      :evenings,
+      :weekend,
+      :any_time
+  ]
+
+  enumerize :pay_type, in: [ :fixed, :hourly, :daily ]
+
+  enumerize :freelancer_type, in: [ :independent, :service_provider ]
+
+  enumerize :country, in: [
+      :at, :au, :be, :ca, :ch, :de, :dk, :es, :fi, :fr, :gb, :hk, :ie, :it, :jp, :lu, :nl, :no, :nz, :pt, :se, :sg, :us
+  ]
+
+  enumerize :state, in: [
+      :created,
+      :published,
+      :quoted,
+      :negotiated,
+      :contracted,
+      :completed
+  ], predicates: true, scope: true
+
+  validates :budget, numericality: true, sane_price: true, if: :creation_completed?
+  validates :duration, numericality: { only_integer: true, greater_than_or_equal_to: 1 }, if: :creation_completed?
+  validates :pay_type, inclusion: { in: pay_type.values }, allow_blank: true, if: :creation_completed?
+  validates :freelancer_type, inclusion: { in: freelancer_type.values }, allow_blank: true, if: :creation_completed?
+  validates :job_function, :freelancer_type, presence: true, if: :is_published?
+  validates :title, :summary, :address, :currency, :country, presence: true, if: -> { step_job_details? || is_published? }
+  validate :scope_or_file, if: :creation_completed?
+  validate :validate_number_of_payments, if: :creation_completed?
+  validate :validate_payments_total, if: :creation_completed?
+  validate :validate_sales_tax, if: :creation_completed?
+
   schema_validations except: :working_days
 
   serialize :technical_skill_tags
@@ -99,15 +136,6 @@ class Job < ApplicationRecord
   attr_accessor :send_contract
 
   audited
-
-  enumerize :job_type, in: I18n.t('enumerize.job_types').keys
-
-  enumerize :working_time, in: [
-    :standard_workday,
-    :evenings,
-    :weekend,
-    :any_time
-  ]
 
   pg_search_scope :search, against: {
     title: "A",
@@ -122,34 +150,6 @@ class Job < ApplicationRecord
     tsearch: { prefix: true, any_word: true }
   }
 
-  enumerize :pay_type, in: [ :fixed, :hourly, :daily ]
-
-  enumerize :freelancer_type, in: [ :independent, :service_provider ]
-
-  enumerize :country, in: [
-      :at, :au, :be, :ca, :ch, :de, :dk, :es, :fi, :fr, :gb, :hk, :ie, :it, :jp, :lu, :nl, :no, :nz, :pt, :se, :sg, :us
-  ]
-
-  enumerize :state, in: [
-    :created,
-    :published,
-    :quoted,
-    :negotiated,
-    :contracted,
-    :completed
-  ], predicates: true, scope: true
-
-  # enumerize :currency, in: [
-  #   :cad,
-  #   :euro,
-  #   :ruble,
-  #   :rupee,
-  #   :usd,
-  #   :yen,
-  # ]
-
-  validate :validate_number_of_payments
-
   def validate_number_of_payments
     if send_contract == "true"
       remaining_payments = payments.reject(&:marked_for_destruction?)
@@ -157,7 +157,6 @@ class Job < ApplicationRecord
     end
   end
 
-  validate :validate_payments_total
   def validate_payments_total
     if send_contract == "true"
       total = payments.inject(0) { |sum, e| sum + e.amount if e.amount.present? }
@@ -165,7 +164,6 @@ class Job < ApplicationRecord
     end
   end
 
-  validate :validate_sales_tax
   def validate_sales_tax
     if send_contract == "true"
       errors.add(:applicable_sales_tax, 'You should set the applicable sales tax!') if applicable_sales_tax.nil?
@@ -205,13 +203,6 @@ class Job < ApplicationRecord
     :every_other_day,
     :weekly
   ]
-
-  validates :budget, numericality: true, sane_price: true
-  validates :duration, numericality: { only_integer: true, greater_than_or_equal_to: 1 }
-  validates :pay_type, inclusion: { in: pay_type.values }, allow_blank: true
-  validates :freelancer_type, inclusion: { in: freelancer_type.values }, allow_blank: true
-  validate :scope_or_file
-  validates :address, :currency, :country, presence: true
 
   def freelancer
     applicants.with_state(:accepted).first&.freelancer
@@ -254,6 +245,14 @@ class Job < ApplicationRecord
     str
   end
 
+  def candidate_details_form_filled
+    freelancer_type.present? && job_function.present? && freelancer_type.present?
+  end
+
+  def creation_completed?
+    creation_step == "wicked_finish"
+  end
+
   def self.all_job_functions
     I18n.t("enumerize.system_integration_job_functions").merge(I18n.t("enumerize.live_events_staging_and_rental_job_functions"))
   end
@@ -288,5 +287,9 @@ class Job < ApplicationRecord
     return unless saved_changes.include?("address") || (!address.nil? && lat.nil?)
     do_geocode
     update_columns(lat: lat, lng: lng)
+  end
+
+  def step_job_details?
+    creation_step == "candidate_details"
   end
 end

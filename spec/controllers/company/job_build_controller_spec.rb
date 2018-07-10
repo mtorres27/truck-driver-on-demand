@@ -1,16 +1,17 @@
 require "rails_helper"
 
-RSpec.describe Company::JobStepsController, type: :controller do
+RSpec.describe Company::JobBuildController, type: :controller do
   let(:company) { create(:company) }
   let(:company_user) { company.company_user }
+  let(:job) { create(:job, company: company, project: create(:project, company: company)) }
 
   describe "GET #show" do
     describe "step: job_details" do
       before { sign_in company_user }
 
       it "renders job_details template" do
-        get :show, params: { id: :job_details }
-        expect(response).to render_template('company/job_steps/job_details')
+        get :show, params: { id: :job_details, job_id: job.id }
+        expect(response).to render_template('company/job_build/job_details')
       end
     end
 
@@ -20,8 +21,8 @@ RSpec.describe Company::JobStepsController, type: :controller do
       before { sign_in company_user }
 
       it "renders candidate_details template" do
-        get :show, params: { id: :candidate_details }
-        expect(response).to render_template('company/job_steps/candidate_details')
+        get :show, params: { id: :candidate_details, job_id: job.id }
+        expect(response).to render_template('company/job_build/candidate_details')
       end
     end
 
@@ -32,29 +33,7 @@ RSpec.describe Company::JobStepsController, type: :controller do
         before { sign_in company_user }
 
         it "redirects to job" do
-          get :show, params: { id: :wicked_finish }
-          expect(response).to redirect_to(company_job_path(job))
-        end
-      end
-
-      context "when creation_step is not wicked_finish" do
-        let!(:job) { create(:job, company: company, project: create(:project, company: company), creation_step: "candidate_details") }
-
-        before do
-          sign_in company_user
-          get :show, params: { id: :wicked_finish }
-        end
-
-        it "sets step to wicked finish" do
-          job.reload
-          expect(job.creation_step).to eq("wicked_finish")
-        end
-
-        it "sets a flash message for publishing the job" do
-          expect(flash[:notice]).to be_present
-        end
-
-        it "redirects to job" do
+          get :show, params: { id: :wicked_finish, job_id: job.id }
           expect(response).to redirect_to(company_job_path(job))
         end
       end
@@ -88,7 +67,7 @@ RSpec.describe Company::JobStepsController, type: :controller do
         end
 
         before do
-          put :update, params: { id: :job_details, job: job_params }
+          put :update, params: { id: :job_details, job_id: job.id, job: job_params }
         end
 
         it "creates a job with given attributes" do
@@ -96,7 +75,7 @@ RSpec.describe Company::JobStepsController, type: :controller do
         end
 
         it "redirects to next step path" do
-          expect(response).to redirect_to(company_job_step_path(:candidate_details))
+          expect(response).to redirect_to(company_job_job_build_path(:candidate_details, job_id: job.id))
         end
       end
 
@@ -116,9 +95,10 @@ RSpec.describe Company::JobStepsController, type: :controller do
           }
         end
 
-        it "does not create a job" do
-          put :update, params: { id: :job_details, job: job_params }
-          expect(company.jobs.count).to eq(0)
+        it "does not update the job" do
+          put :update, params: { id: :job_details, job_id: job.id, job: job_params }
+          job.reload
+          expect(job.title).not_to eq("")
         end
       end
     end
@@ -128,7 +108,7 @@ RSpec.describe Company::JobStepsController, type: :controller do
       let(:job_params) { job.attributes }
 
       before do
-        put :update, params: { id: :candidate_details, job: job_params }
+        put :update, params: { id: :candidate_details, job_id: job.id, job: job_params }
       end
 
       it "publishes the job" do
