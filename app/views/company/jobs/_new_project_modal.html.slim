@@ -1,0 +1,17 @@
+.modal#new_project role="dialog" tabindex="-1"
+  .modal-dialog role="document"
+    .modal-content
+      = simple_form_for([:company, company.projects.new], remote: true) do |f|
+        .modal-header
+          h2 Create a New Project
+        .container
+          .grid-h
+            .grid-cell.grid-cell--100
+              = f.input :name, placeholder: "Enter the project name"
+            .grid-cell.grid-cell--100
+              = f.input :external_project_id, placeholder: "Enter the project number"
+            .grid-cell.grid-cell--100
+              .buttons
+                = f.button :submit, class: "btn btn--primary"
+                a.btn.btn--secondary data-dismiss="modal" href="#"
+                  | Cancel

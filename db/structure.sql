@@ -922,18 +922,18 @@ ALTER SEQUENCE job_invites_id_seq OWNED BY job_invites.id;
 CREATE TABLE jobs (
     id bigint NOT NULL,
     company_id bigint NOT NULL,
-    project_id bigint NOT NULL,
-    title character varying NOT NULL,
+    project_id bigint,
+    title character varying,
     state character varying DEFAULT 'created'::character varying NOT NULL,
-    summary text NOT NULL,
+    summary text,
     scope_of_work text,
-    budget numeric(10,2) NOT NULL,
-    job_function character varying NOT NULL,
-    starts_on date NOT NULL,
+    budget numeric(10,2),
+    job_function character varying,
+    starts_on date,
     ends_on date,
-    duration integer NOT NULL,
+    duration integer,
     pay_type character varying,
-    freelancer_type character varying NOT NULL,
+    freelancer_type character varying,
     technical_skill_tags text,
     invite_only boolean DEFAULT false NOT NULL,
     scope_is_public boolean DEFAULT true NOT NULL,
@@ -970,7 +970,8 @@ CREATE TABLE jobs (
     manufacturer_tags citext,
     company_plan_fees numeric(10,2) DEFAULT 0,
     contracted_at timestamp without time zone,
-    state_province character varying
+    state_province character varying,
+    creation_step character varying
 );
 
 
@@ -2491,6 +2492,8 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20180606180539'),
 ('20180607204753'),
 ('20180611160634'),
-('20180619175806');
+('20180619175806'),
+('20180704204319'),
+('20180706223639');
 
 

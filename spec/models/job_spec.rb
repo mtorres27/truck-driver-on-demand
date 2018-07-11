@@ -4,18 +4,18 @@
 #
 #  id                                     :integer          not null, primary key
 #  company_id                             :integer          not null
-#  project_id                             :integer          not null
-#  title                                  :string           not null
+#  project_id                             :integer
+#  title                                  :string
 #  state                                  :string           default("created"), not null
-#  summary                                :text             not null
+#  summary                                :text
 #  scope_of_work                          :text
-#  budget                                 :decimal(10, 2)   not null
-#  job_function                           :string           not null
-#  starts_on                              :date             not null
+#  budget                                 :decimal(10, 2)
+#  job_function                           :string
+#  starts_on                              :date
 #  ends_on                                :date
-#  duration                               :integer          not null
+#  duration                               :integer
 #  pay_type                               :string
-#  freelancer_type                        :string           not null
+#  freelancer_type                        :string
 #  technical_skill_tags                   :text
 #  invite_only                            :boolean          default(FALSE), not null
 #  scope_is_public                        :boolean          default(TRUE), not null
@@ -53,6 +53,7 @@
 #  company_plan_fees                      :decimal(10, 2)   default(0.0)
 #  contracted_at                          :datetime
 #  state_province                         :string
+#  creation_step                          :string
 #
 # Indexes
 #
@@ -70,9 +71,16 @@ require 'rails_helper'
 
 describe Job, type: :model do
   describe "validations" do
-    it { is_expected.to validate_presence_of(:address) }
-    it { is_expected.to validate_presence_of(:currency) }
-    it { is_expected.to validate_presence_of(:country) }
+    context "when published" do
+      subject { build(:job, creation_step: "wicked_finish", state: "published") }
+      it { is_expected.to validate_presence_of(:job_function) }
+      it { is_expected.to validate_presence_of(:freelancer_type) }
+      it { is_expected.to validate_presence_of(:title) }
+      it { is_expected.to validate_presence_of(:summary) }
+      it { is_expected.to validate_presence_of(:address) }
+      it { is_expected.to validate_presence_of(:currency) }
+      it { is_expected.to validate_presence_of(:country) }
+    end
   end
 
   describe "city_state_country" do
