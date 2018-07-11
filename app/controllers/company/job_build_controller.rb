@@ -23,7 +23,7 @@ class Company::JobBuildController < Company::BaseController
     @job.attributes = job_params
     @job.creation_step = next_step
 
-    @job.state = "published" if @job.creation_step == "wicked_finish" && @job.candidate_details_form_filled
+    @job.state = "published" if @job.creation_completed? && @job.candidate_details_form_filled?
 
     render_wizard @job
   end

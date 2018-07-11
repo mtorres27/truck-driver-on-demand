@@ -94,10 +94,10 @@ class Job < ApplicationRecord
   enumerize :job_type, in: I18n.t('enumerize.job_types').keys
 
   enumerize :working_time, in: [
-      :standard_workday,
-      :evenings,
-      :weekend,
-      :any_time
+    :standard_workday,
+    :evenings,
+    :weekend,
+    :any_time
   ]
 
   enumerize :pay_type, in: [ :fixed, :hourly, :daily ]
@@ -105,16 +105,16 @@ class Job < ApplicationRecord
   enumerize :freelancer_type, in: [ :independent, :service_provider ]
 
   enumerize :country, in: [
-      :at, :au, :be, :ca, :ch, :de, :dk, :es, :fi, :fr, :gb, :hk, :ie, :it, :jp, :lu, :nl, :no, :nz, :pt, :se, :sg, :us
+    :at, :au, :be, :ca, :ch, :de, :dk, :es, :fi, :fr, :gb, :hk, :ie, :it, :jp, :lu, :nl, :no, :nz, :pt, :se, :sg, :us
   ]
 
   enumerize :state, in: [
-      :created,
-      :published,
-      :quoted,
-      :negotiated,
-      :contracted,
-      :completed
+    :created,
+    :published,
+    :quoted,
+    :negotiated,
+    :contracted,
+    :completed
   ], predicates: true, scope: true
 
   validates :budget, numericality: true, sane_price: true, if: :creation_completed?
@@ -245,7 +245,7 @@ class Job < ApplicationRecord
     str
   end
 
-  def candidate_details_form_filled
+  def candidate_details_form_filled?
     freelancer_type.present? && job_function.present? && freelancer_type.present?
   end
 
