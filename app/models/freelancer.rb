@@ -60,7 +60,7 @@ class Freelancer < User
   attr_accessor :accept_terms_of_service, :accept_privacy_policy,
                 :accept_code_of_conduct, :enforce_profile_edit, :user_type
 
-  validates :email, :address, :city, :postal_code, :country, :freelancer_type, :service_areas, :bio, :years_of_experience, :pay_unit_time_preference, presence: true, if: :enforce_profile_edit
+  validates :email, presence: true, if: :enforce_profile_edit
   validates :first_name, :last_name, presence: true, on: :update, if: :step_job_info?
   validates :freelancer_profile, presence: true
   validates_associated :freelancer_profile
