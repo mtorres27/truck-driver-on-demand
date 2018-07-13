@@ -15,6 +15,7 @@ class MainController < ApplicationController
 
   def job_countries
     country = params[:country]
+    return if country.blank?
     specs = Stripe::CountrySpec.retrieve(country.upcase)
     render partial: "job_currencies", locals: { currency: specs.default_currency } if specs.default_currency
   end

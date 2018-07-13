@@ -89,6 +89,8 @@ class FreelancerProfile < ApplicationRecord
   after_save :send_welcome_email, if: :registration_step_changed?
   before_create :set_default_step
 
+  delegate :enforce_profile_edit, to: :freelancer, allow_nil: true
+
   accepts_nested_attributes_for :freelancer
 
   validates :years_of_experience, numericality: { only_integer: true }
@@ -97,6 +99,7 @@ class FreelancerProfile < ApplicationRecord
   validates :job_types, presence: true, on: :update, if: :step_profile?
   validates :avatar, :tagline, :bio, presence: true, on: :update, if: :registration_completed?
   validates :country, :city, presence: true, on: :update, if: :step_job_info?
+  validates :address, :city, :postal_code, :country, :freelancer_type, :service_areas, :bio, :years_of_experience, :pay_unit_time_preference, presence: true, if: :enforce_profile_edit
 
   serialize :job_types
   serialize :job_markets
