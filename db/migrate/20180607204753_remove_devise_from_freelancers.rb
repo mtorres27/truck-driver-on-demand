@@ -9,7 +9,9 @@ class RemoveDeviseFromFreelancers < ActiveRecord::Migration[5.1]
 
     rename_table :freelancers, :freelancer_profiles
 
-    execute('select * from freelancer_profiles').each do |freelancer|
+    Freelancer.skip_callback(:create, :after, :check_for_invites)
+    Freelancer.skip_callback(:save, :after, :add_credit_to_inviters)
+    execute('select * from freelancer_profiles order by id asc').each do |freelancer|
       begin
         if User.find_by(email: freelancer['email']).nil?
           user = User.new(
@@ -46,8 +48,12 @@ class RemoveDeviseFromFreelancers < ActiveRecord::Migration[5.1]
           update_table_freelancer_id(CompanyFavourite, freelancer['id'], user.id)
           update_messages_freelancer_id(freelancer['id'], user.id)
         end
+      rescue StandardError => e
+        p "Error migrating freelancer: #{freelancer['id']} - #{freelancer['email']}. Error: #{e}"
       end
     end
+    Freelancer.set_callback(:create, :after, :check_for_invites)
+    Freelancer.set_callback(:save, :after, :add_credit_to_inviters)
 
     remove_column :freelancer_profiles, :name, :string
     remove_column :freelancer_profiles, :email, :citext
