@@ -30,7 +30,7 @@ class Applicant < ApplicationRecord
 
   belongs_to :company
   belongs_to :job, counter_cache: true
-  belongs_to :freelancer, class_name: :User, foreign_key: 'freelancer_id'
+  belongs_to :freelancer, class_name: "User", foreign_key: 'freelancer_id'
   has_many :quotes, -> { order(created_at: :desc) }, dependent: :destroy
   has_many :messages, -> { includes(:authorable).order(created_at: :desc) }, as: :receivable
   accepts_nested_attributes_for :messages
