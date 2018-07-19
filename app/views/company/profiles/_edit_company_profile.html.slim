@@ -14,14 +14,17 @@
         .grid-h.grid-h--no-margin
           .grid-cell.grid-cell--100
             = f.input :name, required: true, label: "Company Name", placeholder: "Enter a Company Name."
-          / TODO: Do we need contact_name or just company owner name?
-          / .grid-cell.grid-cell--100
-          /   = f.input :contact_name, required: true, label: "Contact Name", placeholder: "Enter your preferred Company Contact Name."
           .grid-cell.grid-cell--100
             = f.input :phone_number, as: :string, label: "Phone Number", placeholder: "Your Contact's Phone Number"
-          / TODO: Same as contact_name
-          / .grid-cell.grid-cell--100
-          /   = f.input :email, required: true, as: :string, label: "Email Address", placeholder: "Enter your preferred Email Address."
+
+          = f.fields_for :company_user, company.company_user do |company_user_form|
+            = company_user_form.hidden_field :id
+            .grid-cell.grid-cell--50
+              = company_user_form.input :first_name, required: true, label: "Contact First Name", placeholder: "Enter your preferred Company Contact First Name."
+            .grid-cell.grid-cell--50
+              = company_user_form.input :last_name, required: true, label: "Contact Last Name", placeholder: "Enter your preferred Company Contact Last Name."
+            .grid-cell.grid-cell--100
+              = company_user_form.input :email, required: true, as: :string, label: "Email Address", placeholder: "Enter your preferred Email Address."
 
   .grid-cell.grid-cell--100
     hr/
