@@ -54,4 +54,10 @@ describe User, type: :model do
 
     it { is_expected.to eq("Jane Doe") }
   end
+
+  describe "#first_name_and_initial" do
+    subject { build(:user, first_name: "Jane", last_name: "Doe").first_name_and_initial }
+
+    it { is_expected.to eq("Jane D") }
+  end
 end

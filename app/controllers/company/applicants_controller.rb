@@ -53,12 +53,12 @@ class Company::ApplicantsController < Company::BaseController
 
   def request_quote
     @applicant.request_quote!
-    redirect_to company_job_applicants_path(@job), notice: "Quote requested from #{@applicant.freelancer&.full_name}"
+    redirect_to company_job_applicants_path(@job), notice: "Quote requested from #{@applicant.freelancer&.first_name_and_initial}"
   end
 
   def ignore
     @applicant.ignore!
-    redirect_to company_job_applicants_path(@job), notice: "Applicant #{@applicant.freelancer&.full_name} ignored"
+    redirect_to company_job_applicants_path(@job), notice: "Applicant #{@applicant.freelancer&.first_name_and_initial} ignored"
   end
 
   private

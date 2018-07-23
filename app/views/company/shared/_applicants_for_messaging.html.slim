@@ -21,7 +21,7 @@
         .list__info.list__info--with-padding.list__info--expand
           - applicant.freelancer.tap do |freelancer|
             h4.heading-h4.heading-h4--no-margin
-              = freelancer.full_name
+              = freelancer.first_name_and_initial
             h5.heading-h5.heading-h5--no-margin
               - distance = calc_distance_from(freelancer)
               - if distance == "N/A"

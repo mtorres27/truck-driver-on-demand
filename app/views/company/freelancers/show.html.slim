@@ -9,7 +9,7 @@
   .frame
     .action-bar
       h2.heading-h2.heading-h2--action-bar
-        = @freelancer.full_name
+        = @freelancer.first_name_and_initial
       .action-bar__actions
         - if @freelancer.freelancer_profile.available
           .tag.tag--success

@@ -2,7 +2,7 @@
   = render "shared/avj_logo_and_address"
 
 .grid-cell.grid-cell--33
-  h4.heading-h4= "To: #{current_user.full_name}"
+  h4.heading-h4= "To: #{current_user.first_name_and_initial}"
   div= current_user.user_data.address
   div #{current_user.user_data.city}, #{current_user.user_data.state}
   div= current_user.user_data.postal_code
