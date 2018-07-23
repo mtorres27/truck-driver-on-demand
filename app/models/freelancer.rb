@@ -102,6 +102,10 @@ class Freelancer < User
 
   delegate :registration_completed?, to: :freelancer_profile, allow_nil: true
 
+  def full_name
+    "#{first_name} #{last_name&.first}"
+  end
+
   def connected?
     freelancer_profile.stripe_account_id.present?
   end
