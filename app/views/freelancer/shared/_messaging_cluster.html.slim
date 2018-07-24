@@ -26,7 +26,7 @@
             .freelancer-job__quote-msg class=(".freelancer-job_quote-msg.freelance-job__quote-msg-has-quote" if item[:payload].has_quote == true)
               .common__user-avatar style="background-image: url(#{item[:payload].authorable.user_data.avatar_url})"
               .freelancer-job__msg-cont.w-clearfix
-                .freelancer-job__msg-user-name= item[:payload].authorable.full_name
+                .freelancer-job__msg-user-name= item[:payload].authorable.first_name_and_initial
                 .freelancer-job__msg-created-at= "#{time_ago_in_words(item[:payload].created_at)} ago"
                 p.freelancer-job__msg-text= item[:payload].body
                 - if item[:payload].attachment_url

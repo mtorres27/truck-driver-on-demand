@@ -4,7 +4,7 @@
     p
       - nspace = current_user.admin? ? "admin" : "company"
       a href="/#{nspace}/freelancers/#{job.freelancer.id}"
-        = job.freelancer.full_name
+        = job.freelancer.first_name_and_initial
 
 
 

@@ -4,7 +4,7 @@ class FreelancerMailer < ApplicationMailer
     @freelancer = freelancer
     headers 'X-SMTPAPI' => {
         sub: {
-            '%freelancer_name%' => [@freelancer.full_name],
+            '%freelancer_name%' => [@freelancer.first_name_and_initial],
             '%root_url%' => [root_url]
         },
         filters: {
@@ -26,7 +26,7 @@ class FreelancerMailer < ApplicationMailer
     headers 'X-SMTPAPI' => {
         sub: {
             '%company_name%' => [@company.name],
-            '%freelancer_name%' => [@freelancer.full_name],
+            '%freelancer_name%' => [@freelancer.first_name_and_initial],
             '%job_title%' => [@job.title],
             '%job_id%' => [@job.id],
             '%root_url%' => [root_url]
@@ -51,7 +51,7 @@ class FreelancerMailer < ApplicationMailer
     headers 'X-SMTPAPI' => {
         sub: {
             '%company_name%' => [@company.name],
-            '%freelancer_name%' => [@freelancer.full_name],
+            '%freelancer_name%' => [@freelancer.first_name_and_initial],
             '%quote_pay_type%' => [@quote.pay_type],
             '%quote_amount%' => [@quote.amount],
             '%job_currency%' => [@job.currency.upcase],
@@ -79,7 +79,7 @@ class FreelancerMailer < ApplicationMailer
     headers 'X-SMTPAPI' => {
         sub: {
             '%company_name%' => [@company.name],
-            '%freelancer_name%' => [@freelancer.full_name],
+            '%freelancer_name%' => [@freelancer.first_name_and_initial],
             '%job_title%' => [@job.title],
             '%job_id%' => [@job.id],
             '%root_url%' => [root_url],
@@ -103,7 +103,7 @@ class FreelancerMailer < ApplicationMailer
     headers 'X-SMTPAPI' => {
         sub: {
             '%company_name%' => [@company.name],
-            '%freelancer_name%' => [@freelancer.full_name],
+            '%freelancer_name%' => [@freelancer.first_name_and_initial],
             '%job_title%' => [@job.title],
             '%root_url%' => [root_url]
         },
@@ -126,7 +126,7 @@ class FreelancerMailer < ApplicationMailer
     headers 'X-SMTPAPI' => {
         sub: {
             '%company_name%' => [@company.name],
-            '%freelancer_name%' => [@freelancer.full_name],
+            '%freelancer_name%' => [@freelancer.first_name_and_initial],
             '%job_title%' => [@job.title],
             '%job_id%' => [@job.id],
             '%root_url%' => [root_url]
@@ -151,7 +151,7 @@ class FreelancerMailer < ApplicationMailer
     headers 'X-SMTPAPI' => {
         sub: {
             '%company_name%' => [@company.name],
-            '%freelancer_name%' => [@freelancer.full_name],
+            '%freelancer_name%' => [@freelancer.first_name_and_initial],
             '%message_body%' => [@message.body],
             '%job_id%' => [@job.id],
             '%root_url%' => [root_url]
@@ -175,7 +175,7 @@ class FreelancerMailer < ApplicationMailer
     headers 'X-SMTPAPI' => {
         sub: {
             '%recipient_name%' => [@company.name],
-            '%sender_name%' => [@freelancer.full_name],
+            '%sender_name%' => [@freelancer.first_name_and_initial],
             '%message_body%' => [@message.body]
         },
         filters: {
@@ -197,7 +197,7 @@ class FreelancerMailer < ApplicationMailer
     headers 'X-SMTPAPI' => {
         sub: {
             '%company_name%' => [@company.name],
-            '%freelancer_name%' => [@freelancer.full_name],
+            '%freelancer_name%' => [@freelancer.first_name_and_initial],
             '%root_url%' => [root_url]
         },
         filters: {
@@ -216,7 +216,7 @@ class FreelancerMailer < ApplicationMailer
     @freelancer = freelancer
     headers 'X-SMTPAPI' => {
         sub: {
-            '%freelancer_name%' => [@freelancer.full_name],
+            '%freelancer_name%' => [@freelancer.first_name_and_initial],
             '%root_url%' => [root_url]
         },
         filters: {
@@ -236,7 +236,7 @@ class FreelancerMailer < ApplicationMailer
     @amount = amount
     headers 'X-SMTPAPI' => {
         sub: {
-            '%freelancer_name%' => [@freelancer.full_name],
+            '%freelancer_name%' => [@freelancer.first_name_and_initial],
             '%$_amount%' => [@amount],
             '%root_url%' => [root_url]
         },
@@ -257,7 +257,7 @@ class FreelancerMailer < ApplicationMailer
     @amount_used = amount_used
     headers 'X-SMTPAPI' => {
         sub: {
-            '%freelancer_name%' => [@freelancer.full_name],
+            '%freelancer_name%' => [@freelancer.first_name_and_initial],
             '%$_amount%' => [@amount_used],
             '%root_url%' => [root_url]
         },

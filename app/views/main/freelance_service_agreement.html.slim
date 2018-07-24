@@ -8,7 +8,7 @@
       | This Freelance Service Agreement is unavilable for viewing, either because the freelancer hasn't been selected, the Job specified doesn't exist, or you don't have the rights to view it.
   - else
     p
-      = "This Freelance Services Agreement (this “Agreement”) is made effective as of the #{@job_start_day} day of #{@job_start_month}, #{@job_start_year} (the “Effective Date”), between #{@job.freelancer.full_name}, an individual residing at #{@job.freelancer.freelancer_profile.address} (“Freelancer”) and #{@job.company.name}, a company having a place of business at #{@job.company.address} (“AV Company”)."
+      = "This Freelance Services Agreement (this “Agreement”) is made effective as of the #{@job_start_day} day of #{@job_start_month}, #{@job_start_year} (the “Effective Date”), between #{@job.freelancer.first_name_and_initial}, an individual residing at #{@job.freelancer.freelancer_profile.address} (“Freelancer”) and #{@job.company.name}, a company having a place of business at #{@job.company.address} (“AV Company”)."
     p
       | 1. Definitions. The following terms shall have the following meanings: (a) “Deliverable(s)” means any [documents, reports, publications, mock-ups, brochures, designs, plans, drawings, audio/video content, sign-off documents, testing checklists domain names, websites, applications, software, code, social media accounts, and/or other materials] prepared by Freelancer for AV Company as a standard Service or as a custom Service described in an SOW;
       br
@@ -107,7 +107,7 @@
     p IN WITNESS WHEREOF, the parties have caused this Agreement to be executed by their duly authorized representatives as of the Effective Date.
 
     p
-      = @job.freelancer.full_name
+      = @job.freelancer.first_name_and_initial
       br
       | By: ______________________
       br

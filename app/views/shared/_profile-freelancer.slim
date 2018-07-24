@@ -8,7 +8,7 @@
           = image_tag(@freelancer.freelancer_profile.avatar_url, size: "75x75")
       .profile__meta__info
         h2.heading-h2
-          = @freelancer.full_name
+          = @freelancer.first_name_and_initial
         - unless current_user&.company_user?
           h4.heading-h4
             a href="mailto:#{@freelancer.email}" target="_blank"

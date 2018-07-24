@@ -263,6 +263,10 @@ class Company < ApplicationRecord
     name
   end
 
+  def first_name_and_initial
+    name
+  end
+
   def user_data
     self
   end

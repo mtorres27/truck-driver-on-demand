@@ -44,6 +44,10 @@ class User < ApplicationRecord
     "#{first_name} #{last_name}"
   end
 
+  def first_name_and_initial
+    "#{first_name} #{last_name&.first}"
+  end
+
   def name_initials
     "#{first_name.first}#{last_name.first}"
   end
