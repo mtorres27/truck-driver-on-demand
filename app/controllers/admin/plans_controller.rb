@@ -45,7 +45,7 @@ class Admin::PlansController < Admin::BaseController
       :subscription_fee,
       :description,
       :period,
-      fee_schema: ['below_2000', 'above_2000']
+      fee_schema: ['avj_fees', 'freelancer_fees']
     )
   end
 end

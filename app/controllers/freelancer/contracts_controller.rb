@@ -19,12 +19,12 @@ class Freelancer::ContractsController < Freelancer::BaseController
     # Get Amount in USD
     job_amout = @accepted_quote.amount / currency_rate
 
-    plan = @job.company.plan
-      if job_amout > 2000
-        fees = plan.fee_schema['above_2000']
-      else
-        fees = plan.fee_schema['below_2000']
-      end
+    # plan = @job.company.plan
+    #   if job_amout > 2000
+    #     fees = plan.fee_schema['above_2000']
+    #   else
+    #     fees = plan.fee_schema['below_2000']
+    #   end
 
     if @job.company.waived_jobs.positive?
       plan_fees = 0
@@ -37,7 +37,7 @@ class Freelancer::ContractsController < Freelancer::BaseController
     @job.company_plan_fees = plan_fees
     @job.save
 
-    @accepted_quote.plan_fee = fees
+    # @accepted_quote.plan_fee = fees
     @accepted_quote.save
 
     # Send notice email
