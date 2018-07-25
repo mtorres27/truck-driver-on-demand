@@ -45,7 +45,7 @@ class Admin::PlansController < Admin::BaseController
       :subscription_fee,
       :description,
       :period,
-      fee_schema: ['avj_fees', 'freelancer_fees']
+      fee_schema: ['company_fees', 'freelancer_fees']
     )
   end
 end

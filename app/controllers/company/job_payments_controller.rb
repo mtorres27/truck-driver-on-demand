@@ -22,7 +22,7 @@ class Company::JobPaymentsController < Company::BaseController
   def show
     @amount      = @payment.amount
     @tax         = @job.applicable_sales_tax * @payment.amount / 100
-    @avj_fees    = current_company.plan.fee_schema['avj_fees'] ? (@amount * current_company.plan.fee_schema['avj_fees'].to_f / 100) : 0
+    @avj_fees    = current_company.plan.fee_schema['company_fees'] ? (@amount * current_company.plan.fee_schema['company_fees'].to_f / 100) : 0
     @avj_t_fees  = current_company.country == 'ca' ? @avj_fees * 1.13 : @avj_fees
     @total       = @amount + @tax + @avj_t_fees
   end
