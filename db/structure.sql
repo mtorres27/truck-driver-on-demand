@@ -1088,7 +1088,11 @@ CREATE TABLE payments (
     tax_amount numeric(10,2),
     total_amount numeric(10,2),
     avj_fees numeric(10,2),
-    avj_credit numeric(10,2) DEFAULT NULL::numeric
+    avj_credit numeric(10,2) DEFAULT NULL::numeric,
+    stripe_charge_id character varying,
+    stripe_balance_transaction_id character varying,
+    funds_available_on integer,
+    funds_available boolean DEFAULT false
 );
 
 
@@ -1820,378 +1824,378 @@ ALTER TABLE ONLY users
 -- Name: associated_index; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX associated_index ON audits USING btree (associated_id, associated_type);
+CREATE INDEX associated_index ON public.audits USING btree (associated_id, associated_type);
 
 
 --
 -- Name: auditable_index; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX auditable_index ON audits USING btree (auditable_id, auditable_type);
+CREATE INDEX auditable_index ON public.audits USING btree (auditable_id, auditable_type);
 
 
 --
 -- Name: index_applicants_on_company_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_applicants_on_company_id ON applicants USING btree (company_id);
+CREATE INDEX index_applicants_on_company_id ON public.applicants USING btree (company_id);
 
 
 --
 -- Name: index_applicants_on_freelancer_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_applicants_on_freelancer_id ON applicants USING btree (freelancer_id);
+CREATE INDEX index_applicants_on_freelancer_id ON public.applicants USING btree (freelancer_id);
 
 
 --
 -- Name: index_applicants_on_job_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_applicants_on_job_id ON applicants USING btree (job_id);
+CREATE INDEX index_applicants_on_job_id ON public.applicants USING btree (job_id);
 
 
 --
 -- Name: index_audits_on_created_at; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_audits_on_created_at ON audits USING btree (created_at);
+CREATE INDEX index_audits_on_created_at ON public.audits USING btree (created_at);
 
 
 --
 -- Name: index_audits_on_request_uuid; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_audits_on_request_uuid ON audits USING btree (request_uuid);
+CREATE INDEX index_audits_on_request_uuid ON public.audits USING btree (request_uuid);
 
 
 --
 -- Name: index_change_orders_on_company_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_change_orders_on_company_id ON change_orders USING btree (company_id);
+CREATE INDEX index_change_orders_on_company_id ON public.change_orders USING btree (company_id);
 
 
 --
 -- Name: index_change_orders_on_job_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_change_orders_on_job_id ON change_orders USING btree (job_id);
+CREATE INDEX index_change_orders_on_job_id ON public.change_orders USING btree (job_id);
 
 
 --
 -- Name: index_companies_on_disabled; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_companies_on_disabled ON companies USING btree (disabled);
+CREATE INDEX index_companies_on_disabled ON public.companies USING btree (disabled);
 
 
 --
 -- Name: index_companies_on_job_markets; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_companies_on_job_markets ON companies USING btree (job_markets);
+CREATE INDEX index_companies_on_job_markets ON public.companies USING btree (job_markets);
 
 
 --
 -- Name: index_companies_on_manufacturer_tags; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_companies_on_manufacturer_tags ON companies USING btree (manufacturer_tags);
+CREATE INDEX index_companies_on_manufacturer_tags ON public.companies USING btree (manufacturer_tags);
 
 
 --
 -- Name: index_companies_on_name; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_companies_on_name ON companies USING btree (name);
+CREATE INDEX index_companies_on_name ON public.companies USING btree (name);
 
 
 --
 -- Name: index_companies_on_plan_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_companies_on_plan_id ON companies USING btree (plan_id);
+CREATE INDEX index_companies_on_plan_id ON public.companies USING btree (plan_id);
 
 
 --
 -- Name: index_companies_on_technical_skill_tags; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_companies_on_technical_skill_tags ON companies USING btree (technical_skill_tags);
+CREATE INDEX index_companies_on_technical_skill_tags ON public.companies USING btree (technical_skill_tags);
 
 
 --
 -- Name: index_company_reviews_on_company_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_company_reviews_on_company_id ON company_reviews USING btree (company_id);
+CREATE INDEX index_company_reviews_on_company_id ON public.company_reviews USING btree (company_id);
 
 
 --
 -- Name: index_company_reviews_on_freelancer_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_company_reviews_on_freelancer_id ON company_reviews USING btree (freelancer_id);
+CREATE INDEX index_company_reviews_on_freelancer_id ON public.company_reviews USING btree (freelancer_id);
 
 
 --
 -- Name: index_company_reviews_on_job_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_company_reviews_on_job_id ON company_reviews USING btree (job_id);
+CREATE INDEX index_company_reviews_on_job_id ON public.company_reviews USING btree (job_id);
 
 
 --
 -- Name: index_freelancer_profiles_on_area; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_freelancer_profiles_on_area ON freelancer_profiles USING btree (area);
+CREATE INDEX index_freelancer_profiles_on_area ON public.freelancer_profiles USING btree (area);
 
 
 --
 -- Name: index_freelancer_profiles_on_available; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_freelancer_profiles_on_available ON freelancer_profiles USING btree (available);
+CREATE INDEX index_freelancer_profiles_on_available ON public.freelancer_profiles USING btree (available);
 
 
 --
 -- Name: index_freelancer_profiles_on_disabled; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_freelancer_profiles_on_disabled ON freelancer_profiles USING btree (disabled);
+CREATE INDEX index_freelancer_profiles_on_disabled ON public.freelancer_profiles USING btree (disabled);
 
 
 --
 -- Name: index_freelancer_profiles_on_freelancer_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_freelancer_profiles_on_freelancer_id ON freelancer_profiles USING btree (freelancer_id);
+CREATE INDEX index_freelancer_profiles_on_freelancer_id ON public.freelancer_profiles USING btree (freelancer_id);
 
 
 --
 -- Name: index_freelancer_profiles_on_job_functions; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_freelancer_profiles_on_job_functions ON freelancer_profiles USING btree (job_functions);
+CREATE INDEX index_freelancer_profiles_on_job_functions ON public.freelancer_profiles USING btree (job_functions);
 
 
 --
 -- Name: index_freelancer_profiles_on_job_markets; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_freelancer_profiles_on_job_markets ON freelancer_profiles USING btree (job_markets);
+CREATE INDEX index_freelancer_profiles_on_job_markets ON public.freelancer_profiles USING btree (job_markets);
 
 
 --
 -- Name: index_freelancer_profiles_on_manufacturer_tags; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_freelancer_profiles_on_manufacturer_tags ON freelancer_profiles USING btree (manufacturer_tags);
+CREATE INDEX index_freelancer_profiles_on_manufacturer_tags ON public.freelancer_profiles USING btree (manufacturer_tags);
 
 
 --
 -- Name: index_freelancer_profiles_on_technical_skill_tags; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_freelancer_profiles_on_technical_skill_tags ON freelancer_profiles USING btree (technical_skill_tags);
+CREATE INDEX index_freelancer_profiles_on_technical_skill_tags ON public.freelancer_profiles USING btree (technical_skill_tags);
 
 
 --
 -- Name: index_freelancer_reviews_on_company_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_freelancer_reviews_on_company_id ON freelancer_reviews USING btree (company_id);
+CREATE INDEX index_freelancer_reviews_on_company_id ON public.freelancer_reviews USING btree (company_id);
 
 
 --
 -- Name: index_freelancer_reviews_on_freelancer_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_freelancer_reviews_on_freelancer_id ON freelancer_reviews USING btree (freelancer_id);
+CREATE INDEX index_freelancer_reviews_on_freelancer_id ON public.freelancer_reviews USING btree (freelancer_id);
 
 
 --
 -- Name: index_freelancer_reviews_on_job_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_freelancer_reviews_on_job_id ON freelancer_reviews USING btree (job_id);
+CREATE INDEX index_freelancer_reviews_on_job_id ON public.freelancer_reviews USING btree (job_id);
 
 
 --
 -- Name: index_friend_invites_on_freelancer_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_friend_invites_on_freelancer_id ON friend_invites USING btree (freelancer_id);
+CREATE INDEX index_friend_invites_on_freelancer_id ON public.friend_invites USING btree (freelancer_id);
 
 
 --
 -- Name: index_identities_on_loginable_type_and_loginable_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_identities_on_loginable_type_and_loginable_id ON identities USING btree (loginable_type, loginable_id);
+CREATE INDEX index_identities_on_loginable_type_and_loginable_id ON public.identities USING btree (loginable_type, loginable_id);
 
 
 --
 -- Name: index_identities_on_loginable_type_and_provider_and_uid; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE UNIQUE INDEX index_identities_on_loginable_type_and_provider_and_uid ON identities USING btree (loginable_type, provider, uid);
+CREATE UNIQUE INDEX index_identities_on_loginable_type_and_provider_and_uid ON public.identities USING btree (loginable_type, provider, uid);
 
 
 --
 -- Name: index_jobs_on_company_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_jobs_on_company_id ON jobs USING btree (company_id);
+CREATE INDEX index_jobs_on_company_id ON public.jobs USING btree (company_id);
 
 
 --
 -- Name: index_jobs_on_manufacturer_tags; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_jobs_on_manufacturer_tags ON jobs USING btree (manufacturer_tags);
+CREATE INDEX index_jobs_on_manufacturer_tags ON public.jobs USING btree (manufacturer_tags);
 
 
 --
 -- Name: index_jobs_on_project_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_jobs_on_project_id ON jobs USING btree (project_id);
+CREATE INDEX index_jobs_on_project_id ON public.jobs USING btree (project_id);
 
 
 --
 -- Name: index_messages_on_authorable_type_and_authorable_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_messages_on_authorable_type_and_authorable_id ON messages USING btree (authorable_type, authorable_id);
+CREATE INDEX index_messages_on_authorable_type_and_authorable_id ON public.messages USING btree (authorable_type, authorable_id);
 
 
 --
 -- Name: index_messages_on_receivable_type_and_receivable_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_messages_on_receivable_type_and_receivable_id ON messages USING btree (receivable_type, receivable_id);
+CREATE INDEX index_messages_on_receivable_type_and_receivable_id ON public.messages USING btree (receivable_type, receivable_id);
 
 
 --
 -- Name: index_on_companies_loc; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_on_companies_loc ON companies USING gist (st_geographyfromtext((((('SRID=4326;POINT('::text || lng) || ' '::text) || lat) || ')'::text)));
+CREATE INDEX index_on_companies_loc ON public.companies USING gist (st_geographyfromtext((((('SRID=4326;POINT('::text || lng) || ' '::text) || lat) || ')'::text)));
 
 
 --
 -- Name: index_on_freelancer_profiles_loc; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_on_freelancer_profiles_loc ON freelancer_profiles USING gist (st_geographyfromtext((((('SRID=4326;POINT('::text || lng) || ' '::text) || lat) || ')'::text)));
+CREATE INDEX index_on_freelancer_profiles_loc ON public.freelancer_profiles USING gist (st_geographyfromtext((((('SRID=4326;POINT('::text || lng) || ' '::text) || lat) || ')'::text)));
 
 
 --
 -- Name: index_on_freelancers_loc; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_on_freelancers_loc ON freelancer_profiles USING gist (st_geographyfromtext((((('SRID=4326;POINT('::text || lng) || ' '::text) || lat) || ')'::text)));
+CREATE INDEX index_on_freelancers_loc ON public.freelancer_profiles USING gist (st_geographyfromtext((((('SRID=4326;POINT('::text || lng) || ' '::text) || lat) || ')'::text)));
 
 
 --
 -- Name: index_on_projects_loc; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_on_projects_loc ON projects USING gist (st_geographyfromtext((((('SRID=4326;POINT('::text || lng) || ' '::text) || lat) || ')'::text)));
+CREATE INDEX index_on_projects_loc ON public.projects USING gist (st_geographyfromtext((((('SRID=4326;POINT('::text || lng) || ' '::text) || lat) || ')'::text)));
 
 
 --
 -- Name: index_pages_on_slug; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_pages_on_slug ON pages USING btree (slug);
+CREATE INDEX index_pages_on_slug ON public.pages USING btree (slug);
 
 
 --
 -- Name: index_payments_on_company_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_payments_on_company_id ON payments USING btree (company_id);
+CREATE INDEX index_payments_on_company_id ON public.payments USING btree (company_id);
 
 
 --
 -- Name: index_payments_on_job_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_payments_on_job_id ON payments USING btree (job_id);
+CREATE INDEX index_payments_on_job_id ON public.payments USING btree (job_id);
 
 
 --
 -- Name: index_projects_on_company_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_projects_on_company_id ON projects USING btree (company_id);
+CREATE INDEX index_projects_on_company_id ON public.projects USING btree (company_id);
 
 
 --
 -- Name: index_projects_on_external_project_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_projects_on_external_project_id ON projects USING btree (external_project_id);
+CREATE INDEX index_projects_on_external_project_id ON public.projects USING btree (external_project_id);
 
 
 --
 -- Name: index_projects_on_name; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_projects_on_name ON projects USING btree (name);
+CREATE INDEX index_projects_on_name ON public.projects USING btree (name);
 
 
 --
 -- Name: index_quotes_on_applicant_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_quotes_on_applicant_id ON quotes USING btree (applicant_id);
+CREATE INDEX index_quotes_on_applicant_id ON public.quotes USING btree (applicant_id);
 
 
 --
 -- Name: index_quotes_on_company_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_quotes_on_company_id ON quotes USING btree (company_id);
+CREATE INDEX index_quotes_on_company_id ON public.quotes USING btree (company_id);
 
 
 --
 -- Name: index_users_on_company_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_users_on_company_id ON users USING btree (company_id);
+CREATE INDEX index_users_on_company_id ON public.users USING btree (company_id);
 
 
 --
 -- Name: index_users_on_confirmation_token; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE UNIQUE INDEX index_users_on_confirmation_token ON users USING btree (confirmation_token);
+CREATE UNIQUE INDEX index_users_on_confirmation_token ON public.users USING btree (confirmation_token);
 
 
 --
 -- Name: index_users_on_email; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE UNIQUE INDEX index_users_on_email ON users USING btree (email);
+CREATE UNIQUE INDEX index_users_on_email ON public.users USING btree (email);
 
 
 --
 -- Name: index_users_on_reset_password_token; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE UNIQUE INDEX index_users_on_reset_password_token ON users USING btree (reset_password_token);
+CREATE UNIQUE INDEX index_users_on_reset_password_token ON public.users USING btree (reset_password_token);
 
 
 --
 -- Name: user_index; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX user_index ON audits USING btree (user_id, user_type);
+CREATE INDEX user_index ON public.audits USING btree (user_id, user_type);
 
 
 --
@@ -2495,6 +2499,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20180611160634'),
 ('20180619175806'),
 ('20180704204319'),
-('20180706223639');
+('20180706223639'),
+('20180725190313');
 
 
