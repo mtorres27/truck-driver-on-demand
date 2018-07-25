@@ -17,15 +17,17 @@
 .grid-cell.grid-cell--100
   .invoice__table
     .invoice__table-row.invoice__table-row--header
-      .invoice__table-text. Description
+      .invoice__table-text Description
       .invoice__table-text.invoice__table-text--right Amount
     .invoice__table-row
       .invoice__table-text= @job.title + ": " +@payment.description
-      .invoice__table-text.invoice__table-text--right= number_with_precision(@payment.amount, precision: 2).to_s + " " + @job.currency.upcase
+      .invoice__table-text.invoice__table-text--right= number_with_precision(@amount, precision: 2).to_s + " " + @job.currency.upcase
     .invoice__table-row
       .invoice__table-text Applicable Taxes
-      / @ #{@job.applicable_sales_tax}%
-      .invoice__table-text.invoice__table-text--right= number_with_precision((@job.applicable_sales_tax * @payment.amount / 100), precision: 2).to_s + " " + @job.currency.upcase
+      .invoice__table-text.invoice__table-text--right= number_with_precision(@tax, precision: 2).to_s + " " + @job.currency.upcase
+    .invoice__table-row
+      .invoice__table-text AV Junction Fees + Tax
+      .invoice__table-text.invoice__table-text--right= number_with_precision(@avj_t_fees, precision: 2).to_s + " " + @job.currency.upcase
     .invoice__table-row.invoice__table-row--total
       .invoice__table-text Total Payout
-      .invoice__table-text.invoice__table-text--right= number_with_precision( (@payment.amount * (1+ (@job.applicable_sales_tax / 100))), precision: 2).to_s + " " + @job.currency.upcase
+      .invoice__table-text.invoice__table-text--right= number_with_precision( @total, precision: 2).to_s + " " + @job.currency.upcase
