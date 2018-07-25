@@ -6,12 +6,12 @@
       .payments__amt
         = job.company_plan_fees.present? ? number_with_precision(job.company_plan_fees , precision: 2) : ''
         | #{job.currency.upcase}
-    .payments__flexbox
-      - if job.company_plan_fees.positive?
-        =link_to company_job_avj_invoice_path(id: job.id), class: 'btn-link'
-          | View Invoice
-      - else
-        .payments__payout-label Waived
+    / .payments__flexbox
+    /   - if job.company_plan_fees.positive?
+    /     =link_to company_job_avj_invoice_path(id: job.id), class: 'btn-link'
+    /       | View Invoice
+    /   - else
+    /     .payments__payout-label Waived
 - if accepted_quote # && !accepted_quote.paid_by_company
   .grid-h
     / .grid-cell.grid-cell--50
@@ -49,11 +49,11 @@
         .payments__status
           strong<
             | #{number_with_precision((accepted_quote.amount.floor + job.company_plan_fees + (accepted_quote.amount * job.applicable_sales_tax/100)), precision: 2) } #{job.currency.upcase}
-      - if current_user.company_user?
-        .payments__flexbox
-          .payments__status
-            = link_to contract_invoice_company_job_path(job), class: 'btn-primary--active top-margin w-inline-block'
-              div View invoice
+      / - if current_user.company_user?
+      /   .payments__flexbox
+      /     .payments__status
+      /       = link_to contract_invoice_company_job_path(job), class: 'btn-primary--active top-margin w-inline-block'
+      /         div View invoice
 
 / - elsif accepted_quote && accepted_quote.paid_by_company && !job.funds_available
 /   .payments
