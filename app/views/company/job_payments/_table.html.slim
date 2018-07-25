@@ -12,18 +12,18 @@
           | View Invoice
       - else
         .payments__payout-label Waived
-- if accepted_quote && !accepted_quote.paid_by_company
+- if accepted_quote # && !accepted_quote.paid_by_company
   .grid-h
-    .grid-cell.grid-cell--50
-      div
-        .tag.tag--in-progress funds pending
-      .payments__status
-        | For this project to be started, it must be fully funded. This shows the AV Freelancer that funds are available but will not be accessible until the milestones are met and you authorize the payout.
-      .payments_status
-        - if current_user.company_user?
-          = render partial: 'company/shared/fund_this_job_button', locals: { job: job, accepted_quote: accepted_quote }
+    / .grid-cell.grid-cell--50
+    /   div
+    /     .tag.tag--in-progress funds pending
+    /   .payments__status
+    /     | For this project to be started, it must be fully funded. This shows the AV Freelancer that funds are available but will not be accessible until the milestones are met and you authorize the payout.
+    /   .payments_status
+    /     - if current_user.company_user?
+    /       = render partial: 'company/shared/fund_this_job_button', locals: { job: job, accepted_quote: accepted_quote }
 
-    .grid-cell.grid-cell--50
+    .grid-cell.grid-cell--100
       .payments__flexbox
         .payments__status
           | Job Total :
@@ -55,30 +55,30 @@
             = link_to contract_invoice_company_job_path(job), class: 'btn-primary--active top-margin w-inline-block'
               div View invoice
 
-- elsif accepted_quote && accepted_quote.paid_by_company && !job.funds_available
-  .payments
-    .payments__flexbox
-      .tag.tag--in-progress funds pending
-      .payments__total-group
-        .payments__total-amt #{number_with_precision(job.gpayments_sum_total, precision: 2)} #{job.currency.upcase}
-        .payments__payout-label Funded
-    .payments__status Thanks for funding this project. These funds will be available to the freelancer #{job.funds_available_on ? "on " + Time.at(job.funds_available_on).to_date.to_s : 'in 7-10 days'}. After which you will be able to release payouts.
-- elsif accepted_quote && accepted_quote.paid_by_company && job.funds_available
-  .payments
-    .payments__flexbox
-      .tag.tag--success #{(job.payments_sum_paid == job.payments_sum_total) ? 'Job Done' : 'FUNDS AVAILABLE'}
-      - if !connector.account&.external_accounts&.data&.any?
-        .tag.tag--in-progress Freelancer has no bank account
-      .payments__total-group
-        .payments__total-amt #{number_with_precision(job.gpayments_sum_paid, precision: 2)} #{job.currency.upcase}
-        .payments__payout-label Total Payouts
-    - if current_user.company_user?
-      = link_to contract_invoice_company_job_path(job), class: 'btn-primary--active top-margin w-inline-block'
-        div View receipt
-    .payments__status You have secured funds for this project. AV Junction will hold these payments on your behalf until each of the milestones listed below are met.
+/ - elsif accepted_quote && accepted_quote.paid_by_company && !job.funds_available
+/   .payments
+/     .payments__flexbox
+/       .tag.tag--in-progress funds pending
+/       .payments__total-group
+/         .payments__total-amt #{number_with_precision(job.gpayments_sum_total, precision: 2)} #{job.currency.upcase}
+/         .payments__payout-label Funded
+/     .payments__status Thanks for funding this project. These funds will be available to the freelancer #{job.funds_available_on ? "on " + Time.at(job.funds_available_on).to_date.to_s : 'in 7-10 days'}. After which you will be able to release payouts.
+/ - elsif accepted_quote && accepted_quote.paid_by_company && job.funds_available
+/   .payments
+/     .payments__flexbox
+/       .tag.tag--success #{(job.payments_sum_paid == job.payments_sum_total) ? 'Job Done' : 'FUNDS AVAILABLE'}
+/       - if !connector.account&.external_accounts&.data&.any?
+/         .tag.tag--in-progress Freelancer has no bank account
+/       .payments__total-group
+/         .payments__total-amt #{number_with_precision(job.gpayments_sum_paid, precision: 2)} #{job.currency.upcase}
+/         .payments__payout-label Total Payouts
+/     - if current_user.company_user?
+/       = link_to contract_invoice_company_job_path(job), class: 'btn-primary--active top-margin w-inline-block'
+/         div View receipt
+/     .payments__status You have secured funds for this project. AV Junction will hold these payments on your behalf until each of the milestones listed below are met.
 
 - payments.each do |payment|
-    div class="payments #{ "milestone--inactive" if accepted_quote.nil? || (accepted_quote.present? && !accepted_quote.paid_by_company)}"
+    div class="payments"
       .payments__flexbox
         .payments__title #{payment.description}
         .payments__amt #{payment.total_amount.present? ? number_with_precision(payment.total_amount, precision: 2) : number_with_precision(payment.amount, precision: 2)} #{job.currency ? job.currency.upcase : ''}
@@ -87,7 +87,7 @@
           .payments__date Paid on #{payment.paid_on}
         - elsif payment.issued_on.present?
           .payments__date Requested from #{job.freelancer.first_name_and_initial} on #{payment.issued_on}
-      - if !payment.paid_on.blank? || (!connector.nil? && !connector.account.nil? && connector.account.external_accounts.data.any? && accepted_quote.present? && accepted_quote.paid_by_company && job.funds_available)
+      - if !payment.paid_on.blank? || (!connector.nil? && !connector.account.nil? && connector.account.external_accounts.data.any? && accepted_quote.present?)
         - path = !current_user.admin? ? company_job_payment_path(job, payment) : admin_job_payment_path(job, payment)
         = link_to path, class: 'btn-primary--active top-margin w-inline-block'
           div #{(payment.paid_on.blank? && current_user.company_user? ? "Issue Payout" : "View Invoice")}
