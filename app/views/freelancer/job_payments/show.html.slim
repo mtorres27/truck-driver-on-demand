@@ -13,4 +13,4 @@
         - if !@payment.paid_on.blank?
           .tag.tag--success Paid
   .grid-h
-    = render "invoice"
+    = render "invoice", locals: { job: @job, payment: @payment, amount: @amount, tax: @tax, avj_t_fees: @avj_t_fees, total: @total }

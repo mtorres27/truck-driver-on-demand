@@ -21,6 +21,11 @@ class Freelancer::JobPaymentsController < Freelancer::BaseController
   end
 
   def show
+    @amount      = @payment.amount
+    @tax         = @job.applicable_sales_tax * @payment.amount / 100
+    @avj_fees    = @job.company.plan.fee_schema['freelancer_fees'] ? (@amount * @job.company.plan.fee_schema['freelancer_fees'].to_f / 100) : 0
+    @avj_t_fees  = @job.company.country == 'ca' ? @avj_fees * 1.13 : @avj_fees
+    @total       = @amount + @tax - @avj_t_fees
   end
 
   def print
