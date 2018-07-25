@@ -2,7 +2,6 @@ class Freelancer::ContractsController < Freelancer::BaseController
   def show
     @job = Job.find(params[:job_id])
     authorize @job
-    @accepted_quote = @job.accepted_quote
   end
 
   def accept

@@ -5,6 +5,7 @@
 
   - path = current_user.admin? ? admin_job_work_order_path(@job) : company_job_work_order_path(@job)
   = simple_form_for(@job, url: path) do |f|
+    = f.hidden_field :enforce_contract_creation, value: true
     .grid-h
       .grid-cell.grid-cell--33
         = render partial: "company/shared/contract_meta", locals: { job: @job }
@@ -26,13 +27,23 @@
 
     .grid-h
       .grid-cell.grid-cell--33
-        = f.input :pay_type, required: true, prompt: "Select", label: "Project Type", input_html: { class: 'form__select-field' }
+        = f.label "Freelancer", required: true
+        select.form-control.form__select-field name="job[accepted_applicant_id]" id="job_accepted_applicant_id"
+          option value=""
+            | Select
+          - @job.applicants.each do |applicant|
+            - if @job.freelancer&.id == applicant.freelancer.id
+              option value=applicant.id selected="true"
+                | #{ applicant.freelancer.full_name }
+            - else
+              option value=applicant.id
+                | #{ applicant.freelancer.full_name }
+      .grid-cell.grid-cell--33
+        = f.input :pay_type, required: true, prompt: "Select", label: "Payment Type", input_html: { class: 'form__select-field js--contract-payment-type' }
 
       .grid-cell.grid-cell--33
-        - if f.object and f.object.accepted_quote
-          = f.input :contract_price, required: true, input_html: { value: number_with_precision(f.object.accepted_quote.amount, precision: 2, class: 'form__text-field') }, label: "Job Work Order Amount", disabled: true
-        - else
-          = f.input :contract_price, required: true, label: "Job Work Order Amount", disabled: true, input_html: { class: 'form__text-field' }
+        = f.label "Contract Price", required: true, class: "js--contract-price-label"
+        = f.input :contract_price, required: true, label: false, input_html: { class: 'form__text-field' }
         .job-details__price-status
           = ""
 
@@ -52,8 +63,8 @@
 
 
 
-      .grid-cell.grid-cell--100
-        #payments
+      .grid-cell.grid-cell--100#payments
+        div
           .form__field-label
             | Payment Schedule
           = f.simple_fields_for :payments do |payment_form|
@@ -102,58 +113,3 @@
               | Send Work Order
             .btn.btn--secondary onclick="saveDraft()"
               | Save Draft
-
-
-javascript:
-  var toggleExpandedJobDetails = function() {
-    var collapsed = "job-details--collapsed";
-    if ($("#contract-extra-data").hasClass(collapsed)) {
-      $("#contract-extra-data").removeClass(collapsed);
-      $(".result-content__expand-btn").html("collapse job details");
-    } else {
-      $("#contract-extra-data").addClass(collapsed);
-      $(".result-content__expand-btn").html("expand job details");
-    }
-  }
-
-  var sendContract = function() {
-    $("#job_send_contract").val(true);
-    $(".edit_job").submit()
-  }
-
-  var saveDraft = function() {
-    $("#job_send_contract").val(false);
-    $(".edit_job").submit()
-  }
-
-  function uploadAddendum (index) {
-    if (index != undefined) {
-      var id = "#job_attachments_attributes_"+index+"_file";
-      var ref = $(id);
-    } else {
-      var ref = $(".add-new-addendum").prev('div').find(".nested_fields").find(".file-input--hidden");
-
-    }
-
-    ref.on('change', function() {
-      var imgPath = $(this)[0].value;
-      var extn = imgPath.substring(imgPath.lastIndexOf('.') + 1).toLowerCase();
-      var image_holder = $(this).parent().parent().find(".freelancer-profile__image").find(".authorable_attachment--full").find("img");
-      if (extn == "gif" || extn == "png" || extn == "jpg" || extn == "jpeg") {
-        if (typeof (FileReader) != "undefined") {
-          var reader = new FileReader();
-          reader.onload = function (e) {
-            image_holder.attr('src', e.target.result)
-          }
-
-          reader.readAsDataURL($(this)[0].files[0]);
-        }
-      } else if (extn == "pdf") {
-        image_holder.attr('src', "/assets/certification/certification_placeholder.png")
-      } else {
-        alert("Only images can be selected.");
-      }
-    });
-
-    ref.click();
-  }

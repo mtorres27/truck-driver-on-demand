@@ -24,17 +24,16 @@ class CompanyMailer < ApplicationMailer
     mail(to: @company.email, subject: 'Welcome to AVJunction!')
   end
 
-  def notice_received_new_quote_from_freelancer(freelancer, company, job, quote)
+  def notice_received_new_quote_from_freelancer(freelancer, company, job, message)
     @company = company
     @freelancer = freelancer
-    @quote = quote
+    @message = message
     @job = job
     headers 'X-SMTPAPI' => {
         sub: {
             '%company_name%' => [@company.name],
-            '%freelancer_name%' => [@freelancer.first_name_and_initial],
-            '%quote_pay_type%' => [@quote.pay_type],
-            '%quote_amount%' => [@quote.amount],
+            '%freelancer_name%' => [@freelancer.full_name],
+            '%message_body%' => [@message.body],
             '%job_currency%' => [@job.currency.upcase],
             '%job_title%' => [@job.title],
             '%job_id%' => [@job.id],

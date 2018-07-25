@@ -69,7 +69,6 @@ class Applicant < ApplicationRecord
     self.state = :accepted
     if save
       quote = quotes.where({applicant_id: id}).first
-      job.update(contract_price: quote.amount, pay_type: quote.pay_type)
     end
   end
 

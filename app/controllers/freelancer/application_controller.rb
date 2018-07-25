@@ -24,8 +24,6 @@ class Freelancer::ApplicationController < Freelancer::BaseController
   
   def set_collections
     @messages = @applicant.messages
-    @quotes = @applicant.quotes
-    @all_quotes = @applicant.job.quotes
 
     @combined_items = []
     @harmonized_items = []
@@ -35,22 +33,6 @@ class Freelancer::ApplicationController < Freelancer::BaseController
       @applicant_accepted = true
     else
       @applicant_accepted = false
-    end
-
-    @messages.each do |message|
-      @combined_items.push({ type: "message", payload: message, date: message.created_at.to_i })
-      @harmonized_indices.push(message.created_at.to_i)
-    end
-
-    @quotes.each do |quote|
-      @combined_items.push({ type: "quote", payload: quote, date: quote.created_at.to_i })
-      @harmonized_indices.push(quote.created_at.to_i)
-    end
-
-    @harmonized_indices = @harmonized_indices.sort.reverse()
-
-    @harmonized_indices.each do |index|
-      search_in_combined(@combined_items, index)
     end
   end
 

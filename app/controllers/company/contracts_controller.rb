@@ -88,7 +88,6 @@ class Company::ContractsController < Company::BaseController
   end
 
   def show
-    @accepted_quote = @job.accepted_quote
     # Should be deleted
     if @job.freelancer.freelancer_profile&.stripe_account_id
       account = Stripe::Account.retrieve(@job.freelancer.freelancer_profile&.stripe_account_id)
@@ -100,7 +99,6 @@ class Company::ContractsController < Company::BaseController
   end
 
   def edit
-    build_payments
   end
 
   def update
@@ -132,7 +130,6 @@ class Company::ContractsController < Company::BaseController
       end
       redirect_to company_job_path(@job), notice: "Work Order updated." if !@job.contracted?
     else
-      build_payments
 
       @errors = []
       @number_of_payments_error = false
@@ -174,6 +171,8 @@ class Company::ContractsController < Company::BaseController
 
   def job_params
     params.require(:job).permit(
+      :enforce_contract_creation,
+      :accepted_applicant_id,
       :scope_of_work,
       :scope_file,
       :addendums,
@@ -194,12 +193,5 @@ class Company::ContractsController < Company::BaseController
       attachments_attributes: [:id, :file, :title, :_destroy],
       payments_attributes: [:id, :description, :company_id, :amount, :_destroy]
     )
-  end
-
-  def build_payments
-    payments_to_build = [(3 - @job.payments.size), 1].max
-    payments_to_build.times do
-      @job.payments.build
-    end
   end
 end

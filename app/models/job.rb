@@ -89,7 +89,10 @@ class Job < ApplicationRecord
   accepts_nested_attributes_for :payments, allow_destroy: true, reject_if: :reject_payments
   accepts_nested_attributes_for :attachments, allow_destroy: true, reject_if: :reject_attachments
 
+  attr_accessor :send_contract, :accepted_applicant_id, :enforce_contract_creation, :save_draft
+
   after_save :check_if_should_do_geocode
+  after_save :accept_applicant, if: :enforce_contract_creation
 
   enumerize :job_type, in: I18n.t('enumerize.job_types').keys
 
@@ -124,6 +127,8 @@ class Job < ApplicationRecord
   validates :job_function, :freelancer_type, presence: true, if: :is_published?
   validates :title, :summary, :address, :currency, :country, presence: true, if: -> { step_job_details? || is_published? }
   validates :freelancer_type, :job_type, :job_market, :job_function, presence: true, if: -> { is_published? }
+  validates :accepted_applicant_id, presence: true, if: :enforce_contract_creation
+  validates :contract_price, numericality: { greater_than_or_equal_to: 1 }, if: :enforce_contract_creation
   validate :scope_or_file, if: :creation_completed?
   validate :validate_number_of_payments, if: :creation_completed?
   validate :validate_payments_total, if: :creation_completed?
@@ -133,8 +138,6 @@ class Job < ApplicationRecord
 
   serialize :technical_skill_tags
   serialize :manufacturer_tags
-
-  attr_accessor :send_contract, :save_draft
 
   audited
 
@@ -150,26 +153,6 @@ class Job < ApplicationRecord
   }, using: {
     tsearch: { prefix: true, any_word: true }
   }
-
-  def validate_number_of_payments
-    if send_contract == "true"
-      remaining_payments = payments.reject(&:marked_for_destruction?)
-      errors.add(:number_of_payments, 'A minimum of 1 payment is required') if remaining_payments.empty?
-    end
-  end
-
-  def validate_payments_total
-    if send_contract == "true"
-      total = payments.inject(0) { |sum, e| sum + e.amount if e.amount.present? }
-      errors.add(:total_of_payments, 'The total amount of payments doesn\'t match with the quote') if total != quotes.where({state: :accepted}).first.amount
-    end
-  end
-
-  def validate_sales_tax
-    if send_contract == "true"
-      errors.add(:applicable_sales_tax, 'You should set the applicable sales tax!') if applicable_sales_tax.nil?
-    end
-  end
 
   def pre_negotiated?
     %w(created published quoted).include?(state)
@@ -288,5 +271,29 @@ class Job < ApplicationRecord
 
   def step_job_details?
     creation_step == "candidate_details"
+  end
+
+  def accept_applicant
+    applicants.where(id: accepted_applicant_id).first&.update_attribute(:state, "accepted")
+  end
+
+  def validate_number_of_payments
+    if send_contract == "true" && pay_type == "fixed"
+      remaining_payments = payments.reject(&:marked_for_destruction?)
+      errors.add(:number_of_payments, 'A minimum of 1 payment is required') if remaining_payments.empty?
+    end
+  end
+
+  def validate_payments_total
+    if send_contract == "true" && pay_type == "fixed"
+      total = payments.inject(0) { |sum, e| sum + e.amount if e.amount.present? }
+      errors.add(:total_of_payments, 'The total amount of payments doesn\'t match with the work order amount') if total != contract_price
+    end
+  end
+
+  def validate_sales_tax
+    if send_contract == "true"
+      errors.add(:applicable_sales_tax, 'You should set the applicable sales tax!') if applicable_sales_tax.nil?
+    end
   end
 end

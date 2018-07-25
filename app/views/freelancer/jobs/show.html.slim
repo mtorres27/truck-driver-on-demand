@@ -140,43 +140,6 @@
         = f.hidden_field :job, value: @job.id
         h2.common__h2-modal= @job.title
         .grid-h
-          .grid-cell.grid-cell--33
-            .common__radio-group.w-radio
-              = f.radio_button :pay_type, "daily", class: "w-radio-input"
-              = f.label :pay_type_daily, "daily", class: "common__field-label"
-          .grid-cell.grid-cell--33
-            .common__radio-group.w-radio
-              = f.radio_button :pay_type, "fixed", checked: true, class: "w-radio-input"
-              = f.label :pay_type_fixed, "fixed", class: "common__field-label"
-          .grid-cell.grid-cell--33
-            .common__radio-group.w-radio
-              = f.radio_button :pay_type, "hourly", class: "w-radio-input"
-              = f.label :pay_type_hourly, "hourly", class: "common__field-label"
-
-          .grid-cell.grid-cell--100.freelancer-job__apply-modal__content-amount--fixed
-            .common__text-field-group
-              = f.label :amount, "Amount", class: "common__field-label required-field"
-              = f.input :amount, type: "text", id: "quote-amount-fixed", placeholder: "Your quote", class: "common__text-field w-input", label: false, required: false
-
-          .grid-cell.grid-cell--50.freelancer-job__apply-modal__content-amount--hourly
-            .common__text-field-group
-              = f.label :number_of_hours, "Number of Hours", class: "common__field-label required-field"
-              = f.input :number_of_hours, type: "text", id: "quote-amount-hourly", placeholder: "No. of Hrs", class: "common__text-field w-input", label: false, required: false
-
-          .grid-cell.grid-cell--50.freelancer-job__apply-modal__content-amount--hourly
-            .common__text-field-group
-              = f.label :hourly_rate, "Hourly Rate", class: "common__field-label required-field"
-              = f.input :hourly_rate, type: "text", id: "quote-amount-hourly-rate", placeholder: "Hourly Rate", class: "common__text-field w-input", label: false, required: false
-
-          .grid-cell.grid-cell--50.freelancer-job__apply-modal__content-amount--daily
-            .common__text-field-group
-              = f.label :number_of_days, "No. of Days", class: "common__field-label required-field"
-              = f.input :number_of_days, type: "text", id: "quote-amount-daily", placeholder: "No. of Days", class: "common__text-field w-input", label: false, required: false
-
-          .grid-cell.grid-cell--50.freelancer-job__apply-modal__content-amount--daily
-            .common__text-field-group
-              = f.label :daily_rate, "Daily Rate", class: "common__field-label required-field"
-              = f.input :daily_rate, type: "text", id: "quote-amount-daily-rate", placeholder: "Daily Rate", class: "common__text-field w-input", label: false, required: false
           .grid-cell.grid-cell--100
             .attachment.common__text-field-group
               label.common__field-label.required-field for="name-4"
@@ -196,29 +159,17 @@ javascript:
 
   var validateQuote = function( ){
     $(".freelancer-job__apply-modal__errors").html("");
-    var fixed = $("#freelancer_job_apply_path_pay_type_fixed").is(":checked");
-    var hourly = $("#freelancer_job_apply_path_pay_type_hourly").is(":checked");
-    var daily = $("#freelancer_job_apply_path_pay_type_daily").is(":checked");
-    var safe = true;
-    if (fixed && $("#freelancer_job_apply_path_amount").val() == "") {
-      safe = false;
-    } else if (hourly && ($("#freelancer_job_apply_path_number_of_hours").val() == "" || $("#freelancer_job_apply_path_hourly_rate").val() == "")) {
-      safe = false;
-    } else if (daily && ($("#freelancer_job_apply_path_number_of_days").val() == "" || $("#freelancer_job_apply_path_daily_rate").val() == "")) {
-      safe = false;
-    }
 
     if ($("#freelancer_job_apply_path_message").val() == "") {
       safe = false;
     }
-
 
     if (!safe) {
       $(".freelancer-job__apply-modal__errors").append("Unable to submit quote: please fill out amount and a message.");
     }
 
     return safe;
-  }
+  };
 
 
   var triggerFileUpload = function () {
@@ -245,36 +196,4 @@ javascript:
       $(".popup").hide();
     });
   });
-
-  var clearAllQuoteValues = function () {
-    $("#freelancer_job_apply_path_amount").val("");
-    $("#freelancer_job_apply_path_number_of_hours").val("");
-    $("#freelancer_job_apply_path_number_of_days").val("");
-    $("#freelancer_job_apply_path_hourly_rate").val("");
-    $("#freelancer_job_apply_path_daily_rate").val("");
-  }
-
-  $("#freelancer_job_apply_path_pay_type_hourly").on('click', function() {
-    clearAllQuoteValues();
-    $(".freelancer-job__apply-modal__content-amount--fixed").hide();
-    $(".freelancer-job__apply-modal__content-amount--hourly").show();
-    $(".freelancer-job__apply-modal__content-amount--daily").hide();
-  });
-
-  $("#freelancer_job_apply_path_pay_type_daily").on('click', function() {
-    clearAllQuoteValues();
-    $(".freelancer-job__apply-modal__content-amount--fixed").hide();
-    $(".freelancer-job__apply-modal__content-amount--hourly").hide();
-    $(".freelancer-job__apply-modal__content-amount--daily").show();
-  });
-
-  $("#freelancer_job_apply_path_pay_type_fixed").on('click', function() {
-    clearAllQuoteValues();
-    $(".freelancer-job__apply-modal__content-amount--fixed").show();
-    $(".freelancer-job__apply-modal__content-amount--hourly").hide();
-    $(".freelancer-job__apply-modal__content-amount--daily").hide();
-  });
-
-  $(".freelancer-job__apply-modal__content-amount--hourly").hide();
-  $(".freelancer-job__apply-modal__content-amount--daily").hide();
 

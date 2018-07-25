@@ -1193,15 +1193,9 @@ CREATE TABLE quotes (
     company_id bigint NOT NULL,
     applicant_id bigint NOT NULL,
     state character varying DEFAULT 'pending'::character varying NOT NULL,
-    amount numeric(10,2) NOT NULL,
-    pay_type character varying DEFAULT 'fixed'::character varying NOT NULL,
     attachment_data text,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
-    number_of_hours integer,
-    hourly_rate integer,
-    number_of_days integer,
-    daily_rate integer,
     author_type character varying DEFAULT 'freelancer'::character varying,
     accepted_by_freelancer boolean DEFAULT false,
     paid_by_company boolean DEFAULT false,
@@ -2495,6 +2489,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20180611160634'),
 ('20180619175806'),
 ('20180704204319'),
-('20180706223639');
+('20180706223639'),
+('20180709202408');
 
 

@@ -30,29 +30,5 @@
                 = "#{freelancer.freelancer_profile.city}"
         .list__info
           = applicant_state_label(applicant)
-
-/ .applicant-messages__list-wrapper
-/   .applicant-messages__list
-/     - applicants.each do |applicant|
-/       a href=company_job_applicant_quotes_path(job, applicant)
-/         .media.applicant class=("applicant--current" if applicant.id == current_applicant_id)
-/           .media-left
-/             = image_tag(applicant.freelancer.avatar_url, size: "40x40")
-/             - if is_verified(applicant.freelancer)
-/               span class="freelancer-verified fa fa-check-circle"
-/           .media-body
-/             - applicant.freelancer.tap do |freelancer|
-/               .freelancer_name= freelancer.name
-/               - distance = calc_distance_from(freelancer)
-/               - if distance == "N/A"
-/                 .freelancer_distance= "#{freelancer.city}"
-/               - else
-/                 .freelancer_distance= "#{freelancer.city}, #{distance} miles away"
-/             = applicant_state_label(applicant)
-
-
-/ javascript:
-/   $("#messaging-filter").on('change', function() {
-/     var val = $(this).val();
-/     window.location.href = "http://"+window.location.host+window.location.pathname+"?filter="+val;
-/   })
+  .list-item
+    = link_to "Create a work order", edit_company_job_work_order_path(job), class: "btn btn--primary"
