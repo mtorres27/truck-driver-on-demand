@@ -41,9 +41,9 @@ class StripeAccount < Struct.new( :freelancer )
         legal_entity: {
           type: type,
         },
-        payout_schedule: {
-          interval: 'manual'
-        }
+        # payout_schedule: {
+        #   interval: 'manual'
+        # }
       )
     rescue StandardError => ex
       Rails.logger.debug 'WHAT!!!!' # TODO: improve
