@@ -30,6 +30,7 @@ gem "jquery-datatables"
 # Authentication & Authorization
 gem "devise"
 gem "pundit"
+gem "rolify"
 
 # Views
 gem "slim-rails", "~> 3.1.2"

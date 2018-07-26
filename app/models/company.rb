@@ -94,7 +94,7 @@ class Company < ApplicationRecord
   has_many :favourites
   has_many :favourite_freelancers, through: :favourites, source: :freelancer
   has_many :company_installs, dependent: :destroy
-  has_one :company_user
+  has_many :company_users
 
   attr_accessor :accept_terms_of_service, :accept_privacy_policy, :accept_code_of_conduct,
                 :enforce_profile_edit, :user_type
@@ -136,7 +136,7 @@ class Company < ApplicationRecord
   before_create :set_default_step
   after_save :send_confirmation_email
 
-  delegate :email, to: :company_user, allow_nil: true
+  delegate :email, to: :owner, allow_nil: true
 
   def freelancers
     Freelancer.
@@ -174,7 +174,7 @@ class Company < ApplicationRecord
     formatted_address: "C",
     description: "C"
   }, associated_against: {
-    company_user: [:email, :first_name, :last_name]
+    company_users: [:email, :first_name, :last_name]
   }, using: {
     tsearch: { prefix: true }
   }
@@ -182,7 +182,7 @@ class Company < ApplicationRecord
   pg_search_scope :name_or_email_search, against: {
     name: "A",
   }, associated_against: {
-    company_user: [:email]
+    company_users: [:email]
   }, using: {
     tsearch: { prefix: true }
   }
@@ -267,6 +267,10 @@ class Company < ApplicationRecord
     self
   end
 
+  def owner
+    company_users.with_role(:owner).first
+  end
+
   private
 
   def add_to_hubspot
@@ -275,8 +279,8 @@ class Company < ApplicationRecord
 
     Hubspot::Contact.createOrUpdate(email,
       company: name,
-      firstname: company_user.first_name,
-      lastname: company_user.last_name,
+      firstname: owner.first_name,
+      lastname: owner.last_name,
       lifecyclestage: "customer",
       im_an: "AV Company",
     )
@@ -295,9 +299,9 @@ class Company < ApplicationRecord
   end
 
   def send_confirmation_email
-    return if company_user.confirmed? || !registration_completed? || company_user.confirmation_sent_at.present?
-    company_user.send_confirmation_instructions
-    company_user.update_column(:confirmation_sent_at, Time.current)
+    return if owner.confirmed? || !registration_completed? || owner.confirmation_sent_at.present?
+    owner.send_confirmation_instructions
+    owner.update_column(:confirmation_sent_at, Time.current)
   end
 
   protected

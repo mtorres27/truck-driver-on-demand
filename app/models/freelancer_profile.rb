@@ -51,7 +51,6 @@
 #  manufacturer_tags        :citext
 #  avj_credit               :decimal(10, 2)
 #  registration_step        :string
-#  province                 :string
 #  freelancer_id            :integer
 #
 # Indexes
