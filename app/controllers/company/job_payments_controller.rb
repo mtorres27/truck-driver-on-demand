@@ -32,32 +32,52 @@ class Company::JobPaymentsController < Company::BaseController
   end
 
   def mark_as_paid
-    quote = @job.accepted_quote
+    quote      = @job.accepted_quote
     freelancer = @job.freelancer
+    @amount      = @payment.amount
+    @tax         = @job.applicable_sales_tax * @payment.amount / 100
+    @avj_fees    = current_company.plan.fee_schema['company_fees'] ? (@amount * current_company.plan.fee_schema['company_fees'].to_f / 100) : 0
+    @avj_t_fees  = current_company.country == 'ca' ? @avj_fees * 1.13 : @avj_fees
+    @total       = @amount + @tax + @avj_t_fees
     begin
-      raise Exception.new('You didn\'t pay this work order yet!') if !quote.paid_by_company
-      money = @payment.total_amount - @payment.avj_fees
+      # NEW
+      charge = Stripe::Charge.create({
+                   amount: (@total * 100).floor ,
+                   currency: @job.currency,
+                   source: params[:stripeToken],
+                   statement_descriptor: "AV Junction - (stripe)",
+                   application_fee: (@avj_t_fees * 100).floor
+               }, stripe_account: freelancer.freelancer_profile&.stripe_account_id)
+      logger.debug charge.inspect
+      @payment.stripe_charge_id = charge[:id]
+      @payment.stripe_balance_transaction_id = charge[:balance_transaction]
+      # @payment.save
+      exit 0
+      #///////
 
-      Stripe::Payout.create({
-        amount: (money * 100).floor,
-        currency: @job.currency
-      },{
-        stripe_account: freelancer.freelancer_profile.stripe_account_id
-      })
+      # raise Exception.new('You didn\'t pay this work order yet!') if !quote.paid_by_company
+      # money = @payment.total_amount - @payment.avj_fees
+      #
+      # Stripe::Payout.create({
+      #   amount: (money * 100).floor,
+      #   currency: @job.currency
+      # },{
+      #   stripe_account: freelancer.freelancer_profile.stripe_account_id
+      # })
 
-      @payment.mark_as_paid!
+      # @payment.mark_as_paid!
 
       # Send notice email
-      PaymentsMailer.notice_payout_freelancer(current_user, freelancer, @job, @payment).deliver_later
-
-      if @job.payments.outstanding.empty?
-        @job.update(state: :completed)
-        FreelancerMailer.notice_job_complete_freelancer(current_user, freelancer, @job).deliver_later
-        CompanyMailer.notice_job_complete_company(current_user, freelancer, @job).deliver_later
-        redirect_to company_job_review_path(@job)
-      else
-        redirect_to company_job_payments_path(@job)
-      end
+      # PaymentsMailer.notice_payout_freelancer(current_user, freelancer, @job, @payment).deliver_later
+      #
+      # if @job.payments.outstanding.empty?
+      #   @job.update(state: :completed)
+      #   FreelancerMailer.notice_job_complete_freelancer(current_user, freelancer, @job).deliver_later
+      #   CompanyMailer.notice_job_complete_company(current_user, freelancer, @job).deliver_later
+      #   redirect_to company_job_review_path(@job)
+      # else
+      #   redirect_to company_job_payments_path(@job)
+      # end
     rescue Exception => e
       flash[:error] = e.message
       redirect_to company_job_payments_path(@job)

@@ -136,7 +136,7 @@ Rails.application.routes.draw do
       resources :messages, only: [:index, :create]
       resources :payments, controller: "job_payments", only: [:index, :show] do
         get :print, on: :member
-        get :mark_as_paid, on: :member
+        post :mark_as_paid, on: :member
         post 'contract_pay' => 'contracts#contract_pay'
       end
       resource :review, only: [:show, :create]

@@ -23,7 +23,7 @@ class Company::ContractsController < Company::BaseController
       end
       amount = (quote.amount * (1 + (@job.applicable_sales_tax / 100)))
       # Stripe fees equals to 2.9% of the total amount plus 30 cents USD
-      stripe_fees = amount * 0.029 + (0.3 * currency_rate)
+      stripe_fees = amount * 0.029 + ( 0.3 * currency_rate )
       plan_fees = @job.company_plan_fees
       platform_fees = (((quote.amount * avj_fees) - avj_credit_used) - stripe_fees + plan_fees)
       if platform_fees < 0
