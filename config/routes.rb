@@ -48,6 +48,7 @@ Rails.application.routes.draw do
       # resources :payments, controller: "job_payments", only: [:index]
       resources :payments, controller: "job_payments", only: [:index, :show] do
         get :print, on: :member
+        post :create_payment, on: :collection
       end
       resource :review, only: [:show, :create]
       resources :quotes, only: [:index, :create] do

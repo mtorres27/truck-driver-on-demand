@@ -11,7 +11,7 @@ class PaymentsMailer < ApplicationMailer
             '%job_id%' => [@job.id],
             '%job_title%' => [@job.title],
             '%job_currency%' => [@job.currency.upcase],
-            '%job_accepted_quote_total_amount%' => [@job.accepted_quote.amount]
+            '%job_accepted_quote_total_amount%' => [@job.contract_price]
         },
         filters: {
             templates: {
@@ -37,7 +37,7 @@ class PaymentsMailer < ApplicationMailer
             '%job_id%' => [@job.id],
             '%job_title%' => [@job.title],
             '%job_currency%' => [@job.currency.upcase],
-            '%job_accepted_quote_total_amount%' => [@job.accepted_quote.amount]
+            '%job_accepted_quote_total_amount%' => [@job.contract_price]
         },
         filters: {
             templates: {
@@ -90,7 +90,7 @@ class PaymentsMailer < ApplicationMailer
             '%job_id%' => [@job.id],
             '%job_title%' => [@job.title],
             '%job_currency%' => [@job.currency.upcase],
-            '%job_accepted_quote_total_amount%' => [@job.accepted_quote.total_amount]
+            '%job_accepted_quote_total_amount%' => [@job.contract_price]
         },
         filters: {
             templates: {
@@ -143,7 +143,7 @@ class PaymentsMailer < ApplicationMailer
             '%job_id%' => [@job.id],
             '%job_title%' => [@job.title],
             '%job_currency%' => [@job.currency.upcase],
-            '%job_accepted_quote_total_amount%' => [@job.accepted_quote.total_amount]
+            '%job_accepted_quote_total_amount%' => [@job.contract_price]
         },
         filters: {
             templates: {
@@ -169,7 +169,7 @@ class PaymentsMailer < ApplicationMailer
             '%job_id%' => [@job.id],
             '%job_title%' => [@job.title],
             '%job_currency%' => [@job.currency.upcase],
-            '%job_accepted_quote_total_amount%' => [@job.accepted_quote.total_amount]
+            '%job_accepted_quote_total_amount%' => [@job.contract_price]
         },
         filters: {
             templates: {

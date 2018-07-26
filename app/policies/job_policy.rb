@@ -88,6 +88,10 @@ class JobPolicy < ApplicationPolicy
     company_user? && company_owner?
   end
 
+  def create_payment?
+    freelancer? && freelancer_hired?
+  end
+
   private
 
   def company_owner?
@@ -96,6 +100,10 @@ class JobPolicy < ApplicationPolicy
 
   def company_subscribed_to_plan?
     record.company&.plan.present?
+  end
+
+  def freelancer_hired?
+    record.freelancer&.id == user.id
   end
 
 end

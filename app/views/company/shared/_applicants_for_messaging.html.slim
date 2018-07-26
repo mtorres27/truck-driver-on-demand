@@ -30,5 +30,6 @@
                 = "#{freelancer.freelancer_profile.city}"
         .list__info
           = applicant_state_label(applicant)
-  .list-item
-    = link_to "Create a work order", edit_company_job_work_order_path(job), class: "btn btn--primary"
+  - if job.freelancer.nil?
+    .list-item
+      = link_to "Create a work order", edit_company_job_work_order_path(job), class: "btn btn--primary"

@@ -6,13 +6,14 @@ class Company::ContractsController < Company::BaseController
   def contract_pay
     begin
       quote = @job.accepted_quote
+      contract_price = @job.contract_price
       freelancer = @job.freelancer
       payments = @job.payments
       avj_fees = freelancer.freelancer_profile&.special_avj_fees || Rails.configuration.avj_fees
       currency_rate = CurrencyExchange.get_currency_rate(@job.currency)
       avj_credit_available = @job.currency == 'usd' ? freelancer.freelancer_profile&.avj_credit.to_f : freelancer.freelancer_profile&.avj_credit.to_f * currency_rate
-      if quote.amount * avj_fees <= avj_credit_available
-        avj_credit_used = quote.amount * avj_fees
+      if contract_price * avj_fees <= avj_credit_available
+        avj_credit_used = contract_price * avj_fees
       else
         avj_credit_used = avj_credit_available
       end
@@ -21,11 +22,11 @@ class Company::ContractsController < Company::BaseController
       else
         freelancer.freelancer_profile.update_attribute(:avj_credit, freelancer.freelancer_profile.avj_credit.to_f - (avj_credit_used / currency_rate))
       end
-      amount = (quote.amount * (1 + (@job.applicable_sales_tax / 100)))
+      amount = (contract_price * (1 + (@job.applicable_sales_tax / 100)))
       # Stripe fees equals to 2.9% of the total amount plus 30 cents USD
       stripe_fees = amount * 0.029 + (0.3 * currency_rate)
       plan_fees = @job.company_plan_fees
-      platform_fees = (((quote.amount * avj_fees) - avj_credit_used) - stripe_fees + plan_fees)
+      platform_fees = (((contract_price * avj_fees) - avj_credit_used) - stripe_fees + plan_fees)
       if platform_fees < 0
         platform_fees = 0
       end

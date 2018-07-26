@@ -1,0 +1,26 @@
+.modal#new_payment role="dialog" tabindex="-1"
+  .modal-dialog role="document"
+    .modal-content
+      = simple_form_for(:payment, url: create_payment_freelancer_job_payments_path(@job), method: :post, remote: true) do |f|
+        .modal-header
+          h2 Request a Payment
+        .container
+          .grid-h
+            .grid-cell.grid-cell--100
+              input type="hidden" id="js--pay_rate" value="#{@job.contract_price}"
+              - if @job.pay_type == "dayly"
+                = f.label "Number of days", required: true
+                input.form-control.required type="number" name="time_unit_amount" id="js--time_unit_amount" placeholder="Enter the number of days"
+              - elsif @job.pay_type == "hourly"
+                = f.label "Number of hours", required: true
+                input.form-control.required type="number" name="time_unit_amount" id="js--time_unit_amount" placeholder="Enter the number of hours"
+            .grid-cell.grid-cell--100
+              = f.input :amount, disabled: true, input_html: { class: "js--payment_amount" }
+            .grid-cell.grid-cell--100
+              = f.input :description, placeholder: "Enter the payment description"
+            .grid-cell.grid-cell--100
+              .buttons
+                = f.hidden_field :company_id, value: @job.company.id
+                = f.button :submit, class: "btn btn--primary"
+                a.btn.btn--secondary data-dismiss="modal" href="#"
+                  | Cancel

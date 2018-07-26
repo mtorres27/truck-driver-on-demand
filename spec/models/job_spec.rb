@@ -54,6 +54,8 @@
 #  contracted_at                          :datetime
 #  state_province                         :string
 #  creation_step                          :string
+#  plan_fee                               :decimal(10, 2)   default(0.0)
+#  paid_by_company                        :boolean          default(FALSE)
 #
 # Indexes
 #

@@ -42,4 +42,24 @@ class Payment < ApplicationRecord
   def mark_as_paid!
     update(paid_on: Time.zone.now.to_date)
   end
+
+  def set_avj_fees
+    self.avj_fees = amount * (job.freelancer.freelancer_profile&.special_avj_fees || Rails.configuration.avj_fees)
+  end
+
+  def set_avj_credit
+    currency_rate = CurrencyExchange.get_currency_rate(job.currency)
+    avj_credit_available = job.currency == 'usd' ? job.freelancer.freelancer_profile&.avj_credit.to_f : job.freelancer.freelancer_profile&.avj_credit.to_f * currency_rate
+    if self.avj_fees <= avj_credit_available
+      avj_credit_used = self.avj_fees
+    else
+      avj_credit_used = avj_credit_available
+    end
+    self.avj_credit = avj_credit_used
+    if job.currency == 'usd'
+      job.freelancer.freelancer_profile.update_attribute(:avj_credit, job.freelancer.freelancer_profile.avj_credit.to_f - avj_credit_used)
+    else
+      job.freelancer.freelancer_profile.update_attribute(:avj_credit, job.freelancer.freelancer_profile.avj_credit.to_f - (avj_credit_used / currency_rate))
+    end
+  end
 end

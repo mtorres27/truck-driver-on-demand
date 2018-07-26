@@ -971,7 +971,9 @@ CREATE TABLE jobs (
     company_plan_fees numeric(10,2) DEFAULT 0,
     contracted_at timestamp without time zone,
     state_province character varying,
-    creation_step character varying
+    creation_step character varying,
+    plan_fee numeric(10,2) DEFAULT 0,
+    paid_by_company boolean DEFAULT false
 );
 
 
@@ -2490,6 +2492,8 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20180619175806'),
 ('20180704204319'),
 ('20180706223639'),
-('20180709202408');
+('20180709202408'),
+('20180725222036'),
+('20180726192551');
 
 
