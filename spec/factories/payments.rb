@@ -20,6 +20,11 @@
 #  stripe_balance_transaction_id :string
 #  funds_available_on            :integer
 #  funds_available               :boolean          default(FALSE)
+#  company_fees                  :decimal(10, 2)   default(0.0)
+#  total_company_fees            :decimal(10, 2)   default(0.0)
+#  freelancer_fees               :decimal(10, 2)   default(0.0)
+#  total_freelancer_fees         :decimal(10, 2)   default(0.0)
+#  transaction_fees              :decimal(10, 2)   default(0.0)
 #
 # Indexes
 #

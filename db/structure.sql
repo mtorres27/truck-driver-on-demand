@@ -1092,7 +1092,12 @@ CREATE TABLE payments (
     stripe_charge_id character varying,
     stripe_balance_transaction_id character varying,
     funds_available_on integer,
-    funds_available boolean DEFAULT false
+    funds_available boolean DEFAULT false,
+    company_fees numeric(10,2) DEFAULT 0,
+    total_company_fees numeric(10,2) DEFAULT 0,
+    freelancer_fees numeric(10,2) DEFAULT 0,
+    total_freelancer_fees numeric(10,2) DEFAULT 0,
+    transaction_fees numeric(10,2) DEFAULT 0
 );
 
 
@@ -2500,6 +2505,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20180619175806'),
 ('20180704204319'),
 ('20180706223639'),
-('20180725190313');
+('20180725190313'),
+('20180726215803');
 
 
