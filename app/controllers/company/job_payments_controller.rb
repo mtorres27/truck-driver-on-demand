@@ -22,7 +22,7 @@ class Company::JobPaymentsController < Company::BaseController
   def show
     @amount      = @payment.amount
     @tax         = @job.applicable_sales_tax * @payment.amount / 100
-    @avj_fees    = current_company.plan.fee_schema['company_fees'] ? (@amount * current_company.plan.fee_schema['company_fees'].to_f / 100) : 0
+    @avj_fees    = @job.company_plan_fees == 0 ? 0 : current_company.plan.fee_schema['company_fees'] ? (@amount * current_company.plan.fee_schema['company_fees'].to_f / 100) : 0
     @avj_t_fees  = current_company.country == 'ca' ? @avj_fees * 1.13 : @avj_fees
     @total       = @amount + @tax + @avj_t_fees
   end
@@ -37,7 +37,7 @@ class Company::JobPaymentsController < Company::BaseController
     currency_rate       = CurrencyExchange.get_currency_rate(@job.currency)
     amount              = @payment.amount
     tax                 = @job.applicable_sales_tax * @payment.amount / 100
-    company_fees        = current_company.plan.fee_schema['company_fees'] ? (amount * current_company.plan.fee_schema['company_fees'].to_f / 100) : 0
+    company_fees        = @job.company_plan_fees == 0 ? 0 : current_company.plan.fee_schema['company_fees'] ? (amount * current_company.plan.fee_schema['company_fees'].to_f / 100) : 0
     company_t_fees      = current_company.country == 'ca' ? company_fees * 1.13 : company_fees
     freelancer_fees     = current_company.plan.fee_schema['freelancer_fees'] ? (amount * current_company.plan.fee_schema['freelancer_fees'].to_f / 100) : 0
     freelancer_t_fees   = @job.freelancer.freelancer_profile.country == 'ca' ? freelancer_fees * 1.13 : freelancer_fees

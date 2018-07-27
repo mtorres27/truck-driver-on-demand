@@ -91,6 +91,8 @@
         - path = !current_user.admin? ? company_job_payment_path(job, payment) : admin_job_payment_path(job, payment)
         = link_to path, class: 'btn-primary--active top-margin w-inline-block'
           div #{(payment.paid_on.blank? && current_user.company_user? ? "Issue Payout" : "View Invoice")}
+      - elsif connector.nil? || connector.account.nil? || !connector.account.external_accounts.data.any?
+        div Freelancer doesn't provide his bank information yet!
       - else
         .btn-primary--disabled.top-margin.w-inline-block
           div Issue Payout
