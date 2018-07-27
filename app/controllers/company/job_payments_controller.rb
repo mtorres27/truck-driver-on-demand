@@ -32,27 +32,46 @@ class Company::JobPaymentsController < Company::BaseController
   end
 
   def mark_as_paid
-    quote      = @job.accepted_quote
-    freelancer = @job.freelancer
-    @amount      = @payment.amount
-    @tax         = @job.applicable_sales_tax * @payment.amount / 100
-    @avj_fees    = current_company.plan.fee_schema['company_fees'] ? (@amount * current_company.plan.fee_schema['company_fees'].to_f / 100) : 0
-    @avj_t_fees  = current_company.country == 'ca' ? @avj_fees * 1.13 : @avj_fees
-    @total       = @amount + @tax + @avj_t_fees
+    # quote               = @jFob.accepted_quote
+    freelancer          = @job.freelancer
+    currency_rate       = CurrencyExchange.get_currency_rate(@job.currency)
+    amount              = @payment.amount
+    tax                 = @job.applicable_sales_tax * @payment.amount / 100
+    company_fees        = current_company.plan.fee_schema['company_fees'] ? (amount * current_company.plan.fee_schema['company_fees'].to_f / 100) : 0
+    company_t_fees      = current_company.country == 'ca' ? company_fees * 1.13 : company_fees
+    freelancer_fees     = current_company.plan.fee_schema['freelancer_fees'] ? (amount * current_company.plan.fee_schema['freelancer_fees'].to_f / 100) : 0
+    freelancer_t_fees   = @job.freelancer.freelancer_profile.country == 'ca' ? freelancer_fees * 1.13 : freelancer_fees
+    application_fees    = company_t_fees + freelancer_t_fees
+    total               = amount + tax + company_t_fees
     begin
       # NEW
       charge = Stripe::Charge.create({
-                   amount: (@total * 100).floor ,
+                   amount: (total * 100).floor ,
                    currency: @job.currency,
                    source: params[:stripeToken],
                    statement_descriptor: "AV Junction - (stripe)",
-                   application_fee: (@avj_t_fees * 100).floor
+                   application_fee: (application_fees * 100).floor
                }, stripe_account: freelancer.freelancer_profile&.stripe_account_id)
       logger.debug charge.inspect
-      @payment.stripe_charge_id = charge[:id]
-      @payment.stripe_balance_transaction_id = charge[:balance_transaction]
-      # @payment.save
-      exit 0
+      balance_transaction = Stripe::BalanceTransaction.retrieve(charge[:balance_transaction], stripe_account: freelancer.freelancer_profile.stripe_account_id)
+      logger.debug balance_transaction.inspect
+      if balance_transaction[:status] == 'pending'
+        @payment.funds_available_on = balance_transaction[:available_on]
+      else
+        @payment.funds_available = true
+      end
+      # Calculations
+      @payment.company_fees                   = company_fees
+      @payment.total_company_fees             = company_t_fees
+      @payment.freelancer_fees                = freelancer_fees
+      @payment.total_freelancer_fees          = freelancer_t_fees
+      @payment.transaction_fees               = total * 0.029 + (0.3 * currency_rate)
+      @payment.total_amount                   = total
+
+      @payment.stripe_charge_id               = charge[:id]
+      @payment.stripe_balance_transaction_id  = charge[:balance_transaction]
+      @payment.save
+      # exit 0
       #///////
 
       # raise Exception.new('You didn\'t pay this work order yet!') if !quote.paid_by_company
@@ -65,19 +84,19 @@ class Company::JobPaymentsController < Company::BaseController
       #   stripe_account: freelancer.freelancer_profile.stripe_account_id
       # })
 
-      # @payment.mark_as_paid!
+      @payment.mark_as_paid!
 
       # Send notice email
-      # PaymentsMailer.notice_payout_freelancer(current_user, freelancer, @job, @payment).deliver_later
+      PaymentsMailer.notice_payout_freelancer(current_user, freelancer, @job, @payment).deliver_later
       #
-      # if @job.payments.outstanding.empty?
-      #   @job.update(state: :completed)
-      #   FreelancerMailer.notice_job_complete_freelancer(current_user, freelancer, @job).deliver_later
-      #   CompanyMailer.notice_job_complete_company(current_user, freelancer, @job).deliver_later
-      #   redirect_to company_job_review_path(@job)
-      # else
-      #   redirect_to company_job_payments_path(@job)
-      # end
+      if @job.payments.outstanding.empty?
+        @job.update(state: :completed)
+        FreelancerMailer.notice_job_complete_freelancer(current_user, freelancer, @job).deliver_later
+        CompanyMailer.notice_job_complete_company(current_user, freelancer, @job).deliver_later
+        redirect_to company_job_review_path(@job)
+      else
+        redirect_to company_job_payments_path(@job)
+      end
     rescue Exception => e
       flash[:error] = e.message
       redirect_to company_job_payments_path(@job)
