@@ -18,7 +18,7 @@
 
       .payments__status You can request a payment from your employer anytime a milestone is met.
   - @payments.each do |payment|
-    div class="payments #{ "milestone--inactive" if !payment.paid_on}"
+    div class="payments"
       .payments__flexbox
         .payments__title #{payment.description}
         .payments__amt #{payment.total_amount.present? ? number_with_precision(payment.total_amount, precision: 2) : number_with_precision(payment.amount, precision: 2)} #{@job.currency ? @job.currency.upcase : ''}
@@ -27,8 +27,10 @@
           - if payment.issued_on.present? || payment.paid_on.present?
             | #{payment.paid_on ? "Paid": "Requested"} #{payment.issued_on ? payment.issued_on : payment.paid_on}
         / a.btn-link href=freelancer_job_payment_path
-        = link_to freelancer_job_payment_path(id: payment.id, job_id: @job.id), class: 'btn-link'
-          | View Invoice
+        - if payment.paid_on.blank?
+        -else
+          = link_to freelancer_job_payment_path(id: payment.id, job_id: @job.id), class: 'btn-link'
+            | View Invoice
       - if !@connector.account.external_accounts.data.any? || !payment.paid_on || (!payment.paid_on.present? && (payment.issued_on.present? && payment.issued_on >= 2.day.ago))
         .btn-primary--disabled.top-margin.w-inline-block
           div request Payout

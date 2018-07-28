@@ -56,6 +56,11 @@
 #  creation_step                          :string
 #  plan_fee                               :decimal(10, 2)   default(0.0)
 #  paid_by_company                        :boolean          default(FALSE)
+#  total_amount                           :decimal(10, 2)
+#  tax_amount                             :decimal(10, 2)
+#  stripe_fees                            :decimal(10, 2)
+#  plan_fees                              :decimal(10, 2)
+#  amount_subtotal                        :decimal(10, 2)
 #
 # Indexes
 #
@@ -79,7 +84,6 @@ class Job < ApplicationRecord
   belongs_to :company
   belongs_to :project, optional: true
   has_many :applicants, -> { includes(:freelancer).order(updated_at: :desc) }, dependent: :destroy
-  has_many :quotes, -> { order(created_at: :desc) }, through: :applicants
   has_many :messages, -> { order(created_at: :desc) }, as: :receivable
   has_many :change_orders, -> { order(updated_at: :desc) }, dependent: :destroy
   has_many :payments, dependent: :destroy
@@ -167,18 +171,6 @@ class Job < ApplicationRecord
   def pre_contracted?
     pre_negotiated? || negotiated?
   end
-
-  def accepted_quote
-    if quotes.where({state: :accepted}).count > 0
-      return quotes.where({state: :accepted}).first
-    else
-      return nil
-    end
-  end
-
-  # def plan_fee_us
-  #   if accepted_quote.amount
-  # end
 
   def work_order
     "WO-"+(id.to_s.rjust(5, '0'))

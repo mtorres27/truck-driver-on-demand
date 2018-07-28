@@ -973,7 +973,12 @@ CREATE TABLE jobs (
     state_province character varying,
     creation_step character varying,
     plan_fee numeric(10,2) DEFAULT 0,
-    paid_by_company boolean DEFAULT false
+    paid_by_company boolean DEFAULT false,
+    total_amount numeric(10,2),
+    tax_amount numeric(10,2),
+    stripe_fees numeric(10,2),
+    plan_fees numeric(10,2),
+    amount_subtotal numeric(10,2)
 );
 
 
@@ -1184,54 +1189,6 @@ CREATE SEQUENCE projects_id_seq
 --
 
 ALTER SEQUENCE projects_id_seq OWNED BY projects.id;
-
-
---
--- Name: quotes; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE quotes (
-    id bigint NOT NULL,
-    company_id bigint NOT NULL,
-    applicant_id bigint NOT NULL,
-    state character varying DEFAULT 'pending'::character varying NOT NULL,
-    attachment_data text,
-    created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL,
-    author_type character varying DEFAULT 'freelancer'::character varying,
-    accepted_by_freelancer boolean DEFAULT false,
-    paid_by_company boolean DEFAULT false,
-    paid_at timestamp without time zone,
-    platform_fees_amount numeric(10,2),
-    tax_amount numeric(10,2),
-    total_amount numeric(10,2),
-    applicable_sales_tax integer,
-    avj_fees numeric(10,2),
-    stripe_fees numeric(10,2),
-    net_avj_fees numeric(10,2),
-    accepted_at timestamp without time zone,
-    avj_credit numeric(10,2) DEFAULT NULL::numeric,
-    plan_fee numeric(10,2) DEFAULT 0
-);
-
-
---
--- Name: quotes_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE quotes_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: quotes_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE quotes_id_seq OWNED BY quotes.id;
 
 
 --
@@ -1528,13 +1485,6 @@ ALTER TABLE ONLY projects ALTER COLUMN id SET DEFAULT nextval('projects_id_seq':
 
 
 --
--- Name: quotes id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY quotes ALTER COLUMN id SET DEFAULT nextval('quotes_id_seq'::regclass);
-
-
---
 -- Name: subscriptions id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -1778,14 +1728,6 @@ ALTER TABLE ONLY plans
 
 ALTER TABLE ONLY projects
     ADD CONSTRAINT projects_pkey PRIMARY KEY (id);
-
-
---
--- Name: quotes quotes_pkey; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY quotes
-    ADD CONSTRAINT quotes_pkey PRIMARY KEY (id);
 
 
 --
@@ -2142,20 +2084,6 @@ CREATE INDEX index_projects_on_name ON projects USING btree (name);
 
 
 --
--- Name: index_quotes_on_applicant_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_quotes_on_applicant_id ON quotes USING btree (applicant_id);
-
-
---
--- Name: index_quotes_on_company_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_quotes_on_company_id ON quotes USING btree (company_id);
-
-
---
 -- Name: index_users_on_company_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -2271,14 +2199,6 @@ ALTER TABLE ONLY applicants
 
 
 --
--- Name: quotes fk_rails_9b32fbc45b; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY quotes
-    ADD CONSTRAINT fk_rails_9b32fbc45b FOREIGN KEY (company_id) REFERENCES companies(id);
-
-
---
 -- Name: freelancer_reviews fk_rails_ab5db9ea44; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -2308,14 +2228,6 @@ ALTER TABLE ONLY payments
 
 ALTER TABLE ONLY change_orders
     ADD CONSTRAINT fk_rails_b3bebfe084 FOREIGN KEY (company_id) REFERENCES companies(id);
-
-
---
--- Name: quotes fk_rails_b73354eeb5; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY quotes
-    ADD CONSTRAINT fk_rails_b73354eeb5 FOREIGN KEY (applicant_id) REFERENCES applicants(id);
 
 
 --
@@ -2492,8 +2404,8 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20180619175806'),
 ('20180704204319'),
 ('20180706223639'),
-('20180709202408'),
 ('20180725222036'),
-('20180726192551');
+('20180726192551'),
+('20180728165546');
 
 
