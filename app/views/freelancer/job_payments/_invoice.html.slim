@@ -25,7 +25,7 @@
         .invoice__table-text Sales Tax @ #{@job.applicable_sales_tax}%
         .invoice__table-text.invoice__table-text--right= (number_with_precision(@tax, precision: 2)).to_s + " " + @job.currency.upcase
     .invoice__table-row
-      .invoice__table-text AV Junction Fees (#{Rails.configuration.avj_sales_tax_number})
+      .invoice__table-text AV Junction Fees (6%)
       .invoice__table-text.invoice__table-text--right= (number_with_precision(@avj_t_fees, precision: 2)).to_s + " " + @job.currency.upcase
     .invoice__table-row
       .invoice__table-text AV Junction Credit ????

@@ -39,6 +39,12 @@
               | #{number_with_precision((accepted_quote.amount * job.applicable_sales_tax/100), precision: 2) } #{job.currency.upcase}
       .payments__flexbox
         .payments__status
+          | Total to freelancer :
+        .payments__status
+          strong<
+            | #{number_with_precision(accepted_quote.amount.floor * (1 + job.applicable_sales_tax/100)  , precision: 2) } #{job.currency.upcase}
+      .payments__flexbox
+        .payments__status
           | AV Junction Fees + Tax #{ accepted_quote.plan_fee.positive? ? "($"+accepted_quote.plan_fee.to_i.to_s+" USD)" : ""}:
         .payments__status
           strong<
@@ -81,7 +87,12 @@
     div class="payments"
       .payments__flexbox
         .payments__title #{payment.description}
-        .payments__amt #{payment.total_amount.present? ? number_with_precision(payment.total_amount, precision: 2) : number_with_precision(payment.amount, precision: 2)} #{job.currency ? job.currency.upcase : ''}
+        .payments__amt
+          | #{payment.total_amount.present? ? number_with_precision(payment.total_amount, precision: 2) : number_with_precision((payment.amount * (1 + job.applicable_sales_tax/100) ), precision: 2)} #{job.currency ? job.currency.upcase : ''}
+          .div
+            - path = !current_user.admin? ? company_job_payment_path(job, payment) : admin_job_payment_path(job, payment)
+            = link_to path, class: 'btn-link'
+              div View Invoice
       .payments__flexbox
         - if payment.paid_on.present?
           .payments__date Paid on #{payment.paid_on}
