@@ -10,10 +10,6 @@ class Company::JobsController < Company::BaseController
 
   end
 
-  def contract_invoice
-    @accepted_quote = @job.accepted_quote
-  end
-
   def show
     redirect_to company_job_job_build_path(@job.creation_step, job_id: @job.id) unless @job.creation_completed?
   end

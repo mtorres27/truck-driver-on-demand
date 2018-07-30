@@ -5,7 +5,7 @@
   - if @job.freelancer&.id == current_user&.id
     .result-wrapper
       = simple_form_for(:message, url: freelancer_job_messages_path(@job)) do |f|
-        = render partial: "freelancer/shared/new_message", locals: { f: f, n: @job.company.name, type: "message", quotes: []  }
+        = render partial: "freelancer/shared/new_message", locals: { f: f, n: @job.company.name, type: "message" }
         .freelancer-job__message-history
           - @messages.each do |message|
             .freelancer-job__quote-msg

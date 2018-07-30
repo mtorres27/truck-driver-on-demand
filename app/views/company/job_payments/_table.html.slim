@@ -1,5 +1,4 @@
 - if job.paid_by_company
-  / div class="payments #{ "milestone--inactive" if accepted_quote.nil? || (accepted_quote.present? && !accepted_quote.paid_by_company)}"
   .milestone--inactive
     .payments__flexbox
       h3.heading-h3 AV Junction Fees
@@ -12,71 +11,6 @@
           | View Invoice
       - else
         .payments__payout-label Waived
-/- if accepted_quote && !accepted_quote.paid_by_company
-/  .grid-h
-/    .grid-cell.grid-cell--50
-/      div
-/        .tag.tag--in-progress funds pending
-/      .payments__status
-/        | For this project to be started, it must be fully funded. This shows the AV Freelancer that funds are available but will not be accessible until the milestones are met and you authorize the payout.
-/      .payments_status
-/        - if current_user.company_user?
-/          = render partial: 'company/shared/fund_this_job_button', locals: { job: job, accepted_quote: accepted_quote }
-/
-/    .grid-cell.grid-cell--50
-/      .payments__flexbox
-/        .payments__status
-/          | Job Total :
-/        .payments__status
-/          strong<
-/            | #{number_with_precision(accepted_quote.amount.floor , precision: 2) } #{job.currency.upcase}
-/      - if job.applicable_sales_tax.present?
-/        .payments__flexbox
-/          .payments__status
-/            | Job Sales Tax :
-/          .payments__status
-/            strong<
-/              | #{number_with_precision((accepted_quote.amount * job.applicable_sales_tax/100), precision: 2) } #{job.currency.upcase}
-/      .payments__flexbox
-/        .payments__status
-/          | AV Junction Fees + Tax #{ accepted_quote.plan_fee.positive? ? "($"+accepted_quote.plan_fee.to_i.to_s+" USD)" : ""}:
-/        .payments__status
-/          strong<
-/            | #{ job.company_plan_fees.positive? ? number_with_precision(job.company_plan_fees , precision: 2) : "Waived"} #{ job.company_plan_fees.positive? ? job.currency.upcase : ''}
-/      .payments__flexbox
-/        .payments__status
-/          | Job Total
-/        .payments__status
-/          strong<
-/            | #{number_with_precision((accepted_quote.amount.floor + job.company_plan_fees + (accepted_quote.amount * job.applicable_sales_tax/100)), precision: 2) } #{job.currency.upcase}
-/      - if current_user.company_user?
-/        .payments__flexbox
-/          .payments__status
-/            = link_to contract_invoice_company_job_path(job), class: 'btn-primary--active top-margin w-inline-block'
-/              div View invoice
-/
-/- elsif accepted_quote && accepted_quote.paid_by_company && !job.funds_available
-/  .payments
-/    .payments__flexbox
-/      .tag.tag--in-progress funds pending
-/      .payments__total-group
-/        .payments__total-amt #{number_with_precision(job.gpayments_sum_total, precision: 2)} #{job.currency.upcase}
-/        .payments__payout-label Funded
-/    .payments__status Thanks for funding this project. These funds will be available to the freelancer #{job.funds_available_on ? "on " + Time.at(job.funds_available_on).to_date.to_s : 'in 7-10 days'}. After which you will be able to release payouts.
-/- elsif accepted_quote && accepted_quote.paid_by_company && job.funds_available
-/  .payments
-/    .payments__flexbox
-/      .tag.tag--success #{(job.payments_sum_paid == job.payments_sum_total) ? 'Job Done' : 'FUNDS AVAILABLE'}
-/      - if !connector.account&.external_accounts&.data&.any?
-/        .tag.tag--in-progress Freelancer has no bank account
-/      .payments__total-group
-/        .payments__total-amt #{number_with_precision(job.gpayments_sum_paid, precision: 2)} #{job.currency.upcase}
-/        .payments__payout-label Total Payouts
-/    - if current_user.company_user?
-/      = link_to contract_invoice_company_job_path(job), class: 'btn-primary--active top-margin w-inline-block'
-/        div View receipt
-/    .payments__status You have secured funds for this project. AV Junction will hold these payments on your behalf until each of the milestones listed below are met.
-
 - payments.each do |payment|
     div class="payments"
       .payments__flexbox

@@ -3,7 +3,6 @@ class Admin::ContractsController < Admin::BaseController
   before_action :authorize_job
 
   def show
-    @accepted_quote = @job.accepted_quote
     # Should be deleted
     if @job.freelancer.freelancer_profile.stripe_account_id
       account = Stripe::Account.retrieve(@job.freelancer.freelancer_profile.stripe_account_id)
