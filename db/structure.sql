@@ -431,16 +431,6 @@ ALTER SEQUENCE public.company_reviews_id_seq OWNED BY public.company_reviews.id;
 
 
 --
--- Name: company_users_roles; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE public.company_users_roles (
-    company_user_id bigint,
-    role_id bigint
-);
-
-
---
 -- Name: currency_rates; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -1247,39 +1237,6 @@ ALTER SEQUENCE public.quotes_id_seq OWNED BY public.quotes.id;
 
 
 --
--- Name: roles; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE public.roles (
-    id bigint NOT NULL,
-    name character varying,
-    resource_type character varying,
-    resource_id bigint,
-    created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
-);
-
-
---
--- Name: roles_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE public.roles_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: roles_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE public.roles_id_seq OWNED BY public.roles.id;
-
-
---
 -- Name: schema_migrations; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -1580,13 +1537,6 @@ ALTER TABLE ONLY public.quotes ALTER COLUMN id SET DEFAULT nextval('public.quote
 
 
 --
--- Name: roles id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.roles ALTER COLUMN id SET DEFAULT nextval('public.roles_id_seq'::regclass);
-
-
---
 -- Name: subscriptions id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -1841,14 +1791,6 @@ ALTER TABLE ONLY public.quotes
 
 
 --
--- Name: roles roles_pkey; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.roles
-    ADD CONSTRAINT roles_pkey PRIMARY KEY (id);
-
-
---
 -- Name: schema_migrations schema_migrations_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -1996,27 +1938,6 @@ CREATE INDEX index_company_reviews_on_freelancer_id ON public.company_reviews US
 --
 
 CREATE INDEX index_company_reviews_on_job_id ON public.company_reviews USING btree (job_id);
-
-
---
--- Name: index_company_users_roles_on_company_user_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_company_users_roles_on_company_user_id ON public.company_users_roles USING btree (company_user_id);
-
-
---
--- Name: index_company_users_roles_on_company_user_id_and_role_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_company_users_roles_on_company_user_id_and_role_id ON public.company_users_roles USING btree (company_user_id, role_id);
-
-
---
--- Name: index_company_users_roles_on_role_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_company_users_roles_on_role_id ON public.company_users_roles USING btree (role_id);
 
 
 --
@@ -2234,20 +2155,6 @@ CREATE INDEX index_quotes_on_applicant_id ON public.quotes USING btree (applican
 --
 
 CREATE INDEX index_quotes_on_company_id ON public.quotes USING btree (company_id);
-
-
---
--- Name: index_roles_on_name_and_resource_type_and_resource_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_roles_on_name_and_resource_type_and_resource_id ON public.roles USING btree (name, resource_type, resource_id);
-
-
---
--- Name: index_roles_on_resource_type_and_resource_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_roles_on_resource_type_and_resource_id ON public.roles USING btree (resource_type, resource_id);
 
 
 --
@@ -2584,7 +2491,6 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20180611160634'),
 ('20180619175806'),
 ('20180704204319'),
-('20180706223639'),
-('20180725232153');
+('20180706223639');
 
 

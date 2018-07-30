@@ -33,13 +33,37 @@
 #
 
 class User < ApplicationRecord
-  rolify
-
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable, :confirmable
 
   validates :email, uniqueness: { case_sensitive: false }
   validates :first_name, :last_name, presence: true
+
+  ROLES = [
+    :admin,
+    :owner,
+    :manager,
+  ].freeze
+
+  def add_valid_role(role)
+    if ROLES.include?(role)
+      add_role(role)
+    else
+      errors.add(:roles, :invalid)
+    end
+  end
+
+  def company_admin?
+    is_admin?
+  end
+
+  def company_owner?
+    is_owner?
+  end
+
+  def company_manager?
+    is_manager?
+  end
 
   def full_name
     "#{first_name} #{last_name}"
