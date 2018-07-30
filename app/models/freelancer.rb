@@ -23,6 +23,7 @@
 #  type                   :string
 #  messages_count         :integer          default(0), not null
 #  company_id             :integer
+#  role                   :string
 #
 # Indexes
 #

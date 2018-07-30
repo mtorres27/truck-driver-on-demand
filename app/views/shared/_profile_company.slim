@@ -3,7 +3,7 @@
     .profile__meta__details__1-1
       .profile__meta__image
         - if company.avatar_data.nil?
-          .circle_profile__image.company__image= company.company_user.name_initials
+          .circle_profile__image.company__image= company.owner.name_initials
         - else
           = image_tag(company.avatar_url, size: "75x75")
       .profile__meta__info
@@ -14,11 +14,11 @@
           - else
             = company.name
         h3.heading-h3
-          = company.company_user.full_name
+          = company.owner.full_name
         h4.heading-h4
           | Email:&nbsp
-          a href="mailto:#{company.company_user.email}" target="_blank"
-            = company.company_user.email
+          a href="mailto:#{company.owner.email}" target="_blank"
+            = company.owner.email
         h4.heading-h4
           i
             = "Member since #{company.created_at.strftime('%B %d, %Y')}"
@@ -157,9 +157,9 @@
             = I18n.t("enumerize.manufacturer_tags.#{index}")
 
   - if current_user.present? && current_user.admin?
-    - if company.company_user.confirmed_at.nil? && company.company_user.confirmation_token.present?
+    - if company.owner.confirmed_at.nil? && company.owner.confirmation_token.present?
       .grid-cell.grid-cell--100
         .confirmation_link
           .confirmation_label
           strong<> Confirmation Link:
-          = confirmation_url(company.company_user, confirmation_token: company.company_user.confirmation_token)
+          = confirmation_url(company.owner, confirmation_token: company.owner.confirmation_token)

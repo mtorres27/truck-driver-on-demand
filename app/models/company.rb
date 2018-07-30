@@ -134,7 +134,7 @@ class Company < ApplicationRecord
 
   after_save :add_to_hubspot
   before_create :set_default_step
-  after_save :send_confirmation_email
+  # after_save :send_confirmation_email
 
   delegate :email, to: :owner, allow_nil: true
 
@@ -268,7 +268,13 @@ class Company < ApplicationRecord
   end
 
   def owner
-    company_users.with_role(:owner).first
+    company_users.where(role: 'owner').first
+  end
+
+  def send_confirmation_email
+    return if owner.confirmed? || !registration_completed? || owner.confirmation_sent_at.present?
+    owner.send_confirmation_instructions
+    owner.update_column(:confirmation_sent_at, Time.current)
   end
 
   private
@@ -296,12 +302,6 @@ class Company < ApplicationRecord
 
   def set_default_step
     self.registration_step ||= "personal"
-  end
-
-  def send_confirmation_email
-    return if owner.confirmed? || !registration_completed? || owner.confirmation_sent_at.present?
-    owner.send_confirmation_instructions
-    owner.update_column(:confirmation_sent_at, Time.current)
   end
 
   protected

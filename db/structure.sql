@@ -1310,7 +1310,8 @@ CREATE TABLE public.users (
     last_name character varying,
     type character varying,
     messages_count integer DEFAULT 0 NOT NULL,
-    company_id bigint
+    company_id bigint,
+    role character varying
 );
 
 
@@ -2491,6 +2492,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20180611160634'),
 ('20180619175806'),
 ('20180704204319'),
-('20180706223639');
+('20180706223639'),
+('20180730130124');
 
 
