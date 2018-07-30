@@ -123,6 +123,7 @@ class Job < ApplicationRecord
   validates :freelancer_type, inclusion: { in: freelancer_type.values }, allow_blank: true, if: :creation_completed?
   validates :job_function, :freelancer_type, presence: true, if: :is_published?
   validates :title, :summary, :address, :currency, :country, presence: true, if: -> { step_job_details? || is_published? }
+  validates :freelancer_type, :job_type, :job_market, :job_function, presence: true, if: -> { is_published? }
   validate :scope_or_file, if: :creation_completed?
   validate :validate_number_of_payments, if: :creation_completed?
   validate :validate_payments_total, if: :creation_completed?
@@ -133,7 +134,7 @@ class Job < ApplicationRecord
   serialize :technical_skill_tags
   serialize :manufacturer_tags
 
-  attr_accessor :send_contract
+  attr_accessor :send_contract, :save_draft
 
   audited
 
@@ -243,10 +244,6 @@ class Job < ApplicationRecord
     str += "#{CS.states(country.to_sym)[state_province.to_sym]}, " if state_province.present?
     str += "#{country.upcase}" if country.present?
     str
-  end
-
-  def candidate_details_form_filled?
-    freelancer_type.present? && job_function.present? && freelancer_type.present?
   end
 
   def creation_completed?

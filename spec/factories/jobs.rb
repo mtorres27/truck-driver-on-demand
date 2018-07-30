@@ -90,5 +90,7 @@ FactoryBot.define do
     address "Address"
     country "ca"
     currency "CAD"
+    job_type "system_integration"
+    job_market "house_of_worship"
   end
 end

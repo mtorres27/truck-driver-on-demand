@@ -23,8 +23,8 @@ class Company::JobBuildController < Company::BaseController
     @job.attributes = job_params
     @job.creation_step = next_step
 
-    @job.state = "published" if @job.creation_completed? && @job.candidate_details_form_filled?
-    flash[:notice] = "You need to publish this job in order to make it visible to freelancers" if @job.creation_completed? && !@job.candidate_details_form_filled?
+    @job.state = "published" if @job.creation_completed? && !@job.save_draft
+    flash[:notice] = "You need to publish this job in order to make it visible to freelancers" if @job.creation_completed? && @job.save_draft
 
     render_wizard @job
   end
@@ -73,6 +73,7 @@ class Company::JobBuildController < Company::BaseController
         :state,
         :address,
         :state_province,
+        :save_draft,
         attachments_attributes: [:id, :file, :title, :_destroy],
         technical_skill_tags:  I18n.t("enumerize.technical_skill_tags").keys,
         manufacturer_tags:  I18n.t("enumerize.manufacturer_tags").keys,
