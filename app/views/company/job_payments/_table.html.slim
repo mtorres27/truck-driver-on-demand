@@ -12,7 +12,7 @@
     /       | View Invoice
     /   - else
     /     .payments__payout-label Waived
-- if accepted_quote # && !accepted_quote.paid_by_company
+- if accepted_quote && showCalculations # && !accepted_quote.paid_by_company
   .grid-h
     / .grid-cell.grid-cell--50
     /   div
@@ -26,7 +26,7 @@
     .grid-cell.grid-cell--100
       .payments__flexbox
         .payments__status
-          | Job Total :
+          | Job Amount :
         .payments__status
           strong<
             | #{number_with_precision(accepted_quote.amount.floor , precision: 2) } #{job.currency.upcase}
@@ -84,26 +84,26 @@
 /     .payments__status You have secured funds for this project. AV Junction will hold these payments on your behalf until each of the milestones listed below are met.
 
 - payments.each do |payment|
-    div class="payments"
-      .payments__flexbox
-        .payments__title #{payment.description}
-        .payments__amt
-          | #{payment.total_amount.present? ? number_with_precision(payment.total_amount, precision: 2) : number_with_precision((payment.amount * (1 + job.applicable_sales_tax/100) ), precision: 2)} #{job.currency ? job.currency.upcase : ''}
-          .div
-            - path = !current_user.admin? ? company_job_payment_path(job, payment) : admin_job_payment_path(job, payment)
-            = link_to path, class: 'btn-link'
-              div View Invoice
-      .payments__flexbox
-        - if payment.paid_on.present?
-          .payments__date Paid on #{payment.paid_on}
-        - elsif payment.issued_on.present?
-          .payments__date Requested from #{job.freelancer.first_name_and_initial} on #{payment.issued_on}
-      - if !payment.paid_on.blank? || (!connector.nil? && !connector.account.nil? && connector.account.external_accounts.data.any? && accepted_quote.present?)
-        - path = !current_user.admin? ? company_job_payment_path(job, payment) : admin_job_payment_path(job, payment)
-        = link_to path, class: 'btn-primary--active top-margin w-inline-block'
-          div #{(payment.paid_on.blank? && current_user.company_user? ? "Issue Payout" : "View Invoice")}
-      - elsif connector.nil? || connector.account.nil? || !connector.account.external_accounts.data.any?
-        div Freelancer doesn't provide his bank information yet!
-      - else
-        .btn-primary--disabled.top-margin.w-inline-block
-          div Issue Payout
+  div class="payments"
+    .payments__flexbox
+      .payments__title #{payment.description}
+      .payments__amt
+        | #{payment.total_amount.present? ? number_with_precision(payment.total_amount, precision: 2) : number_with_precision((payment.amount * (1 + job.applicable_sales_tax/100) ), precision: 2)} #{job.currency ? job.currency.upcase : ''}
+        .div
+          - path = !current_user.admin? ? company_job_payment_path(job, payment) : admin_job_payment_path(job, payment)
+          = link_to path, class: 'btn-link'
+            div View Invoice
+    .payments__flexbox
+      - if payment.paid_on.present?
+        .payments__date Paid on #{payment.paid_on}
+      - elsif payment.issued_on.present?
+        .payments__date Requested from #{job.freelancer.first_name_and_initial} on #{payment.issued_on}
+    - if !payment.paid_on.blank? || (!connector.nil? && !connector.account.nil? && connector.account.external_accounts.data.any? && accepted_quote.present?)
+      - path = !current_user.admin? ? company_job_payment_path(job, payment) : admin_job_payment_path(job, payment)
+      = link_to path, class: 'btn-primary--active top-margin w-inline-block'
+        div #{(payment.paid_on.blank? && current_user.company_user? ? "Issue Payout" : "View Invoice")}
+    - elsif connector.nil? || connector.account.nil? || !connector.account.external_accounts.data.any?
+      div Freelancer doesn't provide his bank information yet!
+    - else
+      .btn-primary--disabled.top-margin.w-inline-block
+        div Issue Payout

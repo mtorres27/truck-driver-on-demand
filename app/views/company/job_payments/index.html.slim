@@ -5,4 +5,4 @@
   .action-bar
     h2.heading-h2.heading-h2--action-bar Payments
 
-  = render partial: "table", locals: { job: @job, payments: @payments, accepted_quote: @accepted_quote, connector: @connector }
+  = render partial: "table", locals: { job: @job, payments: @payments, accepted_quote: @accepted_quote, connector: @connector, showCalculations: true }
