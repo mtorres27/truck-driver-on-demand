@@ -42,8 +42,8 @@ class Company::JobPaymentsController < Company::BaseController
     freelancer_fees     = current_company.plan.fee_schema['freelancer_fees'] ? (amount * current_company.plan.fee_schema['freelancer_fees'].to_f / 100) : 0
     freelancer_t_fees   = @job.freelancer.freelancer_profile.country == 'ca' ? freelancer_fees * 1.13 : freelancer_fees
     application_fees    = company_t_fees + freelancer_t_fees
-    transaction_fees    = total * 0.029 + (0.3 * currency_rate)
     total               = amount + tax + company_t_fees
+    transaction_fees    = total * 0.029 + (0.3 * currency_rate)
     begin
       # NEW
       charge = Stripe::Charge.create({

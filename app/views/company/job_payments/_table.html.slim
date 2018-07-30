@@ -45,13 +45,13 @@
             | #{number_with_precision(accepted_quote.amount.floor * (1 + job.applicable_sales_tax/100)  , precision: 2) } #{job.currency.upcase}
       .payments__flexbox
         .payments__status
-          | AV Junction Fees + Tax #{ accepted_quote.plan_fee.positive? ? "($"+accepted_quote.plan_fee.to_i.to_s+" USD)" : ""}:
+          | AV Junction Fees + Tax :
         .payments__status
           strong<
             | #{ job.company_plan_fees.positive? ? number_with_precision(job.company_plan_fees , precision: 2) : "Waived"} #{ job.company_plan_fees.positive? ? job.currency.upcase : ''}
       .payments__flexbox
         .payments__status
-          | Job Total
+          | Job Total :
         .payments__status
           strong<
             | #{number_with_precision((accepted_quote.amount.floor + job.company_plan_fees + (accepted_quote.amount * job.applicable_sales_tax/100)), precision: 2) } #{job.currency.upcase}
