@@ -44,4 +44,6 @@ Rails.application.configure do
   config.read_encrypted_secrets = false
 
   config.active_job.queue_adapter = :inline
+
+  config.avj_fees = Rails.application.secrets.avj_fees
 end
