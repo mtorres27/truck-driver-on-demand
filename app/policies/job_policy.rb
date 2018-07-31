@@ -33,7 +33,7 @@ class JobPolicy < ApplicationPolicy
   end
 
   def destroy?
-    admin?
+    (company_user? && company_owner?) || admin?
   end
 
   def request_quote?

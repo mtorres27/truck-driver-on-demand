@@ -69,7 +69,7 @@ class Company::JobPaymentsController < Company::BaseController
       # Send notice email
       PaymentsMailer.notice_payout_freelancer(current_user, freelancer, @job, @payment).deliver_later
       #
-      if @job.payments.outstanding.empty?
+      if @job.pay_type == "fixed" && @job.payments.outstanding.empty?
         @job.update(state: :completed)
         FreelancerMailer.notice_job_complete_freelancer(current_user, freelancer, @job).deliver_later
         CompanyMailer.notice_job_complete_company(current_user, freelancer, @job).deliver_later

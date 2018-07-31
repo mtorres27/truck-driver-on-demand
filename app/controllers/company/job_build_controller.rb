@@ -23,8 +23,8 @@ class Company::JobBuildController < Company::BaseController
     @job.attributes = job_params
     @job.creation_step = next_step
 
-    @job.state = "published" if @job.creation_completed? && !@job.save_draft
-    flash[:notice] = "You need to publish this job in order to make it visible to freelancers" if @job.creation_completed? && @job.save_draft
+    @job.state = "published" if @job.creation_completed? && @job.save_draft == "false"
+    flash[:notice] = "You need to publish this job in order to make it visible to freelancers" if @job.creation_completed? && @job.save_draft == "true"
 
     render_wizard @job
   end

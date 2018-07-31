@@ -27,7 +27,7 @@ class Freelancer::ContractsController < Freelancer::BaseController
       @job.company.save
     else
       plan_tax = @job.company.canada_country? ? 1 + (Subscription::CANADA_SALES_TAX_PERCENT/100) : 1
-      plan_fees =  fees.to_f / 100 * @accepted_quote.amount.to_f  * plan_tax
+      plan_fees =  fees.to_f / 100 * @job.contract_price.to_f  * plan_tax
     end
     @job.company_plan_fees = plan_fees
     @job.save

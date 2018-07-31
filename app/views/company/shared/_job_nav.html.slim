@@ -3,9 +3,9 @@
     = job_state_label(job)
     .job-header__budget-group
       - if job.applicable_sales_tax.present?
-        .job-header__budget= number_with_precision(job.total_amount, precision: 2)
+        .job-header__budget= number_with_precision(job.total_amount.to_f, precision: 2)
         span<>= job.currency.upcase if job.currency.upcase
-        .job-header__budget-label + #{number_with_precision(job.accepted_quote.amount * (job.applicable_sales_tax/100), precision: 2)} TAX
+        .job-header__budget-label + #{number_with_precision(job.total_amount.to_f * (job.applicable_sales_tax/100), precision: 2)} TAX
       - else
         .job-header__budget= number_with_precision(job.budget, precision: 0)
         span<>= job.currency.upcase if job.currency

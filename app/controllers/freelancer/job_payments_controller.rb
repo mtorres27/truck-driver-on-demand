@@ -31,7 +31,6 @@ class Freelancer::JobPaymentsController < Freelancer::BaseController
   end
 
   def create_payment
-    binding.pry
     @payment = @job.payments.build(payment_params)
     @payment.issued_on = Date.today
     @payment.tax_amount = @payment.amount * (@job.applicable_sales_tax/100)

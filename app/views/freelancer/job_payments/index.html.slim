@@ -3,19 +3,17 @@
 - content_for :secondary do
   .action-bar
     h2.heading-h2.heading-h2--action-bar Payments
-  - if @payments&.count == 0
-    .payments
-      .payments__flexbox
+  .payments
+    .payments__flexbox
+      - if @payments.count == 0
         .tag.tag--in-progress No payments requested
-        - if !@connector.account.external_accounts.data.any?
-          .tag.tag--in-progress Freelancer has no bank account
-          .btn-primary--disabled.top-margin.w-inline-block
-            div Request Payout
-        - else
-          .btn-primary--active.top-margin.w-inline-block data-toggle="modal" data-target="#new_payment"
-            div Request Payout
+      - if !@connector.account.external_accounts.data.any?
+        .tag.tag--in-progress Freelancer has no bank account
+      - elsif @job.pay_type != "fixed"
+        .btn-primary--active.top-margin.w-inline-block data-toggle="modal" data-target="#new_payment"
+          div Create payment request
 
-      .payments__status You can request a payment from your employer anytime a milestone is met.
+    .payments__status You can request a payment from your employer anytime a milestone is met.
   - @payments.each do |payment|
     div class="payments"
       .payments__flexbox
@@ -25,8 +23,11 @@
         .payments__date
           - if payment.issued_on.present? || payment.paid_on.present?
             | #{payment.paid_on ? "Paid": "Requested"} #{payment.issued_on ? payment.issued_on : payment.paid_on}
-        = link_to freelancer_job_payment_path(id: payment.id, job_id: @job.id), class: 'btn-link'
-          | View Invoice
+        - if payment.paid_on.present?
+          = link_to freelancer_job_payment_path(id: payment.id, job_id: @job.id), class: 'btn-link'
+            | View Invoice
+        - else
+          .tag.tag--in-progress Not paid
       .payments__status
         - if !@connector.account.external_accounts.data.any?
           div

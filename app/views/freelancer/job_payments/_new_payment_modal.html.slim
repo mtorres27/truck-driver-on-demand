@@ -15,7 +15,7 @@
                 = f.label "Number of hours", required: true
                 input.form-control.required type="number" name="time_unit_amount" id="js--time_unit_amount" placeholder="Enter the number of hours"
             .grid-cell.grid-cell--100
-              = f.input :amount, disabled: true, input_html: { class: "js--payment_amount" }
+              = f.input :amount, readonly: true, input_html: { class: "js--payment_amount" }
             .grid-cell.grid-cell--100
               = f.input :description, placeholder: "Enter the payment description"
             .grid-cell.grid-cell--100

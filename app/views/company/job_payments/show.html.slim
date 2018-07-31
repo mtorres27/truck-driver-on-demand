@@ -10,7 +10,6 @@
         a.icon href=print_company_job_payment_path(@job, @payment, format: :pdf) title="Download"
           span.glyphicon.glyphicon-download aria-hidden=true
         - if @payment.paid_on.blank?
-          / = link_to "Release Payout", mark_as_paid_company_job_payment_path(@job, @payment), data: { confirm: "Mark this payment as being paid?" }, class: "btn-primary--active"
           = render partial: 'company/shared/pay_invoice_stripe_button', locals: { job: @job, payment: @payment, total: @total }
         - else
           .tag.tag--success Paid

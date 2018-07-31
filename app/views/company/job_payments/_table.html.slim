@@ -13,20 +13,20 @@
           | Job Amount :
         .payments__status
           strong<
-            | #{number_with_precision(job.total_amount.floor , precision: 2) } #{job.currency.upcase}
+            | #{number_with_precision(job.total_amount.to_f.floor , precision: 2) } #{job.currency.upcase}
       - if job.applicable_sales_tax.present?
         .payments__flexbox
           .payments__status
             | Job Sales Tax :
           .payments__status
             strong<
-              | #{number_with_precision((job.total_amount * job.applicable_sales_tax/100), precision: 2) } #{job.currency.upcase}
+              | #{number_with_precision((job.total_amount.to_f * job.applicable_sales_tax/100), precision: 2) } #{job.currency.upcase}
       .payments__flexbox
         .payments__status
           | Total to freelancer :
         .payments__status
           strong<
-            | #{number_with_precision(job.total_amount.floor.floor * (1 + job.applicable_sales_tax/100)  , precision: 2) } #{job.currency.upcase}
+            | #{number_with_precision(job.total_amount.to_f.floor * (1 + job.applicable_sales_tax/100)  , precision: 2) } #{job.currency.upcase}
       .payments__flexbox
         .payments__status
           | AV Junction Fees + Tax :
@@ -38,7 +38,7 @@
           | Job Total :
         .payments__status
           strong<
-            | #{number_with_precision((job.total_amount.floor + job.company_plan_fees + (job.total_amount * job.applicable_sales_tax/100)), precision: 2) } #{job.currency.upcase}
+            | #{number_with_precision((job.total_amount.to_f.floor + job.company_plan_fees + (job.total_amount.to_f * job.applicable_sales_tax/100)), precision: 2) } #{job.currency.upcase}
 
 - payments.each do |payment|
   div class="payments"
@@ -55,7 +55,7 @@
         .payments__date Paid on #{payment.paid_on}
       - elsif payment.issued_on.present?
         .payments__date Requested from #{job.freelancer.first_name_and_initial} on #{payment.issued_on}
-    - if !payment.paid_on.blank? || (!connector.nil? && !connector.account.nil? && connector.account.external_accounts.data.any? && accepted_quote.present?)
+    - if !payment.paid_on.blank? || (!connector.nil? && !connector.account.nil? && connector.account.external_accounts.data.any?)
       - path = !current_user.admin? ? company_job_payment_path(job, payment) : admin_job_payment_path(job, payment)
       = link_to path, class: 'btn-primary--active top-margin w-inline-block'
         div #{(payment.paid_on.blank? && current_user.company_user? ? "Issue Payout" : "View Invoice")}
