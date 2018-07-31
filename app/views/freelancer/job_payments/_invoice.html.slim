@@ -1,29 +1,39 @@
 .grid-cell.grid-cell--33
-  h4.heading-h4= "From: #{@job.company.name}"
+  h4.heading-h4= "From: #{@job.freelancer&.first_name_and_initial}"
+  div= @job.freelancer&.freelancer_profile.formatted_address
+  div= @job.freelancer&.freelancer_profile.sales_tax_number
+.grid-cell.grid-cell--33
+  h4.heading-h4= "To: #{@job.company.name}"
   div= @job.company.address
   div #{@job.company.city}, #{@job.company.state}
   div= @job.company.postal_code
-  div BN Tax No. #{@job.company.sales_tax_number}
-.grid-cell.grid-cell--33
-  h4.heading-h4= "To: #{@job.freelancer&.first_name_and_initial}"
-  div= @job.freelancer&.freelancer_profile.formatted_address
-  div= @job.freelancer&.freelancer_profile.sales_tax_number
+  - if @job.company.sales_tax_number.present?
+    div BN Tax No. #{@job.company.sales_tax_number}
 .grid-cell.grid-cell--33
   h4.heading-h4= "Inv #: #{@payment.id}"
   div= "Date: #{@payment.paid_on.present? ? @payment.paid_on : "N/A"}"
 
+.grid-cell.grid-cell--33
+  h4.heading-h4.no-margin-bottom Fees From Company
 .grid-cell.grid-cell--100
   .invoice__table
     .invoice__table-row.invoice__table-row--header
       .invoice__table-text Description
       .invoice__table-text.invoice__table-text--right Amount
     .invoice__table-row
-      .invoice__table-text= @job.title + ": " + @payment.description
+      .invoice__table-text= @job.title + " - " + @payment.description
       .invoice__table-text.invoice__table-text--right= (number_with_precision(@amount, precision: 2)).to_s + " " + @job.currency.upcase
     - if @tax > 0
       .invoice__table-row
         .invoice__table-text Sales Tax @ #{@job.applicable_sales_tax}%
         .invoice__table-text.invoice__table-text--right= (number_with_precision(@tax, precision: 2)).to_s + " " + @job.currency.upcase
+    .invoice__table-row.invoice__table-row--total
+      .invoice__table-text Subtotal Paid From Company
+      .invoice__table-text.invoice__table-text--right= number_with_precision((@amount + @tax), precision: 2).to_s + " " + @job.currency.upcase
+.grid-cell.grid-cell--33
+  h4.heading-h4.no-margin-bottom Transaction Fees
+.grid-cell.grid-cell--100
+  .invoice__table
     .invoice__table-row
       .invoice__table-text AV Junction Fees (6%) + Tax
       .invoice__table-text.invoice__table-text--right - #{(number_with_precision(@avj_t_fees, precision: 2)).to_s + " " + @job.currency.upcase}

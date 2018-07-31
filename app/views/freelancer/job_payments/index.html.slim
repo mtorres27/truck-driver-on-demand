@@ -17,7 +17,9 @@
   - @payments.each do |payment|
     div class="payments"
       .payments__flexbox
-        .payments__title #{payment.description}
+        .payments__flexbox
+          .payments__title #{payment.description} - Transaction ##{payment.id}
+          .tag class="#{payment.paid_on.present? ? "tag--success" : "tag--warning"}" #{payment.paid_on.present? ? "Paid" : "Unpaid"}
         .payments__amt #{payment.total_amount.present? ? number_with_precision(payment.total_amount, precision: 2) : number_with_precision((payment.amount* (1 + @job.applicable_sales_tax/100)), precision: 2)} #{@job.currency ? @job.currency.upcase : ''}
       .payments__flexbox
         .payments__date
@@ -26,8 +28,6 @@
         - if payment.paid_on.present?
           = link_to freelancer_job_payment_path(id: payment.id, job_id: @job.id), class: 'btn-link'
             | View Invoice
-        - else
-          .tag.tag--in-progress Not paid
       .payments__status
         - if !@connector.account.external_accounts.data.any?
           div

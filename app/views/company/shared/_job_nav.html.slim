@@ -19,9 +19,9 @@
   h2.heading-h2 #{job.title}
   - if job.freelancer
     h4.heading-h4
-      | AWARDED TO
+      | Awarded to
       - path = current_user.admin? ? admin_freelancer_path(job.freelancer) : company_freelancer_path(id: job.freelancer.id)
-      a<> href=path #{job.freelancer.full_name}
+      a<> href=path #{job.freelancer.first_name_and_initial}
 
 
 
