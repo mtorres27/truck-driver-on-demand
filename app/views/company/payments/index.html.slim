@@ -25,7 +25,7 @@
                     = "Paid #{number_with_precision(job.gpayments_sum_paid, precision: 2)} #{job.currency ? job.currency.upcase : ''} of #{number_with_precision(job.gpayments_sum_total, precision: 2)} #{job.currency ? job.currency.upcase : ''}"
                 div( class="collapse#{idx == 0 ? ' in' : ''}" id="job-group-#{job.id}" aria-labelledby="job-header-#{job.id}" )
                   - connector = StripeAccount.new(job.freelancer)
-                  .job-table-wrapper= render partial: "company/job_payments/table", locals: { job: job, payments: job.payments, connector: connector }
+                  .job-table-wrapper= render partial: "company/job_payments/table", locals: { job: job, payments: job.payments, connector: connector, showCalculations: false }
                 br
 
     = paginate @projects

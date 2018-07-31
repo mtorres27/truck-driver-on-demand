@@ -7,6 +7,9 @@ class Freelancer::ContractsController < Freelancer::BaseController
   def accept
     @job = Job.find(params[:id])
     authorize @job
+
+    # render :show if @job.state == "contracted"
+
     @job.state = "contracted"
     @job.contracted_at = Time.zone.today
     @job.save
@@ -14,26 +17,19 @@ class Freelancer::ContractsController < Freelancer::BaseController
     currency = CurrencyRate.where('currency = ?', @job.currency).first
     currency_rate = currency.nil? ?  1 : currency.rate
 
-    # Get Amount in USD
-    job_amout = @job.contract_price / currency_rate
 
-    plan = @job.company.plan
-      if job_amout > 2000
-        fees = plan.fee_schema['above_2000']
-      else
-        fees = plan.fee_schema['below_2000']
-      end
+    fees = @job.company.plan.fee_schema['company_fees']
 
     if @job.company.waived_jobs.positive?
+      logger.debug "Waived job"
       plan_fees = 0
       @job.company.waived_jobs -= 1
       @job.company.save
     else
       plan_tax = @job.company.canada_country? ? 1 + (Subscription::CANADA_SALES_TAX_PERCENT/100) : 1
-      plan_fees = ( fees.to_i * currency_rate ) * plan_tax
+      plan_fees =  fees.to_f / 100 * @accepted_quote.amount.to_f  * plan_tax
     end
     @job.company_plan_fees = plan_fees
-    @job.plan_fee = fees
     @job.save
 
     # Send notice email

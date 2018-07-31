@@ -11,4 +11,4 @@ html
   body class=(params[:controller]&.gsub("/", "-") || "")
     .container
       .content_card
-        = render "invoice"
+        = render "invoice", locals: { job: @job, payment: @payment, amount: @amount, tax: @tax, avj_t_fees: @avj_t_fees, total: @total }

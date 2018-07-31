@@ -66,7 +66,7 @@ $(document).on("turbolinks:load", function () {
         $("#company-freelancer-matches__form").submit()
     })
 
-    if ($('.js--country-select').val() != "") {
+    if ($('.js--country-select').val() != "" && $('.js--country-select').val() != undefined ) {
         get_currencies($('.js--country-select').val())
     }
     $('.js--country-select').on('change', function () {

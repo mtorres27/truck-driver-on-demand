@@ -3,7 +3,6 @@
 - content_for :secondary do
   .action-bar
     h2.heading-h2.heading-h2--action-bar Payments
-
   - if @payments&.count == 0
     .payments
       .payments__flexbox
@@ -21,25 +20,24 @@
     div class="payments"
       .payments__flexbox
         .payments__title #{payment.description}
-        .payments__amt #{payment.total_amount.present? ? number_with_precision(payment.total_amount, precision: 2) : number_with_precision(payment.amount, precision: 2)} #{@job.currency ? @job.currency.upcase : ''}
+        .payments__amt #{payment.total_amount.present? ? number_with_precision(payment.total_amount, precision: 2) : number_with_precision((payment.amount* (1 + @job.applicable_sales_tax/100)), precision: 2)} #{@job.currency ? @job.currency.upcase : ''}
       .payments__flexbox
         .payments__date
           - if payment.issued_on.present? || payment.paid_on.present?
             | #{payment.paid_on ? "Paid": "Requested"} #{payment.issued_on ? payment.issued_on : payment.paid_on}
-        / a.btn-link href=freelancer_job_payment_path
-        - if payment.paid_on.blank?
-        -else
-          = link_to freelancer_job_payment_path(id: payment.id, job_id: @job.id), class: 'btn-link'
-            | View Invoice
-      - if !@connector.account.external_accounts.data.any? || !payment.paid_on || (!payment.paid_on.present? && (payment.issued_on.present? && payment.issued_on >= 2.day.ago))
-        .btn-primary--disabled.top-margin.w-inline-block
-          div request Payout
-      - elsif !payment.paid_on.present?
-        = link_to freelancer_payout_request_path(id: payment.id, job_id: @job.id), class: 'btn-primary--active top-margin w-inline-block'
-          div request Payout
+        = link_to freelancer_job_payment_path(id: payment.id, job_id: @job.id), class: 'btn-link'
+          | View Invoice
       .payments__status
-        - if payment.paid_on.present?
+        - if !@connector.account.external_accounts.data.any?
+          div
+            | Please provide your bank information
+            =<> link_to freelancer_profile_stripe_bank_account_path
+              | here
+        - elsif payment.paid_on.present?
           | You received a payout for this invoice on #{payment.paid_on}
         - elsif payment.issued_on.present? && payment.issued_on >= 2.day.ago
           | You last requested a payout for this invoice on #{payment.issued_on}. Allow 2 business days for your client to release the funds to you. You may re-request a payout after 2 business days.
+        - elsif !payment.paid_on.present? && @connector.account.external_accounts.data.any?
+          = link_to freelancer_payout_request_path(id: payment.id, job_id: @job.id), class: 'btn-primary--active top-margin w-inline-block'
+            | request Payout
 = render "new_payment_modal"

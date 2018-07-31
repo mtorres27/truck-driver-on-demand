@@ -42,7 +42,8 @@ class StripeAccount < Struct.new( :freelancer )
           type: type,
         },
         payout_schedule: {
-          interval: 'manual'
+          delay_days: 0,
+          interval: 'daily'
         }
       )
     rescue StandardError => ex

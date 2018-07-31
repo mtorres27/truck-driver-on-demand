@@ -5,26 +5,62 @@
       .payments__amt
         = job.company_plan_fees.present? ? number_with_precision(job.company_plan_fees , precision: 2) : ''
         | #{job.currency.upcase}
-    .payments__flexbox
-      - if job.company_plan_fees.positive?
-        =link_to company_job_avj_invoice_path(id: job.id), class: 'btn-link'
-          | View Invoice
-      - else
-        .payments__payout-label Waived
+- if showCalculations
+  .grid-h
+    .grid-cell.grid-cell--100
+      .payments__flexbox
+        .payments__status
+          | Job Amount :
+        .payments__status
+          strong<
+            | #{number_with_precision(job.total_amount.floor , precision: 2) } #{job.currency.upcase}
+      - if job.applicable_sales_tax.present?
+        .payments__flexbox
+          .payments__status
+            | Job Sales Tax :
+          .payments__status
+            strong<
+              | #{number_with_precision((job.total_amount * job.applicable_sales_tax/100), precision: 2) } #{job.currency.upcase}
+      .payments__flexbox
+        .payments__status
+          | Total to freelancer :
+        .payments__status
+          strong<
+            | #{number_with_precision(job.total_amount.floor.floor * (1 + job.applicable_sales_tax/100)  , precision: 2) } #{job.currency.upcase}
+      .payments__flexbox
+        .payments__status
+          | AV Junction Fees + Tax :
+        .payments__status
+          strong<
+            | #{ job.company_plan_fees.positive? ? number_with_precision(job.company_plan_fees , precision: 2) : "Waived"} #{ job.company_plan_fees.positive? ? job.currency.upcase : ''}
+      .payments__flexbox
+        .payments__status
+          | Job Total :
+        .payments__status
+          strong<
+            | #{number_with_precision((job.total_amount.floor + job.company_plan_fees + (job.total_amount * job.applicable_sales_tax/100)), precision: 2) } #{job.currency.upcase}
+
 - payments.each do |payment|
-    div class="payments"
-      .payments__flexbox
-        .payments__title #{payment.description}
-        .payments__amt #{payment.total_amount.present? ? number_with_precision(payment.total_amount, precision: 2) : number_with_precision(payment.amount, precision: 2)} #{job.currency ? job.currency.upcase : ''}
-      .payments__flexbox
-        - if payment.paid_on.present?
-          .payments__date Paid on #{payment.paid_on}
-        - elsif payment.issued_on.present?
-          .payments__date Requested from #{job.freelancer.first_name_and_initial} on #{payment.issued_on}
-      - if !payment.paid_on.blank? || (!connector.nil? && !connector.account.nil? && connector.account.external_accounts.data.any?)
-        - path = !current_user.admin? ? company_job_payment_path(job, payment) : admin_job_payment_path(job, payment)
-        = link_to path, class: 'btn-primary--active top-margin w-inline-block'
-          div #{(payment.paid_on.blank? && current_user.company_user? ? "Issue Payout" : "View Invoice")}
-      - else
-        .btn-primary--disabled.top-margin.w-inline-block
-          div Issue Payout
+  div class="payments"
+    .payments__flexbox
+      .payments__title #{payment.description}
+      .payments__amt
+        | #{payment.total_amount.present? ? number_with_precision(payment.total_amount, precision: 2) : number_with_precision((payment.amount * (1 + job.applicable_sales_tax/100) ), precision: 2)} #{job.currency ? job.currency.upcase : ''}
+        .div
+          - path = !current_user.admin? ? company_job_payment_path(job, payment) : admin_job_payment_path(job, payment)
+          = link_to path, class: 'btn-link'
+            div View Invoice
+    .payments__flexbox
+      - if payment.paid_on.present?
+        .payments__date Paid on #{payment.paid_on}
+      - elsif payment.issued_on.present?
+        .payments__date Requested from #{job.freelancer.first_name_and_initial} on #{payment.issued_on}
+    - if !payment.paid_on.blank? || (!connector.nil? && !connector.account.nil? && connector.account.external_accounts.data.any? && accepted_quote.present?)
+      - path = !current_user.admin? ? company_job_payment_path(job, payment) : admin_job_payment_path(job, payment)
+      = link_to path, class: 'btn-primary--active top-margin w-inline-block'
+        div #{(payment.paid_on.blank? && current_user.company_user? ? "Issue Payout" : "View Invoice")}
+    - elsif connector.nil? || connector.account.nil? || !connector.account.external_accounts.data.any?
+      div Freelancer doesn't provide his bank information yet!
+    - else
+      .btn-primary--disabled.top-margin.w-inline-block
+        div Issue Payout

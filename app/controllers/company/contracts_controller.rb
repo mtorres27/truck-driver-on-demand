@@ -24,7 +24,7 @@ class Company::ContractsController < Company::BaseController
       end
       amount = (contract_price * (1 + (@job.applicable_sales_tax / 100)))
       # Stripe fees equals to 2.9% of the total amount plus 30 cents USD
-      stripe_fees = amount * 0.029 + (0.3 * currency_rate)
+      stripe_fees = amount * 0.029 + ( 0.3 * currency_rate )
       plan_fees = @job.company_plan_fees
       platform_fees = (((contract_price * avj_fees) - avj_credit_used) - stripe_fees + plan_fees)
       if platform_fees < 0
@@ -91,9 +91,9 @@ class Company::ContractsController < Company::BaseController
   def show
     # Should be deleted
     if @job.freelancer.freelancer_profile&.stripe_account_id
-      account = Stripe::Account.retrieve(@job.freelancer.freelancer_profile&.stripe_account_id)
-      account.payout_schedule.interval = 'manual'
-      account.save
+      # account = Stripe::Account.retrieve(@job.freelancer.freelancer_profile&.stripe_account_id)
+      # account.payout_schedule.interval = 'manual'
+      # account.save
     else
       flash[:error] = "The freelancer identity is not verified yet!"
     end
