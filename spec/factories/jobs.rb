@@ -59,7 +59,6 @@
 #  total_amount                           :decimal(10, 2)
 #  tax_amount                             :decimal(10, 2)
 #  stripe_fees                            :decimal(10, 2)
-#  plan_fees                              :decimal(10, 2)
 #  amount_subtotal                        :decimal(10, 2)
 #
 # Indexes
