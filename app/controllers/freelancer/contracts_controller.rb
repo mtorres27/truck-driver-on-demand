@@ -32,9 +32,14 @@ class Freelancer::ContractsController < Freelancer::BaseController
     @job.company_plan_fees = plan_fees
     @job.save
 
-    # Send notice email
-    PaymentsMailer.request_funds_company(@job.company, current_user, @job).deliver_later
-    PaymentsMailer.wait_for_funds_freelancer(@job.company, current_user, @job).deliver_later
+    # Send notice emails
+    if @job.pay_type == "fixed"
+      PaymentsMailer.request_funds_company(@job.company, current_user, @job).deliver_later
+      PaymentsMailer.wait_for_funds_freelancer(@job.company, current_user, @job).deliver_later
+    else
+      FreelancerMailer.notice_work_order_accepted(current_user, @job.company, @job).deliver_later
+      CompanyMailer.notice_work_order_accepted(@job.company, current_user, @job).deliver_later
+    end
     render :show
   end
 end

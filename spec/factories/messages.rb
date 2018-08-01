@@ -15,7 +15,6 @@
 #  send_contract   :boolean          default(FALSE)
 #  unread          :boolean          default(TRUE)
 #  has_quote       :boolean          default(FALSE)
-#  quote_id        :integer
 #  lat             :decimal(9, 6)
 #  lng             :decimal(9, 6)
 #

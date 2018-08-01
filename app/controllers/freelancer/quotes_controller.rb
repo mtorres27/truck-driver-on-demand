@@ -14,6 +14,7 @@ class Freelancer::QuotesController < Freelancer::BaseController
     @message.authorable = current_user
     
     if @message.save
+      CompanyMailer.notice_message_received(@job.company, @applicant.freelancer, @job, @message).deliver_later
       redirect_to freelancer_job_application_index_path(@job, @applicant)
     else
       set_collections

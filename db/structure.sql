@@ -1018,7 +1018,6 @@ CREATE TABLE messages (
     send_contract boolean DEFAULT false,
     unread boolean DEFAULT true,
     has_quote boolean DEFAULT false,
-    quote_id integer,
     lat numeric(9,6),
     lng numeric(9,6)
 );
@@ -2415,6 +2414,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20180725190313'),
 ('20180725222036'),
 ('20180726215803'),
-('20180728165546');
+('20180728165546'),
+('20180801180627');
 
 
