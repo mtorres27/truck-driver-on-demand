@@ -1017,7 +1017,6 @@ CREATE TABLE messages (
     checkin boolean DEFAULT false,
     send_contract boolean DEFAULT false,
     unread boolean DEFAULT true,
-    has_quote boolean DEFAULT false,
     lat numeric(9,6),
     lng numeric(9,6)
 );

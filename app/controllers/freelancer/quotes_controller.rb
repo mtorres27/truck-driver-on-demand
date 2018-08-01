@@ -10,7 +10,6 @@ class Freelancer::QuotesController < Freelancer::BaseController
     set_collections
 
     @message = @applicant.messages.new(message_params)
-    @message.has_quote = true
     @message.authorable = current_user
     
     if @message.save
