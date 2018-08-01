@@ -62,7 +62,9 @@ class Freelancer::JobPaymentsController < Freelancer::BaseController
     params.require(:payment).permit(
       :company_id,
       :description,
-      :amount
+      :amount,
+      :time_unit_amount,
+      :overtime_hours_amount
     )
   end
 end

@@ -17,28 +17,32 @@
         p
           - if @job.pay_type == "fixed"
             = "#{number_with_precision(@job.contract_price, precision: 2)} #{@job.currency&.upcase}"
-          - elsif @job.pay_type == "hourly"
+          - elsif @job.variable_pay_type == "hourly"
             = "#{number_with_precision(@job.contract_price, precision: 2)} #{@job.currency&.upcase}/hour"
-          - elsif @job.pay_type == "daily"
+          - elsif @job.variable_pay_type == "daily"
             = "#{number_with_precision(@job.contract_price, precision: 2)} #{@job.currency&.upcase}/day"
           - else
             | Not Specified
+
+      - if @job.overtime_rate.present?
+        .grid-cell.grid-cell--33
+          h3.heading-h3 Overtime Rate
+          p
+            = "#{number_with_precision(@job.overtime_rate, precision: 2)} #{@job.currency&.upcase}/hour"
 
       .grid-cell.grid-cell--33
         h3.heading-h3
           | Applicable Sales Tax
         p #{@job.applicable_sales_tax ? @job.applicable_sales_tax : 0}%
 
-      
-      
       .grid-cell.grid-cell--expand
         h3.heading-h3
-          | Total price
+          | Total price (Includes taxes)
         - if @job.pay_type == "fixed"
           - pay_type_sufix = ""
-        - elsif @job.pay_type == "hourly"
+        - elsif @job.variable_pay_type == "hourly"
           - pay_type_sufix = "/hour"
-        - elsif @job.pay_type == "daily"
+        - elsif @job.variable_pay_type == "daily"
           - pay_type_sufix = "/day"
         p #{number_with_precision((@job.contract_price + (@job.contract_price * (@job.applicable_sales_tax/100))) , precision: 2) } #{@job.currency.upcase} #{pay_type_sufix}
 

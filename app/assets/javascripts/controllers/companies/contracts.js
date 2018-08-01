@@ -1,31 +1,49 @@
 $(document).on("turbolinks:load", function () {
+    
     if ($(".js--contract-payment-type").val() == "fixed") {
+        $(".js--contract-variable-payment-type-div").hide();
+        $(".js--contract-overtime-rate-div").hide();
         $(".js--contract-price-label").html("<abbr title='required'>*</abbr>Contract price");
         $("#payments").show();
     }
-    else if ($(".js--contract-payment-type").val() == "hourly") {
-        $(".js--contract-price-label").html("<abbr title='required'>*</abbr>Hourly rate");
+    else if ($(".js--contract-payment-type").val() == "variable") {
+        $(".js--contract-variable-payment-type-div").show();
+        $(".js--contract-overtime-rate-div").show();
         $("#payments").hide();
     }
-    else if ($(".js--contract-payment-type").val() == "daily") {
+    
+    if ($(".js--contract-variable-payment-type").val() == "daily") {
         $(".js--contract-price-label").html("<abbr title='required'>*</abbr>Daily rate");
+        $("#payments").hide();
+    }
+    else if ($(".js--contract-variable-payment-type-div").val() == "hourly") {
+        $(".js--contract-price-label").html("<abbr title='required'>*</abbr>Hourly rate");
         $("#payments").hide();
     }
 
     $(".js--contract-payment-type").on("change", function() {
         if ($(this).val() == "fixed") {
+            $(".js--contract-variable-payment-type").val("");
+            $(".js--contract-variable-payment-type-div").hide();
+            $(".js--contract-overtime-rate").val("");
+            $(".js--contract-overtime-rate-div").hide();
             $(".js--contract-price-label").html("<abbr title='required'>*</abbr>Contract price");
             $("#payments").show();
         }
-        else if ($(this).val() == "hourly") {
-            $(".js--contract-price-label").html("<abbr title='required'>*</abbr>Hourly rate");
-            $("#payments").hide();
+        else if ($(this).val() == "variable") {
+            $(".js--contract-variable-payment-type-div").show();
+            $(".js--contract-overtime-rate-div").show();
             $(".js--payment-destroy-button").click();
+            $("#payments").hide();
+        }
+    });
+
+    $(".js--contract-variable-payment-type").on("change", function() {
+        if ($(this).val() == "hourly") {
+            $(".js--contract-price-label").html("<abbr title='required'>*</abbr>Hourly rate");
         }
         else if ($(this).val() == "daily") {
             $(".js--contract-price-label").html("<abbr title='required'>*</abbr>Daily rate");
-            $("#payments").hide();
-            $(".js--payment-destroy-button").click();
         }
     });
 });

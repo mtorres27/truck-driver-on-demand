@@ -25,6 +25,8 @@
 #  freelancer_fees               :decimal(10, 2)   default(0.0)
 #  total_freelancer_fees         :decimal(10, 2)   default(0.0)
 #  transaction_fees              :decimal(10, 2)   default(0.0)
+#  time_unit_amount              :integer
+#  overtime_hours_amount         :integer
 #
 # Indexes
 #

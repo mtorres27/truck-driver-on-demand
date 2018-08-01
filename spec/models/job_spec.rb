@@ -60,6 +60,8 @@
 #  tax_amount                             :decimal(10, 2)
 #  stripe_fees                            :decimal(10, 2)
 #  amount_subtotal                        :decimal(10, 2)
+#  variable_pay_type                      :string
+#  overtime_rate                          :decimal(10, 2)
 #
 # Indexes
 #

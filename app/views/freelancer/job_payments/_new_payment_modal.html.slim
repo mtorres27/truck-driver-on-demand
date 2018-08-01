@@ -8,12 +8,16 @@
           .grid-h
             .grid-cell.grid-cell--100
               input type="hidden" id="js--pay_rate" value="#{@job.contract_price}"
-              - if @job.pay_type == "dayly"
+              input type="hidden" id="js--overtime_pay_rate" value="#{@job.overtime_rate}"
+              - if @job.variable_pay_type == "daily"
                 = f.label "Number of days", required: true
-                input.form-control.required type="number" name="time_unit_amount" id="js--time_unit_amount" placeholder="Enter the number of days"
-              - elsif @job.pay_type == "hourly"
+                = f.input :time_unit_amount, label: false, placeholder: "Enter the number of days", input_html: { class: "js--time_unit_amount" }
+              - elsif @job.variable_pay_type == "hourly"
                 = f.label "Number of hours", required: true
-                input.form-control.required type="number" name="time_unit_amount" id="js--time_unit_amount" placeholder="Enter the number of hours"
+                = f.input :time_unit_amount, label: false, placeholder: "Enter the number of hours", input_html: { class: "js--time_unit_amount" }
+            .grid-cell.grid-cell--100
+              = f.label "Number of overtime hours"
+              = f.input :overtime_hours_amount, label: false, placeholder: "Enter the number of overtime hours (if any)", input_html: { class: "js--overtime_hours_amount" }
             .grid-cell.grid-cell--100
               = f.input :amount, readonly: true, input_html: { class: "js--payment_amount" }
             .grid-cell.grid-cell--100

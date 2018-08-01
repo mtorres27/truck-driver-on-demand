@@ -19,8 +19,16 @@
     .invoice__table-row.invoice__table-row--header
       .invoice__table-text Description
       .invoice__table-text.invoice__table-text--right Amount
+    - if @payment.time_unit_amount.present?
+      .invoice__table-row
+        .invoice__table-text= "#{@payment.time_unit_amount} #{@job.variable_pay_type == 'daily' ? 'days' : 'hours'}"
+        .invoice__table-text.invoice__table-text--right= number_with_precision(@payment.time_unit_amount * @job.contract_price , precision: 2).to_s + " " + @job.currency.upcase
+    - if @payment.overtime_hours_amount.present?
+      .invoice__table-row
+        .invoice__table-text= "#{@payment.overtime_hours_amount} overtime hours"
+        .invoice__table-text.invoice__table-text--right= number_with_precision(@payment.overtime_hours_amount * @job.overtime_rate, precision: 2).to_s + " " + @job.currency.upcase
     .invoice__table-row
-      .invoice__table-text= @job.title + ": " +@payment.description
+      .invoice__table-text= @job.title + ": " +@payment.description + " total"
       .invoice__table-text.invoice__table-text--right= number_with_precision(@amount, precision: 2).to_s + " " + @job.currency.upcase
     - if @tax > 0
       .invoice__table-row

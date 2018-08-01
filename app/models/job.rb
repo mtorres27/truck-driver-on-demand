@@ -60,6 +60,8 @@
 #  tax_amount                             :decimal(10, 2)
 #  stripe_fees                            :decimal(10, 2)
 #  amount_subtotal                        :decimal(10, 2)
+#  variable_pay_type                      :string
+#  overtime_rate                          :decimal(10, 2)
 #
 # Indexes
 #
@@ -108,7 +110,9 @@ class Job < ApplicationRecord
     :any_time
   ]
 
-  enumerize :pay_type, in: [ :fixed, :hourly, :daily ]
+  enumerize :pay_type, in: [ :fixed, :variable ]
+
+  enumerize :variable_pay_type, in: [ :hourly, :daily ]
 
   enumerize :freelancer_type, in: [ :independent, :service_provider ]
 

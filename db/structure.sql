@@ -977,7 +977,9 @@ CREATE TABLE jobs (
     total_amount numeric(10,2),
     tax_amount numeric(10,2),
     stripe_fees numeric(10,2),
-    amount_subtotal numeric(10,2)
+    amount_subtotal numeric(10,2),
+    variable_pay_type character varying,
+    overtime_rate numeric(10,2)
 );
 
 
@@ -1101,7 +1103,9 @@ CREATE TABLE payments (
     total_company_fees numeric(10,2) DEFAULT 0,
     freelancer_fees numeric(10,2) DEFAULT 0,
     total_freelancer_fees numeric(10,2) DEFAULT 0,
-    transaction_fees numeric(10,2) DEFAULT 0
+    transaction_fees numeric(10,2) DEFAULT 0,
+    time_unit_amount integer,
+    overtime_hours_amount integer
 );
 
 
@@ -2414,6 +2418,8 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20180725222036'),
 ('20180726215803'),
 ('20180728165546'),
-('20180801180627');
+('20180801180627'),
+('20180801220123'),
+('20180801230445');
 
 
