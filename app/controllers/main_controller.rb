@@ -1,4 +1,5 @@
 class MainController < ApplicationController
+  before_action :redirect_if_logged_in, only: [:index]
 
   def index
   end
@@ -56,4 +57,11 @@ class MainController < ApplicationController
     end
   end
 
+  private
+
+  def redirect_if_logged_in
+    if current_user.present?
+      redirect_to after_sign_in_path_for(current_user)
+    end
+  end
 end
