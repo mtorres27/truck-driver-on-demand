@@ -141,6 +141,7 @@ Rails.application.routes.draw do
       resource :review, only: [:show, :create]
       get :contract_invoice, on: :member
       get :freelancer_matches, on: :member
+      get :mark_as_finished, on: :member
     end
 
     get "jobs/:id/publish", to: "jobs#publish"

@@ -39,6 +39,11 @@
         .payments__status
           strong<
             | #{number_with_precision((job.total_amount.to_f.floor + job.company_plan_fees + (job.total_amount.to_f * job.applicable_sales_tax/100)), precision: 2) } #{job.currency.upcase}
+      - if current_user.is_a?(CompanyUser) && job.pay_type != "fixed" && payments.count > 0 && payments.outstanding.empty?
+        .payments__flexbox
+          = link_to mark_as_finished_company_job_path(@job), class: 'btn-primary--active top-margin w-inline-block'
+            div Mark job as finished
+
 
 - payments.each do |payment|
   div class="payments"

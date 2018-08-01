@@ -88,6 +88,10 @@ class JobPolicy < ApplicationPolicy
     company_user? && company_owner?
   end
 
+  def mark_as_finished?
+    company_user? && company_owner?
+  end
+
   def create_payment?
     freelancer? && freelancer_hired?
   end

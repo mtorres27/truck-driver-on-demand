@@ -98,6 +98,13 @@ class Company::JobsController < Company::BaseController
     end
   end
 
+  def mark_as_finished
+    @job.update(state: :completed)
+    FreelancerMailer.notice_job_complete_freelancer(current_user, @job.freelancer, @job).deliver_later
+    CompanyMailer.notice_job_complete_company(current_user, @job.freelancer, @job).deliver_later
+    redirect_to company_job_review_path(@job)
+  end
+
 
   private
 
