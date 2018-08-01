@@ -56,10 +56,6 @@ class JobPolicy < ApplicationPolicy
     (company_user? && company_owner?) || freelancer?
   end
 
-  def send_decline_message?
-    company_user? && company_owner?
-  end
-
   def accept?
     (company_user? && company_owner?) || freelancer?
   end

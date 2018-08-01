@@ -21,7 +21,6 @@ class Company::JobPaymentsController < Company::BaseController
   end
 
   def mark_as_paid
-    # quote               = @jFob.accepted_quote
     freelancer          = @job.freelancer
     currency_rate       = CurrencyExchange.get_currency_rate(@job.currency)
     amount              = @payment.amount
@@ -67,19 +66,19 @@ class Company::JobPaymentsController < Company::BaseController
       @job.update_attribute(:total_amount, @job.total_amount.to_f + @payment.total_amount)
 
       # Send notice email
-      PaymentsMailer.notice_payout_freelancer(current_user, freelancer, @job, @payment).deliver_later
+      PaymentsMailer.notice_payout_freelancer(current_company, freelancer, @job, @payment).deliver_later
       #
       if @job.pay_type == "fixed" && @job.payments.outstanding.empty?
         @job.update(state: :completed)
-        FreelancerMailer.notice_job_complete_freelancer(current_user, freelancer, @job).deliver_later
-        CompanyMailer.notice_job_complete_company(current_user, freelancer, @job).deliver_later
+        FreelancerMailer.notice_job_complete_freelancer(current_company, freelancer, @job).deliver_later
+        CompanyMailer.notice_job_complete_company(current_company, freelancer, @job).deliver_later
         redirect_to company_job_review_path(@job)
       else
         redirect_to company_job_payments_path(@job)
       end
-    rescue Exception => e
-      flash[:error] = e.message
-      redirect_to company_job_payments_path(@job)
+    # rescue Exception => e
+    #   flash[:error] = e.message
+    #   redirect_to company_job_payments_path(@job)
     end
   end
 

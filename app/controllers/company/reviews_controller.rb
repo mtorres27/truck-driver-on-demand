@@ -14,7 +14,7 @@ class Company::ReviewsController < Company::BaseController
     @review.company = current_company
 
     if @review.save
-      FreelancerMailer.notice_company_review(current_user, @job.freelancer, @review).deliver_later
+      FreelancerMailer.notice_company_review(current_company, @job.freelancer, @review).deliver_later
       redirect_to company_job_review_path(@job)
     else
       render :show

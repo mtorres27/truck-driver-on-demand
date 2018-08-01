@@ -4,9 +4,9 @@ describe Company::JobsController, type: :controller  do
   login_company
   let(:company) { subject.current_user.company }
   let(:job) { create(:job, project: create(:project, company: company), company: company, address: 'Toronto', state_province: 'ON', country: 'ca' ) }
-  let(:freelancers) { double('Freelancers') }
 
   describe 'GET freelancer_matches' do
+    let(:freelancers) { double('Freelancers') }
     let(:parameters) { { id: job.id } }
 
     before(:each) do
@@ -41,6 +41,24 @@ describe Company::JobsController, type: :controller  do
         get :freelancer_matches, params: parameters
         expect(assigns(:distance)).to eq('160000')
       end
+    end
+  end
+
+  describe 'POST mark_as_finished' do
+    let(:parameters) { { id: job.id } }
+    let(:freelancer) { create :freelancer }
+
+    before(:each) do
+      allow_any_instance_of(Job).to receive(:freelancer).and_return(freelancer)
+    end
+
+    it 'marks the job as finished' do
+      post :mark_as_finished, params: parameters
+      expect(job.reload.state).to eq('completed')
+    end
+
+    it 'sends email to freelancer and company' do
+      expect { post :mark_as_finished, params: parameters }.to change { ActionMailer::Base.deliveries.count }.by(2)
     end
   end
 end

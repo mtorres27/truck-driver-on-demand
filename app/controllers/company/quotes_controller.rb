@@ -28,25 +28,6 @@ class Company::QuotesController < Company::BaseController
     end
   end
 
-  def send_decline_message
-    set_collections
-    @applicants.each do |applicant|
-      if applicant.state != "declined" and applicant.state != "accepted"
-        # send message
-        message = Message.new
-        message.authorable = current_company
-        message.receivable = applicant
-        message.body = "We have decided to go with another provider. Thanks for your interest!"
-        message.save
-
-        # update quote to be declined
-        applicant.state = "declined"
-        applicant.save
-        FreelancerMailer.notice_received_declined_quote_from_company(current_user, applicant.freelancer, applicant.job).deliver_later
-      end
-    end
-  end
-
   private
 
   def set_job

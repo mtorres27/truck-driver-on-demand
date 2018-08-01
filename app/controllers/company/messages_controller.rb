@@ -11,8 +11,8 @@ class Company::MessagesController < Company::BaseController
     @message.authorable = current_company
 
     if @message.save
-      CompanyMailer.notice_message_sent(current_user, @job.freelancer, @message).deliver_later
-      FreelancerMailer.notice_message_received(current_user, @job.freelancer, @job, @message).deliver_later
+      CompanyMailer.notice_message_sent(current_company, @job.freelancer, @message).deliver_later
+      FreelancerMailer.notice_message_received(current_company, @job.freelancer, @job, @message).deliver_later
       redirect_to company_job_messages_path(@job)
     else
       set_collection
