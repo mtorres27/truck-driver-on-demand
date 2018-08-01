@@ -8,7 +8,7 @@
       - unless action_name == "print"
         / a.icon href=print_freelancer_job_payment_path(@job, @payment) target="_blank" title="Print"
         /   span.glyphicon.glyphicon-print Print
-        a.btn-primary--active.icon href=print_freelancer_job_payment_path(@job, @payment, format: :pdf) title="Download" target="_blank"
+        a.btn.btn--secondary.icon href=print_freelancer_job_payment_path(@job, @payment, format: :pdf) title="Download" target="_blank"
           span.glyphicon.glyphicon-download Download PDF
         - if !@payment.paid_on.blank?
           .tag.tag--success Paid

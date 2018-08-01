@@ -49,29 +49,29 @@
       .payments__flexbox
         .payments__title #{payment.description} - Invoice ##{payment.id}
         - amount      = payment.amount
-        - tax         = @job.applicable_sales_tax * payment.amount / 100
-        - avj_fees    = @job.company_plan_fees == 0 ? 0 : company_fees ? (amount * company_fees / 100) : 0
+        - tax         = !job.applicable_sales_tax ? 0 : job.applicable_sales_tax * payment.amount / 100
+        - avj_fees    = !job.company_plan_fees || job.company_plan_fees == 0 ? 0 : company_fees ? (amount * company_fees / 100) : 0
         - avj_t_fees  = current_company.country == 'ca' ? avj_fees * 1.13 : avj_fees
         - total       = amount + tax + avj_t_fees
         .tag class="#{payment.paid_on.present? ? "tag--success" : "tag--warning"}" #{payment.paid_on.present? ? "Paid" : "Unpaid"}
       .payments__amt
         | #{ number_with_precision(total, precision: 2)} #{job.currency ? job.currency.upcase : ''}
-        - if payment.paid_on.blank?
-          .div
-            - path = !current_user.admin? ? company_job_payment_path(job, payment) : admin_job_payment_path(job, payment)
-            = link_to path, class: 'btn-link'
-              div View Invoice
+        / - if payment.paid_on.blank?
+        .div
+          - path = !current_user.admin? ? company_job_payment_path(job, payment) : admin_job_payment_path(job, payment)
+          = link_to path, class: 'btn-link'
+            div View Invoice
     .payments__flexbox
       - if payment.paid_on.present?
         .payments__date Paid on #{payment.paid_on}
       - elsif payment.issued_on.present?
         .payments__date from #{job.freelancer.first_name_and_initial} on #{payment.issued_on}
-    - if !payment.paid_on.blank? || (!connector.nil? && !connector.account.nil? && connector.account.external_accounts.data.any?)
+    - if payment.paid_on.blank? && (!connector.nil? && !connector.account.nil? && connector.account.external_accounts.data.any?)
       - path = !current_user.admin? ? company_job_payment_path(job, payment) : admin_job_payment_path(job, payment)
       = link_to path, class: 'btn-primary--active top-margin w-inline-block'
         div #{(payment.paid_on.blank? && current_user.company_user? ? "Pay Now" : "View Invoice")}
     - elsif connector.nil? || connector.account.nil? || !connector.account.external_accounts.data.any?
       div Freelancer doesn't provide his bank information yet!
-    - else
-      .btn-primary--disabled.top-margin.w-inline-block
-        div PAY NOW
+    / - else
+    /   .btn-primary--disabled.top-margin.w-inline-block
+    /     div PAY NOW

@@ -8,7 +8,9 @@ html
     = javascript_include_tag "application", "data-turbolinks-track": "reload"
 
     title= yield(:title) + " – " if content_for?(:title)
-  body class=(params[:controller]&.gsub("/", "-") || "")
+  body class='body-white'
     .container
-      .content_card
+      div
+        = image_tag('avjunction_logo.png', size: "130x33")
         = render "invoice", locals: { job: @job, payment: @payment, amount: @amount, tax: @tax, avj_t_fees: @avj_t_fees, total: @total }
+        = image_tag('avjunction_logo.png', size: "130x33")
