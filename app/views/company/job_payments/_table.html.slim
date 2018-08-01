@@ -42,15 +42,20 @@
       /   .payments__status
       /     strong<
       /       | #{number_with_precision((job.total_amount.to_f.floor + job.company_plan_fees + (job.total_amount.to_f * job.applicable_sales_tax/100)), precision: 2) } #{job.currency.upcase}
-
+- company_fees = current_company.plan.fee_schema['company_fees'].to_f
 - payments.each do |payment|
   div class="payments"
     .payments__flexbox
       .payments__flexbox
-        .payments__title #{payment.description} - Transaction ##{payment.id}
+        .payments__title #{payment.description} - Invoice ##{payment.id}
+        - amount      = payment.amount
+        - tax         = @job.applicable_sales_tax * payment.amount / 100
+        - avj_fees    = @job.company_plan_fees == 0 ? 0 : company_fees ? (amount * company_fees / 100) : 0
+        - avj_t_fees  = current_company.country == 'ca' ? avj_fees * 1.13 : avj_fees
+        - total       = amount + tax + avj_t_fees
         .tag class="#{payment.paid_on.present? ? "tag--success" : "tag--warning"}" #{payment.paid_on.present? ? "Paid" : "Unpaid"}
       .payments__amt
-        | #{payment.total_amount.present? ? number_with_precision(payment.total_amount, precision: 2) : number_with_precision((payment.amount * (1 + job.applicable_sales_tax/100) ), precision: 2)} #{job.currency ? job.currency.upcase : ''}
+        | #{ number_with_precision(total, precision: 2)} #{job.currency ? job.currency.upcase : ''}
         - if payment.paid_on.blank?
           .div
             - path = !current_user.admin? ? company_job_payment_path(job, payment) : admin_job_payment_path(job, payment)

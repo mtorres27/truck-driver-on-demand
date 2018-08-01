@@ -1,15 +1,15 @@
 .job-header
   .job-header__meta-1
     = job_state_label(job)
-    .job-header__budget-group
-      - if job.applicable_sales_tax.present?
-        .job-header__budget= number_with_precision(job.total_amount.to_f, precision: 2)
-        span<>= job.currency.upcase if job.currency.upcase
-        .job-header__budget-label + #{number_with_precision(job.total_amount.to_f * (job.applicable_sales_tax/100), precision: 2)} TAX
-      - else
-        .job-header__budget= number_with_precision(job.budget, precision: 0)
-        span<>= job.currency.upcase if job.currency
-        .job-header__budget-label Budget
+    / .job-header__budget-group
+    /   - if job.applicable_sales_tax.present?
+    /     .job-header__budget= number_with_precision(job.total_amount.to_f, precision: 2)
+    /     span<>= job.currency.upcase if job.currency.upcase
+    /     .job-header__budget-label + #{number_with_precision(job.total_amount.to_f * (job.applicable_sales_tax/100), precision: 2)} TAX
+    /   - else
+    /     .job-header__budget= number_with_precision(job.budget, precision: 0)
+    /     span<>= job.currency.upcase if job.currency
+    /     .job-header__budget-label Budget
 
   h4.heading-h4
     - path = current_user&.admin? ? admin_company_jobs_path(job.company) : company_projects_path

@@ -2,13 +2,15 @@
 
 - content_for :secondary do
   .action-bar
-    h2.heading-h2.heading-h2--action-bar Payments
+    h2.heading-h2.heading-h2--action-bar Invoice
     .action-bar__actions
       - unless action_name == "print"
-        a.icon href=print_company_job_payment_path(@job, @payment) target="_blank" title="Print"
-          span.glyphicon.glyphicon-print aria-hidden=true
-        a.icon href=print_company_job_payment_path(@job, @payment, format: :pdf) title="Download"
-          span.glyphicon.glyphicon-download aria-hidden=true
+        / span
+        /   a.icon href=print_company_job_payment_path(@job, @payment) target="_blank" title="Print"
+        /     span.glyphicon.glyphicon-print Print
+        span
+          a.icon href=print_company_job_payment_path(@job, @payment, format: :pdf) title="Download" target="_blank"
+            span.glyphicon.glyphicon-download
         - if @payment.paid_on.blank?
           = render partial: 'company/shared/pay_invoice_stripe_button', locals: { job: @job, payment: @payment, total: @total }
         - else
