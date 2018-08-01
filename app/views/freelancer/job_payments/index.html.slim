@@ -13,7 +13,10 @@
         .btn-primary--active.top-margin.w-inline-block data-toggle="modal" data-target="#new_payment"
           div Create payment request
 
-    .payments__status AV Junction makes receiving payments easy and secure. You can request a payment from your employer anytime a milestone is completed.
+    .payments__status
+      p AV Junction makes receiving payments easy and secure. You can request a payment from your employer anytime a milestone is completed.
+
+      p All payments received are subject up to a 6% service fee.
   - freelancer_fees = @job.company.plan.fee_schema['freelancer_fees'].to_f
   - @payments.each do |payment|
     div class="payments"

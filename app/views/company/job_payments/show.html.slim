@@ -9,8 +9,8 @@
         /   a.icon href=print_company_job_payment_path(@job, @payment) target="_blank" title="Print"
         /     span.glyphicon.glyphicon-print Print
         span
-          a.icon href=print_company_job_payment_path(@job, @payment, format: :pdf) title="Download" target="_blank"
-            span.glyphicon.glyphicon-download
+          a.btn-primary--active.icon href=print_company_job_payment_path(@job, @payment, format: :pdf) title="Download" target="_blank"
+            span.glyphicon.glyphicon-download Download PDF
         - if @payment.paid_on.blank?
           = render partial: 'company/shared/pay_invoice_stripe_button', locals: { job: @job, payment: @payment, total: @total }
         - else
