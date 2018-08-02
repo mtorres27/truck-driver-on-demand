@@ -207,7 +207,7 @@ class Company < ApplicationRecord
   def check_if_should_do_geocode
     if saved_changes.include?("address") or saved_changes.include?("city") or (!address.nil? and lat.nil?) or (!city.nil? and lat.nil?)
       do_geocode
-      update_columns(lat: lat, lng: lng)
+      update_columns(formatted_address: formatted_address, lat: lat, lng: lng)
     end
   end
 

@@ -17,6 +17,11 @@ class Company::JobPaymentsController < Company::BaseController
   end
 
   def print
+    @amount      = @payment.amount
+    @tax         = @job.applicable_sales_tax * @payment.amount / 100
+    @avj_fees    = @job.company_plan_fees == 0 ? 0 : current_company.plan.fee_schema['company_fees'] ? (@amount * current_company.plan.fee_schema['company_fees'].to_f / 100) : 0
+    @avj_t_fees  = current_company.country == 'ca' ? @avj_fees * 1.13 : @avj_fees
+    @total       = @amount + @tax + @avj_t_fees
     render layout: false
   end
 
@@ -38,7 +43,8 @@ class Company::JobPaymentsController < Company::BaseController
                    amount: (total * 100).floor ,
                    currency: @job.currency,
                    source: params[:stripeToken],
-                   statement_descriptor: "AV Junction - (stripe)",
+                   description: "Invoice ##{@payment.id}",
+                   statement_descriptor: "AV Junction - (Invoice ##{@payment.id})",
                    application_fee: ((application_fees - transaction_fees) * 100).floor
                }, stripe_account: freelancer.freelancer_profile&.stripe_account_id)
       logger.debug charge.inspect
