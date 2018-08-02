@@ -26,17 +26,21 @@ class Company::JobPaymentsController < Company::BaseController
   end
 
   def mark_as_paid
-    freelancer          = @job.freelancer
-    currency_rate       = CurrencyExchange.get_currency_rate(@job.currency)
-    amount              = @payment.amount
-    tax                 = @job.applicable_sales_tax * @payment.amount / 100
-    company_fees        = @job.company_plan_fees == 0 ? 0 : current_company.plan.fee_schema['company_fees'] ? (amount * current_company.plan.fee_schema['company_fees'].to_f / 100) : 0
-    company_t_fees      = current_company.country == 'ca' ? company_fees * 1.13 : company_fees
-    freelancer_fees     = current_company.plan.fee_schema['freelancer_fees'] ? (amount * current_company.plan.fee_schema['freelancer_fees'].to_f / 100) : 0
-    freelancer_t_fees   = @job.freelancer.freelancer_profile.country == 'ca' ? freelancer_fees * 1.13 : freelancer_fees
-    application_fees    = company_t_fees + freelancer_t_fees
-    total               = amount + tax + company_t_fees
-    transaction_fees    = total * 0.029 + (0.3 * currency_rate)
+    freelancer             = @job.freelancer
+    currency_rate          = CurrencyExchange.get_currency_rate(@job.currency)
+    amount                 = @payment.amount
+    tax                    = @job.applicable_sales_tax * @payment.amount / 100
+    company_fees           = @job.company_plan_fees == 0 ? 0 : current_company.plan.fee_schema['company_fees'] ? (amount * current_company.plan.fee_schema['company_fees'].to_f / 100) : 0
+    company_t_fees         = current_company.country == 'ca' ? company_fees * 1.13 : company_fees
+    freelancer_fees        = current_company.plan.fee_schema['freelancer_fees'] ? (amount * current_company.plan.fee_schema['freelancer_fees'].to_f / 100) : 0
+    freelancer_t_fees      = @job.freelancer.freelancer_profile.country == 'ca' ? freelancer_fees * 1.13 : freelancer_fees
+
+    @payment.set_avj_credit(freelancer_t_fees)
+
+    freelancer_t_fees = freelancer_t_fees - @payment.avj_credit
+    application_fees  = company_t_fees + freelancer_t_fees
+    total             = amount + tax + company_t_fees
+    transaction_fees  = total * 0.029 + (0.3 * currency_rate)
     begin
       # NEW
       charge = Stripe::Charge.create({

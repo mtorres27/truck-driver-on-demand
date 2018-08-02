@@ -40,8 +40,6 @@ class Freelancer::JobPaymentsController < Freelancer::BaseController
     @payment.issued_on = Date.today
     @payment.tax_amount = @payment.amount * (@job.applicable_sales_tax/100)
     @payment.total_amount = @payment.amount + @payment.tax_amount
-    @payment.set_avj_fees
-    @payment.set_avj_credit
     if @payment.save
       redirect_to freelancer_job_payments_path(@job)
     else
