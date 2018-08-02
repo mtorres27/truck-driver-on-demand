@@ -59,8 +59,6 @@ describe Freelancer::JobPaymentsController, type: :controller  do
       expect(payment.issued_on).to eq(Date.today)
       expect(payment.tax_amount).to be_present
       expect(payment.total_amount).to be_present
-      expect(payment.avj_fees).to be_present
-      expect(payment.avj_credit).to be_present
     end
   end
 end

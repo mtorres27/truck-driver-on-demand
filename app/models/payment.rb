@@ -62,11 +62,6 @@ class Payment < ApplicationRecord
         job.freelancer.freelancer_profile.update_attribute(:avj_credit, job.freelancer.freelancer_profile.avj_credit.to_f - avj_credit)
         FreelancerMailer.notice_credit_used(job.freelancer, avj_credit)
       end
-      if job.currency == 'usd'
-
-      else
-        job.freelancer.freelancer_profile.update_attribute(:avj_credit, job.freelancer.freelancer_profile.avj_credit.to_f - (avj_credit_used / currency_rate))
-      end
     end
   end
 
