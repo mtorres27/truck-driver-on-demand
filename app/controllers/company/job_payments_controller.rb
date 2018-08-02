@@ -44,7 +44,7 @@ class Company::JobPaymentsController < Company::BaseController
                    currency: @job.currency,
                    source: params[:stripeToken],
                    description: "Invoice ##{@payment.id}",
-                   statement_descriptor: "AV Junction - (Invoice ##{@payment.id})",
+                   statement_descriptor: "AV Junction-(##{@payment.id})",
                    application_fee: ((application_fees - transaction_fees) * 100).floor
                }, stripe_account: freelancer.freelancer_profile&.stripe_account_id)
       logger.debug charge.inspect
@@ -82,9 +82,9 @@ class Company::JobPaymentsController < Company::BaseController
       else
         redirect_to company_job_payments_path(@job)
       end
-    # rescue Exception => e
-    #   flash[:error] = e.message
-    #   redirect_to company_job_payments_path(@job)
+    rescue Exception => e
+      flash[:error] = e.message
+      redirect_to company_job_payments_path(@job)
     end
   end
 
