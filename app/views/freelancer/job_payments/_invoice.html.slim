@@ -13,6 +13,7 @@
   /   div BN Tax No. #{@job.company.sales_tax_number}
 .grid-cell.grid-cell--33
   h4.heading-h4= "Job: #{@job.title}"
+  div= "Work Order #: #{@job.work_order}"
   div= "Phase: #{@payment.description}"
   div= "Inv #: #{@payment.id}"
   div= "Date: #{@payment.paid_on.present? ? @payment.paid_on : "N/A"}"
