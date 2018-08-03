@@ -59,6 +59,9 @@
           | If the freelancer collects sales tax, be sure to ask them what amount of tax this is. The rate of tax entered here will be reflected in your invoices.
 
       .grid-cell.grid-cell--33
+        = f.input :payment_terms, required: true, label: "Payment terms (in days)", input_html: {class: 'form__text-field'}
+
+      .grid-cell.grid-cell--33
         = f.input :starts_on, html5: true, label: "Start Date (Estimated)", input_html: { class: 'form__text-field'}
 
       .grid-cell.grid-cell--33

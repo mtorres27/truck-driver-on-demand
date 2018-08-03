@@ -979,7 +979,8 @@ CREATE TABLE jobs (
     stripe_fees numeric(10,2),
     amount_subtotal numeric(10,2),
     variable_pay_type character varying,
-    overtime_rate numeric(10,2)
+    overtime_rate numeric(10,2),
+    payment_terms integer
 );
 
 
@@ -2420,6 +2421,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20180728165546'),
 ('20180801180627'),
 ('20180801220123'),
-('20180801230445');
+('20180801230445'),
+('20180802215944');
 
 

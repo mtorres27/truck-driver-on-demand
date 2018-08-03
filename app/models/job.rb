@@ -62,6 +62,7 @@
 #  amount_subtotal                        :decimal(10, 2)
 #  variable_pay_type                      :string
 #  overtime_rate                          :decimal(10, 2)
+#  payment_terms                          :integer
 #
 # Indexes
 #
@@ -137,7 +138,7 @@ class Job < ApplicationRecord
   validates :title, :summary, :address, :currency, :country, presence: true, if: -> { step_job_details? || is_published? }
   validates :freelancer_type, :job_type, :job_market, :job_function, presence: true, if: -> { is_published? }
   validates :accepted_applicant_id, presence: true, if: :enforce_contract_creation
-  validates :contract_price, numericality: { greater_than_or_equal_to: 1 }, if: :enforce_contract_creation
+  validates :contract_price, :payment_terms, numericality: { greater_than_or_equal_to: 1 }, if: :enforce_contract_creation
   validate :scope_or_file, if: :creation_completed?
   validate :validate_number_of_payments, if: :creation_completed?
   validate :validate_payments_total, if: :creation_completed?

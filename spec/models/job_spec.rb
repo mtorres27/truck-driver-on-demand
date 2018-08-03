@@ -62,6 +62,7 @@
 #  amount_subtotal                        :decimal(10, 2)
 #  variable_pay_type                      :string
 #  overtime_rate                          :decimal(10, 2)
+#  payment_terms                          :integer
 #
 # Indexes
 #

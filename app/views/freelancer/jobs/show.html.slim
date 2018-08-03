@@ -7,13 +7,13 @@
   .action-bar
     h2.heading-h2.heading-h2--action-bar Job Detail
     .action-bar__actions
-      /- if @have_applied == false && @connector.verified? || Rails.env.development?
       - if @have_applied == false && @connector.verified?
           a.btn.btn--primary href="#" id="apply-for-job"
             | Apply Now
       - elsif !@connector.verified?
         a href="/freelancer/profile/bank_info"
           | Set up your banking details to apply.
+      = job_state_label(@job)
 
 
   .grid-h
@@ -92,10 +92,12 @@
             - if @job.contract_sent == false
                 = "Your work order #{@job.work_order} is still being created."
             - else
-              - if !@job.negotiated?
-                = "Your work order #{@job.work_order} is awaiting your acceptance."
-              - elsif @job.contracted?
+              - if @job.state == "contracted"
                 = "You have accepted the work order #{@job.work_order}."
+              - elsif @job.state == "completed"
+                = "You have completed the job for the work order #{@job.work_order}."
+              - else
+                = "Your work order #{@job.work_order} is awaiting your acceptance."
           - if @job.contract_sent == true
             - path = current_user.admin? ? admin_job_work_order_path(@job) : freelancer_job_work_order_path(@job)
             a.btn.btn--primary href=path

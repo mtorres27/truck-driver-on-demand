@@ -6,6 +6,7 @@
         - path = current_user.admin? ? edit_admin_job_path(@job) : edit_company_job_path(@job)
         a.btn.btn--primary href=path
           | Edit
+      = job_state_label(@job)
 
   .grid-h
     .grid-cell.grid-cell--50
@@ -49,12 +50,18 @@
             | Create Work Order
         - elsif @job.pre_contracted? and @job.contract_sent == true
           p
-            | Work order sent to #{@job.freelancer.full_name}. Awaiting response.
+            | Work order #{@job.work_order} sent to #{@job.freelancer.full_name}. Awaiting response.
           a.btn.btn--primary href=path
             | Edit Work Order
         - elsif @job.contracted?
           p
-            | Work order accepted by Freelancer.
+            | Work order #{@job.work_order} accepted by Freelancer.
+          - view_path = current_user.admin? ? admin_job_work_order_path(@job) : company_job_work_order_path(@job)
+          a.btn.btn--primary href=view_path
+            | View Work Order
+        - elsif @job.state == "completed"
+          p
+            | Job finished. Work order #{@job.work_order} completed by Freelancer.
           - view_path = current_user.admin? ? admin_job_work_order_path(@job) : company_job_work_order_path(@job)
           a.btn.btn--primary href=view_path
             | View Work Order

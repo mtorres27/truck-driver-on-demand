@@ -15,37 +15,12 @@
           = link_to mark_as_finished_company_job_path(@job), method: :post, class: 'btn-primary--active top-margin w-inline-block'
             div Mark job as finished
       hr
-      / .payments__flexbox
-      /   .payments__status
-      /     | Job Amount :
-      /   .payments__status
-      /     strong<
-      /       | #{number_with_precision(job.total_amount.to_f.floor , precision: 2) } #{job.currency.upcase}
-      / - if job.applicable_sales_tax.present?
-      /   .payments__flexbox
-      /     .payments__status
-      /       | Job Sales Tax :
-      /     .payments__status
-      /       strong<
-      /         | #{number_with_precision((job.total_amount.to_f * job.applicable_sales_tax/100), precision: 2) } #{job.currency.upcase}
-      / .payments__flexbox
-      /   .payments__status
-      /     | Total to freelancer :
-      /   .payments__status
-      /     strong<
-      /       | #{number_with_precision(job.total_amount.to_f.floor * (1 + job.applicable_sales_tax/100)  , precision: 2) } #{job.currency.upcase}
-      / .payments__flexbox
-      /   .payments__status
-      /     | AV Junction Fees + Tax :
-      /   .payments__status
-      /     strong<
-      /       | #{ job.company_plan_fees.positive? ? number_with_precision(job.company_plan_fees , precision: 2) : "Waived"} #{ job.company_plan_fees.positive? ? job.currency.upcase : ''}
-      / .payments__flexbox
-      /   .payments__status
-      /     | Job Total :
-      /   .payments__status
-      /     strong<
-      /       | #{number_with_precision((job.total_amount.to_f.floor + job.company_plan_fees + (job.total_amount.to_f * job.applicable_sales_tax/100)), precision: 2) } #{job.currency.upcase}
+- if payments.count == 0 && job.pay_type == "variable"
+  .grid-h.no-margin-bottom
+    .grid-cell.grid-cell--100
+      p No payments have been requested for this job at the moment.
+      p This is a variable payment type job, which means that the payments will be created dynamically by the freelancer as they advance in the job.
+
 - company_fees = current_company.plan.fee_schema['company_fees'].to_f
 - payments.each do |payment|
   div class="payments"

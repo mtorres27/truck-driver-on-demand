@@ -42,6 +42,13 @@
       = t(:pay_type, scope: [:form, :labels, :job])
     p
       = @job.pay_type&.text
+
+  .grid-cell.grid-cell--33
+    h3.heading-h3
+      | Payment terms
+    p
+      = "#{@job.payment_terms.to_i} days"
+
   .grid-cell.grid-cell--33
     h3.heading-h3
       = t(:working_time, scope: [:form, :labels, :job])

@@ -17,33 +17,10 @@
   div= "Phase: #{@payment.description}"
   div= "Inv #: #{@payment.id}"
   div= "Date: #{@payment.paid_on.present? ? @payment.paid_on : "N/A"}"
-  / TODO: Manfred
-  div= "Terms:"
+  div= "Terms: #{@job.payment_terms.to_i} days"
 .grid-cell.grid-cell--33
   h4.heading-h4.no-margin-bottom Paid to Freelancer
-.grid-cell.grid-cell--100
-  .invoice__table
-    .invoice__table-row.invoice__table-row--header
-      .invoice__table-text Description
-      .invoice__table-text.invoice__table-text--right Amount
-    - if @payment.time_unit_amount.present?
-      .invoice__table-row
-        .invoice__table-text= "#{@payment.time_unit_amount} #{@job.variable_pay_type == 'daily' ? 'days' : 'hours'}"
-        .invoice__table-text.invoice__table-text--right= number_with_precision(@payment.time_unit_amount * @job.contract_price , precision: 2).to_s + " " + @job.currency.upcase
-    - if @payment.overtime_hours_amount.present?
-      .invoice__table-row
-        .invoice__table-text= "#{@payment.overtime_hours_amount} overtime hours"
-        .invoice__table-text.invoice__table-text--right= number_with_precision(@payment.overtime_hours_amount * @job.overtime_rate, precision: 2).to_s + " " + @job.currency.upcase
-    .invoice__table-row
-      .invoice__table-text= @job.title + " - " +@payment.description + " total"
-      .invoice__table-text.invoice__table-text--right= number_with_precision(@amount, precision: 2).to_s + " " + @job.currency.upcase
-    - if @tax && @tax > 0
-      .invoice__table-row
-        .invoice__table-text Freelancer Sales Taxes (#{@job.applicable_sales_tax.to_i}%)
-        .invoice__table-text.invoice__table-text--right= number_with_precision(@tax, precision: 2).to_s + " " + @job.currency.upcase
-    .invoice__table-row.invoice__table-row--total
-      .invoice__table-text Subtotal Paid to Freelancer
-      .invoice__table-text.invoice__table-text--right= number_with_precision((@amount + @tax), precision: 2).to_s + " " + @job.currency.upcase
+= render "shared/payment_invoice"
 .grid-cell.grid-cell--33
   h4.heading-h4.no-margin-bottom Transaction Fees
 .grid-cell.grid-cell--100

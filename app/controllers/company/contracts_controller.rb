@@ -41,7 +41,6 @@ class Company::ContractsController < Company::BaseController
         @job.contract_sent = true
         @job.save
 
-
       end
       redirect_to company_job_path(@job), notice: "Work Order updated." if !@job.contracted?
     else
@@ -92,6 +91,7 @@ class Company::ContractsController < Company::BaseController
       :scope_file,
       :addendums,
       :contract_price,
+      :payment_terms,
       :overtime_rate,
       :send_contract,
       :starts_on,

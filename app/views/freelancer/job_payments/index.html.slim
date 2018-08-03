@@ -9,7 +9,8 @@
         .tag.tag--in-progress No payments requested
       - if !@connector.account.external_accounts.data.any?
         .tag.tag--in-progress Freelancer has no bank account
-      - elsif @job.pay_type != "fixed"
+    - if @connector.account.external_accounts.data.any? && @job.pay_type != "fixed" && @job.state != "completed"
+      .payments__flexbox
         .btn-primary--active.top-margin.w-inline-block data-toggle="modal" data-target="#new_payment"
           div Create payment request
 
@@ -44,9 +45,9 @@
             =<> link_to freelancer_profile_stripe_bank_account_path
               | here
         - elsif payment.paid_on.present?
-          | You received a payout for this invoice on #{payment.paid_on}
+          | You received a payment for this invoice on #{payment.paid_on}
         - elsif payment.issued_on.present? && payment.issued_on >= 2.day.ago
-          | You last requested a payout for this invoice on #{payment.issued_on}. Allow 2 business days for your client to release the funds to you. You may re-request a payout after 2 business days.
+          | You last requested a payment for this invoice on #{payment.issued_on}. Allow 2 business days for your client to release the funds to you. You may re-request a payout after 2 business days.
         - elsif !payment.paid_on.present? && @connector.account.external_accounts.data.any?
           = link_to freelancer_payout_request_path(id: payment.id, job_id: @job.id), class: 'btn-primary--active top-margin w-inline-block'
             | Request Payment

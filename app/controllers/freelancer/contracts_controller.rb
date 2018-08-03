@@ -8,8 +8,6 @@ class Freelancer::ContractsController < Freelancer::BaseController
     @job = Job.find(params[:id])
     authorize @job
 
-    # render :show if @job.state == "contracted"
-
     @job.state = "contracted"
     @job.contracted_at = Time.zone.today
     @job.save
