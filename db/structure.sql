@@ -722,7 +722,8 @@ CREATE TABLE freelancer_profiles (
     avj_credit numeric(10,2) DEFAULT NULL::numeric,
     registration_step character varying,
     province character varying,
-    freelancer_id integer
+    freelancer_id integer,
+    business_tax_number character varying
 );
 
 
@@ -2422,6 +2423,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20180801180627'),
 ('20180801220123'),
 ('20180801230445'),
-('20180802215944');
+('20180802215944'),
+('20180803160038');
 
 

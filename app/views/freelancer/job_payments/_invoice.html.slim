@@ -1,27 +1,7 @@
-.grid-cell.grid-cell--33
-  h4.heading-h4= "From: #{@job.freelancer&.first_name_and_initial}"
-  div= @job.freelancer&.freelancer_profile.address
-  div #{@job.freelancer&.freelancer_profile&.city}, #{@job.freelancer&.freelancer_profile&.state}
-  div= @job.freelancer&.freelancer_profile.postal_code
-  div= @job.freelancer&.freelancer_profile.sales_tax_number
-.grid-cell.grid-cell--33
-  h4.heading-h4= "To: #{@job.company.name}"
-  div= @job.company.address
-  div #{@job.company.city}, #{@job.company.state}
-  div= @job.company.postal_code
-  / - if @job.company.sales_tax_number.present?
-  /   div BN Tax No. #{@job.company.sales_tax_number}
-.grid-cell.grid-cell--33
-  h4.heading-h4= "Job: #{@job.title}"
-  div= "Work Order #: #{@job.work_order}"
-  div= "Phase: #{@payment.description}"
-  div= "Inv #: #{@payment.id}"
-  div= "Date: #{@payment.paid_on.present? ? @payment.paid_on : "N/A"}"
-  div= "Terms: #{@job.payment_terms.to_i} days"
-
+= render "shared/payment_invoice_header"
 .grid-cell.grid-cell--33
   h4.heading-h4.no-margin-bottom Paid By Company
-= render "shared/payment_invoice"
+= render "shared/payment_invoice_detail"
 .grid-cell.grid-cell--33
   h4.heading-h4.no-margin-bottom Transaction Fees
 .grid-cell.grid-cell--100

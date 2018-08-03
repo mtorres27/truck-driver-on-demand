@@ -41,6 +41,7 @@ class Freelancer::JobPaymentsController < Freelancer::BaseController
     @payment.tax_amount = @payment.amount * (@job.applicable_sales_tax/100)
     @payment.total_amount = @payment.amount + @payment.tax_amount
     if @payment.save
+      PaymentsMailer.request_payout_company(@job.company, current_user, @job, @payment).deliver_later
       redirect_to freelancer_job_payments_path(@job)
     else
       flash[:error] = @payment.errors.full_messages.to_sentence
