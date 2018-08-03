@@ -29,7 +29,5 @@ FactoryBot.define do
   factory :applicant do
     job nil
     freelancer nil
-    quote "9.99"
-    accepted ""
   end
 end

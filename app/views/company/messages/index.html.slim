@@ -11,6 +11,6 @@
         - n = ""
       - else
         - n = @job.freelancer.first_name_and_initial
-      = render partial: "company/shared/new_message", locals: {f: f, n: n, type: "message", quotes: []}
+      = render partial: "company/shared/new_message", locals: {f: f, n: n, type: "message"}
       .freelancer-job__message-history
         = render "messages_info"

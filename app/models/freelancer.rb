@@ -207,7 +207,7 @@ class Freelancer < User
       data = f.freelancer_profile
       p "Doing geocode for " + f.id.to_s + "(#{data.compile_address})"
       data.do_geocode
-      data.update_columns(lat: f.lat, lng: f.lng)
+      data.update_columns(formatted_address: f.formatted_address, lat: f.lat, lng: f.lng)
       sleep 1
     end
   end

@@ -89,61 +89,21 @@ class Freelancer::JobsController < Freelancer::BaseController
     # if !@stripe_connector.verified? && !Rails.env.development?
     if !@stripe_connector.verified?
       redirect_to freelancer_job_path(@job), alert: "You need to verify your identity before applying for a job."
-    elsif apply_params[:message].nil? or apply_params[:pay_type].nil?
-      redirect_to freelancer_job_path(@job), alert: "Required data not found; please ensure your message and amount have both been entered."
+    elsif apply_params[:message].nil?
+      redirect_to freelancer_job_path(@job), alert: "Required data not found; please ensure your message has been entered."
     else
       if @applicant.save
-          if apply_params[:pay_type] == "fixed" or apply_params[:pay_type] = "hourly" or apply_params[:pay_type] == "daily"
-            @has_quote = true
-          else
-            @has_quote = false
-          end
         @applicant.messages << Message.create({
           authorable: current_user,
           body: apply_params[:message],
-          has_quote: @has_quote
+          attachment: apply_params[:attachment]
         })
 
-        if apply_params[:pay_type] == "fixed"
-          @applicant.quotes << Quote.create({
-            company: @job.company,
-            pay_type: apply_params[:pay_type],
-            amount: apply_params[:amount],
-            attachment: apply_params[:attachment]
-          })
+        @message = @applicant.messages.last
+        @message.save
 
-          @message = @applicant.messages.last
-          @message.quote_id = @applicant.quotes.last.id
-          @message.save
-        elsif apply_params[:pay_type] == "hourly"
-          @applicant.quotes << Quote.create({
-            company: @job.company,
-            pay_type: apply_params[:pay_type],
-            hourly_rate: apply_params[:hourly_rate],
-            amount: (apply_params[:hourly_rate].to_i * apply_params[:number_of_hours].to_i),
-            number_of_hours: apply_params[:number_of_hours],
-            attachment: apply_params[:attachment]
-          })
-
-          @message = @applicant.messages.last
-          @message.quote_id = @applicant.quotes.last.id
-          @message.save
-        elsif apply_params[:pay_type] == "daily"
-          @applicant.quotes << Quote.create({
-            company: @job.company,
-            pay_type: apply_params[:pay_type],
-            daily_rate: apply_params[:daily_rate],
-            amount: (apply_params[:daily_rate].to_i * apply_params[:number_of_days].to_i),
-            number_of_days: apply_params[:number_of_days],
-            attachment: apply_params[:attachment]
-          })
-
-          @message = @applicant.messages.last
-          @message.quote_id = @applicant.quotes.last.id
-          @message.save
-        end
         # add quote
-        CompanyMailer.notice_received_new_quote_from_freelancer(@applicant.freelancer, @job.company, @job, @applicant.quotes.last).deliver_later
+        CompanyMailer.notice_message_received(@job.company, @applicant.freelancer, @job, @message).deliver_later
         redirect_to freelancer_path(@job), notice: "Application successfully submitted"
       else
         # error message; redirect back to job page
@@ -290,15 +250,9 @@ class Freelancer::JobsController < Freelancer::BaseController
 
   def apply_params
     params.require(:freelancer_job_apply_path).permit(
-      :pay_type,
       :job,
-      :amount,
-      :number_of_hours,
-      :hourly_rate,
       :message,
       :attachment,
-      :daily_rate,
-      :number_of_days,
       :body
     )
   end

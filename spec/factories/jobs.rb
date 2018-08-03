@@ -54,6 +54,15 @@
 #  contracted_at                          :datetime
 #  state_province                         :string
 #  creation_step                          :string
+#  plan_fee                               :decimal(10, 2)   default(0.0)
+#  paid_by_company                        :boolean          default(FALSE)
+#  total_amount                           :decimal(10, 2)
+#  tax_amount                             :decimal(10, 2)
+#  stripe_fees                            :decimal(10, 2)
+#  amount_subtotal                        :decimal(10, 2)
+#  variable_pay_type                      :string
+#  overtime_rate                          :decimal(10, 2)
+#  payment_terms                          :integer
 #
 # Indexes
 #

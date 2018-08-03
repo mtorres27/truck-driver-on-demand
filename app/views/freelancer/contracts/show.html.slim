@@ -15,33 +15,49 @@
         h3.heading-h3 
           = t(:contract_price, scope: [:form, :labels, :job])
         p
-          - if @accepted_quote
-            = number_with_precision(@accepted_quote.amount, precision: 2)
-            span<>= @job.currency.upcase if !@job.currency.nil?
+          - if @job.pay_type == "fixed"
+            = "#{number_with_precision(@job.contract_price, precision: 2)} #{@job.currency&.upcase}"
+          - elsif @job.variable_pay_type == "hourly"
+            = "#{number_with_precision(@job.contract_price, precision: 2)} #{@job.currency&.upcase}/hour"
+          - elsif @job.variable_pay_type == "daily"
+            = "#{number_with_precision(@job.contract_price, precision: 2)} #{@job.currency&.upcase}/day"
           - else
             | Not Specified
-          - if @accepted_quote && @accepted_quote.pay_type == "hourly"
-            = "(#{@accepted_quote.number_of_hours} hours @ #{number_to_currency(@accepted_quote.hourly_rate, precision: 2)}/hour)"
-          - elsif @accepted_quote && @accepted_quote.pay_type == "daily"
-            = "(#{@accepted_quote.number_of_days} days @ #{number_to_currency(@accepted_quote.daily_rate, precision: 2)}/day)"
+
+      - if @job.overtime_rate.present?
+        .grid-cell.grid-cell--33
+          h3.heading-h3 Overtime Rate
+          p
+            = "#{number_with_precision(@job.overtime_rate, precision: 2)} #{@job.currency&.upcase}/hour"
 
       .grid-cell.grid-cell--33
         h3.heading-h3
           | Applicable Sales Tax
         p #{@job.applicable_sales_tax ? @job.applicable_sales_tax : 0}%
 
-      
-      
       .grid-cell.grid-cell--expand
         h3.heading-h3
-          | Total Quote
-        p #{@job.applicable_sales_tax.present? ? number_with_precision( (@accepted_quote.amount+(@accepted_quote.amount*@job.applicable_sales_tax/100)) , precision: 2) :  number_with_precision(@accepted_quote.amount, precision: 2) } #{@job.currency.upcase}
+          | Total price (Includes taxes)
+        - if @job.pay_type == "fixed"
+          - pay_type_sufix = ""
+        - elsif @job.variable_pay_type == "hourly"
+          - pay_type_sufix = "/hour"
+        - elsif @job.variable_pay_type == "daily"
+          - pay_type_sufix = "/day"
+        p #{number_with_precision((@job.contract_price + (@job.contract_price * (@job.applicable_sales_tax/100))) , precision: 2) } #{@job.currency.upcase} #{pay_type_sufix}
 
       .grid-cell.grid-cell--33
         h3.heading-h3
           = t(:pay_type, scope: [:form, :labels, :job])
         p 
-          = @accepted_quote ? @accepted_quote.pay_type&.text : "Not Specified"
+          = @job.pay_type&.text
+
+      .grid-cell.grid-cell--33
+        h3.heading-h3
+          | Payment terms
+        p
+          = "#{@job.payment_terms.to_i} days"
+
       .grid-cell.grid-cell--33
         h3.heading-h3
           = t(:working_time, scope: [:form, :labels, :job])

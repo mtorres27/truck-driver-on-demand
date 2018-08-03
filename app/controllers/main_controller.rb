@@ -1,4 +1,5 @@
 class MainController < ApplicationController
+  before_action :redirect_if_logged_in, only: [:index]
 
   def index
   end
@@ -21,7 +22,6 @@ class MainController < ApplicationController
   end
 
   def freelance_service_agreement
-
     @job = Job.joins(:company).where(:companies => {:disabled => false}).where({id: params[:job]})
     @months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
 
@@ -49,13 +49,19 @@ class MainController < ApplicationController
         @job = nil
       elsif current_user.freelancer? && @job.freelancer.id != current_user.id
         @job = nil
-      elsif current_user.company_user? && @job.company.id != current_user.id
+      elsif current_user.company_user? && @job.company.id != current_user.company.id
         @job = nil
       end
-
     else
       @job = nil
     end
   end
 
+  private
+
+  def redirect_if_logged_in
+    if current_user.present?
+      redirect_to after_sign_in_path_for(current_user)
+    end
+  end
 end

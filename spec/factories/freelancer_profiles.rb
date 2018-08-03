@@ -53,6 +53,7 @@
 #  registration_step        :string
 #  province                 :string
 #  freelancer_id            :integer
+#  business_tax_number      :string
 #
 # Indexes
 #

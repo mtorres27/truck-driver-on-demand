@@ -6,10 +6,9 @@ class Admin::JobPaymentsController < Admin::BaseController
   def index
     # logger.debug @job.inspect
     @payments = @job.payments.order(:created_at)
-    @accepted_quote = @job.accepted_quote
     @connector = StripeAccount.new(@job.freelancer)
 
-    if @accepted_quote.paid_by_company && !@job.funds_available && @job.stripe_balance_transaction_id.present?
+    if @job.paid_by_company && !@job.funds_available && @job.stripe_balance_transaction_id.present?
       balance_transaction = Stripe::BalanceTransaction.retrieve(@job.stripe_balance_transaction_id, stripe_account: @job.freelancer.freelancer_profile.stripe_account_id)
       if balance_transaction[:status] == 'pending'
         @job.funds_available_on = balance_transaction[:available_on]
@@ -21,6 +20,11 @@ class Admin::JobPaymentsController < Admin::BaseController
   end
 
   def show
+    @amount      = @payment.amount
+    @tax         = @job.applicable_sales_tax * @payment.amount / 100
+    @avj_fees    = @job.company_plan_fees == 0 ? 0 : current_company.plan.fee_schema['company_fees'] ? (@amount * current_company.plan.fee_schema['company_fees'].to_f / 100) : 0
+    @avj_t_fees  = @job.company.country == 'ca' ? @avj_fees * 1.13 : @avj_fees
+    @total       = @amount + @tax + @avj_t_fees
   end
 
   private

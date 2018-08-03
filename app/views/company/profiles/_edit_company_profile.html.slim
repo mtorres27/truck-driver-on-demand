@@ -6,9 +6,9 @@
       .grid-cell.grid-cell--33
         .company-profile__image style="width: 200px; height: 200px; margin: auto"
           = image_tag(company.avatar_url, id: "company-edit-profile__avatar")
-          .freelancer-profile__image-upload onclick="updateProfilePicture()"
+          .company-profile__image-upload onclick="updateProfilePicture()"
             span class="zmdi zmdi-camera-add"
-        = f.file_field :avatar, label: false, :accept => 'image/png,image/gif,image/jpeg', class: "file-input--hidden edit-company-profile-avatar"
+        = f.file_field :avatar, label: false, :accept => 'image/png,image/gif,image/jpeg', id: "edit-company-profile-avatar", class: "file-input--hidden"
 
       .grid-cell.grid-cell--67
         .grid-h.grid-h--no-margin
