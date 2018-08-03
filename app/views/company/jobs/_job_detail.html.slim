@@ -50,7 +50,7 @@
             | Create Work Order
         - elsif @job.pre_contracted? and @job.contract_sent == true
           p
-            | Work order #{@job.work_order} sent to #{@job.freelancer.full_name}. Awaiting response.
+            | Work order #{@job.work_order} sent to #{@job.freelancer.first_name_and_initial}. Awaiting response.
           a.btn.btn--primary href=path
             | Edit Work Order
         - elsif @job.contracted?

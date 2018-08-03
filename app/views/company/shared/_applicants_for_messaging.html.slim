@@ -1,15 +1,3 @@
-/ .action-bar
-/     h2.heading-h2.heading-h2--action-bar Applicants
-/     .action-bar__actions
-/       .messaging-filter
-/         .messaging-filter__text
-/           | Filter
-/         .messaging-filter__select
-/           select id="messaging-filter"
-/             option value="" label="All Applicants"
-/             option value="quoting" label="Quoting Applicants" selected=("quoting" if params[:filter] == "quoting")
-/             option value="accepted" label="Accepted Applicant" selected=("selected" if params[:filter] == "accepted")
-
 .list
   - applicants.each do |applicant|
     a href=company_job_applicant_quotes_path(job, applicant)
