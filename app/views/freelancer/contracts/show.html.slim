@@ -89,24 +89,25 @@
               a href= @job.scope_file_url
                 = @job.scope_file.original_filename
 
-      .grid-cell.grid-cell--100
-        h3.heading-h3
-          | Payment Schedule
-        p
-          - if @job.payments.any?
-            table.table
-              - @job.payments.each do |payment|
-                tr
-                  td= payment.description
-                  td.text-right
-                    = number_with_precision(payment.amount, precision: 2)
-                    br
-                    - if @job.currency.nil?
-                      |
-                    - else
-                      = @job.currency.upcase
-          - else
-            | None Specified
+      - if @job.pay_type == "fixed"
+        .grid-cell.grid-cell--100
+          h3.heading-h3
+            | Payment Schedule
+          p
+            - if @job.payments.any?
+              table.table
+                - @job.payments.each do |payment|
+                  tr
+                    td= payment.description
+                    td.text-right
+                      = number_with_precision(payment.amount, precision: 2)
+                      br
+                      - if @job.currency.nil?
+                        |
+                      - else
+                        = @job.currency.upcase
+            - else
+              | None Specified
 
       .grid-cell.grid-cell--50
         h3.heading-h3
