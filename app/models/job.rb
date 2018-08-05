@@ -111,7 +111,7 @@ class Job < ApplicationRecord
     :any_time
   ]
 
-  enumerize :pay_type, in: [ :fixed, :variable ]
+  enumerize :pay_type, in: I18n.t('enumerize.job.pay_type').keys
 
   enumerize :variable_pay_type, in: [ :hourly, :daily ]
 

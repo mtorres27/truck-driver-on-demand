@@ -44,7 +44,10 @@
               = image_tag(message.authorable.user_data.avatar_url, size: "40x40")
             .list__info.list__info--expand.list__info--with-padding
               .list-bar.list-bar--left
-                h4.heading-h4.heading-h4--no-margin #{message.authorable.full_name}
+                - if message.authorable.is_a?(Freelancer)
+                  h4.heading-h4.heading-h4--no-margin #{message.authorable.first_name_and_initial}
+                - else
+                  h4.heading-h4.heading-h4--no-margin #{message.authorable.full_name}
                 | &nbsp;
                 - if !message.created_at.nil?
                   h5.heading-h5 #{time_ago_in_words(message.created_at)} ago
