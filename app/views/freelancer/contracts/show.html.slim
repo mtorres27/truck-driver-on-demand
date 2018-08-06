@@ -64,26 +64,24 @@
         p
           = @job.working_time ? t(@job.working_time) : "Not Specified"
       
-      .grid-cell.grid-cell--33
+      .grid-cell.grid-cell--expand
         h3.heading-h3
           | Start-End Date
-          / = t(:starts_on, scope: [:form, :labels, :job])
         p 
           = l @job.starts_on
           |  - 
           = @job.ends_on ? l(@job.ends_on) : "Not Specified"
 
-      
       .grid-cell.grid-cell--50
-        h3.heading-h3 
-          = t(:summary, scope: [:form, :labels, :job])         
-        p 
+        h3.heading-h3
+          = t(:summary, scope: [:form, :labels, :job])
+        p
           = @job.summary
       .grid-cell.grid-cell--50
-        h3.heading-h3 
-          = t(:scope_of_work, scope: [:form, :labels, :job])           
-        p 
-          = @job.scope_of_work || "Not Specified"   
+        h3.heading-h3
+          = t(:scope_of_work, scope: [:form, :labels, :job])
+        p
+          = @job.scope_of_work || "Not Specified"
           - if !@job.scope_file_url.nil?
             p
               a href= @job.scope_file_url
