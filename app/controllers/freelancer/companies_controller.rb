@@ -72,7 +72,7 @@ class Freelancer::CompaniesController < Freelancer::BaseController
 
 
   def show
-    @company = CompanyUser.find(params[:id])&.company
+    @company = Company.find(params[:id])
     authorize @company
 
     # analytic
