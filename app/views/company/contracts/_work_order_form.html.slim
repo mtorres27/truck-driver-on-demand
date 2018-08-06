@@ -34,10 +34,10 @@
           - @job.applicants.each do |applicant|
             - if @job.freelancer&.id == applicant.freelancer.id
               option value=applicant.id selected="true"
-                | #{ applicant.freelancer.full_name }
+                | #{ applicant.freelancer.first_name_and_initial }
             - else
               option value=applicant.id
-                | #{ applicant.freelancer.full_name }
+                | #{ applicant.freelancer.first_name_and_initial }
       .grid-cell.grid-cell--33
         = f.input :pay_type, required: true, prompt: "Select", label: "Payment Type", input_html: { class: 'form__select-field js--contract-payment-type' }
 

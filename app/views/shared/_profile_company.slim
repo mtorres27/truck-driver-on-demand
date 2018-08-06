@@ -14,7 +14,7 @@
           - else
             = company.name
         h3.heading-h3
-          - if current_user.admin?
+          - if current_user&.admin?
             = company.company_user.full_name
           -else
             = company.company_user.first_name_and_initial
