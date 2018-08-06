@@ -126,7 +126,6 @@ class Job < ApplicationRecord
     :published,
     :quoted,
     :negotiated,
-    :contract_draft,
     :contracted,
     :completed
   ], predicates: true, scope: true

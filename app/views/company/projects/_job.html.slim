@@ -15,7 +15,14 @@
           .job-box__value= job.applicants.size
           .job-box__key Applicants
         - else
-          .job-box__value= number_with_precision(job.contract_price, precision: 0).to_s || 0 + " " + job.currency
+          - if job.pay_type == "fixed"
+            - pay_type_string = "(Fixed)"
+          - else
+            - if job.variable_pay_type == "hourly"
+              - pay_type_string = "(Hourly)"
+            - elsif job.variable_pay_type == "daily"
+              - pay_type_string = "(Daily)"
+          .job-box__value= number_with_precision(job.contract_price, precision: 0).to_s + " #{pay_type_string}" || 0 + " " + job.currency
           .job-box__key Work Order
       .job-box__stat
         - if job.created?
