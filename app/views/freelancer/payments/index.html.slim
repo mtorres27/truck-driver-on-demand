@@ -16,10 +16,10 @@
           .collapse( id="project-group-#{job.id}" aria-labelledby="project-header-#{job.id}" )
             #jobs-accordion role="tablist" area-multiselectable="true"
               - job.payments.each do |payment|
-                div class="payments #{ "milestone--inactive" if !job.accepted_quote.paid_by_company}"
+                div class="payments #{ "milestone--inactive" if !payment.paid_on.present?}"
                   .payments__flexbox
                     .payments__title #{payment.description}
-                    .payments__amt #{payment.total_amount.present? ? number_with_precision(payment.total_amount, precision: 2) : number_with_precision(payment.amount, precision: 2)} #{job.currency ? job.currency.upcase : ''}
+                    .payments__amt #{number_with_precision(payment.amount * (1+ payment.job.applicable_sales_tax/100), precision: 2)} #{job.currency ? job.currency.upcase : ''}
                   .payments__flexbox
                     .payments__date
                       - if payment.issued_on.present? || payment.paid_on.present?

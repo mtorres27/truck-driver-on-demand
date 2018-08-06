@@ -1,8 +1,8 @@
 - if @applicant
   .freelancer-job__detail-cont
     .freelancer-job__quote-cont
-      - if @all_quotes.where({state: "accepted"}).length == 0
-        = render partial: "freelancer/shared/new_quote", locals: { n: @applicant.company.name, type: "quote", quotes: @quotes }
+      - if !@applicant_accepted
+        = render partial: "freelancer/shared/new_quote", locals: { n: @applicant.company.name, type: "quote" }
       - else
         .new-message--wrapper
           .new-message_amount
@@ -21,39 +21,21 @@
                     | Unfortunately, you haven't been selected for this job.
 
       .freelancer-job__message-history
-        - @harmonized_items.each_with_index do |item, index|
-          - if item[:type] == "message"
-            .freelancer-job__quote-msg class=(".freelancer-job_quote-msg.freelance-job__quote-msg-has-quote" if item[:payload].has_quote == true)
-              .common__user-avatar style="background-image: url(#{item[:payload].authorable.user_data.avatar_url})"
-              .freelancer-job__msg-cont.w-clearfix
-                .freelancer-job__msg-user-name= item[:payload].authorable.full_name
-                .freelancer-job__msg-created-at= "#{time_ago_in_words(item[:payload].created_at)} ago"
-                p.freelancer-job__msg-text= item[:payload].body
-                - if item[:payload].attachment_url
-                  a.authorable_attachment href=item[:payload].attachment_url target="_blank"
-                    - if is_image(item[:payload].attachment_url)
-                      span class="authorable_attachment_icon fa fa-image"
-                    - else
-                      span class="authorable_attachment_icon fa fa-file-text"
-                    .authorable_attachment__filename
-                      = eval(item[:payload].attachment_data)[:metadata][:filename]
-
-              - if item[:payload].has_quote == true and !item[:payload].quote_id.nil?
-                - @quote = Quote.find(item[:payload].quote_id)
-                .freelancer-job__msg-quote
-                  .freelancer-job__msg-price
-                    - if @quote.amount <= @job.budget and @quote.state != "declined"
-                      = number_with_precision(@quote.amount, precision: 2) + " " + @job.currency
-                    - elsif @quote.amount <= @job.budget and @quote.state == "declined"
-                      .rejected= number_with_precision(@quote.amount, precision: 2) + " " + @job.currency
-                    - elsif @quote.amount > @job.budget and @quote.state != "declined"
-                      .overbudget2= number_with_precision(@quote.amount, precision: 2) + " " + @job.currency
-                    - elsif @quote.amount > @job.budget and @quote.state == "declined"
-                      .overbudget2.rejected= number_with_precision(@quote.amount, precision: 2) + " " + @job.currency
-                    - if @quote.pay_type == "hourly"
-                      .freelancer-job__msg-price-breakdown
-                        = "(#{@quote.number_of_hours} hours @ #{@quote.hourly_rate} #{@job.currency}/hour)"
-                    - if @quote.pay_type == "daily"
-                      .freelancer-job__msg-price-breakdown
-                        = "(#{@quote.number_of_days} days @ #{@quote.daily_rate} #{@job.currency}/day)"
-
+        - @messages.each_with_index do |message|
+          .freelancer-job__quote-msg class=(".freelancer-job_quote-msg.freelance-job__quote-msg-has-quote")
+            .common__user-avatar style="background-image: url(#{message.authorable.user_data.avatar_url})"
+            .freelancer-job__msg-cont.w-clearfix
+              - if message.authorable.is_a?(Freelancer)
+                .freelancer-job__msg-user-name= message.authorable.first_name_and_initial
+              - else
+                .freelancer-job__msg-user-name= message.authorable.full_name
+              .freelancer-job__msg-created-at= "#{time_ago_in_words(message.created_at)} ago"
+              p.freelancer-job__msg-text= message.body
+              - if message.attachment_url
+                a.authorable_attachment href=message.attachment_url target="_blank"
+                  - if is_image(message.attachment_url)
+                    span class="authorable_attachment_icon fa fa-image"
+                  - else
+                    span class="authorable_attachment_icon fa fa-file-text"
+                  .authorable_attachment__filename
+                    = eval(message.attachment_data)[:metadata][:filename]

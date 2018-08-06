@@ -61,7 +61,7 @@ class Freelancer < User
   attr_accessor :accept_terms_of_service, :accept_privacy_policy,
                 :accept_code_of_conduct, :enforce_profile_edit, :user_type
 
-  validates :email, :address, :city, :postal_code, :country, :freelancer_type, :service_areas, :bio, :years_of_experience, :pay_unit_time_preference, presence: true, if: :enforce_profile_edit
+  validates :email, presence: true, if: :enforce_profile_edit
   validates :first_name, :last_name, presence: true, on: :update, if: :step_job_info?
   validates :freelancer_profile, presence: true
   validates_associated :freelancer_profile
@@ -208,7 +208,7 @@ class Freelancer < User
       data = f.freelancer_profile
       p "Doing geocode for " + f.id.to_s + "(#{data.compile_address})"
       data.do_geocode
-      data.update_columns(lat: f.lat, lng: f.lng)
+      data.update_columns(formatted_address: f.formatted_address, lat: f.lat, lng: f.lng)
       sleep 1
     end
   end

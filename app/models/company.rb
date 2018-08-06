@@ -85,7 +85,6 @@ class Company < ApplicationRecord
   has_many :projects, -> { order(updated_at: :desc) }, dependent: :destroy
   has_many :jobs, dependent: :destroy
   has_many :applicants, dependent: :destroy
-  has_many :quotes, dependent: :destroy
   has_many :payments, dependent: :destroy
   has_many :messages, -> { order(created_at: :desc) }, as: :authorable
   has_many :freelancer_reviews, dependent: :nullify
@@ -208,7 +207,7 @@ class Company < ApplicationRecord
   def check_if_should_do_geocode
     if saved_changes.include?("address") or saved_changes.include?("city") or (!address.nil? and lat.nil?) or (!city.nil? and lat.nil?)
       do_geocode
-      update_columns(lat: lat, lng: lng)
+      update_columns(formatted_address: formatted_address, lat: lat, lng: lng)
     end
   end
 
@@ -260,6 +259,10 @@ class Company < ApplicationRecord
   end
 
   def full_name
+    name
+  end
+
+  def first_name_and_initial
     name
   end
 

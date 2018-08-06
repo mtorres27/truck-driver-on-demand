@@ -48,6 +48,7 @@ Rails.application.routes.draw do
       # resources :payments, controller: "job_payments", only: [:index]
       resources :payments, controller: "job_payments", only: [:index, :show] do
         get :print, on: :member
+        post :create_payment, on: :collection
       end
       resource :review, only: [:show, :create]
       resources :quotes, only: [:index, :create] do
@@ -134,16 +135,15 @@ Rails.application.routes.draw do
         end
       end
       resource :contract, only: [:show, :edit, :update], as: "work_order", path: "work_order"
-        post 'contract_pay' => 'contracts#contract_pay'
       resources :messages, only: [:index, :create]
       resources :payments, controller: "job_payments", only: [:index, :show] do
         get :print, on: :member
-        get :mark_as_paid, on: :member
-        post 'contract_pay' => 'contracts#contract_pay'
+        post :mark_as_paid, on: :member
       end
       resource :review, only: [:show, :create]
       get :contract_invoice, on: :member
       get :freelancer_matches, on: :member
+      post :mark_as_finished, on: :member
     end
 
     get "jobs/:id/publish", to: "jobs#publish"

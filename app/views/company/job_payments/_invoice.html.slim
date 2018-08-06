@@ -1,31 +1,17 @@
+= render "shared/payment_invoice_header"
 .grid-cell.grid-cell--33
-  h4.heading-h4= "From: #{@job.company.name}"
-  div= @job.company.address
-  div #{current_user.user_data.city}, #{current_user.user_data.state}
-  div= current_user.user_data.postal_code
-  div BN Tax No. #{current_user.user_data.sales_tax_number}
+  h4.heading-h4.no-margin-bottom Paid to Freelancer
+= render "shared/payment_invoice_detail"
 .grid-cell.grid-cell--33
-  h4.heading-h4= "To: #{@job.freelancer&.full_name}"
-  div= @job.freelancer&.freelancer_profile&.formatted_address
-  div= @job.freelancer&.freelancer_profile&.sales_tax_number
-.grid-cell.grid-cell--33
-  h4.heading-h4= "Job: #{@job.title}"
-  div= "Phase: #{@payment.description}"
-  div= "Inv #: #{@payment.id}"
-  div= "Date: #{@payment.paid_on}"
-
+  h4.heading-h4.no-margin-bottom Transaction Fees
 .grid-cell.grid-cell--100
   .invoice__table
     .invoice__table-row.invoice__table-row--header
-      .invoice__table-text. Description
+      .invoice__table-text Description
       .invoice__table-text.invoice__table-text--right Amount
     .invoice__table-row
-      .invoice__table-text= @job.title + ": " +@payment.description
-      .invoice__table-text.invoice__table-text--right= number_with_precision(@payment.amount, precision: 2).to_s + " " + @job.currency.upcase
-    .invoice__table-row
-      .invoice__table-text Applicable Taxes
-      / @ #{@job.applicable_sales_tax}%
-      .invoice__table-text.invoice__table-text--right= number_with_precision(@payment.tax_amount, precision: 2).to_s + " " + @job.currency.upcase
+      .invoice__table-text AV Junction Fees (#{current_company.plan.fee_schema['company_fees']}%) #{@tax > 0 ? ' + Tax (13%)' : ''}
+      .invoice__table-text.invoice__table-text--right= number_with_precision(@avj_t_fees, precision: 2).to_s + " " + @job.currency.upcase
     .invoice__table-row.invoice__table-row--total
-      .invoice__table-text Total Payout
-      .invoice__table-text.invoice__table-text--right= number_with_precision(@payment.total_amount, precision: 2).to_s + " " + @job.currency.upcase
+      .invoice__table-text Total Amount Due
+      .invoice__table-text.invoice__table-text--right= number_with_precision(@total, precision: 2).to_s + " " + @job.currency.upcase

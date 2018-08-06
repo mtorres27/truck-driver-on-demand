@@ -1,12 +1,13 @@
 .header-bar
   h1.heading-h1 Post a New Job
 - content_for :secondary do
-  = simple_form_for(@job, url: wizard_path, method: :put) do |f|
+  = simple_form_for(@job, url: wizard_path, method: :put, html: { class: "js--job_form" }) do |f|
+    = f.hidden_field :save_draft, value: false, class: "js--save_draft"
     .action-bar
       h2.heading-h2.heading-h2--action-bar Step 2 of 2 - Attract qualified candidates
       .action-bar__actions
         a.btn.btn--secondary href=company_job_job_build_path(:job_details, job_id: @job.id) Back
-        = link_to "Save as Draft", skip_company_job_job_build_path(:candidate_details, job_id: @job.id), method: :post, class: "btn btn--secondary"
+        .btn.btn--secondary onClick="saveAsDraft()" Save as draft
         = f.button :submit, "Publish", class: "btn btn--primary"
 
     .grid-h
@@ -16,5 +17,5 @@
       .grid-cell
         .buttons
           a.btn.btn--secondary href=company_job_job_build_path(:job_details, job_id: @job.id) Back
-          = link_to "Save as Draft", skip_company_job_job_build_path(:candidate_details, job_id: @job.id), method: :post, class: "btn btn--secondary"
+          .btn.btn--secondary onClick="saveAsDraft()" Save as draft
           = f.button :submit, "Publish", class: "btn btn--primary"

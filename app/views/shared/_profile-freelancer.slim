@@ -8,7 +8,10 @@
           = image_tag(@freelancer.freelancer_profile.avatar_url, size: "75x75")
       .profile__meta__info
         h2.heading-h2
-          = @freelancer.full_name
+          - if current_user&.admin?
+            = @freelancer.full_name
+          - else
+            = @freelancer.first_name_and_initial
         - unless current_user&.company_user?
           h4.heading-h4
             a href="mailto:#{@freelancer.email}" target="_blank"
@@ -245,4 +248,4 @@
                 = review.comments
               p
                 i
-                  = "#{review.company.company_user.full_name}, #{review.company.name}"
+                  = "#{review.company.company_user.first_name_and_initial}, #{review.company.name}"

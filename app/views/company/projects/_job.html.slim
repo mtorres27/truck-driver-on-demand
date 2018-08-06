@@ -21,9 +21,6 @@
         - if job.created?
           .job-box__value -
           .job-box__key &nbsp;
-        - elsif job.published? || job.quoted?
-          .job-box__value= job.quotes.size
-          .job-box__key Quotes
         - else
           .job-box__value= number_with_precision(job.gpayments_sum_paid, precision: 0).to_s || 0 + " " + job.currency
           .job-box__key Paid

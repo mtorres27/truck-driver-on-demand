@@ -23,7 +23,8 @@ class Company::JobBuildController < Company::BaseController
     @job.attributes = job_params
     @job.creation_step = next_step
 
-    @job.state = "published" if @job.creation_completed? && @job.candidate_details_form_filled?
+    @job.state = "published" if @job.creation_completed? && (@job.save_draft == "false" || @job.save_draft.blank?)
+    flash[:notice] = "You need to publish this job in order to make it visible to freelancers" if @job.creation_completed? && @job.save_draft == "true"
 
     render_wizard @job
   end
@@ -33,12 +34,6 @@ class Company::JobBuildController < Company::BaseController
     @job.update_attribute(:creation_step, steps.first)
     authorize_job
     redirect_to wizard_path(steps.first, job_id: @job.id)
-  end
-
-  def skip
-    @job.update_attribute(:creation_step, next_step)
-    flash[:notice] = "You need to publish this job in order to make it visible to freelancers"
-    redirect_to company_job_job_build_path(next_step, job_id: @job.id)
   end
 
   private
@@ -78,6 +73,7 @@ class Company::JobBuildController < Company::BaseController
         :state,
         :address,
         :state_province,
+        :save_draft,
         attachments_attributes: [:id, :file, :title, :_destroy],
         technical_skill_tags:  I18n.t("enumerize.technical_skill_tags").keys,
         manufacturer_tags:  I18n.t("enumerize.manufacturer_tags").keys,

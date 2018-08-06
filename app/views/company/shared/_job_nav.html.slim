@@ -1,19 +1,6 @@
 .job-header
   .job-header__meta-1
     = job_state_label(job)
-    .job-header__budget-group
-      - if job.accepted_quote && job.applicable_sales_tax.present?
-        .job-header__budget= number_with_precision(job.accepted_quote.amount, precision: 2)
-        span<>= job.currency.upcase if job.currency.upcase
-        .job-header__budget-label + #{number_with_precision(job.accepted_quote.amount * (job.applicable_sales_tax/100), precision: 2)} TAX
-      - elsif job.accepted_quote
-        .job-header__budget= number_with_precision(job.accepted_quote.amount, precision: 0)
-        span<>= job.currency.upcase if job.currency.upcase
-        .job-header__budget-label CONTRACT value
-      - else
-        .job-header__budget= number_with_precision(job.budget, precision: 0)
-        span<>= job.currency.upcase if job.currency
-        .job-header__budget-label Budget
 
   h4.heading-h4
     - path = current_user&.admin? ? admin_company_jobs_path(job.company) : company_projects_path
@@ -23,9 +10,9 @@
   h2.heading-h2 #{job.title}
   - if job.freelancer
     h4.heading-h4
-      | AWARDED TO
+      | Awarded to
       - path = current_user.admin? ? admin_freelancer_path(job.freelancer) : company_freelancer_path(id: job.freelancer.id)
-      a<> href=path #{job.freelancer.full_name}
+      a<> href=path #{job.freelancer.first_name_and_initial}
 
 
 

@@ -13,7 +13,7 @@ a.list-item.list-item--freelancer href="/company/freelancers/#{freelancer.id}" c
 
   .list__group
     .list__title
-      = "#{freelancer.full_name} "
+      = "#{freelancer.first_name_and_initial} "
       - if is_verified(freelancer)
         span.list__verified.zmdi.zmdi-check-circle
 

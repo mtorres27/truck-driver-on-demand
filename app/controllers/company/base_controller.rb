@@ -9,7 +9,7 @@ class Company::BaseController < ApplicationController
   private
 
   def current_company
-    @current_company ||= current_user&.company
+    @current_company ||= current_user&.try(:company)
   end
 
   def redirect_if_not_company

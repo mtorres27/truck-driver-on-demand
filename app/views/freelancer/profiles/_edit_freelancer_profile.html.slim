@@ -109,6 +109,8 @@
         .grid-cell.grid-cell--50
           = df.input :sales_tax_number, required: false, label: "Sales tax number", placeholder: "Sales Tax No."
         .grid-cell.grid-cell--50
+          = df.input :business_tax_number, label: "Business Tax Number", placeholder: "Business Tax Number"
+        .grid-cell.grid-cell--50
           .form__field-label Do you have you own tools?
           .form__radio-group
             = df.radio_button(:own_tools, true)

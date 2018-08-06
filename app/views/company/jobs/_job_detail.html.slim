@@ -6,6 +6,7 @@
         - path = current_user.admin? ? edit_admin_job_path(@job) : edit_company_job_path(@job)
         a.btn.btn--primary href=path
           | Edit
+      = job_state_label(@job)
 
   .grid-h
     .grid-cell.grid-cell--50
@@ -36,26 +37,34 @@
     .grid-cell.grid-cell--100
       h3.heading-h3 Work Order
       .billboard.billboard--no-margin
-        p
-          - if @job.freelancer.nil?
-            | A Freelancer has not been selected for this job.
-          - elsif @job.pre_contracted? and @job.contract_sent != true
-            | Congrats a Freelencer has been selected! Work order pending.
-          - elsif @job.pre_contracted? and @job.contract_sent == true
-            | Work order sent to Freelancer. Awaiting response.
-          - elsif @job.contracted?
-            | Work order accepted by Freelancer.
-        - if @job.freelancer.present? && @job.pre_contracted?
-          - path = current_user.admin? ? edit_admin_job_work_order_path(@job) : edit_company_job_work_order_path(@job)
+        - path = current_user.admin? ? edit_admin_job_work_order_path(@job) : edit_company_job_work_order_path(@job)
+        - if @job.freelancer.nil? && @job.applicants.count > 0
+          p
+            | #{@job.applicants.count} freelancers have applied for this job.
           a.btn.btn--primary href=path
             | Create Work Order
-        - elsif @job.freelancer.present? && @job.contracted?
-          - path = current_user.admin? ? admin_job_work_order_path(@job) : company_job_work_order_path(@job)
-          a.btn.btn--primary href=path
-            | View Work Order
-        - else
+        - elsif @job.freelancer.nil? && @job.applicants.count == 0
+          p
+            | There are no applicants for this job
           div.btn.btn--primary.btn--primary--disabled
             | Create Work Order
+        - elsif @job.pre_contracted? and @job.contract_sent == true
+          p
+            | Work order #{@job.work_order} sent to #{@job.freelancer.first_name_and_initial}. Awaiting response.
+          a.btn.btn--primary href=path
+            | Edit Work Order
+        - elsif @job.contracted?
+          p
+            | Work order #{@job.work_order} accepted by Freelancer.
+          - view_path = current_user.admin? ? admin_job_work_order_path(@job) : company_job_work_order_path(@job)
+          a.btn.btn--primary href=view_path
+            | View Work Order
+        - elsif @job.state == "completed"
+          p
+            | Job finished. Work order #{@job.work_order} completed by Freelancer.
+          - view_path = current_user.admin? ? admin_job_work_order_path(@job) : company_job_work_order_path(@job)
+          a.btn.btn--primary href=view_path
+            | View Work Order
 
 
 

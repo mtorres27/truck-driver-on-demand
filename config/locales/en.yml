@@ -45,6 +45,9 @@ en:
       'YT': "Yukon"
       'NT': "Northwest Territories"
     job:
+      pay_type:
+        fixed: 'Fixed'
+        variable: 'Variable (daily/hourly)'
       freelancer_type:
         independent: "Independent"
         service_provider: "Service Provider"
@@ -57,10 +60,6 @@ en:
         eleven_to_twenty: "11 - 20"
         twentyone_to_thirty: "21 - 30"
         more_than_thirty: "30+"
-      pay_type:
-        fixed: "Fixed"
-        hourly: "Hourly"
-        daily: "Daily"
       state:
         created: "Not Published"
         published: "Accepting Applicants"

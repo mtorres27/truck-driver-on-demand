@@ -10,10 +10,6 @@ class Company::JobsController < Company::BaseController
 
   end
 
-  def contract_invoice
-    @accepted_quote = @job.accepted_quote
-  end
-
   def show
     redirect_to company_job_job_build_path(@job.creation_step, job_id: @job.id) unless @job.creation_completed?
   end
@@ -100,6 +96,13 @@ class Company::JobsController < Company::BaseController
       flash[:error] = "Unable to search geocode. Please try again."
       @freelancers = Freelancer.none
     end
+  end
+
+  def mark_as_finished
+    @job.update(state: :completed)
+    FreelancerMailer.notice_job_complete_freelancer(current_company, @job.freelancer, @job).deliver_later
+    CompanyMailer.notice_job_complete_company(current_company, @job.freelancer, @job).deliver_later
+    redirect_to company_job_review_path(@job)
   end
 
 

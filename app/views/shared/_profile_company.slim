@@ -14,11 +14,15 @@
           - else
             = company.name
         h3.heading-h3
-          = company.owner.full_name
-        h4.heading-h4
-          | Email:&nbsp
-          a href="mailto:#{company.owner.email}" target="_blank"
-            = company.owner.email
+          - if current_user&.admin?
+            = company.owner.full_name
+          -else
+            = company.owner.first_name_and_initial
+        - if current_user.admin?
+          h4.heading-h4
+            | Email:&nbsp
+            a href="mailto:#{company.owner.email}" target="_blank"
+              = company.owner.email
         h4.heading-h4
           i
             = "Member since #{company.created_at.strftime('%B %d, %Y')}"
@@ -115,7 +119,7 @@
           .profile__reviews__review-text
             = review.comments
           .profile__reviews__review-name
-            = review.freelancer.full_name
+            = review.freelancer.first_name_and_initial
       - else
         p This company doesn't have any reviews.
 

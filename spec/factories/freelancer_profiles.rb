@@ -52,6 +52,7 @@
 #  avj_credit               :decimal(10, 2)
 #  registration_step        :string
 #  freelancer_id            :integer
+#  business_tax_number      :string
 #
 # Indexes
 #
