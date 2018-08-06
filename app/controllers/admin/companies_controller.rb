@@ -74,7 +74,7 @@ class Admin::CompaniesController < Admin::BaseController
   end
 
   def set_company
-    @company = CompanyUser.find(params[:id])&.company
+    @company = Company.find(params[:id])
   end
 
   def company_params
