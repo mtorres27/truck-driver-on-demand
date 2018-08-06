@@ -126,6 +126,7 @@ class Job < ApplicationRecord
     :published,
     :quoted,
     :negotiated,
+    :contract_draft,
     :contracted,
     :completed
   ], predicates: true, scope: true
@@ -168,12 +169,16 @@ class Job < ApplicationRecord
     %w(created published quoted).include?(state)
   end
 
+  def work_order_in_draft?
+    pre_negotiated? && freelancer.present? && !contract_sent?
+  end
+
   def is_published?
     state != :created
   end
 
   def pre_contracted?
-    pre_negotiated? || negotiated?
+    pre_negotiated? || work_order_in_draft?
   end
 
   def work_order
