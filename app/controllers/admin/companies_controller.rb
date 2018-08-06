@@ -13,7 +13,7 @@ class Admin::CompaniesController < Admin::BaseController
   end
 
   def jobs
-    @company = CompanyUser.find(params[:company_id])&.company
+    @company = Company.find(params[:company_id])
     authorize @company
     @jobs = @company.jobs
     @jobs = @jobs.page(params[:page])
