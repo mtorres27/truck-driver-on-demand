@@ -89,6 +89,7 @@ describe Job, type: :model do
       it { is_expected.to validate_presence_of(:address) }
       it { is_expected.to validate_presence_of(:currency) }
       it { is_expected.to validate_presence_of(:country) }
+      it { is_expected.to validate_numericality_of(:duration).only_integer.is_greater_than_or_equal_to(1) }
     end
   end
 
