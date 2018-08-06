@@ -55,15 +55,13 @@
     p
       = @job.working_time ? t(@job.working_time) : "Not Specified"
 
-  .grid-cell.grid-cell--33
+  .grid-cell.grid-cell--expand
     h3.heading-h3
       | Start-End Date
-    / = t(:starts_on, scope: [:form, :labels, :job])
     p
       = l @job.starts_on
       |  -
       = @job.ends_on ? l(@job.ends_on) : "Not Specified"
-
 
   .grid-cell.grid-cell--50
     h3.heading-h3

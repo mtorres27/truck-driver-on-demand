@@ -25,6 +25,6 @@
             .grid-cell.grid-cell--100
               .buttons
                 = f.hidden_field :company_id, value: @job.company.id
-                = f.button :submit, class: "btn btn--primary"
+                = f.button :submit, "Send Payment Request", class: "btn btn--primary"
                 a.btn.btn--secondary data-dismiss="modal" href="#"
                   | Cancel
