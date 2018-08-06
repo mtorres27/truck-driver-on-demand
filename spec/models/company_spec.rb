@@ -87,20 +87,20 @@ describe Company, type: :model do
               lifecyclestage: "customer",
               im_an: "AV Company",
             )
-            create(:company, name: "Acme", registration_step: 'wicked_finish', company_user: create(:company_user, first_name: "John", last_name: "Doe", email: "test@test.com" ) )
+            create(:company, name: "Acme", registration_step: 'wicked_finish', company_users: [create(:company_user, first_name: "John", last_name: "Doe", email: "test@test.com", role: :owner )] )
           end
         end
 
         context "when registration is not completed" do
           it "does not creates or update a hubspot contact" do
             expect(Hubspot::Contact).not_to receive(:createOrUpdate)
-            create(:company, name: "Acme", registration_step: 'job_info', company_user: create(:company_user, first_name: "John", last_name: "Doe", email: "test@test.com" ) )
+            create(:company, name: "Acme", registration_step: 'job_info', company_users: [create(:company_user, first_name: "John", last_name: "Doe", email: "test@test.com", role: :owner )] )
           end
         end
       end
 
       describe "send_confirmation_email" do
-        let(:company) { create(:company, company_user: create(:company_user, first_name: "John", last_name: "Doe", email: "test@test.com" )) }
+        let(:company) { create(:company, company_users: [create(:company_user, first_name: "John", last_name: "Doe", email: "test@test.com", role: :owner )]) }
         let(:company_params) { { registration_step: "wicked_finish" } }
 
         context "when registration is completed" do
@@ -118,7 +118,7 @@ describe Company, type: :model do
 
         context "when the company user is confirmed" do
           it "does not send the confirmation mail" do
-            company.company_user.confirm
+            company.owner.confirm
             expect { company.update(company_params) }.to change(ActionMailer::Base.deliveries, :count).by(0)
           end
         end
@@ -152,7 +152,7 @@ describe Company, type: :model do
 
     describe "#registration_completed" do
       context "when registration step is wicked_finish" do
-        subject { create(:company, registration_step: "wicked_finish", company_user: create(:company_user)) }
+        subject { create(:company, registration_step: "wicked_finish", company_users: [create(:company_user)] ) }
 
         it { is_expected.to be_registration_completed }
       end
@@ -169,9 +169,9 @@ describe Company, type: :model do
     let!(:company_1) { create(:company, name: "Acme") }
     let!(:company_2) { create(:company, area: "Medicine, Psychology") }
     let(:company_user_1) { create(:company_user, email: "john@doe.com") }
-    let!(:company_3) { create(:company, company_user: company_user_1) }
+    let!(:company_3) { create(:company, company_users: [company_user_1]) }
     let(:company_user_2) { create(:company_user, first_name: "Jane") }
-    let!(:company_4) { create(:company, company_user: company_user_2) }
+    let!(:company_4) { create(:company, company_users: [company_user_2]) }
 
     context "when searching by name" do
       subject { described_class.search("Acme") }
@@ -205,7 +205,7 @@ describe Company, type: :model do
   describe "#name_or_email_search" do
     let!(:company_1) { create(:company, name: "Acme") }
     let(:company_user_1) { create(:company_user, email: "john@doe.com") }
-    let!(:company_2) { create(:company, company_user: company_user_1) }
+    let!(:company_2) { create(:company, company_users: [company_user_1]) }
 
     context "when searching by name" do
       subject { described_class.name_or_email_search("Acme") }

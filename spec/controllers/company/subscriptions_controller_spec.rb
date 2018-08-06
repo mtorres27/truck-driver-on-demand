@@ -40,7 +40,6 @@ describe Company::SubscriptionController, type: :controller  do
         expect(assigns(:subscription)).to be_present
       end
     end
-
   end
 
   describe 'GET invoices' do

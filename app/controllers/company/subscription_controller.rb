@@ -23,7 +23,7 @@ class Company::SubscriptionController < Company::BaseController
     # raise exception if company is not the invoice owner
     @subscription = Subscription.find_by(stripe_subscription_id: params[:subscription])
     authorize @subscription
-
+    binding.pry
     if @subscription.nil? || @subscription.company_id != current_company.id
       flash[:error] = "You can't see this invoice!"
       redirect_to company_invoices_path

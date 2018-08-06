@@ -43,5 +43,9 @@ FactoryBot.define do
     trait :confirmed do
       confirmed_at Time.current
     end
+
+    trait :owner do
+      role :company_owner
+    end
   end
 end
