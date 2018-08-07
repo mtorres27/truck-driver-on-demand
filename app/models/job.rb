@@ -131,7 +131,7 @@ class Job < ApplicationRecord
   ], predicates: true, scope: true
 
   validates :budget, numericality: true, sane_price: true, if: :creation_completed?
-  validates :duration, numericality: { only_integer: true, greater_than_or_equal_to: 1 }, if: :creation_completed?
+  validates :duration, numericality: { only_integer: true, greater_than_or_equal_to: 1 }, if: -> { step_job_details? || creation_completed? }
   validates :pay_type, inclusion: { in: pay_type.values }, allow_blank: true, if: :creation_completed?
   validates :freelancer_type, inclusion: { in: freelancer_type.values }, allow_blank: true, if: :creation_completed?
   validates :job_function, :freelancer_type, presence: true, if: :is_published?
