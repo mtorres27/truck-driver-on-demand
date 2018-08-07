@@ -220,5 +220,28 @@ class FreelancerMailer < ApplicationMailer
     }.to_json
     mail(to: @freelancer.email, subject: 'You earned credit')
   end
+
+  def notice_received_declined_quote(freelancer, company, job)
+    @freelancer = freelancer
+    @company = company
+    @job = job
+    headers 'X-SMTPAPI' => {
+        sub: {
+            '%freelancer_name%' => [@freelancer.first_name_and_initial],
+            '%company_name%' => [@company.name],
+            '%job_title%' => [@job.title],
+            '%root_url%' => [root_url]
+        },
+        filters: {
+            templates: {
+                settings: {
+                    enable: 1,
+                    template_id: '9a9afe3d-ea17-430c-b9d8-4e02af620d81'
+                }
+            }
+        }
+    }.to_json
+    mail(to: @freelancer.email, subject: 'Company has selected another freelancer')
+  end
 end
 

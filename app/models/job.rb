@@ -274,6 +274,10 @@ class Job < ApplicationRecord
 
   def accept_applicant
     applicants.where(id: accepted_applicant_id).first&.update_attribute(:state, "accepted")
+    applicants.where.not(id: accepted_applicant_id, state: "declined").each do |applicant|
+      applicant.update_attribute(:state, "declined")
+      FreelancerMailer.notice_received_declined_quote(applicant.freelancer, company, self).deliver_later
+    end
   end
 
   def validate_number_of_payments

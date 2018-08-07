@@ -93,6 +93,40 @@ describe Job, type: :model do
     end
   end
 
+  describe "triggers" do
+    describe "accept_applicant" do
+      let(:company) { create(:company) }
+      let(:project) { create(:project, company: company) }
+      let(:job) { build(:job,
+                        state_province: 'ON',
+                        address: 'Toronto',
+                        country: 'ca',
+                        company: company,
+                        project: project,
+                        contract_price: 200,
+                        pay_type: 'variable',
+                        variable_pay_type: 'daily',
+                        overtime_rate: 20,
+                        payment_terms: 10) }
+      let!(:accepted_applicant) { create(:applicant, job: job, company: company, freelancer: create(:freelancer)) }
+      let!(:declined_applicant) { create(:applicant, job: job, company: company, freelancer: create(:freelancer)) }
+
+      it "sets the accepted applicant's state to accepted" do
+        job.update(accepted_applicant_id: accepted_applicant.id, enforce_contract_creation: true)
+        expect(accepted_applicant.reload.state).to eq('accepted')
+      end
+
+      it "sets the declined applicant's state to declined" do
+        job.update(accepted_applicant_id: accepted_applicant.id, enforce_contract_creation: true)
+        expect(declined_applicant.reload.state).to eq('declined')
+      end
+
+      it "sends an email to declined applicants" do
+        expect { job.update(accepted_applicant_id: accepted_applicant.id, enforce_contract_creation: true) }.to change(ActionMailer::Base.deliveries, :count).by(1)
+      end
+    end
+  end
+
   describe "city_state_country" do
     let(:company) { create(:company) }
     let(:project) { create(:project, company: company) }
