@@ -86,7 +86,7 @@ FactoryBot.define do
     area { "USA" }
 
     after(:build) do |company|
-      company.company_users << FactoryBot.build(:company_user, :confirmed, role: :owner)
+      company.company_users ||= [FactoryBot.build(:company_user, :confirmed, role: :owner)]
     end
 
     trait :registration_completed do

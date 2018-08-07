@@ -275,7 +275,7 @@ class Company < ApplicationRecord
   end
 
   def send_confirmation_email
-    return if owner.try(:confirmed?) || !registration_completed? || owner.confirmation_sent_at.present?
+    return if owner.try(:confirmed?) || !registration_completed? || owner.try(:confirmation_sent_at).present?
     owner.send_confirmation_instructions
     owner.update_column(:confirmation_sent_at, Time.current)
   end

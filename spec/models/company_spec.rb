@@ -152,7 +152,7 @@ describe Company, type: :model do
 
     describe "#registration_completed" do
       context "when registration step is wicked_finish" do
-        subject { create(:company, registration_step: "wicked_finish", company_users: [create(:company_user)] ) }
+        subject { create(:company, registration_step: "wicked_finish", company_users: [create(:company_user, role: :owner)] ) }
 
         it { is_expected.to be_registration_completed }
       end

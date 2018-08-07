@@ -80,7 +80,7 @@ class CompanyPolicy < ApplicationPolicy
 
   def company_owner?
     return false unless company_user?
-    !record.owner.nil?
+    record.owner&.id == user.id
   end
 
 end

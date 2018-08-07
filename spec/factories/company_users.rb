@@ -45,7 +45,7 @@ FactoryBot.define do
     end
 
     trait :owner do
-      role :company_owner
+      role :owner
     end
   end
 end
