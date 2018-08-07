@@ -6,12 +6,14 @@
   .action-bar
     h2.heading-h2.heading-h2--action-bar
       | Manage Users
+    a.btn.btn--primary href=new_company_company_user_path
+      | Add Company User
   - if @users.any?
     .grid-h
       .grid-cell.grid-cell--100
         .list
           - @users.each do |user|
-            a.list-item href=''
+            a.list-item href=company_company_user_path(user)
               .list-bar
                 .list__title
                   = user.full_name

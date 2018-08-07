@@ -91,7 +91,7 @@ Rails.application.routes.draw do
       end
     end
 
-    get 'manage-users', to: 'users#index', as: 'users'
+    resources :company_users
 
     resources :freelancers, only: [:index, :show] do
       get :hired, on: :collection
