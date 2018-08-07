@@ -4,6 +4,7 @@ $(document).on("turbolinks:load", function () {
         $(".js--contract-variable-payment-type-div").hide();
         $(".js--contract-overtime-rate-div").hide();
         $(".js--contract-price-label").html("<abbr title='required'>*</abbr>Contract price");
+        $(".js--payment-add-button").click();
         $("#payments").show();
     }
     else if ($(".js--contract-payment-type").val() == "variable") {

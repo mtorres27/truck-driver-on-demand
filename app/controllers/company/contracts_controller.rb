@@ -30,7 +30,6 @@ class Company::ContractsController < Company::BaseController
 
       @job.messages << @m
 
-      # TODO: Add bit of code here that sets something in the table to denote being sent?
       @job.contract_sent = true
       @job.save
 
@@ -85,7 +84,6 @@ class Company::ContractsController < Company::BaseController
       :contract_price,
       :payment_terms,
       :overtime_rate,
-      :send_contract,
       :starts_on,
       :ends_on,
       :pay_type,
