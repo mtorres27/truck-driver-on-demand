@@ -19,29 +19,20 @@ class Company::ContractsController < Company::BaseController
   def update
     redirect_to company_job_path(@job), notice: "You can't edit the work order after it's accepted by the freelancer!" if @job.contracted?
 
-    if params.dig(:job, :send_contract) == "true"
-      @send_contract = true
-    else
-      @send_contract = false
-    end
-
     if @job.update(job_params)
-      if @send_contract
-        @m = Message.new
-        @m.authorable = @job.company
-        @m.receivable = @job.freelancer
-        @m.send_contract = true
-        @m.body = "Hi #{@job.freelancer.first_name_and_initial}! This is a note to let you know that we've just sent a work order to you. <a href='/freelancer/jobs/#{@job.id}/work_order'>Click here</a> to view it!"
-        @m.save
-        FreelancerMailer.notice_work_order_received(current_company, @job.freelancer, @job).deliver_later
+      @m = Message.new
+      @m.authorable = @job.company
+      @m.receivable = @job.freelancer
+      @m.send_contract = true
+      @m.body = "Hi #{@job.freelancer.first_name_and_initial}! This is a note to let you know that we've just sent a work order to you. <a href='/freelancer/jobs/#{@job.id}/work_order'>Click here</a> to view it!"
+      @m.save
+      FreelancerMailer.notice_work_order_received(current_company, @job.freelancer, @job).deliver_later
 
-        @job.messages << @m
+      @job.messages << @m
 
-        # TODO: Add bit of code here that sets something in the table to denote being sent?
-        @job.contract_sent = true
-        @job.save
+      @job.contract_sent = true
+      @job.save
 
-      end
       redirect_to company_job_path(@job), notice: "Work Order updated." if !@job.contracted?
     else
 
@@ -93,7 +84,6 @@ class Company::ContractsController < Company::BaseController
       :contract_price,
       :payment_terms,
       :overtime_rate,
-      :send_contract,
       :starts_on,
       :ends_on,
       :pay_type,
