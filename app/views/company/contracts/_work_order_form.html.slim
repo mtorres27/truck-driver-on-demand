@@ -117,8 +117,4 @@
       .grid-cell.grid-cell--100
         - if @job.pre_contracted?
           .buttons
-            = f.hidden_field :send_contract, value: false
-            .btn.btn--primary onclick="sendContract()"
-              | Send Work Order
-            .btn.btn--secondary onclick="saveDraft()"
-              | Save Draft
+            =f.submit "Send Work Order", class: "btn btn--primary"

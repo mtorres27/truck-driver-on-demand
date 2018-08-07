@@ -60,16 +60,6 @@ var toggleExpandedJobDetails = function() {
     }
 };
 
-var sendContract = function() {
-    $("#job_send_contract").val(true);
-    $(".edit_job").submit();
-};
-
-var saveDraft = function() {
-    $("#job_send_contract").val(false);
-    $(".edit_job").submit();
-};
-
 function uploadAddendum (index) {
     if (index != undefined) {
         var id = "#job_attachments_attributes_"+index+"_file";

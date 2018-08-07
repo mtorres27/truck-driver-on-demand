@@ -139,6 +139,7 @@ class Job < ApplicationRecord
   validates :freelancer_type, :job_type, :job_market, :job_function, presence: true, if: -> { is_published? }
   validates :accepted_applicant_id, presence: true, if: :enforce_contract_creation
   validates :contract_price, :payment_terms, numericality: { greater_than_or_equal_to: 1 }, if: :enforce_contract_creation
+  validates :overtime_rate, numericality: { greater_than_or_equal_to: 1 }, if: -> { enforce_contract_creation && pay_type == 'variable' }
   validate :scope_or_file, if: :creation_completed?
   validate :validate_number_of_payments, if: :creation_completed?
   validate :validate_payments_total, if: :creation_completed?
@@ -168,16 +169,12 @@ class Job < ApplicationRecord
     %w(created published quoted).include?(state)
   end
 
-  def work_order_in_draft?
-    pre_negotiated? && freelancer.present? && !contract_sent?
-  end
-
   def is_published?
     state != :created
   end
 
   def pre_contracted?
-    pre_negotiated? || work_order_in_draft?
+    pre_negotiated?
   end
 
   def work_order

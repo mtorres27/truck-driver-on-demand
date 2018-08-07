@@ -53,11 +53,6 @@
             | Work order #{@job.work_order} sent to #{@job.freelancer.first_name_and_initial}. Awaiting response.
           a.btn.btn--primary href=path
             | Edit Work Order
-        - elsif @job.pre_contracted? && @job.work_order_in_draft?
-          p
-            | You saved work order #{@job.work_order} as a draft. Finish it and send it to your selected freelancer in order to finish the contract.
-          a.btn.btn--primary href=path
-            | Edit Work Order
         - elsif @job.contracted?
           p
             | Work order #{@job.work_order} accepted by Freelancer.
