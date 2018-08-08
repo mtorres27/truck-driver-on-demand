@@ -128,6 +128,7 @@ class Company < ApplicationRecord
 
   accepts_nested_attributes_for :featured_projects, allow_destroy: true, reject_if: :reject_featured_projects
   accepts_nested_attributes_for :company_installs, allow_destroy: true, reject_if: :reject_company_installs
+  accepts_nested_attributes_for :company_user
 
   scope :new_registrants, -> { where(disabled: true) }
 
