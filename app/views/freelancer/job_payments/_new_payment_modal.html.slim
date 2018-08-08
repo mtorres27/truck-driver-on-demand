@@ -15,9 +15,12 @@
               - elsif @job.variable_pay_type == "hourly"
                 = f.label "Number of hours (#{@job.contract_price}#{@job.currency.upcase}/hr)", required: true
                 = f.input :time_unit_amount, label: false, placeholder: "Enter the number of hours", input_html: { class: "js--time_unit_amount" }
-            .grid-cell.grid-cell--100
-              = f.label "Number of overtime hours (#{@job.overtime_rate}#{@job.currency.upcase}/hr)"
-              = f.input :overtime_hours_amount, label: false, placeholder: "Enter the number of overtime hours (if any)", input_html: { class: "js--overtime_hours_amount" }
+            - if @job.overtime_rate.present?
+              .grid-cell.grid-cell--100
+                = f.label "Number of overtime hours (#{@job.overtime_rate}#{@job.currency.upcase}/hr)"
+                = f.input :overtime_hours_amount, label: false, placeholder: "Enter the number of overtime hours (if any)", input_html: { class: "js--overtime_hours_amount" }
+            - else
+              = f.hidden_field :overtime_hours_amount, value: 0, class: "js--overtime_hours_amount"
             .grid-cell.grid-cell--100
               = f.input :amount, readonly: true, input_html: { class: "js--payment_amount" }
             .grid-cell.grid-cell--100
