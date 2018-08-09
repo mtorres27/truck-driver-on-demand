@@ -27,6 +27,8 @@
 #  transaction_fees              :decimal(10, 2)   default(0.0)
 #  time_unit_amount              :integer
 #  overtime_hours_amount         :integer
+#  freelancer_avj_fees_rate      :decimal(10, 2)
+#  company_avj_fees_rate         :decimal(10, 2)
 #
 # Indexes
 #

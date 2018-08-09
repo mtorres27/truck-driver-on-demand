@@ -30,9 +30,11 @@ class Company::JobPaymentsController < Company::BaseController
     currency_rate          = CurrencyExchange.get_currency_rate(@job.currency)
     amount                 = @payment.amount
     tax                    = @job.applicable_sales_tax * @payment.amount / 100
-    company_fees           = @job.company_plan_fees == 0 ? 0 : current_company.plan.fee_schema['company_fees'] ? (amount * current_company.plan.fee_schema['company_fees'].to_f / 100) : 0
+    company_fees_rate      = @job.company_plan_fees.zero? ? 0 : current_company.plan.fee_schema['company_fees'].to_f
+    freelancer_fees_rate   = current_company.plan.fee_schema['freelancer_fees'].to_f
+    company_fees           = @job.company_plan_fees.zero? ? 0 : company_fees_rate != 0 ? (amount * company_fees_rate.to_f / 100) : 0
     company_t_fees         = current_company.country == 'ca' ? company_fees * 1.13 : company_fees
-    freelancer_fees        = current_company.plan.fee_schema['freelancer_fees'] ? (amount * current_company.plan.fee_schema['freelancer_fees'].to_f / 100) : 0
+    freelancer_fees        = (amount * freelancer_fees_rate.to_f / 100)
     freelancer_t_fees      = @job.freelancer.freelancer_profile.country == 'ca' ? freelancer_fees * 1.13 : freelancer_fees
 
     @payment.set_avj_credit(freelancer_t_fees)
@@ -66,6 +68,8 @@ class Company::JobPaymentsController < Company::BaseController
       @payment.total_freelancer_fees          = freelancer_t_fees
       @payment.transaction_fees               = total * 0.029 + (0.3 * currency_rate)
       @payment.total_amount                   = total
+      @payment.freelancer_avj_fees_rate       = freelancer_fees_rate
+      @payment.company_avj_fees_rate          = company_fees_rate
 
       @payment.stripe_charge_id               = charge[:id]
       @payment.stripe_balance_transaction_id  = charge[:balance_transaction]

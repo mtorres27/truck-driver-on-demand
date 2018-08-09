@@ -1107,7 +1107,9 @@ CREATE TABLE payments (
     total_freelancer_fees numeric(10,2) DEFAULT 0,
     transaction_fees numeric(10,2) DEFAULT 0,
     time_unit_amount integer,
-    overtime_hours_amount integer
+    overtime_hours_amount integer,
+    freelancer_avj_fees_rate numeric(10,2),
+    company_avj_fees_rate numeric(10,2)
 );
 
 
@@ -2424,6 +2426,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20180801220123'),
 ('20180801230445'),
 ('20180802215944'),
-('20180803160038');
+('20180803160038'),
+('20180808185712');
 
 

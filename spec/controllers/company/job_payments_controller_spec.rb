@@ -70,6 +70,8 @@ describe Company::JobPaymentsController, type: :controller  do
       expect(payment.stripe_charge_id).to be_present
       expect(payment.stripe_balance_transaction_id).to be_present
       expect(payment.avj_credit).to be_present
+      expect(payment.company_avj_fees_rate).to be_present
+      expect(payment.freelancer_avj_fees_rate).to be_present
     end
 
     it 'marks payment as paid' do
