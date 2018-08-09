@@ -15,11 +15,61 @@
 #  last_sign_in_ip        :inet
 #  created_at             :datetime         not null
 #  updated_at             :datetime         not null
+#  confirmation_token     :string
+#  confirmed_at           :datetime
+#  confirmation_sent_at   :datetime
+#  first_name             :string
+#  last_name              :string
+#  type                   :string
+#  messages_count         :integer          default(0), not null
+#  company_id             :integer
+#
+# Indexes
+#
+#  index_users_on_company_id            (company_id)
+#  index_users_on_confirmation_token    (confirmation_token) UNIQUE
+#  index_users_on_email                 (email) UNIQUE
+#  index_users_on_reset_password_token  (reset_password_token) UNIQUE
 #
 
 class User < ApplicationRecord
-  # Include default devise modules. Others available are:
-  # :confirmable, :lockable, :timeoutable and :omniauthable
+
   devise :database_authenticatable, :registerable,
-         :recoverable, :rememberable, :trackable, :validatable
+         :recoverable, :rememberable, :trackable, :validatable, :confirmable
+
+  validates :email, uniqueness: { case_sensitive: false }
+  validates :first_name, :last_name, presence: true
+
+  def full_name
+    "#{first_name} #{last_name}"
+  end
+
+  def first_name_and_initial
+    "#{first_name} #{last_name&.first}"
+  end
+
+  def name_initials
+    "#{first_name.first}#{last_name.first}"
+  end
+
+  def admin?
+    is_a?(Admin)
+  end
+
+  def freelancer?
+    is_a?(Freelancer)
+  end
+
+  def company_user?
+    is_a?(CompanyUser)
+  end
+
+  def user_data
+    if is_a?(CompanyUser)
+      company
+    elsif is_a?(Freelancer)
+      freelancer_profile
+    end
+  end
+
 end

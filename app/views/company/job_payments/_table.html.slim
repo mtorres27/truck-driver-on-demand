@@ -1,98 +1,56 @@
-- if accepted_quote && accepted_quote.paid_by_company
-  / div class="payments #{ "milestone--inactive" if accepted_quote.nil? || (accepted_quote.present? && !accepted_quote.paid_by_company)}"
-  div class="#{ "milestone--inactive" if accepted_quote.nil? || (accepted_quote.present? && !accepted_quote.paid_by_company)}"
+- if job.paid_by_company
+  .milestone--inactive
     .payments__flexbox
       h3.heading-h3 AV Junction Fees
       .payments__amt
         = job.company_plan_fees.present? ? number_with_precision(job.company_plan_fees , precision: 2) : ''
         | #{job.currency.upcase}
-    .payments__flexbox
-      - if job.company_plan_fees.positive?
-        =link_to company_job_avj_invoice_path(id: job.id), class: 'btn-link'
-          | View Invoice
-      - else
-        .payments__payout-label Waived
-- if accepted_quote && !accepted_quote.paid_by_company
-  .grid-h
-    .grid-cell.grid-cell--50
-      div
-        .tag.tag--in-progress funds pending
-      .payments__status
-        | For this project to be started, it must be fully funded. This shows the AV Freelancer that funds are available but will not be accessible until the milestones are met and you authorize the payout.
-      .payments_status
-        - if current_admin.nil?
-          = form_tag company_job_contract_pay_path(job), method: 'post' do
-            input type="hidden" name="quote_id" value=accepted_quote.id
-            script.stripe-button data-label="Fund this Job" data-amount="#{ (accepted_quote.amount.floor +  job.company_plan_fees + (accepted_quote.amount * job.applicable_sales_tax / 100)) * 100 }" data-image="/assets/stripe-logo.png" data-email=("#{current_company.email}") data-description="Fund this Job" data-key=("#{Rails.configuration.stripe[:publishable_key]}") data-locale="auto" src="https://checkout.stripe.com/checkout.js" data-currency="#{job.currency}" data-panel-label="Fund"
-
-    .grid-cell.grid-cell--50
-      .payments__flexbox
-        .payments__status
-          | Job Total :
-        .payments__status
-          strong<
-            | #{number_with_precision(accepted_quote.amount.floor , precision: 2) } #{job.currency.upcase}
-      - if job.applicable_sales_tax.present?
+- if showCalculations
+  .grid-h.no-margin-bottom
+    .grid-cell.grid-cell--100
+      p AV Junction makes paying your freelancers easy and secure. Choose to pay using Visa, MasterCard or American Express.
+      p All payments are subject to a 3.9% transaction fee.
+      - if current_user.is_a?(CompanyUser) && job.pay_type != "fixed" && payments.count > 0 && payments.outstanding.empty?
         .payments__flexbox
-          .payments__status
-            | Job Sales Tax :
-          .payments__status
-            strong<
-              | #{number_with_precision((accepted_quote.amount * job.applicable_sales_tax/100), precision: 2) } #{job.currency.upcase}
-      .payments__flexbox
-        .payments__status
-          | AV Junction Fees + Tax #{ accepted_quote.plan_fee.positive? ? "($"+accepted_quote.plan_fee.to_i.to_s+" USD)" : ""}:
-        .payments__status
-          strong<
-            | #{ job.company_plan_fees.positive? ? number_with_precision(job.company_plan_fees , precision: 2) : "Waived"} #{ job.company_plan_fees.positive? ? job.currency.upcase : ''}
-      .payments__flexbox
-        .payments__status
-          | Job Total
-        .payments__status
-          strong<
-            | #{number_with_precision((accepted_quote.amount.floor + job.company_plan_fees + (accepted_quote.amount * job.applicable_sales_tax/100)), precision: 2) } #{job.currency.upcase}
-      - if current_admin.nil?
-        .payments__flexbox
-          .payments__status
-            = link_to contract_invoice_company_job_path(job), class: 'btn-primary--active top-margin w-inline-block'
-              div View invoice
+          = link_to mark_as_finished_company_job_path(@job), method: :post, class: 'btn-primary--active top-margin w-inline-block'
+            div Mark job as finished
+      hr
+- if payments.count == 0 && job.pay_type == "variable"
+  .grid-h.no-margin-bottom
+    .grid-cell.grid-cell--100
+      p No payments have been requested for this job at the moment.
+      p This is a variable payment type job, which means that the payments will be created dynamically by the freelancer as they advance in the job.
 
-- elsif accepted_quote && accepted_quote.paid_by_company && !job.funds_available
-  .payments
-    .payments__flexbox
-      .tag.tag--in-progress funds pending
-      .payments__total-group
-        .payments__total-amt #{number_with_precision(job.gpayments_sum_total, precision: 2)} #{job.currency.upcase}
-        .payments__payout-label Funded
-    .payments__status Thanks for funding this project. These funds will be available to the freelancer #{job.funds_available_on ? "on " + Time.at(job.funds_available_on).to_date.to_s : 'in 7-10 days'}. After which you will be able to release payouts.
-- elsif accepted_quote && accepted_quote.paid_by_company && job.funds_available
-  .payments
-    .payments__flexbox
-      .tag.tag--success #{(job.payments_sum_paid == job.payments_sum_total) ? 'Job Done' : 'FUNDS AVAILABLE'}
-      - if !connector.account.external_accounts.data.any?
-        .tag.tag--in-progress Freelancer has no bank account
-      .payments__total-group
-        .payments__total-amt #{number_with_precision(job.gpayments_sum_paid, precision: 2)} #{job.currency.upcase}
-        .payments__payout-label Total Payouts
-    - if current_admin.nil?
-      = link_to contract_invoice_company_job_path(job), class: 'btn-primary--active top-margin w-inline-block'
-        div View receipt
-    .payments__status You have secured funds for this project. AV Junction will hold these payments on your behalf until each of the milestones listed below are met.
-
+- company_fees = current_company.plan.fee_schema['company_fees'].to_f
 - payments.each do |payment|
-    div class="payments #{ "milestone--inactive" if accepted_quote.nil? || (accepted_quote.present? && !accepted_quote.paid_by_company)}"
+  div class="payments"
+    .payments__flexbox
       .payments__flexbox
-        .payments__title #{payment.description}
-        .payments__amt #{payment.total_amount.present? ? number_with_precision(payment.total_amount, precision: 2) : number_with_precision(payment.amount, precision: 2)} #{job.currency ? job.currency.upcase : ''}
-      .payments__flexbox
-        - if payment.paid_on.present?
-          .payments__date Paid on #{payment.paid_on}
-        - elsif payment.issued_on.present?
-          .payments__date Requested from #{job.freelancer.name} on #{payment.issued_on}
-      - if !payment.paid_on.blank? || (!connector.nil? && !connector.account.nil? && connector.account.external_accounts.data.any? && accepted_quote.present? && accepted_quote.paid_by_company && job.funds_available)
-        - path = current_admin.nil? ? company_job_payment_path(job, payment) : admin_job_payment_path(job, payment)
-        = link_to path, class: 'btn-primary--active top-margin w-inline-block'
-          div #{((payment.paid_on.blank? && current_admin.nil?) ? "Issue Payout" : "View Invoice")}
-      - else
-        .btn-primary--disabled.top-margin.w-inline-block
-          div Issue Payout
+        .payments__title #{payment.description} - Invoice ##{payment.id}
+        - amount      = payment.amount
+        - tax         = !job.applicable_sales_tax ? 0 : job.applicable_sales_tax * payment.amount / 100
+        - avj_fees    = !job.company_plan_fees || job.company_plan_fees == 0 ? 0 : company_fees ? (amount * company_fees / 100) : 0
+        - avj_t_fees  = current_company.country == 'ca' ? avj_fees * 1.13 : avj_fees
+        - total       = amount + tax + avj_t_fees
+        .tag class="#{payment.paid_on.present? ? "tag--success" : "tag--warning"}" #{payment.paid_on.present? ? "Paid" : "Unpaid"}
+      .payments__amt
+        | #{ number_with_precision(total, precision: 2)} #{job.currency ? job.currency.upcase : ''}
+        / - if payment.paid_on.blank?
+        .div
+          - path = !current_user.admin? ? company_job_payment_path(job, payment) : admin_job_payment_path(job, payment)
+          = link_to path, class: 'btn-link'
+            div View Invoice
+    .payments__flexbox
+      - if payment.paid_on.present?
+        .payments__date Paid on #{payment.paid_on}
+      - elsif payment.issued_on.present?
+        .payments__date from #{job.freelancer.first_name_and_initial} on #{payment.issued_on}
+    - if payment.paid_on.blank? && (!connector.nil? && !connector.account.nil? && connector.account.external_accounts.data.any?)
+      - path = !current_user.admin? ? company_job_payment_path(job, payment) : admin_job_payment_path(job, payment)
+      = link_to path, class: 'btn-primary--active top-margin w-inline-block'
+        div #{(payment.paid_on.blank? && current_user.company_user? ? "Pay Now" : "View Invoice")}
+    - elsif connector.nil? || connector.account.nil? || !connector.account.external_accounts.data.any?
+      div Freelancer doesn't provide his bank information yet!
+    / - else
+    /   .btn-primary--disabled.top-margin.w-inline-block
+    /     div PAY NOW

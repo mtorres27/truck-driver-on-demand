@@ -2,9 +2,9 @@
   h3.heading-h3
     | Freelancer
     p
-      - nspace = current_admin.nil? ? "company" : "admin"
+      - nspace = current_user.admin? ? "admin" : "company"
       a href="/#{nspace}/freelancers/#{job.freelancer.id}"
-        = job.freelancer.name
-    
+        = job.freelancer.first_name_and_initial
+
 
 

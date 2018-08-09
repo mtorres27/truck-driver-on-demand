@@ -11,6 +11,11 @@
 #  created_at      :datetime         not null
 #  updated_at      :datetime         not null
 #
+# Indexes
+#
+#  index_identities_on_loginable_type_and_loginable_id      (loginable_type,loginable_id)
+#  index_identities_on_loginable_type_and_provider_and_uid  (loginable_type,provider,uid) UNIQUE
+#
 
 FactoryBot.define do
   factory :identity do

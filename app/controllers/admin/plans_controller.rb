@@ -1,7 +1,9 @@
 class Admin::PlansController < Admin::BaseController
   before_action :set_plan, except: [:index]
+  before_action :authorize_plan, except: [:index]
 
   def index
+    authorize current_user
     @plans = Plan.order(:name)
     @plans = @plans.page(params[:page])
   end
@@ -31,6 +33,10 @@ class Admin::PlansController < Admin::BaseController
     @plan = Plan.find(params[:id])
   end
 
+  def authorize_plan
+    authorize @plan
+  end
+
   def plan_params
     params.require(:plan).permit(
       :name,
@@ -39,7 +45,7 @@ class Admin::PlansController < Admin::BaseController
       :subscription_fee,
       :description,
       :period,
-      fee_schema: ['below_2000', 'above_2000']
+      fee_schema: ['company_fees', 'freelancer_fees']
     )
   end
 end

@@ -4,18 +4,18 @@
 #
 #  id                                     :integer          not null, primary key
 #  company_id                             :integer          not null
-#  project_id                             :integer          not null
-#  title                                  :string           not null
+#  project_id                             :integer
+#  title                                  :string
 #  state                                  :string           default("created"), not null
-#  summary                                :text             not null
+#  summary                                :text
 #  scope_of_work                          :text
-#  budget                                 :decimal(10, 2)   not null
-#  job_function                           :string           not null
-#  starts_on                              :date             not null
+#  budget                                 :decimal(10, 2)
+#  job_function                           :string
+#  starts_on                              :date
 #  ends_on                                :date
-#  duration                               :integer          not null
+#  duration                               :integer
 #  pay_type                               :string
-#  freelancer_type                        :string           not null
+#  freelancer_type                        :string
 #  technical_skill_tags                   :text
 #  invite_only                            :boolean          default(FALSE), not null
 #  scope_is_public                        :boolean          default(TRUE), not null
@@ -50,9 +50,30 @@
 #  job_type                               :citext
 #  job_market                             :citext
 #  manufacturer_tags                      :citext
-#  contracted_at                          :datetime
 #  company_plan_fees                      :decimal(10, 2)   default(0.0)
+#  contracted_at                          :datetime
 #  state_province                         :string
+#  creation_step                          :string
+#  plan_fee                               :decimal(10, 2)   default(0.0)
+#  paid_by_company                        :boolean          default(FALSE)
+#  total_amount                           :decimal(10, 2)
+#  tax_amount                             :decimal(10, 2)
+#  stripe_fees                            :decimal(10, 2)
+#  amount_subtotal                        :decimal(10, 2)
+#  variable_pay_type                      :string
+#  overtime_rate                          :decimal(10, 2)
+#  payment_terms                          :integer
+#
+# Indexes
+#
+#  index_jobs_on_company_id         (company_id)
+#  index_jobs_on_manufacturer_tags  (manufacturer_tags)
+#  index_jobs_on_project_id         (project_id)
+#
+# Foreign Keys
+#
+#  fk_rails_...  (company_id => companies.id)
+#  fk_rails_...  (project_id => projects.id)
 #
 
 FactoryBot.define do
@@ -78,5 +99,7 @@ FactoryBot.define do
     address "Address"
     country "ca"
     currency "CAD"
+    job_type "system_integration"
+    job_market "house_of_worship"
   end
 end

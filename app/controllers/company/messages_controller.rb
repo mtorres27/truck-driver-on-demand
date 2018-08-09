@@ -1,5 +1,6 @@
 class Company::MessagesController < Company::BaseController
   before_action :set_job
+  before_action :authorize_job
 
   def index
     set_collection
@@ -21,15 +22,19 @@ class Company::MessagesController < Company::BaseController
 
   private
 
-    def set_job
-      @job = current_company.jobs.includes(messages: :authorable).find(params[:job_id])
-    end
+  def set_job
+    @job = current_company.jobs.includes(messages: :authorable).find(params[:job_id])
+  end
 
-    def set_collection
-      @messages = @job.messages
-    end
+  def authorize_job
+    authorize @job
+  end
 
-    def message_params
-      params.require(:message).permit(:body, :attachment)
-    end
+  def set_collection
+    @messages = @job.messages
+  end
+
+  def message_params
+    params.require(:message).permit(:body, :attachment)
+  end
 end

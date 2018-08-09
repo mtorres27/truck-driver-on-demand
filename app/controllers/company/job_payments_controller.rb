@@ -1,51 +1,88 @@
 class Company::JobPaymentsController < Company::BaseController
   before_action :set_job
   before_action :set_payment, except: [:index]
+  before_action :authorize_job
 
   def index
     @payments = @job.payments.order(:created_at)
-    @accepted_quote = @job.accepted_quote
     @connector = StripeAccount.new(@job.freelancer)
-
-    if @accepted_quote.paid_by_company && !@job.funds_available && @job.stripe_balance_transaction_id.present?
-      balance_transaction = Stripe::BalanceTransaction.retrieve(@job.stripe_balance_transaction_id, stripe_account: @job.freelancer.stripe_account_id)
-      if balance_transaction[:status] == 'pending'
-        @job.funds_available_on = balance_transaction[:available_on]
-      else
-        @job.funds_available = true
-      end
-      @job.save
-    end
   end
 
   def show
+    @amount      = @payment.amount
+    @tax         = @job.applicable_sales_tax * @payment.amount / 100
+    @avj_fees    = @job.company_plan_fees == 0 ? 0 : current_company.plan.fee_schema['company_fees'] ? (@amount * current_company.plan.fee_schema['company_fees'].to_f / 100) : 0
+    @avj_t_fees  = current_company.country == 'ca' ? @avj_fees * 1.13 : @avj_fees
+    @total       = @amount + @tax + @avj_t_fees
   end
 
   def print
+    @amount      = @payment.amount
+    @tax         = @job.applicable_sales_tax * @payment.amount / 100
+    @avj_fees    = @job.company_plan_fees == 0 ? 0 : current_company.plan.fee_schema['company_fees'] ? (@amount * current_company.plan.fee_schema['company_fees'].to_f / 100) : 0
+    @avj_t_fees  = current_company.country == 'ca' ? @avj_fees * 1.13 : @avj_fees
+    @total       = @amount + @tax + @avj_t_fees
     render layout: false
   end
 
   def mark_as_paid
-    quote = @job.accepted_quote
-    freelancer = @job.freelancer
+    freelancer             = @job.freelancer
+    currency_rate          = CurrencyExchange.get_currency_rate(@job.currency)
+    amount                 = @payment.amount
+    tax                    = @job.applicable_sales_tax * @payment.amount / 100
+    company_fees_rate      = @job.company_plan_fees.zero? ? 0 : current_company.plan.fee_schema['company_fees'].to_f
+    freelancer_fees_rate   = current_company.plan.fee_schema['freelancer_fees'].to_f
+    company_fees           = @job.company_plan_fees.zero? ? 0 : company_fees_rate != 0 ? (amount * company_fees_rate.to_f / 100) : 0
+    company_t_fees         = current_company.country == 'ca' ? company_fees * 1.13 : company_fees
+    freelancer_fees        = (amount * freelancer_fees_rate.to_f / 100)
+    freelancer_t_fees      = @job.freelancer.freelancer_profile.country == 'ca' ? freelancer_fees * 1.13 : freelancer_fees
+
+    @payment.set_avj_credit(freelancer_t_fees)
+
+    freelancer_t_fees = freelancer_t_fees - @payment.avj_credit
+    application_fees  = company_t_fees + freelancer_t_fees
+    total             = amount + tax + company_t_fees
+    transaction_fees  = total * 0.029 + (0.3 * currency_rate)
     begin
-      raise Exception.new('You didn\'t pay this work order yet!') if !quote.paid_by_company
-      money = @payment.total_amount - @payment.avj_fees
+      # NEW
+      charge = Stripe::Charge.create({
+                   amount: (total * 100).floor ,
+                   currency: @job.currency,
+                   source: params[:stripeToken],
+                   description: "Invoice ##{@payment.id}",
+                   statement_descriptor: "AV Junction-(##{@payment.id})",
+                   application_fee: ((application_fees - transaction_fees) * 100).floor
+               }, stripe_account: freelancer.freelancer_profile&.stripe_account_id)
+      logger.debug charge.inspect
+      balance_transaction = Stripe::BalanceTransaction.retrieve(charge[:balance_transaction], stripe_account: freelancer.freelancer_profile.stripe_account_id)
+      logger.debug balance_transaction.inspect
+      if balance_transaction[:status] == 'pending'
+        @payment.funds_available_on = balance_transaction[:available_on]
+      else
+        @payment.funds_available = true
+      end
+      # Calculations
+      @payment.company_fees                   = company_fees
+      @payment.total_company_fees             = company_t_fees
+      @payment.freelancer_fees                = freelancer_fees
+      @payment.total_freelancer_fees          = freelancer_t_fees
+      @payment.transaction_fees               = total * 0.029 + (0.3 * currency_rate)
+      @payment.total_amount                   = total
+      @payment.freelancer_avj_fees_rate       = freelancer_fees_rate
+      @payment.company_avj_fees_rate          = company_fees_rate
 
-
-      Stripe::Payout.create({
-        amount: (money * 100).floor,
-        currency: @job.currency
-      },{
-        stripe_account: freelancer.stripe_account_id
-      })
+      @payment.stripe_charge_id               = charge[:id]
+      @payment.stripe_balance_transaction_id  = charge[:balance_transaction]
+      @payment.save
 
       @payment.mark_as_paid!
 
+      @job.update_attribute(:total_amount, @job.total_amount.to_f + @payment.total_amount)
+
       # Send notice email
       PaymentsMailer.notice_payout_freelancer(current_company, freelancer, @job, @payment).deliver_later
-
-      if @job.payments.outstanding.empty?
+      #
+      if @job.pay_type == "fixed" && @job.payments.outstanding.empty?
         @job.update(state: :completed)
         FreelancerMailer.notice_job_complete_freelancer(current_company, freelancer, @job).deliver_later
         CompanyMailer.notice_job_complete_company(current_company, freelancer, @job).deliver_later
@@ -61,11 +98,15 @@ class Company::JobPaymentsController < Company::BaseController
 
   private
 
-    def set_job
-      @job = current_company.jobs.includes(:payments).find(params[:job_id])
-    end
+  def set_job
+    @job = current_company.jobs.includes(:payments).find(params[:job_id])
+  end
 
-    def set_payment
-      @payment = @job.payments.find(params[:id])
-    end
+  def set_payment
+    @payment = @job.payments.find(params[:id])
+  end
+
+  def authorize_job
+    authorize @job
+  end
 end

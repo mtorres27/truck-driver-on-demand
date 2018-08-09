@@ -29,6 +29,7 @@ gem "jquery-datatables"
 
 # Authentication & Authorization
 gem "devise"
+gem "pundit"
 
 # Views
 gem "slim-rails", "~> 3.1.2"
@@ -84,7 +85,6 @@ gem "city-state"
 
 group :development do
   gem "annotate"
-  gem "better_errors"
   gem "binding_of_caller"
   gem "rubocop"
   gem "capistrano", "~> 3.8.1"
@@ -100,6 +100,10 @@ group :development, :test do
   gem "rspec-rails"
 end
 
+group :dev, :development do
+  gem "better_errors"
+end
+
 group :test do
   gem "capybara"
   gem "cucumber-rails", require: false
@@ -113,6 +117,7 @@ group :test do
   gem "webmock"
   gem "cucumber"
   gem "rspec_junit_formatter"
+  gem "launchy"
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem

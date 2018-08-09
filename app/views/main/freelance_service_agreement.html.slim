@@ -8,7 +8,7 @@
       | This Freelance Service Agreement is unavilable for viewing, either because the freelancer hasn't been selected, the Job specified doesn't exist, or you don't have the rights to view it.
   - else
     p
-      = "This Freelance Services Agreement (this “Agreement”) is made effective as of the #{@job_start_day} day of #{@job_start_month}, #{@job_start_year} (the “Effective Date”), between #{@job.freelancer.name}, an individual residing at #{@job.freelancer.address} (“Freelancer”) and #{@job.company.name}, a company having a place of business at #{@job.company.address} (“AV Company”)."
+      = "This Freelance Services Agreement (this “Agreement”) is made effective as of the #{@job_start_day} day of #{@job_start_month}, #{@job_start_year} (the “Effective Date”), between #{@job.freelancer.first_name_and_initial}, an individual residing at #{@job.freelancer.freelancer_profile.address} (“Freelancer”) and #{@job.company.name}, a company having a place of business at #{@job.company.address} (“AV Company”)."
     p
       | 1. Definitions. The following terms shall have the following meanings: (a) “Deliverable(s)” means any [documents, reports, publications, mock-ups, brochures, designs, plans, drawings, audio/video content, sign-off documents, testing checklists domain names, websites, applications, software, code, social media accounts, and/or other materials] prepared by Freelancer for AV Company as a standard Service or as a custom Service described in an SOW;
       br
@@ -29,9 +29,9 @@
 
     p
       | 3. AV Company Obligations.
-    
+
     p
-      | 3.1 AV Company acknowledges and agrees that the performance of the Services and development of Deliverables is heavily dependent on cooperation from The AV Company. Accordingly, in addition to any specific responsibilities set out in an SOW, The AV Company shall: 
+      | 3.1 AV Company acknowledges and agrees that the performance of the Services and development of Deliverables is heavily dependent on cooperation from The AV Company. Accordingly, in addition to any specific responsibilities set out in an SOW, The AV Company shall:
       br
       | (i) provide the appropriate and necessary resources, and timely and accurate information and documentation, as reasonably required by Freelancer, to allow Freelancer to perform the Services and develop the Deliverables;
       br
@@ -55,10 +55,10 @@
       | 5.1 Freelancer shall be entitled, in its sole discretion, to determine the method and means for performing the Services and developing the Deliverables. Freelancer shall have the right to determine which of its employees shall be assigned to perform the Services and develop the Deliverables, and to replace or reassign such employees during the term hereof.
       br
       | 5.2 The AV company acknowledges and agrees that Freelancer may retain the services of independent Freelancers from time to time to perform, or to assist Freelancer in performing, Services and developing Deliverables. Freelancer personnel and/or subcontractors shall remain under the direction and control of Freelancer. Freelancer shall in the performance of any Services and development of any Deliverables use reasonable efforts to comply with all The AV company policies, procedures and rules that have been communicated to Freelancer in writing.
-    
+
     p
       | 6. Confidentiality.
-    
+
     p
       | 6.1 Each party (the “Recipient”) acknowledges that, from time to time, it may be exposed to certain business, technical, marketing and financial information and data that is clearly marked with a restrictive legend of the disclosing party (“Discloser”) or that by its nature, through the exercise of reasonable business judgment and in consideration of the circumstances of disclosure would reasonably be considered to be confidential and that is not generally known to the public, including, but not limited to a party’s corporate and business strategies, product plans, data, measurements, personnel information, financial information, and The AV company information (collectively, “Confidential Information”).
       br
@@ -75,7 +75,7 @@
       | 7.3 Notwithstanding the foregoing, Freelancer and/or its licensors shall retain all right, title and interest (including all intellectual property rights) in any Freelancer Materials developed or used by Freelancer in the provision of Services or the development of Deliverables. Except as expressly set forth in this Section 7, no other rights are granted whether by implication, estoppel or otherwise.
     p
       | 8. Warranties and Disclaimers.
-    p 
+    p
       | 8.1 Freelancer warrants that (i) all Services performed under this Agreement will be performed in a professional manner and in accordance with the terms of this Agreement, and (ii) all Deliverables will be substantially in accordance with the specifications set forth in the applicable SOW or Freelancer’s documentation in any.
       br
       | 8.2 Each party represents and warrants that it has the legal power to enter into this Agreement.
@@ -85,9 +85,9 @@
       | 9. LIMITATION OF LIABILITY.
     p
       | FREELANCER’S TOTAL LIABILITY TO THE AV COMPANY FOR DAMAGES OF ANY KIND, WHETHER BASED ON BREACH OF CONTRACT, TORT (INCLUDING NEGLIGENCE) OR OTHERWISE UNDER THIS AGREEMENT WILL BE LIMITED TO AN AMOUNT EQUAL TO THE CUMULATIVE FEES PAID TO FREELANCER UNDER THIS AGREEMENT FOR THE SIX (6) MONTHS PRECEDING ANY CLAIM FOR THE SERVICES AND/OR DELIVERABLES THAT GAVE RISE TO THE CLAIM. IN NO EVENT WILL FREELANCER BE LIABLE TO THE AV COMPANY OR ANYONE ELSE FOR ANY LOST PROFITS OR SAVINGS, LOST BUSINESS, LOSS OF THE AV COMPANY DATA OR ANY INCIDENTAL, SPECIAL, INDIRECT, OR CONSEQUENTIAL DAMAGES, WHETHER BASED ON BREACH OF CONTRACT, TORT (INCLUDING NEGLIGENCE) OR OTHERWISE AND WHETHER OR NOT FREELANCER HAS BEEN ADVISED OF THE POSSIBILITY OF SUCH OCCURRENCE OR DAMAGE. THE PARTIES AGREE THAT THE FOREGOING REPRESENTS A FAIR ALLOCATION OF RISK HEREUNDER.
-    p 
+    p
       | 10. Indemnity Each party (an “Indemnitor”) hereby agrees to, at its own expense, indemnify, defend and hold harmless the other party (“Indemnitee”) from all third-party claims, losses, expenses, fees (including reasonable legal fees), costs, and judgments made against the Indemnitee by a court of competent jurisdiction arising from Indemnitor’s (i) negligence, (ii) willful misconduct, (iii) breach of any representation, warranty and/or covenant in this Agreement.
-    p  
+    p
       | 11. Term and Termination
     p
       | 11.1 Term of Agreement. This Agreement shall commence as of the Effective Date and shall continue in effect until the expiry of all SOWs, including payment of all fees owed under any SOWs, unless otherwise terminated herein.
@@ -107,13 +107,13 @@
     p IN WITNESS WHEREOF, the parties have caused this Agreement to be executed by their duly authorized representatives as of the Effective Date.
 
     p
-      = @job.freelancer.name
+      = @job.freelancer.first_name_and_initial
       br
       | By: ______________________
       br
       | Name:
       br
-      | Title: 
+      | Title:
 
     p
       = @job.company.name
@@ -122,4 +122,4 @@
       br
       | Name:
       br
-      | Title: 
+      | Title:

@@ -1,12 +1,13 @@
-
 class WebhooksController < Freelancer::BaseController
   skip_before_action :verify_authenticity_token
+
   def stripe
+    authorize current_user
     # If the request has a 'user_id' key, then this is a webhook
     # event sent regarding a connected user, and not to a webhook
     # handler setup on the application owner's account.
     # So, use the user_id to look up a connected user on our end.
-    freelancer = params[:freelancer_id] && Freelancer.find_by( stripe_account_id: params[:freelancer_id] )
+    freelancer_profile = params[:freelancer_id] && FreelancerProfile.find_by( stripe_account_id: params[:freelancer_id] )
 
     args = [params[:id], nil].compact # freelancer.try(:secret_key)
 
@@ -21,8 +22,8 @@ class WebhooksController < Freelancer::BaseController
       # our application. We can't look up and verify the event
       # because the event belongs to the connected account, and we're
       # no longer authorized to access their account!
-      if freelancer && freelancer.connected?
-        connector = StripeConnect.new( freelancer )
+      if freelancer_profile&.freelancer&.connected?
+        connector = StripeConnect.new(freelancer_profile.freelancer)
         connector.deauthorized
       end
 

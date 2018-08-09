@@ -5,10 +5,10 @@
     h2.heading-h2.heading-h2--action-bar Reviews
   - if @freelancer_review.new_record?
     h2.heading-h2
-      = "The company hasn't submitted a review of #{@job.freelancer.name}"
+      = "The company hasn't submitted a review of #{@job.freelancer.full_name}"
   - else
     h2.heading-h2
-      = "Company's review of #{@job.freelancer.name}"
+      = "Company's review of #{@job.freelancer.full_name}"
     = render partial: "company/reviews/review_info", locals: {review: @freelancer_review}
   hr
   - if @company_review.new_record?

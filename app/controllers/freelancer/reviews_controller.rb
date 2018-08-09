@@ -1,5 +1,6 @@
 class Freelancer::ReviewsController < Freelancer::BaseController
   before_action :set_job
+  before_action :authorize_job
 
   def show
     @review =
@@ -10,10 +11,10 @@ class Freelancer::ReviewsController < Freelancer::BaseController
   def create
     @review = @job.build_company_review(review_params)
     @review.company = @job.company
-    @review.freelancer = current_freelancer
+    @review.freelancer = current_user
 
     if @review.save
-      CompanyMailer.notice_freelancer_review(@job.company, current_freelancer, @review).deliver_later
+      CompanyMailer.notice_freelancer_review(@job.company, current_user, @review).deliver_later
       redirect_to freelancer_job_review_path(@job)
     else
       render :show
@@ -21,18 +22,22 @@ class Freelancer::ReviewsController < Freelancer::BaseController
   end
 
   private
-    def set_job
-      @job = Job.find(params[:job_id])
-    end
+  def set_job
+    @job = Job.find(params[:job_id])
+  end
 
-    def review_params
-      params.require(:company_review).permit(
-        :quality_of_information_provided,
-        :communication,
-        :materials_available_onsite,
-        :promptness_of_payment,
-        :overall_experience,
-        :comments
-      )
-    end
+  def authorize_job
+    authorize @job
+  end
+
+  def review_params
+    params.require(:company_review).permit(
+      :quality_of_information_provided,
+      :communication,
+      :materials_available_onsite,
+      :promptness_of_payment,
+      :overall_experience,
+      :comments
+    )
+  end
 end

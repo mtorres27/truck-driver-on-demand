@@ -26,13 +26,15 @@ describe Freelancer::JobsController, type: :controller  do
       end
 
       context 'when address exists' do
+        let(:geocode) { { address: "Toronto, ON, Canada", lat: 43.653226, lng: -79.3831843 } }
+
         before(:each) do
-          get :index, params: { search: { address: 'Address' } }
-          allow(Rails).to receive(:cache).and_return(double('Readable', read: true))
+          allow(Rails).to receive_message_chain(:cache, :read).and_return(geocode)
+          get :index, params: { search: { address: 'Toronto, Ontario' } }
         end
 
         it 'sets @address' do
-          expect(assigns(:address)).to eq('Address')
+          expect(assigns(:address)).to eq('Toronto, Ontario')
         end
 
         it 'sets @geocode' do
@@ -83,15 +85,15 @@ describe Freelancer::JobsController, type: :controller  do
 
   describe 'GET job matches' do
     login_freelancer
-    
-    let(:freelancer) { subject.current_freelancer } 
+
+    let(:freelancer) { subject.current_user }
     let(:jobs) { double("jobs") }
 
     before(:each) do
-      freelancer.update_attribute(:job_types, { 'system_integration' => '1' })
-      freelancer.update_attribute(:city, 'Toronto')
-      freelancer.update_attribute(:state, 'ON')
-      freelancer.update_attribute(:country, 'ca')
+      freelancer.freelancer_profile.update_attribute(:job_types, { 'system_integration' => '1' })
+      freelancer.freelancer_profile.update_attribute(:city, 'Toronto')
+      freelancer.freelancer_profile.update_attribute(:state, 'ON')
+      freelancer.freelancer_profile.update_attribute(:country, 'ca')
       allow(jobs).to receive(:with_distance).and_return(jobs)
       allow(Job).to receive(:none).and_return(jobs)
       allow(jobs).to receive(:or).and_return(jobs)

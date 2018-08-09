@@ -24,7 +24,7 @@ h1.heading-h1 Company Profile
     h4.heading-h4
       | Address:
       = " #{@company.address}#{@company.line2? ? ", #{@company.line2}" : "" }, #{@company.city}, #{@company.state}, #{@company.country.try(:upcase)}, #{@company.postal_code}"
-  = render "shared/profile-company"
+  = render "shared/profile_company", company: @company
 
 
 / .profile__wrapper

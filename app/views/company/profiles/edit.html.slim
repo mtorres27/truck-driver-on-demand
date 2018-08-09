@@ -1,5 +1,5 @@
 - content_for :secondary do
-  = simple_form_for(@company, url: company_profile_path) do |f|
+  = simple_form_for(current_company, url: company_profile_path) do |f|
     = f.hidden_field :enforce_profile_edit, value: true
     .action-bar
         h2.heading-h2.heading-h2--action-bar Edit Your Profile
@@ -7,7 +7,7 @@
           = f.button :submit, "Update", class: "btn btn--primary"
           a.btn.btn--secondary href=company_profile_path(@company) Cancel
 
-    = render "edit_company_profile", f: f
+    = render "edit_company_profile", f: f, company: current_company
 
     .grid-cell.grid-cell--67
       .buttons

@@ -1,36 +1,89 @@
 $(document).on("turbolinks:load", function () {
 
+    if ($("#freelancer_profile_job_types_live_events_staging_and_rental").is(":checked")) {
+        $(".freelancer_please_select_job_type_message").hide();
+    }
+    else {
+        $(".freelancer_profile_live_events_staging_and_rental_checkboxes").hide();
+    }
+
+    if ($("#freelancer_profile_job_types_system_integration").is(":checked")) {
+        $(".freelancer_please_select_job_type_message").hide();
+    }
+    else {
+        $(".freelancer_profile_system_integration_checkboxes").hide();
+    }
+
+    if (!$("#freelancer_profile_job_types_live_events_staging_and_rental").is(":checked") && !$("#freelancer_profile_job_types_system_integration").is(":checked")) {
+        $(".freelancer_system_integration_checkboxes").hide();
+        $(".freelancer_live_events_staging_and_rental_checkboxes").hide();
+    }
+
+    $("#freelancer_profile_job_types_live_events_staging_and_rental").on("change", function() {
+        if ($(this).is(":checked")) {
+            $(".freelancer_please_select_job_type_message").hide();
+            $(".freelancer_live_events_staging_and_rental_checkboxes").show();
+        }
+        else {
+            uncheck_all_checkboxes_with_class("freelancer_live_events_staging_and_rental_check_box");
+            $(".freelancer_live_events_staging_and_rental_checkboxes").hide();
+            if (!$("#freelancer_profile_job_types_system_integration").is(":checked")) {
+                $(".freelancer_please_select_job_type_message").show();
+            }
+        }
+    });
+
+    $("#freelancer_profile_job_types_system_integration").on("change", function() {
+        if ($(this).is(":checked")) {
+            $(".freelancer_please_select_job_type_message").hide();
+            $(".freelancer_system_integration_checkboxes").show();
+        }
+        else {
+            uncheck_all_checkboxes_with_class("freelancer_system_integration_check_box");
+            $(".freelancer_system_integration_checkboxes").hide();
+            if (!$("#freelancer_profile_job_types_live_events_staging_and_rental").is(":checked")) {
+                $(".freelancer_please_select_job_type_message").show();
+            }
+        }
+    });
+
     // Display options for country
-    if ($("#freelancer_country").val() == "us") {
+    if ($("#freelancer_profile_country").val() == "us") {
         $(".freelancer_ca_option").hide();
     }
-    else if ($("#freelancer_country").val() == "ca") {
+    else if ($("#freelancer_profile_country").val() == "ca") {
         $(".freelancer_us_option").hide();
     }
     else {
-        $("#freelancer_state").attr("disabled", true);
+        $("#freelancer_profile_state").attr("disabled", true);
         $(".freelancer_ca_option").hide();
         $(".freelancer_us_option").hide();
     }
 
-    $("#freelancer_country").on("change", function() {
+    $("#freelancer_profile_country").on("change", function() {
         if ($(this).val() == "us") {
-            $("#freelancer_state").val("");
-            $("#freelancer_state").removeAttr("disabled");
+            $("#freelancer_profile_state").val("");
+            $("#freelancer_profile_state").removeAttr("disabled");
             $(".freelancer_ca_option").hide();
             $(".freelancer_us_option").show();
         }
         else if ($(this).val() == "ca") {
-            $("#freelancer_state").val("");
-            $("#freelancer_state").removeAttr("disabled");
+            $("#freelancer_profile_state").val("");
+            $("#freelancer_profile_state").removeAttr("disabled");
             $(".freelancer_us_option").hide();
             $(".freelancer_ca_option").show();
         }
         else {
-            $("#freelancer_state").val("");
-            $("#freelancer_state").attr("disabled", true);
+            $("#freelancer_profile_state").val("");
+            $("#freelancer_profile_state").attr("disabled", true);
             $(".freelancer_ca_option").hide();
             $(".freelancer_us_option").hide();
         }
     });
 });
+
+function uncheck_all_checkboxes_with_class(class_name) {
+    $("." + class_name).each(function() {
+        $(this).prop("checked", false)
+    })
+}

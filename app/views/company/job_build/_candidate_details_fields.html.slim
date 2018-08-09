@@ -1,0 +1,92 @@
+.grid-cell.grid-cell--50
+  h2.heading-h2 To help us match you with the right freelancer, select the job type, market and function
+.grid-cell.grid-cell--50
+  .grid-h.grid-h--no-margin
+    .grid-cell.grid-cell--50
+      = f.input :pay_type, prompt: "Select", label: "Preferred Pay Type"
+    .grid-cell.grid-cell--50
+      = f.input :freelancer_type, prompt: "Select"
+    .grid-cell.grid-cell--100
+      = f.input :job_type, prompt: "Select"
+    .grid-cell.grid-cell--100
+      = f.label :job_market
+      select#job_job_market.form-control.select(name='job[job_market]')
+        option(value='')
+          | Select
+        = I18n.t("enumerize.live_events_staging_and_rental_job_markets").each do |index, value|
+          - selected = (!@job.job_market.nil? and @job.job_market == index.to_s)
+          - if selected
+            option.job_live_events_staging_and_rental_option(value="#{index}" selected)
+              = value
+          - else
+            option.job_live_events_staging_and_rental_option(value="#{index}")
+              = value
+        = I18n.t("enumerize.system_integration_job_markets").each do |index, value|
+          - selected = (!@job.job_market.nil? and @job.job_market == index.to_s)
+          - if selected
+            option.job_system_integration_option(value="#{index}" selected)
+              = value
+          - else
+            option.job_system_integration_option(value="#{index}")
+              = value
+    .grid-cell.grid-cell--100
+      = f.label :job_function
+      select#job_job_function.form-control.select(name='job[job_function]')
+        option(value='')
+          | Select
+        = I18n.t("enumerize.live_events_staging_and_rental_job_functions").each do |index, value|
+          - selected = (!@job.job_function.nil? and @job.job_function == index.to_s)
+          - if selected
+            option.job_live_events_staging_and_rental_option(value="#{index}" selected)
+              = value
+          - else
+            option.job_live_events_staging_and_rental_option(value="#{index}")
+              = value
+        = I18n.t("enumerize.system_integration_job_functions").each do |index, value|
+          - selected = (!@job.job_function.nil? and @job.job_function == index.to_s)
+          - if selected
+            option.job_system_integration_option(value="#{index}" selected)
+              = value
+          - else
+            option.job_system_integration_option(value="#{index}")
+              = value
+
+.grid-cell.grid-cell--100
+  hr/
+
+.grid-cell.grid-cell--50
+  h2.heading-h2 Next, select the technical skills and manufacturer brands related to this job
+.grid-cell.grid-cell--50
+  .grid-h.grid-h--no-margin
+    .grid-cell.grid-cell--100
+      = f.label :summary, "Technical skills required for this job"
+      - if @job.errors.full_messages.include?("Technical skill tags can't be blank")
+        .has-error
+          .help-block
+            | One skill must be selected.
+      .freelancer-profile__checkboxes
+        - I18n.t('enumerize.technical_skill_tags').each do |index, value|
+          - tag_name = "job[technical_skill_tags][#{index.to_s}]"
+          - if !@job.technical_skill_tags.nil? and @job.technical_skill_tags.include?(index.to_s)
+            - checked = true
+          - else
+            - checked = false
+          .freelancer-profile__checkbox
+            = check_box_tag tag_name, "1", checked
+            = " #{value}"
+    .grid-cell.grid-cell--100
+      = f.label :summary, "Manufacturer brands required for this job"
+      - if @job.errors.full_messages.include?("Manufacturer tags can't be blank")
+        .has-error
+          .help-block
+            | One skill must be selected.
+      .freelancer-profile__checkboxes
+        - I18n.t('enumerize.manufacturer_tags').each do |index, value|
+          - tag_name = "job[manufacturer_tags][#{index.to_s}]"
+          - if !@job.manufacturer_tags.nil? and @job.manufacturer_tags.include?(index.to_s)
+            - checked = true
+          - else
+            - checked = false
+          .freelancer-profile__checkbox
+            = check_box_tag tag_name, "1", checked
+            = " #{value}"

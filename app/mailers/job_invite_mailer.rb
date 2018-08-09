@@ -4,7 +4,7 @@ class JobInviteMailer < ApplicationMailer
     @job = job
     headers 'X-SMTPAPI' => {
         sub: {
-            '%freelancer_name%' => [@freelancer.name],
+            '%freelancer_name%' => [@freelancer.first_name_and_initial],
             '%job_title%' => [@job.title],
             '%company_name%' => [@job.company.name],
             '%job_id%' => [@job.id],

@@ -4,8 +4,8 @@ ApplicationRecord.descendants.each do |klass|
   klass.auditing_enabled = false
 end
 
-Admin.create!(email: "dave@rapin.com", name: "Dave Rapin", password: "654321", password_confirmation: "654321")
-Admin.create!(email: "pweather24@gmail.com", name: "Paul Weatherhead", password: "654321", password_confirmation: "654321")
+admin_user_attributes = { name: "Paul Weatherhead", user_attributes: { email: "pweather24@gmail.com", password: "654321", password_confirmation: "654321" } }
+admin = Admin.create!(admin_user_attributes)
 
 40.times do
   Freelancer.create!(

@@ -2,14 +2,17 @@
   .grid-cell.grid-cell--33
     .profile__meta__details__1-1
       .profile__meta__image
-        - if @freelancer.avatar_data.nil?
+        - if @freelancer.freelancer_profile.avatar_data.nil?
           .circle_profile__image.freelancer__image= @freelancer.name_initials
         - else
-          = image_tag(@freelancer.avatar_url, size: "75x75")
+          = image_tag(@freelancer.freelancer_profile.avatar_url, size: "75x75")
       .profile__meta__info
         h2.heading-h2
-          = @freelancer.name
-        - unless current_company
+          - if current_user&.admin?
+            = @freelancer.full_name
+          - else
+            = @freelancer.first_name_and_initial
+        - unless current_user&.company_user?
           h4.heading-h4
             a href="mailto:#{@freelancer.email}" target="_blank"
               = @freelancer.email
@@ -24,21 +27,21 @@
   .grid-cell.grid-cell--33
     .profile__meta__details__1-2
       h3.heading-h3
-        = @freelancer.tagline
+        = @freelancer.freelancer_profile.tagline
       .profile__specialties--summary
-        - if !@freelancer.technical_skill_tags.nil? and @freelancer.technical_skill_tags.kind_of?(Hash)
-          - @freelancer.technical_skill_tags.first(2).each do |index, value|
+        - if !@freelancer.freelancer_profile.technical_skill_tags.nil? and @freelancer.freelancer_profile.technical_skill_tags.kind_of?(Hash)
+          - @freelancer.freelancer_profile.technical_skill_tags.first(2).each do |index, value|
             .tag.tag--grey
               = I18n.t("enumerize.technical_skill_tags.#{index}")
       br
       h4.heading-h4
-        = "#{@freelancer.city}, #{@freelancer.state}, #{@freelancer.country&.upcase}"
+        = "#{@freelancer.freelancer_profile.city}, #{@freelancer.freelancer_profile.state}, #{@freelancer.freelancer_profile.country&.upcase}"
   .grid-cell.grid-cell--33
     .profile__stats-box
       .profile__stats.profile__stats--50
         h3.heading-h3
-          - if !@freelancer.pay_unit_time_preference.nil?
-            = t("enumerize.job.pay_type.#{@freelancer.pay_unit_time_preference}")
+          - if @freelancer.freelancer_profile.pay_unit_time_preference.present?
+            = t("enumerize.job.pay_type.#{@freelancer.freelancer_profile.pay_unit_time_preference}")
           - else
             | N/A
         h4.heading-h4
@@ -46,8 +49,8 @@
 
       .profile__stats.profile__stats--50
         h3.heading-h3
-          - if !@freelancer.pay_per_unit_time.nil?
-            = @freelancer.pay_per_unit_time
+          - if @freelancer.freelancer_profile.pay_per_unit_time.present?
+            = @freelancer.freelancer_profile.pay_per_unit_time
           - else
             | N/A
         h4.heading-h4
@@ -59,42 +62,41 @@
   .grid-cell.grid-cell--50
     h3.heading-h3 Bio
     p
-      - if @freelancer.bio.nil? or @freelancer.bio == ""
+      - if @freelancer.freelancer_profile.bio.blank?
         | This freelancer has not yet added a bio.
       - else
-        = "#{@freelancer.bio}"
-
+        = "#{@freelancer.freelancer_profile.bio}"
   .grid-cell.grid-cell--50
     .list-item.list-item--profile
       .list-bar
         h4.heading-h4 Years of Experience
-        h3.heading-h3 ="#{@freelancer.years_of_experience} years"
+        h3.heading-h3 ="#{@freelancer.freelancer_profile.years_of_experience} years"
     .list-item.list-item--profile
       .list-bar
         h4.heading-h4 Type
         h3.heading-h3
-          - if @freelancer.freelancer_type.nil?
+          - if @freelancer.freelancer_profile.freelancer_type.nil?
             | N/A
           - else
-            - if @freelancer.freelancer_type == :independent
-              = @freelancer.freelancer_type.text
+            - if @freelancer.freelancer_profile.freelancer_type == :independent
+              = @freelancer.freelancer_profile.freelancer_type.text
             - else
-              = "#{@freelancer.freelancer_type.text} "
-              - if @freelancer.freelancer_team_size.nil?
+              = "#{@freelancer.freelancer_profile.freelancer_type.text} "
+              - if @freelancer.freelancer_profile.freelancer_team_size.nil?
                 = ""
               - else
-                = "(#{t("enumerize.job.freelancer_team_size.#{@freelancer.freelancer_team_size}")})"
-    - if @freelancer.company_name.present?
+                = "(#{t("enumerize.job.freelancer_team_size.#{@freelancer.freelancer_profile.freelancer_team_size}")})"
+    - if @freelancer.freelancer_profile.company_name.present?
       .list-item.list-item--profile
         .list-bar
           h4.heading-h4 Company Name
-          h3.heading-h3 = @freelancer.company_name
-    - if @freelancer.valid_driver
+          h3.heading-h3 = @freelancer.freelancer_profile.company_name
+    - if @freelancer.freelancer_profile.valid_driver
       .list-item.list-item--profile
         .list-bar
           h4.heading-h4 Has Driver License
           h3.heading-h3 Yes
-    - if @freelancer.own_tools
+    - if @freelancer.freelancer_profile.own_tools
       .list-item.list-item--profile
         .list-bar
           h4.heading-h4 Has Own Tools
@@ -103,7 +105,7 @@
   .grid-cell.grid-cell--100
     hr
 
-  - if !@freelancer.job_markets_for_job_type("system_integration").empty? and !@freelancer.job_types.nil? and @freelancer.job_types.include?("system_integration")
+  - if !@freelancer.job_markets_for_job_type("system_integration").empty? and @freelancer.freelancer_profile.job_types.present? and @freelancer.freelancer_profile.job_types.include?("system_integration")
     .grid-cell.grid-cell--50
       h3.heading-h3 System Integration
       div
@@ -114,7 +116,7 @@
           .tag.tag--grey
             = value
 
-  - if !@freelancer.job_markets_for_job_type("live_events_staging_and_rental").empty? and !@freelancer.job_types.nil? and @freelancer.job_types.include?("live_events_staging_and_rental")
+  - if !@freelancer.job_markets_for_job_type("live_events_staging_and_rental").empty? and @freelancer.freelancer_profile.job_types.present? and @freelancer.freelancer_profile.job_types.include?("live_events_staging_and_rental")
     .grid-cell.grid-cell--50
       h3.heading-h3 Live Events Staging & Rental
       div
@@ -125,19 +127,19 @@
           .tag.tag--grey
             = value
 
-  - if !@freelancer.technical_skill_tags.nil? and @freelancer.technical_skill_tags.kind_of?(Hash)
+  - if @freelancer.freelancer_profile.technical_skill_tags.present? and @freelancer.freelancer_profile.technical_skill_tags.kind_of?(Hash)
     .grid-cell.grid-cell--50
       h3.heading-h3 Technical Skills
       div
-        - @freelancer.technical_skill_tags.each do |index, value|
+        - @freelancer.freelancer_profile.technical_skill_tags.each do |index, value|
           .tag.tag--grey
             = I18n.t("enumerize.technical_skill_tags.#{index}")
 
-  - if !@freelancer.manufacturer_tags.nil? and @freelancer.manufacturer_tags.kind_of?(Hash)
+  - if @freelancer.freelancer_profile.manufacturer_tags.present? and @freelancer.freelancer_profile.manufacturer_tags.kind_of?(Hash)
     .grid-cell.grid-cell--50
       h3.heading-h3 Manufacturers
       div
-        - @freelancer.manufacturer_tags.each do |index, value|
+        - @freelancer.freelancer_profile.manufacturer_tags.each do |index, value|
           .tag.tag--grey
             = I18n.t("enumerize.manufacturer_tags.#{index}")
 
@@ -246,5 +248,4 @@
                 = review.comments
               p
                 i
-                  = "#{review.company.contact_name}, #{review.company.name}"
-
+                  = "#{review.company.company_user.first_name_and_initial}, #{review.company.name}"

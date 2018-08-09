@@ -1,11 +1,9 @@
 class Company::ReviewsController < Company::BaseController
   before_action :set_job
+  before_action :authorize_job
 
   def show
-    @review =
-      @job.freelancer_review ||
-      @job.build_freelancer_review
-
+    @review = @job.freelancer_review || @job.build_freelancer_review
     @review.freelancer = @job.freelancer
     @review.company = current_company
   end
@@ -25,18 +23,22 @@ class Company::ReviewsController < Company::BaseController
 
   private
 
-    def set_job
-      @job = current_company.jobs.find(params[:job_id])
-    end
+  def set_job
+    @job = current_company.jobs.find(params[:job_id])
+  end
 
-    def review_params
-      params.require(:freelancer_review).permit(
-        :availability,
-        :communication,
-        :adherence_to_schedule,
-        :skill_and_quality_of_work,
-        :overall_experience,
-        :comments
-      )
-    end
+  def authorize_job
+    authorize @job
+  end
+
+  def review_params
+    params.require(:freelancer_review).permit(
+      :availability,
+      :communication,
+      :adherence_to_schedule,
+      :skill_and_quality_of_work,
+      :overall_experience,
+      :comments
+    )
+  end
 end

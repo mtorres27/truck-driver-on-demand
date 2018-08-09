@@ -5,13 +5,13 @@ class PaymentsMailer < ApplicationMailer
     @job = job
     headers 'X-SMTPAPI' => {
         sub: {
-            '%freelancer_name%' => [@freelancer.name],
+            '%freelancer_name%' => [@freelancer.first_name_and_initial],
             '%company_name%' => [@company.name],
             '%root_url%' => [root_url],
             '%job_id%' => [@job.id],
             '%job_title%' => [@job.title],
             '%job_currency%' => [@job.currency.upcase],
-            '%job_accepted_quote_total_amount%' => [@job.accepted_quote.amount]
+            '%job_accepted_quote_total_amount%' => [@job.contract_price]
         },
         filters: {
             templates: {
@@ -22,7 +22,7 @@ class PaymentsMailer < ApplicationMailer
             }
         }
     }.to_json
-    mail(to: @company.email, subject: @freelancer.name + " has been accepted the work order. It's time to fund the job.")
+    mail(to: @company.email, subject: @freelancer.first_name_and_initial + " has been accepted the work order. It's time to fund the job.")
   end
 
   def wait_for_funds_freelancer(company, freelancer, job)
@@ -31,13 +31,13 @@ class PaymentsMailer < ApplicationMailer
     @job = job
     headers 'X-SMTPAPI' => {
         sub: {
-            '%freelancer_name%' => [@freelancer.name],
+            '%freelancer_name%' => [@freelancer.first_name_and_initial],
             '%company_name%' => [@company.name],
             '%root_url%' => [root_url],
             '%job_id%' => [@job.id],
             '%job_title%' => [@job.title],
             '%job_currency%' => [@job.currency.upcase],
-            '%job_accepted_quote_total_amount%' => [@job.accepted_quote.amount]
+            '%job_accepted_quote_total_amount%' => [@job.contract_price]
         },
         filters: {
             templates: {
@@ -48,7 +48,7 @@ class PaymentsMailer < ApplicationMailer
             }
         }
     }.to_json
-    mail(to: @freelancer.email, subject: @freelancer.name + " has been accepted the work order. It's time to fund the job.")
+    mail(to: @freelancer.email, subject: @freelancer.first_name_and_initial + " has been accepted the work order. It's time to fund the job.")
   end
 
   def request_payout_company(company, freelancer, job, payment)
@@ -58,7 +58,7 @@ class PaymentsMailer < ApplicationMailer
     @payment = payment
     headers 'X-SMTPAPI' => {
         sub: {
-            '%freelancer_name%' => [@freelancer.name],
+            '%freelancer_name%' => [@freelancer.first_name_and_initial],
             '%company_name%' => [@company.name],
             '%root_url%' => [root_url],
             '%job_id%' => [@job.id],
@@ -75,7 +75,7 @@ class PaymentsMailer < ApplicationMailer
             }
         }
     }.to_json
-    mail(to: @company.email, subject: @freelancer.name + " has requested a payout.")
+    mail(to: @company.email, subject: @freelancer.first_name_and_initial + " has requested a payout.")
   end
 
   def reminder_funds_company(company, freelancer, job)
@@ -84,13 +84,13 @@ class PaymentsMailer < ApplicationMailer
     @job = job
     headers 'X-SMTPAPI' => {
         sub: {
-            '%freelancer_name%' => [@freelancer.name],
-            '%company_name%' => [@company.name],
+            '%freelancer_name%' => [@freelancer.first_name_and_initial],
+            '%company_name%' => [@company..name],
             '%root_url%' => [root_url],
             '%job_id%' => [@job.id],
             '%job_title%' => [@job.title],
             '%job_currency%' => [@job.currency.upcase],
-            '%job_accepted_quote_total_amount%' => [@job.accepted_quote.total_amount]
+            '%job_accepted_quote_total_amount%' => [@job.contract_price]
         },
         filters: {
             templates: {
@@ -111,8 +111,8 @@ class PaymentsMailer < ApplicationMailer
     @payment = payment
     headers 'X-SMTPAPI' => {
         sub: {
-            '%freelancer_name%' => [@freelancer.name],
-            '%company_name%' => [@company.name],
+            '%freelancer_name%' => [@freelancer.first_name_and_initial],
+            '%company_name%' => [@company..name],
             '%root_url%' => [root_url],
             '%job_id%' => [@job.id],
             '%job_title%' => [@job.title],
@@ -137,13 +137,13 @@ class PaymentsMailer < ApplicationMailer
     @job = job
     headers 'X-SMTPAPI' => {
         sub: {
-            '%freelancer_name%' => [@freelancer.name],
+            '%freelancer_name%' => [@freelancer.first_name_and_initial],
             '%company_name%' => [@company.name],
             '%root_url%' => [root_url],
             '%job_id%' => [@job.id],
             '%job_title%' => [@job.title],
             '%job_currency%' => [@job.currency.upcase],
-            '%job_accepted_quote_total_amount%' => [@job.accepted_quote.total_amount]
+            '%job_accepted_quote_total_amount%' => [@job.contract_price]
         },
         filters: {
             templates: {
@@ -163,13 +163,13 @@ class PaymentsMailer < ApplicationMailer
     @job = job
     headers 'X-SMTPAPI' => {
         sub: {
-            '%freelancer_name%' => [@freelancer.name],
+            '%freelancer_name%' => [@freelancer.first_name_and_initial],
             '%company_name%' => [@company.name],
             '%root_url%' => [root_url],
             '%job_id%' => [@job.id],
             '%job_title%' => [@job.title],
             '%job_currency%' => [@job.currency.upcase],
-            '%job_accepted_quote_total_amount%' => [@job.accepted_quote.total_amount]
+            '%job_accepted_quote_total_amount%' => [@job.contract_price]
         },
         filters: {
             templates: {
@@ -190,7 +190,7 @@ class PaymentsMailer < ApplicationMailer
     @payment = payment
     headers 'X-SMTPAPI' => {
         sub: {
-            '%freelancer_name%' => [@freelancer.name],
+            '%freelancer_name%' => [@freelancer.first_name_and_initial],
             '%company_name%' => [@company.name],
             '%root_url%' => [root_url],
             '%job_id%' => [@job.id],

@@ -1,19 +1,21 @@
 Rails.application.routes.draw do
-  devise_for :companies, path: 'company', path_names: { sign_in: "login", sign_up: "register" }, controllers: { registrations: "registrations" }
-  devise_for :freelancers, path: 'freelancer', path_names: { sign_in: "login", sign_up: "register" }, controllers: { registrations: "registrations" }
-  devise_for :admins, path: 'admin', path_names: { sign_in: "login" }, skip: [:registrations]
+  devise_for :users, skip: [:registrations]
 
+  devise_for :company_users, path: 'company',
+                             path_names: { sign_up: "register" },
+                             controllers: { registrations: "company/registrations" },
+                             skip: [:sessions, :passwords, :confirmations]
+
+  devise_for :freelancers, path: 'freelancer',
+                           path_names: { sign_up: "register" },
+                           controllers: { registrations: "freelancer/registrations" },
+                           skip: [:sessions, :passwords, :confirmations]
 
   root "main#index"
 
-  get "company/login", to: "devise/session#new"
   get "freelance-service-agreement", to: "main#freelance_service_agreement"
-
-
   get "confirm_email", to: "main#confirm_email"
-
-  get 'job_country_currency', to: 'main#job_countries', as: 'job_country_currency'
-
+  get "job_country_currency", to: "main#job_countries", as: "job_country_currency"
 
   namespace :freelancer do
 
@@ -46,6 +48,7 @@ Rails.application.routes.draw do
       # resources :payments, controller: "job_payments", only: [:index]
       resources :payments, controller: "job_payments", only: [:index, :show] do
         get :print, on: :member
+        post :create_payment, on: :collection
       end
       resource :review, only: [:show, :create]
       resources :quotes, only: [:index, :create] do
@@ -87,6 +90,7 @@ Rails.application.routes.draw do
         post :skip
       end
     end
+
     resources :freelancers, only: [:index, :show] do
       get :hired, on: :collection
       get :favourites, on: :collection
@@ -115,6 +119,11 @@ Rails.application.routes.draw do
     get '/:id/avj-invoice', to: 'jobs#avj_invoice', as: 'job_avj_invoice'
     get '/:id/print-avj-invoice', to: 'jobs#print_avj_invoice', as: 'job_avj_invoice_print'
     resources :jobs, except: [:index] do
+      resources :job_build, only: [:index, :show, :update, :create] do
+        member do
+          post :skip
+        end
+      end
       resources :applicants do
         get :request_quote, on: :member
         get :ignore, on: :member
@@ -124,16 +133,15 @@ Rails.application.routes.draw do
         end
       end
       resource :contract, only: [:show, :edit, :update], as: "work_order", path: "work_order"
-        post 'contract_pay' => 'contracts#contract_pay'
       resources :messages, only: [:index, :create]
       resources :payments, controller: "job_payments", only: [:index, :show] do
         get :print, on: :member
-        get :mark_as_paid, on: :member
-        post 'contract_pay' => 'contracts#contract_pay'
+        post :mark_as_paid, on: :member
       end
       resource :review, only: [:show, :create]
       get :contract_invoice, on: :member
       get :freelancer_matches, on: :member
+      post :mark_as_finished, on: :member
     end
 
     get "jobs/:id/publish", to: "jobs#publish"
@@ -188,4 +196,5 @@ Rails.application.routes.draw do
   end
 
   get "*any", via: :all, to: "errors#not_found"
+  get "*any", via: :all, to: "errors#unauthorized"
 end

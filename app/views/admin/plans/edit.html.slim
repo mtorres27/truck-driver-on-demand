@@ -18,14 +18,14 @@ h1 Editing Plan
     = f.input :subscription_fee
     = f.fields_for :fee_schema, OpenStruct.new(@plan.fee_schema) do |ff|
       .form-group
-        = ff.label :below_2000
-        = ff.text_field :below_2000, class: 'form-control'
+        = ff.label :company_fees
+        = ff.text_field :company_fees, class: 'form-control'
       .form-group
-        = ff.label :above_2000
-        = ff.text_field :above_2000, class: 'form-control'
+        = ff.label :freelancer_fees
+        = ff.text_field :freelancer_fees, class: 'form-control'
 
   .form-actions
-    = f.button :submit, class: "btn btn-primary", prompt: "Select"
+    = f.button :submit, "Send Payment Request", class: "btn btn-primary", prompt: "Select"
 
 hr
 = link_to 'Show', admin_plan_path(@plan)

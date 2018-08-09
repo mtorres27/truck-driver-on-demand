@@ -1,58 +1,24 @@
-/ .action-bar
-/     h2.heading-h2.heading-h2--action-bar Applicants
-/     .action-bar__actions
-/       .messaging-filter
-/         .messaging-filter__text
-/           | Filter
-/         .messaging-filter__select
-/           select id="messaging-filter"
-/             option value="" label="All Applicants"
-/             option value="quoting" label="Quoting Applicants" selected=("quoting" if params[:filter] == "quoting")
-/             option value="accepted" label="Accepted Applicant" selected=("selected" if params[:filter] == "accepted")
-
 .list
   - applicants.each do |applicant|
     a href=company_job_applicant_quotes_path(job, applicant)
       .list-item.list-item--applicant class=("list-item--active" if applicant.id == current_applicant_id)
         .list__info
-          = image_tag(applicant.freelancer.avatar_url, size: "40x40")
+          = image_tag(applicant.freelancer.freelancer_profile.avatar_url, size: "40x40")
           - if is_verified(applicant.freelancer)
             span class="freelancer-verified fa fa-check-circle"
         .list__info.list__info--with-padding.list__info--expand
           - applicant.freelancer.tap do |freelancer|
             h4.heading-h4.heading-h4--no-margin
-              = freelancer.name
+              = freelancer.first_name_and_initial
             h5.heading-h5.heading-h5--no-margin
               - distance = calc_distance_from(freelancer)
               - if distance == "N/A"
-                = "#{freelancer.city}"
+                = "#{freelancer.freelancer_profile.city}"
               - else
-                = "#{freelancer.city}"
+                = "#{freelancer.freelancer_profile.city}"
         .list__info
           = applicant_state_label(applicant)
-
-/ .applicant-messages__list-wrapper
-/   .applicant-messages__list
-/     - applicants.each do |applicant|
-/       a href=company_job_applicant_quotes_path(job, applicant)
-/         .media.applicant class=("applicant--current" if applicant.id == current_applicant_id)
-/           .media-left
-/             = image_tag(applicant.freelancer.avatar_url, size: "40x40")
-/             - if is_verified(applicant.freelancer)
-/               span class="freelancer-verified fa fa-check-circle"
-/           .media-body
-/             - applicant.freelancer.tap do |freelancer|
-/               .freelancer_name= freelancer.name
-/               - distance = calc_distance_from(freelancer)
-/               - if distance == "N/A"
-/                 .freelancer_distance= "#{freelancer.city}"
-/               - else
-/                 .freelancer_distance= "#{freelancer.city}, #{distance} miles away"
-/             = applicant_state_label(applicant)
-
-
-/ javascript:
-/   $("#messaging-filter").on('change', function() {
-/     var val = $(this).val();
-/     window.location.href = "http://"+window.location.host+window.location.pathname+"?filter="+val;
-/   })
+  - if job.freelancer.nil?
+    .list-item
+      p AV Junction makes creating a work order simple.  Create a work order with your freelancer at anytime by clicking the button below.
+      = link_to "Create a work order", edit_company_job_work_order_path(job), class: "btn btn--primary"

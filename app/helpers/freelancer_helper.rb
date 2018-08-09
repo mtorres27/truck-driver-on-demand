@@ -1,7 +1,7 @@
 module FreelancerHelper
 
   def freelancer_avg_rating(freelancer)
-    if freelancer.freelancer_reviews_count == 0
+    if freelancer.freelancer_reviews.count == 0
       return []
     end
 
@@ -30,7 +30,7 @@ module FreelancerHelper
 
 
   def company_avg_rating(company)
-    if company.company_reviews_count == 0
+    if company.company_reviews.count == 0
       return []
     end
 
@@ -64,12 +64,12 @@ module FreelancerHelper
 
 
   def freelancer_ratings_link(freelancer)
-    "#{freelancer.freelancer_reviews_count} Review#{freelancer.freelancer_reviews_count == 1 ? '' : 's'}"
+    "#{freelancer.freelancer_reviews.count} Review#{freelancer.freelancer_reviews.count == 1 ? '' : 's'}"
   end
 
 
   def is_favourite(freelancer)
-    favourites = current_company.favourites.where({freelancer_id: freelancer.id})
+    favourites = current_company.favourites.where(freelancer_id: freelancer.id)
 
     if favourites.count == 0
       return false
@@ -80,7 +80,7 @@ module FreelancerHelper
   end
 
   def is_verified(freelancer)
-    return freelancer.verified
+    return freelancer.freelancer_profile.verified
   end
 
   def is_showing_freelancer(path)
@@ -91,8 +91,8 @@ module FreelancerHelper
     end
   end
 
-  def distance_from(freelancer)
-    return (((freelancer.distance / 1609.344)*10.0)/10.0).round(2)
+  def distance_from(freelancer, freelancer_profiles_with_distances)
+    return (((freelancer_profiles_with_distances.where(freelancer_id: freelancer.id).first.distance / 1609.344)*10.0)/10.0).round(2) if freelancer_profiles_with_distances.present?
   end
 
 

@@ -10,11 +10,11 @@
         | Edit
 
 
-  - if @company.profile_header_url.include?("missing") or @company.header_source == "color"
-    .profile__wallpaper style="background-color: #{ @company.header_color.include?("#") ? "" : "#"}#{@company.header_color}"
+  - if current_company.profile_header_url.include?("missing") || current_company.header_source == "color"
+    .profile__wallpaper style="background-color: #{ current_company.header_color.include?("#") ? "" : "#"}#{current_company.header_color}"
   - else
-    .profile__wallpaper style="background-image: url(#{@company.profile_header_url.include?("missing") ? "" : @company.profile_header_url});"
+    .profile__wallpaper style="background-image: url(#{current_company.profile_header_url.include?("missing") ? "" : current_company.profile_header_url});"
 
 
-  = render "shared/profile-company"
+  = render "shared/profile_company", company: current_company
 

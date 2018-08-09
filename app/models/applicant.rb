@@ -12,14 +12,25 @@
 #  updated_at     :datetime         not null
 #  messages_count :integer          default(0), not null
 #
+# Indexes
+#
+#  index_applicants_on_company_id     (company_id)
+#  index_applicants_on_freelancer_id  (freelancer_id)
+#  index_applicants_on_job_id         (job_id)
+#
+# Foreign Keys
+#
+#  fk_rails_...  (company_id => companies.id)
+#  fk_rails_...  (freelancer_id => users.id)
+#  fk_rails_...  (job_id => jobs.id)
+#
 
 class Applicant < ApplicationRecord
   extend Enumerize
 
   belongs_to :company
   belongs_to :job, counter_cache: true
-  belongs_to :freelancer
-  has_many :quotes, -> { order(created_at: :desc) }, dependent: :destroy
+  belongs_to :freelancer, class_name: "User", foreign_key: 'freelancer_id'
   has_many :messages, -> { includes(:authorable).order(created_at: :desc) }, as: :receivable
   accepts_nested_attributes_for :messages
 
@@ -34,14 +45,6 @@ class Applicant < ApplicationRecord
     :declined
   ], predicates: true, scope: true
 
-  scope :with_pending_quotes, -> {
-    joins(:quotes).where(quotes: { state: "pending" })
-  }
-
-  scope :without_quotes, -> {
-    where.not(id: Quote.select(:applicant_id))
-  }
-
   def only_one_can_be_accepted
     if accepted? && job.applicants.with_state(:accepted).where.not(id: id).any?
       errors.add(:base, "Only one applicant may be accepted for a job.")
@@ -55,10 +58,7 @@ class Applicant < ApplicationRecord
 
   def accept!
     self.state = :accepted
-    if save
-      quote = quotes.where({applicant_id: id}).first
-      job.update(contract_price: quote.amount, pay_type: quote.pay_type)
-    end
+    save
   end
 
   def reject!
@@ -70,23 +70,5 @@ class Applicant < ApplicationRecord
   def ignore!
     self.state = :ignored
     save
-  end
-
-  def self.connect_quotes_to_messages
-    Applicant.all.each do |applicant|
-      applicant.messages.where({has_quote: false}).each do |message|
-        applicant.quotes.each do |quote|
-          if (message.created_at - quote.created_at).abs < 1
-            message.has_quote = true
-            message.quote_id = quote.id
-            message.save
-          end
-        end
-      end
-    end
-    Message.where({has_quote: false}).find_each do |message|
-      @message_date = message.created_at
-      Quote.where()
-    end
   end
 end

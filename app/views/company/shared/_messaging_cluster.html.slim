@@ -13,130 +13,57 @@
                   = "Click the button below to check the available plans and subscribe."
 
                 div
-                - if current_admin.nil?
+                - if current_user.company_user?
                   a.btn.btn--primary href=company_plans_path
                     | View plans
-      - elsif @all_quotes.where({state: "accepted"}).length == 0
-        - if current_company
-          = render partial: "company/shared/new_message", locals: { f: f, n: @applicant.freelancer.name, type: "quote", quotes: @quotes }
+      - elsif @applicants.where({state: "accepted"}).length == 0
+        - if current_user.company_user?
+          = render partial: "company/shared/new_message", locals: { f: f, n: @applicant.freelancer.first_name_and_initial, type: "quote" }
       - else
         .new-message--wrapper
           .new-message_amount
             .new-message__freelancer-selected
               .new-message__freelancer-selected__avatar
-                = image_tag(@job.freelancer.avatar_url, size: "65x65")
+                = image_tag(@job.freelancer.freelancer_profile.avatar_url, size: "65x65")
 
               .new-message__freelancer-selected__text
                 b
-                  = "Congratulations, you've selected #{@job.freelancer.name} for this job."
+                  = "Congratulations, you've selected #{@job.freelancer.first_name_and_initial} for this job."
                 p
-                  = "The next step is to create a work order with #{@job.freelancer.name}. We've made this super simple by doing all the hard work for you. "
+                  = "The next step is to create a work order with #{@job.freelancer.first_name_and_initial}. We've made this super simple by doing all the hard work for you. "
                   = "Simply click the button below to proceed to creating a work order."
 
                 div
-                - path = current_admin.nil? ? company_job_work_order_path(@job) : admin_job_work_order_path(@job)
+                - path = current_user.admin? ? admin_job_work_order_path(@job) : company_job_work_order_path(@job)
                 a.btn.btn--primary href=path
                   | view Work Order
       .applicant-messages__messages--inner class=("applicant-messages__messages--inner--inactive" if @applicant_accepted == true)
-        - @harmonized_items.each_with_index do |item, index|
-          - if item[:type] == "message"
-            .list-item.list-item--message class=(".list-item.list-item--message.list-item--message-has-quote" if item[:payload].has_quote == true)
-              .list__info
-                = image_tag(item[:payload].authorable.avatar_url, size: "40x40")
-              .list__info.list__info--expand.list__info--with-padding
-                .list-bar.list-bar--left
-                  h4.heading-h4.heading-h4--no-margin #{item[:payload].authorable.name}
-                  | &nbsp;
-                  - if !item[:payload].created_at.nil?
-                    h5.heading-h5 #{time_ago_in_words(item[:payload].created_at)} ago
-                p
+        - @messages.each_with_index do |message|
+          .list-item.list-item--message class=(".list-item.list-item--message.list-item--message-has-quote")
+            .list__info
+              = image_tag(message.authorable.user_data.avatar_url, size: "40x40")
+            .list__info.list__info--expand.list__info--with-padding
+              .list-bar.list-bar--left
+                - if message.authorable.is_a?(Freelancer)
+                  h4.heading-h4.heading-h4--no-margin #{message.authorable.first_name_and_initial}
+                - else
+                  h4.heading-h4.heading-h4--no-margin #{message.authorable.full_name}
+                | &nbsp;
+                - if !message.created_at.nil?
+                  h5.heading-h5 #{time_ago_in_words(message.created_at)} ago
+              p
 
-                  = item[:payload].body
-                  - if item[:payload].attachment_url
-                    .list__info.list__info--with-padding
-                      - if item[:payload].attachment_url
-                        a href=item[:payload].attachment_url target="_blank"
-                          - if is_image(item[:payload].attachment_url)
-                            span class="zmdi zmdi-image"
-                          - else
-                            span class="zmdi zmdi-file-text"
-                          |  
-                          = eval(item[:payload].attachment_data)[:metadata][:filename]   
-              - if item[:payload].has_quote == true and !item[:payload].quote_id.nil?
-                - @quote = Quote.find(item[:payload].quote_id)
-                .list__info
-                  div.quote_amount class=("quote_amount--declined" if @quote.state == "declined")
-                    = number_with_precision(@quote.amount, precision: 0).to_s + " " + (job.currency ? job.currency.upcase : "")
-                  .quote_pay_type= @quote.pay_type.text
-                  - if @quote.pay_type == "hourly"
-                    = "(#{@quote.number_of_hours} hours @ #{@quote.hourly_rate} #{job.currency ? job.currency.upcase : ""}/hour)"
-                  - if @quote.pay_type == "daily"
-                    = "(#{@quote.number_of_days} days @ #{@quote.daily_rate} #{job.currency ? job.currency.upcase : ""}/day)"
-                  - if @quote.fixed? && @quote.amount > @job.budget
-                    .quote_over-budget= "Over Budget"
-                  - elsif @quote.fixed? && @quote.amount < @job.budget
-                    .quote_under-budget= "Under Budget"
-                  - elsif @quote.pending?
-                    - if @quote.fixed? && @quote.amount > @job.budget
-                      .quote_over-budget= "Over Budget"
-                    - elsif @quote.fixed? && @quote.amount < @job.budget
-                      .quote_under-budget= "Under Budget"
-                    - elsif @quote.amount < @job.budget
-                      .quote_under-budget= "Under Budget"
-                    - elsif @quote.amount < @job.budget
-                      .quote_over-budget= "Over Budget"
-
-                  - if @quote.attachment_url
-                    a.authorable_attachment href=@quote.attachment_url target="_blank"
-                      - if is_image(@quote.attachment_url)
-                        span class="authorable_attachment_icon fa fa-image"
-                      - else
-                        span class="authorable_attachment_icon fa fa-file-text"
-                      .authorable_attachment__filename
-                        = eval(@quote.attachment_data)[:metadata][:filename]
-
-
-  - if @quotes.length > 0
-    .modal__accept-quote
-      .modal__accept-quote__content
-        .modal__accept-quote__content__header
-          .modal__accept-quote__content__header__text
-            = "Accept #{number_with_precision(@quotes.where({applicant_id: @applicant.id}).first.amount, precision: 2)} #{(job.currency ? job.currency.upcase : "")}"
-        .modal__accept-quote__content__body
-          b
-            | CONGRATULATIONS, YOU'VE FOUND YOUR FREELANCER.
-          p
-            = "The next step is to create a work order with #{@applicant.freelancer.name}. We've made this super simple by doing all the hard work for you. "
-            | "Simply click the button below to proceed to creating a work worder. If you don't have the time right now you can find this in the job details section."
-          p
-            em
-              = "Remember, by accepting this quote of #{number_with_precision(@quotes.where({applicant_id: @applicant.id}).first.amount, precision: 2)} #{(job.currency ? job.currency.upcase : "")}  with #{@applicant.freelancer.name}, all other applications for this"
-              = " job will automatically be declined, and receive a general notification informing them the job has been filled. Details of who you've selected will not be shared."
-          .buttons
-            .accept_button.btn.btn--primary
-              | Accept
-            .cancel_button.btn.btn--secondary
-              | Cancel
-
-
-
-    .modal__decline-quote
-      .modal__decline-quote__content
-        .modal__decline-quote__content__header
-          .modal__decline-quote__content__header__text
-            = "Decline Quote of #{@quotes.where({applicant_id: @applicant.id}).first.amount}"
-        .modal__decline-quote__content__body
-          b
-            | YOU HAVE DECIDED TO DECLINE THIS QUOTE
-
-          p
-            | Declining this quote will notify the freelancer of your decision. However, they still have the option to offer another quote.
-
-          .buttons
-            .decline_button.btn.btn--primary
-              | Decline Quote
-            .cancel_button.btn.btn--secondary
-              | Cancel
+                = message.body
+                - if message.attachment_url
+                  .list__info.list__info--with-padding
+                    - if message.attachment_url
+                      a href=message.attachment_url target="_blank"
+                        - if is_image(message.attachment_url)
+                          span class="zmdi zmdi-image"
+                        - else
+                          span class="zmdi zmdi-file-text"
+                        |
+                        = eval(message.attachment_data)[:metadata][:filename]
 
   javascript:
     $(".accept_button").on('click', function() {

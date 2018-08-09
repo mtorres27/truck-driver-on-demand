@@ -1,18 +1,18 @@
 - content_for :secondary do
   h1.text-center.heading-h1 = "Register as a Company"
   = render partial: "shared/registration_progress_bar", locals: { step: 4 }
-  = simple_form_for(@company, url: wizard_path) do |f|
+  = simple_form_for(current_company, url: wizard_path) do |f|
     .grid-h
       .grid-cell.grid-cell--100
         = f.label :avatar, label: "Company Logo", required: true
         .company-profile__image style="width: 100px; height: 100px;"
-          = image_tag(@company.avatar_url, id: "company-edit-profile__avatar")
+          = image_tag(current_company.avatar_url, id: "company-edit-profile__avatar")
           .company-profile__image-upload onclick="updateCompanyLogo()"
             span class="zmdi zmdi-camera-add"
-        - if @company.errors.full_messages.include?("Avatar can't be blank")
+        - if current_company.errors.full_messages.include?("Avatar can't be blank")
           .has-error
             .help-block
-             | Please select a company logo.
+              | Please select a company logo.
         = f.file_field :avatar, label: false, :accept => 'image/png,image/gif,image/jpeg', id: "edit-company-profile-avatar", class: "file-input--hidden"
 
       .grid-cell.grid-cell--100
@@ -34,9 +34,9 @@
           .grid-cell.grid-cell--33
             = link_to "Skip & Register", skip_company_registration_step_path(:profile), method: :post, class: "btn btn--secondary"
           .grid-cell.grid-cell--33
-            = link_to "Use another account", destroy_company_session_path,  method: :delete, class: "btn btn--clear"
+            = link_to "Use another account", destroy_user_session_path,  method: :delete, class: "btn btn--clear"
 javascript:
-   var updateCompanyLogo = function() {
+  var updateCompanyLogo = function() {
     $("#edit-company-profile-avatar").click();
     $("#edit-company-profile-avatar").on('change', function() {
       var imgPath = $(this)[0].value;

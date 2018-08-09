@@ -1,10 +1,12 @@
 class Company::SubscriptionController < Company::BaseController
   include TaxHelper
+
   before_action :amount_to_be_charged, :set_description
   protect_from_forgery except: :webhook
 
   def cancel
-    # logger.debug current_company.inspect
+    authorize current_company, :cancel_subscription?
+
     plan = current_company.plan
     StripeTool.cancel_subscription(company: current_company)
     SubscriptionMailer.notice_company_subscription_canceled(current_company, plan).deliver_later
@@ -13,12 +15,15 @@ class Company::SubscriptionController < Company::BaseController
   end
 
   def invoices
+    authorize current_company
     @subscriptions = Subscription.where(company_id: current_company.id)
   end
 
   def invoice
     # raise exception if company is not the invoice owner
     @subscription = Subscription.find_by(stripe_subscription_id: params[:subscription])
+    authorize @subscription
+
     if @subscription.nil? || @subscription.company_id != current_company.id
       flash[:error] = "You can't see this invoice!"
       redirect_to company_invoices_path
@@ -26,6 +31,7 @@ class Company::SubscriptionController < Company::BaseController
   end
 
   def plans
+    authorize current_company
     # redirect to profile edit if no province canadian company
     if current_company.canada_country? && current_company.state.nil?
       flash[:notice] = 'You must update your profile with the province!'
@@ -33,7 +39,7 @@ class Company::SubscriptionController < Company::BaseController
     end
     @plans = Plan.order(name: :asc)
     begin
-      @subscription = Stripe::Subscription.retrieve(current_company.stripe_subscription_id) if current_company.stripe_subscription_id
+      @subscription = Stripe::Subscription.retrieve(current_company.stripe_subscription_id) if current_company.stripe_subscription_id.present?
     rescue Stripe::InvalidRequestError => ex
       flash[:alert] = 'Please subscribe to one of the following plans'
     rescue Exception => ex
@@ -43,7 +49,9 @@ class Company::SubscriptionController < Company::BaseController
   end
 
   def reset_company
-    current_company.created_at                = 3.months.ago - 5.day #2.days.ago 3.months.ago-5.day
+    authorize current_company
+
+    current_company.created_at                             = 3.months.ago - 5.day
     current_company.billing_period_ends_at    = nil
     current_company.stripe_customer_id        = nil
     current_company.stripe_subscription_id    = nil
@@ -63,6 +71,8 @@ class Company::SubscriptionController < Company::BaseController
   end
 
   def update_card_info
+    authorize current_company
+
     if params[:stripeToken]
       customer = Stripe::Customer.retrieve(current_company.stripe_customer_id)
       customer.source = params[:stripeToken]
@@ -78,10 +88,9 @@ class Company::SubscriptionController < Company::BaseController
   end
 
   def subscription_checkout
+    authorize current_company
+
     plan = Plan.find_by(code: params[:plan_id])
-    # logger.debug params[:stripeToken]
-    # logger.debug plan.inspect
-    # exit
     customer = StripeTool.create_customer(email: params[:stripeEmail],
                                           stripe_token: params[:stripeToken])
     subscription = StripeTool.subscribe(customer: customer,
@@ -98,6 +107,7 @@ class Company::SubscriptionController < Company::BaseController
 
   def webhook
     begin
+      authorize current_company
       event_json = JSON.parse(request.body.read)
       event_object = event_json['data']['object']
       case event_json['type']
@@ -119,14 +129,15 @@ class Company::SubscriptionController < Company::BaseController
   end
 
   def new
-
+    authorize current_company
   end
 
   def thanks
-
+    authorize current_company
   end
 
   def create
+    authorize current_company
     begin
     # Amount in cents
       customer = StripeTool.create_customer(email: params[:stripeEmail],
@@ -144,11 +155,12 @@ class Company::SubscriptionController < Company::BaseController
 
   private
 
-    def amount_to_be_charged
-      @amount = 15000
-    end
+  def amount_to_be_charged
+    @amount = 15000
+  end
 
-    def set_description
-      @description = "AVJunction Monthly Subscription"
-    end
+  def set_description
+    @description = "AVJunction Monthly Subscription"
+  end
+
 end

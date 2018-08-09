@@ -4,18 +4,18 @@
 #
 #  id                                     :integer          not null, primary key
 #  company_id                             :integer          not null
-#  project_id                             :integer          not null
-#  title                                  :string           not null
+#  project_id                             :integer
+#  title                                  :string
 #  state                                  :string           default("created"), not null
-#  summary                                :text             not null
+#  summary                                :text
 #  scope_of_work                          :text
-#  budget                                 :decimal(10, 2)   not null
-#  job_function                           :string           not null
-#  starts_on                              :date             not null
+#  budget                                 :decimal(10, 2)
+#  job_function                           :string
+#  starts_on                              :date
 #  ends_on                                :date
-#  duration                               :integer          not null
+#  duration                               :integer
 #  pay_type                               :string
-#  freelancer_type                        :string           not null
+#  freelancer_type                        :string
 #  technical_skill_tags                   :text
 #  invite_only                            :boolean          default(FALSE), not null
 #  scope_is_public                        :boolean          default(TRUE), not null
@@ -50,9 +50,30 @@
 #  job_type                               :citext
 #  job_market                             :citext
 #  manufacturer_tags                      :citext
-#  contracted_at                          :datetime
 #  company_plan_fees                      :decimal(10, 2)   default(0.0)
+#  contracted_at                          :datetime
 #  state_province                         :string
+#  creation_step                          :string
+#  plan_fee                               :decimal(10, 2)   default(0.0)
+#  paid_by_company                        :boolean          default(FALSE)
+#  total_amount                           :decimal(10, 2)
+#  tax_amount                             :decimal(10, 2)
+#  stripe_fees                            :decimal(10, 2)
+#  amount_subtotal                        :decimal(10, 2)
+#  variable_pay_type                      :string
+#  overtime_rate                          :decimal(10, 2)
+#  payment_terms                          :integer
+#
+# Indexes
+#
+#  index_jobs_on_company_id         (company_id)
+#  index_jobs_on_manufacturer_tags  (manufacturer_tags)
+#  index_jobs_on_project_id         (project_id)
+#
+# Foreign Keys
+#
+#  fk_rails_...  (company_id => companies.id)
+#  fk_rails_...  (project_id => projects.id)
 #
 
 class Job < ApplicationRecord
@@ -63,9 +84,8 @@ class Job < ApplicationRecord
   include ScopeFileUploader[:scope_file]
 
   belongs_to :company
-  belongs_to :project
+  belongs_to :project, optional: true
   has_many :applicants, -> { includes(:freelancer).order(updated_at: :desc) }, dependent: :destroy
-  has_many :quotes, -> { order(created_at: :desc) }, through: :applicants
   has_many :messages, -> { order(created_at: :desc) }, as: :receivable
   has_many :change_orders, -> { order(updated_at: :desc) }, dependent: :destroy
   has_many :payments, dependent: :destroy
@@ -77,14 +97,10 @@ class Job < ApplicationRecord
   accepts_nested_attributes_for :payments, allow_destroy: true, reject_if: :reject_payments
   accepts_nested_attributes_for :attachments, allow_destroy: true, reject_if: :reject_attachments
 
-  schema_validations except: :working_days
+  attr_accessor :send_contract, :accepted_applicant_id, :enforce_contract_creation, :save_draft
 
-  serialize :technical_skill_tags
-  serialize :manufacturer_tags
-
-  attr_accessor :send_contract
-
-  audited
+  after_save :check_if_should_do_geocode
+  after_save :accept_applicant, if: :enforce_contract_creation
 
   enumerize :job_type, in: I18n.t('enumerize.job_types').keys
 
@@ -94,6 +110,47 @@ class Job < ApplicationRecord
     :weekend,
     :any_time
   ]
+
+  enumerize :pay_type, in: I18n.t('enumerize.job.pay_type').keys
+
+  enumerize :variable_pay_type, in: [ :hourly, :daily ]
+
+  enumerize :freelancer_type, in: [ :independent, :service_provider ]
+
+  enumerize :country, in: [
+    :at, :au, :be, :ca, :ch, :de, :dk, :es, :fi, :fr, :gb, :hk, :ie, :it, :jp, :lu, :nl, :no, :nz, :pt, :se, :sg, :us
+  ]
+
+  enumerize :state, in: [
+    :created,
+    :published,
+    :quoted,
+    :negotiated,
+    :contracted,
+    :completed
+  ], predicates: true, scope: true
+
+  validates :budget, numericality: true, sane_price: true, if: :creation_completed?
+  validates :duration, numericality: { only_integer: true, greater_than_or_equal_to: 1 }, if: -> { step_job_details? || creation_completed? }
+  validates :pay_type, inclusion: { in: pay_type.values }, allow_blank: true, if: :creation_completed?
+  validates :freelancer_type, inclusion: { in: freelancer_type.values }, allow_blank: true, if: :creation_completed?
+  validates :job_function, :freelancer_type, presence: true, if: :is_published?
+  validates :title, :summary, :address, :currency, :country, presence: true, if: -> { step_job_details? || is_published? }
+  validates :freelancer_type, :job_type, :job_market, :job_function, presence: true, if: -> { is_published? }
+  validates :accepted_applicant_id, presence: true, if: :enforce_contract_creation
+  validates :contract_price, :payment_terms, numericality: { greater_than_or_equal_to: 1 }, if: :enforce_contract_creation
+  validates :overtime_rate, numericality: { greater_than_or_equal_to: 1 }, allow_blank: true
+  validate :scope_or_file, if: :creation_completed?
+  validate :validate_number_of_payments, if: :creation_completed?
+  validate :validate_payments_total, if: :creation_completed?
+  validate :validate_sales_tax, if: :creation_completed?
+
+  schema_validations except: :working_days
+
+  serialize :technical_skill_tags
+  serialize :manufacturer_tags
+
+  audited
 
   pg_search_scope :search, against: {
     title: "A",
@@ -108,56 +165,6 @@ class Job < ApplicationRecord
     tsearch: { prefix: true, any_word: true }
   }
 
-  enumerize :pay_type, in: [ :fixed, :hourly, :daily ]
-
-  enumerize :freelancer_type, in: [ :independent, :service_provider ]
-
-  enumerize :country, in: [
-      :at, :au, :be, :ca, :ch, :de, :dk, :es, :fi, :fr, :gb, :hk, :ie, :it, :jp, :lu, :nl, :no, :nz, :pt, :se, :sg, :us
-  ]
-
-  enumerize :state, in: [
-    :created,
-    :published,
-    :quoted,
-    :negotiated,
-    :contracted,
-    :completed
-  ], predicates: true, scope: true
-
-  # enumerize :currency, in: [
-  #   :cad,
-  #   :euro,
-  #   :ruble,
-  #   :rupee,
-  #   :usd,
-  #   :yen,
-  # ]
-
-  validate :validate_number_of_payments
-
-  def validate_number_of_payments
-    if send_contract == "true"
-      remaining_payments = payments.reject(&:marked_for_destruction?)
-      errors.add(:number_of_payments, 'A minimum of 1 payment is required') if remaining_payments.empty?
-    end
-  end
-
-  validate :validate_payments_total
-  def validate_payments_total
-    if send_contract == "true"
-      total = payments.inject(0) { |sum, e| sum + e.amount if e.amount.present? }
-      errors.add(:total_of_payments, 'The total amount of payments doesn\'t match with the quote') if total != quotes.where({state: :accepted}).first.amount
-    end
-  end
-
-  validate :validate_sales_tax
-  def validate_sales_tax
-    if send_contract == "true"
-      errors.add(:applicable_sales_tax, 'You should set the applicable sales tax!') if applicable_sales_tax.nil?
-    end
-  end
-
   def pre_negotiated?
     %w(created published quoted).include?(state)
   end
@@ -167,20 +174,8 @@ class Job < ApplicationRecord
   end
 
   def pre_contracted?
-    pre_negotiated? || negotiated?
+    pre_negotiated?
   end
-
-  def accepted_quote
-    if quotes.where({state: :accepted}).count > 0
-      return quotes.where({state: :accepted}).first
-    else
-      return nil
-    end
-  end
-
-  # def plan_fee_us
-  #   if accepted_quote.amount
-  # end
 
   def work_order
     "WO-"+(id.to_s.rjust(5, '0'))
@@ -191,13 +186,6 @@ class Job < ApplicationRecord
     :every_other_day,
     :weekly
   ]
-
-  validates :budget, numericality: true, sane_price: true
-  validates :duration, numericality: { only_integer: true }
-  validates :pay_type, inclusion: { in: pay_type.values }, allow_blank: true
-  validates :freelancer_type, inclusion: { in: freelancer_type.values }
-  validate :scope_or_file
-  validates :address, :currency, :country, presence: true
 
   def freelancer
     applicants.with_state(:accepted).first&.freelancer
@@ -240,6 +228,10 @@ class Job < ApplicationRecord
     str
   end
 
+  def creation_completed?
+    creation_step == "wicked_finish"
+  end
+
   def self.all_job_functions
     I18n.t("enumerize.system_integration_job_functions").merge(I18n.t("enumerize.live_events_staging_and_rental_job_functions"))
   end
@@ -250,32 +242,61 @@ class Job < ApplicationRecord
 
   private
 
-    def scope_or_file
-      if scope_of_work.blank? and scope_file_url.nil?
-        errors.add(:scope_of_work, "Either a scope of work or a scope file attachment is required")
-      end
+  def scope_or_file
+    if scope_of_work.blank? and scope_file_url.nil?
+      errors.add(:scope_of_work, "Either a scope of work or a scope file attachment is required")
     end
+  end
 
-    def reject_payments(attrs)
-      exists = attrs["id"].present?
-      empty = attrs["description"].blank? && attrs["amount"].blank?
-      attrs.merge!({ _destroy: 1 }) if exists && empty
-      !exists and empty
+  def reject_payments(attrs)
+    exists = attrs["id"].present?
+    empty = attrs["description"].blank? && attrs["amount"].blank?
+    attrs.merge!({ _destroy: 1 }) if exists && empty
+    !exists and empty
+  end
+
+  def reject_attachments(attrs)
+    exists = attrs["id"].present?
+    empty = attrs["file"].blank? && attrs["title"].blank?
+    attrs.merge!({ _destroy: 1 }) if exists && empty
+    !exists and empty
+  end
+
+  def check_if_should_do_geocode
+    return unless saved_changes.include?("address") || (!address.nil? && lat.nil?)
+    do_geocode
+    update_columns(lat: lat, lng: lng)
+  end
+
+  def step_job_details?
+    creation_step == "candidate_details"
+  end
+
+  def accept_applicant
+    applicants.where(id: accepted_applicant_id).first&.update_attribute(:state, "accepted")
+    applicants.where.not(id: accepted_applicant_id, state: "declined").each do |applicant|
+      applicant.update_attribute(:state, "declined")
+      FreelancerMailer.notice_received_declined_quote(applicant.freelancer, company, self).deliver_later
     end
+  end
 
-    def reject_attachments(attrs)
-      exists = attrs["id"].present?
-      empty = attrs["file"].blank? && attrs["title"].blank?
-      attrs.merge!({ _destroy: 1 }) if exists && empty
-      !exists and empty
+  def validate_number_of_payments
+    if send_contract == "true" && pay_type == "fixed"
+      remaining_payments = payments.reject(&:marked_for_destruction?)
+      errors.add(:number_of_payments, 'A minimum of 1 payment is required') if remaining_payments.empty?
     end
+  end
 
-    after_save :check_if_should_do_geocode
-    def check_if_should_do_geocode
-      if saved_changes.include?("address") or (!address.nil? and lat.nil?)
-        do_geocode
-        update_columns(lat: lat, lng: lng)
-      end
+  def validate_payments_total
+    if send_contract == "true" && pay_type == "fixed"
+      total = payments.inject(0) { |sum, e| sum + e.amount if e.amount.present? }
+      errors.add(:total_of_payments, 'The total amount of payments doesn\'t match with the work order amount') if total != contract_price
     end
+  end
 
+  def validate_sales_tax
+    if send_contract == "true"
+      errors.add(:applicable_sales_tax, 'You should set the applicable sales tax!') if applicable_sales_tax.nil?
+    end
+  end
 end

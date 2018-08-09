@@ -4,9 +4,7 @@
 #
 #  id                        :integer          not null, primary key
 #  token                     :string
-#  email                     :citext           not null
 #  name                      :string
-#  contact_name              :string
 #  address                   :string
 #  formatted_address         :string
 #  area                      :string
@@ -30,15 +28,8 @@
 #  number_of_offices         :integer          default(0)
 #  number_of_employees       :string
 #  established_in            :integer
-#  encrypted_password        :string           default(""), not null
-#  reset_password_token      :string
-#  reset_password_sent_at    :datetime
-#  remember_created_at       :datetime
-#  sign_in_count             :integer          default(0), not null
-#  current_sign_in_at        :datetime
-#  last_sign_in_at           :datetime
-#  current_sign_in_ip        :inet
-#  last_sign_in_ip           :inet
+#  header_color              :string           default("FF6C38")
+#  country                   :string
 #  stripe_customer_id        :string
 #  stripe_subscription_id    :string
 #  stripe_plan_id            :string
@@ -50,11 +41,6 @@
 #  card_brand                :string
 #  exp_month                 :string
 #  exp_year                  :string
-#  header_color              :string           default("FF6C38")
-#  country                   :string
-#  confirmation_token        :string
-#  confirmed_at              :datetime
-#  confirmation_sent_at      :datetime
 #  header_source             :string           default("color")
 #  sales_tax_number          :string
 #  line2                     :string
@@ -68,12 +54,25 @@
 #  waived_jobs               :integer          default(1)
 #  registration_step         :string
 #
+# Indexes
+#
+#  index_companies_on_disabled              (disabled)
+#  index_companies_on_job_markets           (job_markets)
+#  index_companies_on_manufacturer_tags     (manufacturer_tags)
+#  index_companies_on_name                  (name)
+#  index_companies_on_plan_id               (plan_id)
+#  index_companies_on_technical_skill_tags  (technical_skill_tags)
+#  index_on_companies_loc                   (st_geographyfromtext((((('SRID=4326;POINT('::text || lng) || ' '::text) || lat) || ')'::text)))
+#
+# Foreign Keys
+#
+#  fk_rails_...  (plan_id => plans.id)
+#
 
 class Company < ApplicationRecord
-  # Include default devise modules. Others available are:
-  # :confirmable, :lockable, :timeoutable and :omniauthable
-  devise :database_authenticatable, :registerable,
-         :recoverable, :rememberable, :trackable, :validatable, :confirmable
+
+  audited
+
   extend Enumerize
   include PgSearch
   include Geocodable
@@ -86,7 +85,6 @@ class Company < ApplicationRecord
   has_many :projects, -> { order(updated_at: :desc) }, dependent: :destroy
   has_many :jobs, dependent: :destroy
   has_many :applicants, dependent: :destroy
-  has_many :quotes, dependent: :destroy
   has_many :payments, dependent: :destroy
   has_many :messages, -> { order(created_at: :desc) }, as: :authorable
   has_many :freelancer_reviews, dependent: :nullify
@@ -95,18 +93,15 @@ class Company < ApplicationRecord
   has_many :favourites
   has_many :favourite_freelancers, through: :favourites, source: :freelancer
   has_many :company_installs, dependent: :destroy
+  has_one :company_user, dependent: :destroy
 
   attr_accessor :accept_terms_of_service, :accept_privacy_policy, :accept_code_of_conduct,
-                :first_name, :last_name, :enforce_profile_edit, :user_type
-
-  validates_acceptance_of :accept_terms_of_service
-  validates_acceptance_of :accept_privacy_policy
-  validates_acceptance_of :accept_code_of_conduct
+                :enforce_profile_edit, :user_type, :skip_step
 
   validates :phone_number, length: { minimum: 7 }, allow_blank: true
-  validates :first_name, :last_name, :name, :country, :city, presence: true, on: :update,  if: :step_job_info?
+  validates :name, :country, :city, presence: true, on: :update,  if: :step_job_info?
   validates :job_types, presence: true, on: :update, if: :step_profile?
-  validates :avatar, :description, :established_in, :number_of_employees, :number_of_offices, :website, :area, presence: true, on: :update, if: :confirmed_company?
+  validates :avatar, :description, :established_in, :number_of_employees, :number_of_offices, :website, :area, presence: true, on: :update, if: -> { registration_completed? && !skip_step }
 
   enumerize :contract_preference, in: [:prefer_fixed, :prefer_hourly, :prefer_daily]
 
@@ -133,20 +128,22 @@ class Company < ApplicationRecord
 
   accepts_nested_attributes_for :featured_projects, allow_destroy: true, reject_if: :reject_featured_projects
   accepts_nested_attributes_for :company_installs, allow_destroy: true, reject_if: :reject_company_installs
+  accepts_nested_attributes_for :company_user
 
   scope :new_registrants, -> { where(disabled: true) }
 
-  before_save :set_name, if: :step_job_info?
   after_save :add_to_hubspot
   before_create :set_default_step
-  after_save :send_confirmation_email, if: :confirmed_company?
+  after_save :send_confirmation_email
+
+  delegate :email, to: :company_user, allow_nil: true
 
   def freelancers
     Freelancer.
-      joins(applicants: :job).
+      joins(:freelancer_profile, applicants: :job).
       where(jobs: { company_id: id }).
       where(applicants: { state: :accepted }).
-      order(:name)
+      order(first_name: :desc, last_name: :desc)
   end
 
   def renew_month
@@ -157,24 +154,18 @@ class Company < ApplicationRecord
     self.expires_at = Date.today + 1.year
   end
 
-  audited
-
-    validates_presence_of :name,
-      :email,
-      :address,
-      :city,
-      :postal_code,
-      :area,
-      :country,
-      :description,
-      :established_in,
-      if: :enforce_profile_edit
-
+  validates_presence_of :name,
+    :address,
+    :city,
+    :postal_code,
+    :area,
+    :country,
+    :description,
+    :established_in,
+    if: :enforce_profile_edit
 
   pg_search_scope :search, against: {
     name: "A",
-    email: "A",
-    contact_name: "B",
     area: "B",
     job_types: "B",
     job_markets: "B",
@@ -182,15 +173,18 @@ class Company < ApplicationRecord
     manufacturer_tags: "B",
     formatted_address: "C",
     description: "C"
+  }, associated_against: {
+    company_user: [:email, :first_name, :last_name]
   }, using: {
-      tsearch: { prefix: true }
+    tsearch: { prefix: true }
   }
 
   pg_search_scope :name_or_email_search, against: {
-      name: "A",
-      email: "A",
+    name: "A",
+  }, associated_against: {
+    company_user: [:email]
   }, using: {
-      tsearch: { prefix: true }
+    tsearch: { prefix: true }
   }
 
   def rating
@@ -210,10 +204,11 @@ class Company < ApplicationRecord
   end
 
   after_save :check_if_should_do_geocode
+
   def check_if_should_do_geocode
     if saved_changes.include?("address") or saved_changes.include?("city") or (!address.nil? and lat.nil?) or (!city.nil? and lat.nil?)
       do_geocode
-      update_columns(lat: lat, lng: lng)
+      update_columns(formatted_address: formatted_address, lat: lat, lng: lng)
     end
   end
 
@@ -246,10 +241,10 @@ class Company < ApplicationRecord
   end
 
   def self.do_all_geocodes
-    Company.all.each do |f|
-      p "Doing geocode for " + f.id.to_s + "(#{f.compile_address})"
-      f.do_geocode
-      f.update_columns(lat: f.lat, lng: f.lng)
+    Company.all.each do |company|
+      p "Doing geocode for " + company.id.to_s + "(#{company.compile_address})"
+      company.do_geocode
+      company.update_columns(lat: company.lat, lng: company.lng)
 
       sleep 1
     end
@@ -264,8 +259,16 @@ class Company < ApplicationRecord
     number_of_employees.present? && number_of_offices.present? && website.present?
   end
 
-  def name_initials
-    name.blank? ? email[0].upcase : name.split.map(&:first).map(&:upcase).join
+  def full_name
+    name
+  end
+
+  def first_name_and_initial
+    name
+  end
+
+  def user_data
+    self
   end
 
   private
@@ -276,8 +279,8 @@ class Company < ApplicationRecord
 
     Hubspot::Contact.createOrUpdate(email,
       company: name,
-      firstname: contact_name.split(" ")[0],
-      lastname: contact_name.split(" ")[1],
+      firstname: company_user.first_name,
+      lastname: company_user.last_name,
       lifecyclestage: "customer",
       im_an: "AV Company",
     )
@@ -295,17 +298,10 @@ class Company < ApplicationRecord
     self.registration_step ||= "personal"
   end
 
-  def set_name
-    self.contact_name ||= "#{first_name} #{last_name}"
-  end
-
   def send_confirmation_email
-    return if confirmed? || !registration_completed? || confirmation_sent_at.present?
-    self.send_confirmation_instructions
-  end
-
-  def confirmed_company?
-    registration_completed? && self.confirmed? == false
+    return if company_user.confirmed? || !registration_completed? || company_user.confirmation_sent_at.present?
+    company_user.send_confirmation_instructions
+    company_user.update_column(:confirmation_sent_at, Time.current)
   end
 
   protected

@@ -6,7 +6,7 @@ class FriendInvitesMailer < ApplicationMailer
     @friend_name = friend_name
     headers 'X-SMTPAPI' => {
         sub: {
-            '%freelancer_name%' => [@freelancer.name],
+            '%freelancer_name%' => [@freelancer.first_name_and_initial],
             '%friend_name%' => [@friend_name],
             '%root_url%' => [root_url]
         },

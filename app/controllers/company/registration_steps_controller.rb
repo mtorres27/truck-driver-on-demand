@@ -1,16 +1,24 @@
-class Company::RegistrationStepsController < ApplicationController
+class Company::RegistrationStepsController < Company::BaseController
+
   include Wicked::Wizard
+
+  skip_before_action :authenticate_user!, only: [:show]
+  skip_before_action :redirect_if_not_company, only: [:show]
+
   steps :personal, :job_info, :profile
 
-  before_action :verify_current_company
-
   rescue_from Wicked::Wizard::InvalidStepError do
-    redirect_to new_company_session_path
+    redirect_to new_user_session_path
   end
 
   def show
-    @company = current_company
-    render_wizard
+    if params[:id] == "wicked_finish"
+      redirect_to finish_wizard_path
+    elsif current_company.nil?
+      redirect_to root_path
+    else
+      render_wizard
+    end
   end
 
   def index
@@ -18,23 +26,21 @@ class Company::RegistrationStepsController < ApplicationController
   end
 
   def update
-    @company = current_company
-    @company.attributes = params[:company] ? company_params : {}
-    @company.registration_step = next_step
+    current_company.attributes = params[:company] ? company_params : {}
+    current_company.registration_step = next_step
 
-    sign_out @company if next_step == "wicked_finish" && @company.profile_form_filled?
+    sign_out current_user if next_step == "wicked_finish" && current_company.profile_form_filled?
 
-    render_wizard @company
+    render_wizard current_company
   end
 
   def skip
-    @company = current_company
-    @company.update_attribute(:registration_step, next_step)
-    sign_out @company if next_step == "wicked_finish"
+    current_company.update(registration_step: next_step, skip_step: true)
+    sign_out current_user if next_step == "wicked_finish"
     redirect_to company_registration_step_path(next_step)
   end
 
-private
+  private
 
   def finish_wizard_path
     confirm_email_path
@@ -42,12 +48,10 @@ private
 
   def company_params
     params.require(:company).permit(
-      :first_name,
-      :last_name,
-      :city,
       :name,
-      :country,
+      :city,
       :state,
+      :country,
       :avatar,
       :description,
       :established_in,
@@ -56,12 +60,7 @@ private
       :website,
       :area,
       job_types: I18n.t("enumerize.job_types").keys,
-      job_markets: (I18n.t("enumerize.live_events_staging_and_rental_job_markets").keys + I18n.t("enumerize.system_integration_job_markets").keys).uniq,
+      job_markets: (I18n.t("enumerize.live_events_staging_and_rental_job_markets").keys + I18n.t("enumerize.system_integration_job_markets").keys).uniq
     )
-  end
-
-  def verify_current_company
-    return if current_company.present?
-    redirect_to new_company_session_path
   end
 end
