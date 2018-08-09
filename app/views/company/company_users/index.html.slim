@@ -13,9 +13,11 @@
       .grid-cell.grid-cell--100
         .list
           - @users.each do |user|
-            a.list-item href=company_company_user_path(user)
+            .list-item
               .list-bar
                 .list__title
                   = user.full_name
                 .list__title
                   | #{user.role.humanize.capitalize}
+                a.btn.btn--primary href=company_company_user_path(user)
+                  | View Profile

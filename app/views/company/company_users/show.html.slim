@@ -1,0 +1,32 @@
+= render partial: "/company/shared/profile_sub_nav"
+
+- content_for :title, "AVJunction - Profile"
+
+- content_for :secondary do
+  .action-bar
+    h2.heading-h2.heading-h2--action-bar Profile Info
+    .action-bar__actions
+      a.btn.btn--primary href=edit_company_company_user_path(@company_user)
+        | Edit
+      a.btn.btn--primary href=''
+        | Enable/Disable
+      - unless current_user == @company_user
+        = link_to 'Delete', company_company_user_path(@company_user), method: :delete, class: 'btn btn--secondary', data: { confirm: "Are you sure you wish to delete thie user account?" }
+
+  .grid-h
+    .grid-cell.grid-cell--50
+      .profile__meta__details__1-1
+        .profile__meta__info
+          h3.heading-h3
+            = "#{@company_user.first_name} #{@company_user.last_name}"
+          h4.heading-h4
+            | Email:&nbsp
+            a href="mailto:#{@company_user.email}" target="_blank"
+              = @company_user.email
+    .grid-cell.grid-cell--50.grid-cell--shrink
+      .profile__stats-box
+        .profile__stats.profile__stats--33
+          h2.heading-h2.heading-h2--no-margin
+            =@company_user.role.humanize.capitalize
+          h4.heading-h4
+            | Role
