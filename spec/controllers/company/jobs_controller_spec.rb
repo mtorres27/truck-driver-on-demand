@@ -8,15 +8,17 @@ describe Company::JobsController, type: :controller  do
   describe 'GET freelancer_matches' do
     let(:freelancers) { double('Freelancers') }
     let(:parameters) { { id: job.id } }
+    let(:geocode) { { address: "Toronto, ON, Canada", lat: 43.653226, lng: -79.3831843 } }
 
     before(:each) do
+      allow(Rails).to receive_message_chain(:cache, :read).and_return(geocode)
+      allow(Freelancer).to receive(:where).and_return(freelancers)
       allow(freelancers).to receive(:where).and_return(freelancers)
       allow(freelancers).to receive(:order).and_return(freelancers)
       allow(freelancers).to receive(:nearby).and_return(freelancers)
       allow(freelancers).to receive(:with_distance).and_return(freelancers)
       allow(freelancers).to receive(:map).and_return(1)
       allow(freelancers).to receive(:to_i).and_return(freelancers)
-      allow(Freelancer).to receive(:where).and_return(freelancers)
     end
 
     it 'defines @freelancers' do
