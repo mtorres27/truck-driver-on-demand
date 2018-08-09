@@ -19,5 +19,10 @@
                   = user.full_name
                 .list__title
                   | #{user.role.humanize.capitalize}
+                .list__title
+                  - if user.enabled
+                    | Enabled
+                  - else
+                    | Disabled
                 a.btn.btn--primary href=company_company_user_path(user)
                   | View Profile

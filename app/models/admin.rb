@@ -32,6 +32,7 @@
 #  invited_by_type        :string
 #  invited_by_id          :integer
 #  invitations_count      :integer          default(0)
+#  enabled                :boolean          default(TRUE)
 #
 # Indexes
 #

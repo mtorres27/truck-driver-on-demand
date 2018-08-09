@@ -8,10 +8,12 @@
     .action-bar__actions
       a.btn.btn--primary href=edit_company_company_user_path(@company_user)
         | Edit
-      a.btn.btn--primary href=''
-        | Enable/Disable
+      - if @company_user.enabled 
+        = link_to 'Disable', company_company_user_disable_path(@company_user), class: 'btn btn--primary', data: { confirm: "Are you sure you wish to disable this user account?" }
+      - else
+        = link_to 'Enable', company_company_user_enable_path(@company_user), class: 'btn btn--primary', data: { confirm: "Are you sure you wish to enable this user account?" }
       - unless current_user == @company_user
-        = link_to 'Delete', company_company_user_path(@company_user), method: :delete, class: 'btn btn--secondary', data: { confirm: "Are you sure you wish to delete thie user account?" }
+        = link_to 'Delete', company_company_user_path(@company_user), method: :delete, class: 'btn btn--secondary', data: { confirm: "Are you sure you wish to delete this user account?" }
 
   .grid-h
     .grid-cell.grid-cell--50

@@ -15,7 +15,7 @@ class Company::CompanyUsersController < Company::BaseController
 
   def create
     if CompanyUser.invite!(company_user_params.merge({company_id: current_company.id}))
-      redirect_to company_company_users_path(current_company)
+      redirect_to company_company_users_path
     else
       render 'new'
     end
@@ -30,7 +30,7 @@ class Company::CompanyUsersController < Company::BaseController
       if current_user.id == @company_user.id
         redirect_to new_user_session_path
       else
-        redirect_to company_company_users_path(current_company)
+        redirect_to company_company_users_path
       end
     else
       render 'edit'
@@ -40,7 +40,21 @@ class Company::CompanyUsersController < Company::BaseController
   def destroy
     @company_user.destroy
 
-    redirect_to company_company_users_path(current_company)
+    redirect_to company_company_users_path
+  end
+
+  def enable
+    @company_user = current_company.company_users.find(params[:company_user_id])
+    @company_user.update(enabled: true)
+
+    redirect_to company_company_users_path
+  end
+
+  def disable
+    @company_user = current_company.company_users.find(params[:company_user_id])
+    @company_user.update(enabled: false)
+
+    redirect_to company_company_users_path
   end
 
   private
