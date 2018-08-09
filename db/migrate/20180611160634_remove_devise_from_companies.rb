@@ -18,8 +18,8 @@ class RemoveDeviseFromCompanies < ActiveRecord::Migration[5.1]
           confirmation_token: company['confirmation_token'],
           confirmed_at: company['confirmed_at'],
           confirmation_sent_at: company['confirmation_sent_at'],
-          first_name: company['contact_name'].split(" ").first,
-          last_name: company['contact_name'].split(" ").last,
+          first_name: company['contact_name']&.split(" ")&.first,
+          last_name: company['contact_name']&.split(" ")&.last,
           type: 'CompanyUser',
           company_id: company['id'],
         )
