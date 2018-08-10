@@ -53,7 +53,7 @@
                 .plans__tax USD #{ current_company.canada_country?  ?  "+ " + (province_tax(current_company.state)*100).to_s + "% tax" : '' }
 
             div style="text-align: center"
-              - if plan[:name] == "Professional"
+              - if ["Professional", "ENTERPRISE"].include?(plan[:name])
                 .btn.btn--primary.disabled
                   | Coming soon
               - else
