@@ -39,10 +39,10 @@ class Company::JobPaymentsController < Company::BaseController
 
     @payment.set_avj_credit(freelancer_t_fees)
 
-    freelancer_t_fees = freelancer_t_fees - @payment.avj_credit
-    application_fees  = company_t_fees + freelancer_t_fees
-    total             = amount + tax + company_t_fees
-    transaction_fees  = total * 0.029 + (0.3 * currency_rate)
+    freelancer_t_fees -= @payment.avj_credit
+    application_fees   = company_t_fees + freelancer_t_fees
+    total              = amount + tax + company_t_fees
+    transaction_fees   = total * 0.029 + (0.3 * currency_rate)
     begin
       # NEW
       charge = Stripe::Charge.create({
@@ -51,11 +51,11 @@ class Company::JobPaymentsController < Company::BaseController
                    source: params[:stripeToken],
                    description: "Invoice ##{@payment.id}",
                    statement_descriptor: "AV Junction-(##{@payment.id})",
-                   application_fee: ((application_fees - transaction_fees) * 100).floor
+                   application_fee: [((application_fees - transaction_fees) * 100).floor, 0].max
                }, stripe_account: freelancer.freelancer_profile&.stripe_account_id)
-      logger.debug charge.inspect
+      # logger.debug charge.inspect
       balance_transaction = Stripe::BalanceTransaction.retrieve(charge[:balance_transaction], stripe_account: freelancer.freelancer_profile.stripe_account_id)
-      logger.debug balance_transaction.inspect
+      # logger.debug balance_transaction.inspect
       if balance_transaction[:status] == 'pending'
         @payment.funds_available_on = balance_transaction[:available_on]
       else
