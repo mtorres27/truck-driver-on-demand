@@ -1,8 +1,8 @@
 document.addEventListener("turbolinks:load", function(){
     $("#freelance_distance").on('change', function() {
         var val = this.value;
-        $("#distance").val(val);
-        $("#freelancer_search_form").submit();
+        $(".js--distance").val(val);
+        $(".js--freelancer-search-form").submit();
     });
 
     $("#freelance_sort").on('change', function() {
@@ -19,11 +19,14 @@ document.addEventListener("turbolinks:load", function(){
         window.location = "/company/freelancers/favourites?location="+this.value;
     });
 
-    $("#show_avatar_only").on('change', function(){
-        updateFreelancers();
+    $(".js--show-avatar-only-checkbox").on('change', function(){
+        if ($(this).is(":checked")) {
+            $(".js--show-avatar-only-form-field").val(true);
+        } else {
+            $(".js--show-avatar-only-form-field").val(false);
+        }
+        $(".js--freelancer-search-form").submit();
     });
-
-    updateFreelancers();
 
     $("#job_to_invite").change(function() {
         var val = $("#job_to_invite").val();
@@ -35,17 +38,6 @@ document.addEventListener("turbolinks:load", function(){
         }
     });
 });
-
-function updateFreelancers() {
-    if ($("#show_avatar_only").is(":checked")) {
-        $(".freelancer_without_avatar").hide();
-        $(".freelancer_with_avatar").show();
-    }
-    else {
-        $(".freelancer_without_avatar").show();
-        $(".freelancer_with_avatar").show();
-    }
-}
 
 var togglePopOver = function() {
   if ($(".popover").hasClass("popover--visible")) {

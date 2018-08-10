@@ -51,6 +51,7 @@
 #  special_avj_fees         :decimal(10, 2)
 #  avj_credit               :decimal(10, 2)
 #  registration_step        :string
+#  province                 :string
 #  freelancer_id            :integer
 #  business_tax_number      :string
 #
@@ -79,6 +80,7 @@ class FreelancerProfile < ApplicationRecord
   include ProfileHeaderUploader[:profile_header]
   include Disableable
   include EasyPostgis
+  include PgSearch
 
   belongs_to :freelancer, required: false
 
@@ -87,6 +89,7 @@ class FreelancerProfile < ApplicationRecord
   after_save :check_if_should_do_geocode
   after_save :add_to_hubspot
   after_save :send_welcome_email, if: :registration_step_changed?
+  before_save :set_profile_score
   before_create :set_default_step
 
   delegate :enforce_profile_edit, to: :freelancer, allow_nil: true
@@ -132,6 +135,20 @@ class FreelancerProfile < ApplicationRecord
     :at, :au, :be, :ca, :ch, :de, :dk, :es, :fi, :fr, :gb, :hk, :ie, :it, :jp, :lu, :nl, :no, :nz, :pt, :se, :sg, :us
   ]
 
+  pg_search_scope :search, against: {
+      job_types: "A",
+      job_markets: "A",
+      technical_skill_tags: "A",
+      manufacturer_tags: "A",
+      job_functions: "A",
+      tagline: "A",
+      bio: "A"
+  }, associated_against: {
+      freelancer: [:first_name, :last_name]
+  }, using: {
+      tsearch: { prefix: true, any_word: true }
+  }
+
   def check_if_should_do_geocode
     if saved_changes.include?("address") or saved_changes.include?("city") or (!address.nil? and lat.nil?) or (!city.nil? and lat.nil?)
       do_geocode
@@ -156,6 +173,10 @@ class FreelancerProfile < ApplicationRecord
   end
 
   private
+
+  def set_profile_score
+    self.profile_score = freelancer&.score
+  end
 
   def set_default_step
     self.registration_step ||= "personal"

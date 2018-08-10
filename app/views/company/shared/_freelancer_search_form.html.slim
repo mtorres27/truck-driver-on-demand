@@ -1,6 +1,6 @@
-= simple_form_for :search, url: company_freelancers_path, method: :get, html: { id: "freelancer_search_form", class:"grid-h"} do |f|
+= simple_form_for :search, url: company_freelancers_path, method: :get, html: { id: "freelancer_search_form", class:"grid-h js--freelancer-search-form"} do |f|
   input type="hidden" value="#{params.dig(:search, :sort)}" id="sort" name="search[sort]"
-  input type="hidden" value="#{params.dig(:search, :distance)}" id="distance" name="search[distance]"
+  input type="hidden" value="#{params.dig(:search, :distance)}" id="distance" class="js--distance" name="search[distance]"
   .grid-cell.grid-cell--100
     = f.input :keywords, label: false, placeholder: "Search by job function, skills, etc.", input_html: { value: @keywords }
   .grid-cell.grid-cell--33
@@ -8,4 +8,5 @@
   .grid-cell.grid-cell--33
     = f.input :country, collection: I18n.t('enumerize.country').map { |i, v| [i, v] }, label_method: :second, value_method: :first, label: false, prompt: "Select Country", selected: @country
   .grid-cell.grid-cell--expand
+    = f.hidden_field :avatar_only, value: params.dig(:search, :avatar_only), class: "js--show-avatar-only-form-field"
     = f.submit "Search", class: "btn btn--primary"

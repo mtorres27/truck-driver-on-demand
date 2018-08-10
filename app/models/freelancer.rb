@@ -162,9 +162,7 @@ class Freelancer < User
 
   def score
     score = 0
-    score += 1 if self.full_name.present?
-    score += 5 if self.freelancer_profile.avatar_data.present?
-    score += 1 if self.email.present?
+    score += 2 if self.freelancer_profile.avatar_data.present?
     score += 1 if self.freelancer_profile.address.present?
     score += 1 if self.freelancer_profile.area.present?
     score += 1 if self.freelancer_profile.city.present?
@@ -172,7 +170,7 @@ class Freelancer < User
     score += 1 if self.freelancer_profile.postal_code.present?
     score += 1 if self.freelancer_profile.phone_number.present?
     score += 1 if self.freelancer_profile.bio.present?
-    score += 1 if self.freelancer_profile.tag_line.present?
+    score += 1 if self.freelancer_profile.tagline.present?
     score += 1 if self.freelancer_profile.company_name.present?
     score += 1 if self.freelancer_profile.valid_driver
     score += 1 if self.freelancer_profile.available
