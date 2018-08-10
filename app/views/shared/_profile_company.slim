@@ -23,6 +23,9 @@
             | Email:&nbsp
             a href="mailto:#{company.company_user.email}" target="_blank"
               = company.company_user.email
+          h4.heading-h4
+            | Subscription:&nbsp
+            = company.plan.present? ? "#{company.plan.name} plan" : "Not subscribed"
         h4.heading-h4
           i
             = "Member since #{company.created_at.strftime('%B %d, %Y')}"
