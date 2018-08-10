@@ -18,15 +18,17 @@ class Freelancer::ContractsController < Freelancer::BaseController
 
     fees = @job.company.plan.fee_schema['company_fees']
 
-    if @job.company.waived_jobs.positive?
-      logger.debug "Waived job"
-      plan_fees = 0
-      @job.company.waived_jobs -= 1
-      @job.company.save
-    else
-      plan_tax = @job.company.canada_country? ? 1 + (Subscription::CANADA_SALES_TAX_PERCENT/100) : 1
-      plan_fees =  fees.to_f / 100 * @job.contract_price.to_f  * plan_tax
-    end
+    # Remove waived job feature
+    # if @job.company.waived_jobs.positive?
+    #   logger.debug "Waived job"
+    #   plan_fees = 0
+    #   @job.company.waived_jobs -= 1
+    #   @job.company.save
+    # else
+    # end
+    plan_tax = @job.company.canada_country? ? 1 + (Subscription::CANADA_SALES_TAX_PERCENT/100) : 1
+    plan_fees =  fees.to_f / 100 * @job.contract_price.to_f  * plan_tax
+
     @job.company_plan_fees = plan_fees
     @job.save
 
