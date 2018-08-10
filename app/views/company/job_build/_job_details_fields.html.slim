@@ -3,7 +3,7 @@
 .grid-cell.grid-cell--50
   .grid-h.grid-h--no-margin
     .grid-cell.grid-cell--75
-      = f.association :project, collection: current_company.projects, prompt: "Select"
+      = f.association :project, collection: @job.company.projects, prompt: "Select"
     .grid-cell.grid-cell--25.grid-cell--span25
       br
       .form-button
