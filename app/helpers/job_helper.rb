@@ -2,7 +2,9 @@ module JobHelper
   def stateful_company_job_path(job)
     if job.created?
       company_job_path(job)
-    elsif job.published?
+    elsif job.published? && job.applicants.count == 0
+      company_job_path(job)
+    elsif job.published? && job.applicants.count > 0
       company_job_applicants_path(job)
     elsif job.quoted?
       company_job_applicants_path(job)

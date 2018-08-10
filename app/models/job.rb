@@ -131,7 +131,7 @@ class Job < ApplicationRecord
   ], predicates: true, scope: true
 
   validates :budget, numericality: true, sane_price: true, if: :creation_completed?
-  validates :duration, numericality: { only_integer: true, greater_than_or_equal_to: 1 }, if: :creation_completed?
+  validates :duration, numericality: { only_integer: true, greater_than_or_equal_to: 1 }, if: -> { step_job_details? || creation_completed? }
   validates :pay_type, inclusion: { in: pay_type.values }, allow_blank: true, if: :creation_completed?
   validates :freelancer_type, inclusion: { in: freelancer_type.values }, allow_blank: true, if: :creation_completed?
   validates :job_function, :freelancer_type, presence: true, if: :is_published?
@@ -139,6 +139,7 @@ class Job < ApplicationRecord
   validates :freelancer_type, :job_type, :job_market, :job_function, presence: true, if: -> { is_published? }
   validates :accepted_applicant_id, presence: true, if: :enforce_contract_creation
   validates :contract_price, :payment_terms, numericality: { greater_than_or_equal_to: 1 }, if: :enforce_contract_creation
+  validates :overtime_rate, numericality: { greater_than_or_equal_to: 1 }, allow_blank: true
   validate :scope_or_file, if: :creation_completed?
   validate :validate_number_of_payments, if: :creation_completed?
   validate :validate_payments_total, if: :creation_completed?
@@ -173,7 +174,7 @@ class Job < ApplicationRecord
   end
 
   def pre_contracted?
-    pre_negotiated? || negotiated?
+    pre_negotiated?
   end
 
   def work_order
@@ -273,6 +274,10 @@ class Job < ApplicationRecord
 
   def accept_applicant
     applicants.where(id: accepted_applicant_id).first&.update_attribute(:state, "accepted")
+    applicants.where.not(id: accepted_applicant_id, state: "declined").each do |applicant|
+      applicant.update_attribute(:state, "declined")
+      FreelancerMailer.notice_received_declined_quote(applicant.freelancer, company, self).deliver_later
+    end
   end
 
   def validate_number_of_payments

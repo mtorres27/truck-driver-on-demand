@@ -51,6 +51,7 @@ class Company::ProfilesController < Company::BaseController
       manufacturer_tags:  I18n.t("enumerize.manufacturer_tags").keys,
       company_installs_attributes: [:id, :year, :installs, :_destroy],
       featured_projects_attributes: [:id, :file, :name, :_destroy],
+      company_user_attributes: [:id, :first_name, :last_name, :email],
     )
   end
 end

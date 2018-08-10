@@ -26,9 +26,11 @@ describe Freelancer::JobsController, type: :controller  do
       end
 
       context 'when address exists' do
+        let(:geocode) { { address: "Toronto, ON, Canada", lat: 43.653226, lng: -79.3831843 } }
+
         before(:each) do
+          allow(Rails).to receive_message_chain(:cache, :read).and_return(geocode)
           get :index, params: { search: { address: 'Toronto, Ontario' } }
-          allow(Rails).to receive(:cache).and_return(double('Readable', read: true))
         end
 
         it 'sets @address' do
@@ -83,7 +85,7 @@ describe Freelancer::JobsController, type: :controller  do
 
   describe 'GET job matches' do
     login_freelancer
-    
+
     let(:freelancer) { subject.current_user }
     let(:jobs) { double("jobs") }
 

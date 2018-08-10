@@ -4,6 +4,7 @@ $(document).on("turbolinks:load", function () {
         $(".js--contract-variable-payment-type-div").hide();
         $(".js--contract-overtime-rate-div").hide();
         $(".js--contract-price-label").html("<abbr title='required'>*</abbr>Contract price");
+        $(".js--payment-add-button").click();
         $("#payments").show();
     }
     else if ($(".js--contract-payment-type").val() == "variable") {
@@ -58,16 +59,6 @@ var toggleExpandedJobDetails = function() {
         $("#contract-extra-data").addClass(collapsed);
         $(".result-content__expand-btn").html("expand job details");
     }
-};
-
-var sendContract = function() {
-    $("#job_send_contract").val(true);
-    $(".edit_job").submit();
-};
-
-var saveDraft = function() {
-    $("#job_send_contract").val(false);
-    $(".edit_job").submit();
 };
 
 function uploadAddendum (index) {
