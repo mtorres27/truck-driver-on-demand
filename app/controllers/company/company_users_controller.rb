@@ -1,12 +1,16 @@
 class Company::CompanyUsersController < Company::BaseController
-  before_action :find_user, only: [:show, :edit, :update, :destroy]
+  before_action :find_user, only: [
+    :show, :edit, :update, :destroy
+  ]
+  before_action :authorize_company_user, only: [
+    :show, :edit, :update, :destroy
+  ]
 
   def index
     @users = current_company.company_users
   end
 
-  def show
-  end
+  def show; end
 
   def new
     @company_user = current_company.company_users.new
@@ -58,6 +62,10 @@ class Company::CompanyUsersController < Company::BaseController
   end
 
   private
+
+  def authorize_company_user
+    authorize current_user
+  end
 
   def find_user
     @company_user = current_company.company_users.find(params[:id])
