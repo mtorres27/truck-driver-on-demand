@@ -2,9 +2,9 @@ class Company::CompanyUsersController < Company::BaseController
   before_action :find_user, only: [
     :show, :edit, :update, :destroy
   ]
-  before_action :authorize_company_user, only: [
-    :show, :edit, :update, :destroy
-  ]
+  before_action :find_user_for_enable_disable, only: [:enable, :disable]
+  before_action :authorize_company_user, except: [:index, :create]
+  before_action :authorize_current_user, only: [:index, :create]
 
   def index
     @users = current_company.company_users
@@ -48,14 +48,12 @@ class Company::CompanyUsersController < Company::BaseController
   end
 
   def enable
-    @company_user = current_company.company_users.find(params[:company_user_id])
     @company_user.update(enabled: true)
 
     redirect_to company_company_users_path
   end
 
   def disable
-    @company_user = current_company.company_users.find(params[:company_user_id])
     @company_user.update(enabled: false)
 
     redirect_to company_company_users_path
@@ -64,7 +62,15 @@ class Company::CompanyUsersController < Company::BaseController
   private
 
   def authorize_company_user
+    authorize @company_user
+  end
+
+  def authorize_current_user
     authorize current_user
+  end
+
+  def find_user_for_enable_disable
+    @company_user = current_company.company_users.find(params[:company_user_id])
   end
 
   def find_user

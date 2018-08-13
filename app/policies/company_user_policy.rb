@@ -40,16 +40,16 @@ class CompanyUserPolicy < ApplicationPolicy
 
   def company_owner?
     return false unless company_user?
-    record.company_owner?
+    record.company == user.company && user.company_owner?
   end
 
   def company_manager?
     return false unless company_user?
-    record.company_manager?
+    record.company == user.company && user.company_manager?
   end
 
   def company_admin?
     return false unless company_user?
-    record.company_admin?
+    record.company == user.company && user.company_admin?
   end
 end
