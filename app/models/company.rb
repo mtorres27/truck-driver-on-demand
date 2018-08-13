@@ -135,6 +135,7 @@ class Company < ApplicationRecord
 
   after_save :add_to_hubspot
   before_create :set_default_step
+  after_save :set_owner
   after_save :send_confirmation_email
 
   delegate :email, to: :owner, allow_nil: true
@@ -274,6 +275,10 @@ class Company < ApplicationRecord
 
   def owner
     company_users.where(role: 'owner').first
+  end
+
+  def set_owner
+    company_users.first.add_valid_role :owner if owner.nil? && company_users.count == 1
   end
 
   def send_confirmation_email
