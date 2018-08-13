@@ -3,6 +3,7 @@ SET lock_timeout = 0;
 SET idle_in_transaction_session_timeout = 0;
 SET client_encoding = 'UTF8';
 SET standard_conforming_strings = on;
+SELECT pg_catalog.set_config('search_path', '', false);
 SET check_function_bodies = false;
 SET client_min_messages = warning;
 SET row_security = off;
@@ -49,8 +50,6 @@ CREATE EXTENSION IF NOT EXISTS postgis WITH SCHEMA public;
 COMMENT ON EXTENSION postgis IS 'PostGIS geometry, geography, and raster spatial types and functions';
 
 
-SET search_path = public, pg_catalog;
-
 SET default_tablespace = '';
 
 SET default_with_oids = false;
@@ -59,7 +58,7 @@ SET default_with_oids = false;
 -- Name: applicants; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE applicants (
+CREATE TABLE public.applicants (
     id bigint NOT NULL,
     company_id bigint NOT NULL,
     job_id bigint NOT NULL,
@@ -76,7 +75,7 @@ CREATE TABLE applicants (
 -- Name: applicants_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE applicants_id_seq
+CREATE SEQUENCE public.applicants_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -88,14 +87,14 @@ CREATE SEQUENCE applicants_id_seq
 -- Name: applicants_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
-ALTER SEQUENCE applicants_id_seq OWNED BY applicants.id;
+ALTER SEQUENCE public.applicants_id_seq OWNED BY public.applicants.id;
 
 
 --
 -- Name: ar_internal_metadata; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE ar_internal_metadata (
+CREATE TABLE public.ar_internal_metadata (
     key character varying NOT NULL,
     value character varying,
     created_at timestamp without time zone NOT NULL,
@@ -107,7 +106,7 @@ CREATE TABLE ar_internal_metadata (
 -- Name: attachments; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE attachments (
+CREATE TABLE public.attachments (
     id bigint NOT NULL,
     file_data character varying,
     job_id integer,
@@ -121,7 +120,7 @@ CREATE TABLE attachments (
 -- Name: attachments_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE attachments_id_seq
+CREATE SEQUENCE public.attachments_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -133,14 +132,14 @@ CREATE SEQUENCE attachments_id_seq
 -- Name: attachments_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
-ALTER SEQUENCE attachments_id_seq OWNED BY attachments.id;
+ALTER SEQUENCE public.attachments_id_seq OWNED BY public.attachments.id;
 
 
 --
 -- Name: audits; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE audits (
+CREATE TABLE public.audits (
     id bigint NOT NULL,
     auditable_id integer,
     auditable_type character varying,
@@ -163,7 +162,7 @@ CREATE TABLE audits (
 -- Name: audits_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE audits_id_seq
+CREATE SEQUENCE public.audits_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -175,14 +174,14 @@ CREATE SEQUENCE audits_id_seq
 -- Name: audits_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
-ALTER SEQUENCE audits_id_seq OWNED BY audits.id;
+ALTER SEQUENCE public.audits_id_seq OWNED BY public.audits.id;
 
 
 --
 -- Name: certifications; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE certifications (
+CREATE TABLE public.certifications (
     id bigint NOT NULL,
     freelancer_id integer,
     certificate text,
@@ -199,7 +198,7 @@ CREATE TABLE certifications (
 -- Name: certifications_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE certifications_id_seq
+CREATE SEQUENCE public.certifications_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -211,14 +210,14 @@ CREATE SEQUENCE certifications_id_seq
 -- Name: certifications_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
-ALTER SEQUENCE certifications_id_seq OWNED BY certifications.id;
+ALTER SEQUENCE public.certifications_id_seq OWNED BY public.certifications.id;
 
 
 --
 -- Name: change_orders; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE change_orders (
+CREATE TABLE public.change_orders (
     id bigint NOT NULL,
     company_id bigint NOT NULL,
     job_id bigint NOT NULL,
@@ -234,7 +233,7 @@ CREATE TABLE change_orders (
 -- Name: change_orders_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE change_orders_id_seq
+CREATE SEQUENCE public.change_orders_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -246,14 +245,14 @@ CREATE SEQUENCE change_orders_id_seq
 -- Name: change_orders_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
-ALTER SEQUENCE change_orders_id_seq OWNED BY change_orders.id;
+ALTER SEQUENCE public.change_orders_id_seq OWNED BY public.change_orders.id;
 
 
 --
 -- Name: companies; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE companies (
+CREATE TABLE public.companies (
     id bigint NOT NULL,
     token character varying,
     name character varying,
@@ -272,16 +271,14 @@ CREATE TABLE companies (
     company_reviews_count integer DEFAULT 0 NOT NULL,
     profile_header_data text,
     contract_preference character varying DEFAULT 'no_preference'::character varying,
-    job_markets citext,
-    technical_skill_tags citext,
+    job_markets public.citext,
+    technical_skill_tags public.citext,
     profile_views integer DEFAULT 0 NOT NULL,
     website character varying,
     phone_number character varying,
     number_of_offices integer DEFAULT 0,
     number_of_employees character varying,
     established_in integer,
-    header_color character varying DEFAULT 'FF6C38'::character varying,
-    country character varying,
     stripe_customer_id character varying,
     stripe_subscription_id character varying,
     stripe_plan_id character varying,
@@ -293,14 +290,16 @@ CREATE TABLE companies (
     card_brand character varying,
     exp_month character varying,
     exp_year character varying,
+    header_color character varying DEFAULT 'FF6C38'::character varying,
+    country character varying,
     header_source character varying DEFAULT 'color'::character varying,
     sales_tax_number character varying,
     line2 character varying,
     city character varying,
     state character varying,
     postal_code character varying,
-    job_types citext,
-    manufacturer_tags citext,
+    job_types public.citext,
+    manufacturer_tags public.citext,
     plan_id bigint,
     is_trial_applicable boolean DEFAULT true,
     waived_jobs integer DEFAULT 1,
@@ -312,7 +311,7 @@ CREATE TABLE companies (
 -- Name: companies_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE companies_id_seq
+CREATE SEQUENCE public.companies_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -324,14 +323,14 @@ CREATE SEQUENCE companies_id_seq
 -- Name: companies_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
-ALTER SEQUENCE companies_id_seq OWNED BY companies.id;
+ALTER SEQUENCE public.companies_id_seq OWNED BY public.companies.id;
 
 
 --
 -- Name: company_favourites; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE company_favourites (
+CREATE TABLE public.company_favourites (
     id bigint NOT NULL,
     freelancer_id integer,
     company_id integer,
@@ -344,7 +343,7 @@ CREATE TABLE company_favourites (
 -- Name: company_favourites_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE company_favourites_id_seq
+CREATE SEQUENCE public.company_favourites_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -356,14 +355,14 @@ CREATE SEQUENCE company_favourites_id_seq
 -- Name: company_favourites_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
-ALTER SEQUENCE company_favourites_id_seq OWNED BY company_favourites.id;
+ALTER SEQUENCE public.company_favourites_id_seq OWNED BY public.company_favourites.id;
 
 
 --
 -- Name: company_installs; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE company_installs (
+CREATE TABLE public.company_installs (
     id bigint NOT NULL,
     company_id integer,
     year integer,
@@ -377,7 +376,7 @@ CREATE TABLE company_installs (
 -- Name: company_installs_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE company_installs_id_seq
+CREATE SEQUENCE public.company_installs_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -389,14 +388,14 @@ CREATE SEQUENCE company_installs_id_seq
 -- Name: company_installs_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
-ALTER SEQUENCE company_installs_id_seq OWNED BY company_installs.id;
+ALTER SEQUENCE public.company_installs_id_seq OWNED BY public.company_installs.id;
 
 
 --
 -- Name: company_reviews; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE company_reviews (
+CREATE TABLE public.company_reviews (
     id bigint NOT NULL,
     company_id bigint,
     freelancer_id bigint,
@@ -416,7 +415,7 @@ CREATE TABLE company_reviews (
 -- Name: company_reviews_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE company_reviews_id_seq
+CREATE SEQUENCE public.company_reviews_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -428,14 +427,14 @@ CREATE SEQUENCE company_reviews_id_seq
 -- Name: company_reviews_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
-ALTER SEQUENCE company_reviews_id_seq OWNED BY company_reviews.id;
+ALTER SEQUENCE public.company_reviews_id_seq OWNED BY public.company_reviews.id;
 
 
 --
 -- Name: currency_rates; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE currency_rates (
+CREATE TABLE public.currency_rates (
     id bigint NOT NULL,
     currency character varying,
     country character varying,
@@ -449,7 +448,7 @@ CREATE TABLE currency_rates (
 -- Name: currency_rates_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE currency_rates_id_seq
+CREATE SEQUENCE public.currency_rates_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -461,14 +460,14 @@ CREATE SEQUENCE currency_rates_id_seq
 -- Name: currency_rates_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
-ALTER SEQUENCE currency_rates_id_seq OWNED BY currency_rates.id;
+ALTER SEQUENCE public.currency_rates_id_seq OWNED BY public.currency_rates.id;
 
 
 --
 -- Name: favourites; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE favourites (
+CREATE TABLE public.favourites (
     id bigint NOT NULL,
     freelancer_id integer,
     company_id integer,
@@ -481,7 +480,7 @@ CREATE TABLE favourites (
 -- Name: favourites_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE favourites_id_seq
+CREATE SEQUENCE public.favourites_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -493,14 +492,14 @@ CREATE SEQUENCE favourites_id_seq
 -- Name: favourites_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
-ALTER SEQUENCE favourites_id_seq OWNED BY favourites.id;
+ALTER SEQUENCE public.favourites_id_seq OWNED BY public.favourites.id;
 
 
 --
 -- Name: featured_projects; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE featured_projects (
+CREATE TABLE public.featured_projects (
     id bigint NOT NULL,
     company_id integer,
     name character varying,
@@ -515,7 +514,7 @@ CREATE TABLE featured_projects (
 -- Name: featured_projects_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE featured_projects_id_seq
+CREATE SEQUENCE public.featured_projects_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -527,14 +526,14 @@ CREATE SEQUENCE featured_projects_id_seq
 -- Name: featured_projects_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
-ALTER SEQUENCE featured_projects_id_seq OWNED BY featured_projects.id;
+ALTER SEQUENCE public.featured_projects_id_seq OWNED BY public.featured_projects.id;
 
 
 --
 -- Name: freelancer_affiliations; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE freelancer_affiliations (
+CREATE TABLE public.freelancer_affiliations (
     id bigint NOT NULL,
     name character varying,
     image character varying,
@@ -549,7 +548,7 @@ CREATE TABLE freelancer_affiliations (
 -- Name: freelancer_affiliations_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE freelancer_affiliations_id_seq
+CREATE SEQUENCE public.freelancer_affiliations_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -561,14 +560,14 @@ CREATE SEQUENCE freelancer_affiliations_id_seq
 -- Name: freelancer_affiliations_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
-ALTER SEQUENCE freelancer_affiliations_id_seq OWNED BY freelancer_affiliations.id;
+ALTER SEQUENCE public.freelancer_affiliations_id_seq OWNED BY public.freelancer_affiliations.id;
 
 
 --
 -- Name: freelancer_clearances; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE freelancer_clearances (
+CREATE TABLE public.freelancer_clearances (
     id bigint NOT NULL,
     description text,
     image character varying,
@@ -583,7 +582,7 @@ CREATE TABLE freelancer_clearances (
 -- Name: freelancer_clearances_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE freelancer_clearances_id_seq
+CREATE SEQUENCE public.freelancer_clearances_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -595,14 +594,14 @@ CREATE SEQUENCE freelancer_clearances_id_seq
 -- Name: freelancer_clearances_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
-ALTER SEQUENCE freelancer_clearances_id_seq OWNED BY freelancer_clearances.id;
+ALTER SEQUENCE public.freelancer_clearances_id_seq OWNED BY public.freelancer_clearances.id;
 
 
 --
 -- Name: freelancer_insurances; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE freelancer_insurances (
+CREATE TABLE public.freelancer_insurances (
     id bigint NOT NULL,
     name character varying,
     description text,
@@ -618,7 +617,7 @@ CREATE TABLE freelancer_insurances (
 -- Name: freelancer_insurances_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE freelancer_insurances_id_seq
+CREATE SEQUENCE public.freelancer_insurances_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -630,14 +629,14 @@ CREATE SEQUENCE freelancer_insurances_id_seq
 -- Name: freelancer_insurances_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
-ALTER SEQUENCE freelancer_insurances_id_seq OWNED BY freelancer_insurances.id;
+ALTER SEQUENCE public.freelancer_insurances_id_seq OWNED BY public.freelancer_insurances.id;
 
 
 --
 -- Name: freelancer_portfolios; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE freelancer_portfolios (
+CREATE TABLE public.freelancer_portfolios (
     id bigint NOT NULL,
     name text,
     image character varying,
@@ -652,7 +651,7 @@ CREATE TABLE freelancer_portfolios (
 -- Name: freelancer_portfolios_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE freelancer_portfolios_id_seq
+CREATE SEQUENCE public.freelancer_portfolios_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -664,14 +663,14 @@ CREATE SEQUENCE freelancer_portfolios_id_seq
 -- Name: freelancer_portfolios_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
-ALTER SEQUENCE freelancer_portfolios_id_seq OWNED BY freelancer_portfolios.id;
+ALTER SEQUENCE public.freelancer_portfolios_id_seq OWNED BY public.freelancer_portfolios.id;
 
 
 --
 -- Name: freelancer_profiles; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE freelancer_profiles (
+CREATE TABLE public.freelancer_profiles (
     id bigint NOT NULL,
     token character varying,
     avatar_data text,
@@ -684,7 +683,7 @@ CREATE TABLE freelancer_profiles (
     pay_per_unit_time character varying,
     tagline character varying,
     bio text,
-    job_markets citext,
+    job_markets public.citext,
     years_of_experience integer DEFAULT 0 NOT NULL,
     profile_views integer DEFAULT 0 NOT NULL,
     projects_completed integer DEFAULT 0 NOT NULL,
@@ -693,7 +692,7 @@ CREATE TABLE freelancer_profiles (
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
     freelancer_reviews_count integer DEFAULT 0 NOT NULL,
-    technical_skill_tags citext,
+    technical_skill_tags public.citext,
     profile_header_data text,
     verified boolean DEFAULT false,
     header_color character varying DEFAULT 'FF6C38'::character varying,
@@ -715,13 +714,12 @@ CREATE TABLE freelancer_profiles (
     valid_driver boolean,
     own_tools boolean,
     company_name character varying,
-    job_types citext,
-    job_functions citext,
-    manufacturer_tags citext,
     special_avj_fees numeric(10,2),
+    job_types public.citext,
+    job_functions public.citext,
+    manufacturer_tags public.citext,
     avj_credit numeric(10,2) DEFAULT NULL::numeric,
     registration_step character varying,
-    province character varying,
     freelancer_id integer,
     business_tax_number character varying
 );
@@ -731,7 +729,7 @@ CREATE TABLE freelancer_profiles (
 -- Name: freelancer_profiles_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE freelancer_profiles_id_seq
+CREATE SEQUENCE public.freelancer_profiles_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -743,14 +741,14 @@ CREATE SEQUENCE freelancer_profiles_id_seq
 -- Name: freelancer_profiles_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
-ALTER SEQUENCE freelancer_profiles_id_seq OWNED BY freelancer_profiles.id;
+ALTER SEQUENCE public.freelancer_profiles_id_seq OWNED BY public.freelancer_profiles.id;
 
 
 --
 -- Name: freelancer_reviews; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE freelancer_reviews (
+CREATE TABLE public.freelancer_reviews (
     id bigint NOT NULL,
     freelancer_id bigint,
     company_id bigint,
@@ -770,7 +768,7 @@ CREATE TABLE freelancer_reviews (
 -- Name: freelancer_reviews_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE freelancer_reviews_id_seq
+CREATE SEQUENCE public.freelancer_reviews_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -782,16 +780,16 @@ CREATE SEQUENCE freelancer_reviews_id_seq
 -- Name: freelancer_reviews_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
-ALTER SEQUENCE freelancer_reviews_id_seq OWNED BY freelancer_reviews.id;
+ALTER SEQUENCE public.freelancer_reviews_id_seq OWNED BY public.freelancer_reviews.id;
 
 
 --
 -- Name: friend_invites; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE friend_invites (
+CREATE TABLE public.friend_invites (
     id bigint NOT NULL,
-    email citext NOT NULL,
+    email public.citext NOT NULL,
     name character varying NOT NULL,
     freelancer_id bigint NOT NULL,
     accepted boolean DEFAULT false
@@ -802,7 +800,7 @@ CREATE TABLE friend_invites (
 -- Name: friend_invites_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE friend_invites_id_seq
+CREATE SEQUENCE public.friend_invites_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -814,14 +812,14 @@ CREATE SEQUENCE friend_invites_id_seq
 -- Name: friend_invites_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
-ALTER SEQUENCE friend_invites_id_seq OWNED BY friend_invites.id;
+ALTER SEQUENCE public.friend_invites_id_seq OWNED BY public.friend_invites.id;
 
 
 --
 -- Name: identities; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE identities (
+CREATE TABLE public.identities (
     id bigint NOT NULL,
     loginable_type character varying,
     loginable_id bigint NOT NULL,
@@ -837,7 +835,7 @@ CREATE TABLE identities (
 -- Name: identities_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE identities_id_seq
+CREATE SEQUENCE public.identities_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -849,14 +847,14 @@ CREATE SEQUENCE identities_id_seq
 -- Name: identities_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
-ALTER SEQUENCE identities_id_seq OWNED BY identities.id;
+ALTER SEQUENCE public.identities_id_seq OWNED BY public.identities.id;
 
 
 --
 -- Name: job_favourites; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE job_favourites (
+CREATE TABLE public.job_favourites (
     id bigint NOT NULL,
     freelancer_id integer,
     job_id integer,
@@ -869,7 +867,7 @@ CREATE TABLE job_favourites (
 -- Name: job_favourites_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE job_favourites_id_seq
+CREATE SEQUENCE public.job_favourites_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -881,14 +879,14 @@ CREATE SEQUENCE job_favourites_id_seq
 -- Name: job_favourites_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
-ALTER SEQUENCE job_favourites_id_seq OWNED BY job_favourites.id;
+ALTER SEQUENCE public.job_favourites_id_seq OWNED BY public.job_favourites.id;
 
 
 --
 -- Name: job_invites; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE job_invites (
+CREATE TABLE public.job_invites (
     id bigint NOT NULL,
     job_id integer,
     freelancer_id integer,
@@ -901,7 +899,7 @@ CREATE TABLE job_invites (
 -- Name: job_invites_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE job_invites_id_seq
+CREATE SEQUENCE public.job_invites_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -913,14 +911,14 @@ CREATE SEQUENCE job_invites_id_seq
 -- Name: job_invites_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
-ALTER SEQUENCE job_invites_id_seq OWNED BY job_invites.id;
+ALTER SEQUENCE public.job_invites_id_seq OWNED BY public.job_invites.id;
 
 
 --
 -- Name: jobs; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE jobs (
+CREATE TABLE public.jobs (
     id bigint NOT NULL,
     company_id bigint NOT NULL,
     project_id bigint,
@@ -966,9 +964,9 @@ CREATE TABLE jobs (
     stripe_balance_transaction_id character varying,
     funds_available_on integer,
     funds_available boolean DEFAULT false,
-    job_type citext,
-    job_market citext,
-    manufacturer_tags citext,
+    job_type public.citext,
+    job_market public.citext,
+    manufacturer_tags public.citext,
     company_plan_fees numeric(10,2) DEFAULT 0,
     contracted_at timestamp without time zone,
     state_province character varying,
@@ -989,7 +987,7 @@ CREATE TABLE jobs (
 -- Name: jobs_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE jobs_id_seq
+CREATE SEQUENCE public.jobs_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -1001,14 +999,14 @@ CREATE SEQUENCE jobs_id_seq
 -- Name: jobs_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
-ALTER SEQUENCE jobs_id_seq OWNED BY jobs.id;
+ALTER SEQUENCE public.jobs_id_seq OWNED BY public.jobs.id;
 
 
 --
 -- Name: messages; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE messages (
+CREATE TABLE public.messages (
     id bigint NOT NULL,
     authorable_type character varying,
     authorable_id bigint NOT NULL,
@@ -1030,7 +1028,7 @@ CREATE TABLE messages (
 -- Name: messages_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE messages_id_seq
+CREATE SEQUENCE public.messages_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -1042,14 +1040,14 @@ CREATE SEQUENCE messages_id_seq
 -- Name: messages_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
-ALTER SEQUENCE messages_id_seq OWNED BY messages.id;
+ALTER SEQUENCE public.messages_id_seq OWNED BY public.messages.id;
 
 
 --
 -- Name: pages; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE pages (
+CREATE TABLE public.pages (
     id bigint NOT NULL,
     slug character varying NOT NULL,
     title character varying NOT NULL,
@@ -1063,7 +1061,7 @@ CREATE TABLE pages (
 -- Name: pages_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE pages_id_seq
+CREATE SEQUENCE public.pages_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -1075,14 +1073,14 @@ CREATE SEQUENCE pages_id_seq
 -- Name: pages_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
-ALTER SEQUENCE pages_id_seq OWNED BY pages.id;
+ALTER SEQUENCE public.pages_id_seq OWNED BY public.pages.id;
 
 
 --
 -- Name: payments; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE payments (
+CREATE TABLE public.payments (
     id bigint NOT NULL,
     company_id bigint NOT NULL,
     job_id bigint NOT NULL,
@@ -1117,7 +1115,7 @@ CREATE TABLE payments (
 -- Name: payments_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE payments_id_seq
+CREATE SEQUENCE public.payments_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -1129,14 +1127,14 @@ CREATE SEQUENCE payments_id_seq
 -- Name: payments_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
-ALTER SEQUENCE payments_id_seq OWNED BY payments.id;
+ALTER SEQUENCE public.payments_id_seq OWNED BY public.payments.id;
 
 
 --
 -- Name: plans; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE plans (
+CREATE TABLE public.plans (
     id bigint NOT NULL,
     name character varying,
     code character varying,
@@ -1154,7 +1152,7 @@ CREATE TABLE plans (
 -- Name: plans_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE plans_id_seq
+CREATE SEQUENCE public.plans_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -1166,14 +1164,14 @@ CREATE SEQUENCE plans_id_seq
 -- Name: plans_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
-ALTER SEQUENCE plans_id_seq OWNED BY plans.id;
+ALTER SEQUENCE public.plans_id_seq OWNED BY public.plans.id;
 
 
 --
 -- Name: projects; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE projects (
+CREATE TABLE public.projects (
     id bigint NOT NULL,
     company_id bigint NOT NULL,
     external_project_id character varying,
@@ -1190,7 +1188,7 @@ CREATE TABLE projects (
 -- Name: projects_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE projects_id_seq
+CREATE SEQUENCE public.projects_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -1202,14 +1200,14 @@ CREATE SEQUENCE projects_id_seq
 -- Name: projects_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
-ALTER SEQUENCE projects_id_seq OWNED BY projects.id;
+ALTER SEQUENCE public.projects_id_seq OWNED BY public.projects.id;
 
 
 --
 -- Name: schema_migrations; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE schema_migrations (
+CREATE TABLE public.schema_migrations (
     version character varying NOT NULL
 );
 
@@ -1218,7 +1216,7 @@ CREATE TABLE schema_migrations (
 -- Name: subscriptions; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE subscriptions (
+CREATE TABLE public.subscriptions (
     id bigint NOT NULL,
     company_id integer,
     plan_id integer,
@@ -1239,7 +1237,7 @@ CREATE TABLE subscriptions (
 -- Name: subscriptions_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE subscriptions_id_seq
+CREATE SEQUENCE public.subscriptions_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -1251,14 +1249,14 @@ CREATE SEQUENCE subscriptions_id_seq
 -- Name: subscriptions_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
-ALTER SEQUENCE subscriptions_id_seq OWNED BY subscriptions.id;
+ALTER SEQUENCE public.subscriptions_id_seq OWNED BY public.subscriptions.id;
 
 
 --
 -- Name: users; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE users (
+CREATE TABLE public.users (
     id bigint NOT NULL,
     email character varying DEFAULT ''::character varying NOT NULL,
     encrypted_password character varying DEFAULT ''::character varying NOT NULL,
@@ -1279,7 +1277,17 @@ CREATE TABLE users (
     last_name character varying,
     type character varying,
     messages_count integer DEFAULT 0 NOT NULL,
-    company_id bigint
+    company_id bigint,
+    role character varying,
+    invitation_token character varying,
+    invitation_created_at timestamp without time zone,
+    invitation_sent_at timestamp without time zone,
+    invitation_accepted_at timestamp without time zone,
+    invitation_limit integer,
+    invited_by_type character varying,
+    invited_by_id bigint,
+    invitations_count integer DEFAULT 0,
+    enabled boolean DEFAULT true
 );
 
 
@@ -1287,7 +1295,7 @@ CREATE TABLE users (
 -- Name: users_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE users_id_seq
+CREATE SEQUENCE public.users_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -1299,224 +1307,224 @@ CREATE SEQUENCE users_id_seq
 -- Name: users_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
-ALTER SEQUENCE users_id_seq OWNED BY users.id;
+ALTER SEQUENCE public.users_id_seq OWNED BY public.users.id;
 
 
 --
 -- Name: applicants id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY applicants ALTER COLUMN id SET DEFAULT nextval('applicants_id_seq'::regclass);
+ALTER TABLE ONLY public.applicants ALTER COLUMN id SET DEFAULT nextval('public.applicants_id_seq'::regclass);
 
 
 --
 -- Name: attachments id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY attachments ALTER COLUMN id SET DEFAULT nextval('attachments_id_seq'::regclass);
+ALTER TABLE ONLY public.attachments ALTER COLUMN id SET DEFAULT nextval('public.attachments_id_seq'::regclass);
 
 
 --
 -- Name: audits id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY audits ALTER COLUMN id SET DEFAULT nextval('audits_id_seq'::regclass);
+ALTER TABLE ONLY public.audits ALTER COLUMN id SET DEFAULT nextval('public.audits_id_seq'::regclass);
 
 
 --
 -- Name: certifications id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY certifications ALTER COLUMN id SET DEFAULT nextval('certifications_id_seq'::regclass);
+ALTER TABLE ONLY public.certifications ALTER COLUMN id SET DEFAULT nextval('public.certifications_id_seq'::regclass);
 
 
 --
 -- Name: change_orders id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY change_orders ALTER COLUMN id SET DEFAULT nextval('change_orders_id_seq'::regclass);
+ALTER TABLE ONLY public.change_orders ALTER COLUMN id SET DEFAULT nextval('public.change_orders_id_seq'::regclass);
 
 
 --
 -- Name: companies id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY companies ALTER COLUMN id SET DEFAULT nextval('companies_id_seq'::regclass);
+ALTER TABLE ONLY public.companies ALTER COLUMN id SET DEFAULT nextval('public.companies_id_seq'::regclass);
 
 
 --
 -- Name: company_favourites id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY company_favourites ALTER COLUMN id SET DEFAULT nextval('company_favourites_id_seq'::regclass);
+ALTER TABLE ONLY public.company_favourites ALTER COLUMN id SET DEFAULT nextval('public.company_favourites_id_seq'::regclass);
 
 
 --
 -- Name: company_installs id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY company_installs ALTER COLUMN id SET DEFAULT nextval('company_installs_id_seq'::regclass);
+ALTER TABLE ONLY public.company_installs ALTER COLUMN id SET DEFAULT nextval('public.company_installs_id_seq'::regclass);
 
 
 --
 -- Name: company_reviews id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY company_reviews ALTER COLUMN id SET DEFAULT nextval('company_reviews_id_seq'::regclass);
+ALTER TABLE ONLY public.company_reviews ALTER COLUMN id SET DEFAULT nextval('public.company_reviews_id_seq'::regclass);
 
 
 --
 -- Name: currency_rates id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY currency_rates ALTER COLUMN id SET DEFAULT nextval('currency_rates_id_seq'::regclass);
+ALTER TABLE ONLY public.currency_rates ALTER COLUMN id SET DEFAULT nextval('public.currency_rates_id_seq'::regclass);
 
 
 --
 -- Name: favourites id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY favourites ALTER COLUMN id SET DEFAULT nextval('favourites_id_seq'::regclass);
+ALTER TABLE ONLY public.favourites ALTER COLUMN id SET DEFAULT nextval('public.favourites_id_seq'::regclass);
 
 
 --
 -- Name: featured_projects id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY featured_projects ALTER COLUMN id SET DEFAULT nextval('featured_projects_id_seq'::regclass);
+ALTER TABLE ONLY public.featured_projects ALTER COLUMN id SET DEFAULT nextval('public.featured_projects_id_seq'::regclass);
 
 
 --
 -- Name: freelancer_affiliations id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY freelancer_affiliations ALTER COLUMN id SET DEFAULT nextval('freelancer_affiliations_id_seq'::regclass);
+ALTER TABLE ONLY public.freelancer_affiliations ALTER COLUMN id SET DEFAULT nextval('public.freelancer_affiliations_id_seq'::regclass);
 
 
 --
 -- Name: freelancer_clearances id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY freelancer_clearances ALTER COLUMN id SET DEFAULT nextval('freelancer_clearances_id_seq'::regclass);
+ALTER TABLE ONLY public.freelancer_clearances ALTER COLUMN id SET DEFAULT nextval('public.freelancer_clearances_id_seq'::regclass);
 
 
 --
 -- Name: freelancer_insurances id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY freelancer_insurances ALTER COLUMN id SET DEFAULT nextval('freelancer_insurances_id_seq'::regclass);
+ALTER TABLE ONLY public.freelancer_insurances ALTER COLUMN id SET DEFAULT nextval('public.freelancer_insurances_id_seq'::regclass);
 
 
 --
 -- Name: freelancer_portfolios id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY freelancer_portfolios ALTER COLUMN id SET DEFAULT nextval('freelancer_portfolios_id_seq'::regclass);
+ALTER TABLE ONLY public.freelancer_portfolios ALTER COLUMN id SET DEFAULT nextval('public.freelancer_portfolios_id_seq'::regclass);
 
 
 --
 -- Name: freelancer_profiles id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY freelancer_profiles ALTER COLUMN id SET DEFAULT nextval('freelancer_profiles_id_seq'::regclass);
+ALTER TABLE ONLY public.freelancer_profiles ALTER COLUMN id SET DEFAULT nextval('public.freelancer_profiles_id_seq'::regclass);
 
 
 --
 -- Name: freelancer_reviews id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY freelancer_reviews ALTER COLUMN id SET DEFAULT nextval('freelancer_reviews_id_seq'::regclass);
+ALTER TABLE ONLY public.freelancer_reviews ALTER COLUMN id SET DEFAULT nextval('public.freelancer_reviews_id_seq'::regclass);
 
 
 --
 -- Name: friend_invites id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY friend_invites ALTER COLUMN id SET DEFAULT nextval('friend_invites_id_seq'::regclass);
+ALTER TABLE ONLY public.friend_invites ALTER COLUMN id SET DEFAULT nextval('public.friend_invites_id_seq'::regclass);
 
 
 --
 -- Name: identities id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY identities ALTER COLUMN id SET DEFAULT nextval('identities_id_seq'::regclass);
+ALTER TABLE ONLY public.identities ALTER COLUMN id SET DEFAULT nextval('public.identities_id_seq'::regclass);
 
 
 --
 -- Name: job_favourites id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY job_favourites ALTER COLUMN id SET DEFAULT nextval('job_favourites_id_seq'::regclass);
+ALTER TABLE ONLY public.job_favourites ALTER COLUMN id SET DEFAULT nextval('public.job_favourites_id_seq'::regclass);
 
 
 --
 -- Name: job_invites id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY job_invites ALTER COLUMN id SET DEFAULT nextval('job_invites_id_seq'::regclass);
+ALTER TABLE ONLY public.job_invites ALTER COLUMN id SET DEFAULT nextval('public.job_invites_id_seq'::regclass);
 
 
 --
 -- Name: jobs id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY jobs ALTER COLUMN id SET DEFAULT nextval('jobs_id_seq'::regclass);
+ALTER TABLE ONLY public.jobs ALTER COLUMN id SET DEFAULT nextval('public.jobs_id_seq'::regclass);
 
 
 --
 -- Name: messages id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY messages ALTER COLUMN id SET DEFAULT nextval('messages_id_seq'::regclass);
+ALTER TABLE ONLY public.messages ALTER COLUMN id SET DEFAULT nextval('public.messages_id_seq'::regclass);
 
 
 --
 -- Name: pages id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY pages ALTER COLUMN id SET DEFAULT nextval('pages_id_seq'::regclass);
+ALTER TABLE ONLY public.pages ALTER COLUMN id SET DEFAULT nextval('public.pages_id_seq'::regclass);
 
 
 --
 -- Name: payments id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY payments ALTER COLUMN id SET DEFAULT nextval('payments_id_seq'::regclass);
+ALTER TABLE ONLY public.payments ALTER COLUMN id SET DEFAULT nextval('public.payments_id_seq'::regclass);
 
 
 --
 -- Name: plans id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY plans ALTER COLUMN id SET DEFAULT nextval('plans_id_seq'::regclass);
+ALTER TABLE ONLY public.plans ALTER COLUMN id SET DEFAULT nextval('public.plans_id_seq'::regclass);
 
 
 --
 -- Name: projects id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY projects ALTER COLUMN id SET DEFAULT nextval('projects_id_seq'::regclass);
+ALTER TABLE ONLY public.projects ALTER COLUMN id SET DEFAULT nextval('public.projects_id_seq'::regclass);
 
 
 --
 -- Name: subscriptions id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY subscriptions ALTER COLUMN id SET DEFAULT nextval('subscriptions_id_seq'::regclass);
+ALTER TABLE ONLY public.subscriptions ALTER COLUMN id SET DEFAULT nextval('public.subscriptions_id_seq'::regclass);
 
 
 --
 -- Name: users id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY users ALTER COLUMN id SET DEFAULT nextval('users_id_seq'::regclass);
+ALTER TABLE ONLY public.users ALTER COLUMN id SET DEFAULT nextval('public.users_id_seq'::regclass);
 
 
 --
 -- Name: applicants applicants_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY applicants
+ALTER TABLE ONLY public.applicants
     ADD CONSTRAINT applicants_pkey PRIMARY KEY (id);
 
 
@@ -1524,7 +1532,7 @@ ALTER TABLE ONLY applicants
 -- Name: ar_internal_metadata ar_internal_metadata_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY ar_internal_metadata
+ALTER TABLE ONLY public.ar_internal_metadata
     ADD CONSTRAINT ar_internal_metadata_pkey PRIMARY KEY (key);
 
 
@@ -1532,7 +1540,7 @@ ALTER TABLE ONLY ar_internal_metadata
 -- Name: attachments attachments_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY attachments
+ALTER TABLE ONLY public.attachments
     ADD CONSTRAINT attachments_pkey PRIMARY KEY (id);
 
 
@@ -1540,7 +1548,7 @@ ALTER TABLE ONLY attachments
 -- Name: audits audits_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY audits
+ALTER TABLE ONLY public.audits
     ADD CONSTRAINT audits_pkey PRIMARY KEY (id);
 
 
@@ -1548,7 +1556,7 @@ ALTER TABLE ONLY audits
 -- Name: certifications certifications_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY certifications
+ALTER TABLE ONLY public.certifications
     ADD CONSTRAINT certifications_pkey PRIMARY KEY (id);
 
 
@@ -1556,7 +1564,7 @@ ALTER TABLE ONLY certifications
 -- Name: change_orders change_orders_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY change_orders
+ALTER TABLE ONLY public.change_orders
     ADD CONSTRAINT change_orders_pkey PRIMARY KEY (id);
 
 
@@ -1564,7 +1572,7 @@ ALTER TABLE ONLY change_orders
 -- Name: companies companies_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY companies
+ALTER TABLE ONLY public.companies
     ADD CONSTRAINT companies_pkey PRIMARY KEY (id);
 
 
@@ -1572,7 +1580,7 @@ ALTER TABLE ONLY companies
 -- Name: company_favourites company_favourites_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY company_favourites
+ALTER TABLE ONLY public.company_favourites
     ADD CONSTRAINT company_favourites_pkey PRIMARY KEY (id);
 
 
@@ -1580,7 +1588,7 @@ ALTER TABLE ONLY company_favourites
 -- Name: company_installs company_installs_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY company_installs
+ALTER TABLE ONLY public.company_installs
     ADD CONSTRAINT company_installs_pkey PRIMARY KEY (id);
 
 
@@ -1588,7 +1596,7 @@ ALTER TABLE ONLY company_installs
 -- Name: company_reviews company_reviews_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY company_reviews
+ALTER TABLE ONLY public.company_reviews
     ADD CONSTRAINT company_reviews_pkey PRIMARY KEY (id);
 
 
@@ -1596,7 +1604,7 @@ ALTER TABLE ONLY company_reviews
 -- Name: currency_rates currency_rates_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY currency_rates
+ALTER TABLE ONLY public.currency_rates
     ADD CONSTRAINT currency_rates_pkey PRIMARY KEY (id);
 
 
@@ -1604,7 +1612,7 @@ ALTER TABLE ONLY currency_rates
 -- Name: favourites favourites_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY favourites
+ALTER TABLE ONLY public.favourites
     ADD CONSTRAINT favourites_pkey PRIMARY KEY (id);
 
 
@@ -1612,7 +1620,7 @@ ALTER TABLE ONLY favourites
 -- Name: featured_projects featured_projects_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY featured_projects
+ALTER TABLE ONLY public.featured_projects
     ADD CONSTRAINT featured_projects_pkey PRIMARY KEY (id);
 
 
@@ -1620,7 +1628,7 @@ ALTER TABLE ONLY featured_projects
 -- Name: freelancer_affiliations freelancer_affiliations_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY freelancer_affiliations
+ALTER TABLE ONLY public.freelancer_affiliations
     ADD CONSTRAINT freelancer_affiliations_pkey PRIMARY KEY (id);
 
 
@@ -1628,7 +1636,7 @@ ALTER TABLE ONLY freelancer_affiliations
 -- Name: freelancer_clearances freelancer_clearances_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY freelancer_clearances
+ALTER TABLE ONLY public.freelancer_clearances
     ADD CONSTRAINT freelancer_clearances_pkey PRIMARY KEY (id);
 
 
@@ -1636,7 +1644,7 @@ ALTER TABLE ONLY freelancer_clearances
 -- Name: freelancer_insurances freelancer_insurances_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY freelancer_insurances
+ALTER TABLE ONLY public.freelancer_insurances
     ADD CONSTRAINT freelancer_insurances_pkey PRIMARY KEY (id);
 
 
@@ -1644,7 +1652,7 @@ ALTER TABLE ONLY freelancer_insurances
 -- Name: freelancer_portfolios freelancer_portfolios_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY freelancer_portfolios
+ALTER TABLE ONLY public.freelancer_portfolios
     ADD CONSTRAINT freelancer_portfolios_pkey PRIMARY KEY (id);
 
 
@@ -1652,7 +1660,7 @@ ALTER TABLE ONLY freelancer_portfolios
 -- Name: freelancer_profiles freelancer_profiles_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY freelancer_profiles
+ALTER TABLE ONLY public.freelancer_profiles
     ADD CONSTRAINT freelancer_profiles_pkey PRIMARY KEY (id);
 
 
@@ -1660,7 +1668,7 @@ ALTER TABLE ONLY freelancer_profiles
 -- Name: freelancer_reviews freelancer_reviews_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY freelancer_reviews
+ALTER TABLE ONLY public.freelancer_reviews
     ADD CONSTRAINT freelancer_reviews_pkey PRIMARY KEY (id);
 
 
@@ -1668,7 +1676,7 @@ ALTER TABLE ONLY freelancer_reviews
 -- Name: friend_invites friend_invites_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY friend_invites
+ALTER TABLE ONLY public.friend_invites
     ADD CONSTRAINT friend_invites_pkey PRIMARY KEY (id);
 
 
@@ -1676,7 +1684,7 @@ ALTER TABLE ONLY friend_invites
 -- Name: identities identities_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY identities
+ALTER TABLE ONLY public.identities
     ADD CONSTRAINT identities_pkey PRIMARY KEY (id);
 
 
@@ -1684,7 +1692,7 @@ ALTER TABLE ONLY identities
 -- Name: job_favourites job_favourites_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY job_favourites
+ALTER TABLE ONLY public.job_favourites
     ADD CONSTRAINT job_favourites_pkey PRIMARY KEY (id);
 
 
@@ -1692,7 +1700,7 @@ ALTER TABLE ONLY job_favourites
 -- Name: job_invites job_invites_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY job_invites
+ALTER TABLE ONLY public.job_invites
     ADD CONSTRAINT job_invites_pkey PRIMARY KEY (id);
 
 
@@ -1700,7 +1708,7 @@ ALTER TABLE ONLY job_invites
 -- Name: jobs jobs_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY jobs
+ALTER TABLE ONLY public.jobs
     ADD CONSTRAINT jobs_pkey PRIMARY KEY (id);
 
 
@@ -1708,7 +1716,7 @@ ALTER TABLE ONLY jobs
 -- Name: messages messages_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY messages
+ALTER TABLE ONLY public.messages
     ADD CONSTRAINT messages_pkey PRIMARY KEY (id);
 
 
@@ -1716,7 +1724,7 @@ ALTER TABLE ONLY messages
 -- Name: pages pages_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY pages
+ALTER TABLE ONLY public.pages
     ADD CONSTRAINT pages_pkey PRIMARY KEY (id);
 
 
@@ -1724,7 +1732,7 @@ ALTER TABLE ONLY pages
 -- Name: payments payments_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY payments
+ALTER TABLE ONLY public.payments
     ADD CONSTRAINT payments_pkey PRIMARY KEY (id);
 
 
@@ -1732,7 +1740,7 @@ ALTER TABLE ONLY payments
 -- Name: plans plans_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY plans
+ALTER TABLE ONLY public.plans
     ADD CONSTRAINT plans_pkey PRIMARY KEY (id);
 
 
@@ -1740,7 +1748,7 @@ ALTER TABLE ONLY plans
 -- Name: projects projects_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY projects
+ALTER TABLE ONLY public.projects
     ADD CONSTRAINT projects_pkey PRIMARY KEY (id);
 
 
@@ -1748,7 +1756,7 @@ ALTER TABLE ONLY projects
 -- Name: schema_migrations schema_migrations_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY schema_migrations
+ALTER TABLE ONLY public.schema_migrations
     ADD CONSTRAINT schema_migrations_pkey PRIMARY KEY (version);
 
 
@@ -1756,7 +1764,7 @@ ALTER TABLE ONLY schema_migrations
 -- Name: subscriptions subscriptions_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY subscriptions
+ALTER TABLE ONLY public.subscriptions
     ADD CONSTRAINT subscriptions_pkey PRIMARY KEY (id);
 
 
@@ -1764,7 +1772,7 @@ ALTER TABLE ONLY subscriptions
 -- Name: users users_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY users
+ALTER TABLE ONLY public.users
     ADD CONSTRAINT users_pkey PRIMARY KEY (id);
 
 
@@ -1772,500 +1780,528 @@ ALTER TABLE ONLY users
 -- Name: associated_index; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX associated_index ON audits USING btree (associated_id, associated_type);
+CREATE INDEX associated_index ON public.audits USING btree (associated_id, associated_type);
 
 
 --
 -- Name: auditable_index; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX auditable_index ON audits USING btree (auditable_id, auditable_type);
+CREATE INDEX auditable_index ON public.audits USING btree (auditable_id, auditable_type);
 
 
 --
 -- Name: index_applicants_on_company_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_applicants_on_company_id ON applicants USING btree (company_id);
+CREATE INDEX index_applicants_on_company_id ON public.applicants USING btree (company_id);
 
 
 --
 -- Name: index_applicants_on_freelancer_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_applicants_on_freelancer_id ON applicants USING btree (freelancer_id);
+CREATE INDEX index_applicants_on_freelancer_id ON public.applicants USING btree (freelancer_id);
 
 
 --
 -- Name: index_applicants_on_job_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_applicants_on_job_id ON applicants USING btree (job_id);
+CREATE INDEX index_applicants_on_job_id ON public.applicants USING btree (job_id);
 
 
 --
 -- Name: index_audits_on_created_at; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_audits_on_created_at ON audits USING btree (created_at);
+CREATE INDEX index_audits_on_created_at ON public.audits USING btree (created_at);
 
 
 --
 -- Name: index_audits_on_request_uuid; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_audits_on_request_uuid ON audits USING btree (request_uuid);
+CREATE INDEX index_audits_on_request_uuid ON public.audits USING btree (request_uuid);
 
 
 --
 -- Name: index_change_orders_on_company_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_change_orders_on_company_id ON change_orders USING btree (company_id);
+CREATE INDEX index_change_orders_on_company_id ON public.change_orders USING btree (company_id);
 
 
 --
 -- Name: index_change_orders_on_job_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_change_orders_on_job_id ON change_orders USING btree (job_id);
+CREATE INDEX index_change_orders_on_job_id ON public.change_orders USING btree (job_id);
 
 
 --
 -- Name: index_companies_on_disabled; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_companies_on_disabled ON companies USING btree (disabled);
+CREATE INDEX index_companies_on_disabled ON public.companies USING btree (disabled);
 
 
 --
 -- Name: index_companies_on_job_markets; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_companies_on_job_markets ON companies USING btree (job_markets);
+CREATE INDEX index_companies_on_job_markets ON public.companies USING btree (job_markets);
 
 
 --
 -- Name: index_companies_on_manufacturer_tags; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_companies_on_manufacturer_tags ON companies USING btree (manufacturer_tags);
+CREATE INDEX index_companies_on_manufacturer_tags ON public.companies USING btree (manufacturer_tags);
 
 
 --
 -- Name: index_companies_on_name; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_companies_on_name ON companies USING btree (name);
+CREATE INDEX index_companies_on_name ON public.companies USING btree (name);
 
 
 --
 -- Name: index_companies_on_plan_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_companies_on_plan_id ON companies USING btree (plan_id);
+CREATE INDEX index_companies_on_plan_id ON public.companies USING btree (plan_id);
 
 
 --
 -- Name: index_companies_on_technical_skill_tags; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_companies_on_technical_skill_tags ON companies USING btree (technical_skill_tags);
+CREATE INDEX index_companies_on_technical_skill_tags ON public.companies USING btree (technical_skill_tags);
 
 
 --
 -- Name: index_company_reviews_on_company_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_company_reviews_on_company_id ON company_reviews USING btree (company_id);
+CREATE INDEX index_company_reviews_on_company_id ON public.company_reviews USING btree (company_id);
 
 
 --
 -- Name: index_company_reviews_on_freelancer_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_company_reviews_on_freelancer_id ON company_reviews USING btree (freelancer_id);
+CREATE INDEX index_company_reviews_on_freelancer_id ON public.company_reviews USING btree (freelancer_id);
 
 
 --
 -- Name: index_company_reviews_on_job_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_company_reviews_on_job_id ON company_reviews USING btree (job_id);
+CREATE INDEX index_company_reviews_on_job_id ON public.company_reviews USING btree (job_id);
 
 
 --
 -- Name: index_freelancer_profiles_on_area; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_freelancer_profiles_on_area ON freelancer_profiles USING btree (area);
+CREATE INDEX index_freelancer_profiles_on_area ON public.freelancer_profiles USING btree (area);
 
 
 --
 -- Name: index_freelancer_profiles_on_available; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_freelancer_profiles_on_available ON freelancer_profiles USING btree (available);
+CREATE INDEX index_freelancer_profiles_on_available ON public.freelancer_profiles USING btree (available);
 
 
 --
 -- Name: index_freelancer_profiles_on_disabled; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_freelancer_profiles_on_disabled ON freelancer_profiles USING btree (disabled);
+CREATE INDEX index_freelancer_profiles_on_disabled ON public.freelancer_profiles USING btree (disabled);
 
 
 --
 -- Name: index_freelancer_profiles_on_freelancer_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_freelancer_profiles_on_freelancer_id ON freelancer_profiles USING btree (freelancer_id);
+CREATE INDEX index_freelancer_profiles_on_freelancer_id ON public.freelancer_profiles USING btree (freelancer_id);
 
 
 --
 -- Name: index_freelancer_profiles_on_job_functions; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_freelancer_profiles_on_job_functions ON freelancer_profiles USING btree (job_functions);
+CREATE INDEX index_freelancer_profiles_on_job_functions ON public.freelancer_profiles USING btree (job_functions);
 
 
 --
 -- Name: index_freelancer_profiles_on_job_markets; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_freelancer_profiles_on_job_markets ON freelancer_profiles USING btree (job_markets);
+CREATE INDEX index_freelancer_profiles_on_job_markets ON public.freelancer_profiles USING btree (job_markets);
 
 
 --
 -- Name: index_freelancer_profiles_on_manufacturer_tags; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_freelancer_profiles_on_manufacturer_tags ON freelancer_profiles USING btree (manufacturer_tags);
+CREATE INDEX index_freelancer_profiles_on_manufacturer_tags ON public.freelancer_profiles USING btree (manufacturer_tags);
 
 
 --
 -- Name: index_freelancer_profiles_on_technical_skill_tags; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_freelancer_profiles_on_technical_skill_tags ON freelancer_profiles USING btree (technical_skill_tags);
+CREATE INDEX index_freelancer_profiles_on_technical_skill_tags ON public.freelancer_profiles USING btree (technical_skill_tags);
 
 
 --
 -- Name: index_freelancer_reviews_on_company_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_freelancer_reviews_on_company_id ON freelancer_reviews USING btree (company_id);
+CREATE INDEX index_freelancer_reviews_on_company_id ON public.freelancer_reviews USING btree (company_id);
 
 
 --
 -- Name: index_freelancer_reviews_on_freelancer_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_freelancer_reviews_on_freelancer_id ON freelancer_reviews USING btree (freelancer_id);
+CREATE INDEX index_freelancer_reviews_on_freelancer_id ON public.freelancer_reviews USING btree (freelancer_id);
 
 
 --
 -- Name: index_freelancer_reviews_on_job_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_freelancer_reviews_on_job_id ON freelancer_reviews USING btree (job_id);
+CREATE INDEX index_freelancer_reviews_on_job_id ON public.freelancer_reviews USING btree (job_id);
 
 
 --
 -- Name: index_friend_invites_on_freelancer_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_friend_invites_on_freelancer_id ON friend_invites USING btree (freelancer_id);
+CREATE INDEX index_friend_invites_on_freelancer_id ON public.friend_invites USING btree (freelancer_id);
 
 
 --
 -- Name: index_identities_on_loginable_type_and_loginable_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_identities_on_loginable_type_and_loginable_id ON identities USING btree (loginable_type, loginable_id);
+CREATE INDEX index_identities_on_loginable_type_and_loginable_id ON public.identities USING btree (loginable_type, loginable_id);
 
 
 --
 -- Name: index_identities_on_loginable_type_and_provider_and_uid; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE UNIQUE INDEX index_identities_on_loginable_type_and_provider_and_uid ON identities USING btree (loginable_type, provider, uid);
+CREATE UNIQUE INDEX index_identities_on_loginable_type_and_provider_and_uid ON public.identities USING btree (loginable_type, provider, uid);
 
 
 --
 -- Name: index_jobs_on_company_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_jobs_on_company_id ON jobs USING btree (company_id);
+CREATE INDEX index_jobs_on_company_id ON public.jobs USING btree (company_id);
 
 
 --
 -- Name: index_jobs_on_manufacturer_tags; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_jobs_on_manufacturer_tags ON jobs USING btree (manufacturer_tags);
+CREATE INDEX index_jobs_on_manufacturer_tags ON public.jobs USING btree (manufacturer_tags);
 
 
 --
 -- Name: index_jobs_on_project_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_jobs_on_project_id ON jobs USING btree (project_id);
+CREATE INDEX index_jobs_on_project_id ON public.jobs USING btree (project_id);
 
 
 --
 -- Name: index_messages_on_authorable_type_and_authorable_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_messages_on_authorable_type_and_authorable_id ON messages USING btree (authorable_type, authorable_id);
+CREATE INDEX index_messages_on_authorable_type_and_authorable_id ON public.messages USING btree (authorable_type, authorable_id);
 
 
 --
 -- Name: index_messages_on_receivable_type_and_receivable_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_messages_on_receivable_type_and_receivable_id ON messages USING btree (receivable_type, receivable_id);
+CREATE INDEX index_messages_on_receivable_type_and_receivable_id ON public.messages USING btree (receivable_type, receivable_id);
 
 
 --
 -- Name: index_on_companies_loc; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_on_companies_loc ON companies USING gist (st_geographyfromtext((((('SRID=4326;POINT('::text || lng) || ' '::text) || lat) || ')'::text)));
+CREATE INDEX index_on_companies_loc ON public.companies USING gist (public.st_geographyfromtext((((('SRID=4326;POINT('::text || lng) || ' '::text) || lat) || ')'::text)));
 
 
 --
 -- Name: index_on_freelancer_profiles_loc; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_on_freelancer_profiles_loc ON freelancer_profiles USING gist (st_geographyfromtext((((('SRID=4326;POINT('::text || lng) || ' '::text) || lat) || ')'::text)));
+CREATE INDEX index_on_freelancer_profiles_loc ON public.freelancer_profiles USING gist (public.st_geographyfromtext((((('SRID=4326;POINT('::text || lng) || ' '::text) || lat) || ')'::text)));
 
 
 --
 -- Name: index_on_freelancers_loc; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_on_freelancers_loc ON freelancer_profiles USING gist (st_geographyfromtext((((('SRID=4326;POINT('::text || lng) || ' '::text) || lat) || ')'::text)));
+CREATE INDEX index_on_freelancers_loc ON public.freelancer_profiles USING gist (public.st_geographyfromtext((((('SRID=4326;POINT('::text || lng) || ' '::text) || lat) || ')'::text)));
 
 
 --
 -- Name: index_on_projects_loc; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_on_projects_loc ON projects USING gist (st_geographyfromtext((((('SRID=4326;POINT('::text || lng) || ' '::text) || lat) || ')'::text)));
+CREATE INDEX index_on_projects_loc ON public.projects USING gist (public.st_geographyfromtext((((('SRID=4326;POINT('::text || lng) || ' '::text) || lat) || ')'::text)));
 
 
 --
 -- Name: index_pages_on_slug; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_pages_on_slug ON pages USING btree (slug);
+CREATE INDEX index_pages_on_slug ON public.pages USING btree (slug);
 
 
 --
 -- Name: index_payments_on_company_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_payments_on_company_id ON payments USING btree (company_id);
+CREATE INDEX index_payments_on_company_id ON public.payments USING btree (company_id);
 
 
 --
 -- Name: index_payments_on_job_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_payments_on_job_id ON payments USING btree (job_id);
+CREATE INDEX index_payments_on_job_id ON public.payments USING btree (job_id);
 
 
 --
 -- Name: index_projects_on_company_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_projects_on_company_id ON projects USING btree (company_id);
+CREATE INDEX index_projects_on_company_id ON public.projects USING btree (company_id);
 
 
 --
 -- Name: index_projects_on_external_project_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_projects_on_external_project_id ON projects USING btree (external_project_id);
+CREATE INDEX index_projects_on_external_project_id ON public.projects USING btree (external_project_id);
 
 
 --
 -- Name: index_projects_on_name; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_projects_on_name ON projects USING btree (name);
+CREATE INDEX index_projects_on_name ON public.projects USING btree (name);
 
 
 --
 -- Name: index_users_on_company_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_users_on_company_id ON users USING btree (company_id);
+CREATE INDEX index_users_on_company_id ON public.users USING btree (company_id);
 
 
 --
 -- Name: index_users_on_confirmation_token; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE UNIQUE INDEX index_users_on_confirmation_token ON users USING btree (confirmation_token);
+CREATE UNIQUE INDEX index_users_on_confirmation_token ON public.users USING btree (confirmation_token);
 
 
 --
 -- Name: index_users_on_email; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE UNIQUE INDEX index_users_on_email ON users USING btree (email);
+CREATE UNIQUE INDEX index_users_on_email ON public.users USING btree (email);
+
+
+--
+-- Name: index_users_on_invitation_token; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX index_users_on_invitation_token ON public.users USING btree (invitation_token);
+
+
+--
+-- Name: index_users_on_invitations_count; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_users_on_invitations_count ON public.users USING btree (invitations_count);
+
+
+--
+-- Name: index_users_on_invited_by_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_users_on_invited_by_id ON public.users USING btree (invited_by_id);
+
+
+--
+-- Name: index_users_on_invited_by_type_and_invited_by_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_users_on_invited_by_type_and_invited_by_id ON public.users USING btree (invited_by_type, invited_by_id);
 
 
 --
 -- Name: index_users_on_reset_password_token; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE UNIQUE INDEX index_users_on_reset_password_token ON users USING btree (reset_password_token);
+CREATE UNIQUE INDEX index_users_on_reset_password_token ON public.users USING btree (reset_password_token);
 
 
 --
 -- Name: user_index; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX user_index ON audits USING btree (user_id, user_type);
+CREATE INDEX user_index ON public.audits USING btree (user_id, user_type);
 
 
 --
 -- Name: company_reviews fk_rails_05756653f5; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY company_reviews
-    ADD CONSTRAINT fk_rails_05756653f5 FOREIGN KEY (job_id) REFERENCES jobs(id);
+ALTER TABLE ONLY public.company_reviews
+    ADD CONSTRAINT fk_rails_05756653f5 FOREIGN KEY (job_id) REFERENCES public.jobs(id);
 
 
 --
 -- Name: payments fk_rails_0fc68a9316; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY payments
-    ADD CONSTRAINT fk_rails_0fc68a9316 FOREIGN KEY (company_id) REFERENCES companies(id);
+ALTER TABLE ONLY public.payments
+    ADD CONSTRAINT fk_rails_0fc68a9316 FOREIGN KEY (company_id) REFERENCES public.companies(id);
 
 
 --
 -- Name: jobs fk_rails_1977e8b5a6; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY jobs
-    ADD CONSTRAINT fk_rails_1977e8b5a6 FOREIGN KEY (project_id) REFERENCES projects(id);
+ALTER TABLE ONLY public.jobs
+    ADD CONSTRAINT fk_rails_1977e8b5a6 FOREIGN KEY (project_id) REFERENCES public.projects(id);
 
 
 --
 -- Name: freelancer_reviews fk_rails_2d750cb05f; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY freelancer_reviews
-    ADD CONSTRAINT fk_rails_2d750cb05f FOREIGN KEY (freelancer_id) REFERENCES users(id);
+ALTER TABLE ONLY public.freelancer_reviews
+    ADD CONSTRAINT fk_rails_2d750cb05f FOREIGN KEY (freelancer_id) REFERENCES public.users(id);
 
 
 --
 -- Name: companies fk_rails_2e8c071a79; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY companies
-    ADD CONSTRAINT fk_rails_2e8c071a79 FOREIGN KEY (plan_id) REFERENCES plans(id);
+ALTER TABLE ONLY public.companies
+    ADD CONSTRAINT fk_rails_2e8c071a79 FOREIGN KEY (plan_id) REFERENCES public.plans(id);
 
 
 --
 -- Name: applicants fk_rails_32d387f70d; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY applicants
-    ADD CONSTRAINT fk_rails_32d387f70d FOREIGN KEY (job_id) REFERENCES jobs(id);
+ALTER TABLE ONLY public.applicants
+    ADD CONSTRAINT fk_rails_32d387f70d FOREIGN KEY (job_id) REFERENCES public.jobs(id);
 
 
 --
 -- Name: projects fk_rails_44a549d7b3; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY projects
-    ADD CONSTRAINT fk_rails_44a549d7b3 FOREIGN KEY (company_id) REFERENCES companies(id);
+ALTER TABLE ONLY public.projects
+    ADD CONSTRAINT fk_rails_44a549d7b3 FOREIGN KEY (company_id) REFERENCES public.companies(id);
 
 
 --
 -- Name: applicants fk_rails_4b7bc91392; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY applicants
-    ADD CONSTRAINT fk_rails_4b7bc91392 FOREIGN KEY (freelancer_id) REFERENCES users(id);
+ALTER TABLE ONLY public.applicants
+    ADD CONSTRAINT fk_rails_4b7bc91392 FOREIGN KEY (freelancer_id) REFERENCES public.users(id);
 
 
 --
 -- Name: company_reviews fk_rails_54727610ca; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY company_reviews
-    ADD CONSTRAINT fk_rails_54727610ca FOREIGN KEY (company_id) REFERENCES companies(id);
+ALTER TABLE ONLY public.company_reviews
+    ADD CONSTRAINT fk_rails_54727610ca FOREIGN KEY (company_id) REFERENCES public.companies(id);
 
 
 --
 -- Name: applicants fk_rails_7283c3d901; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY applicants
-    ADD CONSTRAINT fk_rails_7283c3d901 FOREIGN KEY (company_id) REFERENCES companies(id);
+ALTER TABLE ONLY public.applicants
+    ADD CONSTRAINT fk_rails_7283c3d901 FOREIGN KEY (company_id) REFERENCES public.companies(id);
 
 
 --
 -- Name: freelancer_reviews fk_rails_ab5db9ea44; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY freelancer_reviews
-    ADD CONSTRAINT fk_rails_ab5db9ea44 FOREIGN KEY (company_id) REFERENCES companies(id);
+ALTER TABLE ONLY public.freelancer_reviews
+    ADD CONSTRAINT fk_rails_ab5db9ea44 FOREIGN KEY (company_id) REFERENCES public.companies(id);
 
 
 --
 -- Name: jobs fk_rails_b34da78090; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY jobs
-    ADD CONSTRAINT fk_rails_b34da78090 FOREIGN KEY (company_id) REFERENCES companies(id);
+ALTER TABLE ONLY public.jobs
+    ADD CONSTRAINT fk_rails_b34da78090 FOREIGN KEY (company_id) REFERENCES public.companies(id);
 
 
 --
 -- Name: payments fk_rails_b35f361f8d; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY payments
-    ADD CONSTRAINT fk_rails_b35f361f8d FOREIGN KEY (job_id) REFERENCES jobs(id);
+ALTER TABLE ONLY public.payments
+    ADD CONSTRAINT fk_rails_b35f361f8d FOREIGN KEY (job_id) REFERENCES public.jobs(id);
 
 
 --
 -- Name: change_orders fk_rails_b3bebfe084; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY change_orders
-    ADD CONSTRAINT fk_rails_b3bebfe084 FOREIGN KEY (company_id) REFERENCES companies(id);
+ALTER TABLE ONLY public.change_orders
+    ADD CONSTRAINT fk_rails_b3bebfe084 FOREIGN KEY (company_id) REFERENCES public.companies(id);
 
 
 --
 -- Name: change_orders fk_rails_cab1ecc845; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY change_orders
-    ADD CONSTRAINT fk_rails_cab1ecc845 FOREIGN KEY (job_id) REFERENCES jobs(id);
+ALTER TABLE ONLY public.change_orders
+    ADD CONSTRAINT fk_rails_cab1ecc845 FOREIGN KEY (job_id) REFERENCES public.jobs(id);
 
 
 --
 -- Name: company_reviews fk_rails_dfd5a40d4e; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY company_reviews
-    ADD CONSTRAINT fk_rails_dfd5a40d4e FOREIGN KEY (freelancer_id) REFERENCES users(id);
+ALTER TABLE ONLY public.company_reviews
+    ADD CONSTRAINT fk_rails_dfd5a40d4e FOREIGN KEY (freelancer_id) REFERENCES public.users(id);
 
 
 --
 -- Name: freelancer_reviews fk_rails_f184aba2e9; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY freelancer_reviews
-    ADD CONSTRAINT fk_rails_f184aba2e9 FOREIGN KEY (job_id) REFERENCES jobs(id);
+ALTER TABLE ONLY public.freelancer_reviews
+    ADD CONSTRAINT fk_rails_f184aba2e9 FOREIGN KEY (job_id) REFERENCES public.jobs(id);
 
 
 --
@@ -2405,7 +2441,6 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20180420173017'),
 ('20180424155938'),
 ('20180424190619'),
-('20180504205104'),
 ('20180506150209'),
 ('20180508222720'),
 ('20180509110048'),
@@ -2422,11 +2457,14 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20180725222036'),
 ('20180726215803'),
 ('20180728165546'),
+('20180730130124'),
 ('20180801180627'),
 ('20180801220123'),
 ('20180801230445'),
 ('20180802215944'),
 ('20180803160038'),
-('20180808185712');
+('20180808185712'),
+('20180809145354'),
+('20180809204356');
 
 

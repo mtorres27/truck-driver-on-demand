@@ -51,7 +51,6 @@
 #  special_avj_fees         :decimal(10, 2)
 #  avj_credit               :decimal(10, 2)
 #  registration_step        :string
-#  province                 :string
 #  freelancer_id            :integer
 #  business_tax_number      :string
 #

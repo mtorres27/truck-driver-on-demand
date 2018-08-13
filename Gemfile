@@ -29,6 +29,7 @@ gem "jquery-datatables"
 
 # Authentication & Authorization
 gem "devise"
+gem "devise_invitable"
 gem "pundit"
 
 # Views

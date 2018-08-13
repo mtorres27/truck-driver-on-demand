@@ -7,7 +7,7 @@ class SubscriptionPolicy < ApplicationPolicy
   private
 
   def company_owner?
-    record.company&.company_user&.id == user.id
+    record.company&.owner.company_owner?
   end
 
 end

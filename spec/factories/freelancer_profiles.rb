@@ -45,13 +45,12 @@
 #  valid_driver             :boolean
 #  own_tools                :boolean
 #  company_name             :string
+#  special_avj_fees         :decimal(10, 2)
 #  job_types                :citext
 #  job_functions            :citext
 #  manufacturer_tags        :citext
-#  special_avj_fees         :decimal(10, 2)
 #  avj_credit               :decimal(10, 2)
 #  registration_step        :string
-#  province                 :string
 #  freelancer_id            :integer
 #  business_tax_number      :string
 #

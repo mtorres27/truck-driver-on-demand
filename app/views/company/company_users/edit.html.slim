@@ -1,0 +1,27 @@
+= render partial: "/company/shared/profile_sub_nav"
+
+- content_for :title, "AVJunction - Edit Company User"
+
+- content_for :secondary do
+  = simple_form_for(@company_user, url: company_company_user_path) do |f|
+    = f.hidden_field :enforce_profile_edit, value: true
+    .action-bar
+        h2.heading-h2.heading-h2--action-bar Edit Company User
+        .action-bar__actions
+          = f.button :submit, "Edit User", class: "btn btn--primary"
+          a.btn.btn--secondary href=company_company_users_path(current_company) Cancel
+
+    .grid-cell.grid-cell--67
+      .grid-h.grid-h--no-margin
+        .grid-cell.grid-cell--100
+          = f.input :first_name, required: true, label: "First Name", placeholder: "Enter a First Name."
+        .grid-cell.grid-cell--100
+          = f.input :last_name, required: true, label: "Last Name", placeholder: "Enter a Last Name."
+        .grid-cell.grid-cell--100
+          = f.input :email, required: true, label: "Email", placeholder: "Enter an Email."
+        .grid-cell.grid-cell--100
+          = f.input :role, collection: @roles, required: true, label: "Role"
+        .grid-cell.grid-cell--100
+          = f.input :password, required: true, label: "Password", placeholder: "Enter a Password."
+        .grid-cell.grid-cell--100
+          = f.input :password_confirmation, required: true, label: "Password Confirmation", placeholder: "Confirm Password."
