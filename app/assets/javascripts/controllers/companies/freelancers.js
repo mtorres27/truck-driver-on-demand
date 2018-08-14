@@ -1,10 +1,4 @@
 document.addEventListener("turbolinks:load", function(){
-    $("#freelance_distance").on('change', function() {
-        var val = this.value;
-        $(".js--distance").val(val);
-        $(".js--freelancer-search-form").submit();
-    });
-
     $("#freelance_sort").on('change', function() {
         var val = this.value;
         $("#sort").val(val);
@@ -17,15 +11,6 @@ document.addEventListener("turbolinks:load", function(){
 
     $("#freelancer_favourites_location").on('change', function() {
         window.location = "/company/freelancers/favourites?location="+this.value;
-    });
-
-    $(".js--show-avatar-only-checkbox").on('change', function(){
-        if ($(this).is(":checked")) {
-            $(".js--show-avatar-only-form-field").val(true);
-        } else {
-            $(".js--show-avatar-only-form-field").val(false);
-        }
-        $(".js--freelancer-search-form").submit();
     });
 
     $("#job_to_invite").change(function() {
