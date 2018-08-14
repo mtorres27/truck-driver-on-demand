@@ -1,5 +1,4 @@
-- has_avatar_class = freelancer.freelancer_profile.avatar_url == "avatar/missing.png"  ? "freelancer_without_avatar" : "freelancer_with_avatar"
-a.list-item.list-item--freelancer href="/company/freelancers/#{freelancer.id}" class="#{has_avatar_class}"
+a.list-item.list-item--freelancer href="/company/freelancers/#{freelancer.id}"
 
   .list__img
     - if is_favourite(freelancer)
@@ -19,7 +18,7 @@ a.list-item.list-item--freelancer href="/company/freelancers/#{freelancer.id}" c
 
     .list__city
       - freelancer_address = "#{"#{freelancer.freelancer_profile.city}, " if freelancer.freelancer_profile.city.present?}#{"#{freelancer.freelancer_profile.state}, " if freelancer.freelancer_profile.state.present?}#{freelancer.freelancer_profile.country&.upcase}"
-      = "#{freelancer_address}. #{params.dig(:search, :address).present? ? "#{distance_from(freelancer, @freelancer_profiles)} miles away" : "" }"
+      = "#{freelancer_address}. #{params.dig(:search, :address).present? ? "#{distance_from(freelancer, @freelancer_profiles_with_distances)} miles away" : "" }"
 
     .list__rating
     - @stars = freelancer_avg_rating(freelancer)
