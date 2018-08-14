@@ -5,8 +5,9 @@ class Company::FreelancersController < Company::BaseController
     authorize current_company
     @keywords = params.dig(:search, :keywords).presence
     @address = params.dig(:search, :address).presence
+    @state_province = params.dig(:search, :state_province).presence
     @country = params.dig(:search, :country).presence
-    @avatar_only = params.dig(:search, :avatar_only) == "true"
+    @avatar_only = params.dig(:search, :avatar_only) == "1"
 
     if params.has_key?(:search) and !@keywords and !@address and !@country
       flash[:error] = "You'll need to add some search criteria to narrow your search results!"
@@ -26,23 +27,26 @@ class Company::FreelancersController < Company::BaseController
     end
 
     if @address
+      @address_for_geocode = @address
+      @address_for_geocode += ", #{CS.states(@country.to_sym)[@state_province.to_sym]}" if @state_province.present?
+      @address_for_geocode += ", #{CS.countries[@country.upcase.to_sym]}" if @country.present?
       # check for cached version of address
-      if Rails.cache.read(@address)
-        @geocode = Rails.cache.read(@address)
+      if Rails.cache.read(@address_for_geocode)
+        @geocode = Rails.cache.read(@address_for_geocode)
       else
         # save cached version of address
-        @geocode = do_geocode(@address)
-        Rails.cache.write(@address, @geocode)
+        @geocode = do_geocode(@address_for_geocode)
+        Rails.cache.write(@address_for_geocode, @geocode)
       end
 
       if @geocode
         point = OpenStruct.new(:lat => @geocode[:lat], :lng => @geocode[:lng])
         if @distance.nil?
-          @distance = 60000
+          @distance_int = 60000
         else
-          @distance = @distance.to_i
+          @distance_int = @distance.to_i
         end
-        @freelancer_profiles = @freelancer_profiles.nearby(@geocode[:lat], @geocode[:lng], @distance).with_distance(point).order("verified DESC, profile_score DESC, distance")
+        @freelancer_profiles = @freelancer_profiles.nearby(@geocode[:lat], @geocode[:lng], @distance_int).with_distance(point).order("verified DESC, profile_score DESC, distance")
       else
         @freelancer_profiles = FreelancerProfile.none
       end

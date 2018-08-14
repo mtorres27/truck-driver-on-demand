@@ -19,15 +19,6 @@ h1.heading-h1 Search for AV Freelancers
         = " in "
         span class="result-header__text--strong"
           = I18n.t("enumerize.country.#{params[:search][:country]}")
-
-
-    .action-bar__actions
-      select id="freelance_distance" class="company-freelancer__distance margin-right"
-        = render partial: "shared/distance_options", locals: { distance: params.dig(:search, :distance) }
-      label
-        - checked = @avatar_only
-        = check_box_tag "avatar_only", "1", checked, class: "js--show-avatar-only-checkbox"
-        = " Profile picture"
   .list
     - @freelancer_profiles.each do |freelancer_profile|
       = render partial: "company/shared/freelancer_info", locals: { freelancer: freelancer_profile.freelancer }
