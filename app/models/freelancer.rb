@@ -23,13 +23,27 @@
 #  type                   :string
 #  messages_count         :integer          default(0), not null
 #  company_id             :integer
+#  role                   :string
+#  invitation_token       :string
+#  invitation_created_at  :datetime
+#  invitation_sent_at     :datetime
+#  invitation_accepted_at :datetime
+#  invitation_limit       :integer
+#  invited_by_type        :string
+#  invited_by_id          :integer
+#  invitations_count      :integer          default(0)
+#  enabled                :boolean          default(TRUE)
 #
 # Indexes
 #
-#  index_users_on_company_id            (company_id)
-#  index_users_on_confirmation_token    (confirmation_token) UNIQUE
-#  index_users_on_email                 (email) UNIQUE
-#  index_users_on_reset_password_token  (reset_password_token) UNIQUE
+#  index_users_on_company_id                         (company_id)
+#  index_users_on_confirmation_token                 (confirmation_token) UNIQUE
+#  index_users_on_email                              (email) UNIQUE
+#  index_users_on_invitation_token                   (invitation_token) UNIQUE
+#  index_users_on_invitations_count                  (invitations_count)
+#  index_users_on_invited_by_id                      (invited_by_id)
+#  index_users_on_invited_by_type_and_invited_by_id  (invited_by_type,invited_by_id)
+#  index_users_on_reset_password_token               (reset_password_token) UNIQUE
 #
 
 require 'net/http'
@@ -148,9 +162,7 @@ class Freelancer < User
 
   def score
     score = 0
-    score += 1 if self.full_name.present?
-    score += 5 if self.freelancer_profile.avatar_data.present?
-    score += 1 if self.email.present?
+    score += 2 if self.freelancer_profile.avatar_data.present?
     score += 1 if self.freelancer_profile.address.present?
     score += 1 if self.freelancer_profile.area.present?
     score += 1 if self.freelancer_profile.city.present?
@@ -158,7 +170,7 @@ class Freelancer < User
     score += 1 if self.freelancer_profile.postal_code.present?
     score += 1 if self.freelancer_profile.phone_number.present?
     score += 1 if self.freelancer_profile.bio.present?
-    score += 1 if self.freelancer_profile.tag_line.present?
+    score += 1 if self.freelancer_profile.tagline.present?
     score += 1 if self.freelancer_profile.company_name.present?
     score += 1 if self.freelancer_profile.valid_driver
     score += 1 if self.freelancer_profile.available

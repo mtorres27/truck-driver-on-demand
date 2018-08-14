@@ -5,72 +5,65 @@ class Company::FreelancersController < Company::BaseController
     authorize current_company
     @keywords = params.dig(:search, :keywords).presence
     @address = params.dig(:search, :address).presence
+    @state_province = params.dig(:search, :state_province).presence
     @country = params.dig(:search, :country).presence
-    @avatar_only = params[:avatar_only] == "1"
+    @avatar_only = params.dig(:search, :avatar_only) == "1"
 
     if params.has_key?(:search) and !@keywords and !@address and !@country
       flash[:error] = "You'll need to add some search criteria to narrow your search results!"
       redirect_to company_freelancers_path && return
     end
 
-    @sort = params.dig(:search, :sort).presence
     @distance = params.dig(:search, :distance).presence
 
-    if @sort == "ASC"
-      sort = :asc
-    elsif @sort == "DESC"
-      sort = :desc
-    elsif @sort == "RELEVANCE"
-      sort = nil
-    end
-
-    if sort != nil
-      @freelancer_profiles = FreelancerProfile.where(disabled: false)
+    if @avatar_only
+      @freelancer_profiles = FreelancerProfile.where(disabled: false).where.not(avatar_data: nil)
     else
       @freelancer_profiles = FreelancerProfile.where(disabled: false)
     end
 
-    @freelancer_profiles = @freelancer_profiles.order("verified DESC")
-    @freelancers = Freelancer.where(id: @freelancer_profiles.map(&:freelancer_id))
+    if @country
+      @freelancer_profiles = @freelancer_profiles.where(country: @country)
+    end
 
     if @address
+      @address_for_geocode = @address
+      @address_for_geocode += ", #{CS.states(@country.to_sym)[@state_province.to_sym]}" if @state_province.present?
+      @address_for_geocode += ", #{CS.countries[@country.upcase.to_sym]}" if @country.present?
       # check for cached version of address
-      if Rails.cache.read(@address)
-        @geocode = Rails.cache.read(@address)
+      if Rails.cache.read(@address_for_geocode)
+        @geocode = Rails.cache.read(@address_for_geocode)
       else
         # save cached version of address
-        @geocode = do_geocode(@address)
-        Rails.cache.write(@address, @geocode)
+        @geocode = do_geocode(@address_for_geocode)
+        Rails.cache.write(@address_for_geocode, @geocode)
       end
 
       if @geocode
         point = OpenStruct.new(:lat => @geocode[:lat], :lng => @geocode[:lng])
         if @distance.nil?
-          @distance = 60000
+          @distance_int = 60000
+        else
+          @distance_int = @distance.to_i
         end
-        @freelancer_profiles = @freelancer_profiles.where(freelancer_id: @freelancers.map(&:id))
-        @freelancer_profiles = @freelancer_profiles.nearby(@geocode[:lat], @geocode[:lng], @distance).with_distance(point).order("distance")
-        @freelancers = Freelancer.where(id: @freelancer_profiles.map(&:freelancer_id))
+        @freelancer_profiles = @freelancer_profiles.nearby(@geocode[:lat], @geocode[:lng], @distance_int).with_distance(point).order("verified DESC, profile_score DESC, distance")
       else
-        @freelancers = Freelancer.none
+        @freelancer_profiles = FreelancerProfile.none
       end
+    else
+      @freelancer_profiles = @freelancer_profiles.order("verified DESC, profile_score DESC")
     end
 
     if (!@keywords and !@address and !@country) or (@keywords.blank? and @address.blank? and @country.blank?)
-      @freelancers = Freelancer.none
+      @freelancer_profiles = FreelancerProfile.none
     else
       if !@keywords.blank?
-        @freelancers = @freelancers.search(@keywords)
+        @freelancer_profiles = @freelancer_profiles.search(@keywords)
       end
     end
 
-    if @country
-      @freelancer_profiles = @freelancer_profiles.where(freelancer_id: @freelancers.map(&:id))
-      @freelancer_profiles = @freelancer_profiles.where(country: @country)
-      @freelancers = Freelancer.where(id: @freelancer_profiles.map(&:freelancer_id))
-    end
-
-    @freelancers = @freelancers.page(params[:page]).per(10)
+    @freelancer_profiles_with_distances = @freelancer_profiles
+    @freelancer_profiles = @freelancer_profiles.page(params[:page]).per(10)
   end
 
   def hired

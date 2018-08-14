@@ -91,6 +91,11 @@ Rails.application.routes.draw do
       end
     end
 
+    resources :company_users do
+      get 'enable', to: 'company_users#enable', as: 'enable'
+      get 'disable', to: 'company_users#disable', as: 'disable'
+    end
+
     resources :freelancers, only: [:index, :show] do
       get :hired, on: :collection
       get :favourites, on: :collection

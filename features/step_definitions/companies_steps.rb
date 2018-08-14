@@ -1,20 +1,20 @@
 include Warden::Test::Helpers
 
 Given("Exists an full registered company user with email {string} and password {string}") do |email, password|
-  user = FactoryBot.create(:company_user, :confirmed, email: email, password: password)
-  FactoryBot.create(:company, :registration_completed, company_user: user)
+  user = FactoryBot.create(:company_user, :confirmed, email: email, password: password, role: :owner)
+  FactoryBot.create(:company, :registration_completed, company_users: [user])
 end
 
 Given("I filled company registration step {int}") do |step|
   user = FactoryBot.create(:company_user)
   case step
   when 1
-    FactoryBot.create(:company, company_user: user, name: nil, country: nil, city: nil, state: nil)
+    FactoryBot.create(:company, company_users: [user], name: nil, country: nil, city: nil, state: nil)
   when 2
-    FactoryBot.create(:company, company_user: user, job_types: nil, job_markets: nil, registration_step: "job_info")
+    FactoryBot.create(:company, company_users: [user], job_types: nil, job_markets: nil, registration_step: "job_info")
   when 3
     FactoryBot.create(
-      :company, company_user: user, job_types: { live_events_staging_and_rental: "1" }, description: nil,
+      :company, company_users: [user], job_types: { live_events_staging_and_rental: "1" }, description: nil,
       established_in: nil, number_of_employees: nil, number_of_offices: nil, website: nil, area: nil, registration_step: "profile"
     )
   end

@@ -80,7 +80,7 @@ class CompanyPolicy < ApplicationPolicy
 
   def company_owner?
     return false unless company_user?
-    record.company_user&.id == user.id
+    record.owner&.id == user.id
   end
 
 end

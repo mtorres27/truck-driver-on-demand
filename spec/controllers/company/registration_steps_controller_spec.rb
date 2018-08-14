@@ -25,7 +25,7 @@ RSpec.describe Company::RegistrationStepsController, type: :controller do
 
   describe "PUT #update" do
     let(:company) { create(:company) }
-    let(:company_user) { company.company_user }
+    let!(:company_user) { create(:company_user, company: company, role: :owner) }
 
     before do
       sign_in company_user

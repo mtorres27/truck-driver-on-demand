@@ -1,11 +1,40 @@
-= simple_form_for :search, url: company_freelancers_path, method: :get, html: { id: "freelancer_search_form", class:"grid-h"} do |f|
+= simple_form_for :search, url: company_freelancers_path, method: :get, html: { id: "freelancer_search_form", class:"grid-h js--freelancer-search-form"} do |f|
   input type="hidden" value="#{params.dig(:search, :sort)}" id="sort" name="search[sort]"
-  input type="hidden" value="#{params.dig(:search, :distance)}" id="distance" name="search[distance]"
+  input type="hidden" value="#{params.dig(:search, :distance)}" id="distance" class="js--distance" name="search[distance]"
   .grid-cell.grid-cell--100
     = f.input :keywords, label: false, placeholder: "Search by job function, skills, etc.", input_html: { value: @keywords }
-  .grid-cell.grid-cell--33
-    = f.input :address, label: false, placeholder: "Enter City and State/Province", input_html: { value: @address }
-  .grid-cell.grid-cell--33
-    = f.input :country, collection: I18n.t('enumerize.country').map { |i, v| [i, v] }, label_method: :second, value_method: :first, label: false, prompt: "Select Country", selected: @country
-  .grid-cell.grid-cell--expand
+  .grid-cell.grid-cell--20
+    = f.input :country, collection: I18n.t('enumerize.country').map { |i, v| [i, v] }, label_method: :second, value_method: :first, label: false, prompt: "Country", selected: @country
+  .grid-cell.grid-cell--20
+    select#search_state_province.form-control.select(name='search[state_province]')
+      option(value='')
+        | State/Province
+      = CS.states(:us).each do |index, value|
+        - selected = (!@state_province.nil? and @state_province == index.to_s)
+        - if selected
+          option.search_us_option(value="#{index}" selected)
+            = value
+        - else
+          option.search_us_option(value="#{index}")
+            = value
+      = CS.states(:ca).each do |index, value|
+        - selected = (!@state_province.nil? and @state_province == index.to_s)
+        - if selected
+          option.search_ca_option(value="#{index}" selected)
+            = value
+        - else
+          option.search_ca_option(value="#{index}")
+            = value
+  .grid-cell.grid-cell--20
+    = f.input :address, label: false, placeholder: "City", input_html: { value: @address }
+  .grid-cell.grid-cell--20
+    select#search_distance.form-control.select(name='search[distance]')
+      option(value="")
+        | Radius
+      = render partial: "shared/distance_options", locals: {distance: @distance}
+  .grid-cell.grid-cell--20
+    label
+      = f.check_box :avatar_only, checked: @avatar_only
+      = " Profile picture"
+  .grid-cell.grid-cell--50
     = f.submit "Search", class: "btn btn--primary"
