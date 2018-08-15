@@ -27,40 +27,6 @@ $(document).on("turbolinks:load", function () {
         }
     });
 
-    // Display options for country
-    if ($("#job_country").val() == "us") {
-        $(".job_ca_option").hide();
-    }
-    else if ($("#job_country").val() == "ca") {
-        $(".job_us_option").hide();
-    }
-    else {
-        $("#job_state_province").attr("disabled", true);
-        $(".job_ca_option").hide();
-        $(".job_us_option").hide();
-    }
-
-    $("#job_country").on("change", function() {
-        if ($(this).val() == "us") {
-            $("#job_state_province").val("");
-            $("#job_state_province").removeAttr("disabled");
-            $(".job_ca_option").hide();
-            $(".job_us_option").show();
-        }
-        else if ($(this).val() == "ca") {
-            $("#job_state_province").val("");
-            $("#job_state_province").removeAttr("disabled");
-            $(".job_us_option").hide();
-            $(".job_ca_option").show();
-        }
-        else {
-            $("#job_state_province").val("");
-            $("#job_state_province").attr("disabled", true);
-            $(".job_ca_option").hide();
-            $(".job_us_option").hide();
-        }
-    });
-
     // Submit search on distance change
     $(".company-freelancer-matches__distance").on("change", function() {
         $("#company-freelancer-matches__form").submit()
