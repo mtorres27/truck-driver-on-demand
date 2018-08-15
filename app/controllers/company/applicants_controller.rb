@@ -14,21 +14,6 @@ class Company::ApplicantsController < Company::BaseController
     if @job.applicants.where({state: "accepted"}).length > 0
       @applicant = @job.applicants.where({state: "accepted"}).first
       @current_applicant_id = @applicant.id
-
-      @index = 0
-      @counter = 0
-      @applicants.each do |applicant|
-        if applicant.id == @applicant.id
-          @index = @counter
-        end
-        @counter+= 1
-      end
-
-      if @index > 0
-        @applicants = @applicants.to_a
-        @applicants.insert(0, @applicants.delete_at(@index))
-      end
-
     else
       if @job.applicants.length > 0
         @applicant = Applicant.where({job_id:@job.id}).includes(:messages).order("messages.created_at").where('messages_count > 0').last
