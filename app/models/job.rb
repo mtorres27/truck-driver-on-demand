@@ -130,6 +130,7 @@ class Job < ApplicationRecord
     :completed
   ], predicates: true, scope: true
 
+  validates :project_id, presence: true
   validates :budget, numericality: true, sane_price: true, if: :creation_completed?
   validates :duration, numericality: { only_integer: true, greater_than_or_equal_to: 1 }, if: -> { step_job_details? || creation_completed? }
   validates :pay_type, inclusion: { in: pay_type.values }, allow_blank: true, if: :creation_completed?
