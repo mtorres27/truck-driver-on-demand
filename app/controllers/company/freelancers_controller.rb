@@ -26,10 +26,16 @@ class Company::FreelancersController < Company::BaseController
       @freelancer_profiles = @freelancer_profiles.where(country: @country)
     end
 
-    if @address
-      @address_for_geocode = @address
-      @address_for_geocode += ", #{CS.states(@country.to_sym)[@state_province.to_sym]}" if @state_province.present?
-      @address_for_geocode += ", #{CS.countries[@country.upcase.to_sym]}" if @country.present?
+    if @address || @state_province
+      if @address
+        @address_for_geocode = @address
+        @address_for_geocode += ", #{CS.states(@country.to_sym)[@state_province.to_sym]}" if @state_province.present?
+        @address_for_geocode += ", #{CS.countries[@country.upcase.to_sym]}" if @country.present?
+      else
+        @address_for_geocode = "#{CS.states(@country.to_sym)[@state_province.to_sym]}" if @state_province.present?
+        @address_for_geocode += ", #{CS.countries[@country.upcase.to_sym]}" if @country.present?
+      end
+
       # check for cached version of address
       if Rails.cache.read(@address_for_geocode)
         @geocode = Rails.cache.read(@address_for_geocode)

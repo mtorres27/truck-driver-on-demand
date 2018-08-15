@@ -40,6 +40,7 @@ describe Company::SubscriptionController, type: :controller  do
         expect(assigns(:subscription)).to be_present
       end
     end
+
   end
 
   describe 'GET invoices' do
@@ -64,16 +65,15 @@ describe Company::SubscriptionController, type: :controller  do
     end
 
     context 'when invoice does not belong to company' do
-      let(:other_company) { create(:company, name: 'Other company') }
-      let!(:other_owner) { create(:company_user, company_id: other_company.id, role: :owner) }
+      let(:other_company) { create(:company) }
       let!(:subscription) { create(:subscription, company_id: other_company.id) }
 
       before(:each) do
         get :invoice, params: { subscription: subscription.stripe_subscription_id }
       end
 
-      it 'redirect somewhere else' do
-        expect(response).to redirect_to company_invoices_path
+      it 'be a 401 Unauthorized' do
+        expect(response.status).to eq(401)
       end
     end
   end

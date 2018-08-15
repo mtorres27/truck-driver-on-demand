@@ -4,7 +4,6 @@ describe Freelancer::JobPaymentsController, type: :controller  do
   login_freelancer
   let(:freelancer) { subject.current_user }
   let(:company) { create :company }
-  let!(:owner) { create(:company_user, company: company, role: :owner) }
   let(:job) { create(:job,
                      project: create(:project, company: company),
                      company: company,

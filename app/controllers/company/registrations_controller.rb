@@ -4,7 +4,6 @@ class Company::RegistrationsController < Devise::RegistrationsController
 
   def create
     super do |resource|
-      resource.add_valid_role :owner
       sign_in resource if resource.valid?
     end
   end

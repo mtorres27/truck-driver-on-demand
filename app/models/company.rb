@@ -93,8 +93,7 @@ class Company < ApplicationRecord
   has_many :favourites
   has_many :favourite_freelancers, through: :favourites, source: :freelancer
   has_many :company_installs, dependent: :destroy
-
-  has_many :company_users
+  has_one :company_user
 
   attr_accessor :accept_terms_of_service, :accept_privacy_policy, :accept_code_of_conduct,
                 :enforce_profile_edit, :user_type, :skip_step
@@ -129,16 +128,15 @@ class Company < ApplicationRecord
 
   accepts_nested_attributes_for :featured_projects, allow_destroy: true, reject_if: :reject_featured_projects
   accepts_nested_attributes_for :company_installs, allow_destroy: true, reject_if: :reject_company_installs
-  accepts_nested_attributes_for :company_users
+  accepts_nested_attributes_for :company_user
 
   scope :new_registrants, -> { where(disabled: true) }
 
   after_save :add_to_hubspot
   before_create :set_default_step
-  after_save :set_owner
   after_save :send_confirmation_email
 
-  delegate :email, to: :owner, allow_nil: true
+  delegate :email, to: :company_user, allow_nil: true
 
   def freelancers
     Freelancer.
@@ -176,7 +174,7 @@ class Company < ApplicationRecord
     formatted_address: "C",
     description: "C"
   }, associated_against: {
-    company_users: [:email, :first_name, :last_name]
+    company_user: [:email, :first_name, :last_name]
   }, using: {
     tsearch: { prefix: true }
   }
@@ -184,7 +182,7 @@ class Company < ApplicationRecord
   pg_search_scope :name_or_email_search, against: {
     name: "A",
   }, associated_against: {
-    company_users: [:email]
+    company_user: [:email]
   }, using: {
     tsearch: { prefix: true }
   }
@@ -273,20 +271,6 @@ class Company < ApplicationRecord
     self
   end
 
-  def owner
-    company_users.where(role: 'owner').first
-  end
-
-  def set_owner
-    company_users.first.add_valid_role :owner if owner.nil? && company_users.count == 1
-  end
-
-  def send_confirmation_email
-    return if owner.try(:confirmed?) || !registration_completed? || owner.try(:confirmation_sent_at).present?
-    owner.send_confirmation_instructions
-    owner.update_column(:confirmation_sent_at, Time.current)
-  end
-
   private
 
   def add_to_hubspot
@@ -295,8 +279,8 @@ class Company < ApplicationRecord
 
     Hubspot::Contact.createOrUpdate(email,
       company: name,
-      firstname: owner.first_name,
-      lastname: owner.last_name,
+      firstname: company_user.first_name,
+      lastname: company_user.last_name,
       lifecyclestage: "customer",
       im_an: "AV Company",
     )
@@ -312,6 +296,12 @@ class Company < ApplicationRecord
 
   def set_default_step
     self.registration_step ||= "personal"
+  end
+
+  def send_confirmation_email
+    return if company_user.confirmed? || !registration_completed? || company_user.confirmation_sent_at.present?
+    company_user.send_confirmation_instructions
+    company_user.update_column(:confirmation_sent_at, Time.current)
   end
 
   protected

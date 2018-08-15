@@ -12,7 +12,7 @@ module ControllerMacros
     before(:each) do
       @request.env["devise.mapping"] = Devise.mappings[:company]
       company = FactoryBot.create(:company)
-      company_user = FactoryBot.create(:company_user, company: company, role: :owner)
+      company_user = FactoryBot.create(:company_user, company: company)
       company_user.confirm
       sign_in company_user
     end

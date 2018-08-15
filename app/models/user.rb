@@ -47,9 +47,8 @@
 #
 
 class User < ApplicationRecord
-  include Roleable
-  
-  devise :invitable, :database_authenticatable, :registerable,
+
+  devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable, :confirmable
 
   validates :email, uniqueness: { case_sensitive: false }
