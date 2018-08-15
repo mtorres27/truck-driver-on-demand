@@ -45,24 +45,24 @@
       = f.input :country, prompt: "Select", input_html: { class: "js--country-select" }
     .grid-cell.grid-cell--50
       = f.label "State/Province"
-      select#job_state_province.form-control.select(name='job[state_province]')
+      select#job_state_province.js--state-province-select.form-control.select(name='job[state_province]')
         option(value='')
           | Select
         = CS.states(:us).each do |index, value|
           - selected = (!@job.state_province.nil? and @job.state_province == index.to_s)
           - if selected
-            option.job_us_option(value="#{index}" selected)
+            option.js--us_option(value="#{index}" selected)
               = value
           - else
-            option.job_us_option(value="#{index}")
+            option.js--us_option(value="#{index}")
               = value
         = CS.states(:ca).each do |index, value|
           - selected = (!@job.state_province.nil? and @job.state_province == index.to_s)
           - if selected
-            option.job_ca_option(value="#{index}" selected)
+            option.js--ca_option(value="#{index}" selected)
               = value
           - else
-            option.job_ca_option(value="#{index}")
+            option.js--ca_option(value="#{index}")
               = value
     .grid-cell.grid-cell--100
       = f.input :address, placeholder: "Enter City", label: "City"
