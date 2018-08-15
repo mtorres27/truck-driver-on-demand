@@ -2,7 +2,7 @@ require "rails_helper"
 
 RSpec.describe Company::JobBuildController, type: :controller do
   let(:company) { create(:company) }
-  let!(:company_user) { create(:company_user, company: company, role: :owner) }
+  let(:company_user) { company.company_user }
   let(:job) { create(:job, company: company, project: create(:project, company: company)) }
 
   describe "GET #show" do
@@ -42,7 +42,7 @@ RSpec.describe Company::JobBuildController, type: :controller do
 
   describe "PUT #update" do
     let(:company) { create(:company) }
-    let!(:company_user) { create(:company_user, company: company, role: :owner) }
+    let(:company_user) { company.company_user }
 
     before do
       sign_in company_user

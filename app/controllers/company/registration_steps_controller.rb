@@ -29,10 +29,7 @@ class Company::RegistrationStepsController < Company::BaseController
     current_company.attributes = params[:company] ? company_params : {}
     current_company.registration_step = next_step
 
-    if next_step == "wicked_finish" && current_company.profile_form_filled?
-      current_company.send_confirmation_email
-      sign_out current_user
-    end
+    sign_out current_user if next_step == "wicked_finish" && current_company.profile_form_filled?
 
     render_wizard current_company
   end

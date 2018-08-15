@@ -25,7 +25,6 @@
 .ruby-gemset
 .DS_Store
 /coverage
-erd.pdf
 
 # Ignore encrypted secrets files.
 config/secrets.yml
@@ -33,5 +32,3 @@ config/secrets.yml.key
 config/secrets.yml.enc
 
 config/database.yml
-
-.idea/
