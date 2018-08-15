@@ -7,6 +7,3 @@ h1.heading-h1
     | Subscriptions
   a.tab-bar__item href="#{company_invoices_path}" class=("tab-bar__item--active" if request.path == company_invoices_path or controller.action_name == "invoice")
     | Invoices
-  - if current_user.company_owner?
-    a.tab-bar__item href="#{company_company_users_path}" class=("tab-bar__item--active" if request.path == company_company_users_path or controller.action_name == "index")
-      | Manage Users

@@ -40,7 +40,7 @@
           td= company.country.try(:upcase)
           td= company.plan.present? ? company.plan.name : "Not subscribed"
           td= company.created_at.strftime('%b %-d, %Y')
-          td= company.owner&.confirmed?
+          td= company.company_user.confirmed?
           td= company.disabled
           td.text-right
             = link_to 'Edit', edit_admin_company_path(company)

@@ -47,6 +47,7 @@
 #
 
 class CompanyUser < User
+
   audited
 
   belongs_to :company

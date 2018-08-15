@@ -11,11 +11,15 @@ h1.heading-h1 Search for AV Freelancers
       span class="result-header__text--strong"
         - if params.dig(:search, :keywords).presence
           = params[:search][:keywords]
-      - if params.dig(:search, :address).presence and params[:search][:address] > ""
+      - if params.dig(:search, :address).presence && params[:search][:address] > "" || params.dig(:search, :state_province).presence
         = " near "
-        span class="result-header__text--strong"
-          = params[:search][:address]
-      - if params.dig(:search, :country).presence and params[:search][:country] > ""
+        - if params.dig(:search, :address).presence && params[:search][:address] > ""
+          span class="result-header__text--strong"
+            = params[:search][:address]
+        - if params.dig(:search, :state_province).presence
+          span class="result-header__text--strong"
+            = params[:search][:state_province]
+      - if params.dig(:search, :country).presence && params[:search][:country] > ""
         = " in "
         span class="result-header__text--strong"
           = I18n.t("enumerize.country.#{params[:search][:country]}")

@@ -95,7 +95,7 @@ class JobPolicy < ApplicationPolicy
   private
 
   def company_owner?
-    record.company.owner.role == user.role
+    record.company&.company_user&.id == user.id
   end
 
   def company_subscribed_to_plan?
