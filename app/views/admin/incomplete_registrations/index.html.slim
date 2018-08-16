@@ -28,7 +28,7 @@
             td= link_to registrant.freelancer.full_name, admin_freelancer_path(registrant.freelancer)
             td Freelancer
             td= mail_to registrant.freelancer.email
-            td= registrant.registration_step
+            td= "#{registrant.registration_step}(##{I18n.t("registration_step_numbers.#{registrant.registration_step}")})"
             td= registrant.state
             td= registrant.country.try(:upcase)
             td= registrant.created_at.strftime('%b %-d, %Y')
@@ -45,7 +45,7 @@
             td= link_to registrant.name, admin_company_path(registrant)
             td Company
             td= mail_to registrant.company_user.email
-            td= registrant.registration_step
+            td= "#{registrant.registration_step}(##{I18n.t("registration_step_numbers.#{registrant.registration_step}")})"
             td= registrant.state
             td= registrant.country.try(:upcase)
             td= registrant.created_at.strftime('%b %-d, %Y')
