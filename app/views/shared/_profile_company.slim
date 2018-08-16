@@ -15,10 +15,11 @@
             = company.name
         h3.heading-h3
           = company.company_user.full_name
-        h4.heading-h4
-          | Email:&nbsp
-          a href="mailto:#{company.company_user.email}" target="_blank"
-            = company.company_user.email
+        - if current_user.admin?
+          h4.heading-h4
+            | Email:&nbsp
+            a href="mailto:#{company.company_user.email}" target="_blank"
+              = company.company_user.email
         h4.heading-h4
           i
             = "Member since #{company.created_at.strftime('%B %d, %Y')}"
