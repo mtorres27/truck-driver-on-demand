@@ -131,6 +131,7 @@ class Company < ApplicationRecord
   accepts_nested_attributes_for :company_user
 
   scope :new_registrants, -> { where(disabled: true) }
+  scope :incomplete_registrations, -> { where.not(registration_step: "wicked_finish") }
 
   after_save :add_to_hubspot
   before_create :set_default_step

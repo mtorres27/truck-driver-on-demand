@@ -85,6 +85,7 @@ class FreelancerProfile < ApplicationRecord
   belongs_to :freelancer, required: false
 
   scope :new_registrants, -> { where(disabled: true) }
+  scope :incomplete_registrations, -> { where.not(registration_step: "wicked_finish") }
 
   after_save :check_if_should_do_geocode
   after_save :add_to_hubspot
