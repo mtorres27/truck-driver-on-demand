@@ -1,18 +1,19 @@
 .row
   .col-xs-12.col-sm-6
-    h2 New Registrants
+    h2 Incomplete Registrations
 .row
   .col-xs-12.col-sm-3
-    a.btn.btn--primary.btn-download-csv href=download_csv_admin_new_registrant_path
+    a.btn.btn--primary.btn-download-csv href=download_csv_admin_incomplete_registration_path
       | Export to CSV
 
 .table-responsive
-  table.table.table-striped#admin-new-registrants-table
+  table.table.table-striped#admin-incomplete-registrations-table
     thead
       tr
         th Name
         th User Type
         th Email
+        th Registration Step
         th State/Province
         th Country
         th Date Created
@@ -21,12 +22,13 @@
         th.text-right Actions
 
     tbody
-      - @new_registrants.each do |registrant|
+      - @registrants.each do |registrant|
         - if registrant.class == FreelancerProfile
           tr
             td= link_to registrant.freelancer.full_name, admin_freelancer_path(registrant.freelancer)
             td Freelancer
             td= mail_to registrant.freelancer.email
+            td= "#{registrant.registration_step}(##{I18n.t("registration_step_numbers.#{registrant.registration_step}")})"
             td= registrant.state
             td= registrant.country.try(:upcase)
             td= registrant.created_at.strftime('%b %-d, %Y')
@@ -43,6 +45,7 @@
             td= link_to registrant.name, admin_company_path(registrant)
             td Company
             td= mail_to registrant.company_user.email
+            td= "#{registrant.registration_step}(##{I18n.t("registration_step_numbers.#{registrant.registration_step}")})"
             td= registrant.state
             td= registrant.country.try(:upcase)
             td= registrant.created_at.strftime('%b %-d, %Y')

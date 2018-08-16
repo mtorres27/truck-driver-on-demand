@@ -193,6 +193,13 @@ Rails.application.routes.draw do
     resources :audits, only: [:index]
 
     resources :new_registrants, only: [:index]
+    resource :new_registrant, only: [:download_csv] do
+      get :download_csv
+    end
+    resources :incomplete_registrations, only: [:index]
+    resource :incomplete_registration, only: [:download_csv] do
+      get :download_csv
+    end
   end
 
   get "*any", via: :all, to: "errors#not_found"
