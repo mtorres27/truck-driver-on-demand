@@ -6,7 +6,7 @@
     .action-bar__actions
 
   .result-wrapper
-    = simple_form_for(:message, url: company_job_messages_path(@job)) do |f|
+    = simple_form_for(:message, url: company_job_messages_path(@job), html: { class: "js--message-form", data: { id: @job.id, type: "Company" } }) do |f|
       - if @job.freelancer.nil?
         - n = ""
       - else
