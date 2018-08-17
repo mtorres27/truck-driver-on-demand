@@ -3,12 +3,12 @@ module Disableable
 
   def disable!
     self.disabled = true
-    save
+    save(validate: false)
   end
 
   def enable!
     self.disabled = false
-    save
+    save(validate: false)
   end
 
   included do
