@@ -130,7 +130,7 @@ class Company < ApplicationRecord
   accepts_nested_attributes_for :company_installs, allow_destroy: true, reject_if: :reject_company_installs
   accepts_nested_attributes_for :company_user
 
-  scope :new_registrants, -> { where(disabled: true) }
+  scope :new_registrants, -> { where(disabled: true, registration_step: "wicked_finish") }
   scope :incomplete_registrations, -> { where.not(registration_step: "wicked_finish") }
 
   after_save :add_to_hubspot
