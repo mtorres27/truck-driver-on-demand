@@ -23,7 +23,14 @@ class Company::JobBuildController < Company::BaseController
     @job.attributes = job_params
     @job.creation_step = next_step
 
-    @job.state = "published" if @job.creation_completed? && (@job.save_draft == "false" || @job.save_draft.blank?)
+    if @job.creation_completed? && (@job.save_draft == "false" || @job.save_draft.blank?)
+      @job.state = "published"
+      get_matches
+      @freelancers.each do |freelancer|
+        JobNotificationMailer.notify_job_posting(freelancer, @job).deliver_later
+      end
+    end
+
     flash[:notice] = "You need to publish this job in order to make it visible to freelancers" if @job.creation_completed? && @job.save_draft == "true"
 
     render_wizard @job
@@ -37,6 +44,38 @@ class Company::JobBuildController < Company::BaseController
   end
 
   private
+
+  def get_matches
+    @jobs = @job.company.jobs
+    @distance = params[:search][:distance] if params[:search].present?
+    @freelancer_profiles = FreelancerProfile.where(disabled: false).where("job_types like ?", "%#{@job.job_type}%")
+    @freelancers = Freelancer.where(id: @freelancer_profiles.map(&:freelancer_id))
+    @address_for_geocode = @job.address
+    @address_for_geocode += ", #{CS.states(@job.country.to_sym)[@job.state_province.to_sym]}" if @job.state_province.present?
+    @address_for_geocode += ", #{CS.countries[@job.country.upcase.to_sym]}" if @job.country.present?
+
+    # check for cached version of address
+    if Rails.cache.read(@address_for_geocode)
+      @geocode = Rails.cache.read(@address_for_geocode)
+    else
+      # save cached version of address
+      @geocode = do_geocode(@address_for_geocode)
+      Rails.cache.write(@address_for_geocode, @geocode)
+    end
+    
+    if @geocode
+      point = OpenStruct.new(:lat => @geocode[:lat], :lng => @geocode[:lng])
+      if @distance.nil?
+        @distance = 160934
+      end
+      @freelancer_profiles = FreelancerProfile.where(freelancer_id: @freelancers.map(&:id))
+      @freelancer_profiles = @freelancer_profiles.nearby(@geocode[:lat], @geocode[:lng], @distance).with_distance(point).order("distance")
+      @freelancers = Freelancer.where(id: @freelancer_profiles.map(&:freelancer_id))
+    else
+      flash[:error] = "Unable to search geocode. Please try again."
+      @freelancers = Freelancer.none
+    end
+  end
 
   def finish_wizard_path
     company_job_path(@job)
