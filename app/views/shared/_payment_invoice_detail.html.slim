@@ -4,12 +4,14 @@
       .invoice__table-text Description
       .invoice__table-text.invoice__table-text--right Amount
     - if @payment.time_unit_amount.present?
+      - contract_rate = "#{number_with_precision(@job.contract_price, precision: 2)} #{@job.currency&.upcase}"
       .invoice__table-row
-        .invoice__table-text= "#{@payment.time_unit_amount} #{@job.variable_pay_type == 'daily' ? 'Days' : 'Hours'}"
+        .invoice__table-text= "#{@payment.time_unit_amount} #{@job.variable_pay_type == 'daily' ? "Days (#{contract_rate}/day)" : "Hours (#{contract_rate}/hour)"}"
         .invoice__table-text.invoice__table-text--right= number_with_precision(@payment.time_unit_amount * @job.contract_price, precision: 2).to_s + " " + @job.currency.upcase
     - if @payment.overtime_hours_amount.to_f > 0
+      - overtime_rate = "#{number_with_precision(@job.overtime_rate, precision: 2)} #{@job.currency&.upcase}"
       .invoice__table-row
-        .invoice__table-text= "#{@payment.overtime_hours_amount} Overtime Hours"
+        .invoice__table-text= "#{@payment.overtime_hours_amount} Overtime Hours (#{overtime_rate}/hour)"
         .invoice__table-text.invoice__table-text--right= number_with_precision(@payment.overtime_hours_amount * @job.overtime_rate, precision: 2).to_s + " " + @job.currency.upcase
     - if @job.pay_type == "fixed"
       .invoice__table-row
