@@ -47,9 +47,8 @@ class Company::JobBuildController < Company::BaseController
 
   def get_matches
     @jobs = @job.company.jobs
-    @distance = params[:search][:distance] if params[:search].present?
+    @distance = 160934
     @freelancer_profiles = FreelancerProfile.where(disabled: false).where("job_types like ?", "%#{@job.job_type}%")
-    @freelancers = Freelancer.where(id: @freelancer_profiles.map(&:freelancer_id))
     @address_for_geocode = @job.address
     @address_for_geocode += ", #{CS.states(@job.country.to_sym)[@job.state_province.to_sym]}" if @job.state_province.present?
     @address_for_geocode += ", #{CS.countries[@job.country.upcase.to_sym]}" if @job.country.present?
@@ -65,10 +64,6 @@ class Company::JobBuildController < Company::BaseController
     
     if @geocode
       point = OpenStruct.new(:lat => @geocode[:lat], :lng => @geocode[:lng])
-      if @distance.nil?
-        @distance = 160934
-      end
-      @freelancer_profiles = FreelancerProfile.where(freelancer_id: @freelancers.map(&:id))
       @freelancer_profiles = @freelancer_profiles.nearby(@geocode[:lat], @geocode[:lng], @distance).with_distance(point).order("distance")
       @freelancers = Freelancer.where(id: @freelancer_profiles.map(&:freelancer_id))
     else
