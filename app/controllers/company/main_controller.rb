@@ -4,13 +4,7 @@ class Company::MainController < Company::BaseController
 
   def index
     authorize current_company
-    # @freelancers = Freelancer.where(disabled: false).order(id: 'DESC').limit(4)
-    @freelancers ||= []
-    begin
-      @freelancers = Freelancer.find([335, 229, 320, 393])
-    rescue Exception
-
-    end
+    @freelancers = Freelancer.joins(:freelancer_profile).where(freelancer_profiles: { disabled: false }).where('freelancer_profiles.profile_score > 15').order(created_at: 'DESC').limit(4)
   end
 
   private
