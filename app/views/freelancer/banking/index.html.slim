@@ -38,7 +38,7 @@
         - if !@connector.account
           hr
           h2.h2-margin-top Banking Info
-          p To accept payouts from an AV Company to your personal or company bank account, you will need to add your banking details to your AV Junction account.
+          p To accept payments from an AV Company to your personal or company bank account, you will need to add your banking details to your AV Junction account.
           .btn-primary--disabled.width-100
             div Add Bank Account
         - elsif @connector.account.verification.fields_needed.include? 'external_account'
@@ -71,7 +71,7 @@
                 .bank-card__text-group.width-50
                   .bank-card__field-title BANK NAME
                   .bank-card__field-label #{ex_account.bank_name}
-          p Your bank account has been connected to your AV Junction successfully. You will now be able to accept payouts from an AV Company to your Bank Account.
+          p Your bank account has been connected to your AV Junction successfully. You will now be able to accept payments from an AV Company to your Bank Account.
           / a.btn-ghost--active.w-inline-block.width-100 href="#"
           /   div remove and add another card
           / p

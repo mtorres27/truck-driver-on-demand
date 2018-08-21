@@ -14,8 +14,14 @@
         - if @freelancer.freelancer_profile.available
           .tag.tag--success
             | Available
-          div.btn-icon-link style="cursor: pointer" onclick="togglePopOver()"
-            div class="zmdi zmdi-account-add"
+        - if @favourite
+          a.btn-icon-link href="#{params[:id]}?toggle_favourite=true"
+            div class="zmdi zmdi-favorite"
+        - else
+          a.btn-icon-link href="#{params[:id]}?toggle_favourite=true"
+            div class="zmdi zmdi-favorite-outline"
+        - if @freelancer.freelancer_profile.available
+          .btn.btn--primary onclick="togglePopOver()" Invite to quote
           .popover--blanket onclick="hidePopOver()"
           .popover
 
@@ -36,11 +42,5 @@
         - else
           .tag.tag--warning
             | Unavailable
-        - if @favourite
-            a.btn-icon-link href="#{params[:id]}?toggle_favourite=true"
-              div class="zmdi zmdi-favorite"
-        - else
-          a.btn-icon-link href="#{params[:id]}?toggle_favourite=true"
-            div class="zmdi zmdi-favorite-outline"
 
     = render "shared/profile-freelancer"

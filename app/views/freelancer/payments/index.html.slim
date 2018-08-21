@@ -29,9 +29,9 @@
                       | View Invoice
                   .payments__status
                     - if payment.paid_on.present?
-                      | You received a payout for this invoice on #{payment.paid_on}
+                      | You received a payment for this invoice on #{payment.paid_on}
                     - elsif payment.issued_on.present? && payment.issued_on >= 2.day.ago
-                      | You last requested a payout for this invoice on #{payment.issued_on}. Allow 2 business days for your client to release the funds to you. You may re-request a payout after 2 business days.
+                      | You last requested a payment for this invoice on #{payment.issued_on}. Allow 2 business days for your client to release the funds to you. You may re-request a payment after 2 business days.
 
 
     = paginate @jobs

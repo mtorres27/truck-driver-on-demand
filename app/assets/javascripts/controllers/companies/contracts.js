@@ -48,6 +48,21 @@ $(document).on("turbolinks:load", function () {
             $(".js--contract-price-label").html("<abbr title='required'>*</abbr>Daily rate");
         }
     });
+
+    if ($(".js--disable-overtime-rate-checkbox").is(":checked")) {
+        $(".js--contract-overtime-rate").val("");
+        $(".js--contract-overtime-rate").attr("disabled", true);
+    }
+
+    $(".js--disable-overtime-rate-checkbox").on("change", function() {
+        if ($(this).is(":checked")) {
+            $(".js--contract-overtime-rate").val("");
+            $(".js--contract-overtime-rate").attr("disabled", true);
+        }
+        else {
+            $(".js--contract-overtime-rate").removeAttr("disabled");
+        }
+    })
 });
 
 var toggleExpandedJobDetails = function() {

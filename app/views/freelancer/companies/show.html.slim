@@ -9,6 +9,13 @@
     .action-bar
       h2.heading-h2.heading-h2--action-bar
         = @company.name
+      .action-bar__actions
+        - if @favourite
+          a.btn-icon-link href="#{params[:id]}?toggle_favourite=true"
+            div class="zmdi zmdi-favorite"
+        - else
+          a.btn-icon-link href="#{params[:id]}?toggle_favourite=true"
+            div class="zmdi zmdi-favorite-outline"
 
     = render "shared/profile_company", company: @company
 

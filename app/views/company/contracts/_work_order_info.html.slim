@@ -63,6 +63,8 @@
       |  -
       = @job.ends_on ? l(@job.ends_on) : "Not Specified"
 
+  hr
+
   .grid-cell.grid-cell--50
     h3.heading-h3
       = t(:summary, scope: [:form, :labels, :job])
@@ -115,7 +117,7 @@
     - else
       p None Specified
 
-  .grid-cell.grid-cell--100
+  .grid-cell.grid-cell--50
     h3.heading-h3
       = t(:addendums, scope: [:form, :labels, :job])
     p
@@ -123,14 +125,15 @@
         = "Not Specified"
       - else
         - @job.attachments.each do |attachment|
-          a.job-details__attachment__file href=attachment.file_url target="_blank"
-            - if is_image(attachment.file_url)
-              - if attachment.file_url.include?("missing")
-                img src='/assets/file/missing.png'
+          a.job-details__attachment href=attachment.file_url target="_blank"
+            .job-details__attachment__file
+              - if is_image(attachment.file_url)
+                - if attachment.file_url.include?("missing")
+                  img src='/assets/file/missing.png'
+                - else
+                  img src=attachment.file_url
               - else
-                img src=attachment.file_url
-            - else
-              span class="fa fa-file-text"
-            p
-              a href=attachment.file_url target="_blank"
-                = attachment.title
+                span class="fa fa-file-text"
+              p
+                a href=attachment.file_url target="_blank"
+                  = attachment.title
