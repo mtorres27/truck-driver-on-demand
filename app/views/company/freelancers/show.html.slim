@@ -12,10 +12,9 @@
         = @freelancer.first_name_and_initial
       .action-bar__actions
         - if @freelancer.freelancer_profile.available
-          .tag.tag--success
+          .tag.tag--success.gutter-right
             | Available
-          div.btn-icon-link style="cursor: pointer" onclick="togglePopOver()"
-            div class="zmdi zmdi-account-add"
+          .btn.btn--primary onclick="togglePopOver()" Invite to quote
           .popover--blanket onclick="hidePopOver()"
           .popover
 
@@ -31,14 +30,12 @@
 
             span.popover-response--error
             span.popover-response--success
-
-
         - else
           .tag.tag--warning
             | Unavailable
         - if @favourite
-            a.btn-icon-link href="#{params[:id]}?toggle_favourite=true"
-              div class="zmdi zmdi-favorite"
+          a.btn-icon-link href="#{params[:id]}?toggle_favourite=true"
+            div class="zmdi zmdi-favorite"
         - else
           a.btn-icon-link href="#{params[:id]}?toggle_favourite=true"
             div class="zmdi zmdi-favorite-outline"

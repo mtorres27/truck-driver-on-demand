@@ -6,6 +6,11 @@ $(document).on("turbolinks:load", function () {
     $(".js--overtime_hours_amount").on("change", function() {
         calculateTotalAmount();
     });
+
+    $("#close-modal").on('click', function(e) {
+        e.preventDefault();
+        $(".popup").hide();
+    });
 });
 
 function calculateTotalAmount() {

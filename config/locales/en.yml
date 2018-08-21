@@ -302,6 +302,7 @@ en:
   summary_description: "This text describes why the summary is necessary."
   scope_of_work_description: "This describes why the scope of work is necessary."
   invitation_to_quote_email_subject: "You've been invited to quote on a job!"
+  job_posted_in_the_area_email_subject: "A new job has been posted near you!"
   registration_step_numbers:
     personal: "1"
     job_info: "2"
