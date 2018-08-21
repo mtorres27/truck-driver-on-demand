@@ -32,6 +32,10 @@ class Company::JobsController < Company::BaseController
     if @job.save
       flash[:notice] = "This job has been published."
       redirect_to company_job_path(@job)
+      get_matches
+      @freelancers.each do |freelancer|
+        JobNotificationMailer.notify_job_posting(freelancer, @job).deliver_later
+      end
     else
       render :edit
     end
@@ -67,6 +71,19 @@ class Company::JobsController < Company::BaseController
   end
 
   def freelancer_matches
+    get_matches
+  end
+
+  def mark_as_finished
+    @job.update(state: :completed)
+    FreelancerMailer.notice_job_complete_freelancer(current_company, @job.freelancer, @job).deliver_later
+    CompanyMailer.notice_job_complete_company(current_company, @job.freelancer, @job).deliver_later
+    redirect_to company_job_review_path(@job)
+  end
+
+  private
+
+  def get_matches
     @jobs = @job.company.jobs
     @distance = params[:search][:distance] if params[:search].present?
     @freelancer_profiles = FreelancerProfile.where(disabled: false).where("job_types like ?", "%#{@job.job_type}%")
@@ -83,7 +100,7 @@ class Company::JobsController < Company::BaseController
       @geocode = do_geocode(@address_for_geocode)
       Rails.cache.write(@address_for_geocode, @geocode)
     end
-
+    
     if @geocode
       point = OpenStruct.new(:lat => @geocode[:lat], :lng => @geocode[:lng])
       if @distance.nil?
@@ -97,16 +114,6 @@ class Company::JobsController < Company::BaseController
       @freelancers = Freelancer.none
     end
   end
-
-  def mark_as_finished
-    @job.update(state: :completed)
-    FreelancerMailer.notice_job_complete_freelancer(current_company, @job.freelancer, @job).deliver_later
-    CompanyMailer.notice_job_complete_company(current_company, @job.freelancer, @job).deliver_later
-    redirect_to company_job_review_path(@job)
-  end
-
-
-  private
 
   def set_job
     @job = current_company.jobs.find(params[:id])
