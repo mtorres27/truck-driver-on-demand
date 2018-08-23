@@ -1,6 +1,10 @@
 .row
   .col-xs-12.col-sm-6
     h2 Incomplete Registrations
+  .col-xs-12.col-sm-6
+    .search-form
+      = simple_form_for :search, url: admin_incomplete_registrations_path, method: :get do |f|
+        = f.input :keywords, label: false, placeholder: "Search", input_html: {value: @keywords}
 .row
   .col-xs-12.col-sm-3
     a.btn.btn--primary.btn-download-csv href=download_csv_admin_incomplete_registration_path

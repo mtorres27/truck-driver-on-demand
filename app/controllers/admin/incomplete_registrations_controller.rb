@@ -4,6 +4,11 @@ class Admin::IncompleteRegistrationsController < Admin::BaseController
     authorize current_user
     freelancers = FreelancerProfile.incomplete_registrations
     companies = Company.incomplete_registrations
+    @keywords = params.dig(:search, :keywords).presence
+    if @keywords.present?
+      freelancers = freelancers.name_or_email_search(@keywords)
+      companies = companies.name_or_email_search(@keywords)
+    end
     @registrants = (freelancers + companies).sort_by { |registrant| registrant.created_at }.reverse
   end
 

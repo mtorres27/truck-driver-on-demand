@@ -150,6 +150,10 @@ class FreelancerProfile < ApplicationRecord
       tsearch: { prefix: true, any_word: true }
   }
 
+  pg_search_scope :name_or_email_search, against: {},
+                  associated_against: { freelancer: [:email, :first_name, :last_name]
+                  }, using: { tsearch: { prefix: true }}
+
   def check_if_should_do_geocode
     if saved_changes.include?("address") or saved_changes.include?("city") or (!address.nil? and lat.nil?) or (!city.nil? and lat.nil?)
       do_geocode

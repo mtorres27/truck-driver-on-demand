@@ -4,6 +4,11 @@ class Admin::NewRegistrantsController < Admin::BaseController
     authorize current_user
     freelancers = FreelancerProfile.new_registrants
     companies = Company.new_registrants
+    @keywords = params.dig(:search, :keywords).presence
+    if @keywords.present?
+      freelancers = freelancers.name_or_email_search(@keywords)
+      companies = companies.name_or_email_search(@keywords)
+    end
     @new_registrants = (freelancers + companies).sort_by { |registrant| registrant.created_at }.reverse
   end
 
