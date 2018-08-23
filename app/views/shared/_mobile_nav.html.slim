@@ -53,7 +53,7 @@
     - elsif request.path.index('admin') == 1
       - if current_user&.admin?
         a.mobile-nav__menu__item href=admin_root_path data-turbolinks="false"
-          Dashboard
+          | Dashboard
         a.mobile-nav__menu__item href=admin_companies_path data-turbolinks="false"
           | Companies
         a.mobile-nav__menu__item href=admin_freelancers_path data-turbolinks="false"
