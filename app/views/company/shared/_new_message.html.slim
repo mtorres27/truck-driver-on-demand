@@ -3,44 +3,10 @@
     .attachment.common__text-field-group
       label.common__field-label for="name-4"
         = "Send a message to #{n}"
-      = f.text_area :body, as: :string, placeholder: "Enter your message", label: false, maxlength: 5000, class: "w-input"
-      = f.input :attachment, as: :file, label: false
+      = f.text_area :body, as: :string, placeholder: "Enter your message", label: false, maxlength: 5000, class: "w-input js--message-input"
+      = f.input :attachment, as: :file, label: false, input_html: { class: "js--message-attachment" }
 
-    = f.submit "Post Message", class: "btn btn--primary", id: "new-message__submit", onclick: "return validateMessage();"
+    #new-message__submit.btn.btn--primary onClick= "validateMessage();"
+      | Send
 
     div#new-message__validation-errors
-
-
-javascript:
-  $("#new-message__validation-errors").hide();
-
-  var validateMessage = function() {
-    $("#new-message__validation-errors").html("");
-    $("#new-message__validation-errors").hide();
-    var safe = true;
-
-    if ($("#message_body").val() == "") {
-      safe = false;
-    }
-
-    if (!safe) {
-      $("#new-message__validation-errors").html("A message is required.");
-      $("#new-message__validation-errors").show();
-    }
-
-    console.log(safe);
-
-    return safe;
-
-  }
-
-
-  var triggerFileUpload = function () {
-    $("#message_attachment").click();
-  };
-
-
-  $("#message_attachment").change(function() {
-    $(".new-message__attachment-button").addClass("new-message__attachment-button--active");
-  });
-
