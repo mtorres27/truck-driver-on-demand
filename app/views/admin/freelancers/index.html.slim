@@ -37,7 +37,7 @@
           td= mail_to freelancer.email
           td= freelancer.freelancer_profile.state
           td= freelancer.freelancer_profile.country.try(:upcase)
-          td= freelancer.created_at.strftime('%b %-d, %Y')
+          td= freelancer.freelancer_profile.created_at.strftime('%b %-d, %Y')
           td= !freelancer.confirmed_at.nil?
           td= freelancer.freelancer_profile.disabled
           td.text-right
