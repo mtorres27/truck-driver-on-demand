@@ -234,6 +234,7 @@ class Freelancer < User
     return if FriendInvite.by_email(email).count.zero? || freelancer_profile.nil?
     self.freelancer_profile.avj_credit = 10
     save!
+    Notification.create(title: "Credit earned", body: "You earned credit!", authorable: self, receivable: self, url: Rails.application.routes.url_helpers.freelancer_friend_invites_url)
     FreelancerMailer.notice_credit_earned(self, 10).deliver_later
   end
 
@@ -251,7 +252,10 @@ class Freelancer < User
       freelancer.freelancer_profile.avj_credit = freelancer.freelancer_profile.avj_credit.to_f + credit_earned
       freelancer.freelancer_profile.save!
       invite.update_attribute(:accepted, true)
-      FreelancerMailer.notice_credit_earned(freelancer, credit_earned).deliver_later if credit_earned > 0
+      if credit_earned > 0
+        Notification.create(title: "Credit earned", body: "You earned credit!", authorable: freelancer, receivable: freelancer, url: Rails.application.routes.url_helpers.freelancer_friend_invites_url)
+        FreelancerMailer.notice_credit_earned(freelancer, credit_earned).deliver_later
+      end
     end
   end
 

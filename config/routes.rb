@@ -19,6 +19,8 @@ Rails.application.routes.draw do
   get "confirm_email", to: "main#confirm_email"
   get "job_country_currency", to: "main#job_countries", as: "job_country_currency"
 
+  resources :notifications, only: [:show]
+
   namespace :freelancer do
 
     root "main#index"
@@ -77,8 +79,6 @@ Rails.application.routes.draw do
     get "jobs/:id/work_order/accept", to: "contracts#accept"
     get "job_payment/request", to: "job_payments#request_payout", as: "payout_request"
 
-    resources :notifications
-
     resource :friend_invites, only: [:show, :update]
 
   end
@@ -116,7 +116,6 @@ Rails.application.routes.draw do
       get 'plans/invoices', to: 'subscription#invoices', as: 'invoices'
       get 'plan/invoice', to: 'subscription#invoice', as: 'invoice'
 
-    resources :notifications
     get 'job_country_currency', to: 'jobs#job_countries', as: 'job_country_currency'
     get '/:id/avj-invoice', to: 'jobs#avj_invoice', as: 'job_avj_invoice'
     get '/:id/print-avj-invoice', to: 'jobs#print_avj_invoice', as: 'job_avj_invoice_print'

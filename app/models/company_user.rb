@@ -62,6 +62,7 @@ class CompanyUser < User
   validates_acceptance_of :accept_code_of_conduct
 
   delegate :registration_completed?, to: :company
+  delegate :notifications, to: :company
 
   protected
 

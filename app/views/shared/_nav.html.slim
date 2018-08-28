@@ -31,13 +31,24 @@ nav#top-nav.navbar
             = link_to "My Freelancers", hired_company_freelancers_path
           li( class=("active" if request.path.include?(company_payments_path)) )
             = link_to "Payments", company_payments_path
-          - if 1 == 2
-            li( class=("active" if request.path.include?(company_notifications_path)) )
-              a href=company_notifications_path
-                | Notifications
-                - if current_user.messages.where(unread: true).count > 0
-                  span class="new-message__bell fa fa-bell"
-
+          li.dropdown.notification-container
+            a href="#" class="dropdown-toggle btn-icon-link" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"
+              - if current_user.notifications.unread.count > 0
+                span.zmdi.zmdi-notifications-active.js--notifications-icon
+              - else
+                span.zmdi.zmdi-notifications-none.js--notifications-icon
+              .notification-badge.js--notifications-count
+                = current_user.notifications.unread.count if current_user.notifications.unread.count > 0
+            .dropdown-menu
+              .notifications
+                .list-notification.js--notifications data-id="#{current_user.id}"
+                  - if current_user.notifications.to_show.count > 0
+                    - (current_user.notifications.unread + current_user.notifications.to_show).uniq.each do |notification|
+                      = render "shared/notification", notification: notification
+                  - else
+                    .list-item.notifications.w-inline-block href="#"
+                      .list__title Nothing to see here
+                      .list__desc You don't have any new notifications for the moment
           li.dropdown
             a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"
               .dropdown-avatar
@@ -84,6 +95,23 @@ nav#top-nav.navbar
           li
             a.mobile-nav__menu__item href=freelancer_profile_path data-turbolinks="false"
               | my profile
-
+          li.dropdown.notification-container
+            a.mobile-nav__menu__item href="#" class="dropdown-toggle btn-icon-link" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"
+              - if current_user.notifications.unread.count > 0
+                span.zmdi.zmdi-notifications-active.js--notifications-icon
+              - else
+                span.zmdi.zmdi-notifications-none.js--notifications-icon
+              .notification-badge.js--notifications-count
+                = current_user.notifications.unread.count if current_user.notifications.unread.count > 0
+            .dropdown-menu
+              .notifications
+                .list-notification.js--notifications data-id="#{current_user.id}"
+                  - if current_user.notifications.to_show.count > 0
+                    - (current_user.notifications.unread + current_user.notifications.to_show).uniq.each do |notification|
+                      = render "shared/notification", notification: notification
+                  - else
+                    .list-item.w-inline-block href="#"
+                      .list__title Nothing to see here
+                      .list__desc You don't have any new notifications for the moment
           li
             = link_to "Logout", destroy_user_session_path, method: :delete, class: "mobile-nav__menu__item"

@@ -119,6 +119,7 @@ class Company::FreelancersController < Company::BaseController
           result = 3
         else
           # freelancer is clear to be invited
+          Notification.create(title: @job.title, body: "You've been invited to apply", authorable: @job.company, receivable: @freelancer, url: freelancer_job_url(@job))
           JobInviteMailer.invite_to_quote(@freelancer, @job).deliver_later
           @invite = JobInvite.new
           @invite.freelancer_id = @freelancer.id

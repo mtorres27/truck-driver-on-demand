@@ -88,7 +88,7 @@ function getGeolocation() {
     if (geolocation) {
         geolocation.getCurrentPosition(success, error, positionOptions);
     }
-};
+}
 
 var validateMessage = function() {
     $("#new-message__validation-errors").html("");

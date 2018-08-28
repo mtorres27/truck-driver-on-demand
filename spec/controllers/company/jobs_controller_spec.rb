@@ -62,5 +62,9 @@ describe Company::JobsController, type: :controller  do
     it 'sends email to freelancer and company' do
       expect { post :mark_as_finished, params: parameters }.to change { ActionMailer::Base.deliveries.count }.by(2)
     end
+
+    it 'sends notification to company and freelancer' do
+      expect { post :mark_as_finished, params: parameters }.to change { Notification.count }.by(1)
+    end
   end
 end

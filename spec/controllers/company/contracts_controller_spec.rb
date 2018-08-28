@@ -22,6 +22,10 @@ describe Company::ContractsController, type: :controller  do
       expect { put :update, params: { job_id: job.id, job: parameters } }.to change { Message.count }.by(1)
     end
 
+    it "sends a notification to the freelancer" do
+      expect { put :update, params: { job_id: job.id, job: parameters } }.to change { Notification.count }.by(1)
+    end
+
     it "sends an email" do
       expect { put :update, params: { job_id: job.id, job: parameters } }.to change { ActionMailer::Base.deliveries.count }.by(1)
     end

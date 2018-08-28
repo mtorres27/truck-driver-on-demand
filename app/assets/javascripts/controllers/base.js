@@ -1,15 +1,15 @@
 $(window).scroll(function() {
-  var scroll = $(window).scrollTop()
+  var scroll = $(window).scrollTop();
 
   if (scroll > 0) {
-    $("#top-nav").addClass("navbar-floating")
+    $("#top-nav").addClass("navbar-floating");
 
   } else {
-    $("#top-nav").removeClass("navbar-floating")
+    $("#top-nav").removeClass("navbar-floating");
   }
 });
 
 var hide_remove_association = function (obj, hard) {
-  $(obj).parent().parent().fadeOut()
-  if (hard) $(obj).parent().parent().remove()
-}
+  $(obj).parent().parent().fadeOut();
+  if (hard) $(obj).parent().parent().remove();
+};

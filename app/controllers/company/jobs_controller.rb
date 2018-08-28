@@ -34,6 +34,7 @@ class Company::JobsController < Company::BaseController
       redirect_to company_job_path(@job)
       get_matches
       @freelancers.each do |freelancer|
+        Notification.create(title: @job.title, body: "You may apply for this job", authorable: @job.company, receivable: freelancer, url: freelancer_job_url(@job))
         JobNotificationMailer.notify_job_posting(freelancer, @job).deliver_later
       end
     else
@@ -76,6 +77,7 @@ class Company::JobsController < Company::BaseController
 
   def mark_as_finished
     @job.update(state: :completed)
+    Notification.create(title: @job.title, body: "This job has been completed", authorable: @job.company, receivable: @job.freelancer, url: freelancer_job_review_url(@job))
     FreelancerMailer.notice_job_complete_freelancer(current_company, @job.freelancer, @job).deliver_later
     CompanyMailer.notice_job_complete_company(current_company, @job.freelancer, @job).deliver_later
     redirect_to company_job_review_path(@job)
