@@ -105,8 +105,13 @@ var validateMessage = function() {
     }
 
     if (safe) {
-        $(".js--message-form").submit();
-        $(".js--message-form")[0].reset();
+        if ($(".js--message-form").length > 0) {
+            $(".js--message-form").submit();
+            $(".js--message-form")[0].reset();
+        }
+        else if ($(".js--applicant-message-form").length > 0) {
+            $(".js--applicant-message-form").submit();
+        }
     }
 };
 
