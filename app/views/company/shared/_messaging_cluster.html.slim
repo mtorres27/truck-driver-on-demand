@@ -1,5 +1,5 @@
 - if @applicant
-  = simple_form_for(:message, url: company_job_applicant_quotes_path(@job, @applicant)) do |f|
+  = simple_form_for(:message, url: company_job_applicant_quotes_path(@job, @applicant), html: { class: "js--applicant-message-form" }) do |f|
     .applicant-messages__messages
       - if @job.company.plan_id.nil?
         .new-message--wrapper
