@@ -45,7 +45,7 @@ class Admin::FreelancersController < Admin::BaseController
 
   def download_csv
     authorize current_user
-    @freelancers = Freelancer.order('created_at DESC')
+    @freelancer_profiles = FreelancerProfile.order('created_at DESC')
     create_csv
     send_data @csv_file, :type => 'text/csv; charset=iso-8859-1; header=present', :disposition => 'attachment; filename=freelancers.csv'
   end
@@ -58,9 +58,9 @@ class Admin::FreelancersController < Admin::BaseController
 
   def create_csv
     @csv_file = CSV.generate({}) do |csv|
-      csv << @freelancers.first.attributes.keys unless @freelancers.first.nil?
-      @freelancers.each do |f|
-        csv << f.attributes.values
+      csv << @freelancer_profiles.first.freelancer.attributes.keys + @freelancer_profiles.first.attributes.keys unless @freelancer_profiles.first.nil?
+      @freelancer_profiles.each do |f|
+        csv << f.freelancer.attributes.values + f.attributes.values
       end
     end
   end

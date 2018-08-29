@@ -53,4 +53,14 @@ class Message < ApplicationRecord
       errors.add(:base, "Message must have coordinates when checkin is marked")
     end
   end
+
+  def send_email_notifications
+    if authorable.is_a?(Company)
+      CompanyMailer.notice_message_sent(authorable, receivable.freelancer, self).deliver_later
+      FreelancerMailer.notice_message_received(authorable, receivable.freelancer, receivable, self).deliver_later
+    elsif message.authorable.is_a?(Freelancer)
+      FreelancerMailer.notice_message_sent(receivable.company, authorable, self).deliver_later
+      CompanyMailer.notice_message_received(receivable.company, authorable, receivable, self).deliver_later
+    end
+  end
 end

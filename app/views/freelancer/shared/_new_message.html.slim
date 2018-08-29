@@ -3,52 +3,15 @@
     .attachment.common__text-field-group
       label.common__field-label for="name-4"
         = "Send a message to #{n}"
-      = f.text_area :body, as: :string, placeholder: "Enter your message", label: false, maxlength: 5000, class: "w-input"
-      = f.input :checkin, as: :boolean, checked_value: true, unchecked_value: false, label: "Check in to my location (Turn on GPS for more accurate results)"
-      = f.hidden_field :lat
-      = f.hidden_field :lng
-      = f.input :attachment, as: :file, label: false
+      = f.text_area :body, as: :string, placeholder: "Enter your message", label: false, maxlength: 5000, class: "w-input js--message-input"
+      = f.input :checkin, as: :boolean, checked_value: true, unchecked_value: false, label: "Check in to my location (Turn on GPS for more accurate results)", input_html: { class: "js--message-checkin" }
+      = f.hidden_field :lat, class: "js--message-lat"
+      = f.hidden_field :lng, class: "js--message-lng"
+      = f.input :attachment, as: :file, label: false, input_html: { class: "js--message-attachment" }
 
     .common__form-action-cont.w-clearfix
       div#new-message__loading-notice
       div#new-message__validation-errors
-      a#message-submit.btn.btn--primary.w-inline-block.width-100 onclick="submitForm();"
+      a#message-submit.btn.btn--primary.w-inline-block.width-100 onclick="validateMessage();"
         div#new-message__submit
           | Send
-
-
-javascript:
-  var triggerFileUpload = function () {
-    $("#message_attachment").click();
-  };
-
-  var submitForm = function() {
-    if ($("#message-submit").attr('disabled') === undefined) {
-      var validated = true;
-      $("#new-message__validation-errors").html("");
-
-      if ($("#message_body").val() == "") {
-        validated = false;
-      }
-
-      if (validated) {
-        $(".simple_form").submit();
-      } else {
-        $("#new-message__validation-errors").html("The message field cannot be empty.")
-      }
-    }
-  };
-
-  $("#message_attachment").change(function() {
-    $("#attachment-indicator").addClass("new-message__checkin--active");
-  });
-
-  var triggerCheckin = function() {
-    if ($(".new-message__checkin").hasClass("new-message__checkin--active")) {
-      $(".new-message__checkin").removeClass("new-message__checkin--active");
-      $("#message_checkin").val("false");
-    } else {
-      $(".new-message__checkin").addClass("new-message__checkin--active");
-      $("#message_checkin").val("true");
-    }
-  };
