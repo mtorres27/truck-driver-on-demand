@@ -16,7 +16,7 @@ module StripeTool
       company.exp_month                 = customer.sources.data[0].exp_month
       company.exp_year                  = customer.sources.data[0].exp_year
     end
-    company.save
+    company.save(validate: false)
     # subscription
     Subscription.where(company_id: company.id).update_all(is_active: false)
     company_subscription = Subscription.new
