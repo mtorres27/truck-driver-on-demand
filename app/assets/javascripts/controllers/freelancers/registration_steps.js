@@ -1,22 +1,21 @@
 $(document).on("turbolinks:load", function () {
 
     if ($("#freelancer_profile_job_types_live_events_staging_and_rental").is(":checked")) {
+        console.log(1);
         $(".freelancer_please_select_job_type_message").hide();
     }
     else {
-        $(".freelancer_profile_live_events_staging_and_rental_checkboxes").hide();
+        console.log(2);
+        $(".freelancer_live_events_staging_and_rental_checkboxes").hide();
     }
 
     if ($("#freelancer_profile_job_types_system_integration").is(":checked")) {
+        console.log(3);
         $(".freelancer_please_select_job_type_message").hide();
     }
     else {
+        console.log(4);
         $(".freelancer_profile_system_integration_checkboxes").hide();
-    }
-
-    if (!$("#freelancer_profile_job_types_live_events_staging_and_rental").is(":checked") && !$("#freelancer_profile_job_types_system_integration").is(":checked")) {
-        $(".freelancer_system_integration_checkboxes").hide();
-        $(".freelancer_live_events_staging_and_rental_checkboxes").hide();
     }
 
     $("#freelancer_profile_job_types_live_events_staging_and_rental").on("change", function() {
