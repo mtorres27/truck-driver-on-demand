@@ -241,6 +241,11 @@ class Job < ApplicationRecord
     I18n.t("enumerize.system_integration_job_markets").merge(I18n.t("enumerize.live_events_staging_and_rental_job_markets"))
   end
 
+  def self.count
+    self.where(project_id: nil).destroy_all
+    super
+  end
+
   private
 
   def scope_or_file
