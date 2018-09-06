@@ -303,7 +303,7 @@ CREATE TABLE companies (
     manufacturer_tags citext,
     plan_id bigint,
     is_trial_applicable boolean DEFAULT true,
-    waived_jobs integer DEFAULT 1,
+    waived_jobs integer DEFAULT 0,
     registration_step character varying
 );
 
@@ -2470,6 +2470,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20180809145354'),
 ('20180809204356'),
 ('20180810215943'),
-('20180814215826');
+('20180814215826'),
+('20180906170002');
 
 
