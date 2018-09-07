@@ -9,6 +9,26 @@
     .mobile-nav__header__title
       = image_tag "avjunction-logo_header.svg"
 
+    - if current_user.present?
+      .mobile-nav__header__right
+        a href="#" class="dropdown-toggle btn-icon-link" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"
+          - if current_user.notifications.unread.count > 0
+            span.zmdi.zmdi-notifications-active.js--notifications-icon
+          - else
+            span.zmdi.zmdi-notifications-none.js--notifications-icon
+          .notification-badge.js--notifications-count
+            = current_user.notifications.unread.count if current_user.notifications.unread.count > 0
+        .dropdown-menu.mobile-dropdown
+          .notifications
+            .list-notification.js--notifications data-id="#{current_user.id}"
+              - if current_user.notifications.to_show.count > 0
+                - (current_user.notifications.unread + current_user.notifications.to_show).uniq.each do |notification|
+                  = render "shared/notification", notification: notification
+              - else
+                .list-item.notifications.w-inline-block href="#"
+                  .list__title Nothing to see here
+                  .list__desc You don't have any new notifications for the moment
+
   .mobile-nav__blocker
     |
   .mobile-nav__menu
@@ -27,6 +47,20 @@
           | av companies
         a.mobile-nav__menu__item href=freelancer_payments_path
           | payments
+        a.mobile-nav__menu__item href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"
+          | Notifications
+          span.js--notification-count= current_user.notifications.unread.count
+          span.caret
+        .dropdown-menu
+          .notifications
+            .list-notification.js--notifications data-id="#{current_user.id}"
+              - if current_user.notifications.to_show.count > 0
+                - (current_user.notifications.unread + current_user.notifications.to_show).uniq.each do |notification|
+                  = render "shared/notification", notification: notification
+              - else
+                .list-item.w-inline-block href="#"
+                  .list__title Nothing to see here
+                  .list__desc You don't have any new notifications for the moment
         a.mobile-nav__menu__item href=freelancer_profile_path data-turbolinks="false"
           = image_tag current_user.freelancer_profile.avatar_url
           | my profile

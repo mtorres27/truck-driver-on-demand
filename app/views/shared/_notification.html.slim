@@ -1,0 +1,4 @@
+a.list-item.notifications.w-inline-block href="#{notification_path(notification)}" class="#{"notification-unread" if notification.read_at.blank?}"
+  .list__date= "#{notification.authorable.first_name_and_initial}, #{time_ago_in_words(notification.created_at)} ago."
+  .list__title= notification.title
+  .list__desc= notification.body

@@ -56,6 +56,48 @@
     &.company__image
       background-color: #00AEDB
 
+.notifications
+  padding: 0 16px 0 16px
+  background-color: #fff
+  right: 0px
+  top: 73px
+  width: 320px
+  @media (max-width: $breakpoint-tablet)
+    right: -50px
+
+.notification-unread
+  background-color: $gray-lightest
+
+.notification-container
+  margin-right: 16px
+
+.notification-badge
+  display: flex
+  flex-direction: row
+  justify-content: center
+  align-items: center
+  padding: 0 8px 0 8px
+  height: 24px
+  min-width: 24px
+  position: absolute
+  top: 5px
+  left: 30px
+  color: white
+  background-color: $brand-primary
+  border-radius: 24px
+  font-size: 14px
+  @media (max-width: $breakpoint-tablet)
+    top: 10px
+    left: 35px
+    width: 15px
+    height: 15px
+    min-width: 15px
+
+.list-notification
+  overflow: scroll
+  height: 80vh
+  margin-right: -16px
+  margin-left: -16px
 
 .mobile-nav
   width: 100%
@@ -112,6 +154,15 @@
         width: 150px
         height: auto
 
+    &__right
+      position: absolute
+      z-index: 2
+      right: 0
+      top: 0
+      padding: 15px
+      float: right
+      //margin-right: -15px
+
   &__menu
     position: absolute
     width: calc(100% - 50px)
@@ -145,5 +196,9 @@
       -webkit-transition: 0.3s ease-in-out
       -moz-transition: 0.3s ease-in-out
       -o-transition: 0.3s ease-in-out
+
+.mobile-dropdown
+  left: auto
+  right: 15px
 
     

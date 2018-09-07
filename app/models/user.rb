@@ -51,6 +51,8 @@ class User < ApplicationRecord
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable, :confirmable
 
+  has_many :notifications, as: :receivable, dependent: :destroy
+
   validates :email, uniqueness: { case_sensitive: false }
   validates :first_name, :last_name, presence: true
 

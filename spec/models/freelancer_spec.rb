@@ -80,6 +80,10 @@ describe Freelancer, type: :model do
         it "adds 10 avj credit to invited freelancer" do
           expect(freelancer.freelancer_profile.avj_credit).to eq(10)
         end
+
+        it "sends notification to freelancer" do
+          expect(freelancer.notifications.count).to eq(1)
+        end
       end
     end
 
@@ -104,6 +108,10 @@ describe Freelancer, type: :model do
           it "sends an email to the inviter" do
             expect(FreelancerMailer).to receive(:notice_credit_earned)
             freelancer.confirm
+          end
+
+          it "sends a notification to the inviter" do
+            expect { freelancer.confirm }.to change { Notification.count }.by(1)
           end
 
           context "when inviter has nil avj_credit" do

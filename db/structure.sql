@@ -1046,6 +1046,44 @@ ALTER SEQUENCE messages_id_seq OWNED BY messages.id;
 
 
 --
+-- Name: notifications; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE notifications (
+    id bigint NOT NULL,
+    authorable_type character varying,
+    authorable_id bigint NOT NULL,
+    receivable_type character varying,
+    receivable_id bigint NOT NULL,
+    body text,
+    title text,
+    read_at timestamp without time zone,
+    url text,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: notifications_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE notifications_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: notifications_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE notifications_id_seq OWNED BY notifications.id;
+
+
+--
 -- Name: pages; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -1481,6 +1519,13 @@ ALTER TABLE ONLY messages ALTER COLUMN id SET DEFAULT nextval('messages_id_seq':
 
 
 --
+-- Name: notifications id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY notifications ALTER COLUMN id SET DEFAULT nextval('notifications_id_seq'::regclass);
+
+
+--
 -- Name: pages id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -1720,6 +1765,14 @@ ALTER TABLE ONLY jobs
 
 ALTER TABLE ONLY messages
     ADD CONSTRAINT messages_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: notifications notifications_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY notifications
+    ADD CONSTRAINT notifications_pkey PRIMARY KEY (id);
 
 
 --
@@ -2035,6 +2088,20 @@ CREATE INDEX index_messages_on_authorable_type_and_authorable_id ON messages USI
 --
 
 CREATE INDEX index_messages_on_receivable_type_and_receivable_id ON messages USING btree (receivable_type, receivable_id);
+
+
+--
+-- Name: index_notifications_on_authorable_type_and_authorable_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_notifications_on_authorable_type_and_authorable_id ON notifications USING btree (authorable_type, authorable_id);
+
+
+--
+-- Name: index_notifications_on_receivable_type_and_receivable_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_notifications_on_receivable_type_and_receivable_id ON notifications USING btree (receivable_type, receivable_id);
 
 
 --
@@ -2471,6 +2538,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20180809204356'),
 ('20180810215943'),
 ('20180814215826'),
+('20180824200604'),
 ('20180906170002');
 
 

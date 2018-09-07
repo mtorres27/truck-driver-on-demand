@@ -80,10 +80,12 @@ class Company::JobPaymentsController < Company::BaseController
       @job.update_attribute(:total_amount, @job.total_amount.to_f + @payment.total_amount)
 
       # Send notice email
+      Notification.create(title: @job.title, body: "You received a payment", authorable: @job.company, receivable: @job.freelancer, url: freelancer_job_payment_url(@payment, job_id: @job.id))
       PaymentsMailer.notice_payout_freelancer(current_company, freelancer, @job, @payment).deliver_later
       #
       if @job.pay_type == "fixed" && @job.payments.outstanding.empty?
         @job.update(state: :completed)
+        Notification.create(title: @job.title, body: "This job has been completed", authorable: @job.company, receivable: @job.freelancer, url: freelancer_job_review_url(@job))
         FreelancerMailer.notice_job_complete_freelancer(current_company, freelancer, @job).deliver_later
         CompanyMailer.notice_job_complete_company(current_company, freelancer, @job).deliver_later
         redirect_to company_job_review_path(@job)
