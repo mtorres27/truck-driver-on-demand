@@ -114,6 +114,8 @@ RSpec.describe Company::JobBuildController, type: :controller do
       it "publishes the job" do
         expect(job.reload.state).to eq("published")
       end
+
+
     end
   end
 end

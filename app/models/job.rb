@@ -282,6 +282,7 @@ class Job < ApplicationRecord
     applicants.where(id: accepted_applicant_id).first&.update_attribute(:state, "accepted")
     applicants.where.not(id: accepted_applicant_id, state: "declined").each do |applicant|
       applicant.update_attribute(:state, "declined")
+      Notification.create(title: self.title, body: "Your application was declined", authorable: company, receivable: applicant.freelancer, url: Rails.application.routes.url_helpers.freelancer_job_url(self))
       FreelancerMailer.notice_received_declined_quote(applicant.freelancer, company, self).deliver_later
     end
   end

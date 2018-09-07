@@ -14,6 +14,7 @@ class Company::ReviewsController < Company::BaseController
     @review.company = current_company
 
     if @review.save
+      Notification.create(title: @job.title, body: "#{@job.company.name} reviewed your performance on this job.", authorable: @job.company, receivable: @job.freelancer, url: freelancer_job_url(@job))
       FreelancerMailer.notice_company_review(current_company, @job.freelancer, @review).deliver_later
       redirect_to company_job_review_path(@job)
     else

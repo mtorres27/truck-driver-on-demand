@@ -11,7 +11,8 @@ describe Company::JobPaymentsController, type: :controller  do
                      country: 'ca',
                      applicable_sales_tax: 13,
                      company_plan_fees: 9,
-                     currency: 'cad' ) }
+                     currency: 'cad',
+                     pay_type: 'fixed' ) }
   let(:payment) { create :payment, job: job, company: company }
   let(:plan) { double("Plan") }
 
@@ -48,6 +49,7 @@ describe Company::JobPaymentsController, type: :controller  do
     let!(:currency_rate) { create :currency_rate, currency: 'cad' }
     let(:freelancer) { create :freelancer }
     let!(:job_past_total_amount) { job.total_amount }
+    let!(:other_payment) { create :payment, job: job, company: company }
 
     before do
       allow(plan).to receive(:fee_schema).and_return({ 'company_fees' => 6, 'freelancer_fees' => 4 })
@@ -55,12 +57,12 @@ describe Company::JobPaymentsController, type: :controller  do
       allow_any_instance_of(Job).to receive(:freelancer).and_return(freelancer)
       allow(Stripe::Charge).to receive(:create).and_return({ id: 1, balance_transaction: 1 })
       allow(Stripe::BalanceTransaction).to receive(:retrieve).and_return({ status: 'status' })
-      post :mark_as_paid, params: { id: payment.id, job_id: job.id }
-      payment.reload
-      job.reload
     end
 
     it 'defines fields on payment' do
+      post :mark_as_paid, params: { id: payment.id, job_id: job.id }
+      payment.reload
+      job.reload
       expect(payment.company_fees).to be_present
       expect(payment.total_company_fees).to be_present
       expect(payment.freelancer_fees).to be_present
@@ -75,11 +77,29 @@ describe Company::JobPaymentsController, type: :controller  do
     end
 
     it 'marks payment as paid' do
+      post :mark_as_paid, params: { id: payment.id, job_id: job.id }
+      payment.reload
+      job.reload
       expect(payment.paid_on).to be_present
     end
 
     it 'updates the job total amount' do
+      post :mark_as_paid, params: { id: payment.id, job_id: job.id }
+      payment.reload
+      job.reload
       expect(job.total_amount).not_to eq(job_past_total_amount)
+    end
+
+    it 'sends a notification to the freelancer' do
+      expect { post :mark_as_paid, params: { id: payment.id, job_id: job.id } }.to change { Notification.count }.by(1)
+    end
+
+    context 'when last payment' do
+      let!(:other_payment) { nil }
+
+      it 'sends notifications about the job being completed' do
+        expect { post :mark_as_paid, params: { id: payment.id, job_id: job.id } }.to change { Notification.count }.by(2)
+      end
     end
   end
 end

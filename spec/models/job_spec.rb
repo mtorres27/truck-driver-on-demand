@@ -124,6 +124,10 @@ describe Job, type: :model do
       it "sends an email to declined applicants" do
         expect { job.update(accepted_applicant_id: accepted_applicant.id, enforce_contract_creation: true) }.to change(ActionMailer::Base.deliveries, :count).by(1)
       end
+
+      it "sends a notification to declined applicants" do
+        expect { job.update(accepted_applicant_id: accepted_applicant.id, enforce_contract_creation: true) }.to change(Notification, :count).by(1)
+      end
     end
   end
 

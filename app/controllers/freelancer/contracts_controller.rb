@@ -17,15 +17,6 @@ class Freelancer::ContractsController < Freelancer::BaseController
 
 
     fees = @job.company.plan.fee_schema['company_fees']
-
-    # Remove waived job feature
-    # if @job.company.waived_jobs.positive?
-    #   logger.debug "Waived job"
-    #   plan_fees = 0
-    #   @job.company.waived_jobs -= 1
-    #   @job.company.save
-    # else
-    # end
     plan_tax = @job.company.canada_country? ? 1 + (Subscription::CANADA_SALES_TAX_PERCENT/100) : 1
     plan_fees =  fees.to_f / 100 * @job.contract_price.to_f  * plan_tax
 
@@ -34,6 +25,7 @@ class Freelancer::ContractsController < Freelancer::BaseController
 
     # Send notice emails
     FreelancerMailer.notice_work_order_accepted(current_user, @job.company, @job).deliver_later
+    Notification.create(title: @job.title, body: "#{current_user.first_name_and_initial} accepted your work order", authorable: current_user, receivable: @job.company, url: company_job_url(@job))
     CompanyMailer.notice_work_order_accepted(@job.company, current_user, @job).deliver_later
 
     render :show

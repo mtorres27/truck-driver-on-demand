@@ -31,6 +31,7 @@ class Freelancer::JobPaymentsController < Freelancer::BaseController
     @payment.issued_on = Date.today
     @payment.save
     # Send notice email
+    Notification.create(title: @job.title, body: "#{current_user.first_name_and_initial} requested a payment", authorable: @job.freelancer, receivable: @job.company, url: company_job_payment_url(@payment, job_id: @job.id))
     PaymentsMailer.request_payout_company(@job.company, current_user, @job, @payment).deliver_later
     redirect_to freelancer_job_payments_path(job_id: @job.id)
   end
@@ -41,6 +42,7 @@ class Freelancer::JobPaymentsController < Freelancer::BaseController
     @payment.tax_amount = @payment.amount * (@job.applicable_sales_tax/100)
     @payment.total_amount = @payment.amount + @payment.tax_amount
     if @payment.save
+      Notification.create(title: @job.title, body: "#{current_user.first_name_and_initial} requested a payment", authorable: @job.freelancer, receivable: @job.company, url: company_job_payment_url(@payment, job_id: @job.id))
       PaymentsMailer.request_payout_company(@job.company, current_user, @job, @payment).deliver_later
       redirect_to freelancer_job_payments_path(@job)
     else

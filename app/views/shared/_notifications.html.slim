@@ -1,0 +1,7 @@
+- if notifications.count > 0
+  - notifications.each do |notification|
+    = render "shared/notification", notification: notification
+- else
+  .list-item.notifications.w-inline-block href="#"
+    .list__title Nothing to see here
+    .list__desc You don't have any new notifications for the moment

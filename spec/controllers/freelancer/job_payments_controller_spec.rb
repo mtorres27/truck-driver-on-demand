@@ -53,6 +53,14 @@ describe Freelancer::JobPaymentsController, type: :controller  do
       expect{ post :create_payment, params: { job_id: job.id, payment: { description: 'Description', company_id: company.id, amount: 500 } } }.to change{ Payment.count }.by(1)
     end
 
+    it 'sends an email to company' do
+      expect{ post :create_payment, params: { job_id: job.id, payment: { description: 'Description', company_id: company.id, amount: 500 } } }.to change{ ActionMailer::Base.deliveries.count }.by(1)
+    end
+
+    it 'sends a notification to company' do
+      expect{ post :create_payment, params: { job_id: job.id, payment: { description: 'Description', company_id: company.id, amount: 500 } } }.to change{ Notification.count }.by(1)
+    end
+
     it 'sets the right attributes to the payment' do
       post :create_payment, params: { job_id: job.id, payment: { description: 'Description', company_id: company.id, amount: 500 } }
       payment = Payment.last
