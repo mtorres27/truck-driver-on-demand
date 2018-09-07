@@ -15,6 +15,10 @@ class ApplicationController < ActionController::Base
     rescue_from ActionController::RoutingError, with: :render_404
     rescue_from ActiveRecord::RecordNotFound, with: :render_404
     rescue_from ActionView::MissingTemplate, with: :render_404
+    rescue_from StandardError do |e|
+      Rollbar.error(e)
+      render_500
+    end
   end
 
   rescue_from Pundit::NotAuthorizedError, with: :render_401
@@ -52,6 +56,12 @@ class ApplicationController < ActionController::Base
   def render_401
     respond_to do |format|
       format.html { render template: "errors/unauthorized", status: :unauthorized }
+    end
+  end
+
+  def render_500
+    respond_to do |format|
+      format.html { render template: "errors/internal_server_error", status: 500 }
     end
   end
 
