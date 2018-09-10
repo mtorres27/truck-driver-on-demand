@@ -47,7 +47,6 @@ class Company::JobBuildController < Company::BaseController
   private
 
   def get_matches
-    @jobs = @job.company.jobs
     @distance = 160934
     @freelancer_profiles = FreelancerProfile.where(disabled: false).where("job_types like ?", "%#{@job.job_type}%")
     @address_for_geocode = @job.address
