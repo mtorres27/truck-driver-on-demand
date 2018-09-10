@@ -101,7 +101,7 @@ class FreelancerProfile < ApplicationRecord
   validates :phone_number, length: { minimum: 7 }, allow_blank: true
   validates :phone_number, length: { minimum: 7 }, on: :update, allow_blank: true
   validates :job_types, presence: true, on: :update, if: :step_profile?
-  validates :avatar, :tagline, :bio, presence: true, on: :update, if: :registration_completed?
+  validates :tagline, :bio, presence: true, on: :update, if: :registration_completed?
   validates :country, :city, presence: true, on: :update, if: :step_job_info?
   validates :address, :city, :postal_code, :country, :freelancer_type, :service_areas, :bio, :years_of_experience, :pay_unit_time_preference, presence: true, if: :enforce_profile_edit
 

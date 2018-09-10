@@ -102,7 +102,7 @@ class Company < ApplicationRecord
   validates :phone_number, length: { minimum: 7 }, allow_blank: true
   validates :name, :country, :city, presence: true, on: :update,  if: :step_job_info?
   validates :job_types, presence: true, on: :update, if: :step_profile?
-  validates :avatar, :description, :established_in, :number_of_employees, :number_of_offices, :website, :area, presence: true, on: :update, if: -> { registration_completed? && !skip_step }
+  validates :description, :established_in, :number_of_employees, :number_of_offices, :website, :area, presence: true, on: :update, if: -> { registration_completed? && !skip_step }
 
   enumerize :contract_preference, in: [:prefer_fixed, :prefer_hourly, :prefer_daily]
 
