@@ -152,7 +152,6 @@ describe FreelancerProfile, type: :model do
       subject { create(:freelancer_profile, registration_step: "wicked_finish", freelancer: create(:freelancer)) }
 
       it { is_expected.to validate_presence_of(:bio) }
-      it { is_expected.to validate_presence_of(:avatar) }
       it { is_expected.to validate_presence_of(:tagline) }
     end
   end
