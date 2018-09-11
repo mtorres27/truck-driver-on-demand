@@ -27,7 +27,7 @@ class Company::JobBuildController < Company::BaseController
       @job.state = "published"
       get_matches
       @freelancers.each do |freelancer|
-        Notification.create(title: @job.title, body: "You may apply for this job", authorable: @job.company, receivable: freelancer, url: freelancer_job_url(@job))
+        Notification.create(title: @job.title, body: "New job in your area", authorable: @job.company, receivable: freelancer, url: freelancer_job_url(@job))
         JobNotificationMailer.notify_job_posting(freelancer, @job).deliver_later
       end
     end
