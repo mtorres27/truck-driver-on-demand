@@ -21,12 +21,12 @@ a.list-item.list-item--freelancer href="/company/freelancers/#{freelancer.id}"
       = "#{freelancer_address}. #{params.dig(:search, :address).present? ? "#{distance_from(freelancer, @freelancer_profiles_with_distances)} miles away" : "" }"
 
     .list__rating
-    - @stars = freelancer_avg_rating(freelancer)
-    - @stars.each do |star|
-      i class=star
-    / - if freelancer.freelancer_reviews_count > 0
-    /   a class="reviews__counter" href="/company/freelancers/#{freelancer.id}#reviews" data-turbolinks="false"
-    /     = freelancer_ratings_link(freelancer)
+      - @stars = freelancer_avg_rating(freelancer)
+      - @stars.each do |star|
+        i class=star
+
+    .list__desc
+      = "Profile score: #{freelancer.freelancer_profile.profile_score}"
 
     .list__desc
       = freelancer.freelancer_profile.tagline

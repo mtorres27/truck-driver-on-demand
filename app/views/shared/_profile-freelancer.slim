@@ -1,63 +1,10 @@
 .grid-h
   .grid-cell.grid-cell--33
-    .profile__meta__details__1-1
-      .profile__meta__image
-        - if @freelancer.freelancer_profile.avatar_data.nil?
-          .circle_profile__image.freelancer__image= @freelancer.name_initials
-        - else
-          = image_tag(@freelancer.freelancer_profile.avatar_url, size: "75x75")
-      .profile__meta__info
-        h2.heading-h2
-          span.gutter-right
-            - if current_user&.admin?
-              = @freelancer.full_name
-            - else
-              = @freelancer.first_name_and_initial
-          - if is_verified(@freelancer)
-            span.list__verified.zmdi.zmdi-check-circle
-        - unless current_user&.company_user?
-          h4.heading-h4
-            a href="mailto:#{@freelancer.email}" target="_blank"
-              = @freelancer.email
-        h4.heading-h4
-          = "Joined #{@freelancer.created_at.strftime('%B %d, %Y')}"
-        h4.heading-h4
-          = freelancer_ratings_link(@freelancer)
-        .profile__meta__rating
-          - @stars = freelancer_avg_rating(@freelancer)
-            - @stars.each do |star|
-              i class=star
+    = render "shared/freelancer_profile_heading_column_1"
   .grid-cell.grid-cell--33
-    .profile__meta__details__1-2
-      h3.heading-h3
-        = @freelancer.freelancer_profile.tagline
-      .profile__specialties--summary
-        - if !@freelancer.freelancer_profile.technical_skill_tags.nil? and @freelancer.freelancer_profile.technical_skill_tags.kind_of?(Hash)
-          - @freelancer.freelancer_profile.technical_skill_tags.first(2).each do |index, value|
-            .tag.tag--grey
-              = I18n.t("enumerize.technical_skill_tags.#{index}")
-      br
-      h4.heading-h4
-        = "#{@freelancer.freelancer_profile.city}, #{@freelancer.freelancer_profile.state}, #{@freelancer.freelancer_profile.country&.upcase}"
+    = render "shared/freelancer_profile_heading_column_2"
   .grid-cell.grid-cell--33
-    .profile__stats-box
-      .profile__stats.profile__stats--50
-        h3.heading-h3
-          - if @freelancer.freelancer_profile.pay_unit_time_preference.present?
-            = t("enumerize.job.pay_type.#{@freelancer.freelancer_profile.pay_unit_time_preference}")
-          - else
-            | N/A
-        h4.heading-h4
-          | Pay Pref
-
-      .profile__stats.profile__stats--50
-        h3.heading-h3
-          - if @freelancer.freelancer_profile.pay_per_unit_time.present?
-            = @freelancer.freelancer_profile.pay_per_unit_time
-          - else
-            | N/A
-        h4.heading-h4
-          | Rate
+    = render "shared/freelancer_profile_heading_column_3"
 
   .grid-cell.grid-cell--100
     hr

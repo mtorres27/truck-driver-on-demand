@@ -26,6 +26,7 @@ gem "bootstrap-sass", "~> 3.3.7"
 gem "font-awesome-rails", "~> 4.7.0"
 gem "jquery-rails", "~> 4.3.1"
 gem "jquery-datatables"
+gem "chartkick"
 
 # Authentication & Authorization
 gem "devise"
