@@ -94,6 +94,7 @@ class FreelancerProfile < ApplicationRecord
   before_create :set_default_step
 
   delegate :enforce_profile_edit, to: :freelancer, allow_nil: true
+  delegate :full_name, to: :freelancer
 
   accepts_nested_attributes_for :freelancer
 
@@ -175,6 +176,10 @@ class FreelancerProfile < ApplicationRecord
 
   def profile_form_filled?
     avatar.present? && bio.present? && tagline.present?
+  end
+
+  def user
+    freelancer
   end
 
   private

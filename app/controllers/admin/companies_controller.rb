@@ -6,10 +6,30 @@ class Admin::CompaniesController < Admin::BaseController
   def index
     authorize current_user
     @keywords = params.dig(:search, :keywords).presence
-    @companies = Company.order('created_at DESC')
+    @filter_by_disabled = params.dig(:search, :filter_by_disabled).presence
+    @sort = params.dig(:search, :sort).presence
+
     if @keywords
-      @companies = @companies.name_or_email_search(@keywords)
+      @company_ids = Company.name_or_email_search(@keywords).pluck(:id)
+    else
+      @company_ids = Company.pluck(:id)
     end
+
+    if @sort.blank?
+      @companies = Company.where(id: @company_ids).order('created_at DESC')
+    else
+      if ['name', 'state', 'country', 'created_at', 'created_at DESC'].include?(@sort)
+        @companies = Company.where(id: @company_ids).order(@sort)
+      else
+        @companies = Company.includes(:company_user).where(id: @company_ids).order("users.#{@sort}")
+      end
+    end
+
+    if @filter_by_disabled.present? && @filter_by_disabled != 'nil'
+      @companies = @companies.where(disabled: @filter_by_disabled)
+    end
+
+    @companies = @companies.page(params[:page]).per(10)
   end
 
   def jobs

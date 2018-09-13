@@ -2,14 +2,27 @@ class Admin::IncompleteRegistrationsController < Admin::BaseController
 
   def index
     authorize current_user
-    freelancers = FreelancerProfile.incomplete_registrations
+    freelancer_profiles = FreelancerProfile.incomplete_registrations
     companies = Company.incomplete_registrations
     @keywords = params.dig(:search, :keywords).presence
+    @sort = params.dig(:search, :sort).presence
+
     if @keywords.present?
-      freelancers = freelancers.name_or_email_search(@keywords)
+      freelancer_profiles = freelancer_profiles.name_or_email_search(@keywords)
       companies = companies.name_or_email_search(@keywords)
     end
-    @registrants = (freelancers + companies).sort_by { |registrant| registrant.created_at }.reverse
+
+    if @sort.blank? || @sort == 'created_at DESC'
+      @registrants = (freelancer_profiles + companies).sort_by { |registrant| registrant.created_at }.reverse
+    else
+      if ['full_name', 'state', 'country', 'created_at'].include?(@sort)
+        @registrants = (freelancer_profiles + companies).sort_by { |registrant| registrant.try(@sort.to_sym) || "" }
+      else
+        @registrants = (freelancer_profiles + companies).sort_by { |registrant| registrant.user.try(@sort.to_sym) || "" }
+      end
+    end
+
+    @registrants = Kaminari.paginate_array(@registrants).page(params[:page]).per(10)
   end
 
   def download_csv

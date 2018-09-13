@@ -7,10 +7,30 @@ class Admin::FreelancersController < Admin::BaseController
   def index
     authorize current_user
     @keywords = params.dig(:search, :keywords).presence
-    @freelancers = Freelancer.order('created_at DESC')
+    @filter_by_disabled = params.dig(:search, :filter_by_disabled).presence
+    @sort = params.dig(:search, :sort).presence
+
     if @keywords
-      @freelancers = @freelancers.name_or_email_search(@keywords)
+      @freelancer_ids = Freelancer.name_or_email_search(@keywords).pluck(:id)
+    else
+      @freelancer_ids = Freelancer.pluck(:id)
     end
+
+    if @sort.blank?
+      @freelancers = Freelancer.includes(:freelancer_profile).where(id: @freelancer_ids).order('freelancer_profiles.created_at DESC')
+    else
+      if ['first_name', 'email'].include?(@sort)
+        @freelancers = Freelancer.where(id: @freelancer_ids).order(@sort)
+      else
+        @freelancers = Freelancer.includes(:freelancer_profile).where(id: @freelancer_ids).order("freelancer_profiles.#{@sort}")
+      end
+    end
+
+    if @filter_by_disabled.present? && @filter_by_disabled != 'nil'
+      @freelancers = @freelancers.joins(:freelancer_profile).where(freelancer_profiles: { disabled: @filter_by_disabled })
+    end
+
+    @freelancers = @freelancers.page(params[:page]).per(10)
   end
 
   def show
