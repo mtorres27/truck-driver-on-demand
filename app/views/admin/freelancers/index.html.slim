@@ -1,21 +1,37 @@
-.row
-  .col-xs-12.col-sm-6
-    h2 Freelancers
-  .col-xs-12.col-sm-6
-    .search-form
-      = simple_form_for :search, url: admin_freelancers_path, method: :get do |f|
+= simple_form_for :search, url: admin_freelancers_path, html: { class: "js--admin-search-form" }, method: :get do |f|
+  .row
+    .col-xs-12.col-sm-6
+      h2 Freelancers
+    .col-xs-12.col-sm-6
+      .search-form
         = f.input :keywords, label: false, placeholder: "Search", input_html: { value: @keywords }
-  .col-xs-12.col-sm-3
-    a.btn.btn--primary.btn-download-csv href=download_csv_admin_freelancer_path
-      | Export to CSV
-  .col-xs-12.col-sm-12 style="padding-bottom:5px; margin-bottom:5px;"
-    select#filter-by-disabled-select
-      option value= 'all'
-        | All records
-      option value= 'enabled'
-        | Enabled only
-      option value= 'disabled'
-        | Disabled only
+    .col-xs-12.col-sm-3
+      a.btn.btn--primary.btn-download-csv href=download_csv_admin_freelancer_path
+        | Export to CSV
+    .col-xs-12.col-sm-12 style="padding-bottom:5px; margin-bottom:5px;"
+      label Display options: &nbsp
+      select#search_filter_by_disabled name="search[filter_by_disabled]"
+        option value= 'nil'
+          | All records
+        option value= 'false' selected=("selected" if params.dig(:search, :filter_by_disabled) == 'false')
+          | Enabled only
+        option value= 'true' selected=("selected" if params.dig(:search, :filter_by_disabled) == 'true')
+          | Disabled only
+    .col-xs-12.col-sm-12 style="padding-bottom:5px; margin-bottom:5px;"
+      label Sort by: &nbsp
+      select#search_sort name="search[sort]"
+        option value= 'first_name' selected=("selected" if params.dig(:search, :sort) == 'first_name')
+          | Name
+        option value= 'email' selected=("selected" if params.dig(:search, :sort) == 'email')
+          | Email
+        option value= 'state' selected=("selected" if params.dig(:search, :sort) == 'state')
+          | State/Province
+        option value= 'country' selected=("selected" if params.dig(:search, :sort) == 'country')
+          | Country
+        option value= 'created_at' selected=("selected" if params.dig(:search, :sort) == 'created_at')
+          | Date Created ASC
+        option value= 'created_at DESC' selected=("selected" if params.dig(:search, :sort) == 'created_at DESC' || params.dig(:search, :sort).blank?)
+          | Date Created DESC
 
 .table-responsive
   table.table.table-striped#admin-freelancers-table
@@ -49,4 +65,4 @@
               = link_to 'Delete', admin_freelancer_path(freelancer), data: { confirm: 'Are you sure?' }, method: :delete
             - else
               = link_to 'Disable', disable_admin_freelancer_path(freelancer)
-
+= paginate @freelancers

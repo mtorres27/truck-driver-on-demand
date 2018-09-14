@@ -1,14 +1,31 @@
-.row
-  .col-xs-12.col-sm-6
-    h2 New Registrants
-  .col-xs-12.col-sm-6
-    .search-form
-      = simple_form_for :search, url: admin_new_registrants_path, method: :get do |f|
+= simple_form_for :search, url: admin_new_registrants_path, html: { class: "js--admin-search-form" }, method: :get do |f|
+  .row
+    .col-xs-12.col-sm-6
+      h2 New Registrants
+    .col-xs-12.col-sm-6
+      .search-form
         = f.input :keywords, label: false, placeholder: "Search", input_html: {value: @keywords}
-.row
-  .col-xs-12.col-sm-3
-    a.btn.btn--primary.btn-download-csv href=download_csv_admin_new_registrant_path
-      | Export to CSV
+  .row
+    .col-xs-12.col-sm-3
+      a.btn.btn--primary.btn-download-csv href=download_csv_admin_new_registrant_path
+        | Export to CSV
+    .col-xs-12.col-sm-12 style="padding-bottom:5px; margin-bottom:5px;"
+      label Sort by: &nbsp
+      select#search_sort name="search[sort]"
+        option value= 'full_name' selected=("selected" if params.dig(:search, :sort) == 'full_name')
+          | Name
+        option value= 'type' selected=("selected" if params.dig(:search, :sort) == 'type')
+          | User Type
+        option value= 'email' selected=("selected" if params.dig(:search, :sort) == 'email')
+          | Email
+        option value= 'state' selected=("selected" if params.dig(:search, :sort) == 'state')
+          | State/Province
+        option value= 'country' selected=("selected" if params.dig(:search, :sort) == 'country')
+          | Country
+        option value= 'created_at' selected=("selected" if params.dig(:search, :sort) == 'created_at')
+          | Date Created ASC
+        option value= 'created_at DESC' selected=("selected" if params.dig(:search, :sort) == 'created_at DESC' || params.dig(:search, :sort).blank?)
+          | Date Created DESC
 
 .table-responsive
   table.table.table-striped#admin-new-registrants-table
@@ -58,4 +75,4 @@
               = link_to 'Enable', enable_admin_company_path(registrant)
               '  |
               = link_to 'Delete', admin_company_path(registrant), data: { confirm: "Are you sure?" }, method: :delete
-
+= paginate @new_registrants
