@@ -15,7 +15,7 @@ class Admin::NewRegistrantsController < Admin::BaseController
     if @sort.blank? || @sort == 'created_at DESC'
       @new_registrants = (freelancer_profiles + companies).sort_by { |registrant| registrant.created_at }.reverse
     else
-      if ['full_name', 'state', 'country', 'created_at'].include?(@sort)
+      if ['full_name', 'state', 'country', 'created_at', 'registration_step'].include?(@sort)
         @new_registrants = (freelancer_profiles + companies).sort_by { |registrant| registrant.try(@sort.to_sym) || "" }
       else
         @new_registrants = (freelancer_profiles + companies).sort_by { |registrant| registrant.user.try(@sort.to_sym) || "" }
