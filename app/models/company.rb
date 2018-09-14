@@ -273,6 +273,10 @@ class Company < ApplicationRecord
     self
   end
 
+  def user
+    company_user
+  end
+
   private
 
   def add_to_hubspot
