@@ -20,4 +20,4 @@
             = link_to "Delete Job", company_job_path(@job), data: {confirm: "Are you sure you want to permanently delete this job posting?", class: "btn btn--danger"}, method: :delete
 
 
-= render "new_project_modal", company: company
+= render "company/jobs/new_project_modal", company: company

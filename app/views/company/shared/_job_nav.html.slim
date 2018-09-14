@@ -22,14 +22,14 @@
     .tab-bar__item--active
       Job Details
   - else
-    .tab-bar__item class=("tab-bar__item--active" if (controller.controller_name == "jobs" && request.path != freelancer_matches_company_job_path && request.path != company_job_avj_invoice_path && request.path != contract_invoice_company_job_path) or request.path.index(/work_order/))
+    .tab-bar__item class=("tab-bar__item--active" if (controller.controller_name == "jobs" && request.path != freelancer_matches_company_job_path && request.path != freelancer_matches_admin_job_path && request.path != company_job_avj_invoice_path && request.path != contract_invoice_company_job_path) or request.path.index(/work_order/))
       - path = current_user.admin? ? admin_job_path(job) : company_job_path(job)
       a href=path
         | Job Details
-    - if current_user.company_user?
-      .tab-bar__item class=("tab-bar__item--active" if (controller.controller_name == "jobs" && request.path == freelancer_matches_company_job_path))
-        a href=freelancer_matches_company_job_path(job)
-          | Matches
+    .tab-bar__item class=("tab-bar__item--active" if (controller.controller_name == "jobs" && (request.path == freelancer_matches_company_job_path || request.path == freelancer_matches_admin_job_path)))
+      - path = current_user.admin? ? freelancer_matches_admin_job_path(job) : freelancer_matches_company_job_path(job)
+      a href=path
+        | Matches
     .tab-bar__item class=("tab-bar__item--active" if request.path.index(/applicant/)) class=("tab-bar__item--inactive" if job.applicants_count == 0 )
       - if job.applicants_count > 0
         - path = current_user.admin? ? admin_job_applicants_path(job) : company_job_applicants_path(job)
