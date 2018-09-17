@@ -36,11 +36,12 @@ class Company::JobsController < Company::BaseController
 
       if params.dig(:job, :state) == 'published'
         flash[:notice] = "This job has been published."
-        get_matches
-        @freelancers.each do |freelancer|
-          Notification.create(title: @job.title, body: "New job in your area", authorable: @job.company, receivable: freelancer, url: freelancer_job_url(@job))
-          JobNotificationMailer.notify_job_posting(freelancer, @job).deliver_later
-        end
+        # TODO: Figure out why we are sending multiple emails to users
+        # get_matches
+        # @freelancers.each do |freelancer|
+        #   Notification.create(title: @job.title, body: "New job in your area", authorable: @job.company, receivable: freelancer, url: freelancer_job_url(@job))
+        #   JobNotificationMailer.notify_job_posting(freelancer, @job).deliver_later
+        # end
       end
 
       redirect_to company_job_path(@job)

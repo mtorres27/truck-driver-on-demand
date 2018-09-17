@@ -25,11 +25,12 @@ class Company::JobBuildController < Company::BaseController
 
     if @job.creation_completed? && (@job.save_draft == "false" || @job.save_draft.blank?)
       @job.state = "published"
-      get_matches
-      @freelancers.each do |freelancer|
-        Notification.create(title: @job.title, body: "New job in your area", authorable: @job.company, receivable: freelancer, url: freelancer_job_url(@job))
-        JobNotificationMailer.notify_job_posting(freelancer, @job).deliver_later
-      end
+      # TODO: Figure out why we are sending multiple emails to users
+      # get_matches
+      # @freelancers.each do |freelancer|
+      #   Notification.create(title: @job.title, body: "New job in your area", authorable: @job.company, receivable: freelancer, url: freelancer_job_url(@job))
+      #   JobNotificationMailer.notify_job_posting(freelancer, @job).deliver_later
+      # end
     end
 
     flash[:notice] = "You need to publish this job in order to make it visible to freelancers" if @job.creation_completed? && @job.save_draft == "true"
