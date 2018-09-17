@@ -77,7 +77,7 @@ class JobPolicy < ApplicationPolicy
   end
 
   def freelancer_matches?
-    company_user? && company_owner?
+    company_user? && company_owner? || admin?
   end
 
   def contract_invoice?

@@ -1,6 +1,6 @@
 class Admin::JobsController < Admin::BaseController
-  before_action :set_job, only: [:show, :edit, :update, :destroy, :login_as]
-  before_action :authorize_job, only: [:show, :edit, :update, :destroy, :login_as]
+  before_action :set_job, only: [:show, :edit, :update, :destroy, :freelancer_matches]
+  before_action :authorize_job, only: [:show, :edit, :update, :destroy, :freelancer_matches]
 
   def index
     authorize current_user
@@ -33,7 +33,40 @@ class Admin::JobsController < Admin::BaseController
     redirect_to admin_jobs_path, notice: "Jobs removed."
   end
 
+  def freelancer_matches
+    get_matches
+  end
+
   private
+
+  def get_matches
+    @distance = params[:search][:distance] if params[:search].present?
+    @freelancer_profiles = FreelancerProfile.where(disabled: false).where("job_types like ?", "%#{@job.job_type}%")
+    @address_for_geocode = @job.address
+    @address_for_geocode += ", #{CS.states(@job.country.to_sym)[@job.state_province.to_sym]}" if @job.state_province.present?
+    @address_for_geocode += ", #{CS.countries[@job.country.upcase.to_sym]}" if @job.country.present?
+
+    # check for cached version of address
+    if Rails.cache.read(@address_for_geocode)
+      @geocode = Rails.cache.read(@address_for_geocode)
+    else
+      # save cached version of address
+      @geocode = do_geocode(@address_for_geocode)
+      Rails.cache.write(@address_for_geocode, @geocode)
+    end
+
+    if @geocode
+      point = OpenStruct.new(:lat => @geocode[:lat], :lng => @geocode[:lng])
+      if @distance.nil?
+        @distance = 160934
+      end
+      @freelancer_profiles = @freelancer_profiles.nearby(@geocode[:lat], @geocode[:lng], @distance).with_distance(point).order("distance")
+      @freelancers = Freelancer.where(id: @freelancer_profiles.map(&:freelancer_id))
+    else
+      flash[:error] = "Unable to search geocode. Please try again."
+      @freelancers = Freelancer.none
+    end
+  end
 
   def set_job
     @job = Job.find(params[:id])
