@@ -76,49 +76,36 @@
       - else
         = company.description
 
-    h3.heading-h3 Stats
-    p
-      = company.established_in ? "#{Time.now.year - company.established_in} years in business" : "N/A"
-
     h3.heading-h3 Employees
     p
       = company.number_of_employees ? "#{t(company.number_of_employees)} employees" : "N/A"
 
+  .grid-cell.grid-cell--50
     h3.heading-h3 AV Projects Completed
-    p
-      - if company.company_installs.length > 0
-        - company.company_installs.order('year ASC').each do |installation|
-          .profile__projects__project
-            strong
-              = "#{installation.year}: "
-            em
-              = number_with_delimiter(installation.installs, delimiter: ',')
-      - else
+    - if company.company_installs.length > 0
+      - company.company_installs.order('year ASC').each do |installation|
+        .list-item.list-item--profile
+          .list-bar
+            h4.heading-h4= "#{installation.year}: "
+            h3.heading-h3= number_with_delimiter(installation.installs, delimiter: ',')
+    - else
+      p
         | This company has no information about installs by year
 
-    h3.heading-h3 Projects
-    p
-      - if company.featured_projects.length > 0
-        - company.featured_projects.each do |project|
-          a.profile__projects__project href="#{project.file_url.include?('missing') ? '/assets/' : ''} #{project.file_url}" target="_blank"
-            .profile__projects__project__image style="background-image: url(#{project.file_url.include?('missing') ? '/assets/' : ''} #{project.file_url})"
-            .profile__projects__project__name
-              = project.name
-      - else
-        | This company has no featured projects.
+  .grid-cell.grid-cell--100
+    hr
 
-    h3.heading-h3 Reviews
-    a name="reviews"
-    .profile__reviews-value
-      - if company.company_reviews.count > 0
-        .profile__reviews__review
-        - company.company_reviews.each do |review|
-          .profile__reviews__review-text
-            = review.comments
-          .profile__reviews__review-name
-            = review.freelancer.first_name_and_initial
-      - else
-        p This company doesn't have any reviews.
+  .grid-cell.grid-cell--50
+    h3.heading-h3 Projects
+    - if company.featured_projects.length > 0
+      - company.featured_projects.each do |project|
+        a.profile__projects__project href="#{project.file_url.include?('missing') ? '/assets/' : ''} #{project.file_url}" target="_blank"
+          .profile__projects__project__image style="background-image: url(#{project.file_url.include?('missing') ? '/assets/' : ''} #{project.file_url})"
+          .profile__projects__project__name
+            = project.name
+    - else
+      p
+        | This company has no featured projects.
 
   .grid-cell.grid-cell--50
     h3.heading-h3 Specialties
@@ -156,6 +143,20 @@
         - company.manufacturer_tags.each do |index, value|
           .tag.tag--grey
             = I18n.t("enumerize.manufacturer_tags.#{index}")
+
+  .grid-cell.grid-cell--50
+    h3.heading-h3 Reviews
+    a name="reviews"
+    .profile__reviews-value
+      - if company.company_reviews.count > 0
+        .profile__reviews__review
+        - company.company_reviews.each do |review|
+          .profile__reviews__review-text
+            = review.comments
+          .profile__reviews__review-name
+            = review.freelancer.first_name_and_initial
+      - else
+        p This company doesn't have any reviews.
 
   - if current_user.present? && current_user.admin?
     - if company.company_user.confirmed_at.nil? && company.company_user.confirmation_token.present?

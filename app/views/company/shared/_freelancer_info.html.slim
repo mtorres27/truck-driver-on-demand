@@ -1,7 +1,7 @@
 a.list-item.list-item--freelancer href="/company/freelancers/#{freelancer.id}"
 
   .list__img
-    - if is_favourite(freelancer)
+    - if current_user.is_a?(CompanyUser) && is_favourite(freelancer)
       .list__fav
         span.zmdi.zmdi-favorite
     - if freelancer.freelancer_profile.avatar_data.present?

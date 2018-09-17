@@ -20,8 +20,7 @@ h1.heading-h1
             h2.heading-h2 Need an AV Freelancer?
             p Create a job and publish it to our database to receive quotes or browse our database and invite them to quote.
             .buttons
-              a.btn.btn--secondary href=new_company_job_path
-                | Go there now
+              = link_to "Go there now", company_projects_path, class: "btn btn--secondary", role: "button"
         .grid-cell.grid-cell--50
           .callout
             h2.heading-h2 Do you have a job in progress?
