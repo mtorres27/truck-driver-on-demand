@@ -36,12 +36,11 @@ class Company::JobsController < Company::BaseController
 
       if params.dig(:job, :state) == 'published'
         flash[:notice] = "This job has been published."
-        # TODO: Figure out why we are sending multiple emails to users
-        # get_matches
-        # @freelancers.each do |freelancer|
-        #   Notification.create(title: @job.title, body: "New job in your area", authorable: @job.company, receivable: freelancer, url: freelancer_job_url(@job))
-        #   JobNotificationMailer.notify_job_posting(freelancer, @job).deliver_later
-        # end
+        get_matches
+        @freelancers.each do |freelancer|
+          Notification.create(title: @job.title, body: "New job in your area", authorable: @job.company, receivable: freelancer, url: freelancer_job_url(@job))
+          JobNotificationMailer.notify_job_posting(freelancer, @job).deliver_later
+        end
       end
 
       redirect_to company_job_path(@job)
@@ -69,35 +68,6 @@ class Company::JobsController < Company::BaseController
   end
 
   private
-
-  def get_matches
-    @distance = params[:search][:distance] if params[:search].present?
-    @freelancer_profiles = FreelancerProfile.where(disabled: false).where("job_types like ?", "%#{@job.job_type}%")
-    @address_for_geocode = @job.address
-    @address_for_geocode += ", #{CS.states(@job.country.to_sym)[@job.state_province.to_sym]}" if @job.state_province.present?
-    @address_for_geocode += ", #{CS.countries[@job.country.upcase.to_sym]}" if @job.country.present?
-
-    # check for cached version of address
-    if Rails.cache.read(@address_for_geocode)
-      @geocode = Rails.cache.read(@address_for_geocode)
-    else
-      # save cached version of address
-      @geocode = do_geocode(@address_for_geocode)
-      Rails.cache.write(@address_for_geocode, @geocode)
-    end
-    
-    if @geocode
-      point = OpenStruct.new(:lat => @geocode[:lat], :lng => @geocode[:lng])
-      if @distance.nil?
-        @distance = 160934
-      end
-      @freelancer_profiles = @freelancer_profiles.nearby(@geocode[:lat], @geocode[:lng], @distance).with_distance(point).order("distance")
-      @freelancers = Freelancer.where(id: @freelancer_profiles.map(&:freelancer_id))
-    else
-      flash[:error] = "Unable to search geocode. Please try again."
-      @freelancers = Freelancer.none
-    end
-  end
 
   def set_job
     @job = current_company.jobs.find(params[:id])
