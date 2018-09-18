@@ -28,7 +28,7 @@ class Company::FreelancersController < Company::BaseController
 
     if @address || @state_province
       if @address
-        @address_for_geocode = @address
+        @address_for_geocode = @address.capitalize
         @address_for_geocode += ", #{CS.states(@country.to_sym)[@state_province.to_sym]}" if @state_province.present?
         @address_for_geocode += ", #{CS.countries[@country.upcase.to_sym]}" if @country.present?
       else
