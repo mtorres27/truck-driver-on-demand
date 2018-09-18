@@ -11,7 +11,7 @@ class Freelancer::RegistrationStepsController < Freelancer::BaseController
   end
 
   def show
-    if params[:id] == "wicked_finish"
+    if params[:id] == "wicked_finish" || current_freelancer_profile&.registration_step == "wicked_finish"
       redirect_to finish_wizard_path
     elsif current_freelancer_profile.nil?
       redirect_to root_path
