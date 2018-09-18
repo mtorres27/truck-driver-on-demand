@@ -31,6 +31,8 @@
       .grid-cell.grid-cell--33
         = f.input :city, required: true, label: "City", placeholder: "Enter your city"
       .grid-cell.grid-cell--100
+        = f.input :phone_number, as: :string, label: "Phone Number", required: true, autofocus: true, placeholder: "Enter your company's phone number"
+      .grid-cell.grid-cell--100
         .grid-h
           .grid-cell.grid-cell--33
             = f.button :submit, "Continue", class: "btn btn--primary"
