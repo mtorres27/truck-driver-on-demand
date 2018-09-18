@@ -12,7 +12,7 @@ class Company::RegistrationStepsController < Company::BaseController
   end
 
   def show
-    if params[:id] == "wicked_finish"
+    if params[:id] == "wicked_finish" || current_company&.registration_step == "wicked_finish"
       redirect_to finish_wizard_path
     elsif current_company.nil?
       redirect_to root_path

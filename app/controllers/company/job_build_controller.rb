@@ -12,8 +12,7 @@ class Company::JobBuildController < Company::BaseController
   end
 
   def show
-    # if params[:id] == "wicked_finish" || @job.creation_step == "wicked_finish"
-    if params[:id] == "wicked_finish"
+    if params[:id] == "wicked_finish" || @job.creation_step == "wicked_finish"
       redirect_to finish_wizard_path
     else
       render_wizard
