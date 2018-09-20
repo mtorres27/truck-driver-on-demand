@@ -63,6 +63,7 @@
 #  variable_pay_type                      :string
 #  overtime_rate                          :decimal(10, 2)
 #  payment_terms                          :integer
+#  expired                                :boolean          default(FALSE)
 #
 # Indexes
 #

@@ -6,6 +6,9 @@
         - path = current_user.admin? ? edit_admin_job_path(@job) : edit_company_job_path(@job)
         a.btn.btn--primary href=path
           | Edit
+      - if @job.expired?
+        span.tag.tag--default.gutter-right
+          | Expired
       = job_state_label(@job)
 
   .grid-h

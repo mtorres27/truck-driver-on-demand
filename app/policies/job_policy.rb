@@ -88,6 +88,14 @@ class JobPolicy < ApplicationPolicy
     company_user? && company_owner?
   end
 
+  def mark_as_expired?
+    admin?
+  end
+
+  def unmark_as_expired?
+    admin?
+  end
+
   def create_payment?
     freelancer? && freelancer_hired?
   end
