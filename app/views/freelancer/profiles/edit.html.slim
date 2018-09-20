@@ -4,7 +4,7 @@
   = simple_form_for(@freelancer, url: freelancer_profile_path) do |f|
     = f.hidden_field :enforce_profile_edit, value: true
     .action-bar
-      h2.heading-h2.heading-h2--action-bar Edit Your Profile
+      h2.heading-h2.heading-h2--action-bar= "Edit Profile (#{@freelancer.freelancer_profile.profile_score}% complete)"
       .action-bar__actions
         = f.button :submit, "Update", class: "btn btn--primary"
         a.btn.btn--secondary href=freelancer_profile_path Cancel

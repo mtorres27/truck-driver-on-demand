@@ -62,6 +62,7 @@ h1.heading-h1
 
 
     .grid-cell.grid-cell--33
+      = render "freelancer/shared/profile_score_chart", score: current_user.freelancer_profile.profile_score, height: '240px'
       .homepage__sidebar
         .grid-v
           .grid-cell
@@ -78,25 +79,25 @@ h1.heading-h1
             p
               | To be able to apply to a job you need to connect your banking details. First verify your identity and then connect a bank account so you can receive payments.
             a.btn-link href="https://www.avjunction.com/creating-a-profile" target="_blank"
-                | Learn more
+              | Learn more
           .grid-cell
             h3.heading-h3 Find Jobs or Get Invited
             p
               | Search for jobs or we will let you know if you have been invited to quote. Negotiate quotes, build a work order, and set payment milestones.
             a.btn-link href="https://www.avjunction.com/how-to-guide-av-freelancer" target="_blank"
-                | Learn more
+              | Learn more
           .grid-cell
             h3.heading-h3 Work Together
             p
               | Provide daily reports, pictures and share documents in a central location.
             a.btn-link href="https://www.avjunction.com/how-to-guide-av-freelancer" target="_blank"
-                | Learn more
+              | Learn more
           .grid-cell
             h3.heading-h3 Request Payments & Rate Experience
             p
               | Request payments on completed milestones for fixed price work orders or create hourly or daily invoices. Rate your experience with your employer.
             a.btn-link href="https://www.avjunction.com/how-to-guide-av-freelancer" target="_blank"
-                | Learn more
+              | Learn more
           .grid-cell
             h3.heading-h3 Visit the Knowledge Center for more
             p
