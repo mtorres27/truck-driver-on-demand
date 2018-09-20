@@ -30,6 +30,8 @@ class Freelancer::ProfilesController < Freelancer::BaseController
   def freelancer_params
     params.require(:freelancer).permit(
       :id,
+      :first_name,
+      :last_name,
       :email,
       :enforce_profile_edit,
       freelancer_profile_attributes: [
