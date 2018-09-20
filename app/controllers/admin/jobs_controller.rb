@@ -1,6 +1,6 @@
 class Admin::JobsController < Admin::BaseController
-  before_action :set_job, only: [:show, :edit, :update, :destroy, :freelancer_matches]
-  before_action :authorize_job, only: [:show, :edit, :update, :destroy, :freelancer_matches]
+  before_action :set_job, only: [:show, :edit, :update, :destroy, :freelancer_matches, :mark_as_expired, :unmark_as_expired]
+  before_action :authorize_job, only: [:show, :edit, :update, :destroy, :freelancer_matches, :mark_as_expired, :unmark_as_expired]
 
   def index
     authorize current_user
@@ -43,6 +43,16 @@ class Admin::JobsController < Admin::BaseController
 
   def freelancer_matches
     get_matches
+  end
+
+  def mark_as_expired
+    @job.update_columns(expired: true)
+    redirect_to admin_jobs_path, notice: "Job marked as expired."
+  end
+
+  def unmark_as_expired
+    @job.update_columns(expired: false)
+    redirect_to admin_jobs_path, notice: "Job marked as not expired."
   end
 
   private
