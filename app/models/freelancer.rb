@@ -192,7 +192,7 @@ class Freelancer < User
 
   def reject_certification(attrs)
     exists = attrs["id"].present?
-    empty = attrs["certificate"].blank? and attrs["name"].blank?
+    empty = attrs["name"].blank?
     !exists and empty
   end
 
