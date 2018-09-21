@@ -96,7 +96,7 @@ module FreelancerHelper
   end
 
   def hash_id(freelancer)
-    hashids = Hashids.new(Rails.application.secrets.hash_ids_salt)
+    hashids = Hashids.new(Rails.application.secrets.hash_ids_salt, 8)
     hashids.encode(freelancer.id)
   end
 end
