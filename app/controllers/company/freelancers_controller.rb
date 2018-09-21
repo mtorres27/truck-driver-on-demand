@@ -3,15 +3,17 @@ class Company::FreelancersController < Company::BaseController
 
   def index
     authorize current_company
-    @keywords = params.dig(:search, :keywords).presence
+    @job_type = params.dig(:search, :job_type).presence
+    @job_function = params.dig(:search, :job_function).presence
     @address = params.dig(:search, :address).presence
     @state_province = params.dig(:search, :state_province).presence
     @country = params.dig(:search, :country).presence
     @avatar_only = params.dig(:search, :avatar_only) == "1"
 
-    if params.has_key?(:search) && !@keywords && !@address && !@country
-      flash[:error] = "You'll need to add some search criteria to narrow your search results!"
-      redirect_to company_freelancers_path
+    if params.has_key?(:search) && ( !@job_type || !@job_function || !@address || !@country || (['ca', 'us'].include?(@country) && ! @state_province) )
+      flash[:error] = "You'll need complete all the fields to search for freelancers"
+      @freelancer_profiles = FreelancerProfile.none.page(params[:page]).per(10)
+      return
     end
 
     @distance = params.dig(:search, :distance).presence
@@ -22,50 +24,33 @@ class Company::FreelancersController < Company::BaseController
       @freelancer_profiles = FreelancerProfile.where(disabled: false)
     end
 
-    if @country
-      @freelancer_profiles = @freelancer_profiles.where(country: @country)
-    end
+    @freelancer_profiles = @freelancer_profiles.where(country: @country)
+    @freelancer_profiles = @freelancer_profiles.where("job_types like ?", "%#{@job_type}%")
+    @freelancer_profiles = @freelancer_profiles.where("job_functions like ?", "%#{@job_function}%")
 
-    if @address || @state_province
-      if @address
-        @address_for_geocode = @address.capitalize
-        @address_for_geocode += ", #{CS.states(@country.to_sym)[@state_province.to_sym]}" if @state_province.present?
-        @address_for_geocode += ", #{CS.countries[@country.upcase.to_sym]}" if @country.present?
-      else
-        @address_for_geocode = "#{CS.states(@country.to_sym)[@state_province.to_sym]}" if @state_province.present?
-        @address_for_geocode += ", #{CS.countries[@country.upcase.to_sym]}" if @country.present?
-      end
+    @address_for_geocode = @address.capitalize
+    @address_for_geocode += ", #{CS.states(@country.to_sym)[@state_province.to_sym]}" if @state_province.present?
+    @address_for_geocode += ", #{CS.countries[@country.upcase.to_sym]}" if @country.present?
 
-      # check for cached version of address
-      if Rails.cache.read(@address_for_geocode)
-        @geocode = Rails.cache.read(@address_for_geocode)
-      else
-        # save cached version of address
-        @geocode = do_geocode(@address_for_geocode)
-        Rails.cache.write(@address_for_geocode, @geocode)
-      end
-
-      if @geocode
-        point = OpenStruct.new(:lat => @geocode[:lat], :lng => @geocode[:lng])
-        if @distance.nil?
-          @distance_int = 60000
-        else
-          @distance_int = @distance.to_i
-        end
-        @freelancer_profiles = @freelancer_profiles.nearby(@geocode[:lat], @geocode[:lng], @distance_int).with_distance(point).order("verified DESC, profile_score DESC, distance")
-      else
-        @freelancer_profiles = FreelancerProfile.none
-      end
+    # check for cached version of address
+    if Rails.cache.read(@address_for_geocode)
+      @geocode = Rails.cache.read(@address_for_geocode)
     else
-      @freelancer_profiles = @freelancer_profiles.order("verified DESC, profile_score DESC")
+      # save cached version of address
+      @geocode = do_geocode(@address_for_geocode)
+      Rails.cache.write(@address_for_geocode, @geocode)
     end
 
-    if (!@keywords and !@address and !@country) or (@keywords.blank? and @address.blank? and @country.blank?)
+    if @geocode
+      point = OpenStruct.new(:lat => @geocode[:lat], :lng => @geocode[:lng])
+      if @distance.nil?
+        @distance_int = 60000
+      else
+        @distance_int = @distance.to_i
+      end
+      @freelancer_profiles = @freelancer_profiles.nearby(@geocode[:lat], @geocode[:lng], @distance_int).with_distance(point).order("verified DESC, profile_score DESC, distance")
+    else
       @freelancer_profiles = FreelancerProfile.none
-    else
-      if !@keywords.blank?
-        @freelancer_profiles = @freelancer_profiles.search(@keywords)
-      end
     end
 
     @freelancer_profiles_with_distances = @freelancer_profiles

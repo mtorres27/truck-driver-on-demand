@@ -1,29 +1,32 @@
 $(document).on("turbolinks:load", function () {
 
     // Display options for job_type
-    if ($("#job_job_type").val() == "system_integration") {
-        $(".job_live_events_staging_and_rental_option").hide();
+    if ($(".js--job_type").val() == "system_integration") {
+        $(".js--live_events_staging_and_rental_option").hide();
     }
-    else if ($("#job_job_type").val() == "live_events_staging_and_rental") {
-        $(".job_system_integration_option").hide();
+    else if ($(".js--job_type").val() == "live_events_staging_and_rental") {
+        $(".js--system_integration_option").hide();
     }
     else {
-        $(".job_live_events_staging_and_rental_option").hide();
-        $(".job_system_integration_option").hide();
+        $(".js--live_events_staging_and_rental_option").hide();
+        $(".js--system_integration_option").hide();
     }
 
-    $("#job_job_type").on("change", function() {
+    $(".js--job_type").on("change", function() {
         if ($(this).val() == "system_integration") {
-            $(".job_live_events_staging_and_rental_option").hide();
-            $(".job_system_integration_option").show();
+            $(".js--job_type_dependent_select").val("");
+            $(".js--live_events_staging_and_rental_option").hide();
+            $(".js--system_integration_option").show();
         }
         else if ($(this).val() == "live_events_staging_and_rental") {
-            $(".job_live_events_staging_and_rental_option").show();
-            $(".job_system_integration_option").hide();
+            $(".js--job_type_dependent_select").val("");
+            $(".js--live_events_staging_and_rental_option").show();
+            $(".js--system_integration_option").hide();
         }
         else {
-            $(".job_live_events_staging_and_rental_option").hide();
-            $(".job_system_integration_option").hide();
+            $(".js--job_type_dependent_select").val("");
+            $(".js--live_events_staging_and_rental_option").hide();
+            $(".js--system_integration_option").hide();
         }
     });
 

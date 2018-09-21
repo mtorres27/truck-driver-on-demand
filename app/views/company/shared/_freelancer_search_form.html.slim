@@ -1,8 +1,28 @@
 = simple_form_for :search, url: company_freelancers_path, method: :get, html: { id: "freelancer_search_form", class:"grid-h grid-h--baseline js--freelancer-search-form"} do |f|
   input type="hidden" value="#{params.dig(:search, :sort)}" id="sort" name="search[sort]"
   input type="hidden" value="#{params.dig(:search, :distance)}" id="distance" class="js--distance" name="search[distance]"
-  .grid-cell.grid-cell--100
-    = f.input :keywords, label: false, placeholder: "Search by job function, skills, etc.", input_html: { value: @keywords }
+  .grid-cell.grid-cell--50
+    = f.input :job_type, collection: I18n.t('enumerize.job_types').map { |i, v| [i, v] }, label_method: :second, value_method: :first, label: false, prompt: "Job Type", selected: @job_type, input_html: { class: 'js--job_type' }
+  .grid-cell.grid-cell--50
+    select#search_job_function.js--job_type_dependent_select.form-control.select(name='search[job_function]')
+      option(value='')
+        | Job Function
+      = I18n.t("enumerize.live_events_staging_and_rental_job_functions").each do |index, value|
+        - selected = (@job_function == index.to_s)
+        - if selected
+          option.js--live_events_staging_and_rental_option(value="#{index}" selected)
+            = value
+        - else
+          option.js--live_events_staging_and_rental_option(value="#{index}")
+            = value
+      = I18n.t("enumerize.system_integration_job_functions").each do |index, value|
+        - selected = (@job_function == index.to_s)
+        - if selected
+          option.js--system_integration_option(value="#{index}" selected)
+            = value
+        - else
+          option.js--system_integration_option(value="#{index}")
+            = value
   .grid-cell.grid-cell--20
     = f.input :country, collection: I18n.t('enumerize.country').map { |i, v| [i, v] }, label_method: :second, value_method: :first, label: false, prompt: "Country", selected: @country, input_html: { class: "js--country-select" }
   .grid-cell.grid-cell--20
