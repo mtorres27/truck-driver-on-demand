@@ -191,6 +191,7 @@ GEM
     globalid (0.4.0)
       activesupport (>= 4.2.0)
     hashdiff (0.3.7)
+    hashids (1.0.4)
     hashie (3.5.6)
     http (2.2.2)
       addressable (~> 2.3)
@@ -505,6 +506,7 @@ DEPENDENCIES
   fastimage (~> 2.1.0)
   flamegraph (~> 0.9.5)
   font-awesome-rails (~> 4.7.0)
+  hashids
   hubspot-ruby
   image_processing (~> 0.4.1)
   jbuilder (~> 2.5)

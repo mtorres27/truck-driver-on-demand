@@ -34,7 +34,7 @@ h1.heading-h1
             .grid-h
               - @freelancers.each do |freelancer|
                 .grid-cell.grid-cell--25
-                  a.homepage__avatar href=company_freelancer_path(freelancer)
+                  a.homepage__avatar href=company_freelancer_path(hash_id(freelancer))
                     - if freelancer.freelancer_profile.avatar_data.present?
                       = image_tag(freelancer.freelancer_profile.avatar_url, size: "75x75")
                     - else

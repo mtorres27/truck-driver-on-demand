@@ -95,5 +95,8 @@ module FreelancerHelper
     return (((freelancer_profiles_with_distances.where(freelancer_id: freelancer.id).first.distance / 1609.344)*10.0)/10.0).round(2) if freelancer_profiles_with_distances.present?
   end
 
-
+  def hash_id(freelancer)
+    hashids = Hashids.new(Rails.application.secrets.hash_ids_salt)
+    hashids.encode(freelancer.id)
+  end
 end

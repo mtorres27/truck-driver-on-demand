@@ -135,7 +135,17 @@ class Company::FreelancersController < Company::BaseController
 
 
   def show
-    @freelancer = Freelancer.find(params[:id])
+    hashids = Hashids.new(Rails.application.secrets.hash_ids_salt)
+    id = hashids.decode(params[:id])
+
+    if id.count == 0
+      render_404
+      return
+    end
+
+    id = id[0]
+
+    @freelancer = Freelancer.find(id)
     authorize @freelancer
 
     @jobs = []
@@ -164,7 +174,7 @@ class Company::FreelancersController < Company::BaseController
     end
     @freelancer.freelancer_profile.save
 
-    @favourite = current_company.favourites.where(freelancer_id: params[:id]).length > 0 ? true : false
+    @favourite = current_company.favourites.where(freelancer_id: id).length > 0 ? true : false
     if params.dig(:toggle_favourite) == "true"
       if @favourite == false
         current_company.favourite_freelancers << @freelancer

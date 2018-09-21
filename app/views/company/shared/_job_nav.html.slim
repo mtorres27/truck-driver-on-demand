@@ -13,7 +13,7 @@
   - if job.freelancer
     h4.heading-h4
       | Awarded to
-      - path = current_user.admin? ? admin_freelancer_path(job.freelancer) : company_freelancer_path(id: job.freelancer.id)
+      - path = current_user.admin? ? admin_freelancer_path(job.freelancer) : company_freelancer_path(hash_id(job.freelancer))
       a<> href=path #{job.freelancer.first_name_and_initial}
 
 

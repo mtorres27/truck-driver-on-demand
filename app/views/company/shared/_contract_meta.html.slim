@@ -3,7 +3,7 @@
     | Freelancer
     p
       - nspace = current_user.admin? ? "admin" : "company"
-      a href="/#{nspace}/freelancers/#{job.freelancer.id}"
+      a href="/#{nspace}/freelancers/#{current_user.admin? ? job.freelancer.id : hash_id(job.freelancer)}"
         = job.freelancer.first_name_and_initial
 
 
