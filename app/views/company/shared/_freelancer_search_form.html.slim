@@ -2,8 +2,9 @@
   input type="hidden" value="#{params.dig(:search, :sort)}" id="sort" name="search[sort]"
   input type="hidden" value="#{params.dig(:search, :distance)}" id="distance" class="js--distance" name="search[distance]"
   .grid-cell.grid-cell--50
-    = f.input :job_type, collection: I18n.t('enumerize.job_types').map { |i, v| [i, v] }, label_method: :second, value_method: :first, label: false, prompt: "Job Type", selected: @job_type, input_html: { class: 'js--job_type' }
+    = f.input :job_type, collection: I18n.t('enumerize.job_types').map { |i, v| [i, v] }, label_method: :second, value_method: :first, label: "Job Type", prompt: "Job Type", selected: @job_type, input_html: { class: 'js--job_type' }
   .grid-cell.grid-cell--50
+    = f.label "Job Function"
     select#search_job_function.js--job_type_dependent_select.form-control.select(name='search[job_function]')
       option(value='')
         | Job Function
@@ -23,9 +24,14 @@
         - else
           option.js--system_integration_option(value="#{index}")
             = value
-  .grid-cell.grid-cell--20
-    = f.input :country, collection: I18n.t('enumerize.country').map { |i, v| [i, v] }, label_method: :second, value_method: :first, label: false, prompt: "Country", selected: @country, input_html: { class: "js--country-select" }
-  .grid-cell.grid-cell--20
+  .grid-cell.grid-cell--50
+    = f.input :technical_skill_tag, collection: I18n.t('enumerize.technical_skill_tags').map { |i, v| [i, v] }, label_method: :second, value_method: :first, label: "Technical skills", prompt: "Technical skills", selected: @technical_skill_tag, required: false
+  .grid-cell.grid-cell--50
+    = f.input :manufacturer_tag, collection: I18n.t('enumerize.manufacturer_tags').map { |i, v| [i, v] }, label_method: :second, value_method: :first, label: "Manufacturers", prompt: "Manufacturers", selected: @manufacturer_tag, required: false
+  .grid-cell.grid-cell--25
+    = f.input :country, collection: I18n.t('enumerize.country').map { |i, v| [i, v] }, label_method: :second, value_method: :first, label: "Country", prompt: "Country", selected: @country, input_html: { class: "js--country-select" }
+  .grid-cell.grid-cell--25
+    = f.label "State/Province"
     select#search_state_province.js--state-province-select.form-control.select(name='search[state_province]')
       option(value='')
         | State/Province
@@ -45,16 +51,17 @@
         - else
           option.js--ca_option(value="#{index}")
             = value
-  .grid-cell.grid-cell--20
-    = f.input :address, label: false, placeholder: "City", input_html: { value: @address }
-  .grid-cell.grid-cell--20
+  .grid-cell.grid-cell--25
+    = f.input :address, label: "City", placeholder: "City", input_html: { value: @address }
+  .grid-cell.grid-cell--25
+    = f.label "Distance", required: false
     select#search_distance.form-control.select(name='search[distance]')
       option(value="")
-        | Radius
+        | Distance
       = render partial: "shared/distance_options", locals: {distance: @distance}
-  .grid-cell.grid-cell--20
-    label
-      = f.check_box :avatar_only, checked: @avatar_only
-      = " Profile picture"
-  .grid-cell.grid-cell--50
+  /.grid-cell.grid-cell--75
+  /  label
+  /    = f.check_box :avatar_only, checked: @avatar_only
+  /    = " Profile picture"
+  .grid-cell.grid-cell--25
     = f.submit "Search", class: "btn btn--primary"

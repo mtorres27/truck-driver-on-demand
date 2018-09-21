@@ -10,9 +10,13 @@ h1.heading-h1 Search for AV Freelancers
         = "#{@freelancer_profiles.total_count} freelancers found"
       span class="result-header__text--strong"
         - if params.dig(:search, :job_type).presence
-          = params[:search][:job_type]
+          = params[:search][:job_type].humanize
         - if params.dig(:search, :job_function).presence
-          = ", #{params[:search][:job_function]}"
+          = ", #{params[:search][:job_function].humanize}"
+        - if params.dig(:search, :technical_skill_tag).presence
+          = ", #{params[:search][:technical_skill_tag].humanize}"
+        - if params.dig(:search, :manufacturer_tag).presence
+          = ", #{params[:search][:manufacturer_tag].humanize}"
       - if @address_for_geocode.present? && @address_for_geocode > ""
         = " near "
         span class="result-header__text--strong"

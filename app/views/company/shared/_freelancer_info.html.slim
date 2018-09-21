@@ -26,9 +26,6 @@ a.list-item.list-item--freelancer href="/#{current_user.is_a?(Admin) ? "admin" :
         i class=star
 
     .list__desc
-      = "Profile score: #{freelancer.freelancer_profile.profile_score}"
-
-    .list__desc
       = freelancer.freelancer_profile.tagline
 
     .tags

@@ -9,6 +9,8 @@ class Company::FreelancersController < Company::BaseController
     @state_province = params.dig(:search, :state_province).presence
     @country = params.dig(:search, :country).presence
     @avatar_only = params.dig(:search, :avatar_only) == "1"
+    @technical_skill_tag = params.dig(:search, :technical_skill_tag).presence
+    @manufacturer_tag = params.dig(:search, :manufacturer_tag).presence
 
     if params.has_key?(:search) && ( !@job_type || !@job_function || !@address || !@country || (['ca', 'us'].include?(@country) && ! @state_province) )
       flash[:error] = "You'll need complete all the fields to search for freelancers"
@@ -27,6 +29,14 @@ class Company::FreelancersController < Company::BaseController
     @freelancer_profiles = @freelancer_profiles.where(country: @country)
     @freelancer_profiles = @freelancer_profiles.where("job_types like ?", "%#{@job_type}%")
     @freelancer_profiles = @freelancer_profiles.where("job_functions like ?", "%#{@job_function}%")
+
+    if @technical_skill_tag
+      @freelancer_profiles = @freelancer_profiles.where("technical_skill_tags like ?", "%#{@technical_skill_tag}%")
+    end
+
+    if @manufacturer_tag
+      @freelancer_profiles = @freelancer_profiles.where("manufacturer_tags like ?", "%#{@manufacturer_tag}%")
+    end
 
     @address_for_geocode = @address.capitalize
     @address_for_geocode += ", #{CS.states(@country.to_sym)[@state_province.to_sym]}" if @state_province.present?
