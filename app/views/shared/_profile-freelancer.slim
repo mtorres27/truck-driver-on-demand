@@ -36,7 +36,7 @@
                 = ""
               - else
                 = "(#{t("enumerize.job.freelancer_team_size.#{@freelancer.freelancer_profile.freelancer_team_size}")})"
-    - if @freelancer.freelancer_profile.company_name.present?
+    - if @freelancer.freelancer_profile.company_name.present? && !current_user.is_a?(CompanyUser)
       .list-item.list-item--profile
         .list-bar
           h4.heading-h4 Company Name
