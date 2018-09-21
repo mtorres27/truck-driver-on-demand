@@ -5,6 +5,6 @@
       .result-content
         | You don't yet have any favourite AV companies.
     - @companies.each do |company|
-      a.result-row href=company_freelancer_path(company)
+      a.result-row href=freelancer_company_path(company)
         = render partial: "/freelancer/shared/company_info", locals: { company: company }
 

@@ -1,4 +1,4 @@
-a.list-item.list-item--freelancer href="/#{current_user.is_a?(Admin) ? "admin" : "company"}/freelancers/#{freelancer.id}"
+a.list-item.list-item--freelancer href="/#{current_user.is_a?(Admin) ? "admin" : "company"}/freelancers/#{current_user.is_a?(Admin) ? freelancer.id : hash_id(freelancer)}"
 
   .list__img
     - if current_user.is_a?(CompanyUser) && is_favourite(freelancer)
