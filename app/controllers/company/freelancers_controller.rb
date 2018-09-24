@@ -13,7 +13,7 @@ class Company::FreelancersController < Company::BaseController
     @manufacturer_tag = params.dig(:search, :manufacturer_tag).presence
 
     if params.has_key?(:search) && ( !@job_type || !@job_function || !@address || !@country || (['ca', 'us'].include?(@country) && ! @state_province) )
-      flash[:error] = "You'll need complete all the fields to search for freelancers"
+      flash.now[:error] = "You'll need complete all the fields to search for freelancers"
       @freelancer_profiles = FreelancerProfile.none.page(params[:page]).per(10)
       return
     end
