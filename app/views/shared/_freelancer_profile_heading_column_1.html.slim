@@ -21,8 +21,6 @@
       = "Joined #{@freelancer.freelancer_profile.created_at.strftime('%B %d, %Y')}"
     h4.heading-h4
       = freelancer_ratings_link(@freelancer)
-    h4.heading-h4
-      = "Profile score: #{@freelancer.freelancer_profile.profile_score}"
     .profile__meta__rating
       - @stars = freelancer_avg_rating(@freelancer)
       - @stars.each do |star|
