@@ -1,4 +1,4 @@
-a.list-item.list-item--freelancer href="/company/freelancers/#{freelancer.id}"
+a.list-item.list-item--freelancer href="/#{current_user.is_a?(Admin) ? "admin" : "company"}/freelancers/#{current_user.is_a?(Admin) ? freelancer.id : hash_id(freelancer)}"
 
   .list__img
     - if current_user.is_a?(CompanyUser) && is_favourite(freelancer)
@@ -21,12 +21,9 @@ a.list-item.list-item--freelancer href="/company/freelancers/#{freelancer.id}"
       = "#{freelancer_address}. #{params.dig(:search, :address).present? ? "#{distance_from(freelancer, @freelancer_profiles_with_distances)} miles away" : "" }"
 
     .list__rating
-    - @stars = freelancer_avg_rating(freelancer)
-    - @stars.each do |star|
-      i class=star
-    / - if freelancer.freelancer_reviews_count > 0
-    /   a class="reviews__counter" href="/company/freelancers/#{freelancer.id}#reviews" data-turbolinks="false"
-    /     = freelancer_ratings_link(freelancer)
+      - @stars = freelancer_avg_rating(freelancer)
+      - @stars.each do |star|
+        i class=star
 
     .list__desc
       = freelancer.freelancer_profile.tagline

@@ -1,0 +1,18 @@
+.profile__stats-box
+  .profile__stats.profile__stats--50
+    h3.heading-h3
+      - if @freelancer.freelancer_profile.pay_unit_time_preference.present?
+        = t("enumerize.job.pay_type.#{@freelancer.freelancer_profile.pay_unit_time_preference}")
+      - else
+        | N/A
+    h4.heading-h4
+      | Pay Pref
+
+  .profile__stats.profile__stats--50
+    h3.heading-h3
+      - if @freelancer.freelancer_profile.pay_per_unit_time.present?
+        = @freelancer.freelancer_profile.pay_per_unit_time
+      - else
+        | N/A
+      h4.heading-h4
+        | Rate

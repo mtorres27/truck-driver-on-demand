@@ -174,12 +174,12 @@ class Freelancer < User
     score += 1 if self.freelancer_profile.company_name.present?
     score += 1 if self.freelancer_profile.valid_driver
     score += 1 if self.freelancer_profile.available
-    score += 5 * self.certifications.count
-    score += 2 * self.freelancer_affiliations.count
-    score += 2 * self.freelancer_clearances.count
-    score += 1 * self.freelancer_insurances.count
-    score += 1 * self.freelancer_portfolios.count
-    score
+    score += 5 if self.certifications.count > 0
+    score += 2 if self.freelancer_affiliations.count > 0
+    score += 2 if self.freelancer_clearances.count > 0
+    score += 1 if self.freelancer_insurances.count > 0
+    score += 1 if self.freelancer_portfolios.count > 0
+    (score.to_f/24)*100
   end
 
   def self.avg_rating(freelancer)
@@ -192,7 +192,7 @@ class Freelancer < User
 
   def reject_certification(attrs)
     exists = attrs["id"].present?
-    empty = attrs["certificate"].blank? and attrs["name"].blank?
+    empty = attrs["name"].blank?
     !exists and empty
   end
 

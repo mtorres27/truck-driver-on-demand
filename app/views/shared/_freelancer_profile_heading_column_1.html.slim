@@ -1,0 +1,30 @@
+.profile__meta__details__1-1
+  .profile__meta__image
+    - if @freelancer.freelancer_profile.avatar_data.nil?
+      .circle_profile__image.freelancer__image= @freelancer.name_initials
+    - else
+      = image_tag(@freelancer.freelancer_profile.avatar_url, size: "75x75")
+  .profile__meta__info
+    h2.heading-h2
+      span.gutter-right
+        - if current_user&.admin?
+          = @freelancer.full_name
+        - else
+          = @freelancer.first_name_and_initial
+      - if is_verified(@freelancer)
+        span.list__verified.zmdi.zmdi-check-circle
+    - unless current_user&.company_user?
+      h4.heading-h4
+        a href="mailto:#{@freelancer.email}" target="_blank"
+          = @freelancer.email
+    h4.heading-h4
+      = "Joined #{@freelancer.freelancer_profile.created_at.strftime('%B %d, %Y')}"
+    h4.heading-h4
+      = freelancer_ratings_link(@freelancer)
+    - unless current_user.is_a?(CompanyUser)
+      h4.heading-h4
+        = "Pofile score: #{@freelancer.freelancer_profile.profile_score}%"
+    .profile__meta__rating
+      - @stars = freelancer_avg_rating(@freelancer)
+      - @stars.each do |star|
+        i class=star

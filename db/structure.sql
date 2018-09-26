@@ -981,7 +981,8 @@ CREATE TABLE jobs (
     amount_subtotal numeric(10,2),
     variable_pay_type character varying,
     overtime_rate numeric(10,2),
-    payment_terms integer
+    payment_terms integer,
+    expired boolean DEFAULT false
 );
 
 
@@ -2539,6 +2540,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20180810215943'),
 ('20180814215826'),
 ('20180824200604'),
-('20180906170002');
+('20180906170002'),
+('20180920171313');
 
 

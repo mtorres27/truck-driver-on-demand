@@ -26,9 +26,9 @@ class Freelancer::JobsController < Freelancer::BaseController
     end
 
     if sort != nil
-      @jobs = Job.joins(:company).where(companies: { disabled: false }).where.not(companies: { plan_id: nil }).where(state: "published").order(name: sort)
+      @jobs = Job.joins(:company).where(companies: { disabled: false }).where.not(companies: { plan_id: nil }).where(state: "published", expired: false).order(name: sort)
     else
-      @jobs = Job.joins(:company).where(companies: { disabled: false }).where.not(companies: { plan_id: nil }).where(state: "published").all
+      @jobs = Job.joins(:company).where(companies: { disabled: false }).where.not(companies: { plan_id: nil }).where(state: "published", expired: false).all
     end
 
     if @address

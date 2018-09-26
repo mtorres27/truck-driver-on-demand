@@ -26,6 +26,7 @@ gem "bootstrap-sass", "~> 3.3.7"
 gem "font-awesome-rails", "~> 4.7.0"
 gem "jquery-rails", "~> 4.3.1"
 gem "jquery-datatables"
+gem "chartkick"
 
 # Authentication & Authorization
 gem "devise"
@@ -48,6 +49,7 @@ gem "redcarpet", "~> 3.4.0"
 gem "wicked_pdf", "~> 1.1.0"
 gem "wkhtmltopdf-binary", "~> 0.12.3.1"
 gem "wicked"
+gem "hashids"
 
 # Services
 gem "rollbar"
