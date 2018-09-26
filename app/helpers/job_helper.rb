@@ -36,12 +36,17 @@ module JobHelper
       declined: :danger
     }
 
-    sym = job.state.to_sym
-    t = job.state.text
+    if !job.company.subscription_active? && job.state == 'published' && job.applicants.count == 0
+      sym = :created
+      t = 'Not Published'
+    else
+      sym = job.state.to_sym
+      t = job.state.text
+    end
 
-    if current_user.freelancer? && job.applicants.where({freelancer_id: current_user.id, state: "declined"}).count > 0
+    if current_user.freelancer? && job.applicants.where({freelancer_id: current_user.id, state: 'declined'}).count > 0
       sym = :declined
-      t = "declined"
+      t = 'declined'
     end
 
     content_tag(:span, class: "tag tag--#{mappings[sym]}") do

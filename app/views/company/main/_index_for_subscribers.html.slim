@@ -1,0 +1,93 @@
+h1.heading-h1
+  | Hi #{current_company.name}, welcome to AV Junction
+
+- content_for :secondary do
+  .grid-h.grid-h--no-margin
+    .grid-cell.grid-cell--67
+      .grid-h
+        .grid-cell.grid-cell--100
+          - trial_period_ends_at = current_company.trial_period_ends_at
+          - if trial_period_ends_at.present?
+            h1.heading-h1= "Your trial period ends in #{distance_of_time_in_words_to_now(trial_period_ends_at)}"
+          h2.heading-h2 Take the First Step. It's Simple.
+          br
+          h3.heading-h3 Post a job. Tell us what you need done. We’ll analyze your needs and provide suitable matches from our database of AV professionals.
+          br
+          .buttons
+            = link_to "Post a Job", company_job_job_build_index_path(job_id: :build_job), method: :post, class: "btn btn--primary", role: "button"
+        .grid-cell.grid-cell--100
+          .callout
+            h2.heading-h2 Do you have a job in progress?
+            p Access your current jobs and work orders through your dashboard. Review applicants, quotes, updates & payments.
+            .buttons
+              a.btn.btn--secondary href=company_projects_path
+                | Go there now
+        .grid-cell.grid-cell--100
+          h2.heading-h2 AV Freelancer Coverage
+          iframe style='height: 500px;' src='https://thexs-mapping.firebaseapp.com/mapping.html?fid=1HrvQqHYrlFjwJUv5CQhXGyzcE1fTq1Ls'
+
+        .grid-cell.grid-cell--100
+          .callout
+            h2.heading-h2 FAQ
+            h3.heading-h3 How much does it cost?
+            p All payments are subject to a 3.9% transaction fee.
+
+            h3.heading-h3 How does payment work?
+            p AV Junction makes paying your freelancers easy and secure.  Choose to pay using Visa, MasterCard or American Express. (ACH for US Companies is coming soon!)  For fixed priced work orders a payment schedule is created based on milestones.  When those milestones are completed your freelancer will request payment.  For hourly or daily work orders an invoice is created by the freelancer and sent to you for payment.
+
+            h3.heading-h3 How do I get started?
+            p Creating a job posting is the first step.  You can invite freelancers to quote or receive quotes automatically from freelancers who find your job through our search tool.
+
+            h3.heading-h3 Need Help?
+            p
+              | Contact us at
+              a href="mailto:info@avjunction.com"
+                |   info@avjunction.com
+            p
+              | Call us at
+              a href="tel:1-844-602-2000"
+                |   1-844-602-2000
+
+            a.btn-link href="https://www.avjunction.com/faq" target="_blank"
+              | More FAQ’s…
+    .grid-cell.grid-cell--33
+      .homepage__sidebar
+        .grid-v
+          .grid-cell
+            h2.heading-h2 How it Works
+          .grid-cell
+            h3.heading-h3 Post a Job
+            p
+              | Enter in a job summary, the location and type of freelancer you are looking for.
+            .buttons
+              a.btn-link href="https://www.avjunction.com/how-to-guide-av-company" target="_blank"
+                | Learn more
+          .grid-cell
+            h3.heading-h3 Find AV Freelancers
+            p
+              | We match qualified AV freelancers based on your job posting or Freelancers come direct to you.
+            a.btn-link href="https://www.avjunction.com/how-to-guide-av-company" target="_blank"
+              | Learn more
+          .grid-cell
+            h3.heading-h3 Hire
+            p
+              | Request quotes, negotiate fixed priced, hourly or daily work orders. Simple work order creation.
+            a.btn-link href="https://www.avjunction.com/how-to-guide-av-company" target="_blank"
+              | Learn more
+          .grid-cell
+            h3.heading-h3 Manage
+            p
+              | Collaborate easily. Chat, send files, track project milestones and receive timely progress reports, images and real time onsite check-in.
+            a.btn-link href="https://www.avjunction.com/how-to-guide-av-company " target="_blank"
+              | Learn more
+          .grid-cell
+            h3.heading-h3 Make Payments
+            p
+              | Receive invoices and use our secure and fast payment system.
+            a.btn-link href="https://www.avjunction.com/how-to-guide-av-company" target="_blank"
+              | Learn more
+          .grid-cell
+            h3.heading-h3 Visit the Knowledge Center for more
+            p
+              a.btn-link href="https://www.avjunction.com/how-to-guide-av-company " target="_blank"
+                | To the Knowledge Center

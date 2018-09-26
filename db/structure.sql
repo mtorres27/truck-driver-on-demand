@@ -982,7 +982,8 @@ CREATE TABLE jobs (
     variable_pay_type character varying,
     overtime_rate numeric(10,2),
     payment_terms integer,
-    expired boolean DEFAULT false
+    expired boolean DEFAULT false,
+    fee_schema json
 );
 
 
@@ -1185,7 +1186,8 @@ CREATE TABLE plans (
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
     description text,
-    period character varying DEFAULT 'yearly'::character varying
+    period character varying DEFAULT 'yearly'::character varying,
+    is_canadian boolean DEFAULT false
 );
 
 
@@ -2541,6 +2543,8 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20180814215826'),
 ('20180824200604'),
 ('20180906170002'),
-('20180920171313');
+('20180920171313'),
+('20180929195929'),
+('20181005155020');
 
 

@@ -26,7 +26,7 @@ describe Company::SubscriptionController, type: :controller  do
     it 'assigns the existing plans to @plans' do
       create_list(:plan, 3)
       get :plans
-      expect(assigns(:plans).count).to eq(3)
+      expect(assigns(:plans).count).to eq(4)
     end
 
     context 'when subscribed to a plan' do
@@ -84,6 +84,7 @@ describe Company::SubscriptionController, type: :controller  do
     let(:subscription) { double('Subscription', id: 1, current_period_end: Date.today, plan: plan) }
 
     before(:each) do
+      company.update_columns(plan_id: nil)
       allow(StripeTool).to receive(:create_customer).and_return(customer)
       allow(StripeTool).to receive(:subscribe).and_return(subscription)
       allow(StripeTool).to receive(:update_company_info_with_subscription).and_return(true)

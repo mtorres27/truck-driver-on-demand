@@ -64,6 +64,7 @@
 #  overtime_rate                          :decimal(10, 2)
 #  payment_terms                          :integer
 #  expired                                :boolean          default(FALSE)
+#  fee_schema                             :json
 #
 # Indexes
 #
@@ -102,6 +103,7 @@ class Job < ApplicationRecord
 
   after_save :check_if_should_do_geocode
   after_save :accept_applicant, if: :enforce_contract_creation
+  after_create :set_plan_fee
 
   enumerize :job_type, in: I18n.t('enumerize.job_types').keys
 
@@ -306,5 +308,9 @@ class Job < ApplicationRecord
     if send_contract == "true"
       errors.add(:applicable_sales_tax, 'You should set the applicable sales tax!') if applicable_sales_tax.nil?
     end
+  end
+
+  def set_plan_fee
+    update_columns(fee_schema: company.plan.fee_schema)
   end
 end

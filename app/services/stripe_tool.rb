@@ -22,7 +22,7 @@ module StripeTool
     company_subscription = Subscription.new
     company_subscription.company_id = company.id
     company_subscription.plan_id = plan.id
-    company_subscription.description = "Subscription to #{plan.name} plan."
+    company_subscription.description = "Subscription to #{plan.name}."
     company_subscription.stripe_subscription_id = subscription.id
     company_subscription.is_active = true
     company_subscription.ends_at = company.billing_period_ends_at
@@ -120,6 +120,13 @@ module StripeTool
 
   def self.get_stripe_plan(id:)
     Stripe::Plan.retrieve(id)
+  end
+
+  def self.get_trial_period_end(company:)
+    return unless company.stripe_subscription_id.present?
+    subscription = Stripe::Subscription.retrieve(company.stripe_subscription_id)
+    return unless subscription['trial_end'].present?
+    Time.at(subscription['trial_end'])
   end
 
   private

@@ -84,6 +84,7 @@ FactoryBot.define do
     number_of_offices { Faker::Number.number(1) }
     website { Faker::Lorem.word }
     area { "USA" }
+    subscription_status { "active" }
 
     after(:build) do |company|
       company.company_user ||= FactoryBot.build(:company_user, :confirmed)

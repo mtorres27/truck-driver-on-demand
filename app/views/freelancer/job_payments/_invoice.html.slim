@@ -10,7 +10,7 @@
       .invoice__table-text Description
       .invoice__table-text.invoice__table-text--right Amount
     .invoice__table-row
-      .invoice__table-text AV Junction Fees (#{@payment.freelancer_avj_fees_rate || @job.company.plan.fee_schema['freelancer_fees']}%) #{@tax && @tax > 0 ? '+ Tax (13%)' : ''}
+      .invoice__table-text AV Junction Fees (#{@payment.freelancer_avj_fees_rate || @job.fee_schema['freelancer_fees']}%) #{@tax && @tax > 0 ? '+ Tax (13%)' : ''}
       .invoice__table-text.invoice__table-text--right - #{(number_with_precision(@avj_t_fees, precision: 2)).to_s + " " + @job.currency.upcase}
     .invoice__table-row
       .invoice__table-text AV Junction Credit
