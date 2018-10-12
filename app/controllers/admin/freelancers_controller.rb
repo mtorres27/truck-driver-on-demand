@@ -11,7 +11,7 @@ class Admin::FreelancersController < Admin::BaseController
     @sort = params.dig(:search, :sort).presence
 
     if @keywords
-      @freelancer_ids = Freelancer.name_or_email_search(@keywords).pluck(:id)
+      @freelancer_ids = Freelancer.admin_search(@keywords).pluck(:id)
     else
       @freelancer_ids = Freelancer.pluck(:id)
     end

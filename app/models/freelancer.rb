@@ -114,6 +114,33 @@ class Freelancer < User
     tsearch: { prefix: true }
   }
 
+  pg_search_scope :admin_search, against: {
+      email: "A",
+      first_name: "A",
+      last_name: "A"
+  }, associated_against: {
+      freelancer_profile: [
+          :address,
+          :area,
+          :country,
+          :freelancer_type,
+          :state,
+          :service_areas,
+          :city,
+          :phone_number,
+          :company_name,
+          :job_types,
+          :job_markets,
+          :technical_skill_tags,
+          :manufacturer_tags,
+          :job_functions,
+          :tagline,
+          :bio
+      ]
+  }, using: {
+      tsearch: { prefix: true }
+  }
+
   delegate :registration_completed?, to: :freelancer_profile, allow_nil: true
 
   def connected?
