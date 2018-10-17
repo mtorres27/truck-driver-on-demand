@@ -21,6 +21,10 @@ class Company::ProfilesController < Company::BaseController
 
   private
 
+  def unsubscribed_redirect?
+    false
+  end
+
   def company_params
     params.require(:company).permit(
       :id,

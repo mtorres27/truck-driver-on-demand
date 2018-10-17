@@ -83,14 +83,6 @@ module FreelancerHelper
     return freelancer.freelancer_profile.verified
   end
 
-  def is_showing_freelancer(path)
-    if request.path.include?(company_freelancers_path) && !request.path.include?("hired") && !request.path.include?("favourites")
-      true
-    else
-      false
-    end
-  end
-
   def distance_from(freelancer, freelancer_profiles_with_distances)
     return (((freelancer_profiles_with_distances.where(freelancer_id: freelancer.id).first.distance / 1609.344)*10.0)/10.0).round(2) if freelancer_profiles_with_distances.present?
   end

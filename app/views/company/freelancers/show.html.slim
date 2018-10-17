@@ -14,22 +14,23 @@
         - if @freelancer.freelancer_profile.available
           .tag.tag--success.gutter-right
             | Available
-          .btn.btn--primary onclick="togglePopOver()" Invite to quote
-          .popover--blanket onclick="hidePopOver()"
-          .popover
+          - if current_company.subscription_active?
+            .btn.btn--primary onclick="togglePopOver()" Invite to quote
+            .popover--blanket onclick="hidePopOver()"
+            .popover
 
-            label.form__field-label for="field"  Invite to quote
-            select.form__select-field.w-select name="job_to_invite" id="job_to_invite"
-              option value=""
-                | Select Job
-              - @jobs.each do |job|
-                option value="#{job.id}"
-                  | #{job.title}
-            .btn.btn--primary id="job_invite_button" style="cursor: pointer" onclick="submitInvitation(#{@freelancer.id})" class="btn btn--primary btn--primary--disabled"
-              div invite
+              label.form__field-label for="field"  Invite to quote
+              select.form__select-field.w-select name="job_to_invite" id="job_to_invite"
+                option value=""
+                  | Select Job
+                - @jobs.each do |job|
+                  option value="#{job.id}"
+                    | #{job.title}
+              .btn.btn--primary id="job_invite_button" style="cursor: pointer" onclick="submitInvitation(#{@freelancer.id})" class="btn btn--primary btn--primary--disabled"
+                div invite
 
-            span.popover-response--error
-            span.popover-response--success
+              span.popover-response--error
+              span.popover-response--success
         - else
           .tag.tag--warning
             | Unavailable

@@ -1,72 +1,6 @@
 class Company::FreelancersController < Company::BaseController
   include FreelancerHelper
 
-  def index
-    authorize current_company
-    @job_type = params.dig(:search, :job_type).presence
-    @job_function = params.dig(:search, :job_function).presence
-    @address = params.dig(:search, :address).presence
-    @state_province = params.dig(:search, :state_province).presence
-    @country = params.dig(:search, :country).presence
-    @avatar_only = params.dig(:search, :avatar_only) == "1"
-    @technical_skill_tag = params.dig(:search, :technical_skill_tag).presence
-    @manufacturer_tag = params.dig(:search, :manufacturer_tag).presence
-
-    if params.has_key?(:search) && ( !@job_type || !@job_function || !@address || !@country || (['ca', 'us'].include?(@country) && ! @state_province) )
-      flash.now[:error] = "You'll need complete all the fields to search for freelancers"
-      @freelancer_profiles = FreelancerProfile.none.page(params[:page]).per(10)
-      return
-    end
-
-    @distance = params.dig(:search, :distance).presence
-
-    if @avatar_only
-      @freelancer_profiles = FreelancerProfile.where(disabled: false).where.not(avatar_data: nil)
-    else
-      @freelancer_profiles = FreelancerProfile.where(disabled: false)
-    end
-
-    @freelancer_profiles = @freelancer_profiles.where(country: @country)
-    @freelancer_profiles = @freelancer_profiles.where("job_types like ?", "%#{@job_type}%")
-    @freelancer_profiles = @freelancer_profiles.where("job_functions like ?", "%#{@job_function}%")
-
-    if @technical_skill_tag
-      @freelancer_profiles = @freelancer_profiles.where("technical_skill_tags like ?", "%#{@technical_skill_tag}%")
-    end
-
-    if @manufacturer_tag
-      @freelancer_profiles = @freelancer_profiles.where("manufacturer_tags like ?", "%#{@manufacturer_tag}%")
-    end
-
-    @address_for_geocode = @address.capitalize
-    @address_for_geocode += ", #{CS.states(@country.to_sym)[@state_province.to_sym]}" if @state_province.present?
-    @address_for_geocode += ", #{CS.countries[@country.upcase.to_sym]}" if @country.present?
-
-    # check for cached version of address
-    if Rails.cache.read(@address_for_geocode)
-      @geocode = Rails.cache.read(@address_for_geocode)
-    else
-      # save cached version of address
-      @geocode = do_geocode(@address_for_geocode)
-      Rails.cache.write(@address_for_geocode, @geocode)
-    end
-
-    if @geocode
-      point = OpenStruct.new(:lat => @geocode[:lat], :lng => @geocode[:lng])
-      if @distance.nil?
-        @distance_int = 60000
-      else
-        @distance_int = @distance.to_i
-      end
-      @freelancer_profiles = @freelancer_profiles.nearby(@geocode[:lat], @geocode[:lng], @distance_int).with_distance(point).order("verified DESC, profile_score DESC, distance")
-    else
-      @freelancer_profiles = FreelancerProfile.none
-    end
-
-    @freelancer_profiles_with_distances = @freelancer_profiles
-    @freelancer_profiles = @freelancer_profiles.page(params[:page]).per(10)
-  end
-
   def hired
     authorize current_company, :index?
     @locations = current_company.freelancers.uniq.pluck(:city)
@@ -159,7 +93,7 @@ class Company::FreelancersController < Company::BaseController
     authorize @freelancer
 
     @jobs = []
-    @jobs_master = current_company.jobs.where(state: "published").order(title: :asc).distinct
+    @jobs_master = current_company.jobs.where(state: "published").order(title: :asc)
     @jobs_master.each do |job|
       @found = false
       job.applicants.each do |applicant|
@@ -223,6 +157,12 @@ class Company::FreelancersController < Company::BaseController
     end
 
     render json: { status: 'success', freelancers: params[:freelancers] }
+  end
+
+  private
+
+  def unsubscribed_redirect?
+    false
   end
 
 end

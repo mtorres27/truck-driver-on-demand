@@ -54,6 +54,10 @@ class Company::ProjectsController < Company::BaseController
 
   private
 
+  def unsubscribed_redirect?
+    false
+  end
+
   def set_project
     @project = current_company.projects.find(params[:id])
   end

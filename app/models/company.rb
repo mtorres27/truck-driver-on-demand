@@ -277,6 +277,16 @@ class Company < ApplicationRecord
     company_user
   end
 
+  def subscription_active?
+    ['trialing', 'active'].include?(subscription_status) || (subscription_status == "cancelled" && billing_period_ends_at > Time.now.to_i)
+  end
+
+  def trial_period_ends_at
+    trial_period_end = StripeTool.get_trial_period_end(company: self)
+    return unless trial_period_end.present? && trial_period_end > Time.now
+    trial_period_end
+  end
+
   private
 
   def add_to_hubspot

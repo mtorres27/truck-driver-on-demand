@@ -23,14 +23,17 @@ nav#top-nav.navbar
     ul.nav.navbar-nav.navbar-right
       - if request.path.index('company') == 1
         - if current_user&.company_user?
-          li( class=("active" if request.path == company_root_path || is_showing_freelancer(request.path)) )
-            = link_to "Search Freelancers", company_root_path
-          li( class=("active" if request.path.include?(company_projects_path)) )
-            = link_to "My Job Postings", company_projects_path
-          li( class=("active" if request.path == company_freelancers_path + "/hired" || request.path == company_freelancers_path + "/favourites") )
-            = link_to "My Freelancers", hired_company_freelancers_path
-          li( class=("active" if request.path.include?(company_payments_path)) )
-            = link_to "Payments", company_payments_path
+          - if current_company.subscription_active?
+            li( class=("active" if request.path == company_root_path) )
+              = link_to "Post a Job", company_job_job_build_index_path(job_id: :build_job), method: :post
+          - if current_company.jobs.count > 0
+            li( class=("active" if request.path.include?(company_projects_path)) )
+              = link_to "My Job Postings", company_projects_path
+          - if current_company.subscription_active?
+            li( class=("active" if request.path == hired_company_freelancers_path || request.path == favourites_company_freelancers_path) )
+              = link_to "My Freelancers", hired_company_freelancers_path
+            li( class=("active" if request.path.include?(company_payments_path)) )
+              = link_to "Payments", company_payments_path
           li.dropdown.notification-container
             a href="#" class="dropdown-toggle btn-icon-link" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"
               - if current_user.notifications.unread.count > 0

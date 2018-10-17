@@ -12,6 +12,7 @@
 #  updated_at       :datetime         not null
 #  description      :text
 #  period           :string           default("yearly")
+#  is_canadian      :boolean          default(FALSE)
 #
 
 FactoryBot.define do
