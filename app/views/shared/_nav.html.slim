@@ -24,7 +24,7 @@ nav#top-nav.navbar
       - if request.path.index('company') == 1
         - if current_user&.company_user?
           - if current_company.subscription_active?
-            li( class=("active" if request.path == company_root_path) )
+            li
               = link_to "Post a Job", company_job_job_build_index_path(job_id: :build_job), method: :post
           - if current_company.jobs.count > 0
             li( class=("active" if request.path.include?(company_projects_path)) )

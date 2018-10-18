@@ -6,11 +6,12 @@
   div= current_company.address
   div #{current_company.city}, #{current_company.state}
   div= current_company.postal_code
-  div BN Tax No. #{current_company.sales_tax_number}
+  div=  "BN Tax No. #{current_company.sales_tax_number}" if current_company.sales_tax_number.present?
 .grid-cell.grid-cell--33
   h4.heading-h4= "Inv #: #{@subscription[:id]}"
   div= "Date: #{Time.at(@subscription[:created_at]).strftime('%b %-d, %Y')}"
 .grid-cell.grid-cell--100
+  - currency = current_company.canada_country? ? 'CAD' : 'USD'
   .invoice__table
     .invoice__table-row.invoice__table-row--header
       .invoice__table-text. Description
@@ -18,12 +19,12 @@
     .invoice__table-row
       .invoice__table-text #{@subscription[:description]}
       .invoice__table-text.invoice__table-text--right
-        | $#{(@subscription[:amount])}USD
+        | $#{number_with_precision(@subscription[:amount], precision: 2)}#{currency}
     .invoice__table-row
       .invoice__table-text Tax (%#{current_company.canada_country? ? Subscription::CANADA_SALES_TAX_PERCENT : 0})
       .invoice__table-text.invoice__table-text--right
-        | $#{@subscription[:tax]}USD
+        | $#{number_with_precision(@subscription[:tax], precision: 2)}#{currency}
     .invoice__table-row.invoice__table-row--total
       .invoice__table-text Total
       .invoice__table-text.invoice__table-text--right
-        | $#{(@subscription[:amount]+@subscription[:tax])}USD
+        | $#{number_with_precision(@subscription[:amount]+@subscription[:tax], precision: 2)}#{currency}
