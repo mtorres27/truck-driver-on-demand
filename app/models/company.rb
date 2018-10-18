@@ -287,6 +287,18 @@ class Company < ApplicationRecord
     trial_period_end
   end
 
+  def trial_days_available
+    if trial_period_ends_at.present?
+      if trial_period_ends_at > Time.now
+        (trial_period_ends_at.to_date - Time.now.to_date).to_i
+      else
+        0
+      end
+    else
+      15
+    end
+  end
+
   private
 
   def add_to_hubspot

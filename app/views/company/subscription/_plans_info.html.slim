@@ -33,7 +33,8 @@
         .plans
           h2.heading-h2.center #{plan[:name]}
           .plans__subtitle
-            == plan.description
+            h3.heading-h3.center
+              == plan.description
           .plans__pricing
             - if  plan[:subscription_fee] <= 0
               .plans__price $#{number_with_precision(plan[:subscription_fee] , precision: 2,  strip_insignificant_zeros: true)}
