@@ -101,7 +101,7 @@ class Company::SubscriptionController < Company::BaseController
     subscription = StripeTool.subscribe(customer: customer,
                                         tax: current_company.canada_country? ? Subscription::CANADA_SALES_TAX_PERCENT : 0,
                                         plan: plan,
-                                        is_new: current_company.is_trial_applicable
+                                        trial_period: current_company.trial_days_available
                                         )
     StripeTool.update_company_info_with_subscription(company: current_company, customer: customer, subscription: subscription, plan: plan)
 

@@ -12,13 +12,13 @@ nav#top-nav.navbar
       span.icon-bar
     - if request.path.index('company') == 1
       a.navbar-brand href="/company" title="AV Junction"
-        = image_tag("avjunction-logo_header.svg", class: "header-logo", alt: "AV Junction")
+        = image_tag('avjunction_logo.png', class: "header-logo", alt: "AV Junction")
     - elsif request.path.index('freelancer') == 1
       a.navbar-brand href="/freelancer" title="AV Junction"
-        = image_tag("avjunction-logo_header.svg", class: "header-logo", alt: "AV Junction")
+        = image_tag('avjunction_logo.png', class: "header-logo", alt: "AV Junction")
     - else
       a.navbar-brand href="/" title="AV Junction"
-        = image_tag("avjunction-logo_header.svg", class: "header-logo", alt: "AV Junction")
+        = image_tag('avjunction_logo.png', class: "header-logo", alt: "AV Junction")
   #navbar-lg.collapse.navbar-collapse
     ul.nav.navbar-nav.navbar-right
       - if request.path.index('company') == 1
