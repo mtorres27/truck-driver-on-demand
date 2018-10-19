@@ -22,7 +22,7 @@
       p This is a variable payment type job, which means that the payments will be created dynamically by the freelancer as they advance in the job.
 
 - payments.each do |payment|
-  - company_fees = payment.company_avj_fees_rate.to_f
+  - company_fees = job.fee_schema['company_fees'].to_f
   div class="payments"
     .payments__flexbox
       .payments__flexbox

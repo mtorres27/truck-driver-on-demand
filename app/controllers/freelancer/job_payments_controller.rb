@@ -13,7 +13,7 @@ class Freelancer::JobPaymentsController < Freelancer::BaseController
     @amount      = @payment.amount
     @tax         = @job.applicable_sales_tax * @payment.amount / 100
     @avj_fees    = @job.fee_schema['freelancer_fees'] ? (@amount * @job.fee_schema['freelancer_fees'].to_f / 100) : 0
-    @avj_t_fees  = @job.company.country == 'ca' ? @avj_fees * 1.13 : @avj_fees
+    @avj_t_fees  = current_user.freelancer_profile.country == 'ca' ? @avj_fees * 1.13 : @avj_fees
     @total       = @amount + @tax - @avj_t_fees
   end
 
@@ -21,7 +21,7 @@ class Freelancer::JobPaymentsController < Freelancer::BaseController
     @amount      = @payment.amount
     @tax         = @job.applicable_sales_tax * @payment.amount / 100
     @avj_fees    = @job.fee_schema['freelancer_fees'] ? (@amount * @job.fee_schema['freelancer_fees'].to_f / 100) : 0
-    @avj_t_fees  = @job.company.country == 'ca' ? @avj_fees * 1.13 : @avj_fees
+    @avj_t_fees  = current_user.freelancer_profile.country == 'ca' ? @avj_fees * 1.13 : @avj_fees
     @total       = @amount + @tax - @avj_t_fees
     render layout: false
   end
