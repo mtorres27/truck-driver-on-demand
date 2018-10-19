@@ -23,6 +23,8 @@ nav#top-nav.navbar
     ul.nav.navbar-nav.navbar-right
       - if request.path.index('company') == 1
         - if current_user&.company_user?
+          li( class=("active" if request.path == company_root_path) )
+            = link_to "Home", company_root_path
           - if current_company.subscription_active?
             li
               = link_to "Post a Job", company_job_job_build_index_path(job_id: :build_job), method: :post
