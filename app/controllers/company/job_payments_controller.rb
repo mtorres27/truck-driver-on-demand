@@ -11,7 +11,7 @@ class Company::JobPaymentsController < Company::BaseController
   def show
     @amount      = @payment.amount
     @tax         = @job.applicable_sales_tax * @payment.amount / 100
-    @avj_fees    = @job.company_plan_fees == 0 ? 0 : @job.fee_schema['company_fees'] ? (@amount * @job.fee_schema['company_fees'].to_f / 100) : 0
+    @avj_fees    = @job.company_plan_fees == 0 ? 0 : @payment.company_avj_fees_rate ? (@amount * @payment.company_avj_fees_rate.to_f / 100) : 0
     @avj_t_fees  = current_company.country == 'ca' ? @avj_fees * 1.13 : @avj_fees
     @total       = @amount + @tax + @avj_t_fees
   end
@@ -19,7 +19,7 @@ class Company::JobPaymentsController < Company::BaseController
   def print
     @amount      = @payment.amount
     @tax         = @job.applicable_sales_tax * @payment.amount / 100
-    @avj_fees    = @job.company_plan_fees == 0 ? 0 : @job.fee_schema['company_fees'] ? (@amount * @job.fee_schema['company_fees'].to_f / 100) : 0
+    @avj_fees    = @job.company_plan_fees == 0 ? 0 : @payment.company_avj_fees_rate ? (@amount * @payment.company_avj_fees_rate.to_f / 100) : 0
     @avj_t_fees  = current_company.country == 'ca' ? @avj_fees * 1.13 : @avj_fees
     @total       = @amount + @tax + @avj_t_fees
     render layout: false
