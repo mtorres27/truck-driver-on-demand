@@ -72,6 +72,8 @@
         a.mobile-nav__menu__item href=new_company_user_registration_path data-turbolinks="false"
           | Register
       - elsif current_user.company_user?
+        a.mobile-nav__menu__item href=company_root_path data-turbolinks="false"
+          | Home
         - if current_company.subscription_active?
           = link_to "Post a Job", company_job_job_build_index_path(job_id: :build_job), method: :post, class: "mobile-nav__menu__item"
         - if current_company.jobs.count > 0
