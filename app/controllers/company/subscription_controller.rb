@@ -16,12 +16,13 @@ class Company::SubscriptionController < Company::BaseController
 
   def invoices
     authorize current_company
-    @subscriptions = Subscription.where(company_id: current_company.id)
+    current_company.check_for_new_invoices
+    @subscriptions = current_company.subscriptions.order('created_at DESC')
   end
 
   def invoice
     # raise exception if company is not the invoice owner
-    @subscription = Subscription.find_by(stripe_subscription_id: params[:subscription])
+    @subscription = Subscription.find(params[:invoice])
     authorize @subscription
     if @subscription.nil? || @subscription.company_id != current_company.id
       flash[:error] = "You can't see this invoice!"
@@ -96,8 +97,13 @@ class Company::SubscriptionController < Company::BaseController
     authorize current_company
 
     plan = Plan.find_by(code: params[:plan_id])
-    customer = StripeTool.create_customer(email: params[:stripeEmail],
-                                          stripe_token: params[:stripeToken])
+
+    if current_company.stripe_customer_id.present?
+      customer = Stripe::Customer.retrieve(current_company.stripe_customer_id)
+    else
+      customer = StripeTool.create_customer(email: params[:stripeEmail], stripe_token: params[:stripeToken])
+    end
+
     subscription = StripeTool.subscribe(customer: customer,
                                         tax: current_company.canada_country? ? Subscription::CANADA_SALES_TAX_PERCENT : 0,
                                         plan: plan,

@@ -59,7 +59,7 @@ describe Company::SubscriptionController, type: :controller  do
       let!(:subscription) { create(:subscription, company_id: company.id) }
 
       it 'assigns @subscription' do
-        get :invoice, params: { subscription: subscription.stripe_subscription_id }
+        get :invoice, params: { invoice: subscription.id }
         expect(assigns(:subscription)).to eq(subscription)
       end
     end
@@ -69,7 +69,7 @@ describe Company::SubscriptionController, type: :controller  do
       let!(:subscription) { create(:subscription, company_id: other_company.id) }
 
       before(:each) do
-        get :invoice, params: { subscription: subscription.stripe_subscription_id }
+        get :invoice, params: { invoice: subscription.id }
       end
 
       it 'be a 401 Unauthorized' do

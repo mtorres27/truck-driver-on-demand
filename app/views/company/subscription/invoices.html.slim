@@ -12,11 +12,13 @@
         .list
           - currency = current_company.canada_country? ? 'CAD' : 'USD'
           - @subscriptions.each do |subscription|
-            a.list-item href=company_invoice_path(subscription: subscription.stripe_subscription_id)
+            a.list-item href=company_invoice_path(invoice: subscription.id)
               .list-bar
-                .list__title
+                .list__title.list__40
                   = subscription.description
-                .list__title
+                .list__title.list__30
+                  = (subscription.stripe_invoice_date || subscription.created_at).strftime('%b %-d, %Y')
+                .list__title.list__30.right-text
                   | $#{number_with_precision(subscription.amount+subscription.tax, precision: 2)} #{currency}
 
   - else

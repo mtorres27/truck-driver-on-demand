@@ -19,16 +19,7 @@ module StripeTool
     company.save(validate: false)
     # subscription
     Subscription.where(company_id: company.id).update_all(is_active: false)
-    company_subscription = Subscription.new
-    company_subscription.company_id = company.id
-    company_subscription.plan_id = plan.id
-    company_subscription.description = "Subscription to #{plan.name}."
-    company_subscription.stripe_subscription_id = subscription.id
-    company_subscription.is_active = true
-    company_subscription.ends_at = company.billing_period_ends_at
-    company_subscription.amount = plan.subscription_fee
-    company_subscription.tax = plan.subscription_fee * (Subscription::CANADA_SALES_TAX_PERCENT/100) if company.canada_country?
-    company_subscription.save
+    company.check_for_new_invoices
   end
 
   def self.update_company_card_info(company:, last_4_digits:, card_brand:, exp_month:, exp_year:)

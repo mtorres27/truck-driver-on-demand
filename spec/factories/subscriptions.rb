@@ -15,6 +15,8 @@
 #  refund                 :decimal(10, 2)   default(0.0)
 #  tax                    :decimal(10, 2)   default(0.0)
 #  description            :string
+#  stripe_invoice_id      :string
+#  stripe_invoice_date    :datetime
 #
 
 FactoryBot.define do
