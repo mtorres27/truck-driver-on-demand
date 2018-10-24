@@ -12,9 +12,6 @@ h1 Editing Plan
     = f.input :description, as: "hidden", id: "description"
     trix-editor input="plan_description"
     = f.input :period
-    / - @plan.fee_schema.try(:each) do |key, value|
-    /   = key
-    /   = f.input key
     = f.input :subscription_fee
     = f.fields_for :fee_schema, OpenStruct.new(@plan.fee_schema) do |ff|
       .form-group

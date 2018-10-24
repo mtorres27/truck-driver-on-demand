@@ -7,14 +7,45 @@ class Admin::FreelancersController < Admin::BaseController
   def index
     authorize current_user
     @keywords = params.dig(:search, :keywords).presence
+    @country = params.dig(:search, :country).presence
+    @state_province = params.dig(:search, :state_province).presence
+    @city = params.dig(:search, :city).presence
     @filter_by_disabled = params.dig(:search, :filter_by_disabled).presence
     @sort = params.dig(:search, :sort).presence
 
     if @keywords
-      @freelancer_ids = Freelancer.admin_search(@keywords).pluck(:id)
+      @freelancers = Freelancer.admin_search(@keywords)
     else
-      @freelancer_ids = Freelancer.pluck(:id)
+      @freelancers = Freelancer.all
     end
+
+    freelancer_profiles = FreelancerProfile.where(freelancer_id: @freelancers.pluck(:id))
+
+    if @city
+      # check for cached version of address
+      @address_for_geocode = @city
+      @address_for_geocode += ", #{CS.states(@country.to_sym)[@state_province.to_sym]}" if @state_province.present?
+      @address_for_geocode += ", #{CS.countries[@country.upcase.to_sym]}" if @country.present?
+      if Rails.cache.read(@address_for_geocode)
+        @geocode = Rails.cache.read(@address_for_geocode)
+      else
+        # save cached version of address
+        @geocode = do_geocode(@address_for_geocode)
+        Rails.cache.write(@address_for_geocode, @geocode)
+      end
+
+      if @geocode
+        point = OpenStruct.new(:lat => @geocode[:lat], :lng => @geocode[:lng])
+        @distance = 60000
+        freelancer_profiles = freelancer_profiles.nearby(@geocode[:lat], @geocode[:lng], @distance).with_distance(point)
+      end
+    end
+
+    freelancer_profiles = freelancer_profiles.where(country: @country) if @country.present?
+    freelancer_profiles = freelancer_profiles.where(state: @state_province) if @state_province.present?
+
+    @freelancers = Freelancer.where(id: freelancer_profiles.pluck(:freelancer_id))
+    @freelancer_ids = @freelancers.pluck(:id)
 
     if @sort.blank?
       @freelancers = Freelancer.includes(:freelancer_profile).where(id: @freelancer_ids).order('freelancer_profiles.created_at DESC')
