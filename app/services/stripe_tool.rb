@@ -125,8 +125,8 @@ module StripeTool
   def self.get_trial_period_end(company:)
     return unless company.stripe_subscription_id.present?
     subscription = Stripe::Subscription.retrieve(company.stripe_subscription_id)
-    return unless subscription['trial_end'].present?
-    Time.at(subscription['trial_end'])
+    return unless subscription['trial_start'].present?
+    Time.at(subscription['trial_start']) + 15.days
   end
 
   private
