@@ -47,18 +47,6 @@
           | av companies
         a.mobile-nav__menu__item href=freelancer_payments_path
           | payments
-          span.js--notification-count= current_user.notifications.unread.count
-          span.caret
-        .dropdown-menu
-          .notifications
-            .list-notification.js--notifications data-id="#{current_user.id}"
-              - if current_user.notifications.to_show.count > 0
-                - (current_user.notifications.unread + current_user.notifications.to_show).uniq.each do |notification|
-                  = render "shared/notification", notification: notification
-              - else
-                .list-item.w-inline-block href="#"
-                  .list__title Nothing to see here
-                  .list__desc You don't have any new notifications for the moment
         a.mobile-nav__menu__item href=freelancer_profile_path data-turbolinks="false"
           = image_tag current_user.freelancer_profile.avatar_url
           | my profile

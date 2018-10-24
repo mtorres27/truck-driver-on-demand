@@ -9,7 +9,10 @@
   div=  "BN Tax No. #{current_company.sales_tax_number}" if current_company.sales_tax_number.present?
 .grid-cell.grid-cell--33
   h4.heading-h4= "Inv #: #{@subscription[:id]}"
-  div= "Date: #{Time.at(@subscription[:created_at]).strftime('%b %-d, %Y')}"
+  - if @subscription[:stripe_invoice_date].present?
+    div= "Date: #{Time.at(@subscription[:stripe_invoice_date]).strftime('%b %-d, %Y')}"
+  -else
+    div= "Date: #{Time.at(@subscription[:created_at]).strftime('%b %-d, %Y')}"
 .grid-cell.grid-cell--100
   - currency = current_company.canada_country? ? 'CAD' : 'USD'
   .invoice__table

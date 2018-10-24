@@ -16,17 +16,12 @@ describe StripeTool do
       allow(plan).to receive(:[]).with(:trial_period).and_return(1)
       allow(card_data).to receive(:[]).with(0).and_return(card_info)
       allow_any_instance_of(Company).to receive(:save).and_return(true)
+      allow_any_instance_of(Company).to receive(:check_for_new_invoices).and_return(true)
     end
 
     it "updates the company's data" do
       expect_any_instance_of(Company).to receive(:save).once
       StripeTool.update_company_info_with_subscription(company: company, customer: customer, subscription: subscription, plan: plan)
-    end
-
-    it "creates a new subscription" do
-      expect {
-        StripeTool.update_company_info_with_subscription(company: company, customer: customer, subscription: subscription, plan: plan) }
-          .to change{ Subscription.count }.by(1)
     end
   end
 
