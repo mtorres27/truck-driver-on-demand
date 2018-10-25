@@ -96,7 +96,7 @@ module StripeTool
     subscription = Stripe::Subscription.retrieve(company.stripe_subscription_id)
     period_end = self.get_cancel_period_end(subscription: subscription)
     # Rails.logger.debug period_end
-    self.cancel(subscription: subscription, period_end: period_end)
+    self.cancel(subscription: subscription)
     if subscription.plan.amount > 0
       self.refund_customer(
         company: company,
@@ -134,16 +134,12 @@ module StripeTool
     return subscription.current_period_end
   end
 
-  def self.cancel(subscription:, period_end:)
-    cancel_at_period_end = subscription.status == 'past_due' ? false : true
+  def self.cancel(subscription:)
     if subscription.status == 'trialing' || subscription.plan.amount > 0
-      subscription.trial_end = period_end
       subscription.prorate = false
       subscription.save
     end
-    subscription.delete(
-      at_period_end: cancel_at_period_end
-    )
+    subscription.delete()
   end
 
   def self.refund_customer(company:, old_exp:)
