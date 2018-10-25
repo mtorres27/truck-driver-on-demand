@@ -26,7 +26,8 @@ describe StripeTool do
   end
 
   describe '.cancel_subscription' do
-    let!(:company) { create(:company, billing_period_ends_at: DateTime.now) }
+    let(:company_plan) { create :plan, name: 'Name' }
+    let!(:company) { create(:company, billing_period_ends_at: DateTime.now, plan: company_plan) }
     let(:plan) { double('Plan', id: 1, name: 'Name', amount: 10) }
     let(:subscription) { double('Subscription', id: 1, current_period_start: DateTime.now.to_i, status: 'status', plan: plan) }
 
