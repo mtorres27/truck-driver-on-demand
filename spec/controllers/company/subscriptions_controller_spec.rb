@@ -92,7 +92,7 @@ describe Company::SubscriptionController, type: :controller  do
 
     it 'subscribes the company to the specified plan' do
       expect(StripeTool).to receive(:create_customer).with(email: company.email, stripe_token: 'token').once
-      expect(StripeTool).to receive(:subscribe).with(customer: customer, tax: 0, plan: plan, trial_period: company.trial_days_available).once
+      expect(StripeTool).to receive(:subscribe).with(customer: customer, tax: 0, plan: plan).once
       expect(StripeTool).to receive(:update_company_info_with_subscription).with(company: company, customer: customer, subscription: subscription, plan: plan).once
       post :subscription_checkout, params: { plan_id: plan.code, stripeEmail: company.email, stripeToken: 'token' }
     end

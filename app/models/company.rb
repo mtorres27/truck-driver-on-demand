@@ -325,8 +325,8 @@ class Company < ApplicationRecord
     company_subscription.is_active = true
     company_subscription.ends_at = Time.at(stripe_subscription.current_period_end).to_datetime
     company_subscription.stripe_invoice_date = Time.at(invoice.date).to_datetime
-    company_subscription.amount = invoice.subtotal
-    company_subscription.tax = invoice.tax
+    company_subscription.amount = invoice.subtotal / 100
+    company_subscription.tax = invoice.tax / 100
     company_subscription.save
   end
 

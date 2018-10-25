@@ -56,10 +56,9 @@ module StripeTool
     )
   end
 
-  def self.subscribe(customer:, tax:, plan:, trial_period:)
+  def self.subscribe(customer:, tax:, plan:)
     customer.subscriptions.create(
       plan: plan[:code],
-      trial_period_days: trial_period,
       tax_percent: tax
     )
   end
@@ -100,7 +99,9 @@ module StripeTool
     if subscription.plan.amount > 0
       self.refund_customer(
         company: company,
-        old_exp: company.billing_period_ends_at.to_time.to_i
+        old_exp: company.billing_period_ends_at.to_time.to_i,
+        plan_code: company.plan.code,
+        plan_period: company.plan.period
         )
     end
     company.billing_period_ends_at = Time.at(period_end).to_date
@@ -136,17 +137,17 @@ module StripeTool
 
   def self.cancel(subscription:)
     if subscription.status == 'trialing' || subscription.plan.amount > 0
-      subscription.prorate = false
+      subscription.prorate = true
       subscription.save
     end
-    subscription.delete()
+    subscription.delete
   end
 
-  def self.refund_customer(company:, old_exp:)
+  def self.refund_customer(company:, old_exp:, plan_code:, plan_period:)
     # calculate months
-    professional_plan = Stripe::Plan.retrieve('avj_professional')
-    no_of_month = ((old_exp - Time.now.to_time.to_i)/1.month.second).to_i
-    amount = no_of_month * professional_plan[:amount] / 12
+    plan = Stripe::Plan.retrieve(plan_code)
+    no_of_days = ((old_exp - Time.now.to_time.to_i)/1.day.second).to_i
+    amount = no_of_days * plan[:amount] / (plan_period == "yearly" ? 365 : 30)
     amount += amount * (Subscription::CANADA_SALES_TAX_PERCENT/100) if company.canada_country?
     # generate the refund
     if amount > 0
@@ -154,7 +155,7 @@ module StripeTool
         amount: amount.round,
         currency:  'usd',
         customer: company.stripe_customer_id,
-        description: 'Refund for unused period in the professional plan.'
+        description: "Refund for unused period in the #{plan_code} plan."
       )
       Stripe::Refund.create(
         charge: charge.id
