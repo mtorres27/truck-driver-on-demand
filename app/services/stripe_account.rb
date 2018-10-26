@@ -42,7 +42,7 @@ class StripeAccount < Struct.new( :freelancer )
           type: type,
         },
         payout_schedule: {
-          delay_days: 0,
+          delay_days: 7,
           interval: 'daily'
         }
       )
