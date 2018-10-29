@@ -1,14 +1,12 @@
 require "rails_helper"
 
 RSpec.describe Company::JobBuildController, type: :controller do
-  let(:company) { create(:company) }
-  let(:company_user) { company.company_user }
+  login_company
+  let(:company) { subject.current_user.company }
   let(:job) { create(:job, company: company, project: create(:project, company: company)) }
 
   describe "GET #show" do
     describe "step: job_details" do
-      before { sign_in company_user }
-
       it "renders job_details template" do
         get :show, params: { id: :job_details, job_id: job.id }
         expect(response).to render_template('company/job_build/job_details')
@@ -17,8 +15,6 @@ RSpec.describe Company::JobBuildController, type: :controller do
 
     describe "step: candidate_details" do
       let!(:job) { create(:job, company: company, project: create(:project, company: company), creation_step: "candidate_details") }
-
-      before { sign_in company_user }
 
       it "renders candidate_details template" do
         get :show, params: { id: :candidate_details, job_id: job.id }
@@ -30,8 +26,6 @@ RSpec.describe Company::JobBuildController, type: :controller do
       context "when creation_step is wicked_finish" do
         let!(:job) { create(:job, company: company, project: create(:project, company: company), creation_step: "wicked_finish") }
 
-        before { sign_in company_user }
-
         it "redirects to job" do
           get :show, params: { id: :wicked_finish, job_id: job.id }
           expect(response).to redirect_to(company_job_path(job))
@@ -41,12 +35,6 @@ RSpec.describe Company::JobBuildController, type: :controller do
   end
 
   describe "PUT #update" do
-    let(:company) { create(:company) }
-    let(:company_user) { company.company_user }
-
-    before do
-      sign_in company_user
-    end
 
     describe "step: job_details" do
       context "when the fields are filled" do
@@ -114,8 +102,6 @@ RSpec.describe Company::JobBuildController, type: :controller do
       it "publishes the job" do
         expect(job.reload.state).to eq("published")
       end
-
-
     end
   end
 end

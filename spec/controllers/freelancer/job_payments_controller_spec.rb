@@ -3,7 +3,7 @@ require 'rails_helper'
 describe Freelancer::JobPaymentsController, type: :controller  do
   login_freelancer
   let(:freelancer) { subject.current_user }
-  let(:company) { create :company }
+  let(:company) { create :company, plan: create(:plan) }
   let(:job) { create(:job,
                      project: create(:project, company: company),
                      company: company,

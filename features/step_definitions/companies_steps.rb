@@ -2,7 +2,7 @@ include Warden::Test::Helpers
 
 Given("Exists an full registered company user with email {string} and password {string}") do |email, password|
   user = FactoryBot.create(:company_user, :confirmed, email: email, password: password)
-  FactoryBot.create(:company, :registration_completed, company_user: user)
+  FactoryBot.create(:company, :registration_completed, company_user: user, plan: FactoryBot.create(:plan))
 end
 
 Given("I filled company registration step {int}") do |step|

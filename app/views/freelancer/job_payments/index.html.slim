@@ -21,7 +21,7 @@
       p Don't forget to use the progress tab to send updates and pictures of your work to the company.
       p All payments received are subject up to a 6% service fee.
       p Please note that a payment may take up to 2 business days to hit your bank account after it is issued by the company.
-  - freelancer_fees = @job.company.plan.fee_schema['freelancer_fees'].to_f
+  - freelancer_fees = @job.fee_schema['freelancer_fees'].to_f
   - @payments.each do |payment|
     div class="payments"
       .payments__flexbox
@@ -30,8 +30,8 @@
           .tag class="#{payment.paid_on.present? ? "tag--success" : "tag--warning"}" #{payment.paid_on.present? ? "Paid" : "Unpaid"}
         - amount      = payment.amount
         - tax         = @job.applicable_sales_tax * payment.amount / 100
-        - avj_fees    = @job.company.plan.fee_schema['freelancer_fees'] ? (amount * freelancer_fees / 100) : 0
-        - avj_t_fees  = @job.company.country == 'ca' ? avj_fees * 1.13 : avj_fees
+        - avj_fees    = @job.fee_schema['freelancer_fees'] ? (amount * freelancer_fees / 100) : 0
+        - avj_t_fees  = current_user.freelancer_profile.country == 'ca' ? avj_fees * 1.13 : avj_fees
         - total       = amount + tax - avj_t_fees
         .payments__amt #{ number_with_precision(total, precision: 2)} #{@job.currency ? @job.currency.upcase : ''}
       .payments__flexbox

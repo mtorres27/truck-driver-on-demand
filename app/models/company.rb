@@ -95,6 +95,7 @@ class Company < ApplicationRecord
   has_many :company_installs, dependent: :destroy
   has_one :company_user, dependent: :destroy
   has_many :notifications, as: :receivable, dependent: :destroy
+  has_many :subscriptions
 
   attr_accessor :accept_terms_of_service, :accept_privacy_policy, :accept_code_of_conduct,
                 :enforce_profile_edit, :user_type, :skip_step
@@ -277,7 +278,57 @@ class Company < ApplicationRecord
     company_user
   end
 
+  def subscription_active?
+    ['trialing', 'active'].include?(subscription_status) || (subscription_status == "cancelled" && billing_period_ends_at > Time.now.to_i)
+  end
+
+  def trial_period_ends_at
+    trial_period_end = StripeTool.get_trial_period_end(company: self)
+    return unless trial_period_end.present? && trial_period_end > Time.now
+    trial_period_end
+  end
+
+  def trial_days_available
+    if trial_period_ends_at.present?
+      if trial_period_ends_at > Time.now
+        (trial_period_ends_at.to_date - Time.now.to_date).to_i
+      else
+        0
+      end
+    else
+      15
+    end
+  end
+
+  def check_for_new_invoices
+    if stripe_customer_id.present?
+      customer = Stripe::Customer.retrieve(stripe_customer_id)
+      invoices = StripeTool.get_invoices(customer: customer)
+      invoices.each do |invoice|
+        next if subscriptions.find_by(stripe_invoice_id: invoice.id).present?
+        stripe_subscription = Stripe::Subscription.retrieve(invoice.subscription)
+        plan = Plan.find_by(code: stripe_subscription.plan.id)
+        create_subscription(plan, stripe_subscription, invoice)
+      end
+    end
+  end
+
   private
+
+  def create_subscription(plan, stripe_subscription, invoice)
+    company_subscription = Subscription.new
+    company_subscription.company_id = id
+    company_subscription.plan_id = plan.id
+    company_subscription.description = "Subscription to #{plan.name}."
+    company_subscription.stripe_subscription_id = stripe_subscription.id
+    company_subscription.stripe_invoice_id = invoice.id
+    company_subscription.is_active = true
+    company_subscription.ends_at = Time.at(stripe_subscription.current_period_end).to_datetime
+    company_subscription.stripe_invoice_date = Time.at(invoice.date).to_datetime
+    company_subscription.amount = invoice.subtotal / 100
+    company_subscription.tax = invoice.tax / 100
+    company_subscription.save
+  end
 
   def add_to_hubspot
     return unless Rails.application.secrets.enabled_hubspot

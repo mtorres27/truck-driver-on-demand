@@ -6,7 +6,7 @@
         .buttons
           a.btn-icon-link data-dismiss="modal" href="#"
             span.zmdi.zmdi-close
-      = simple_form_for(:payment, url: create_payment_freelancer_job_payments_path(@job), method: :post, remote: true) do |f|
+      = simple_form_for(:payment, url: create_payment_freelancer_job_payments_path(@job), method: :post, html: { class: "js--create-payment-form" }) do |f|
         .grid-h
           .grid-cell.grid-cell--100
             input type="hidden" id="js--pay_rate" value="#{@job.contract_price}"
@@ -30,6 +30,6 @@
           .grid-cell.grid-cell--100
             .buttons
               = f.hidden_field :company_id, value: @job.company.id
-              = f.button :submit, "Send Payment Request", class: "btn btn--primary"
+              = f.button :submit, "Send Payment Request", class: "btn btn--primary", data: { disable_with: "Please wait..." }
               a.btn.btn--secondary data-dismiss="modal" href="#"
                 | Cancel

@@ -12,9 +12,20 @@
       = job_state_label(@job)
 
   .grid-h
-    .grid-cell.grid-cell--50
-      h3.heading-h3 Budget
-      h1.heading-h1.heading-h1--no-margin = number_with_precision(@job.budget, precision: 0).to_s + " " + @job.currency.upcase
+    - if @job.contract_price.present?
+      .grid-cell.grid-cell--50
+        h3.heading-h3 Contract Price
+        h2.heading-h2.heading-h2--no-margin
+          - if @job.pay_type == "fixed"
+            = "#{number_with_precision(@job.contract_price, precision: 2)} #{@job.currency&.upcase}"
+          - elsif @job.variable_pay_type == "hourly"
+            = "#{number_with_precision(@job.contract_price, precision: 2)} #{@job.currency&.upcase}/hour"
+          - elsif @job.variable_pay_type == "daily"
+            = "#{number_with_precision(@job.contract_price, precision: 2)} #{@job.currency&.upcase}/day"
+    - else
+      .grid-cell.grid-cell--50
+        h3.heading-h3 Budget
+        h2.heading-h2.heading-h2--no-margin = number_with_precision(@job.budget, precision: 0).to_s + " " + @job.currency.upcase
 
     .grid-cell.grid-cell--50
       h3.heading-h3 Project Reference

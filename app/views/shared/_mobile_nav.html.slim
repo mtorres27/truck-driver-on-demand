@@ -7,7 +7,7 @@
         span class="fa fa-close"
 
     .mobile-nav__header__title
-      = image_tag "avjunction-logo_header.svg"
+      = image_tag "avjunction_logo.png"
 
     - if current_user.present?
       .mobile-nav__header__right
@@ -47,20 +47,6 @@
           | av companies
         a.mobile-nav__menu__item href=freelancer_payments_path
           | payments
-        a.mobile-nav__menu__item href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"
-          | Notifications
-          span.js--notification-count= current_user.notifications.unread.count
-          span.caret
-        .dropdown-menu
-          .notifications
-            .list-notification.js--notifications data-id="#{current_user.id}"
-              - if current_user.notifications.to_show.count > 0
-                - (current_user.notifications.unread + current_user.notifications.to_show).uniq.each do |notification|
-                  = render "shared/notification", notification: notification
-              - else
-                .list-item.w-inline-block href="#"
-                  .list__title Nothing to see here
-                  .list__desc You don't have any new notifications for the moment
         a.mobile-nav__menu__item href=freelancer_profile_path data-turbolinks="false"
           = image_tag current_user.freelancer_profile.avatar_url
           | my profile
@@ -73,13 +59,19 @@
           | Register
       - elsif current_user.company_user?
         a.mobile-nav__menu__item href=company_root_path data-turbolinks="false"
-          | Search for AV Freelancers
-        a.mobile-nav__menu__item href=company_projects_path data-turbolinks="false"
-          | Job Postings
-        a.mobile-nav__menu__item href=hired_company_freelancers_path data-turbolinks="false"
-          | My Freelancers
-        a.mobile-nav__menu__item href=company_payments_path data-turbolinks="false"
-          | Payments
+          | Home
+        - if current_company.subscription_active?
+          = link_to "Post a Job", company_job_job_build_index_path(job_id: :build_job), method: :post, class: "mobile-nav__menu__item"
+        - if current_company.jobs.count > 0
+          a.mobile-nav__menu__item href=company_projects_path data-turbolinks="false"
+            | Job Postings
+        - if current_company.subscription_active?
+          a.mobile-nav__menu__item href=hired_company_freelancers_path data-turbolinks="false"
+            | My Freelancers
+          a.mobile-nav__menu__item href=company_payments_path data-turbolinks="false"
+            | Payments
+        a.mobile-nav__menu__item href=company_plans_path data-turbolinks="false"
+          | Subscription
         a.mobile-nav__menu__item href=company_profile_path data-turbolinks="false"
           = image_tag current_user.company.avatar_url
           | my profile

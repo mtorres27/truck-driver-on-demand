@@ -26,9 +26,9 @@ class Freelancer::JobsController < Freelancer::BaseController
     end
 
     if sort != nil
-      @jobs = Job.joins(:company).where(companies: { disabled: false }).where.not(companies: { plan_id: nil }).where(state: "published", expired: false).order(name: sort)
+      @jobs = valid_company_jobs.where(state: "published", expired: false).order(name: sort)
     else
-      @jobs = Job.joins(:company).where(companies: { disabled: false }).where.not(companies: { plan_id: nil }).where(state: "published", expired: false).all
+      @jobs = valid_company_jobs.where(state: "published", expired: false).all
     end
 
     if @address
@@ -248,6 +248,10 @@ class Freelancer::JobsController < Freelancer::BaseController
   end
 
   private
+
+  def valid_company_jobs
+    Job.joins(:company).where(companies: { disabled: false }).where.not(companies: { plan_id: nil })
+  end
 
   def apply_params
     params.require(:freelancer_job_apply_path).permit(

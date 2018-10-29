@@ -10,18 +10,19 @@ class Company::SubscriptionController < Company::BaseController
     plan = current_company.plan
     StripeTool.cancel_subscription(company: current_company)
     SubscriptionMailer.notice_company_subscription_canceled(current_company, plan).deliver_later
-    flash[:notice] = "Your just cancelled your company subscription!"
+    flash[:notice] = "You just cancelled your company subscription!"
     redirect_to company_plans_path
   end
 
   def invoices
     authorize current_company
-    @subscriptions = Subscription.where(company_id: current_company.id)
+    current_company.check_for_new_invoices
+    @subscriptions = current_company.subscriptions.order('created_at DESC')
   end
 
   def invoice
     # raise exception if company is not the invoice owner
-    @subscription = Subscription.find_by(stripe_subscription_id: params[:subscription])
+    @subscription = Subscription.find(params[:invoice])
     authorize @subscription
     if @subscription.nil? || @subscription.company_id != current_company.id
       flash[:error] = "You can't see this invoice!"
@@ -36,7 +37,13 @@ class Company::SubscriptionController < Company::BaseController
       flash[:notice] = 'You must update your profile with the province!'
       redirect_to edit_company_profile_path
     end
-    @plans = Plan.order(name: :asc)
+
+    if current_company.canada_country?
+      @plans = Plan.where(is_canadian: true)
+    else
+      @plans = Plan.where(is_canadian: false)
+    end
+
     begin
       @subscription = Stripe::Subscription.retrieve(current_company.stripe_subscription_id) if current_company.stripe_subscription_id.present?
     rescue Stripe::InvalidRequestError => ex
@@ -50,7 +57,7 @@ class Company::SubscriptionController < Company::BaseController
   def reset_company
     authorize current_company
 
-    current_company.created_at                             = 3.months.ago - 5.day
+    current_company.created_at                = 3.months.ago - 5.day
     current_company.billing_period_ends_at    = nil
     current_company.stripe_customer_id        = nil
     current_company.stripe_subscription_id    = nil
@@ -90,12 +97,16 @@ class Company::SubscriptionController < Company::BaseController
     authorize current_company
 
     plan = Plan.find_by(code: params[:plan_id])
-    customer = StripeTool.create_customer(email: params[:stripeEmail],
-                                          stripe_token: params[:stripeToken])
+
+    if current_company.stripe_customer_id.present?
+      customer = Stripe::Customer.retrieve(current_company.stripe_customer_id)
+    else
+      customer = StripeTool.create_customer(email: params[:stripeEmail], stripe_token: params[:stripeToken])
+    end
+
     subscription = StripeTool.subscribe(customer: customer,
                                         tax: current_company.canada_country? ? Subscription::CANADA_SALES_TAX_PERCENT : 0,
-                                        plan: plan,
-                                        is_new: current_company.is_trial_applicable
+                                        plan: plan
                                         )
     StripeTool.update_company_info_with_subscription(company: current_company, customer: customer, subscription: subscription, plan: plan)
 
@@ -162,4 +173,7 @@ class Company::SubscriptionController < Company::BaseController
     @description = "AVJunction Monthly Subscription"
   end
 
+  def unsubscribed_redirect?
+    false
+  end
 end

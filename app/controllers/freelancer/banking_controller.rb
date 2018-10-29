@@ -47,6 +47,7 @@ class Freelancer::BankingController < Freelancer::BaseController
       else
         account = connector.account
       end
+
       if account
         account_info, result = prepare_info(account, params[:account][type])
         flash[:error] = "Unable to create  account! #{result[:error]}" if result[:error]

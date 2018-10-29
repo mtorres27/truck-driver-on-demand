@@ -1,13 +1,44 @@
 = simple_form_for :search, url: admin_freelancers_path, html: { class: "js--admin-search-form" }, method: :get do |f|
   .row
-    .col-xs-12.col-sm-6
+    .col-xs-12.col-sm-12
       h2 Freelancers
-    .col-xs-12.col-sm-6
+    .col-xs-12.col-sm-12
       .search-form
         = f.input :keywords, label: false, placeholder: "Search", input_html: { value: @keywords }
     .col-xs-12.col-sm-3
-      a.btn.btn--primary.btn-download-csv href=download_csv_admin_freelancer_path
-        | Export to CSV
+      .search-form
+        = f.input :country, collection: I18n.t("enumerize.country").map { |k, v| [v, k] }, selected: @country, label: false, prompt: "Country", input_html: { class: "js--country-select" }
+    .col-xs-12.col-sm-3
+      .search-form
+        select#search_state_province.js--state-province-select.form-control.select(name='search[state_province]')
+          option(value='')
+            | State/Province
+          = CS.states(:us).each do |index, value|
+            - selected = (@state_province == index.to_s)
+            - if selected
+              option.js--us_option(value="#{index}" selected)
+                = value
+            - else
+              option.js--us_option(value="#{index}")
+                = value
+          = CS.states(:ca).each do |index, value|
+            - selected = (@state_province == index.to_s)
+            - if selected
+              option.js--ca_option(value="#{index}" selected)
+                = value
+            - else
+              option.js--ca_option(value="#{index}")
+                = value
+    .col-xs-12.col-sm-4
+      .search-form
+        = f.input :city, label: false, placeholder: "City", input_html: {value: @city}
+    .col-xs-12.col-sm-2
+      .search-form
+        = f.submit "Search", class: "btn btn--primary"
+    .col-xs-12.col-sm-3
+      .search-form
+        a.btn.btn--primary.btn-download-csv href=download_csv_admin_freelancer_path
+          | Export to CSV
     .col-xs-12.col-sm-12 style="padding-bottom:5px; margin-bottom:5px;"
       label Display options: &nbsp
       select#search_filter_by_disabled name="search[filter_by_disabled]"

@@ -12,16 +12,16 @@ class Freelancer::JobPaymentsController < Freelancer::BaseController
   def show
     @amount      = @payment.amount
     @tax         = @job.applicable_sales_tax * @payment.amount / 100
-    @avj_fees    = @job.company.plan.fee_schema['freelancer_fees'] ? (@amount * @job.company.plan.fee_schema['freelancer_fees'].to_f / 100) : 0
-    @avj_t_fees  = @job.company.country == 'ca' ? @avj_fees * 1.13 : @avj_fees
+    @avj_fees    = @job.fee_schema['freelancer_fees'] ? (@amount * @job.fee_schema['freelancer_fees'].to_f / 100) : 0
+    @avj_t_fees  = current_user.freelancer_profile.country == 'ca' ? @avj_fees * 1.13 : @avj_fees
     @total       = @amount + @tax - @avj_t_fees
   end
 
   def print
     @amount      = @payment.amount
     @tax         = @job.applicable_sales_tax * @payment.amount / 100
-    @avj_fees    = @job.company.plan.fee_schema['freelancer_fees'] ? (@amount * @job.company.plan.fee_schema['freelancer_fees'].to_f / 100) : 0
-    @avj_t_fees  = @job.company.country == 'ca' ? @avj_fees * 1.13 : @avj_fees
+    @avj_fees    = @job.fee_schema['freelancer_fees'] ? (@amount * @job.fee_schema['freelancer_fees'].to_f / 100) : 0
+    @avj_t_fees  = current_user.freelancer_profile.country == 'ca' ? @avj_fees * 1.13 : @avj_fees
     @total       = @amount + @tax - @avj_t_fees
     render layout: false
   end
@@ -38,16 +38,21 @@ class Freelancer::JobPaymentsController < Freelancer::BaseController
 
   def create_payment
     @payment = @job.payments.build(payment_params)
-    @payment.issued_on = Date.today
-    @payment.tax_amount = @payment.amount * (@job.applicable_sales_tax/100)
-    @payment.total_amount = @payment.amount + @payment.tax_amount
-    if @payment.save
-      Notification.create(title: @job.title, body: "#{current_user.first_name_and_initial} requested a payment", authorable: @job.freelancer, receivable: @job.company, url: company_job_payment_url(@payment, job_id: @job.id))
-      PaymentsMailer.request_payout_company(@job.company, current_user, @job, @payment).deliver_later
-      redirect_to freelancer_job_payments_path(@job)
+    if @payment.amount.present?
+      @payment.issued_on = Date.today
+      @payment.tax_amount = @payment.amount * (@job.applicable_sales_tax/100)
+      @payment.total_amount = @payment.amount + @payment.tax_amount
+      if @payment.save
+        Notification.create(title: @job.title, body: "#{current_user.first_name_and_initial} requested a payment", authorable: @job.freelancer, receivable: @job.company, url: company_job_payment_url(@payment, job_id: @job.id))
+        PaymentsMailer.request_payout_company(@job.company, current_user, @job, @payment).deliver_later
+        redirect_to freelancer_job_payments_path(@job)
+      else
+        flash[:error] = @payment.errors.full_messages.to_sentence
+        redirect_to freelancer_job_payments_path(@job)
+      end
     else
-      flash[:error] = @payment.errors.full_messages.to_sentence
-      redirect_to :back
+      flash[:error] = "No payment amount specified"
+      redirect_to freelancer_job_payments_path(@job)
     end
   end
 

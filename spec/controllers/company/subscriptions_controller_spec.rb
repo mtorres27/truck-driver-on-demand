@@ -26,7 +26,7 @@ describe Company::SubscriptionController, type: :controller  do
     it 'assigns the existing plans to @plans' do
       create_list(:plan, 3)
       get :plans
-      expect(assigns(:plans).count).to eq(3)
+      expect(assigns(:plans).count).to eq(4)
     end
 
     context 'when subscribed to a plan' do
@@ -59,7 +59,7 @@ describe Company::SubscriptionController, type: :controller  do
       let!(:subscription) { create(:subscription, company_id: company.id) }
 
       it 'assigns @subscription' do
-        get :invoice, params: { subscription: subscription.stripe_subscription_id }
+        get :invoice, params: { invoice: subscription.id }
         expect(assigns(:subscription)).to eq(subscription)
       end
     end
@@ -69,7 +69,7 @@ describe Company::SubscriptionController, type: :controller  do
       let!(:subscription) { create(:subscription, company_id: other_company.id) }
 
       before(:each) do
-        get :invoice, params: { subscription: subscription.stripe_subscription_id }
+        get :invoice, params: { invoice: subscription.id }
       end
 
       it 'be a 401 Unauthorized' do
@@ -84,6 +84,7 @@ describe Company::SubscriptionController, type: :controller  do
     let(:subscription) { double('Subscription', id: 1, current_period_end: Date.today, plan: plan) }
 
     before(:each) do
+      company.update_columns(plan_id: nil)
       allow(StripeTool).to receive(:create_customer).and_return(customer)
       allow(StripeTool).to receive(:subscribe).and_return(subscription)
       allow(StripeTool).to receive(:update_company_info_with_subscription).and_return(true)
@@ -91,7 +92,7 @@ describe Company::SubscriptionController, type: :controller  do
 
     it 'subscribes the company to the specified plan' do
       expect(StripeTool).to receive(:create_customer).with(email: company.email, stripe_token: 'token').once
-      expect(StripeTool).to receive(:subscribe).with(customer: customer, tax: 0, plan: plan, is_new: company.is_trial_applicable).once
+      expect(StripeTool).to receive(:subscribe).with(customer: customer, tax: 0, plan: plan).once
       expect(StripeTool).to receive(:update_company_info_with_subscription).with(company: company, customer: customer, subscription: subscription, plan: plan).once
       post :subscription_checkout, params: { plan_id: plan.code, stripeEmail: company.email, stripeToken: 'token' }
     end

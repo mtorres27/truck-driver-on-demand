@@ -16,7 +16,7 @@ class Freelancer::ContractsController < Freelancer::BaseController
     currency_rate = currency.nil? ?  1 : currency.rate
 
 
-    fees = @job.company.plan.fee_schema['company_fees']
+    fees = @job.fee_schema['company_fees']
     plan_tax = @job.company.canada_country? ? 1 + (Subscription::CANADA_SALES_TAX_PERCENT/100) : 1
     plan_fees =  fees.to_f / 100 * @job.contract_price.to_f  * plan_tax
 

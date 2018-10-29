@@ -12,9 +12,10 @@
 #  updated_at       :datetime         not null
 #  description      :text
 #  period           :string           default("yearly")
+#  is_canadian      :boolean          default(FALSE)
 #
 
 class Plan < ApplicationRecord
-  has_many :companies
+  has_many :companies, dependent: :nullify
 
 end

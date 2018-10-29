@@ -93,7 +93,7 @@ Rails.application.routes.draw do
       end
     end
 
-    resources :freelancers, only: [:index, :show] do
+    resources :freelancers, only: [:show] do
       get :hired, on: :collection
       get :favourites, on: :collection
       post :add_favourites, on: :collection

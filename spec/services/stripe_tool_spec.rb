@@ -16,22 +16,18 @@ describe StripeTool do
       allow(plan).to receive(:[]).with(:trial_period).and_return(1)
       allow(card_data).to receive(:[]).with(0).and_return(card_info)
       allow_any_instance_of(Company).to receive(:save).and_return(true)
+      allow_any_instance_of(Company).to receive(:check_for_new_invoices).and_return(true)
     end
 
     it "updates the company's data" do
       expect_any_instance_of(Company).to receive(:save).once
       StripeTool.update_company_info_with_subscription(company: company, customer: customer, subscription: subscription, plan: plan)
     end
-
-    it "creates a new subscription" do
-      expect {
-        StripeTool.update_company_info_with_subscription(company: company, customer: customer, subscription: subscription, plan: plan) }
-          .to change{ Subscription.count }.by(1)
-    end
   end
 
   describe '.cancel_subscription' do
-    let!(:company) { create(:company, billing_period_ends_at: DateTime.now) }
+    let(:company_plan) { create :plan, name: 'Name' }
+    let!(:company) { create(:company, billing_period_ends_at: DateTime.now, plan: company_plan) }
     let(:plan) { double('Plan', id: 1, name: 'Name', amount: 10) }
     let(:subscription) { double('Subscription', id: 1, current_period_start: DateTime.now.to_i, status: 'status', plan: plan) }
 

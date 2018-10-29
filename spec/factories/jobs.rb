@@ -64,6 +64,7 @@
 #  overtime_rate                          :decimal(10, 2)
 #  payment_terms                          :integer
 #  expired                                :boolean          default(FALSE)
+#  fee_schema                             :json
 #
 # Indexes
 #

@@ -1,0 +1,58 @@
+.grid-h
+  - if current_company.last_4_digits.present? && !current_company.is_subscription_cancelled
+    - if !current_company.plan.nil? && current_company.plan.subscription_fee > 0
+      .grid-cell.grid-cell--50
+        .plans
+          h2.heading-h2.center
+            = current_company.card_brand
+          .plans__pricing
+            .plans__price
+              | **** #{current_company.last_4_digits}
+            .plans__tax Expires #{current_company.exp_month} / #{current_company.exp_year}
+          div style="text-align: center"
+            = form_tag '/company/update_card_info', method: 'post' do
+              script.stripe-button  data-email=("#{current_user.email}") src="https://checkout.stripe.com/checkout.js" class="stripe-button" data-key="#{Rails.configuration.stripe[:publishable_key]}" data-image="/assets/stripe-logo.png" data-name="Update Card Details" data-panel-label="Update Card Details" data-label="Update Card Details" data-allow-remember-me=false data-locale="auto"
+
+  - if current_company.plan.present?
+    .grid-cell.grid-cell--50
+      .plans
+        h2.heading-h2.center Cancel your subscription
+        - if current_company.plan.period == 'monthly'
+          .plans__subtitle Like we said, no strings attached.
+          .plans__subtitle You can cancel your monthly subscription at any time. The cancellation shall become effective at the end of the current billing cycle and no refund will be provided for any previous payments.
+        - elsif current_company.plan.period == 'yearly'
+          .plans__subtitle Annual subscriptions come with a great discount and run on a one-year billing cycle with cancellation available the following year.  No refunds will be provided for any previous payments.
+        .plans__pricing
+          .plans__price
+        a.btn-ghost--active.w-inline-block.width-100 href=company_subscription_cancel_path  onclick="return confirm('Are you sure you want to cancel your subscription?')"
+          div Cancel subscription
+
+  - else
+    - @plans.each do |plan|
+      .grid-cell.grid-cell--50
+        .plans
+          h2.heading-h2.center #{plan[:name]}
+          .plans__subtitle
+            h3.heading-h3.center
+              == plan.description
+          .plans__pricing
+            - if  plan[:subscription_fee] <= 0
+              .plans__price $#{number_with_precision(plan[:subscription_fee] , precision: 2,  strip_insignificant_zeros: true)}
+              .plans__tax &nbsp;
+            - else
+              .plans__price $#{number_with_precision(plan[:subscription_fee] , precision: 2,  strip_insignificant_zeros: true)}
+              - if current_company.canada_country?
+                .plans__tax CAD + #{ (province_tax(current_company.state)*100).to_s + "% tax" }
+              - else
+                .plans__tax USD
+
+          div style="text-align: center"
+            - if ["Professional", "ENTERPRISE"].include?(plan[:name])
+              .btn.btn--primary.disabled
+                | Coming soon
+            - else
+              = form_tag company_subscription_checkout_path, method: 'post', plan: plan  do
+                =link_to "Subscribe to this plan", company_subscription_checkout_path(free: false), method: :post, class: "subscribe #{plan[:subscription_fee] > 0 ? 'paid':'free'} btn btn--primary"
+                input type="hidden" name="plan_id" value=plan[:code]
+                div.hidden
+                  script.stripe-button.w-inline-block data-label="Pay" data-image="/assets/stripe-logo.png" data-amount=(current_company.canada_country? ? (plan[:subscription_fee] +(plan[:subscription_fee] * province_tax(current_company.state.upcase))) *100 : plan[:subscription_fee]*100) data-email=("#{current_user.email}") data-description="#{plan[:name]}"  data-key=("#{Rails.configuration.stripe[:publishable_key]}") data-locale="auto" src="https://checkout.stripe.com/checkout.js" data-currency = "#{current_company.canada_country? ? 'cad' : 'usd'}" data-panel-label="Pay"

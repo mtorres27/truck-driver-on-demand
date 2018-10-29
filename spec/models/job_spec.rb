@@ -64,6 +64,7 @@
 #  overtime_rate                          :decimal(10, 2)
 #  payment_terms                          :integer
 #  expired                                :boolean          default(FALSE)
+#  fee_schema                             :json
 #
 # Indexes
 #
@@ -96,7 +97,7 @@ describe Job, type: :model do
 
   describe "triggers" do
     describe "accept_applicant" do
-      let(:company) { create(:company) }
+      let(:company) { create(:company, plan: create(:plan)) }
       let(:project) { create(:project, company: company) }
       let(:job) { build(:job,
                         state_province: 'ON',
@@ -133,7 +134,7 @@ describe Job, type: :model do
   end
 
   describe "city_state_country" do
-    let(:company) { create(:company) }
+    let(:company) { create(:company, plan: create(:plan)) }
     let(:project) { create(:project, company: company) }
     let(:job) { build(:job, state_province: 'ON', address: 'Toronto', country: 'ca', company: company, project: project) }
 
