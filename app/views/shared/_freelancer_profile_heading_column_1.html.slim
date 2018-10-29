@@ -23,7 +23,7 @@
       = freelancer_ratings_link(@freelancer)
     - unless current_user.is_a?(CompanyUser)
       h4.heading-h4
-        = "Pofile score: #{@freelancer.freelancer_profile.profile_score}%"
+        = "Profile score: #{@freelancer.freelancer_profile.profile_score}%"
     .profile__meta__rating
       - @stars = freelancer_avg_rating(@freelancer)
       - @stars.each do |star|
