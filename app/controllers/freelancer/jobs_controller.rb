@@ -223,7 +223,7 @@ class Freelancer::JobsController < Freelancer::BaseController
       @address = ''
       @address += "#{current_user.freelancer_profile.address}, " if current_user.freelancer_profile.address.present?
       @address += current_user.freelancer_profile.city if current_user.freelancer_profile.city.present?
-      @address += ", #{CS.states(current_user.freelancer_profile.country.upcase.to_sym)[current_user.freelancer_profile.state.to_sym]}" if current_user.freelancer_profile.country.present?
+      @address += ", #{CS.states(current_user.freelancer_profile.country.upcase.to_sym)[current_user.freelancer_profile.state.to_sym]}" if current_user.freelancer_profile.country.present? && current_user.freelancer_profile.state.present?
       @address += ", #{CS.countries[current_user.freelancer_profile.country.upcase.to_sym]}" if current_user.freelancer_profile.country.present?
       if @address
         # check for cached version of address
