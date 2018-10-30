@@ -16,9 +16,9 @@ namespace :currency do
     end
     currencies = CurrencyRate.distinct.pluck(:currency)
     countries_str = currencies.join(',')
-    puts 'http://data.fixer.io/api/latest?access_key='+Rails.application.secrets.fixer_api_key+'&base=USD&symbols='+countries_str
+    puts 'http://data.fixer.io/api/latest?access_key='+Rails.application.secrets.fixer_api_key+'&base=CAD&symbols='+countries_str
     # TODO: Change base currency to USD (needs paid account)
-    url = URI.parse('http://data.fixer.io/api/latest?access_key='+Rails.application.secrets.fixer_api_key+'&base=USD&symbols='+countries_str)
+    url = URI.parse('http://data.fixer.io/api/latest?access_key='+Rails.application.secrets.fixer_api_key+'&base=CAD&symbols='+countries_str)
     req = Net::HTTP::Get.new(url.to_s)
     res = Net::HTTP.start(url.host, url.port) { |http| http.request(req) }
     result = JSON.parse(res.body)
