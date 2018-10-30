@@ -9,7 +9,7 @@
         a.btn.btn--secondary href=company_job_job_build_path(:job_details, job_id: @job.id) Back
         .btn.btn--secondary onClick="saveAsDraft()" Save as draft
         - if @job.company.subscription_active?
-          = f.button :submit, "Publish", class: "btn btn--primary"
+          = f.button :submit, "Publish", class: "btn btn--primary js--job-publish-button disabled"
 
     .grid-h
       = render "candidate_details_fields", f: f
@@ -20,5 +20,5 @@
           a.btn.btn--secondary href=company_job_job_build_path(:job_details, job_id: @job.id) Back
           .btn.btn--secondary onClick="saveAsDraft()" Save as draft
           - if @job.company.subscription_active?
-            = f.button :submit, "Publish", class: "btn btn--primary"
+            = f.button :submit, "Publish", class: "btn btn--primary js--job-publish-button disabled"
 

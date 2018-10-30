@@ -38,6 +38,7 @@ class Company::JobsController < Company::BaseController
         flash[:notice] = "This job has been published."
         get_matches
         @freelancers.each do |freelancer|
+          next if Notification.where(receivable: freelancer, url: freelancer_job_url(@job)).count > 0
           Notification.create(title: @job.title, body: "New job in your area", authorable: @job.company, receivable: freelancer, url: freelancer_job_url(@job))
           JobNotificationMailer.notify_job_posting(freelancer, @job).deliver_later
         end
