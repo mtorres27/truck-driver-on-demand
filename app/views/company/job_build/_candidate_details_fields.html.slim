@@ -3,14 +3,14 @@
 .grid-cell.grid-cell--50
   .grid-h.grid-h--no-margin
     .grid-cell.grid-cell--50
-      = f.input :pay_type, prompt: "Select", label: "Preferred Pay Type"
+      = f.input :pay_type, prompt: "Select", required: true, label: "Preferred Pay Type", input_html: { class: "js--job-required-field" }
     .grid-cell.grid-cell--50
-      = f.input :freelancer_type, prompt: "Select"
+      = f.input :freelancer_type, prompt: "Select", required: true, input_html: { class: "js--job-required-field" }
     .grid-cell.grid-cell--100
-      = f.input :job_type, prompt: "Select", input_html: { class: "js--job_type" }
+      = f.input :job_type, prompt: "Select", required: true, input_html: { class: "js--job_type js--job-required-field" }
     .grid-cell.grid-cell--100
-      = f.label :job_market
-      select#job_job_market.js--job_type_dependent_select.form-control.select(name='job[job_market]')
+      = f.label :job_market, required: true
+      select#job_job_market.js--job-required-field.js--job_type_dependent_select.form-control.select(name='job[job_market]')
         option(value='')
           | Select
         = I18n.t("enumerize.live_events_staging_and_rental_job_markets").each do |index, value|
@@ -30,8 +30,8 @@
             option.js--system_integration_option(value="#{index}")
               = value
     .grid-cell.grid-cell--100
-      = f.label :job_function
-      select#job_job_function.js--job_type_dependent_select.form-control.select(name='job[job_function]')
+      = f.label :job_function, required: true
+      select#job_job_function.js--job-required-field.js--job_type_dependent_select.form-control.select(name='job[job_function]')
         option(value='')
           | Select
         = I18n.t("enumerize.live_events_staging_and_rental_job_functions").each do |index, value|

@@ -10,11 +10,11 @@
         .btn.btn--secondary type="button" data-toggle="modal" data-target="#new_project"
           | New Project
     .grid-cell.grid-cell--100
-      = f.input :title, placeholder: "Enter the job title"
+      = f.input :title, placeholder: "Enter the job title", required: true
     .grid-cell.grid-cell--50
       = f.input :starts_on, html5: true
     .grid-cell.grid-cell--50
-      = f.input :duration, placeholder: "Number of days"
+      = f.input :duration, placeholder: "Number of days", required: true
     .grid-cell.grid-cell--100
       span
         abbr title="required"= "*"
@@ -42,7 +42,7 @@
 .grid-cell.grid-cell--50
   .grid-h.grid-h--no-margin
     .grid-cell.grid-cell--50
-      = f.input :country, prompt: "Select", input_html: { class: "js--country-select" }
+      = f.input :country, prompt: "Select", required: true, input_html: { class: "js--country-select" }
     .grid-cell.grid-cell--50
       = f.label "State/Province"
       select#job_state_province.js--state-province-select.form-control.select(name='job[state_province]')
@@ -65,7 +65,7 @@
             option.js--ca_option(value="#{index}")
               = value
     .grid-cell.grid-cell--100
-      = f.input :address, placeholder: "Enter City", label: "City"
+      = f.input :address, placeholder: "Enter City", label: "City", required: true
     .grid-cell.grid-cell--100
       = f.input :budget, placeholder: "Enter a budget", input_html: {value: number_with_precision(f.object.budget, precision: 2)}
     .grid-cell.grid-cell--100
