@@ -34,7 +34,7 @@ class Company::JobsController < Company::BaseController
         @m.save
       end
 
-      if params.dig(:job, :state) == 'published'
+      if @job.state == 'published'
         flash[:notice] = "This job has been published."
         get_matches
         @freelancers.each do |freelancer|
