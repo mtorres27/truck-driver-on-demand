@@ -51,7 +51,7 @@ class Company::JobPaymentsController < Company::BaseController
                    source: params[:stripeToken],
                    description: "Invoice ##{@payment.id}",
                    statement_descriptor: "AV Junction-(##{@payment.id})",
-                   application_fee: [(application_fees * 100).floor, 0].max
+                   application_fee: [((application_fees -  transaction_fees) * 100).floor, 0].max
                }, stripe_account: freelancer.freelancer_profile&.stripe_account_id)
       # logger.debug charge.inspect
       balance_transaction = Stripe::BalanceTransaction.retrieve(charge[:balance_transaction], stripe_account: freelancer.freelancer_profile.stripe_account_id)
