@@ -13,7 +13,14 @@ describe Freelancer::ContractsController, type: :controller  do
                        country: 'ca',
                        applicable_sales_tax: 13,
                        company_plan_fees: 9,
-                       currency: 'cad' ) }
+                       currency: 'cad' ,
+                       job_type: 'system_integration',
+                       job_market: 'type',
+                       job_function: 'type',
+                       starts_on: Date.today,
+                       scope_of_work: 'scope',
+                       pay_type: 'fixed',
+    ) }
     let!(:applicant) { create :applicant, company: company, job: job, freelancer: freelancer, state: "quoting" }
 
     it 'sets the job state to contracted' do

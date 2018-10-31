@@ -77,7 +77,7 @@ class JobPolicy < ApplicationPolicy
   end
 
   def freelancer_matches?
-    company_user? && company_owner? || admin?
+    (company_user? && company_owner? || admin?) && record.state == 'published'
   end
 
   def contract_invoice?

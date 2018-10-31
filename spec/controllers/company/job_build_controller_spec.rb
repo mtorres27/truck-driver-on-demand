@@ -92,7 +92,17 @@ RSpec.describe Company::JobBuildController, type: :controller do
     end
 
     describe "step :candidate_details" do
-      let!(:job) { create(:job, company: company, project: create(:project, company: company), state: "created", creation_step: "candidate_details") }
+      let!(:job) { create(:job,
+                          company: company,
+                          project: create(:project, company: company),
+                          state: "created",
+                          creation_step: "candidate_details",
+                          job_type: 'system_integration',
+                          job_market: 'type',
+                          job_function: 'type',
+                          starts_on: Date.today,
+                          scope_of_work: 'Scope',
+                          pay_type: 'fixed') }
       let(:job_params) { job.attributes }
 
       before do
