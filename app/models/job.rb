@@ -136,15 +136,16 @@ class Job < ApplicationRecord
   validates :project_id, presence: true
   validates :budget, numericality: true, sane_price: true, if: :creation_completed?
   validates :duration, numericality: { only_integer: true, greater_than_or_equal_to: 1 }, if: -> { step_job_details? || creation_completed? }
+  validates :starts_on, presence: true, if: -> { step_job_details? || creation_completed? }
+  validate :scope_or_file, if: -> { step_job_details? || creation_completed? }
   validates :pay_type, inclusion: { in: pay_type.values }, allow_blank: true, if: :creation_completed?
   validates :freelancer_type, inclusion: { in: freelancer_type.values }, allow_blank: true, if: :creation_completed?
-  validates :job_function, :freelancer_type, presence: true, if: :is_published?
+  validates :job_function, :job_market, :job_type, :freelancer_type, :pay_type, presence: true, if: :is_published?
   validates :title, :summary, :address, :currency, :country, presence: true, if: -> { step_job_details? || is_published? }
   validates :freelancer_type, :job_type, :job_market, :job_function, presence: true, if: -> { is_published? }
   validates :accepted_applicant_id, presence: true, if: :enforce_contract_creation
   validates :contract_price, :payment_terms, numericality: { greater_than_or_equal_to: 1 }, if: :enforce_contract_creation
   validates :overtime_rate, numericality: { greater_than_or_equal_to: 1 }, allow_blank: true
-  validate :scope_or_file, if: :creation_completed?
   validate :validate_number_of_payments, if: :creation_completed?
   validate :validate_payments_total, if: :creation_completed?
   validate :validate_sales_tax, if: :creation_completed?
