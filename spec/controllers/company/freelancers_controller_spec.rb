@@ -3,7 +3,19 @@ require 'rails_helper'
 describe Company::FreelancersController, type: :controller  do
   login_company
   let(:company) { subject.current_user.company }
-  let(:job) { create(:job, project: create(:project, company: company), company: company, address: 'Toronto', state_province: 'ON', country: 'ca', state: 'published' ) }
+  let(:job) { create(:job,
+                     project: create(:project, company: company),
+                     company: company,
+                     address: 'Toronto',
+                     state_province: 'ON',
+                     country: 'ca',
+                     state: 'published',
+                     job_type: 'system_integration',
+                     job_market: 'type',
+                     job_function: 'type',
+                     starts_on: Date.today,
+                     scope_of_work: 'Scope',
+                     pay_type: 'fixed') }
   let(:freelancer) { create(:freelancer) }
 
   describe "GET #invite_to_quote" do
