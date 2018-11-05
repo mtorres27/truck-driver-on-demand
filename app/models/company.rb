@@ -279,7 +279,7 @@ class Company < ApplicationRecord
   end
 
   def subscription_active?
-    ['trialing', 'active'].include?(subscription_status) || (subscription_status == "cancelled" && (billing_period_ends_at > Date.todat.to_datetime if billing_period_ends_at.present?))
+    ['trialing', 'active'].include?(subscription_status) || (subscription_status == "cancelled" && (billing_period_ends_at > Date.today.to_datetime if billing_period_ends_at.present?))
   end
 
   def trial_period_ends_at
