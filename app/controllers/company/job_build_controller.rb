@@ -49,6 +49,10 @@ class Company::JobBuildController < Company::BaseController
 
   private
 
+  def unsubscribed_redirect?
+    !current_company&.subscription_active?
+  end
+
   def finish_wizard_path
     company_job_path(@job)
   end
