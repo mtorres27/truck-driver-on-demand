@@ -87,7 +87,7 @@ FactoryBot.define do
     subscription_status { "active" }
 
     after(:build) do |company|
-      company.company_user ||= FactoryBot.build(:company_user, :confirmed)
+      company.owner ||= FactoryBot.build(:company_user, :confirmed)
     end
 
     trait :registration_completed do

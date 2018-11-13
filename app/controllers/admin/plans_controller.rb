@@ -46,6 +46,7 @@ class Admin::PlansController < Admin::BaseController
       :description,
       :period,
       :job_posting_limit,
+      :user_limit,
       fee_schema: ['company_fees', 'freelancer_fees']
     )
   end

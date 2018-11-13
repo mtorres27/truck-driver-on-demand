@@ -65,16 +65,19 @@
 #  payment_terms                          :integer
 #  expired                                :boolean          default(FALSE)
 #  fee_schema                             :json
+#  creator_id                             :integer
 #
 # Indexes
 #
 #  index_jobs_on_company_id         (company_id)
+#  index_jobs_on_creator_id         (creator_id)
 #  index_jobs_on_manufacturer_tags  (manufacturer_tags)
 #  index_jobs_on_project_id         (project_id)
 #
 # Foreign Keys
 #
 #  fk_rails_...  (company_id => companies.id)
+#  fk_rails_...  (creator_id => users.id)
 #  fk_rails_...  (project_id => projects.id)
 #
 

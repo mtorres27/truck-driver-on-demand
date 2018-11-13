@@ -105,7 +105,13 @@ class ApplicationController < ActionController::Base
       resource.update_attribute(:currently_logged_in, true)
       return admin_root_path if resource.admin?
       return freelancer_root_path if resource.freelancer?
-      return company_root_path if resource.company_user?
+      if resource.company_user?
+        return company_root_path if resource.enabled?
+        flash.discard
+        flash[:error] = "Your account was disabled by your manager."
+        resource.update_attribute(:currently_logged_in, false)
+        sign_out resource
+      end
     end
     root_path
   end

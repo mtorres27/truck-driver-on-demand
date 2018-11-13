@@ -14,6 +14,7 @@ h1 Editing Plan
     = f.input :period
     = f.input :subscription_fee
     = f.input :job_posting_limit
+    = f.input :user_limit
     = f.fields_for :fee_schema, OpenStruct.new(@plan.fee_schema) do |ff|
       .form-group
         = ff.label :company_fees

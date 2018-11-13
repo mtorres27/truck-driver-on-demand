@@ -48,8 +48,7 @@ class Company::JobBuildController < Company::BaseController
   end
 
   def create
-    @job = current_company.jobs.create
-    @job.update_attribute(:creation_step, steps.first)
+    @job = current_company.jobs.create(creation_step: steps.first, creator_id: current_user.id)
     authorize_job
     redirect_to wizard_path(steps.first, job_id: @job.id)
   end

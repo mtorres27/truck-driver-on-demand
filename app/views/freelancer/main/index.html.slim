@@ -30,21 +30,6 @@ h1.heading-h1
               a.btn.btn--secondary href=my_jobs_freelancer_jobs_path
                 | Go there now
 
-        / TODO: Change to new jobs
-        /.grid-cell.grid-cell--100
-        /  h2.heading-h2 New AV Companies hiring on AV Junction
-        /  .container
-        /    .grid-h
-        /      - @companies.each do |company|
-        /        .grid-cell.grid-cell--25
-        /          a.homepage__avatar href=freelancer_company_path(company)
-        /            - if company.avatar_data.present?
-        /              = image_tag(company.avatar_url, size: "75x75")
-        /            - else
-        /              .circle_profile__image.company__image= company.company_user.name_initials
-        /          h4.heading-h4
-        /            = company.name
-
         .grid-cell.grid-cell--100
           .callout
             h2.heading-h2 FAQ

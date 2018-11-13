@@ -1,0 +1,41 @@
+= render partial: "company/shared/job_nav", locals: { job: @job }
+- content_for :secondary do
+  .action-bar
+    h2.heading-h2.heading-h2--action-bar Collaborators
+  .grid-h
+    .grid-cell.grid-cell--100
+      .list
+        - @collaborators.each do |collaborator|
+          .list-item
+            .list-bar
+              .list__title.list__30
+                = collaborator.user.first_name_and_initial
+              .list__title.list__30
+                .tags
+                  .tag.tag--hollow
+                    = @job.creator == collaborator.user ? "Author" : "Collaborator"
+              .list__title.list__40.right-text
+                .buttons
+                  - if @job.creator != collaborator.user
+                    = link_to "Remove", "/company/jobs/#{@job.id}/remove_collaborator/#{collaborator.user.id}", method: :post, class: "btn btn--primary"
+                  - if current_user == collaborator.user
+                    - if collaborator.receive_notifications
+                      = link_to "Unsubscribe", "/company/jobs/#{@job.id}/unsubscribe_collaborator/#{collaborator.user.id}", method: :post, class: "btn btn--primary"
+                    - else
+                      = link_to "Subscribe", "/company/jobs/#{@job.id}/subscribe_collaborator/#{collaborator.user.id}", method: :post, class: "btn btn--primary"
+
+  - if @non_collaborators.count > 0
+    .grid-h
+      .grid-cell.grid-cell--100
+        h2.heading-h2 Add collaborators
+      .grid-cell.grid-cell--100
+        .list
+          - @non_collaborators.each do |collaborator|
+            .list-item
+              .list-bar
+                .list__title.list__30
+                  = collaborator.first_name_and_initial
+                .list__title.list__30
+                .list__title.list__40.right-text
+                  = link_to "Add", "/company/jobs/#{@job.id}/add_collaborator/#{collaborator.id}", method: :post, class: "btn btn--primary"
+

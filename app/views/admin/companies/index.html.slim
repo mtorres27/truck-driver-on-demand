@@ -51,12 +51,12 @@
       - @companies.each do |company|
         tr
           td= link_to company.name, admin_company_path(company)
-          td= mail_to company.email
+          td= mail_to company.owner.email
           td= company.state
           td= company.country.try(:upcase)
           td= company.plan.present? ? company.plan.name : "Not subscribed"
           td= company.created_at.strftime('%b %-d, %Y')
-          td= company.company_user.confirmed?
+          td= company.owner.confirmed?
           td= company.disabled
           td.text-right
             = link_to 'Edit', edit_admin_company_path(company)

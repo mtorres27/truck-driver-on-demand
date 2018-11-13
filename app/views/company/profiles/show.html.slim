@@ -5,9 +5,10 @@
 - content_for :secondary do
   .action-bar
     h2.heading-h2.heading-h2--action-bar Profile Info
-    .action-bar--actions
-      a.btn.btn--primary href=edit_company_profile_path
-        | Edit
+    - if current_user.role == "Owner"
+      .action-bar--actions
+        a.btn.btn--primary href=edit_company_profile_path
+          | Edit
 
 
   - if current_company.profile_header_url.include?("missing") || current_company.header_source == "color"

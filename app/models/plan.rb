@@ -14,6 +14,7 @@
 #  period            :string           default("yearly")
 #  is_canadian       :boolean          default(FALSE)
 #  job_posting_limit :integer
+#  user_limit        :integer          default(1)
 #
 
 class Plan < ApplicationRecord

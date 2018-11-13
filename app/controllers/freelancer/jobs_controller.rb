@@ -103,8 +103,10 @@ class Freelancer::JobsController < Freelancer::BaseController
         @message.save
 
         # add quote
-        Notification.create(title: @job.title, body: "#{@applicant.freelancer.first_name_and_initial} applied for this job", authorable: @applicant.freelancer, receivable: @job.company, url: company_job_applicants_url(@job))
-        CompanyMailer.notice_message_received(@job.company, @applicant.freelancer, @job, @message).deliver_later
+        @job.collaborators_for_notifications.each do |collaborator|
+          CompanyMailer.notice_message_received(collaborator, @applicant.freelancer, @job, @message).deliver_later
+          Notification.create(title: @job.title, body: "#{@applicant.freelancer.first_name_and_initial} applied for this job", authorable: @applicant.freelancer, receivable: collaborator, url: company_job_applicants_url(@job))
+        end
         redirect_to freelancer_job_application_index_path(@job), notice: "Application successfully submitted"
       else
         # error message; redirect back to job page

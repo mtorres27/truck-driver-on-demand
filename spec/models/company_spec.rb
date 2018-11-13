@@ -118,7 +118,7 @@ describe Company, type: :model do
 
         context "when the company user is confirmed" do
           it "does not send the confirmation mail" do
-            company.company_user.confirm
+            company.owner.confirm
             expect { company.update(company_params) }.to change(ActionMailer::Base.deliveries, :count).by(0)
           end
         end

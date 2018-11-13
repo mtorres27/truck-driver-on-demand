@@ -96,10 +96,30 @@ class JobPolicy < ApplicationPolicy
     admin?
   end
 
+  def collaborators?
+    company_user? && company_owner?
+  end
+
+  def add_collaborator?
+    company_user? && company_owner?
+  end
+
+  def remove_collaborator?
+    company_user? && company_owner?
+  end
+
+  def subscribe_collaborator?
+    company_user? && company_owner?
+  end
+
+  def unsubscribe_collaborator?
+    company_user? && company_owner?
+  end
+
   private
 
   def company_owner?
-    record.company&.company_user&.id == user.id
+    record.company&.id == user.company&.id
   end
 
   def company_subscribed_to_plan?

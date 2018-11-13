@@ -61,8 +61,10 @@ class Message < ApplicationRecord
       FreelancerMailer.notice_message_received(authorable, receivable.freelancer, receivable, self).deliver_later
     elsif authorable.is_a?(Freelancer)
       FreelancerMailer.notice_message_sent(receivable.company, authorable, self).deliver_later
-      Notification.create(title: receivable.title, body: "You have a new message", authorable: authorable, receivable: receivable.company, url: Rails.application.routes.url_helpers.company_job_messages_url(receivable))
-      CompanyMailer.notice_message_received(receivable.company, authorable, receivable, self).deliver_later
+      receivable.collaborators_for_notifications.each do |collaborator|
+        Notification.create(title: receivable.title, body: "You have a new message", authorable: authorable, receivable: collaborator, url: Rails.application.routes.url_helpers.company_job_messages_url(receivable))
+        CompanyMailer.notice_message_received(collaborator, authorable, receivable, self).deliver_later
+      end
     end
   end
 end

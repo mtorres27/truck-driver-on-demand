@@ -1,0 +1,15 @@
+= render partial: "/company/shared/profile_sub_nav"
+
+- content_for :title, "AVJunction - User Management"
+
+- content_for :secondary do
+  .action-bar
+    h2.heading-h2.heading-h2--action-bar Users
+    .action-bar__actions
+      - if current_user.role == "Owner" && current_company.has_available_user_slots?
+        a.btn.btn--primary href=new_company_company_user_path
+          | Add User
+
+  .list
+    - @users.each do |company_user|
+      = render partial: "company/shared/company_user_info", locals: { company_user: company_user }

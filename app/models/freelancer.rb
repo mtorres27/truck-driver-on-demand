@@ -23,7 +23,6 @@
 #  type                   :string
 #  messages_count         :integer          default(0), not null
 #  company_id             :integer
-#  role                   :string
 #  invitation_token       :string
 #  invitation_created_at  :datetime
 #  invitation_sent_at     :datetime
@@ -34,6 +33,8 @@
 #  invitations_count      :integer          default(0)
 #  enabled                :boolean          default(TRUE)
 #  currently_logged_in    :boolean
+#  role                   :string
+#  phone_number           :string
 #
 # Indexes
 #

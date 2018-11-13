@@ -92,7 +92,7 @@ class Company < ApplicationRecord
   has_many :favourites
   has_many :favourite_freelancers, through: :favourites, source: :freelancer
   has_many :company_installs, dependent: :destroy
-  has_one :company_user, dependent: :destroy
+  has_many :company_users, dependent: :destroy
   has_many :notifications, as: :receivable, dependent: :destroy
   has_many :subscriptions
 
@@ -129,7 +129,7 @@ class Company < ApplicationRecord
 
   accepts_nested_attributes_for :featured_projects, allow_destroy: true, reject_if: :reject_featured_projects
   accepts_nested_attributes_for :company_installs, allow_destroy: true, reject_if: :reject_company_installs
-  accepts_nested_attributes_for :company_user
+  accepts_nested_attributes_for :company_users
 
   scope :new_registrants, -> { where(disabled: true, registration_step: "wicked_finish") }
   scope :incomplete_registrations, -> { where.not(registration_step: "wicked_finish") }
@@ -137,8 +137,6 @@ class Company < ApplicationRecord
   after_save :add_to_hubspot
   before_create :set_default_step
   after_save :send_confirmation_email
-
-  delegate :email, to: :company_user, allow_nil: true
 
   def freelancers
     Freelancer.
@@ -148,6 +146,10 @@ class Company < ApplicationRecord
       order(first_name: :desc, last_name: :desc)
   end
 
+  def owner
+    company_users.where(role: 'Owner').first
+  end
+
   def open_jobs
     jobs.where(state: :published)
   end
@@ -155,6 +157,18 @@ class Company < ApplicationRecord
   def has_available_job_posting_slots?
     if plan.present?
       plan.job_posting_limit.nil? ? true : open_jobs.count < plan.job_posting_limit
+    end
+  end
+
+  def has_ability_to_add_extra_users?
+    if plan.present?
+      plan.user_limit > 1
+    end
+  end
+
+  def has_available_user_slots?
+    if plan.present? && plan.user_limit > 1
+      company_users.count < plan.user_limit
     end
   end
 
@@ -284,7 +298,7 @@ class Company < ApplicationRecord
   end
 
   def user
-    company_user
+    owner
   end
 
   def subscription_active?
@@ -346,8 +360,8 @@ class Company < ApplicationRecord
 
     Hubspot::Contact.createOrUpdate(email,
       company: name,
-      firstname: company_user.first_name,
-      lastname: company_user.last_name,
+      firstname: owner.first_name,
+      lastname: owner.last_name,
       lifecyclestage: "customer",
       im_an: "AV Company",
     )
@@ -366,9 +380,9 @@ class Company < ApplicationRecord
   end
 
   def send_confirmation_email
-    return if company_user.confirmed? || !registration_completed? || company_user.confirmation_sent_at.present?
-    company_user.send_confirmation_instructions
-    company_user.update_column(:confirmation_sent_at, Time.current)
+    return if owner&.confirmed? || !registration_completed? || owner&.confirmation_sent_at.present?
+    owner&.send_confirmation_instructions
+    owner&.update_column(:confirmation_sent_at, Time.current)
   end
 
   protected

@@ -11,8 +11,8 @@ class Company::BaseController < ApplicationController
   private
 
   def check_for_job_posting_availability
-    if !current_company.has_available_job_posting_slots?
-      flash[:notice] = "You have reached the job posting limit for your current subscription, this job will be saved as a draft. You need to disable a job or open a contract with a freelancer on one of your current jobs, or upgrade to a higher plan in order to publish another job."
+    if current_company.present? && current_company.plan.present? && !current_company.has_available_job_posting_slots?
+      flash[:job_posting_limit] = "You have reached the job posting limit for your current subscription, future jobs will be saved as a drafts. You need to disable a job or open a contract with a freelancer on one of your current jobs, or upgrade to a higher plan in order to publish another job."
     end
   end
 

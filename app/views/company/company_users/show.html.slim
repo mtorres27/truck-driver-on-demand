@@ -1,0 +1,15 @@
+= render partial: "/company/shared/profile_sub_nav"
+
+- content_for :title, "AVJunction - User Management"
+
+- content_for :secondary do
+  .action-bar
+    h2.heading-h2.heading-h2--action-bar Personal Info
+    .action-bar__actions
+      a.btn.btn--primary href=edit_company_company_user_path(@company_user)
+        | Edit
+  .grid-h
+    .grid-cell.grid-cell--50
+      h2.heading-h2= @company_user.full_name
+      h3.heading-h3= @company_user.email
+      h3.heading-h3= "Phone: #{@company_user.phone_number}" if @company_user.phone_number.present?

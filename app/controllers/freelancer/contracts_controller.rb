@@ -25,9 +25,10 @@ class Freelancer::ContractsController < Freelancer::BaseController
 
     # Send notice emails
     FreelancerMailer.notice_work_order_accepted(current_user, @job.company, @job).deliver_later
-    Notification.create(title: @job.title, body: "#{current_user.first_name_and_initial} accepted your work order", authorable: current_user, receivable: @job.company, url: company_job_url(@job))
-    CompanyMailer.notice_work_order_accepted(@job.company, current_user, @job).deliver_later
-
+    @job.collaborators_for_notifications.each do |collaborator|
+      CompanyMailer.notice_work_order_accepted(collaborator, current_user, @job).deliver_later
+      Notification.create(title: @job.title, body: "#{current_user.first_name_and_initial} accepted your work order", authorable: current_user, receivable: collaborator, url: company_job_url(@job))
+    end
     render :show
   end
 end

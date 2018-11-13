@@ -65,16 +65,19 @@
 #  payment_terms                          :integer
 #  expired                                :boolean          default(FALSE)
 #  fee_schema                             :json
+#  creator_id                             :integer
 #
 # Indexes
 #
 #  index_jobs_on_company_id         (company_id)
+#  index_jobs_on_creator_id         (creator_id)
 #  index_jobs_on_manufacturer_tags  (manufacturer_tags)
 #  index_jobs_on_project_id         (project_id)
 #
 # Foreign Keys
 #
 #  fk_rails_...  (company_id => companies.id)
+#  fk_rails_...  (creator_id => users.id)
 #  fk_rails_...  (project_id => projects.id)
 #
 
@@ -87,6 +90,7 @@ class Job < ApplicationRecord
 
   belongs_to :company
   belongs_to :project, optional: true
+  belongs_to :creator, class_name: 'CompanyUser'
   has_many :applicants, -> { includes(:freelancer).order(updated_at: :desc) }, dependent: :destroy
   has_many :messages, -> { order(created_at: :desc) }, as: :receivable
   has_many :change_orders, -> { order(updated_at: :desc) }, dependent: :destroy
@@ -94,14 +98,16 @@ class Job < ApplicationRecord
   has_one :freelancer_review, dependent: :nullify
   has_one :company_review, dependent: :nullify
   has_many :job_invites
+  has_many :job_collaborators, dependent: :destroy
 
   accepts_nested_attributes_for :attachments, allow_destroy: true, reject_if: :reject_attachments
 
-  attr_accessor :send_contract, :accepted_applicant_id, :enforce_contract_creation, :save_draft
+  attr_accessor :send_contract, :accepted_applicant_id, :enforce_contract_creation, :draft
 
   after_save :check_if_should_do_geocode
   after_save :accept_applicant, if: :enforce_contract_creation
   after_create :set_plan_fee
+  after_create :set_creator_as_collaborator
 
   enumerize :job_type, in: I18n.t('enumerize.job_types').keys
 
@@ -131,7 +137,7 @@ class Job < ApplicationRecord
     :completed
   ], predicates: true, scope: true
 
-  validates :project_id, presence: true
+  validates :project_id, presence: true, if: -> { step_job_details? || creation_completed? }
   validates :budget, numericality: true, sane_price: true, if: -> { step_job_details? || creation_completed? }
   validates :duration, numericality: { only_integer: true, greater_than_or_equal_to: 1 }, if: -> { step_job_details? || creation_completed? }
   validates :starts_on, presence: true, if: -> { step_job_details? || creation_completed? }
@@ -192,6 +198,10 @@ class Job < ApplicationRecord
     applicants.with_state(:accepted).first&.freelancer
   end
 
+  def collaborators_for_notifications
+    job_collaborators.where(receive_notifications: true).map(&:user)
+  end
+
   def city_state_country
     str = ""
     str += "#{address}, " if address.present?
@@ -218,6 +228,13 @@ class Job < ApplicationRecord
   end
 
   private
+
+  def set_creator_as_collaborator
+    job_collaborators.create(user: creator)
+    unless creator.role == "Owner"
+      job_collaborators.create(user: company.owner)
+    end
+  end
 
   def scope_or_file
     if scope_of_work.blank? and scope_file_url.nil?

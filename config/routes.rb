@@ -89,6 +89,11 @@ Rails.application.routes.draw do
       post :add_favourites, on: :collection
     end
 
+    resources :company_users, only: [:index, :show, :new, :create, :destroy, :edit, :update] do
+      post :disable, on: :member
+      post :enable, on: :member
+    end
+
     get "freelancers/:id/invite_to_quote", to: "freelancers#invite_to_quote"
 
     resources :applicants
@@ -124,11 +129,16 @@ Rails.application.routes.draw do
       resource :contract, only: [:show, :edit, :update], as: "work_order", path: "work_order"
       resources :messages, only: [:index, :create]
       resource :review, only: [:show, :create]
+      get :collaborators, on: :member
       get :contract_invoice, on: :member
       get :freelancer_matches, on: :member
       post :mark_as_finished, on: :member
     end
 
+    post "jobs/:id/add_collaborator/:company_user_id", to: "jobs#add_collaborator"
+    post "jobs/:id/remove_collaborator/:company_user_id", to: "jobs#remove_collaborator"
+    post "jobs/:id/unsubscribe_collaborator/:company_user_id", to: "jobs#unsubscribe_collaborator"
+    post "jobs/:id/subscribe_collaborator/:company_user_id", to: "jobs#subscribe_collaborator"
     get "jobs/:id/publish", to: "jobs#publish"
   end
 

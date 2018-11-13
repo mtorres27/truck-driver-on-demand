@@ -853,6 +853,37 @@ ALTER SEQUENCE identities_id_seq OWNED BY identities.id;
 
 
 --
+-- Name: job_collaborators; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE job_collaborators (
+    id bigint NOT NULL,
+    job_id bigint NOT NULL,
+    user_id bigint NOT NULL,
+    receive_notifications boolean DEFAULT true
+);
+
+
+--
+-- Name: job_collaborators_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE job_collaborators_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: job_collaborators_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE job_collaborators_id_seq OWNED BY job_collaborators.id;
+
+
+--
 -- Name: job_favourites; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -983,7 +1014,8 @@ CREATE TABLE jobs (
     overtime_rate numeric(10,2),
     payment_terms integer,
     expired boolean DEFAULT false,
-    fee_schema json
+    fee_schema json,
+    creator_id bigint
 );
 
 
@@ -1134,7 +1166,8 @@ CREATE TABLE plans (
     description text,
     period character varying DEFAULT 'yearly'::character varying,
     is_canadian boolean DEFAULT false,
-    job_posting_limit integer
+    job_posting_limit integer,
+    user_limit integer DEFAULT 1
 );
 
 
@@ -1271,7 +1304,6 @@ CREATE TABLE users (
     type character varying,
     messages_count integer DEFAULT 0 NOT NULL,
     company_id bigint,
-    role character varying,
     invitation_token character varying,
     invitation_created_at timestamp without time zone,
     invitation_sent_at timestamp without time zone,
@@ -1281,7 +1313,9 @@ CREATE TABLE users (
     invited_by_id bigint,
     invitations_count integer DEFAULT 0,
     enabled boolean DEFAULT true,
-    currently_logged_in boolean
+    currently_logged_in boolean,
+    role character varying,
+    phone_number character varying
 );
 
 
@@ -1442,6 +1476,13 @@ ALTER TABLE ONLY friend_invites ALTER COLUMN id SET DEFAULT nextval('friend_invi
 --
 
 ALTER TABLE ONLY identities ALTER COLUMN id SET DEFAULT nextval('identities_id_seq'::regclass);
+
+
+--
+-- Name: job_collaborators id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY job_collaborators ALTER COLUMN id SET DEFAULT nextval('job_collaborators_id_seq'::regclass);
 
 
 --
@@ -1680,6 +1721,14 @@ ALTER TABLE ONLY friend_invites
 
 ALTER TABLE ONLY identities
     ADD CONSTRAINT identities_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: job_collaborators job_collaborators_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY job_collaborators
+    ADD CONSTRAINT job_collaborators_pkey PRIMARY KEY (id);
 
 
 --
@@ -1995,10 +2044,31 @@ CREATE UNIQUE INDEX index_identities_on_loginable_type_and_provider_and_uid ON i
 
 
 --
+-- Name: index_job_collaborators_on_job_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_job_collaborators_on_job_id ON job_collaborators USING btree (job_id);
+
+
+--
+-- Name: index_job_collaborators_on_user_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_job_collaborators_on_user_id ON job_collaborators USING btree (user_id);
+
+
+--
 -- Name: index_jobs_on_company_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_jobs_on_company_id ON jobs USING btree (company_id);
+
+
+--
+-- Name: index_jobs_on_creator_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_jobs_on_creator_id ON jobs USING btree (creator_id);
 
 
 --
@@ -2227,6 +2297,14 @@ ALTER TABLE ONLY company_reviews
 
 
 --
+-- Name: job_collaborators fk_rails_5b6ad69406; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY job_collaborators
+    ADD CONSTRAINT fk_rails_5b6ad69406 FOREIGN KEY (job_id) REFERENCES jobs(id);
+
+
+--
 -- Name: applicants fk_rails_7283c3d901; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -2267,6 +2345,14 @@ ALTER TABLE ONLY change_orders
 
 
 --
+-- Name: job_collaborators fk_rails_d4b8b384a8; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY job_collaborators
+    ADD CONSTRAINT fk_rails_d4b8b384a8 FOREIGN KEY (user_id) REFERENCES users(id);
+
+
+--
 -- Name: company_reviews fk_rails_dfd5a40d4e; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -2280,6 +2366,14 @@ ALTER TABLE ONLY company_reviews
 
 ALTER TABLE ONLY freelancer_reviews
     ADD CONSTRAINT fk_rails_f184aba2e9 FOREIGN KEY (job_id) REFERENCES jobs(id);
+
+
+--
+-- Name: jobs fk_rails_f251f165d2; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY jobs
+    ADD CONSTRAINT fk_rails_f251f165d2 FOREIGN KEY (creator_id) REFERENCES users(id);
 
 
 --
@@ -2457,6 +2551,10 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20181114170452'),
 ('20181115173748'),
 ('20181116155610'),
-('20181119182307');
+('20181119182307'),
+('20181128205316'),
+('20181129154912'),
+('20181203174528'),
+('20181203184841');
 
 

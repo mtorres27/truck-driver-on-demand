@@ -29,14 +29,20 @@ class Company::RegistrationStepsController < Company::BaseController
     current_company.attributes = params[:company] ? company_params : {}
     current_company.registration_step = next_step
 
-    sign_out current_user if next_step == "wicked_finish" && current_company.profile_form_filled?
+    if next_step == "wicked_finish" && current_company.profile_form_filled?
+      current_user.update_attribute(:role, "Owner") unless current_user.role.present?
+      sign_out current_user
+    end
 
     render_wizard current_company
   end
 
   def skip
     current_company.update(registration_step: next_step, skip_step: true)
-    sign_out current_user if next_step == "wicked_finish"
+    if next_step == "wicked_finish"
+      current_user.update_attribute(:role, "Owner") unless current_user.role.present?
+      sign_out current_user
+    end
     redirect_to company_registration_step_path(next_step)
   end
 

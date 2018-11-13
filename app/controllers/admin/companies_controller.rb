@@ -86,9 +86,9 @@ class Admin::CompaniesController < Admin::BaseController
 
   def create_csv
     @csv_file = CSV.generate({}) do |csv|
-      csv << @companies.first.company_user.attributes.keys + @companies.first.attributes.keys unless @companies.first.nil?
+      csv << @companies.first.owner.attributes.keys + @companies.first.attributes.keys unless @companies.first.nil?
       @companies.each do |c|
-        csv << c.company_user.attributes.values + c.attributes.values
+        csv << c.owner.attributes.values + c.attributes.values
       end
     end
   end
