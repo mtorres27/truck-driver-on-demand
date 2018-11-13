@@ -49,11 +49,6 @@ Rails.application.routes.draw do
       resources :application, only: [:index, :create]
       resource :contract, only: [:show, :accept], as: "work_order", path: "work_order"
       resources :messages, only: [:index, :create]
-      # resources :payments, controller: "job_payments", only: [:index]
-      resources :payments, controller: "job_payments", only: [:index, :show] do
-        get :print, on: :member
-        post :create_payment, on: :collection
-      end
       resource :review, only: [:show, :create]
       resources :quotes, only: [:index, :create] do
         get :accept, on: :member
@@ -66,7 +61,6 @@ Rails.application.routes.draw do
       resource :settings, only: [:index, :edit, :update]
 
     end
-    resources :payments, only: [:index]
 
     get "profile/bank_info", to: "banking#index", as: "profile_stripe_banking_info"
     get "profile/identity", to: "banking#identity", as: "profile_stripe_banking"
@@ -77,10 +71,6 @@ Rails.application.routes.draw do
     post "jobs/:id", to: "jobs#apply"
     post "job/apply", to: "jobs#apply"
     get "jobs/:id/work_order/accept", to: "contracts#accept"
-    get "job_payment/request", to: "job_payments#request_payout", as: "payout_request"
-
-    resource :friend_invites, only: [:show, :update]
-
   end
 
   namespace :company do
@@ -102,7 +92,6 @@ Rails.application.routes.draw do
     get "freelancers/:id/invite_to_quote", to: "freelancers#invite_to_quote"
 
     resources :applicants
-    resources :payments
     resources :projects
     resources :subscription
       get 'thanks', to: 'subscription#thanks', as: 'thanks'
@@ -117,8 +106,7 @@ Rails.application.routes.draw do
       get 'plan/invoice', to: 'subscription#invoice', as: 'invoice'
 
     get 'job_country_currency', to: 'jobs#job_countries', as: 'job_country_currency'
-    get '/:id/avj-invoice', to: 'jobs#avj_invoice', as: 'job_avj_invoice'
-    get '/:id/print-avj-invoice', to: 'jobs#print_avj_invoice', as: 'job_avj_invoice_print'
+
     resources :jobs, except: [:index] do
       resources :job_build, only: [:index, :show, :update, :create] do
         member do
@@ -135,10 +123,6 @@ Rails.application.routes.draw do
       end
       resource :contract, only: [:show, :edit, :update], as: "work_order", path: "work_order"
       resources :messages, only: [:index, :create]
-      resources :payments, controller: "job_payments", only: [:index, :show] do
-        get :print, on: :member
-        post :mark_as_paid, on: :member
-      end
       resource :review, only: [:show, :create]
       get :contract_invoice, on: :member
       get :freelancer_matches, on: :member
@@ -182,7 +166,6 @@ Rails.application.routes.draw do
       resources :applicants
       resource :contract, only: [:show, :edit, :update], as: "work_order", path: "work_order"
       resources :messages, only: [:index, :create]
-      resources :payments, controller: "job_payments", only: [:index, :show]
       resource :review, only: [:show, :create]
     end
 

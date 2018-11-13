@@ -64,7 +64,7 @@ jobs:
           command: |
             bundle exec rails db:drop
             bundle exec rails db:create
-            bundle exec rails db:migrate
+            bundle exec rails db:setup
           environment:
             DATABASE_URL: "postgres://postgres@localhost:5432/avj_test"
 

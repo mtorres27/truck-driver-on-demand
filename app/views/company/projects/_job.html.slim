@@ -29,12 +29,5 @@
           .job-box__value -
           .job-box__key &nbsp;
         - else
-          .job-box__value= number_with_precision(job.gpayments_sum_paid, precision: 0).to_s || 0 + " " + job.currency
-          .job-box__key Paid
-      .job-box__stat
-        - if job.created?
-          .job-box__value -
-          .job-box__key &nbsp;
-        - else
           .job-box__value= job.messages.size
           .job-box__key Messages

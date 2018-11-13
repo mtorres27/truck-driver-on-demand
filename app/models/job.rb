@@ -90,13 +90,11 @@ class Job < ApplicationRecord
   has_many :applicants, -> { includes(:freelancer).order(updated_at: :desc) }, dependent: :destroy
   has_many :messages, -> { order(created_at: :desc) }, as: :receivable
   has_many :change_orders, -> { order(updated_at: :desc) }, dependent: :destroy
-  has_many :payments, dependent: :destroy
   has_many :attachments, dependent: :destroy
   has_one :freelancer_review, dependent: :nullify
   has_one :company_review, dependent: :nullify
   has_many :job_invites
 
-  accepts_nested_attributes_for :payments, allow_destroy: true, reject_if: :reject_payments
   accepts_nested_attributes_for :attachments, allow_destroy: true, reject_if: :reject_attachments
 
   attr_accessor :send_contract, :accepted_applicant_id, :enforce_contract_creation, :save_draft
@@ -146,8 +144,6 @@ class Job < ApplicationRecord
   validates :accepted_applicant_id, presence: true, if: :enforce_contract_creation
   validates :contract_price, :payment_terms, numericality: { greater_than_or_equal_to: 1 }, if: :enforce_contract_creation
   validates :overtime_rate, numericality: { greater_than_or_equal_to: 1 }, allow_blank: true
-  validate :validate_number_of_payments, if: :creation_completed?
-  validate :validate_payments_total, if: :creation_completed?
   validate :validate_sales_tax, if: :creation_completed?
 
   schema_validations except: :working_days
@@ -196,35 +192,6 @@ class Job < ApplicationRecord
     applicants.with_state(:accepted).first&.freelancer
   end
 
-  def payments_sum_paid
-    payments.
-      select { |p| p.paid_on.present? }.
-      sum { |p| p.amount || 0 }
-  end
-
-  def payments_sum_outstanding
-    payments.
-      select { |p| p.paid_on.blank? }.
-      sum { |p| p.amount || 0 }
-  end
-
-  def payments_sum_total
-    payments.
-      sum { |p| p.amount || 0 }
-  end
-
-  def gpayments_sum_paid
-    payments_sum_paid * (1 + ((applicable_sales_tax||0) / 100))
-  end
-
-  def gpayments_sum_outstanding
-    payments_sum_outstanding * (1 + ((applicable_sales_tax||0) / 100))
-  end
-
-  def gpayments_sum_total
-    payments_sum_total * (1 + ((applicable_sales_tax||0) / 100))
-  end
-
   def city_state_country
     str = ""
     str += "#{address}, " if address.present?
@@ -258,13 +225,6 @@ class Job < ApplicationRecord
     end
   end
 
-  def reject_payments(attrs)
-    exists = attrs["id"].present?
-    empty = attrs["description"].blank? && attrs["amount"].blank?
-    attrs.merge!({ _destroy: 1 }) if exists && empty
-    !exists and empty
-  end
-
   def reject_attachments(attrs)
     exists = attrs["id"].present?
     empty = attrs["file"].blank? && attrs["title"].blank?
@@ -288,20 +248,6 @@ class Job < ApplicationRecord
       applicant.update_attribute(:state, "declined")
       Notification.create(title: self.title, body: "Your application was declined", authorable: company, receivable: applicant.freelancer, url: Rails.application.routes.url_helpers.freelancer_job_url(self))
       FreelancerMailer.notice_received_declined_quote(applicant.freelancer, company, self).deliver_later
-    end
-  end
-
-  def validate_number_of_payments
-    if send_contract == "true" && pay_type == "fixed"
-      remaining_payments = payments.reject(&:marked_for_destruction?)
-      errors.add(:number_of_payments, 'A minimum of 1 payment is required') if remaining_payments.empty?
-    end
-  end
-
-  def validate_payments_total
-    if send_contract == "true" && pay_type == "fixed"
-      total = payments.inject(0) { |sum, e| sum + e.amount if e.amount.present? }
-      errors.add(:total_of_payments, 'The total amount of payments doesn\'t match with the work order amount') if total != contract_price
     end
   end
 

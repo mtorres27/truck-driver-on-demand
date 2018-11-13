@@ -1119,60 +1119,6 @@ ALTER SEQUENCE pages_id_seq OWNED BY pages.id;
 
 
 --
--- Name: payments; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE payments (
-    id bigint NOT NULL,
-    company_id bigint NOT NULL,
-    job_id bigint NOT NULL,
-    description character varying NOT NULL,
-    amount numeric(10,2) NOT NULL,
-    issued_on date,
-    paid_on date,
-    attachment_data text,
-    created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL,
-    tax_amount numeric(10,2),
-    total_amount numeric(10,2),
-    avj_fees numeric(10,2),
-    avj_credit numeric(10,2) DEFAULT NULL::numeric,
-    stripe_charge_id character varying,
-    stripe_balance_transaction_id character varying,
-    funds_available_on integer,
-    funds_available boolean DEFAULT false,
-    company_fees numeric(10,2) DEFAULT 0,
-    total_company_fees numeric(10,2) DEFAULT 0,
-    freelancer_fees numeric(10,2) DEFAULT 0,
-    total_freelancer_fees numeric(10,2) DEFAULT 0,
-    transaction_fees numeric(10,2) DEFAULT 0,
-    time_unit_amount integer,
-    overtime_hours_amount integer,
-    freelancer_avj_fees_rate numeric(10,2),
-    company_avj_fees_rate numeric(10,2)
-);
-
-
---
--- Name: payments_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE payments_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: payments_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE payments_id_seq OWNED BY payments.id;
-
-
---
 -- Name: plans; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -1539,13 +1485,6 @@ ALTER TABLE ONLY pages ALTER COLUMN id SET DEFAULT nextval('pages_id_seq'::regcl
 
 
 --
--- Name: payments id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY payments ALTER COLUMN id SET DEFAULT nextval('payments_id_seq'::regclass);
-
-
---
 -- Name: plans id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -1787,14 +1726,6 @@ ALTER TABLE ONLY notifications
 
 ALTER TABLE ONLY pages
     ADD CONSTRAINT pages_pkey PRIMARY KEY (id);
-
-
---
--- Name: payments payments_pkey; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY payments
-    ADD CONSTRAINT payments_pkey PRIMARY KEY (id);
 
 
 --
@@ -2146,20 +2077,6 @@ CREATE INDEX index_pages_on_slug ON pages USING btree (slug);
 
 
 --
--- Name: index_payments_on_company_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_payments_on_company_id ON payments USING btree (company_id);
-
-
---
--- Name: index_payments_on_job_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_payments_on_job_id ON payments USING btree (job_id);
-
-
---
 -- Name: index_projects_on_company_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -2252,14 +2169,6 @@ ALTER TABLE ONLY company_reviews
 
 
 --
--- Name: payments fk_rails_0fc68a9316; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY payments
-    ADD CONSTRAINT fk_rails_0fc68a9316 FOREIGN KEY (company_id) REFERENCES companies(id);
-
-
---
 -- Name: jobs fk_rails_1977e8b5a6; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -2337,14 +2246,6 @@ ALTER TABLE ONLY freelancer_reviews
 
 ALTER TABLE ONLY jobs
     ADD CONSTRAINT fk_rails_b34da78090 FOREIGN KEY (company_id) REFERENCES companies(id);
-
-
---
--- Name: payments fk_rails_b35f361f8d; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY payments
-    ADD CONSTRAINT fk_rails_b35f361f8d FOREIGN KEY (job_id) REFERENCES jobs(id);
 
 
 --
@@ -2551,6 +2452,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20181005155020'),
 ('20181024193655'),
 ('20181024211631'),
+('20181114170452'),
 ('20181115173748');
 
 

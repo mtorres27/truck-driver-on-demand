@@ -74,17 +74,6 @@
       .grid-cell.grid-cell--33
         = f.input :working_time, prompt: "Select", label: "Acceptable Working Hours"
 
-
-
-      .grid-cell.grid-cell--100#payments
-        div
-          .form__field-label
-            | Payment Schedule
-          = f.simple_fields_for :payments do |payment_form|
-            = render "payment_fields", f: payment_form
-          .buttons
-            = link_to_add_association 'Add Schedule Item', f, :payments, class: "btn btn--primary js--payment-add-button"
-
       .grid-cell.grid-cell--100
         .form__field-label
           | Reporting Requirements

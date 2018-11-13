@@ -96,10 +96,6 @@ class JobPolicy < ApplicationPolicy
     admin?
   end
 
-  def create_payment?
-    freelancer? && freelancer_hired?
-  end
-
   private
 
   def company_owner?

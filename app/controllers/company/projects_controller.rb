@@ -4,7 +4,7 @@ class Company::ProjectsController < Company::BaseController
 
   def index
     authorize current_company
-    @projects = current_company.projects.includes(jobs: :payments).order({ external_project_id: :desc, id: :desc }).page(params[:page]).per(50)
+    @projects = current_company.projects.includes(:jobs).order({ external_project_id: :desc, id: :desc }).page(params[:page]).per(50)
     @job_count = Job.joins(:project).where(projects: { company_id: current_company.id }).count
   end
 

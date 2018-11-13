@@ -2,6 +2,8 @@
   .action-bar
     h2.heading-h2.heading-h2--action-bar Job Detail
     .action-bar__actions
+      - if @job.contracted? && current_user.company_user?
+        = link_to "Mark job as finished", mark_as_finished_company_job_path(@job), method: :post, class: "btn btn--primary", data: { confirm: "Are you sure?" }
       - if @job.pre_contracted?
         - path = current_user.admin? ? edit_admin_job_path(@job) : edit_company_job_path(@job)
         a.btn.btn--primary href=path
