@@ -8,7 +8,7 @@
   div= current_company.postal_code
   div=  "BN Tax No. #{current_company.sales_tax_number}" if current_company.sales_tax_number.present?
 .grid-cell.grid-cell--33
-  h4.heading-h4= "Inv #: #{@subscription[:id]}"
+  h4.heading-h4= "Inv #: #{@subscription[:stripe_invoice_number]}"
   - if @subscription[:stripe_invoice_date].present?
     div= "Date: #{Time.at(@subscription[:stripe_invoice_date]).strftime('%b %-d, %Y')}"
   -else

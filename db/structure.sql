@@ -1274,7 +1274,8 @@ CREATE TABLE subscriptions (
     tax numeric(10,2) DEFAULT 0,
     description character varying,
     stripe_invoice_id character varying,
-    stripe_invoice_date timestamp without time zone
+    stripe_invoice_date timestamp without time zone,
+    stripe_invoice_number character varying
 );
 
 
@@ -2549,6 +2550,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20180929195929'),
 ('20181005155020'),
 ('20181024193655'),
-('20181024211631');
+('20181024211631'),
+('20181115173748');
 
 

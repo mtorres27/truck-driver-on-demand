@@ -17,6 +17,7 @@
 #  description            :string
 #  stripe_invoice_id      :string
 #  stripe_invoice_date    :datetime
+#  stripe_invoice_number  :string
 #
 
 class Subscription < ApplicationRecord

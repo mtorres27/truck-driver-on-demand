@@ -321,12 +321,13 @@ class Company < ApplicationRecord
     company_subscription.plan_id = plan.id
     company_subscription.description = "Subscription to #{plan.name}."
     company_subscription.stripe_subscription_id = stripe_subscription.id
+    company_subscription.stripe_invoice_number = invoice.number
     company_subscription.stripe_invoice_id = invoice.id
     company_subscription.is_active = true
     company_subscription.ends_at = Time.at(stripe_subscription.current_period_end).to_datetime
     company_subscription.stripe_invoice_date = Time.at(invoice.date).to_datetime
-    company_subscription.amount = invoice.subtotal / 100
-    company_subscription.tax = invoice.tax / 100
+    company_subscription.amount = invoice.subtotal.to_f / 100
+    company_subscription.tax = (invoice.tax.to_f / 100).to_f
     company_subscription.save
   end
 
