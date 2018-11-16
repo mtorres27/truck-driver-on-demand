@@ -22,20 +22,28 @@ class Company::JobBuildController < Company::BaseController
   def update
     @job.attributes = job_params
     @job.creation_step = next_step
+    job_slots_available = true
 
     if @job.creation_completed? && (@job.save_draft == "false" || @job.save_draft.blank?)
-      @job.state = "published"
-      if @job.valid?
-        get_matches
-        @freelancers.each do |freelancer|
-          next if Notification.where(receivable: freelancer, url: freelancer_job_url(@job)).count > 0
-          Notification.create(title: @job.title, body: "New job in your area", authorable: @job.company, receivable: freelancer, url: freelancer_job_url(@job))
-          JobNotificationMailer.notify_job_posting(freelancer, @job).deliver_later
+      if current_company&.has_available_job_posting_slots?
+        @job.state = "published"
+        if @job.valid?
+          get_matches
+          @freelancers.each do |freelancer|
+            next if Notification.where(receivable: freelancer, url: freelancer_job_url(@job)).count > 0
+            Notification.create(title: @job.title, body: "New job in your area", authorable: @job.company, receivable: freelancer, url: freelancer_job_url(@job))
+            JobNotificationMailer.notify_job_posting(freelancer, @job).deliver_later
+          end
         end
+      else
+        job_slots_available = false
+        @job.state = "created"
+        @job.save_draft = "true"
+        flash[:notice] = "You have reached the job posting limit for your current subscription, this job will be saved as a draft. You need to disable a job or open a contract with a freelancer on one of your current jobs, or upgrade to a higher plan in order to publish another job."
       end
     end
 
-    flash[:notice] = "You need to publish this job in order to make it visible to freelancers" if @job.creation_completed? && @job.save_draft == "true"
+    flash[:notice] = "You need to publish this job in order to make it visible to freelancers" if @job.creation_completed? && @job.save_draft == "true" && job_slots_available
 
     render_wizard @job
   end

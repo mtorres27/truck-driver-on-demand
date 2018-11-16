@@ -148,6 +148,16 @@ class Company < ApplicationRecord
       order(first_name: :desc, last_name: :desc)
   end
 
+  def open_jobs
+    jobs.where(state: :published)
+  end
+
+  def has_available_job_posting_slots?
+    if plan.present?
+      plan.job_posting_limit.nil? ? true : open_jobs.count < plan.job_posting_limit
+    end
+  end
+
   def renew_month
     self.expires_at = Date.today + 1.month
   end

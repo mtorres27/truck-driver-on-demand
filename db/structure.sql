@@ -1133,7 +1133,8 @@ CREATE TABLE plans (
     updated_at timestamp without time zone NOT NULL,
     description text,
     period character varying DEFAULT 'yearly'::character varying,
-    is_canadian boolean DEFAULT false
+    is_canadian boolean DEFAULT false,
+    job_posting_limit integer
 );
 
 
@@ -2453,6 +2454,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20181024193655'),
 ('20181024211631'),
 ('20181114170452'),
-('20181115173748');
+('20181115173748'),
+('20181116155610');
 
 

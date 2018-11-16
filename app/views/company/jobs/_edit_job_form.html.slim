@@ -10,7 +10,7 @@
     .grid-cell.grid-cell--expand
     .grid-cell
       .buttons
-        - if action_name == "new" || action_name == "create" || (@job.company.subscription_active?)
+        - if (action_name == "new" || action_name == "create" || (@job.company.subscription_active?)) && @job.state != 'published'
           = f.button :button, "Publish", name: "job[state]", value: "published", class: "btn btn--primary"
           = f.button :submit, "Save as Draft", class: "btn btn--secondary"
         - else
