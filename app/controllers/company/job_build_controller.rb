@@ -8,7 +8,7 @@ class Company::JobBuildController < Company::BaseController
   steps :job_details, :candidate_details
 
   def index
-    redirect_to company_job_step_path(:job_details)
+    redirect_to root_path
   end
 
   def show
