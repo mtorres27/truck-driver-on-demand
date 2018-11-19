@@ -1,17 +1,17 @@
 Rails.application.routes.draw do
   mount ActionCable.server => '/cable'
 
-  devise_for :users, skip: [:registrations]
+  devise_for :users, skip: [:registrations], controllers: {sessions: "sessions" }
 
   devise_for :company_users, path: 'company',
                              path_names: { sign_up: "register" },
-                             controllers: { registrations: "company/registrations" },
-                             skip: [:sessions, :passwords, :confirmations]
+                             controllers: {registrations: "company/registrations", sessions: "sessions" },
+                             skip: [:devise, :passwords, :confirmations]
 
   devise_for :freelancers, path: 'freelancer',
                            path_names: { sign_up: "register" },
-                           controllers: { registrations: "freelancer/registrations" },
-                           skip: [:sessions, :passwords, :confirmations]
+                           controllers: {registrations: "freelancer/registrations", sessions: "sessions" },
+                           skip: [:devise, :passwords, :confirmations]
 
   root "main#index"
 

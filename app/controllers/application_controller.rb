@@ -97,10 +97,16 @@ class ApplicationController < ActionController::Base
   protected
 
   def after_sign_in_path_for(resource)
-    return admin_root_path if resource.admin?
-    return freelancer_root_path if resource.freelancer?
-    return company_root_path if resource.company_user?
+    if resource.currently_logged_in?
+      flash.discard
+      flash[:error] = "You are already logged in on another device."
+      sign_out resource
+    else
+      resource.update_attribute(:currently_logged_in, true)
+      return admin_root_path if resource.admin?
+      return freelancer_root_path if resource.freelancer?
+      return company_root_path if resource.company_user?
+    end
     root_path
   end
-
 end

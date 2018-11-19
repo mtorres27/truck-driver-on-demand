@@ -39,7 +39,6 @@ class Company::JobBuildController < Company::BaseController
         job_slots_available = false
         @job.state = "created"
         @job.save_draft = "true"
-        flash[:notice] = "You have reached the job posting limit for your current subscription, this job will be saved as a draft. You need to disable a job or open a contract with a freelancer on one of your current jobs, or upgrade to a higher plan in order to publish another job."
       end
     end
 

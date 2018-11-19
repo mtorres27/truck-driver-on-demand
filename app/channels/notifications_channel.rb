@@ -3,6 +3,12 @@ class NotificationsChannel < ApplicationCable::Channel
     stream_from "notifications_channel_#{params['notifications_stream_id']}"
   end
 
+  def unsubscribed
+    user = User.find(params['notifications_stream_id'])
+    user.update_attribute(:currently_logged_in, false)
+    super
+  end
+
   def receive(payload)
     user = User.find(payload['id'])
     unread_notifications = user.notifications.unread

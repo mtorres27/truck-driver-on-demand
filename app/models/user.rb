@@ -33,6 +33,7 @@
 #  invited_by_id          :integer
 #  invitations_count      :integer          default(0)
 #  enabled                :boolean          default(TRUE)
+#  currently_logged_in    :boolean
 #
 # Indexes
 #
@@ -87,5 +88,4 @@ class User < ApplicationRecord
       freelancer_profile
     end
   end
-
 end

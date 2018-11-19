@@ -18,7 +18,6 @@ class Company::JobsController < Company::BaseController
 
     if job_params[:state] == 'published' && !current_company&.has_available_job_posting_slots?
       params[:job][:state] = 'created'
-      flash[:notice] = "You have reached the job posting limit for your current subscription, this job will be saved as a draft. You need to eaither delete another job, open a contract with a freelancer, or upgrade to a higher plan in order to publish another job."
     end
 
     if @job.update(job_params)
