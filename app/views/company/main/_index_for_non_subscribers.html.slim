@@ -8,8 +8,9 @@ h1.heading-h1
         .grid-cell.grid-cell--100
           h2.heading-h2 Choose a Plan to Post a Job on AV Junction.
           h3.heading-h3 Receive a 15 day free trial on your subscription of either plan. You won’t be charged until the trial expires. Post jobs, get access to our freelancer database and hire your ideal AV professional.
-        .grid-cell.grid-cell--100
-          = render 'company/subscription/plans_info'
+        - if current_user.role == "Owner"
+          .grid-cell.grid-cell--100
+            = render 'company/subscription/plans_info'
         .grid-cell.grid-cell--100
           h2.heading-h2 We are local, everywhere.
           iframe style='height: 500px;' src='https://thexs-mapping.firebaseapp.com/mapping.html?fid=1HrvQqHYrlFjwJUv5CQhXGyzcE1fTq1Ls'
