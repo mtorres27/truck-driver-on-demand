@@ -1,6 +1,8 @@
 class ApplicationController < ActionController::Base
+  TIMEOUT = 30
+
   protect_from_forgery with: :exception
-  auto_session_timeout 10.minutes
+  auto_session_timeout TIMEOUT.minutes
 
   require "erb"
   include ERB::Util
@@ -100,7 +102,7 @@ class ApplicationController < ActionController::Base
   def after_sign_in_path_for(resource)
     if resource.currently_logged_in?
       flash.discard
-      flash[:error] = "You are already logged in on another device."
+      flash[:error] = "You are already logged in on another device. Please log out from your other device or wait for your session to expire. Session timeout happens after #{TIMEOUT} minutes of inactivity"
       sign_out resource
     else
       return admin_root_path if resource.admin?

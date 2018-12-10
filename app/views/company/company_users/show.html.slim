@@ -4,12 +4,11 @@
 
 - content_for :secondary do
   .action-bar
-    h2.heading-h2.heading-h2--action-bar Personal Info
+    h2.heading-h2.heading-h2--action-bar= @company_user.full_name
     .action-bar__actions
       a.btn.btn--primary href=edit_company_company_user_path(@company_user)
         | Edit
   .grid-h
     .grid-cell.grid-cell--50
-      h2.heading-h2= @company_user.full_name
-      h3.heading-h3= @company_user.email
-      h3.heading-h3= "Phone: #{@company_user.phone_number}" if @company_user.phone_number.present?
+      h4.heading-h4= "Email: #{@company_user.email}"
+      h4.heading-h4= "Phone: #{@company_user.phone_number}" if @company_user.phone_number.present?

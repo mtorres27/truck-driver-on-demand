@@ -19,4 +19,7 @@
         .grid-cell.grid-cell--50
           = f.input :password_confirmation, as: :password, placeholder: "Password Confirmation"
       .grid-cell.grid-cell--25
-        = f.button :submit, "Save changes", class: "btn btn-primary"
+        .buttons
+          = f.button :submit, "Save changes", class: "btn btn-primary"
+          a.btn.btn--clear href=company_company_user_path(@company_user)
+            | Cancel
