@@ -13,6 +13,21 @@ Rails.application.routes.draw do
                            controllers: {registrations: "freelancer/registrations", sessions: "sessions" },
                            skip: [:devise, :passwords, :confirmations]
 
+  devise_scope :company_user do
+    match 'active'            => 'sessions#active',               via: :get
+    match 'timeout'           => 'sessions#timeout',              via: :get
+  end
+
+  devise_scope :freelancer do
+    match 'active'            => 'sessions#active',               via: :get
+    match 'timeout'           => 'sessions#timeout',              via: :get
+  end
+
+  devise_scope :admin do
+    match 'active'            => 'sessions#active',               via: :get
+    match 'timeout'           => 'sessions#timeout',              via: :get
+  end
+
   root "main#index"
 
   get "freelance-service-agreement", to: "main#freelance_service_agreement"

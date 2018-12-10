@@ -32,6 +32,7 @@ gem "chartkick"
 gem "devise"
 gem "devise_invitable"
 gem "pundit"
+gem "auto-session-timeout"
 
 # Views
 gem "slim-rails", "~> 3.1.2"
