@@ -24,5 +24,7 @@ FactoryBot.define do
     trial_period 1
     subscription_fee "9.99"
     fee_schema ""
+    job_posting_limit 10
+    user_limit 5
   end
 end

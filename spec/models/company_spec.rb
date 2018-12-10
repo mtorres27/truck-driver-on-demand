@@ -79,40 +79,27 @@ describe Company, type: :model do
 
         context "when registration is completed and profile form is filled" do
           it "creates or update a hubspot contact" do
-            expect(Hubspot::Contact).to receive(:createOrUpdate).with(
-              "test@test.com",
-              company: "Acme",
-              firstname: "John",
-              lastname: "Doe",
-              lifecyclestage: "customer",
-              im_an: "AV Company",
-            )
-            create(:company, name: "Acme", registration_step: 'wicked_finish', company_user: create(:company_user, first_name: "John", last_name: "Doe", email: "test@test.com" ) )
+            expect(Hubspot::Contact).to receive(:createOrUpdate)
+            create(:company, name: "Acme", registration_step: 'wicked_finish' )
           end
         end
 
         context "when registration is not completed" do
           it "does not creates or update a hubspot contact" do
             expect(Hubspot::Contact).not_to receive(:createOrUpdate)
-            create(:company, name: "Acme", registration_step: 'job_info', company_user: create(:company_user, first_name: "John", last_name: "Doe", email: "test@test.com" ) )
+            create(:company, name: "Acme", registration_step: 'job_info' )
           end
         end
       end
 
       describe "send_confirmation_email" do
-        let(:company) { create(:company, company_user: create(:company_user, first_name: "John", last_name: "Doe", email: "test@test.com" )) }
+        let(:company) { create(:company) }
         let(:company_params) { { registration_step: "wicked_finish" } }
 
         context "when registration is completed" do
           it "calls send_confirmation_email" do
             expect(company).to receive(:send_confirmation_email)
             company.update(company_params)
-          end
-        end
-
-        context "when the company user is not confirmed" do
-          it "sends the confirmation mail" do
-            expect { company.update(company_params) }.to change(ActionMailer::Base.deliveries, :count).by(1)
           end
         end
 
@@ -152,7 +139,7 @@ describe Company, type: :model do
 
     describe "#registration_completed" do
       context "when registration step is wicked_finish" do
-        subject { create(:company, registration_step: "wicked_finish", company_user: create(:company_user)) }
+        subject { create(:company, registration_step: "wicked_finish") }
 
         it { is_expected.to be_registration_completed }
       end
@@ -162,69 +149,6 @@ describe Company, type: :model do
 
         it { is_expected.not_to be_registration_completed }
       end
-    end
-  end
-
-  describe "#search" do
-    let!(:company_1) { create(:company, name: "Acme") }
-    let!(:company_2) { create(:company, area: "Medicine, Psychology") }
-    let(:company_user_1) { create(:company_user, email: "john@doe.com") }
-    let!(:company_3) { create(:company, company_user: company_user_1) }
-    let(:company_user_2) { create(:company_user, first_name: "Jane") }
-    let!(:company_4) { create(:company, company_user: company_user_2) }
-
-    context "when searching by name" do
-      subject { described_class.search("Acme") }
-
-      it { is_expected.to include(company_1) }
-      it { is_expected.not_to include(company_2) }
-    end
-
-    context "when searching by area" do
-      subject { described_class.search("Medicine") }
-
-      it { is_expected.to include(company_2) }
-      it { is_expected.not_to include(company_1) }
-    end
-
-    context "when searching by email" do
-      subject { described_class.search("john@doe.com") }
-
-      it { is_expected.to include(company_3) }
-      it { is_expected.not_to include(company_1) }
-    end
-
-    context "when searching by name (first_name or last_name)" do
-      subject { described_class.search("Jane") }
-
-      it { is_expected.to include(company_4) }
-      it { is_expected.not_to include(company_3) }
-    end
-  end
-
-  describe "#name_or_email_search" do
-    let!(:company_1) { create(:company, name: "Acme") }
-    let(:company_user_1) { create(:company_user, email: "john@doe.com") }
-    let!(:company_2) { create(:company, company_user: company_user_1) }
-
-    context "when searching by name" do
-      subject { described_class.name_or_email_search("Acme") }
-
-      it { is_expected.to include(company_1) }
-      it { is_expected.not_to include(company_2) }
-    end
-
-    context "when searching by email" do
-      subject { described_class.name_or_email_search("john@doe.com") }
-
-      it { is_expected.to include(company_2) }
-      it { is_expected.not_to include(company_1) }
-    end
-
-    context "when search does not match any record" do
-      subject { described_class.name_or_email_search("Coyote") }
-
-      it { is_expected.to be_empty }
     end
   end
 end

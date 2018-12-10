@@ -87,7 +87,12 @@ FactoryBot.define do
     subscription_status { "active" }
 
     after(:build) do |company|
-      company.owner ||= FactoryBot.build(:company_user, :confirmed)
+      company.company_users.build(first_name: Faker::Name.unique.name,
+                                  last_name: Faker::Name.unique.name,
+                                  email: Faker::Internet.unique.email,
+                                  password: "password", password_confirmation: "password",
+                                  confirmed_at: Time.current,
+                                  role: "Owner")
     end
 
     trait :registration_completed do

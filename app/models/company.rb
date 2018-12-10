@@ -358,7 +358,7 @@ class Company < ApplicationRecord
     return unless Rails.application.secrets.enabled_hubspot
     return if !registration_completed? || changes[:registration_step].nil?
 
-    Hubspot::Contact.createOrUpdate(email,
+    Hubspot::Contact.createOrUpdate(owner.email,
       company: name,
       firstname: owner.first_name,
       lastname: owner.last_name,

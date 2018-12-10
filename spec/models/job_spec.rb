@@ -112,7 +112,8 @@ describe Job, type: :model do
                         pay_type: 'variable',
                         variable_pay_type: 'daily',
                         overtime_rate: 20,
-                        payment_terms: 10) }
+                        payment_terms: 10,
+                        creator: company.owner) }
       let!(:accepted_applicant) { create(:applicant, job: job, company: company, freelancer: create(:freelancer)) }
       let!(:declined_applicant) { create(:applicant, job: job, company: company, freelancer: create(:freelancer)) }
 

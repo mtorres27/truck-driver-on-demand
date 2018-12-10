@@ -3,7 +3,7 @@ require "rails_helper"
 RSpec.describe Company::JobBuildController, type: :controller do
   login_company
   let(:company) { subject.current_user.company }
-  let(:job) { create(:job, company: company, project: create(:project, company: company)) }
+  let(:job) { create(:job, company: company, project: create(:project, company: company), creator: company.owner) }
 
   describe "GET #show" do
     describe "step: job_details" do
@@ -14,7 +14,7 @@ RSpec.describe Company::JobBuildController, type: :controller do
     end
 
     describe "step: candidate_details" do
-      let!(:job) { create(:job, company: company, project: create(:project, company: company), creation_step: "candidate_details") }
+      let!(:job) { create(:job, company: company, project: create(:project, company: company), creation_step: "candidate_details", creator: company.owner) }
 
       it "renders candidate_details template" do
         get :show, params: { id: :candidate_details, job_id: job.id }
@@ -24,7 +24,7 @@ RSpec.describe Company::JobBuildController, type: :controller do
 
     describe "step: wicked_finish" do
       context "when creation_step is wicked_finish" do
-        let!(:job) { create(:job, company: company, project: create(:project, company: company), creation_step: "wicked_finish") }
+        let!(:job) { create(:job, company: company, project: create(:project, company: company), creation_step: "wicked_finish", creator: company.owner) }
 
         it "redirects to job" do
           get :show, params: { id: :wicked_finish, job_id: job.id }
@@ -102,7 +102,9 @@ RSpec.describe Company::JobBuildController, type: :controller do
                           job_function: 'type',
                           starts_on: Date.today,
                           scope_of_work: 'Scope',
-                          pay_type: 'fixed') }
+                          pay_type: 'fixed',
+                          creator: company.owner,
+                          budget: 10000) }
       let(:job_params) { job.attributes }
 
       before do

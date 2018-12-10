@@ -3,7 +3,7 @@ require 'rails_helper'
 describe Company::ContractsController, type: :controller  do
   login_company
   let(:company) { subject.current_user.company }
-  let(:job) { create(:job, project: create(:project, company: company), company: company, address: 'Toronto', state_province: 'ON', country: 'ca' ) }
+  let(:job) { create(:job, project: create(:project, company: company), company: company, address: 'Toronto', state_province: 'ON', country: 'ca', creator: company.owner ) }
   let(:freelancer) { create(:freelancer) }
   let!(:applicant) { create(:applicant, company: company, job: job, freelancer: freelancer) }
 

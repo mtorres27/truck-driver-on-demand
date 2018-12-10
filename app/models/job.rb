@@ -102,7 +102,7 @@ class Job < ApplicationRecord
 
   accepts_nested_attributes_for :attachments, allow_destroy: true, reject_if: :reject_attachments
 
-  attr_accessor :send_contract, :accepted_applicant_id, :enforce_contract_creation, :draft
+  attr_accessor :send_contract, :accepted_applicant_id, :enforce_contract_creation, :save_draft
 
   after_save :check_if_should_do_geocode
   after_save :accept_applicant, if: :enforce_contract_creation
