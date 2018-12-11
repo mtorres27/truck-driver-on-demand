@@ -1,38 +1,47 @@
-a.list-item.list-item--freelancer href="/#{current_user.is_a?(Admin) ? "admin" : "company"}/freelancers/#{current_user.is_a?(Admin) ? freelancer.id : hash_id(freelancer)}"
+.list-item.list-item--freelancer
 
-  .list__img
-    - if current_user.is_a?(CompanyUser) && is_favourite(freelancer)
-      .list__fav
-        span.zmdi.zmdi-favorite
-    - if freelancer.freelancer_profile.avatar_data.present?
-      .list__img-overlay
-      = image_tag(freelancer.freelancer_profile.avatar_url, size: "75x75")
-    - else
-      .circle_profile__image.freelancer__image= freelancer.name_initials
+  .list__flex-expand
+    a.list__img href="/#{current_user.is_a?(Admin) ? "admin" : "company"}/freelancers/#{current_user.is_a?(Admin) ? freelancer.id : hash_id(freelancer)}"
+      - if current_user.is_a?(CompanyUser) && is_favourite(freelancer)
+        .list__fav
+          span.zmdi.zmdi-favorite
+      - if freelancer.freelancer_profile.avatar_data.present?
+        .list__img-overlay
+        = image_tag(freelancer.freelancer_profile.avatar_url, size: "75x75")
+      - else
+        .circle_profile__image.freelancer__image= freelancer.name_initials
 
-  .list__group
-    .list__title
-      = "#{freelancer.first_name_and_initial} "
-      - if is_verified(freelancer)
-        span.list__verified.zmdi.zmdi-check-circle
+    a.list__group href="/#{current_user.is_a?(Admin) ? "admin" : "company"}/freelancers/#{current_user.is_a?(Admin) ? freelancer.id : hash_id(freelancer)}"
+      .list__title
+        = "#{freelancer.first_name_and_initial} "
+        - if is_verified(freelancer)
+          span.list__verified.zmdi.zmdi-check-circle
 
-    .list__city
-      - freelancer_address = "#{"#{freelancer.freelancer_profile.city}, " if freelancer.freelancer_profile.city.present?}#{"#{freelancer.freelancer_profile.state}, " if freelancer.freelancer_profile.state.present?}#{freelancer.freelancer_profile.country&.upcase}"
-      = "#{freelancer_address}. #{params.dig(:search, :address).present? ? "#{distance_from(freelancer, @freelancer_profiles_with_distances)} miles away" : "" }"
+      .list__city
+        - freelancer_address = "#{"#{freelancer.freelancer_profile.city}, " if freelancer.freelancer_profile.city.present?}#{"#{freelancer.freelancer_profile.state}, " if freelancer.freelancer_profile.state.present?}#{freelancer.freelancer_profile.country&.upcase}"
+        = "#{freelancer_address}. #{params.dig(:search, :address).present? ? "#{distance_from(freelancer, @freelancer_profiles_with_distances)} miles away" : "" }"
 
-    .list__rating
-      - @stars = freelancer_avg_rating(freelancer)
-      - @stars.each do |star|
-        i class=star
+      .list__rating
+        - @stars = freelancer_avg_rating(freelancer)
+        - @stars.each do |star|
+          i class=star
 
-    .list__desc
-      = freelancer.freelancer_profile.tagline
+      .list__desc
+        = freelancer.freelancer_profile.tagline
 
-    .tags
-      - if freelancer.freelancer_profile.job_types.present? and freelancer.freelancer_profile.job_types.kind_of?(Hash)
-        - freelancer.freelancer_profile.job_types.each do |index, value|
-          .tag.tag--hollow
-            = I18n.t("enumerize.job_types.#{index}")
-          - freelancer.job_functions_for_job_type(index).first(2).each do |job_function|
-            .tag.tag--grey
-              = job_function
+      .tags
+        - if freelancer.freelancer_profile.job_types.present? and freelancer.freelancer_profile.job_types.kind_of?(Hash)
+          - freelancer.freelancer_profile.job_types.each do |index, value|
+            .tag.tag--hollow
+              = I18n.t("enumerize.job_types.#{index}")
+            - freelancer.job_functions_for_job_type(index).first(2).each do |job_function|
+              .tag.tag--grey
+                = job_function
+  .buttons
+    - if current_company.subscription_active?
+      - if @job.applicants.where({ freelancer_id: freelancer.id }).count > 0
+        .btn.btn--primary disabled="true" Already applied
+      - elsif @job.job_invites.where({ freelancer_id: freelancer.id}).count > 0
+        .btn.btn--primary disabled="true" Invite sent
+      - else
+        .btn.btn--primary class="js--invite-to-quote-matches-btn-#{freelancer.id}" onclick="inviteToQuote(#{freelancer.id}, #{@job.id})" Invite to quote

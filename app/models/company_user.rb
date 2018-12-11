@@ -53,7 +53,7 @@ class CompanyUser < User
   audited
 
   belongs_to :company
-  has_many :job_collaborators, foreign_key: 'user_id'
+  has_many :job_collaborators, foreign_key: 'user_id', dependent: :destroy
   has_many :jobs, foreign_key: 'creator_id'
 
   before_validation :initialize_company

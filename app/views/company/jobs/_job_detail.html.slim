@@ -3,7 +3,7 @@
     h2.heading-h2.heading-h2--action-bar Job Detail
     .action-bar__actions
       - if @job.contracted? && current_user.company_user?
-        = link_to "Mark job as finished", mark_as_finished_company_job_path(@job), method: :post, class: "btn btn--primary", data: { confirm: "Are you sure?" }
+        = link_to "Mark job complete", mark_as_finished_company_job_path(@job), method: :post, class: "btn btn--primary", data: { confirm: "Are you sure?" }
       - if @job.pre_contracted?
         - path = current_user.admin? ? edit_admin_job_path(@job) : edit_company_job_path(@job)
         a.btn.btn--primary href=path
@@ -30,17 +30,12 @@
         h2.heading-h2.heading-h2--no-margin = number_with_precision(@job.budget, precision: 0).to_s + " " + @job.currency.upcase
 
     .grid-cell.grid-cell--50
-      h3.heading-h3 Project Reference
-      h2.heading-h2
-        - if current_user.company_user?
-          a href=company_projects_path()
-            = project_reference(@job.project)
-        - else
-          = project_reference(@job.project)
-
-    .grid-cell.grid-cell--50
       h3.heading-h3 Job Title
       p = @job.title
+
+    .grid-cell.grid-cell--50
+      h3.heading-h3 Author
+      p= @job.creator.first_name_and_initial
 
     .grid-cell.grid-cell--50
       h3.heading-h3 Location of Job

@@ -1,8 +1,8 @@
 .list-item.list-item--freelancer
-  .list__group
-    .list__title
+  .list__flex-expand
+    h3.heading-h3.gutter-right
       = "#{company_user.first_name_and_initial} "
-    .list__desc
+    p.gutter-right
       = company_user.email
     .tags
       .tag.tag--hollow
@@ -10,13 +10,11 @@
       - if !company_user.enabled
         .tag.tag--active
           |Disabled
-      br
-      - if company_user.role != "Owner"
-        .buttons
-
-          = link_to "Edit", edit_company_company_user_path(company_user), class: "btn btn--primary"
-          - if company_user.enabled
-            = link_to "Disable", disable_company_company_user_path(company_user), data: {confirm: "Are you sure?"}, class: "btn btn--primary", method: :post
-          - else company_user.enabled
-            = link_to "Enable", enable_company_company_user_path(company_user), data: {confirm: "Are you sure?"}, class: "btn btn--primary", method: :post
-          = link_to "Delete", company_company_user_path(company_user), data: {confirm: "Are you sure?"}, class: "btn btn--danger", method: :delete
+  - if company_user.role != "Owner"
+    .buttons
+      = link_to "Edit", edit_company_company_user_path(company_user), class: "btn btn--primary"
+      - if company_user.enabled
+        = link_to "Disable", disable_company_company_user_path(company_user), data: {confirm: "Are you sure?"}, class: "btn btn--primary", method: :post
+      - else company_user.enabled
+        = link_to "Enable", enable_company_company_user_path(company_user), data: {confirm: "Are you sure?"}, class: "btn btn--primary", method: :post
+      = link_to "Delete", company_company_user_path(company_user), data: {confirm: "Are you sure?"}, class: "btn btn--danger", method: :delete

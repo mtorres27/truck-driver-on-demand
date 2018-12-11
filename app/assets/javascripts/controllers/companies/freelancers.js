@@ -59,4 +59,4 @@ var submitInvitation = function(freelancer_id) {
       var select = $('#job_currency');
       select.empty().append(data);
     });
-}
+};

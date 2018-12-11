@@ -54,6 +54,7 @@ class Company::JobsController < Company::BaseController
 
   def freelancer_matches
     get_matches
+    @jobs = current_company.jobs.where(state: "published").order(title: :asc)
   end
 
   def mark_as_finished
