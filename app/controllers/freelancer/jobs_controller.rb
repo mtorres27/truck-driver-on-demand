@@ -77,7 +77,7 @@ class Freelancer::JobsController < Freelancer::BaseController
   end
 
   def apply
-    @stripe_connector = StripeAccount.new(current_user)
+    # @stripe_connector = StripeAccount.new(current_user)
     @applicant = Applicant.new
     @job = Job.find(params[:id])
     authorize @job
@@ -87,9 +87,9 @@ class Freelancer::JobsController < Freelancer::BaseController
     @applicant.company = @job.company
 
     # if !@stripe_connector.verified? && !Rails.env.development?
-    if !@stripe_connector.verified?
-      redirect_to freelancer_job_path(@job), alert: "You need to verify your identity before applying for a job."
-    elsif apply_params[:message].nil?
+    # if !@stripe_connector.verified?
+    #   redirect_to freelancer_job_path(@job), alert: "You need to verify your identity before applying for a job."
+    if apply_params[:message].nil?
       redirect_to freelancer_job_path(@job), alert: "Required data not found; please ensure your message has been entered."
     else
       if @applicant.save
@@ -136,8 +136,6 @@ class Freelancer::JobsController < Freelancer::BaseController
         @favourite = false
       end
     end
-
-    @connector = StripeAccount.new(current_user)
   end
 
 
