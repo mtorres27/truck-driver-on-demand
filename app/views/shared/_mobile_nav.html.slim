@@ -70,7 +70,7 @@
           | Subscription
         a.mobile-nav__menu__item href=company_profile_path data-turbolinks="false"
           = image_tag current_user.company.avatar_url
-          | my profile
+          | Settings
         = link_to "Logout", destroy_user_session_path, method: :delete, class: "mobile-nav__menu__item"
     - elsif request.path.index('admin') == 1
       - if current_user&.admin?

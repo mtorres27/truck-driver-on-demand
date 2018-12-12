@@ -41,7 +41,12 @@ class Company::CompanyUsersController < Company::BaseController
     authorize @company_user
     params[:company_user] = params[:company_user].except(:password, :password_confirmation) if params[:company_user][:password].blank?
     if @company_user.update(company_user_params)
-      redirect_to edit_company_company_user_path(@company_user)
+      flash[:notice] = "Successfully updated"
+      if @company_user == current_user
+        redirect_to company_company_user_path(@company_user)
+      else
+        redirect_to company_company_users_path
+      end
     else
       flash.now[:error] = @company_user.errors.full_messages.to_sentence
       render :edit
