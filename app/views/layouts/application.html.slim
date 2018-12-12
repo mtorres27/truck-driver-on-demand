@@ -34,8 +34,6 @@ html
 
 
   body(class = "#{controller.controller_name}-#{controller.action_name}")
-    - if current_user
-      = auto_session_timeout_js
     .wrap
       .section.section--header
         .container.container--header

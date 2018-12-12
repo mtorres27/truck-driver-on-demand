@@ -1313,7 +1313,6 @@ CREATE TABLE users (
     invited_by_id bigint,
     invitations_count integer DEFAULT 0,
     enabled boolean DEFAULT true,
-    currently_logged_in boolean,
     role character varying,
     phone_number character varying
 );
@@ -2555,6 +2554,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20181128205316'),
 ('20181129154912'),
 ('20181203174528'),
-('20181203184841');
+('20181203184841'),
+('20181212151759');
 
 

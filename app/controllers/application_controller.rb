@@ -1,8 +1,5 @@
 class ApplicationController < ActionController::Base
-  TIMEOUT = 30
-
   protect_from_forgery with: :exception
-  auto_session_timeout TIMEOUT.minutes
 
   require "erb"
   include ERB::Util
@@ -100,19 +97,13 @@ class ApplicationController < ActionController::Base
   protected
 
   def after_sign_in_path_for(resource)
-    if resource.currently_logged_in?
+    return admin_root_path if resource.admin?
+    return freelancer_root_path if resource.freelancer?
+    if resource.company_user?
+      return company_root_path if resource.enabled?
       flash.discard
-      flash[:error] = "You are already logged in on another device. Please log out from your other device or wait for your session to expire. Session timeout happens after #{TIMEOUT} minutes of inactivity"
+      flash[:error] = "Your account was disabled by your manager."
       sign_out resource
-    else
-      return admin_root_path if resource.admin?
-      return freelancer_root_path if resource.freelancer?
-      if resource.company_user?
-        return company_root_path if resource.enabled?
-        flash.discard
-        flash[:error] = "Your account was disabled by your manager."
-        sign_out resource
-      end
     end
     root_path
   end
