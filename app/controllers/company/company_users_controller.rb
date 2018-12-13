@@ -75,10 +75,14 @@ class Company::CompanyUsersController < Company::BaseController
 
   def enable
     authorize @company_user
-    if @company_user.update_attribute(:enabled, true)
-      flash[:notice] = "User enabled"
+    if current_company.enabled_users.count < current_company.plan&.user_limit
+      if @company_user.update_attribute(:enabled, true)
+        flash[:notice] = "User enabled"
+      else
+        flash[:error] = "There was an error trying to enable the user"
+      end
     else
-      flash[:notice] = "There was an error trying to enable the user"
+      flash[:error] = "You have reached the limit of enabled users available for your current plan. Upgrade to a better plan in order to enable more users."
     end
     redirect_to company_company_users_path
   end

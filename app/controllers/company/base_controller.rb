@@ -4,7 +4,6 @@ class Company::BaseController < ApplicationController
   before_action :authenticate_user!
   before_action :redirect_if_not_company
   before_action :redirect_if_not_subscribed
-  before_action :check_for_job_posting_availability
 
   helper_method :current_company
 

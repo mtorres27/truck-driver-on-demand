@@ -4,6 +4,7 @@ class Company::JobBuildController < Company::BaseController
 
   before_action :set_job, except: [:index, :create]
   before_action :authorize_job, except: [:index, :create]
+  before_action :check_for_job_posting_availability
 
   steps :job_details, :candidate_details
 

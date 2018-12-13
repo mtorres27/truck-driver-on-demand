@@ -336,6 +336,17 @@ class Company < ApplicationRecord
     end
   end
 
+  def disable_all_users
+    company_users.each do |company_user|
+      next if company_user.role == "Owner"
+      company_user.update_attribute(:enabled, false)
+    end
+  end
+
+  def enabled_users
+    company_users.where(enabled: true)
+  end
+
   private
 
   def create_subscription(plan, stripe_subscription, invoice)

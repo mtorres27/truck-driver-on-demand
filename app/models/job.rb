@@ -138,7 +138,7 @@ class Job < ApplicationRecord
   ], predicates: true, scope: true
 
   validates :project_id, presence: true, if: -> { step_job_details? || creation_completed? }
-  validates :budget, numericality: true, sane_price: true, if: -> { step_job_details? || creation_completed? }
+  validates :budget, presence: true, numericality: true, sane_price: true, if: -> { step_job_details? || creation_completed? }
   validates :duration, numericality: { only_integer: true, greater_than_or_equal_to: 1 }, if: -> { step_job_details? || creation_completed? }
   validates :starts_on, presence: true, if: -> { step_job_details? || creation_completed? }
   validate :scope_or_file, if: -> { step_job_details? || creation_completed? }

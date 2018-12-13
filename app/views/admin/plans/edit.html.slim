@@ -15,13 +15,14 @@ h1 Editing Plan
     = f.input :subscription_fee
     = f.input :job_posting_limit
     = f.input :user_limit
-    = f.fields_for :fee_schema, OpenStruct.new(@plan.fee_schema) do |ff|
-      .form-group
-        = ff.label :company_fees
-        = ff.text_field :company_fees, class: 'form-control'
-      .form-group
-        = ff.label :freelancer_fees
-        = ff.text_field :freelancer_fees, class: 'form-control'
+    = f.input :trial_period
+    /= f.fields_for :fee_schema, OpenStruct.new(@plan.fee_schema) do |ff|
+    /  .form-group
+    /    = ff.label :company_fees
+    /    = ff.text_field :company_fees, class: 'form-control'
+    /  .form-group
+    /    = ff.label :freelancer_fees
+    /    = ff.text_field :freelancer_fees, class: 'form-control'
 
   .form-actions
     = f.button :submit, "Save", class: "btn btn-primary", prompt: "Select"

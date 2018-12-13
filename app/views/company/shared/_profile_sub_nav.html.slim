@@ -6,10 +6,10 @@ h1.heading-h1
   a.tab-bar__item href="#{company_company_user_path(current_user)}" class=("tab-bar__item--active" if request.path == edit_company_company_user_path(current_user) || request.path == company_company_user_path(current_user))
     | Personal Info
   - if current_user.role == "Owner"
+    - if current_company.has_ability_to_add_extra_users?
+      a.tab-bar__item href="#{company_company_users_path}" class=("tab-bar__item--active" if request.path == company_company_users_path || request.path == new_company_company_user_path)
+        | User Management
     a.tab-bar__item href="#{company_plans_path}" class=("tab-bar__item--active" if request.path == company_plans_path or request.path == "/freelancer/profile/identity" or request.path == "/freelancer/profile/bank_account")
       | Subscriptions
     a.tab-bar__item href="#{company_invoices_path}" class=("tab-bar__item--active" if request.path == company_invoices_path or controller.action_name == "invoice")
       | Invoices
-    - if current_company.has_ability_to_add_extra_users?
-      a.tab-bar__item href="#{company_company_users_path}" class=("tab-bar__item--active" if request.path == company_company_users_path || request.path == new_company_company_user_path)
-        | User Management

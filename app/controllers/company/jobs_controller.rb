@@ -1,6 +1,7 @@
 class Company::JobsController < Company::BaseController
   before_action :set_job, except: [:job_countries, :new, :create]
   before_action :authorize_job, except: [:job_countries, :new, :create]
+  before_action :check_for_job_posting_availability
 
   def show
     redirect_to company_job_job_build_path(@job.creation_step, job_id: @job.id) unless @job.creation_completed?
@@ -69,7 +70,7 @@ class Company::JobsController < Company::BaseController
 
   def collaborators
     @collaborators = @job.job_collaborators
-    @non_collaborators = current_company.company_users.where.not(id: @collaborators.map(&:user).map(&:id))
+    @non_collaborators = current_company.company_users.where.not(id: @collaborators.map(&:user).map(&:id), enabled: false)
   end
 
   def add_collaborator

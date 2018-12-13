@@ -29,7 +29,7 @@
       - path = current_user.admin? ? admin_job_path(job) : company_job_path(job)
       a href=path
         | Job Details
-    - if current_company.present? && current_company.company_users.count > 1
+    - if current_company.present? && current_company.has_ability_to_add_extra_users? && current_company.company_users.count > 1
       .tab-bar__item class=("tab-bar__item--active" if (request.path == collaborators_company_job_path(job)))
         - path = collaborators_company_job_path(job)
         a href=path

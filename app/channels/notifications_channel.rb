@@ -4,8 +4,6 @@ class NotificationsChannel < ApplicationCable::Channel
   end
 
   def unsubscribed
-    user = User.find(params['notifications_stream_id'])
-    user.update_attribute(:currently_logged_in, false)
     super
   end
 

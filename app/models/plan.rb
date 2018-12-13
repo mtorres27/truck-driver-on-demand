@@ -20,4 +20,7 @@
 class Plan < ApplicationRecord
   has_many :companies, dependent: :nullify
 
+  def nickname
+    name
+  end
 end
