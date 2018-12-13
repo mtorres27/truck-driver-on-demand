@@ -4,6 +4,7 @@ class Company::BaseController < ApplicationController
   before_action :authenticate_user!
   before_action :redirect_if_not_company
   before_action :redirect_if_not_subscribed
+  before_action :redirect_if_disabled
 
   helper_method :current_company
 
@@ -25,6 +26,13 @@ class Company::BaseController < ApplicationController
 
   def redirect_if_not_subscribed
     redirect_to root_path if unsubscribed_redirect?
+  end
+
+  def redirect_if_disabled
+    return if (current_user.present? && current_user.enabled) || !current_user.present?
+    sign_out current_user
+    flash[:error] = "Your account has been disabled"
+    redirect_to root_path
   end
 
   def current_company_registering?

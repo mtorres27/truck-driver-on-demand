@@ -78,6 +78,7 @@ class Company::JobsController < Company::BaseController
     if @collaborator.present?
       @job.job_collaborators.create(user_id: @collaborator.id)
       CompanyMailer.notice_added_as_collaborator(@collaborator, @job).deliver_later
+      Notification.create(title: @job.title, body: "You've been added as a collaborator", authorable: current_user, receivable: @collaborator, url: company_job_url(@job))
       flash[:notice] = "Collaborator added to this job."
     else
       flash[:error] = "You're trying to add a collaborator from outside of your company."
