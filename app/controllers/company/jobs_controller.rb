@@ -1,7 +1,7 @@
 class Company::JobsController < Company::BaseController
   before_action :set_job, except: [:job_countries, :new, :create]
   before_action :authorize_job, except: [:job_countries, :new, :create]
-  before_action :check_for_job_posting_availability
+  before_action :check_for_job_posting_availability, only: [:edit]
 
   def show
     redirect_to company_job_job_build_path(@job.creation_step, job_id: @job.id) unless @job.creation_completed?
