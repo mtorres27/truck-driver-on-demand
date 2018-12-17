@@ -107,7 +107,7 @@ module StripeTool
     company.billing_period_ends_at = Time.at(period_end).to_date
     company.plan_id = nil
     company.subscription_status = "cancelled"
-    company.save
+    company.save(validate: false)
   end
 
   def self.get_stripe_plan(id:)

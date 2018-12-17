@@ -1,5 +1,6 @@
 h1.heading-h1
-  | Hi #{current_company.name}, welcome to AV Junction
+  - name = current_user.role == "Owner" ? current_company.name : current_user.first_name_and_initial
+  | Hi #{name}, welcome to AV Junction
 
 - content_for :secondary do
   .grid-h.grid-h--no-margin
