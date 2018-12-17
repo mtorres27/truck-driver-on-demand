@@ -20,6 +20,8 @@ document.addEventListener("turbolinks:load", function(){
           $("#job_invite_button").addClass("btn--primary--disabled")
         } else {
           $("#job_invite_button").removeClass("btn--primary--disabled");
+          $("#job_invite_button").removeAttr("disabled");
+          $("#job_invite_button").html("Invite");
         }
     });
 });
@@ -47,16 +49,14 @@ var submitInvitation = function(freelancer_id) {
   }
 
   $.get("/company/freelancers/"+ freelancer_id + "/invite_to_quote", { job_to_invite: $("#job_to_invite").val()})
-    .done(function( data ) {
-      $(".popover-response--error").html("");
-      $(".popover-response--success").html("");
-      if (data.success == 1) {
-        $(".popover-response--success").html(data.message);
-      } else {
-        $(".popover-response--error").html(data.message);
-      }
-
-      var select = $('#job_currency');
-      select.empty().append(data);
+      .done(function( data ) {
+          if (data.success == 1) {
+              $("#job_invite_button").html(data.message);
+          } else {
+              $("#job_invite_button").html(data.message);
+          }
+          $("#job_invite_button").attr("disabled", true);
+          var select = $('#job_currency');
+          select.empty().append(data);
     });
-}
+};

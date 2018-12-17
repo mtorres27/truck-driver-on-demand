@@ -25,10 +25,15 @@
     .tab-bar__item--active
       Job Details
   - else
-    .tab-bar__item class=("tab-bar__item--active" if (controller.controller_name == "jobs" && request.path != freelancer_matches_company_job_path && request.path != freelancer_matches_admin_job_path && request.path != company_job_avj_invoice_path && request.path != contract_invoice_company_job_path) or request.path.index(/work_order/))
+    .tab-bar__item class=("tab-bar__item--active" if (controller.controller_name == "jobs" && request.path != freelancer_matches_company_job_path && request.path != collaborators_company_job_path(job) && request.path != freelancer_matches_admin_job_path) or request.path.index(/work_order/))
       - path = current_user.admin? ? admin_job_path(job) : company_job_path(job)
       a href=path
         | Job Details
+    - if current_company.present? && current_company.has_ability_to_add_extra_users? && current_company.company_users.count > 1
+      .tab-bar__item class=("tab-bar__item--active" if (request.path == collaborators_company_job_path(job)))
+        - path = collaborators_company_job_path(job)
+        a href=path
+          | Collaborators
     - if job.state == 'published'
       .tab-bar__item class=("tab-bar__item--active" if (controller.controller_name == "jobs" && (request.path == freelancer_matches_company_job_path || request.path == freelancer_matches_admin_job_path)))
         - path = current_user.admin? ? freelancer_matches_admin_job_path(job) : freelancer_matches_company_job_path(job)
@@ -48,13 +53,6 @@
         - path = current_user.admin? ? admin_job_messages_path(job) : company_job_messages_path(job)
         a href=path
           | Progress
-    .tab-bar__item class=("tab-bar__item--active" if request.path.index(/payment/) || request.path == company_job_avj_invoice_path(id: job.id) || request.path == contract_invoice_company_job_path(job)) class=("tab-bar__item--inactive" if job.pre_contracted?)
-      - if job.pre_contracted?
-        | Payments
-      - else
-        - path = current_user.admin? ? admin_job_payments_path(job) : company_job_payments_path(job)
-        a href=path
-          | Payments
     .tab-bar__item class=("tab-bar__item--active" if request.path.index(/review/)) class=("tab-bar__item--inactive" unless job.completed?)
       - unless job.completed?
         | Review

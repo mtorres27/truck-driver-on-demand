@@ -22,6 +22,7 @@
           .plans__subtitle You can cancel your monthly subscription at any time. The cancellation shall become effective at the end of the current billing cycle and no refund will be provided for any previous payments.
         - elsif current_company.plan.period == 'yearly'
           .plans__subtitle Annual subscriptions come with a great discount and run on a one-year billing cycle with cancellation available the following year.  No refunds will be provided for any previous payments.
+        .plans__subtitle If you would like to upgrade or downgrade your current plan simply cancel your existing subscription and select a new plan.
         .plans__pricing
           .plans__price
         a.btn-ghost--active.w-inline-block.width-100 href=company_subscription_cancel_path  onclick="return confirm('Are you sure you want to cancel your subscription?')"

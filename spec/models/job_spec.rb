@@ -65,16 +65,19 @@
 #  payment_terms                          :integer
 #  expired                                :boolean          default(FALSE)
 #  fee_schema                             :json
+#  creator_id                             :integer
 #
 # Indexes
 #
 #  index_jobs_on_company_id         (company_id)
+#  index_jobs_on_creator_id         (creator_id)
 #  index_jobs_on_manufacturer_tags  (manufacturer_tags)
 #  index_jobs_on_project_id         (project_id)
 #
 # Foreign Keys
 #
 #  fk_rails_...  (company_id => companies.id)
+#  fk_rails_...  (creator_id => users.id)
 #  fk_rails_...  (project_id => projects.id)
 #
 
@@ -109,7 +112,8 @@ describe Job, type: :model do
                         pay_type: 'variable',
                         variable_pay_type: 'daily',
                         overtime_rate: 20,
-                        payment_terms: 10) }
+                        payment_terms: 10,
+                        creator: company.owner) }
       let!(:accepted_applicant) { create(:applicant, job: job, company: company, freelancer: create(:freelancer)) }
       let!(:declined_applicant) { create(:applicant, job: job, company: company, freelancer: create(:freelancer)) }
 

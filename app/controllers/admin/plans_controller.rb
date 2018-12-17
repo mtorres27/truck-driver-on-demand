@@ -24,7 +24,7 @@ class Admin::PlansController < Admin::BaseController
 
   def destroy
     @plan.destroy
-    redirect_to admin_projects_path, notice: "Plan removed."
+    redirect_to admin_plans_path, notice: "Plan removed."
   end
 
   private
@@ -45,6 +45,8 @@ class Admin::PlansController < Admin::BaseController
       :subscription_fee,
       :description,
       :period,
+      :job_posting_limit,
+      :user_limit,
       fee_schema: ['company_fees', 'freelancer_fees']
     )
   end

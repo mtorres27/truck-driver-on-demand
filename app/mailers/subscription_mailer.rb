@@ -17,7 +17,7 @@ class SubscriptionMailer < ApplicationMailer
             }
         }
     }.to_json
-    mail(to: @company.email, subject: "Subscribed to plan")
+    mail(to: @company.owner.email, subject: "Subscribed to plan")
   end
 
   def notice_company_subscription_canceled(company, plan)
@@ -38,6 +38,6 @@ class SubscriptionMailer < ApplicationMailer
             }
         }
     }.to_json
-    mail(to: @company.email, subject: "Subscription canceled")
+    mail(to: @company.owner.email, subject: "Subscription canceled")
   end
 end

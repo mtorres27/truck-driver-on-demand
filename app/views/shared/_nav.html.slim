@@ -34,8 +34,6 @@ nav#top-nav.navbar
           - if current_company.subscription_active?
             li( class=("active" if request.path == hired_company_freelancers_path || request.path == favourites_company_freelancers_path) )
               = link_to "My Freelancers", hired_company_freelancers_path
-            li( class=("active" if request.path.include?(company_payments_path)) )
-              = link_to "Payments", company_payments_path
           li.dropdown.notification-container
             a href="#" class="dropdown-toggle btn-icon-link" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"
               - if current_user.notifications.unread.count > 0
@@ -64,9 +62,7 @@ nav#top-nav.navbar
               span.caret
             ul class="dropdown-menu"
               li
-                = link_to "Profile", company_profile_path
-              li
-                = link_to "Subscription", company_plans_path
+                = link_to "Settings", company_profile_path
               li.divider role="separator"
               li.dropdown-header= current_user.company.name
               li
@@ -94,9 +90,6 @@ nav#top-nav.navbar
           li
             a.mobile-nav__menu__item href=av_companies_freelancer_companies_path data-turbolinks="false"
               | av companies
-          li
-            a.mobile-nav__menu__item href=freelancer_payments_path data-turbolinks="false"
-              | Payments
           li
             a.mobile-nav__menu__item href=freelancer_profile_path data-turbolinks="false"
               | my profile

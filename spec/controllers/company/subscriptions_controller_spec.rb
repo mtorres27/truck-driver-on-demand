@@ -91,22 +91,22 @@ describe Company::SubscriptionController, type: :controller  do
     end
 
     it 'subscribes the company to the specified plan' do
-      expect(StripeTool).to receive(:create_customer).with(email: company.email, stripe_token: 'token').once
+      expect(StripeTool).to receive(:create_customer).with(email: company.owner.email, stripe_token: 'token').once
       expect(StripeTool).to receive(:subscribe).with(customer: customer, tax: 0, plan: plan).once
       expect(StripeTool).to receive(:update_company_info_with_subscription).with(company: company, customer: customer, subscription: subscription, plan: plan).once
-      post :subscription_checkout, params: { plan_id: plan.code, stripeEmail: company.email, stripeToken: 'token' }
+      post :subscription_checkout, params: { plan_id: plan.code, stripeEmail: company.owner.email, stripeToken: 'token' }
     end
 
     it 'sends an email to the company' do
-      expect { post :subscription_checkout, params: { plan_id: plan.code, stripeEmail: company.email, stripeToken: 'token' } }.to change { ActionMailer::Base.deliveries.count }.by(1)
+      expect { post :subscription_checkout, params: { plan_id: plan.code, stripeEmail: company.owner.email, stripeToken: 'token' } }.to change { ActionMailer::Base.deliveries.count }.by(1)
     end
 
     it 'displays a flash message' do
-      post :subscription_checkout, params: { plan_id: plan.code, stripeEmail: company.email, stripeToken: 'token' }
+      post :subscription_checkout, params: { plan_id: plan.code, stripeEmail: company.owner.email, stripeToken: 'token' }
       expect(flash[:notice]).to be_present
     end
     it 'redirects to company plans' do
-      post :subscription_checkout, params: { plan_id: plan.code, stripeEmail: company.email, stripeToken: 'token' }
+      post :subscription_checkout, params: { plan_id: plan.code, stripeEmail: company.owner.email, stripeToken: 'token' }
       expect(response).to redirect_to(company_plans_path)
     end
   end

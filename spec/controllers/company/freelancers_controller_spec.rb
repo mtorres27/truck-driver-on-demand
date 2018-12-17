@@ -15,7 +15,8 @@ describe Company::FreelancersController, type: :controller  do
                      job_function: 'type',
                      starts_on: Date.today,
                      scope_of_work: 'Scope',
-                     pay_type: 'fixed') }
+                     pay_type: 'fixed',
+                     creator: company.owner) }
   let(:freelancer) { create(:freelancer) }
 
   describe "GET #invite_to_quote" do

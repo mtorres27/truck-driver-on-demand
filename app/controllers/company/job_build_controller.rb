@@ -4,6 +4,7 @@ class Company::JobBuildController < Company::BaseController
 
   before_action :set_job, except: [:index, :create]
   before_action :authorize_job, except: [:index, :create]
+  before_action :check_for_job_posting_availability
 
   steps :job_details, :candidate_details
 
@@ -22,27 +23,33 @@ class Company::JobBuildController < Company::BaseController
   def update
     @job.attributes = job_params
     @job.creation_step = next_step
+    job_slots_available = true
 
     if @job.creation_completed? && (@job.save_draft == "false" || @job.save_draft.blank?)
-      @job.state = "published"
-      if @job.valid?
-        get_matches
-        @freelancers.each do |freelancer|
-          next if Notification.where(receivable: freelancer, url: freelancer_job_url(@job)).count > 0
-          Notification.create(title: @job.title, body: "New job in your area", authorable: @job.company, receivable: freelancer, url: freelancer_job_url(@job))
-          JobNotificationMailer.notify_job_posting(freelancer, @job).deliver_later
+      if current_company&.has_available_job_posting_slots?
+        @job.state = "published"
+        if @job.valid?
+          get_matches
+          @freelancers.each do |freelancer|
+            next if Notification.where(receivable: freelancer, url: freelancer_job_url(@job)).count > 0
+            Notification.create(title: @job.title, body: "New job in your area", authorable: @job.company, receivable: freelancer, url: freelancer_job_url(@job))
+            JobNotificationMailer.notify_job_posting(freelancer, @job).deliver_later
+          end
         end
+      else
+        job_slots_available = false
+        @job.state = "created"
+        @job.save_draft = "true"
       end
     end
 
-    flash[:notice] = "You need to publish this job in order to make it visible to freelancers" if @job.creation_completed? && @job.save_draft == "true"
+    flash[:notice] = "You need to publish this job in order to make it visible to freelancers" if @job.creation_completed? && @job.save_draft == "true" && job_slots_available
 
     render_wizard @job
   end
 
   def create
-    @job = current_company.jobs.create
-    @job.update_attribute(:creation_step, steps.first)
+    @job = current_company.jobs.create(creation_step: steps.first, creator_id: current_user.id)
     authorize_job
     redirect_to wizard_path(steps.first, job_id: @job.id)
   end

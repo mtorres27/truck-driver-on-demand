@@ -14,8 +14,10 @@ class Freelancer::ReviewsController < Freelancer::BaseController
     @review.freelancer = current_user
 
     if @review.save
-      Notification.create(title: @job.title, body: "#{current_user.first_name_and_initial} reviewed your performance on this job", authorable: @job.freelancer, receivable: @job.company, url: company_job_review_url(@job))
-      CompanyMailer.notice_freelancer_review(@job.company, current_user, @review).deliver_later
+      @job.collaborators_for_notifications.each do |collaborator|
+        CompanyMailer.notice_freelancer_review(collaborator, current_user, @review).deliver_later
+        Notification.create(title: @job.title, body: "#{current_user.first_name_and_initial} reviewed your performance on this job", authorable: @job.freelancer, receivable: collaborator, url: company_job_review_url(@job))
+      end
       redirect_to freelancer_job_review_path(@job)
     else
       render :show

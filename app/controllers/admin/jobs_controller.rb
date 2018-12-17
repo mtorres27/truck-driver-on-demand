@@ -85,7 +85,6 @@ class Admin::JobsController < Admin::BaseController
       :scope_is_public,
       :budget_is_public,
       :contract_price,
-      :payment_schedule,
       :reporting_frequency,
       :require_photos_on_updates,
       :require_checkin,

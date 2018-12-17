@@ -64,11 +64,11 @@ class Company::FreelancersController < Company::BaseController
       ret = { success: 1, message: "Invite Sent!"}
     else
       if result == 0
-        message = "We were unable to send your invite. Please try again."
+        message = "Unable to send invite. Please try again."
       elsif result == 2
-        message = "This freelancer has already applied for this job."
+        message = "Already applied."
       elsif result == 3
-        message = "This freelancer has already received an invitation to apply for this job."
+        message = "Already invited."
       end
 
       ret = { success: 0, message: message}

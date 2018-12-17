@@ -85,7 +85,6 @@ class Company < ApplicationRecord
   has_many :projects, -> { order(updated_at: :desc) }, dependent: :destroy
   has_many :jobs, dependent: :destroy
   has_many :applicants, dependent: :destroy
-  has_many :payments, dependent: :destroy
   has_many :messages, -> { order(created_at: :desc) }, as: :authorable
   has_many :freelancer_reviews, dependent: :nullify
   has_many :company_reviews, dependent: :destroy
@@ -93,7 +92,7 @@ class Company < ApplicationRecord
   has_many :favourites
   has_many :favourite_freelancers, through: :favourites, source: :freelancer
   has_many :company_installs, dependent: :destroy
-  has_one :company_user, dependent: :destroy
+  has_many :company_users, dependent: :destroy
   has_many :notifications, as: :receivable, dependent: :destroy
   has_many :subscriptions
 
@@ -130,7 +129,7 @@ class Company < ApplicationRecord
 
   accepts_nested_attributes_for :featured_projects, allow_destroy: true, reject_if: :reject_featured_projects
   accepts_nested_attributes_for :company_installs, allow_destroy: true, reject_if: :reject_company_installs
-  accepts_nested_attributes_for :company_user
+  accepts_nested_attributes_for :company_users
 
   scope :new_registrants, -> { where(disabled: true, registration_step: "wicked_finish") }
   scope :incomplete_registrations, -> { where.not(registration_step: "wicked_finish") }
@@ -139,14 +138,38 @@ class Company < ApplicationRecord
   before_create :set_default_step
   after_save :send_confirmation_email
 
-  delegate :email, to: :company_user, allow_nil: true
-
   def freelancers
     Freelancer.
       joins(:freelancer_profile, applicants: :job).
       where(jobs: { company_id: id }).
       where(applicants: { state: :accepted }).
       order(first_name: :desc, last_name: :desc)
+  end
+
+  def owner
+    company_users.where(role: 'Owner').first
+  end
+
+  def open_jobs
+    jobs.where(state: :published)
+  end
+
+  def has_available_job_posting_slots?
+    if plan.present?
+      plan.job_posting_limit.nil? ? true : open_jobs.count < plan.job_posting_limit
+    end
+  end
+
+  def has_ability_to_add_extra_users?
+    if plan.present?
+      plan.user_limit > 1
+    end
+  end
+
+  def has_available_user_slots?
+    if plan.present? && plan.user_limit > 1
+      company_users.count < plan.user_limit
+    end
   end
 
   def renew_month
@@ -275,7 +298,7 @@ class Company < ApplicationRecord
   end
 
   def user
-    company_user
+    owner
   end
 
   def subscription_active?
@@ -313,6 +336,17 @@ class Company < ApplicationRecord
     end
   end
 
+  def disable_all_users
+    company_users.each do |company_user|
+      next if company_user.role == "Owner"
+      company_user.update_attribute(:enabled, false)
+    end
+  end
+
+  def enabled_users
+    company_users.where(enabled: true)
+  end
+
   private
 
   def create_subscription(plan, stripe_subscription, invoice)
@@ -335,10 +369,10 @@ class Company < ApplicationRecord
     return unless Rails.application.secrets.enabled_hubspot
     return if !registration_completed? || changes[:registration_step].nil?
 
-    Hubspot::Contact.createOrUpdate(email,
+    Hubspot::Contact.createOrUpdate(owner.email,
       company: name,
-      firstname: company_user.first_name,
-      lastname: company_user.last_name,
+      firstname: owner.first_name,
+      lastname: owner.last_name,
       lifecyclestage: "customer",
       im_an: "AV Company",
     )
@@ -357,9 +391,9 @@ class Company < ApplicationRecord
   end
 
   def send_confirmation_email
-    return if company_user.confirmed? || !registration_completed? || company_user.confirmation_sent_at.present?
-    company_user.send_confirmation_instructions
-    company_user.update_column(:confirmation_sent_at, Time.current)
+    return if owner&.confirmed? || !registration_completed? || owner&.confirmation_sent_at.present?
+    owner&.send_confirmation_instructions
+    owner&.update_column(:confirmation_sent_at, Time.current)
   end
 
   protected
