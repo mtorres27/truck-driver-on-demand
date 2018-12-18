@@ -56,6 +56,7 @@ class CompanyUser < User
   has_many :jobs, foreign_key: 'creator_id'
 
   before_validation :initialize_company
+  before_create :set_role
 
   attr_accessor :accept_terms_of_service, :accept_privacy_policy, :accept_code_of_conduct,
                 :enforce_profile_edit, :user_type
@@ -96,6 +97,10 @@ class CompanyUser < User
 
   def send_confirmation_notification?
     false
+  end
+
+  def set_role
+    self.role = "Owner" if self.role.blank?
   end
 
 end
