@@ -31,14 +31,14 @@
   .grid-cell.grid-cell--100
     h2.heading-h2 Choose a Plan to Post a Job on AV Junction.
     h3.heading-h3 Receive a 15 day free trial on your subscription of either plan. You won’t be charged until the trial expires. Post jobs, get access to our freelancer database and hire your ideal AV professional.
+  .grid-cell.grid-cell--100
     form
       = radio_button_tag "Monthly", "Monthly", true, class: "js--radio-monthly-subscriptions"
       label.gutter-right Monthly
       = radio_button_tag "Annual", "Annual", false, class: "js--radio-yearly-subscriptions"
-      label Annual
-      .tag.tag--success
-        | Save 10%
-
+      label.gutter-right Annual
+      .tag.tag--in-progress
+        | 1 Month Free On Annual Plans
   .grid-cell.grid-cell--100.js--plans-monthly-subscriptions
     .grid-h.grid-h--no-margin
       = render "company/subscription/plan", plan: @monthly_plans[0], name: "Starter"
