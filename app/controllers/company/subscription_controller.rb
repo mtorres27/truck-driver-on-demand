@@ -39,11 +39,7 @@ class Company::SubscriptionController < Company::BaseController
       redirect_to edit_company_profile_path
     end
 
-    if current_company.canada_country?
-      @plans = Plan.where(is_canadian: true)
-    else
-      @plans = Plan.where(is_canadian: false)
-    end
+    get_plans
 
     begin
       @subscription = Stripe::Subscription.retrieve(current_company.stripe_subscription_id) if current_company.stripe_subscription_id.present?

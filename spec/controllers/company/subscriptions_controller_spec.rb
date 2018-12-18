@@ -24,9 +24,13 @@ describe Company::SubscriptionController, type: :controller  do
     end
 
     it 'assigns the existing plans to @plans' do
-      create_list(:plan, 3)
+      3.times do
+        create(:plan)
+        create(:plan, period: 'monthly')
+      end
       get :plans
-      expect(assigns(:plans).count).to eq(4)
+      expect(assigns(:monthly_plans)).to be_present
+      expect(assigns(:yearly_plans)).to be_present
     end
 
     context 'when subscribed to a plan' do
