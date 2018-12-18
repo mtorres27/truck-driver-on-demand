@@ -1,5 +1,12 @@
 .freelancer-job__quote-msg
-  .common__user-avatar style="background-image: url(#{message.authorable.user_data.avatar_url})"
+  - if message.authorable.is_a?(Freelancer)
+    - if message.authorable.freelancer_profile.avatar_data.nil?
+      .dropdown-avatar
+        .circle_profile__image.freelancer__image= message.authorable.name_initials
+    - else
+      .common__user-avatar style="background-image: url(#{message.authorable.user_data.avatar_url})"
+  - else
+    .common__user-avatar style="background-image: url(#{message.authorable.user_data.avatar_url})"
   .freelancer-job__msg-cont.w-clearfix
     .freelancer-job__msg-user-name= message.authorable.first_name_and_initial
     .freelancer-job__msg-created-at= "#{time_ago_in_words(message.created_at)} ago"

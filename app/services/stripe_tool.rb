@@ -97,7 +97,7 @@ module StripeTool
     period_end = self.get_cancel_period_end(subscription: subscription)
     # Rails.logger.debug period_end
     self.cancel(subscription: subscription)
-    if subscription.plan.amount > 0
+    if subscription.plan.amount > 0 && subscription.status != "trialing"
       self.refund_customer(
         company: company,
         old_exp: company.billing_period_ends_at.to_time.to_i,
