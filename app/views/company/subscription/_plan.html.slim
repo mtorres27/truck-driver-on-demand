@@ -2,11 +2,11 @@
   h2.heading-h2= name
   h3.heading-h3
     - monthly_price = plan.period == "monthly" ? plan.subscription_fee : plan.subscription_fee/12
-    | $#{number_with_precision(monthly_price , precision: 2)}
+    | $#{number_with_precision(monthly_price , precision: 0)}
     - if current_company.canada_country?
-      span.heading-h6= "CAD/MO + tax"
+      span.heading-h6= " CAD/MO + tax"
     - else
-      span.heading-h6= "USD/MO"
+      span.heading-h6= " USD/MO"
   p= "#{plan.job_posting_limit > 100 ? "Unlimited" : plan.job_posting_limit} Active Job Postings"
   p= plan.user_limit > 1 ? "#{plan.user_limit} Users" : "Single User"
   = form_tag company_subscription_checkout_path, method: 'post', plan: plan  do
