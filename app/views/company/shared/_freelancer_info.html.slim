@@ -1,6 +1,6 @@
 .list-item.list-item--freelancer
 
-  .list__flex-expand
+  .list__flex-expand.flex-align-start
     a.list__img href="/#{current_user.is_a?(Admin) ? "admin" : "company"}/freelancers/#{current_user.is_a?(Admin) ? freelancer.id : hash_id(freelancer)}"
       - if current_user.is_a?(CompanyUser) && is_favourite(freelancer)
         .list__fav

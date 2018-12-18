@@ -1,0 +1,16 @@
+.grid-cell.grid-cell--25
+  h2.heading-h2= name
+  h3.heading-h3
+    - monthly_price = plan.period == "monthly" ? plan.subscription_fee : plan.subscription_fee/12
+    | $#{number_with_precision(monthly_price , precision: 2)}
+    - if current_company.canada_country?
+      span.heading-h6= "CAD/MO + tax"
+    - else
+      span.heading-h6= "USD/MO"
+  p= "#{plan.job_posting_limit > 100 ? "Unlimited" : plan.job_posting_limit} Active Job Postings"
+  p= plan.user_limit > 1 ? "#{plan.user_limit} Users" : "Single User"
+  = form_tag company_subscription_checkout_path, method: 'post', plan: plan  do
+    =link_to "Start 14 day trial", company_subscription_checkout_path(free: false), method: :post, class: "subscribe paid btn btn--primary"
+    input type="hidden" name="plan_id" value=plan[:code]
+    div.hidden
+      script.stripe-button.w-inline-block data-label="Pay" data-image="/assets/stripe-logo.png" data-amount=(current_company.canada_country? ? (plan[:subscription_fee] +(plan[:subscription_fee] * province_tax(current_company.state.upcase))) *100 : plan[:subscription_fee]*100) data-email=("#{current_user.email}") data-description="#{plan[:name]}"  data-key=("#{Rails.configuration.stripe[:publishable_key]}") data-locale="auto" src="https://checkout.stripe.com/checkout.js" data-currency = "#{current_company.canada_country? ? 'cad' : 'usd'}" data-panel-label="Pay"

@@ -44,7 +44,11 @@ class Company::CompanyUsersController < Company::BaseController
       if @company_user == current_user
         bypass_sign_in(@company_user)
       end
-      flash[:notice] = "Successfully updated"
+      if !params[:company_user][:password].blank?
+        flash[:notice] = "Password successfully updated"
+      else
+        flash[:notice] = "Successfully updated"
+      end
       if @company_user == current_user
         redirect_to company_company_user_path(@company_user)
       else

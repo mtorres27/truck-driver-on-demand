@@ -3,7 +3,11 @@
     a href=company_job_applicant_quotes_path(job, applicant)
       .list-item.list-item--applicant class=("list-item--active" if applicant.id == current_applicant_id)
         .list__info
-          = image_tag(applicant.freelancer.freelancer_profile.avatar_url, size: "40x40")
+          - if applicant.freelancer.freelancer_profile.avatar_data.nil?
+            .dropdown-avatar
+              .circle_profile__image.freelancer__image= applicant.freelancer.name_initials
+          - else
+            = image_tag(applicant.freelancer.freelancer_profile.avatar_url, size: "40x40")
           - if is_verified(applicant.freelancer)
             span class="freelancer-verified fa fa-check-circle"
         .list__info.list__info--with-padding.list__info--expand

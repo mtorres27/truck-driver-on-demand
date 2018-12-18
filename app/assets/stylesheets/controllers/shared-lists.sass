@@ -36,6 +36,8 @@
     -webkit-flex-direction: row
     -ms-flex-direction: row
     flex-direction: row
+    @media (max-width: $breakpoint-tablet)
+      flex-direction: column
   &--profile
     margin-right: 0px
     margin-left: 0px
@@ -90,8 +92,8 @@
 .list__flex-expand
   display: flex
   flex: 1
-  align-items: baseline
   padding: 8px 0 8px 0
+  align-items: baseline
 
 .list__author
   color: #000

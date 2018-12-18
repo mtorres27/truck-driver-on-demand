@@ -46,7 +46,11 @@
         a.mobile-nav__menu__item href=av_companies_freelancer_companies_path data-turbolinks="false"
           | av companies
         a.mobile-nav__menu__item href=freelancer_profile_path data-turbolinks="false"
-          = image_tag current_user.freelancer_profile.avatar_url
+          - if current_user.freelancer_profile.avatar_data.nil?
+            .dropdown-avatar
+              .circle_profile__image.freelancer__image= current_user.name_initials
+          - else
+            = image_tag(current_user.freelancer_profile.avatar_url)
           | my profile
         = link_to "Logout", destroy_user_session_path, method: :delete, class: "mobile-nav__menu__item"
     - elsif request.path.index('company') == 1
