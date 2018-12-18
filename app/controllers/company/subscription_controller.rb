@@ -10,6 +10,7 @@ class Company::SubscriptionController < Company::BaseController
     plan = current_company.plan
     StripeTool.cancel_subscription(company: current_company)
     SubscriptionMailer.notice_company_subscription_canceled(current_company, plan).deliver_later
+    current_company.disable_all_users
     flash[:notice] = "You just cancelled your company subscription!"
     redirect_to company_plans_path
   end
@@ -38,11 +39,7 @@ class Company::SubscriptionController < Company::BaseController
       redirect_to edit_company_profile_path
     end
 
-    if current_company.canada_country?
-      @plans = Plan.where(is_canadian: true)
-    else
-      @plans = Plan.where(is_canadian: false)
-    end
+    get_plans
 
     begin
       @subscription = Stripe::Subscription.retrieve(current_company.stripe_subscription_id) if current_company.stripe_subscription_id.present?

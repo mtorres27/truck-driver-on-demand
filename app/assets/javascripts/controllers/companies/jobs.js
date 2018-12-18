@@ -50,3 +50,15 @@ function get_currencies(country) {
             select.empty().append(data);
         });
 }
+
+function inviteToQuote(freelancer_id, job_id) {
+    $.get("/company/freelancers/"+ freelancer_id + "/invite_to_quote", { job_to_invite: job_id})
+        .done(function( data ) {
+            if (data.success == 1) {
+                $(".js--invite-to-quote-matches-btn-" + freelancer_id).html(data.message);
+            } else {
+                $(".js--invite-to-quote-matches-btn-" + freelancer_id).html(data.message);
+            }
+            $(".js--invite-to-quote-matches-btn-" + freelancer_id).attr("disabled", true)
+        });
+}

@@ -67,12 +67,12 @@
           tr
             td= link_to registrant.name, admin_company_path(registrant)
             td Company
-            td= mail_to registrant.company_user.email
+            td= mail_to registrant.owner.email
             td= "(##{I18n.t("registration_step_numbers.#{registrant.registration_step}")})#{registrant.registration_step}"
             td= registrant.state
             td= registrant.country.try(:upcase)
             td= registrant.created_at.strftime('%b %-d, %Y')
-            td= !registrant.company_user.confirmed_at.nil?
+            td= !registrant.owner.confirmed_at.nil?
             td= registrant.disabled
             td.text-right
               = link_to 'Edit', edit_admin_company_path(registrant)

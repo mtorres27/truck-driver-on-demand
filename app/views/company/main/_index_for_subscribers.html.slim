@@ -1,5 +1,6 @@
 h1.heading-h1
-  | Hi #{current_company.name}, welcome to AV Junction
+  - name = current_user.role == "Owner" ? current_company.name : current_user.first_name_and_initial
+  | Hi #{name}, welcome to AV Junction
 
 - content_for :secondary do
   .grid-h.grid-h--no-margin
@@ -18,12 +19,14 @@ h1.heading-h1
         .grid-cell.grid-cell--100
           .callout
             h2.heading-h2 FAQ
-            h3.heading-h3 How much does it cost?
-            p All payments are subject to a 3.9% transaction fee.
-            h3.heading-h3 How does payment work?
-            p AV Junction makes paying your freelancers easy and secure.  Choose to pay using Visa, MasterCard or American Express. (ACH for US Companies is coming soon!)  For fixed priced work orders a payment schedule is created based on milestones.  When those milestones are completed your freelancer will request payment.  For hourly or daily work orders an invoice is created by the freelancer and sent to you for payment
             h3.heading-h3 How do I get started?
-            p Creating a job posting is the first step.  You can invite freelancers to quote or receive quotes automatically from freelancers who find your job through our search tool.
+            p Creating a job posting is the first step. You can invite freelancers to quote or receive quotes automatically from freelancers who find your job through our search tool.
+            h3.heading-h3 Can I chat with AV freelancers before I hire them?
+            p Yes. Once you have posted a job you are able to message potential candidates. You can ask for more details about their experience, AV certifications and availability. You are also free to negotiate price and payment terms.
+            h3.heading-h3 How do I free up a job posting slot?
+            p Job posting slots become available again once you either delete a job posting or create a new work order with a freelancer.
+            h3.heading-h3 How do I get progress updates from my AV freelancer?
+            p Once you have hired your AV freelancer you can use our built in progress tool. You can chat, share files, track project milestones and receive real time onsite check-in when they arrive at the job site all in one central place.
             h3.heading-h3 Need Help?
             p
               | Contact us at
@@ -48,27 +51,27 @@ h1.heading-h1
               a.btn-link href="https://www.avjunction.com/how-to-guide-av-company" target="_blank"
                 | Learn more
           .grid-cell
-            h3.heading-h3 Find AV Freelancers
+            h3.heading-h3 Get Instantly Matched
             p
               | We match qualified AV freelancers based on your job posting or Freelancers come direct to you.
             a.btn-link href="https://www.avjunction.com/how-to-guide-av-company" target="_blank"
               | Learn more
           .grid-cell
-            h3.heading-h3 Hire
+            h3.heading-h3 Message Candidates
             p
-              | Request quotes, negotiate fixed priced, hourly or daily work orders. Simple work order creation.
+              | Contact candidates directly and request quotes with ease. Review several quotes at the same time to ensure you receive a fair price.
             a.btn-link href="https://www.avjunction.com/how-to-guide-av-company" target="_blank"
               | Learn more
           .grid-cell
-            h3.heading-h3 Manage
+            h3.heading-h3 Hire
             p
-              | Collaborate easily. Chat, send files, track project milestones and receive timely progress reports, images and real time onsite check-in.
+              | Create simple fixed price, hourly, or daily work order contracts and the ability to set payment terms for every hire.
             a.btn-link href="https://www.avjunction.com/how-to-guide-av-company " target="_blank"
               | Learn more
           .grid-cell
-            h3.heading-h3 Make Payments
+            h3.heading-h3 Manage Jobs & Repeat
             p
-              | Receive invoices and use our secure and fast payment system.
+              | Collaborate easily. Chat, send files, track project milestones and receive timely progress reports, images and real time onsite check-in.
             a.btn-link href="https://www.avjunction.com/how-to-guide-av-company" target="_blank"
               | Learn more
           .grid-cell

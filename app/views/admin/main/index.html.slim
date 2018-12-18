@@ -1,7 +1,7 @@
 h2 Dashboard
 
 .row
-  - ['Incomplete Registrations', 'New Registrant', 'Company', 'Freelancer', 'Project', 'Job', 'Applicant', 'Message', 'Payment', 'Plan'].each do |klass|
+  - ['Incomplete Registrations', 'New Registrant', 'Company', 'Freelancer', 'Project', 'Job', 'Applicant', 'Message', 'Plan'].each do |klass|
     - if %w(Company Freelancer Project Job Plan).include?(klass)
       a href="/admin/#{klass.downcase.pluralize}"
         .col-xs-12.col-sm-6.col-md-4.col-lg-3

@@ -17,7 +17,7 @@
     tbody
       - @plans.each do |plan|
         tr
-          td= link_to plan.name, admin_plan_path(plan)
+          td= link_to "#{plan.name} #{plan.is_canadian? ? "(Canada)" : ""}", admin_plan_path(plan)
           td= link_to plan.code, admin_plan_path(plan)
           td.text-right
             = link_to 'Edit', edit_admin_plan_path(plan)

@@ -36,28 +36,12 @@ class Company::ContractsController < Company::BaseController
 
       redirect_to company_job_path(@job), notice: "Work Order updated." if !@job.contracted?
     else
-
       @errors = []
-      @number_of_payments_error = false
-      @total_of_payments_error = false
       @job.errors.messages.each do |key, index|
-
-        if key == :number_of_payments
-          @number_of_payments_error = true
-        elsif key == :total_of_payments
-          @total_of_payments_error = true
-        else
-          @errors << key.to_s.underscore.humanize.titlecase
-        end
+        @errors << key.to_s.underscore.humanize.titlecase
       end
 
       @combined_errors = @errors.join(",")
-
-      if @number_of_payments_error
-        @combined_errors << "Payments (At least 1 is required)"
-      elsif @total_of_payments_error
-        @combined_errors << "Wrong payments amount!"
-      end
 
       flash[:error] = "Unable to save: the following fields need to be filled out: " + @combined_errors + ". If any of the fields aren't visible on the contract page, you might need to provide additional information in the job details page."
       render :edit
@@ -102,8 +86,7 @@ class Company::ContractsController < Company::BaseController
       :require_checkin,
       :require_uniform,
       :opt_out_of_freelance_service_agreement,
-      attachments_attributes: [:id, :file, :title, :_destroy],
-      payments_attributes: [:id, :description, :company_id, :amount, :_destroy]
+      attachments_attributes: [:id, :file, :title, :_destroy]
     )
   end
 end

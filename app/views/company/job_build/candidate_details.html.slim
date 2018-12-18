@@ -8,7 +8,7 @@
       .action-bar__actions
         a.btn.btn--secondary href=company_job_job_build_path(:job_details, job_id: @job.id) Back
         .btn.btn--secondary onClick="saveAsDraft()" Save as draft
-        - if @job.company.subscription_active?
+        - if @job.company.subscription_active? && @job.company.has_available_job_posting_slots?
           = f.button :submit, "Publish", class: "btn btn--primary js--job-publish-button disabled", disabled: true
 
     .grid-h
@@ -19,6 +19,6 @@
         .buttons
           a.btn.btn--secondary href=company_job_job_build_path(:job_details, job_id: @job.id) Back
           .btn.btn--secondary onClick="saveAsDraft()" Save as draft
-          - if @job.company.subscription_active?
+          - if @job.company.subscription_active? && @job.company.has_available_job_posting_slots?
             = f.button :submit, "Publish", class: "btn btn--primary js--job-publish-button disabled", disabled: true
 

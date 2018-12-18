@@ -853,6 +853,37 @@ ALTER SEQUENCE identities_id_seq OWNED BY identities.id;
 
 
 --
+-- Name: job_collaborators; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE job_collaborators (
+    id bigint NOT NULL,
+    job_id bigint NOT NULL,
+    user_id bigint NOT NULL,
+    receive_notifications boolean DEFAULT true
+);
+
+
+--
+-- Name: job_collaborators_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE job_collaborators_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: job_collaborators_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE job_collaborators_id_seq OWNED BY job_collaborators.id;
+
+
+--
 -- Name: job_favourites; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -983,7 +1014,8 @@ CREATE TABLE jobs (
     overtime_rate numeric(10,2),
     payment_terms integer,
     expired boolean DEFAULT false,
-    fee_schema json
+    fee_schema json,
+    creator_id bigint
 );
 
 
@@ -1119,60 +1151,6 @@ ALTER SEQUENCE pages_id_seq OWNED BY pages.id;
 
 
 --
--- Name: payments; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE payments (
-    id bigint NOT NULL,
-    company_id bigint NOT NULL,
-    job_id bigint NOT NULL,
-    description character varying NOT NULL,
-    amount numeric(10,2) NOT NULL,
-    issued_on date,
-    paid_on date,
-    attachment_data text,
-    created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL,
-    tax_amount numeric(10,2),
-    total_amount numeric(10,2),
-    avj_fees numeric(10,2),
-    avj_credit numeric(10,2) DEFAULT NULL::numeric,
-    stripe_charge_id character varying,
-    stripe_balance_transaction_id character varying,
-    funds_available_on integer,
-    funds_available boolean DEFAULT false,
-    company_fees numeric(10,2) DEFAULT 0,
-    total_company_fees numeric(10,2) DEFAULT 0,
-    freelancer_fees numeric(10,2) DEFAULT 0,
-    total_freelancer_fees numeric(10,2) DEFAULT 0,
-    transaction_fees numeric(10,2) DEFAULT 0,
-    time_unit_amount integer,
-    overtime_hours_amount integer,
-    freelancer_avj_fees_rate numeric(10,2),
-    company_avj_fees_rate numeric(10,2)
-);
-
-
---
--- Name: payments_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE payments_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: payments_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE payments_id_seq OWNED BY payments.id;
-
-
---
 -- Name: plans; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -1187,7 +1165,9 @@ CREATE TABLE plans (
     updated_at timestamp without time zone NOT NULL,
     description text,
     period character varying DEFAULT 'yearly'::character varying,
-    is_canadian boolean DEFAULT false
+    is_canadian boolean DEFAULT false,
+    job_posting_limit integer,
+    user_limit integer DEFAULT 1
 );
 
 
@@ -1324,7 +1304,6 @@ CREATE TABLE users (
     type character varying,
     messages_count integer DEFAULT 0 NOT NULL,
     company_id bigint,
-    role character varying,
     invitation_token character varying,
     invitation_created_at timestamp without time zone,
     invitation_sent_at timestamp without time zone,
@@ -1333,7 +1312,9 @@ CREATE TABLE users (
     invited_by_type character varying,
     invited_by_id bigint,
     invitations_count integer DEFAULT 0,
-    enabled boolean DEFAULT true
+    enabled boolean DEFAULT true,
+    role character varying,
+    phone_number character varying
 );
 
 
@@ -1497,6 +1478,13 @@ ALTER TABLE ONLY identities ALTER COLUMN id SET DEFAULT nextval('identities_id_s
 
 
 --
+-- Name: job_collaborators id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY job_collaborators ALTER COLUMN id SET DEFAULT nextval('job_collaborators_id_seq'::regclass);
+
+
+--
 -- Name: job_favourites id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -1536,13 +1524,6 @@ ALTER TABLE ONLY notifications ALTER COLUMN id SET DEFAULT nextval('notification
 --
 
 ALTER TABLE ONLY pages ALTER COLUMN id SET DEFAULT nextval('pages_id_seq'::regclass);
-
-
---
--- Name: payments id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY payments ALTER COLUMN id SET DEFAULT nextval('payments_id_seq'::regclass);
 
 
 --
@@ -1742,6 +1723,14 @@ ALTER TABLE ONLY identities
 
 
 --
+-- Name: job_collaborators job_collaborators_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY job_collaborators
+    ADD CONSTRAINT job_collaborators_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: job_favourites job_favourites_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -1787,14 +1776,6 @@ ALTER TABLE ONLY notifications
 
 ALTER TABLE ONLY pages
     ADD CONSTRAINT pages_pkey PRIMARY KEY (id);
-
-
---
--- Name: payments payments_pkey; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY payments
-    ADD CONSTRAINT payments_pkey PRIMARY KEY (id);
 
 
 --
@@ -2062,10 +2043,31 @@ CREATE UNIQUE INDEX index_identities_on_loginable_type_and_provider_and_uid ON i
 
 
 --
+-- Name: index_job_collaborators_on_job_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_job_collaborators_on_job_id ON job_collaborators USING btree (job_id);
+
+
+--
+-- Name: index_job_collaborators_on_user_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_job_collaborators_on_user_id ON job_collaborators USING btree (user_id);
+
+
+--
 -- Name: index_jobs_on_company_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_jobs_on_company_id ON jobs USING btree (company_id);
+
+
+--
+-- Name: index_jobs_on_creator_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_jobs_on_creator_id ON jobs USING btree (creator_id);
 
 
 --
@@ -2143,20 +2145,6 @@ CREATE INDEX index_on_projects_loc ON projects USING gist (st_geographyfromtext(
 --
 
 CREATE INDEX index_pages_on_slug ON pages USING btree (slug);
-
-
---
--- Name: index_payments_on_company_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_payments_on_company_id ON payments USING btree (company_id);
-
-
---
--- Name: index_payments_on_job_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_payments_on_job_id ON payments USING btree (job_id);
 
 
 --
@@ -2252,14 +2240,6 @@ ALTER TABLE ONLY company_reviews
 
 
 --
--- Name: payments fk_rails_0fc68a9316; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY payments
-    ADD CONSTRAINT fk_rails_0fc68a9316 FOREIGN KEY (company_id) REFERENCES companies(id);
-
-
---
 -- Name: jobs fk_rails_1977e8b5a6; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -2316,6 +2296,14 @@ ALTER TABLE ONLY company_reviews
 
 
 --
+-- Name: job_collaborators fk_rails_5b6ad69406; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY job_collaborators
+    ADD CONSTRAINT fk_rails_5b6ad69406 FOREIGN KEY (job_id) REFERENCES jobs(id);
+
+
+--
 -- Name: applicants fk_rails_7283c3d901; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -2340,14 +2328,6 @@ ALTER TABLE ONLY jobs
 
 
 --
--- Name: payments fk_rails_b35f361f8d; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY payments
-    ADD CONSTRAINT fk_rails_b35f361f8d FOREIGN KEY (job_id) REFERENCES jobs(id);
-
-
---
 -- Name: change_orders fk_rails_b3bebfe084; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -2364,6 +2344,14 @@ ALTER TABLE ONLY change_orders
 
 
 --
+-- Name: job_collaborators fk_rails_d4b8b384a8; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY job_collaborators
+    ADD CONSTRAINT fk_rails_d4b8b384a8 FOREIGN KEY (user_id) REFERENCES users(id);
+
+
+--
 -- Name: company_reviews fk_rails_dfd5a40d4e; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -2377,6 +2365,14 @@ ALTER TABLE ONLY company_reviews
 
 ALTER TABLE ONLY freelancer_reviews
     ADD CONSTRAINT fk_rails_f184aba2e9 FOREIGN KEY (job_id) REFERENCES jobs(id);
+
+
+--
+-- Name: jobs fk_rails_f251f165d2; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY jobs
+    ADD CONSTRAINT fk_rails_f251f165d2 FOREIGN KEY (creator_id) REFERENCES users(id);
 
 
 --
@@ -2551,6 +2547,14 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20181005155020'),
 ('20181024193655'),
 ('20181024211631'),
-('20181115173748');
+('20181114170452'),
+('20181115173748'),
+('20181116155610'),
+('20181119182307'),
+('20181128205316'),
+('20181129154912'),
+('20181203174528'),
+('20181203184841'),
+('20181212151759');
 
 

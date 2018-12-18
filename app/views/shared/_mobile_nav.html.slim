@@ -45,10 +45,12 @@
           | my jobs
         a.mobile-nav__menu__item href=av_companies_freelancer_companies_path data-turbolinks="false"
           | av companies
-        a.mobile-nav__menu__item href=freelancer_payments_path
-          | payments
         a.mobile-nav__menu__item href=freelancer_profile_path data-turbolinks="false"
-          = image_tag current_user.freelancer_profile.avatar_url
+          - if current_user.freelancer_profile.avatar_data.nil?
+            .dropdown-avatar
+              .circle_profile__image.freelancer__image= current_user.name_initials
+          - else
+            = image_tag(current_user.freelancer_profile.avatar_url)
           | my profile
         = link_to "Logout", destroy_user_session_path, method: :delete, class: "mobile-nav__menu__item"
     - elsif request.path.index('company') == 1
@@ -68,13 +70,11 @@
         - if current_company.subscription_active?
           a.mobile-nav__menu__item href=hired_company_freelancers_path data-turbolinks="false"
             | My Freelancers
-          a.mobile-nav__menu__item href=company_payments_path data-turbolinks="false"
-            | Payments
         a.mobile-nav__menu__item href=company_plans_path data-turbolinks="false"
           | Subscription
         a.mobile-nav__menu__item href=company_profile_path data-turbolinks="false"
           = image_tag current_user.company.avatar_url
-          | my profile
+          | Settings
         = link_to "Logout", destroy_user_session_path, method: :delete, class: "mobile-nav__menu__item"
     - elsif request.path.index('admin') == 1
       - if current_user&.admin?

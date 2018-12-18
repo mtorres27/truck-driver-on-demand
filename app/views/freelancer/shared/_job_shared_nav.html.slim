@@ -16,15 +16,6 @@
         | Progress
     - else
       | Progress
-  div class=(request.path == "/freelancer/jobs/#{job.id}/payments" ? "tab-item--active" : "tab-item--inactive")
-    - if job.pre_contracted?
-      | Payments
-    - else
-      - if job.freelancer&.id == current_user.id
-        a href=freelancer_job_payments_path(job)
-          | Payments
-      - else
-        | Payments
   div href=freelancer_job_review_path(job) class=(request.path == "/freelancer/jobs/#{job.id}/review" ? "tab-item--active" : "tab-item--inactive")
     - unless job.completed?
       | Review

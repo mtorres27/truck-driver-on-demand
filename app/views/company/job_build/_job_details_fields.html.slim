@@ -67,7 +67,7 @@
     .grid-cell.grid-cell--100
       = f.input :address, placeholder: "Enter City", label: "City", required: true
     .grid-cell.grid-cell--100
-      = f.input :budget, required: true, placeholder: "Enter a budget", input_html: {value: number_with_precision(f.object.budget, precision: 2)}
+      = f.input :budget, placeholder: "Enter a budget", required: true, input_html: {value: number_with_precision(f.object.budget, precision: 2)}
     .grid-cell.grid-cell--100
       = f.input :budget_is_public
     .grid-cell.grid-cell--100

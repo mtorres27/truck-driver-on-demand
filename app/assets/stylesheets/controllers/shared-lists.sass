@@ -22,10 +22,12 @@
   flex-direction: column
   border-bottom: 1px solid rgba(0, 0, 0, 0.15)
   color: black
+  flex-wrap: nowrap
   @media (max-width: $breakpoint-tablet)
     margin-right: -16px
     margin-left: -16px
     padding: 8px 16px
+    flex-wrap: wrap
   &:hover
     background-color: rgba(32, 140, 192, 0.05)
   &--freelancer, &--message, &--applicant
@@ -34,6 +36,8 @@
     -webkit-flex-direction: row
     -ms-flex-direction: row
     flex-direction: row
+    @media (max-width: $breakpoint-tablet)
+      flex-direction: column
   &--profile
     margin-right: 0px
     margin-left: 0px
@@ -80,6 +84,16 @@
 
 .list__30
   width: 30%
+
+.list__flex-row
+  display: flex
+  flex-direction: row
+
+.list__flex-expand
+  display: flex
+  flex: 1
+  padding: 8px 0 8px 0
+  align-items: baseline
 
 .list__author
   color: #000

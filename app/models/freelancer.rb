@@ -23,7 +23,6 @@
 #  type                   :string
 #  messages_count         :integer          default(0), not null
 #  company_id             :integer
-#  role                   :string
 #  invitation_token       :string
 #  invitation_created_at  :datetime
 #  invitation_sent_at     :datetime
@@ -33,6 +32,8 @@
 #  invited_by_id          :integer
 #  invitations_count      :integer          default(0)
 #  enabled                :boolean          default(TRUE)
+#  role                   :string
+#  phone_number           :string
 #
 # Indexes
 #
@@ -65,7 +66,6 @@ class Freelancer < User
   has_many :freelancer_clearances
   has_many :freelancer_portfolios
   has_many :freelancer_insurances
-  has_many :friend_invites
   has_many :job_favourites
   has_many :favourite_jobs, through: :job_favourites, source: :job
   has_many :company_favourites
@@ -84,8 +84,6 @@ class Freelancer < User
   validates_acceptance_of :accept_code_of_conduct
 
   before_validation :initialize_freelancer_profile
-  after_create :check_for_invites
-  after_save :add_credit_to_inviters, if: :confirmed_at_changed?
 
   accepts_nested_attributes_for :freelancer_profile
   accepts_nested_attributes_for :certifications, allow_destroy: true, reject_if: :reject_certification
@@ -93,7 +91,6 @@ class Freelancer < User
   accepts_nested_attributes_for :freelancer_clearances, reject_if: :all_blank, allow_destroy: true
   accepts_nested_attributes_for :freelancer_portfolios, reject_if: :all_blank, allow_destroy: true
   accepts_nested_attributes_for :freelancer_insurances, reject_if: :all_blank, allow_destroy: true
-  accepts_nested_attributes_for :friend_invites, reject_if: :all_blank, allow_destroy: true
 
   pg_search_scope :search, against: {
     first_name: "A",
@@ -183,10 +180,6 @@ class Freelancer < User
     freelancer_job_functions
   end
 
-  def was_invited?
-    FriendInvite.where(email: email, accepted: true).count > 0
-  end
-
   def score
     score = 0
     score += 2 if self.freelancer_profile.avatar_data.present?
@@ -255,35 +248,6 @@ class Freelancer < User
 
   def initialize_freelancer_profile
     self.freelancer_profile ||= build_freelancer_profile
-  end
-
-  def check_for_invites
-    return if FriendInvite.by_email(email).count.zero? || freelancer_profile.nil?
-    self.freelancer_profile.avj_credit = 10
-    save!
-    Notification.create(title: "Credit earned", body: "You earned credit!", authorable: self, receivable: self, url: Rails.application.routes.url_helpers.freelancer_friend_invites_url)
-    FreelancerMailer.notice_credit_earned(self, 10).deliver_later
-  end
-
-  def add_credit_to_inviters
-    return if FriendInvite.by_email(email).count.zero?
-    FriendInvite.by_email(email).each do |invite|
-      freelancer = invite.freelancer
-      if freelancer.freelancer_profile.avj_credit.nil?
-        credit_earned = 20
-      elsif freelancer.freelancer_profile.avj_credit + 20 <= 200
-        credit_earned = 20
-      else
-        credit_earned = 200 - freelancer.freelancer_profile.avj_credit
-      end
-      freelancer.freelancer_profile.avj_credit = freelancer.freelancer_profile.avj_credit.to_f + credit_earned
-      freelancer.freelancer_profile.save!
-      invite.update_attribute(:accepted, true)
-      if credit_earned > 0
-        Notification.create(title: "Credit earned", body: "You earned credit!", authorable: freelancer, receivable: freelancer, url: Rails.application.routes.url_helpers.freelancer_friend_invites_url)
-        FreelancerMailer.notice_credit_earned(freelancer, credit_earned).deliver_later
-      end
-    end
   end
 
   def step_profile?

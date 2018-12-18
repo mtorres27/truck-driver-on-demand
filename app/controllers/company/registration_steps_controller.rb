@@ -36,7 +36,9 @@ class Company::RegistrationStepsController < Company::BaseController
 
   def skip
     current_company.update(registration_step: next_step, skip_step: true)
+
     sign_out current_user if next_step == "wicked_finish"
+
     redirect_to company_registration_step_path(next_step)
   end
 

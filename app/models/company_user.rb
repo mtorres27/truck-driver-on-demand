@@ -23,7 +23,6 @@
 #  type                   :string
 #  messages_count         :integer          default(0), not null
 #  company_id             :integer
-#  role                   :string
 #  invitation_token       :string
 #  invitation_created_at  :datetime
 #  invitation_sent_at     :datetime
@@ -33,6 +32,8 @@
 #  invited_by_id          :integer
 #  invitations_count      :integer          default(0)
 #  enabled                :boolean          default(TRUE)
+#  role                   :string
+#  phone_number           :string
 #
 # Indexes
 #
@@ -51,8 +52,11 @@ class CompanyUser < User
   audited
 
   belongs_to :company
+  has_many :job_collaborators, foreign_key: 'user_id', dependent: :destroy
+  has_many :jobs, foreign_key: 'creator_id'
 
   before_validation :initialize_company
+  before_create :set_role
 
   attr_accessor :accept_terms_of_service, :accept_privacy_policy, :accept_code_of_conduct,
                 :enforce_profile_edit, :user_type
@@ -62,7 +66,22 @@ class CompanyUser < User
   validates_acceptance_of :accept_code_of_conduct
 
   delegate :registration_completed?, to: :company
-  delegate :notifications, to: :company
+
+  def available_jobs
+    if role == "Owner"
+      company.jobs
+    else
+      company.jobs.where(id: job_collaborators.map(&:job_id))
+    end
+  end
+
+  def notifications
+    if role == "Owner"
+      Notification.where(receivable_id: id, receivable_type: "User").or(Notification.where(receivable_id: company.id, receivable_type: "Company"))
+    else
+      Notification.where(receivable_id: id, receivable_type: "User")
+    end
+  end
 
   protected
 
@@ -78,6 +97,10 @@ class CompanyUser < User
 
   def send_confirmation_notification?
     false
+  end
+
+  def set_role
+    self.role = "Owner" if self.role.blank?
   end
 
 end

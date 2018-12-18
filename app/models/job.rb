@@ -65,16 +65,19 @@
 #  payment_terms                          :integer
 #  expired                                :boolean          default(FALSE)
 #  fee_schema                             :json
+#  creator_id                             :integer
 #
 # Indexes
 #
 #  index_jobs_on_company_id         (company_id)
+#  index_jobs_on_creator_id         (creator_id)
 #  index_jobs_on_manufacturer_tags  (manufacturer_tags)
 #  index_jobs_on_project_id         (project_id)
 #
 # Foreign Keys
 #
 #  fk_rails_...  (company_id => companies.id)
+#  fk_rails_...  (creator_id => users.id)
 #  fk_rails_...  (project_id => projects.id)
 #
 
@@ -87,16 +90,16 @@ class Job < ApplicationRecord
 
   belongs_to :company
   belongs_to :project, optional: true
+  belongs_to :creator, class_name: 'CompanyUser'
   has_many :applicants, -> { includes(:freelancer).order(updated_at: :desc) }, dependent: :destroy
   has_many :messages, -> { order(created_at: :desc) }, as: :receivable
   has_many :change_orders, -> { order(updated_at: :desc) }, dependent: :destroy
-  has_many :payments, dependent: :destroy
   has_many :attachments, dependent: :destroy
   has_one :freelancer_review, dependent: :nullify
   has_one :company_review, dependent: :nullify
   has_many :job_invites
+  has_many :job_collaborators, dependent: :destroy
 
-  accepts_nested_attributes_for :payments, allow_destroy: true, reject_if: :reject_payments
   accepts_nested_attributes_for :attachments, allow_destroy: true, reject_if: :reject_attachments
 
   attr_accessor :send_contract, :accepted_applicant_id, :enforce_contract_creation, :save_draft
@@ -104,6 +107,7 @@ class Job < ApplicationRecord
   after_save :check_if_should_do_geocode
   after_save :accept_applicant, if: :enforce_contract_creation
   after_create :set_plan_fee
+  after_create :set_creator_as_collaborator
 
   enumerize :job_type, in: I18n.t('enumerize.job_types').keys
 
@@ -133,8 +137,8 @@ class Job < ApplicationRecord
     :completed
   ], predicates: true, scope: true
 
-  validates :project_id, presence: true
-  validates :budget, numericality: true, sane_price: true, if: -> { step_job_details? || creation_completed? }
+  validates :project_id, presence: true, if: -> { step_job_details? || creation_completed? }
+  validates :budget, presence: true, numericality: true, sane_price: true, if: -> { step_job_details? || creation_completed? }
   validates :duration, numericality: { only_integer: true, greater_than_or_equal_to: 1 }, if: -> { step_job_details? || creation_completed? }
   validates :starts_on, presence: true, if: -> { step_job_details? || creation_completed? }
   validate :scope_or_file, if: -> { step_job_details? || creation_completed? }
@@ -146,8 +150,6 @@ class Job < ApplicationRecord
   validates :accepted_applicant_id, presence: true, if: :enforce_contract_creation
   validates :contract_price, :payment_terms, numericality: { greater_than_or_equal_to: 1 }, if: :enforce_contract_creation
   validates :overtime_rate, numericality: { greater_than_or_equal_to: 1 }, allow_blank: true
-  validate :validate_number_of_payments, if: :creation_completed?
-  validate :validate_payments_total, if: :creation_completed?
   validate :validate_sales_tax, if: :creation_completed?
 
   schema_validations except: :working_days
@@ -196,33 +198,8 @@ class Job < ApplicationRecord
     applicants.with_state(:accepted).first&.freelancer
   end
 
-  def payments_sum_paid
-    payments.
-      select { |p| p.paid_on.present? }.
-      sum { |p| p.amount || 0 }
-  end
-
-  def payments_sum_outstanding
-    payments.
-      select { |p| p.paid_on.blank? }.
-      sum { |p| p.amount || 0 }
-  end
-
-  def payments_sum_total
-    payments.
-      sum { |p| p.amount || 0 }
-  end
-
-  def gpayments_sum_paid
-    payments_sum_paid * (1 + ((applicable_sales_tax||0) / 100))
-  end
-
-  def gpayments_sum_outstanding
-    payments_sum_outstanding * (1 + ((applicable_sales_tax||0) / 100))
-  end
-
-  def gpayments_sum_total
-    payments_sum_total * (1 + ((applicable_sales_tax||0) / 100))
+  def collaborators_for_notifications
+    job_collaborators.where(receive_notifications: true).map(&:user)
   end
 
   def city_state_country
@@ -252,17 +229,17 @@ class Job < ApplicationRecord
 
   private
 
+  def set_creator_as_collaborator
+    job_collaborators.create(user: creator)
+    unless creator.role == "Owner"
+      job_collaborators.create(user: company.owner)
+    end
+  end
+
   def scope_or_file
     if scope_of_work.blank? and scope_file_url.nil?
       errors.add(:scope_of_work, "Either a scope of work or a scope file attachment is required")
     end
-  end
-
-  def reject_payments(attrs)
-    exists = attrs["id"].present?
-    empty = attrs["description"].blank? && attrs["amount"].blank?
-    attrs.merge!({ _destroy: 1 }) if exists && empty
-    !exists and empty
   end
 
   def reject_attachments(attrs)
@@ -288,20 +265,6 @@ class Job < ApplicationRecord
       applicant.update_attribute(:state, "declined")
       Notification.create(title: self.title, body: "Your application was declined", authorable: company, receivable: applicant.freelancer, url: Rails.application.routes.url_helpers.freelancer_job_url(self))
       FreelancerMailer.notice_received_declined_quote(applicant.freelancer, company, self).deliver_later
-    end
-  end
-
-  def validate_number_of_payments
-    if send_contract == "true" && pay_type == "fixed"
-      remaining_payments = payments.reject(&:marked_for_destruction?)
-      errors.add(:number_of_payments, 'A minimum of 1 payment is required') if remaining_payments.empty?
-    end
-  end
-
-  def validate_payments_total
-    if send_contract == "true" && pay_type == "fixed"
-      total = payments.inject(0) { |sum, e| sum + e.amount if e.amount.present? }
-      errors.add(:total_of_payments, 'The total amount of payments doesn\'t match with the work order amount') if total != contract_price
     end
   end
 

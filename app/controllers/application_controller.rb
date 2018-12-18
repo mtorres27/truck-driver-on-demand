@@ -99,8 +99,15 @@ class ApplicationController < ActionController::Base
   def after_sign_in_path_for(resource)
     return admin_root_path if resource.admin?
     return freelancer_root_path if resource.freelancer?
-    return company_root_path if resource.company_user?
+    if resource.company_user?
+      if resource.enabled?
+        return edit_company_company_user_path(resource) if resource.sign_in_count == 1 && resource.role != "Owner"
+        return company_root_path
+      end
+      flash.discard
+      flash[:error] = "Your account was disabled by your manager."
+      sign_out resource
+    end
     root_path
   end
-
 end

@@ -20,6 +20,7 @@ describe Freelancer::ContractsController, type: :controller  do
                        starts_on: Date.today,
                        scope_of_work: 'scope',
                        pay_type: 'fixed',
+                       creator: company.owner
     ) }
     let!(:applicant) { create :applicant, company: company, job: job, freelancer: freelancer, state: "quoting" }
 

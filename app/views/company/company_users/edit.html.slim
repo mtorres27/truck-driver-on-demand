@@ -1,0 +1,25 @@
+= render partial: "/company/shared/profile_sub_nav"
+
+- content_for :title, "AVJunction - User Management"
+
+- content_for :secondary do
+  .action-bar
+    h2.heading-h2.heading-h2--action-bar Edit User Info
+    .action-bar__actions
+      a.btn.btn--primary href=company_company_user_path(@company_user)
+        | Back
+  = simple_form_for([:company, @company_user]) do |f|
+    .grid-h
+      = render "form", f: f
+      .grid-cell.grid-cell--100
+        = f.input :phone_number, as: :string, placeholder: "Phone Number"
+      - if current_user == @company_user
+        .grid-cell.grid-cell--50
+          = f.input :password, as: :password, placeholder: "New Password", label: "New Password"
+        .grid-cell.grid-cell--50
+          = f.input :password_confirmation, as: :password, placeholder: "Password Confirmation"
+      .grid-cell.grid-cell--25
+        .buttons
+          = f.button :submit, "Save changes", class: "btn btn-primary"
+          a.btn.btn--clear href=company_company_user_path(@company_user)
+            | Cancel

@@ -59,7 +59,8 @@ module StripeTool
   def self.subscribe(customer:, tax:, plan:)
     customer.subscriptions.create(
       plan: plan[:code],
-      tax_percent: tax
+      tax_percent: tax,
+      trial_from_plan: true
     )
   end
 
@@ -107,7 +108,7 @@ module StripeTool
     company.billing_period_ends_at = Time.at(period_end).to_date
     company.plan_id = nil
     company.subscription_status = "cancelled"
-    company.save
+    company.save(validate: false)
   end
 
   def self.get_stripe_plan(id:)

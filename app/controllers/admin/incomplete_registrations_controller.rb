@@ -28,7 +28,7 @@ class Admin::IncompleteRegistrationsController < Admin::BaseController
   def download_csv
     authorize current_user
     freelancers = FreelancerProfile.incomplete_registrations.map(&:freelancer)
-    companies = Company.incomplete_registrations.map(&:company_user)
+    companies = Company.incomplete_registrations.map(&:owner)
     @registrants = (freelancers + companies).sort_by { |registrant| registrant.created_at }.reverse
     create_csv
     send_data @csv_file, :type => 'text/csv; charset=iso-8859-1; header=present', :disposition => 'attachment; filename=incomplete_registrations.csv'

@@ -9,4 +9,5 @@
         | You're currently subscribed to the #{current_company.plan&.name.presence || ''}
       - else
         | You'll need to subscribe to a plan to post a job.
-  = render "plans_info"
+  .grid-h
+    = render "plans_info"

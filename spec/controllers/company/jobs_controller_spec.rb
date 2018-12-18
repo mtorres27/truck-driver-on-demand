@@ -15,7 +15,8 @@ describe Company::JobsController, type: :controller  do
                      starts_on: Date.today,
                      scope_of_work: 'Scope',
                      pay_type: 'fixed',
-                     state: 'created') }
+                     state: 'created',
+                     creator: company.owner) }
 
   describe 'POST mark_as_finished' do
     let(:parameters) { { id: job.id } }
