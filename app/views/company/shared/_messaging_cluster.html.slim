@@ -41,7 +41,14 @@
         - @messages.each_with_index do |message|
           .list-item.list-item--message class=(".list-item.list-item--message.list-item--message-has-quote")
             .list__info
-              = image_tag(message.authorable.user_data.avatar_url, size: "40x40")
+              - if message.authorable.is_a?(Freelancer)
+                - if message.authorable.freelancer_profile.avatar_data.nil?
+                  .dropdown-avatar
+                    .circle_profile__image.freelancer__image= message.authorable.name_initials
+                - else
+                  = image_tag(message.authorable.freelancer_profile.avatar_url, size: "40x40")
+              - else
+                = image_tag(message.authorable.user_data.avatar_url, size: "40x40")
             .list__info.list__info--expand.list__info--with-padding
               .list-bar.list-bar--left
                 - if message.authorable.is_a?(Freelancer)

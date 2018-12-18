@@ -3,14 +3,6 @@ class Company::ContractsController < Company::BaseController
   before_action :authorize_job
 
   def show
-    # Should be deleted
-    if @job.freelancer.freelancer_profile&.stripe_account_id
-      # account = Stripe::Account.retrieve(@job.freelancer.freelancer_profile&.stripe_account_id)
-      # account.payout_schedule.interval = 'manual'
-      # account.save
-    else
-      flash[:error] = "The freelancer identity is not verified yet!"
-    end
   end
 
   def edit
