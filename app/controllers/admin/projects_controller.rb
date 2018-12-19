@@ -6,7 +6,7 @@ class Admin::ProjectsController < Admin::BaseController
   def index
     authorize current_user
     @keywords = params.dig(:search, :keywords).presence
-    @projects = Project.order(:name)
+    @projects = Project.order(created_at: :desc)
     if @keywords
       @projects = @projects.search(@keywords)
     end
