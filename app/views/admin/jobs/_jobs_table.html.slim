@@ -5,6 +5,7 @@
         th Job
         th Company Name
         th Project
+        th Created Date
         th Expired
         th.text-right Actions
 
@@ -14,6 +15,7 @@
           td= link_to job.title, admin_job_path(job)
           td= link_to job.company.name, admin_company_path(job.company)
           td= link_to job.project.name, admin_project_path(job.project)
+          td= job.created_at.strftime('%b %-d, %Y')
           td= job.expired
           td.text-right
             = link_to 'Edit', edit_admin_job_path(job)

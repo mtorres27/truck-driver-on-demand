@@ -96,8 +96,9 @@ module StripeTool
     subscription = Stripe::Subscription.retrieve(company.stripe_subscription_id)
     period_end = self.get_cancel_period_end(subscription: subscription)
     # Rails.logger.debug period_end
+    trialing = subscription.status == "trialing"
     self.cancel(subscription: subscription)
-    if subscription.plan.amount > 0 && subscription.status != "trialing"
+    if subscription.plan.amount > 0 && !trialing
       self.refund_customer(
         company: company,
         old_exp: company.billing_period_ends_at.to_time.to_i,
@@ -145,22 +146,18 @@ module StripeTool
   end
 
   def self.refund_customer(company:, old_exp:, plan_code:, plan_period:)
+    customer = Stripe::Customer.retrieve(company.stripe_customer_id)
+    charge = customer.charges.first
     # calculate months
     plan = Stripe::Plan.retrieve(plan_code)
     no_of_days = ((old_exp - Time.now.to_time.to_i)/1.day.second).to_i
-    amount = no_of_days * plan[:amount] / (plan_period == "yearly" ? 365 : 30)
+    amount = no_of_days * (plan[:amount] / (plan_period == "yearly" ? 365 : 30))
     amount += amount * (Subscription::CANADA_SALES_TAX_PERCENT/100) if company.canada_country?
     # generate the refund
     if amount > 0
-      charge = Stripe::Charge.create(
-        amount: amount.round,
-        currency:  'usd',
-        customer: company.stripe_customer_id,
-        description: "Refund for unused period in the #{plan_code} plan."
-      )
       Stripe::Refund.create(
-        charge: charge.id
-      )
+          charge: charge.id,
+          amount: amount.to_i)
       company_subscription = Subscription.where(['company_id = ?', company.id]).order("created_at DESC").first()
       if company_subscription.present?
         company_subscription.refund = amount/100

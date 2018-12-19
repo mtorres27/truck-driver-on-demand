@@ -208,7 +208,7 @@ class Company < ApplicationRecord
   pg_search_scope :name_or_email_search, against: {
     name: "A",
   }, associated_against: {
-    company_user: [:email]
+    company_users: [:email]
   }, using: {
     tsearch: { prefix: true }
   }

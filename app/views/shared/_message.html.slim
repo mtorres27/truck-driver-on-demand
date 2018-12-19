@@ -1,4 +1,4 @@
-.freelancer-job__quote-msg
+.list-item.flex-row.flex-no-wrap
   - if message.authorable.is_a?(Freelancer)
     - if message.authorable.freelancer_profile.avatar_data.nil?
       .dropdown-avatar
@@ -7,7 +7,7 @@
       .common__user-avatar style="background-image: url(#{message.authorable.user_data.avatar_url})"
   - else
     .common__user-avatar style="background-image: url(#{message.authorable.user_data.avatar_url})"
-  .freelancer-job__msg-cont.w-clearfix
+  .gutter-left
     .freelancer-job__msg-user-name= message.authorable.first_name_and_initial
     .freelancer-job__msg-created-at= "#{time_ago_in_words(message.created_at)} ago"
     p.freelancer-job__msg-text
