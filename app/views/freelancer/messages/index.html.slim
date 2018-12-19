@@ -5,10 +5,12 @@
   .action-bar
     h2.heading-h2.heading-h2--action-bar Progress
     .action-bar__actions
-  - if @job.freelancer&.id == current_user&.id
-    .result-wrapper
-      = simple_form_for(:message, url: freelancer_job_messages_path(@job), html: { class: "js--message-form", data: { id: @job.id, type: "Freelancer" } }) do |f|
-        = render partial: "freelancer/shared/new_message", locals: { f: f, n: @job.company.name, type: "message" }
-        .freelancer-job__message-history
+  .grid-h
+    - if @job.freelancer&.id == current_user&.id
+      .grid-cell.grid-cell--100
+        = simple_form_for(:message, url: freelancer_job_messages_path(@job), html: { class: "js--message-form", data: { id: @job.id, type: "Freelancer" } }) do |f|
+          = render partial: "freelancer/shared/new_message", locals: { f: f, n: @job.company.name, type: "message" }
+      .grid-cell.grid-cell--100
+        .js--freelancer-job__message-history
           - @messages.each do |message|
             = render "shared/message", message: message

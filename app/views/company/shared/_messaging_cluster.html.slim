@@ -24,8 +24,11 @@
           .new-message_amount
             .new-message__freelancer-selected
               .new-message__freelancer-selected__avatar
-                = image_tag(@job.freelancer.freelancer_profile.avatar_url, size: "65x65")
-
+                - if @job.freelancer.freelancer_profile.avatar_data.nil?
+                  .homepage__avatar
+                    .circle_profile__image.freelancer__image= @job.freelancer.name_initials
+                - else
+                  = image_tag(@job.freelancer.freelancer_profile.avatar_url, size: "75x75")
               .new-message__freelancer-selected__text
                 b
                   = "Congratulations, you've selected #{@job.freelancer.first_name_and_initial} for this job."
@@ -46,9 +49,9 @@
                   .dropdown-avatar
                     .circle_profile__image.freelancer__image= message.authorable.name_initials
                 - else
-                  = image_tag(message.authorable.freelancer_profile.avatar_url, size: "40x40")
+                  = image_tag(message.authorable.freelancer_profile.avatar_url, size: "35x35")
               - else
-                = image_tag(message.authorable.user_data.avatar_url, size: "40x40")
+                = image_tag(message.authorable.user_data.avatar_url, size: "35x35")
             .list__info.list__info--expand.list__info--with-padding
               .list-bar.list-bar--left
                 - if message.authorable.is_a?(Freelancer)
