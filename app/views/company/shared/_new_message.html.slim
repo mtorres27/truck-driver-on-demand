@@ -1,12 +1,10 @@
-.new-message--wrapper
-  .new-message
-    .attachment.common__text-field-group
-      label.common__field-label for="name-4"
-        = "Send a message to #{n}"
-      = f.text_area :body, as: :string, placeholder: "Enter your message", label: false, maxlength: 5000, class: "w-input js--message-input"
-      = f.input :attachment, as: :file, label: false, input_html: { class: "js--message-attachment" }
+.attachment.common__text-field-group
+  label.common__field-label for="name-4"
+    = "Send a message to #{n}"
+  = f.text_area :body, as: :string, placeholder: "Enter your message", label: false, maxlength: 5000, class: "w-input js--message-input"
+  = f.input :attachment, as: :file, label: false, input_html: { class: "js--message-attachment" }
 
-    #new-message__submit.btn.btn--primary onClick= "validateMessage();"
-      | Send
+#new-message__submit.btn.btn--primary.w-inline-block.width-100 onClick= "validateMessage();"
+  | Send
 
-    div#new-message__validation-errors
+div#new-message__validation-errors

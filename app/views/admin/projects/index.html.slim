@@ -12,6 +12,7 @@
       tr
         th Project
         th Company
+        th Created Date
         th.text-right Actions
 
     tbody
@@ -19,6 +20,7 @@
         tr
           td= link_to project.name, admin_project_path(project)
           td= link_to project.company.name, admin_company_path(project.company)
+          td= project.created_at.strftime('%b %-d, %Y')
           td.text-right
             = link_to 'Edit', edit_admin_project_path(project)
             '  |

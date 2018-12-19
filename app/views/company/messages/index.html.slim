@@ -4,13 +4,14 @@
   .action-bar
     h2.heading-h2.heading-h2--action-bar Progress
     .action-bar__actions
-
-  .result-wrapper
-    = simple_form_for(:message, url: company_job_messages_path(@job), html: { class: "js--message-form", data: { id: @job.id, type: "Company" } }) do |f|
-      - if @job.freelancer.nil?
-        - n = ""
-      - else
-        - n = @job.freelancer.first_name_and_initial
-      = render partial: "company/shared/new_message", locals: {f: f, n: n, type: "message"}
-      .freelancer-job__message-history
+  .grid-h
+    .grid-cell.grid-cell--100
+      = simple_form_for(:message, url: company_job_messages_path(@job), html: { class: "js--message-form", data: { id: @job.id, type: "Company" } }) do |f|
+        - if @job.freelancer.nil?
+          - n = ""
+        - else
+          - n = @job.freelancer.first_name_and_initial
+        = render partial: "company/shared/new_message", locals: {f: f, n: n, type: "message"}
+    .grid-cell.grid-cell--100
+      .js--freelancer-job__message-history
         = render "messages_info"

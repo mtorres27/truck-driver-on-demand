@@ -1,17 +1,15 @@
-.new-message--wrapper
-  .new-message
-    .attachment.common__text-field-group
-      label.common__field-label for="name-4"
-        = "Send a message to #{n}"
-      = f.text_area :body, as: :string, placeholder: "Enter your message", label: false, maxlength: 5000, class: "w-input js--message-input"
-      = f.input :checkin, as: :boolean, checked_value: true, unchecked_value: false, label: "Check in to my location (Turn on GPS for more accurate results)", input_html: { class: "js--message-checkin" }
-      = f.hidden_field :lat, class: "js--message-lat"
-      = f.hidden_field :lng, class: "js--message-lng"
-      = f.input :attachment, as: :file, label: false, input_html: { class: "js--message-attachment" }
+.attachment.common__text-field-group
+  label.common__field-label for="name-4"
+    = "Send a message to #{n}"
+  = f.text_area :body, as: :string, placeholder: "Enter your message", label: false, maxlength: 5000, class: "w-input js--message-input"
+  = f.input :checkin, as: :boolean, checked_value: true, unchecked_value: false, label: "Check in to my location (Turn on GPS for more accurate results)", input_html: { class: "js--message-checkin" }
+  = f.hidden_field :lat, class: "js--message-lat"
+  = f.hidden_field :lng, class: "js--message-lng"
+  = f.input :attachment, as: :file, label: false, input_html: { class: "js--message-attachment" }
 
-    .common__form-action-cont.w-clearfix
-      div#new-message__loading-notice
-      div#new-message__validation-errors
-      a#message-submit.btn.btn--primary.w-inline-block.width-100 onclick="validateMessage();"
-        div#new-message__submit
-          | Send
+.common__form-action-cont.w-clearfix
+  div#new-message__loading-notice
+  div#new-message__validation-errors
+  a#message-submit.btn.btn--primary.w-inline-block.width-100 onclick="validateMessage();"
+    div#new-message__submit
+      | Send
