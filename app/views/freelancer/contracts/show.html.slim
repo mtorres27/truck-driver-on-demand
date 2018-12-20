@@ -35,7 +35,7 @@
           | Applicable Sales Tax
         p #{@job.applicable_sales_tax ? @job.applicable_sales_tax : 0}%
 
-      .grid-cell.grid-cell--expand
+      .grid-cell.grid-cell--33
         h3.heading-h3
           | Total price (Includes taxes)
         - if @job.pay_type == "fixed"
@@ -64,7 +64,7 @@
         p
           = @job.working_time ? t(@job.working_time) : "Not Specified"
       
-      .grid-cell.grid-cell--expand
+      .grid-cell.grid-cell--50
         h3.heading-h3
           | Start-End Date
         p 
