@@ -5,6 +5,8 @@ class ApplicationController < ActionController::Base
   include ERB::Util
   include Pundit
 
+  helper_method :current_company
+
   before_action do
     if Rails.env.development?
       # Rack::MiniProfiler.authorize_request
@@ -26,6 +28,10 @@ class ApplicationController < ActionController::Base
   def after_inactive_sign_up_path_for(resource)
     cookies.delete(:onboarding)
     confirm_email_path
+  end
+
+  def current_company
+    @current_company ||= current_user&.try(:company)
   end
 
   def do_geocode(address)
