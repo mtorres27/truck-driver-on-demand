@@ -8,8 +8,9 @@
     .action-bar__actions
       a.btn.btn--primary href=edit_freelancer_profile_path
         | Edit
-      a.btn.btn--primary href="mailto:info@avjunction.com?subject=I would like my account to be verified" target="_blank"
-        | Verify
+      - unless @freelancer.freelancer_profile.verified
+        a.btn.btn--primary href="mailto:info@avjunction.com?subject=I would like my account to be verified" target="_blank"
+          | Verify
 
 
 
