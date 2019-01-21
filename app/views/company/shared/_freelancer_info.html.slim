@@ -37,7 +37,7 @@
             - freelancer.job_functions_for_job_type(index).first(2).each do |job_function|
               .tag.tag--grey
                 = job_function
-  - if @job.present?
+  - if @job.present? && current_company.present?
     .buttons
       - if current_company.subscription_active?
         - if @job.applicants.where({ freelancer_id: freelancer.id }).count > 0
