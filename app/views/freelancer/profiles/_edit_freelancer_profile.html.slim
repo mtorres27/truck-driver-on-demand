@@ -239,7 +239,9 @@
     .grid-cell.grid-cell--67
       .grid-v
         .grid-cell.grid-cell--100
-          .form__field-label Accreditation
+          .form__field-label
+            | Accreditation
+            label.text-red.gutter-left= "#{"(Files are required)" if @freelancer.errors.details[:"certifications.certificate_data"].present?}"
           = f.simple_fields_for :certifications do |certification_form|
             = render "/freelancer/profiles/certification_fields", f: certification_form
           .links.add-new-certificate
@@ -251,7 +253,9 @@
     .grid-cell.grid-cell--67
       .grid-v
         .grid-cell.grid-cell--100
-          .form__field-label Affilate
+          .form__field-label
+            | Affilate
+            label.text-red.gutter-left= "#{"(Files are required)" if @freelancer.errors.details[:"freelancer_affiliations.image_data"].present?}"
           = f.simple_fields_for :freelancer_affiliations do |freelancer_affiliation_form|
             = render "/freelancer/profiles/freelancer_affiliation_fields", f: freelancer_affiliation_form
           .links.add-new-affiliation
@@ -263,7 +267,9 @@
     .grid-cell.grid-cell--67
       .grid-v
         .grid-cell.grid-cell--100
-          .form__field-label Security Clearance
+          .form__field-label
+            | Security Clearance
+            label.text-red.gutter-left= "#{"(Files are required)" if @freelancer.errors.details[:"freelancer_clearances.image_data"].present?}"
           = f.simple_fields_for :freelancer_clearances do |freelancer_clearance_form|
             = render "/freelancer/profiles/freelancer_clearance_fields", f: freelancer_clearance_form
           .links.add-new-clearance
@@ -275,7 +281,9 @@
     .grid-cell.grid-cell--67
       .grid-v
         .grid-cell.grid-cell--100
-          .form__field-label Gallery
+          .form__field-label
+            | Gallery
+            label.text-red.gutter-left= "#{"(Files are required)" if @freelancer.errors.details[:"freelancer_portfolios.image_data"].present?}"
           = f.simple_fields_for :freelancer_portfolios do |freelancer_portfolio_form|
             = render "/freelancer/profiles/freelancer_portfolio_fields", f: freelancer_portfolio_form
           .links.add-new-portfolio
@@ -287,7 +295,9 @@
     .grid-cell.grid-cell--67
       .grid-v
         .grid-cell.grid-cell--100
-          .form__field-label Insurance
+          .form__field-label
+            | Insurance
+            label.text-red.gutter-left= "#{"(Files are required)" if @freelancer.errors.details[:"freelancer_insurances.image_data"].present?}"
           = f.simple_fields_for :freelancer_insurances do |freelancer_insurance_form|
             = render "/freelancer/profiles/freelancer_insurance_fields", f: freelancer_insurance_form
           .links.add-new-insurance

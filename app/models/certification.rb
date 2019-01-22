@@ -24,6 +24,8 @@ class Certification < ApplicationRecord
 
   after_save :generate_thumbnail
 
+  validates :certificate_data, presence: true
+
   enumerize :cert_type, in: [ :skill, :onsite ]
 
   def generate_thumbnail
