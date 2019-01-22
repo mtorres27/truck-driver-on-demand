@@ -20,6 +20,8 @@ class FreelancerPortfolio < ApplicationRecord
 
   after_save :generate_thumbnail
 
+  validates :image_data, presence: true
+
   def generate_thumbnail
     if self.image_data.nil?
       return
