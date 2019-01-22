@@ -53,7 +53,7 @@ nav#top-nav.navbar
                       .list__title Nothing to see here
                       .list__desc You don't have any new notifications for the moment
           li.dropdown
-            a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"
+            a href="#" class="dropdown-toggle profile-image-nav" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"
               .dropdown-avatar
                 - if current_user.company.avatar_data.nil?
                   .circle_profile__image.company__image= current_user.name_initials
