@@ -99,7 +99,7 @@ function uploadAddendum (index) {
                 reader.readAsDataURL($(this)[0].files[0]);
             }
         } else if (extn == "pdf") {
-            image_holder.attr('src', "/assets/certification/certification_placeholder.png")
+            image_holder.attr('src', "/assets/adendum/placeholder.png")
         } else {
             alert("Only images can be selected.");
         }

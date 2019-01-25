@@ -2,7 +2,7 @@
   .profile__meta__details__1-1
     .freelancer-profile__image.float-left
       - if !f.object.image_url.nil? && !f.object.image_url.include?('missing.pdf')
-        - url = is_image(f.object.image_url) ? f.object.image_url : "/assets/certification/certification_placeholder.png"
+        - url = is_image(f.object.image_url) ? f.object.image_url : "/assets/freelancer_affiliation/placeholder.png"
         a.authorable_attachment--full href=f.object.image_url target="_blank"
           img src=url
         .freelancer-profile__image-upload onclick="uploadAffiliateImage(#{f.index})"
