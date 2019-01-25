@@ -102,12 +102,12 @@
       .profile__certifications__container
         - @freelancer.freelancer_portfolios.each do |portfolio|
           .profile__certifications__certificate
-            - url = portfolio.image_url.include?("missing.pdf") ? "/assets/certification/certification_placeholder.png" : portfolio.image_url
+            - url = portfolio.image_url.include?("missing.pdf") ? "/assets/certification/placeholder.png" : portfolio.image_url
             a href=url target="_blank"
               - if is_image(url)
                 - src=url
               - else
-                - src="/assets/certification/certification_placeholder.png"
+                - src="/assets/certification/placeholder.png"
               .profile__certification
                 img.profile__certification__image sizes="185px" src=src
                 .profile__certification__label= portfolio.name
@@ -118,12 +118,12 @@
       .profile__certifications__container
         - @freelancer.certifications.each do |certification|
           .profile__certifications__certificate
-            - url = certification.certificate_url.include?("missing.pdf") ? "/assets/certification/certification_placeholder.png" : certification.certificate_url
+            - url = certification.certificate_url.include?("missing.pdf") ? "/assets/certification/placeholder.png" : certification.certificate_url
             a href=url target="_blank"
               - if is_image(url)
                 - src=url
               - else
-                - src="/assets/certification/certification_placeholder.png"
+                - src="/assets/certification/placeholder.png"
               .profile__certification
                 img.profile__certification__image sizes="185px" src=src
                 .profile__certification__label= certification.name
@@ -134,12 +134,12 @@
       .profile__certifications__container
         - @freelancer.freelancer_insurances.each do |insurance|
           .profile__certifications__certificate
-            - url = insurance.image_url.include?("missing.pdf") ? "/assets/certification/certification_placeholder.png" : insurance.image_url
+            - url = insurance.image_url.include?("missing.pdf") ? "/assets/insurance/placeholder.png" : insurance.image_url
             a href=url target="_blank"
               - if is_image(url)
                 - src=url
               - else
-                - src="/assets/certification/certification_placeholder.png"
+                - src="/assets/insurance/placeholder.png"
               .profile__certification
                 img.profile__certification__image sizes="185px" src=src
                 .profile__certification__label= insurance.name
@@ -151,12 +151,12 @@
       .profile__certifications__container
         - @freelancer.freelancer_affiliations.each do |affiliate|
           .profile__certifications__certificate
-            - url = affiliate.image_url.include?("missing.pdf") ? "/assets/certification/certification_placeholder.png" : affiliate.image_url
+            - url = affiliate.image_url.include?("missing.pdf") ? "/assets/freelancer_affiliation/placeholder.png" : affiliate.image_url
             a href=url target="_blank"
               - if is_image(url)
                 - src=url
               - else
-                - src="/assets/certification/certification_placeholder.png"
+                - src="/assets/freelancer_affiliation/placeholder.png"
               .profile__certification
                 img.profile__certification__image sizes="185px" src=src
                 .profile__certification__label= affiliate.name
@@ -167,12 +167,12 @@
       .profile__certifications__container
         - @freelancer.freelancer_clearances.each do |clearance|
           .profile__certifications__certificate
-            - url = clearance.image_url.include?("missing.pdf") ? "/assets/certification/certification_placeholder.png" : clearance.image_url
+            - url = clearance.image_url.include?("missing.pdf") ? "/assets/security_clearance/placeholder.png" : clearance.image_url
             a href=url target="_blank"
               - if is_image(url)
                 - src=url
               - else
-                - src="/assets/certification/certification_placeholder.png"
+                - src="/assets/security_clearance/placeholder.png"
               .profile__certification
                 img.profile__certification__image sizes="185px" src=src
                 .profile__certification__label= clearance.description

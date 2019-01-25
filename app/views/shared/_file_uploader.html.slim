@@ -27,7 +27,7 @@
 /   .uploader__image
 /     .freelancer-profile__image.float-left
 /       - if !f.object.certificate_url.include?('missing.pdf')
-/         - url = is_image(f.object.certificate_url) ? f.object.certificate_url : "/assets/certification/certification_placeholder.png"
+/         - url = is_image(f.object.certificate_url) ? f.object.certificate_url : "/assets/certification/placeholder.png"
 /         a.authorable_attachment--full href=f.object.certificate_url target="_blank"
 /           img src=url
 /         .freelancer-profile__image-upload onclick="uploadCertificate(#{f.index})"
