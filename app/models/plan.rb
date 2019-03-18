@@ -24,3 +24,4 @@ class Plan < ApplicationRecord
     name
   end
 end
+

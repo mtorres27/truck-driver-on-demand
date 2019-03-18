@@ -2,7 +2,7 @@ class MyDeviseMailer < Devise::Mailer
   helper :application
   include Devise::Controllers::UrlHelpers
   include Devise::Mailers::Helpers
-  default from: 'AV Junction <info@avjunction.com>', template_path: 'mailers', template_name: 'default'
+  default from: 'AV Junction <the.team@avjunction.com>', template_path: 'mailers', template_name: 'default'
 
   def confirmation_instructions(record, token, opts={})
     @token = token
