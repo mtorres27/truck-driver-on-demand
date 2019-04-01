@@ -41,7 +41,7 @@
 #  card_brand                :string
 #  exp_month                 :string
 #  exp_year                  :string
-#  header_source             :string           default("color")
+#  header_source             :string           default("default")
 #  sales_tax_number          :string
 #  line2                     :string
 #  city                      :string
