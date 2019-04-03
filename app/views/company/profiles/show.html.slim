@@ -11,7 +11,9 @@
           | Edit
 
 
-  - if current_company.profile_header_url.include?("missing") || current_company.header_source == "color"
+  - if current_company.header_source == 'default'
+    .profile__wallpaper style="background-image: url(#{image_path('profile_header/default_wallpaper.jpg')});"
+  - elsif current_company.profile_header_url.include?("missing") || current_company.header_source == "color"
     .profile__wallpaper style="background-color: #{ current_company.header_color.include?("#") ? "" : "#"}#{current_company.header_color}"
   - else
     .profile__wallpaper style="background-image: url(#{current_company.profile_header_url.include?("missing") ? "" : current_company.profile_header_url});"
