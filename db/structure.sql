@@ -293,7 +293,7 @@ CREATE TABLE companies (
     card_brand character varying,
     exp_month character varying,
     exp_year character varying,
-    header_source character varying DEFAULT 'color'::character varying,
+    header_source character varying DEFAULT 'default'::character varying,
     sales_tax_number character varying,
     line2 character varying,
     city character varying,
@@ -700,7 +700,7 @@ CREATE TABLE freelancer_profiles (
     country character varying,
     freelancer_team_size character varying,
     freelancer_type character varying,
-    header_source character varying DEFAULT 'color'::character varying,
+    header_source character varying DEFAULT 'default'::character varying,
     stripe_account_id character varying,
     stripe_account_status text,
     currency character varying,
@@ -2555,6 +2555,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20181129154912'),
 ('20181203174528'),
 ('20181203184841'),
-('20181212151759');
+('20181212151759'),
+('20190401182720');
 
 

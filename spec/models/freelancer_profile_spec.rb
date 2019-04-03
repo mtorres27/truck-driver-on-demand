@@ -30,7 +30,7 @@
 #  country                  :string
 #  freelancer_team_size     :string
 #  freelancer_type          :string
-#  header_source            :string           default("color")
+#  header_source            :string           default("default")
 #  stripe_account_id        :string
 #  stripe_account_status    :text
 #  currency                 :string

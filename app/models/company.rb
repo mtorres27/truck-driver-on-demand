@@ -41,7 +41,7 @@
 #  card_brand                :string
 #  exp_month                 :string
 #  exp_year                  :string
-#  header_source             :string           default("color")
+#  header_source             :string           default("default")
 #  sales_tax_number          :string
 #  line2                     :string
 #  city                      :string
@@ -124,7 +124,8 @@ class Company < ApplicationRecord
 
   enumerize :header_source, in: [
     :color,
-    :wallpaper
+    :wallpaper,
+    :default
   ]
 
   accepts_nested_attributes_for :featured_projects, allow_destroy: true, reject_if: :reject_featured_projects
