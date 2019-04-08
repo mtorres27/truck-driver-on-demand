@@ -11,7 +11,9 @@ h1.heading-h1 Company Profile
         | Edit
 
 
-  - if @company.profile_header_url.include?("missing") or @company.header_source == "color"
+  - if @company.header_source == 'default'
+    .profile__wallpaper style="background-image: url(#{image_path('profile_header/default_wallpaper.jpg')});"
+  - elsif @company.profile_header_url.include?("missing") or @company.header_source == "color"
     .profile__wallpaper style="background-color: #{ @company.header_color.include?("#") ? "" : "#"}#{@company.header_color}"
   - else
     .profile__wallpaper style="background-image: url(#{@company.profile_header_url.include?("missing") ? "" : @company.profile_header_url});"
