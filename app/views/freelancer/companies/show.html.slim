@@ -1,5 +1,7 @@
 .container.container--header
-  - if @company.profile_header_url.include?("missing") or @company.header_source == "color"
+  - if @company.header_source == 'default'
+    .profile__wallpaper style="background-image: url(#{image_path('profile_header/default_wallpaper.jpg')});"
+  - elsif @company.profile_header_url.include?("missing") or @company.header_source == "color"
     .profile__wallpaper.profile__wallpaper--wide style="background-color: #{ @company.header_color.include?("#") ? "" : "#"}#{@company.header_color}"
   - else
     .profile__wallpaper.profile__wallpaper--wide style="background-image: url(#{@company.profile_header_url.include?("missing") ? "" : @company.profile_header_url});"

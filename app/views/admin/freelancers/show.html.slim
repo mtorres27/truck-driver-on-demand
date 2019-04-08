@@ -9,7 +9,9 @@ h1.headin-h1 Freelancer Profile
       a.btn.btn--primary href=admin_freelancers_path
         | Cancel
 
-  - if @freelancer.freelancer_profile.profile_header_url.include?("missing") or @freelancer.freelancer_profile.header_source == "color"
+  - if @freelancer.freelancer_profile.header_source == 'default'
+    .profile__wallpaper style="background-image: url(#{image_path('profile_header/default_wallpaper.jpg')});"
+  - elsif @freelancer.freelancer_profile.profile_header_url.include?("missing") or @freelancer.freelancer_profile.header_source == "color"
     .profile__wallpaper style="background-color: #{ @freelancer.freelancer_profile.header_color.include?("#") ? "" : "#"}#{@freelancer.freelancer_profile.header_color}"
   - else
     .profile__wallpaper style="background-image: url(#{@freelancer.freelancer_profile.profile_header_url.include?("missing") ? "" : @freelancer.freelancer_profile.profile_header_url});"
