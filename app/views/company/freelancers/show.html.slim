@@ -36,11 +36,5 @@
         - else
           .tag.tag--warning
             | Unavailable
-        - if @favourite
-          a.btn-icon-link href="#{params[:id]}?toggle_favourite=true"
-            div class="zmdi zmdi-favorite"
-        - else
-          a.btn-icon-link href="#{params[:id]}?toggle_favourite=true"
-            div class="zmdi zmdi-favorite-outline"
 
     = render "shared/profile-freelancer"

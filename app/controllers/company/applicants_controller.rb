@@ -48,10 +48,6 @@ class Company::ApplicantsController < Company::BaseController
 
   private
 
-  def unsubscribed_redirect?
-    false
-  end
-
   def set_job
     @job = current_company.jobs.includes(:applicants).find(params[:job_id])
   end

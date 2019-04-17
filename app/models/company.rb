@@ -53,6 +53,7 @@
 #  is_trial_applicable       :boolean          default(TRUE)
 #  waived_jobs               :integer          default(0)
 #  registration_step         :string
+#  saved_freelancers_ids     :citext
 #
 # Indexes
 #
@@ -117,6 +118,7 @@ class Company < ApplicationRecord
   serialize :job_markets
   serialize :technical_skill_tags
   serialize :manufacturer_tags
+  serialize :saved_freelancers_ids, Array
 
   enumerize :country, in: [
     :at, :au, :be, :ca, :ch, :de, :dk, :es, :fi, :fr, :gb, :hk, :ie, :it, :jp, :lu, :nl, :no, :nz, :pt, :se, :sg, :us
@@ -140,11 +142,15 @@ class Company < ApplicationRecord
   after_save :send_confirmation_email
 
   def freelancers
+    Freelancer.where(id: saved_freelancers_ids)
+  end
+
+  def hired_freelancers
     Freelancer.
-      joins(:freelancer_profile, applicants: :job).
-      where(jobs: { company_id: id }).
-      where(applicants: { state: :accepted }).
-      order(first_name: :desc, last_name: :desc)
+        joins(:freelancer_profile, applicants: :job).
+        where(jobs: { company_id: id }).
+        where(applicants: { state: :accepted }).
+        order(first_name: :desc, last_name: :desc)
   end
 
   def owner
@@ -346,6 +352,10 @@ class Company < ApplicationRecord
 
   def enabled_users
     company_users.where(enabled: true)
+  end
+
+  def has_saved_freelancer?(freelancer)
+    saved_freelancers_ids.include?(freelancer.id)
   end
 
   private

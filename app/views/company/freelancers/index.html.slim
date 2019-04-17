@@ -1,0 +1,26 @@
+h1.heading-h1 Search for AV Freelancers
+= render "company/shared/freelancer_search_form"
+
+- content_for :secondary do
+  .action-bar
+    h2.heading-h2.heading-h2--action-bar
+      - if params.dig(:search, :keywords).presence
+        = "#{@freelancer_profiles.total_count} freelancers found for "
+      - else
+        = "#{@freelancer_profiles.total_count} freelancers found"
+      span class="result-header__text--strong"
+        - if params.dig(:search, :keywords).presence
+          = params[:search][:keywords]
+      - if @address_for_geocode.present? && @address_for_geocode > ""
+        = " near "
+        span class="result-header__text--strong"
+          = @address_for_geocode
+      - if params.dig(:search, :country).presence && params[:search][:country] > "" && !@address_for_geocode.present?
+        = " in "
+        span class="result-header__text--strong"
+          = I18n.t("enumerize.country.#{params[:search][:country]}")
+  .list
+    - @freelancer_profiles.each do |freelancer_profile|
+      = render partial: "company/shared/freelancer_info", locals: { freelancer: freelancer_profile.freelancer }
+
+    = paginate @freelancer_profiles

@@ -169,8 +169,4 @@ class Company::SubscriptionController < Company::BaseController
   def set_description
     @description = "AVJunction Monthly Subscription"
   end
-
-  def unsubscribed_redirect?
-    false
-  end
 end

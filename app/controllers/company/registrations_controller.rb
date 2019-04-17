@@ -27,8 +27,4 @@ class Company::RegistrationsController < Devise::RegistrationsController
     confirm_email_path
   end
 
-  def unsubscribed_redirect?
-    false
-  end
-
 end

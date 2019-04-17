@@ -53,6 +53,7 @@
 #  is_trial_applicable       :boolean          default(TRUE)
 #  waived_jobs               :integer          default(0)
 #  registration_step         :string
+#  saved_freelancers_ids     :citext
 #
 # Indexes
 #

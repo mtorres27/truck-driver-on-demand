@@ -2,9 +2,6 @@
 
   .list__flex-expand.flex-align-start
     a.list__img href="/#{current_user.is_a?(Admin) ? "admin" : "company"}/freelancers/#{current_user.is_a?(Admin) ? freelancer.id : hash_id(freelancer)}"
-      - if current_user.is_a?(CompanyUser) && is_favourite(freelancer)
-        .list__fav
-          span.zmdi.zmdi-favorite
       - if freelancer.freelancer_profile.avatar_data.present?
         .list__img-overlay
         = image_tag(freelancer.freelancer_profile.avatar_url, size: "75x75")
@@ -37,12 +34,16 @@
             - freelancer.job_functions_for_job_type(index).first(2).each do |job_function|
               .tag.tag--grey
                 = job_function
-  - if @job.present? && current_company.present?
+  - if current_company.present?
     .buttons
-      - if current_company.subscription_active?
-        - if @job.applicants.where({ freelancer_id: freelancer.id }).count > 0
+      - if @job.present?
+        - if @job.applicants.where({freelancer_id: freelancer.id}).count > 0
           .btn.btn--primary disabled="true" Already applied
-        - elsif @job.job_invites.where({ freelancer_id: freelancer.id}).count > 0
+        - elsif @job.job_invites.where({freelancer_id: freelancer.id}).count > 0
           .btn.btn--primary disabled="true" Invite sent
         - else
           .btn.btn--primary class="js--invite-to-quote-matches-btn-#{freelancer.id}" onclick="inviteToQuote(#{freelancer.id}, #{@job.id})" Invite to quote
+      - if current_company.has_saved_freelancer?(freelancer)
+        .btn.btn-primary disabled="true" Freelancer Saved
+      - else
+        = link_to "Save For Later", save_freelancer_company_freelancer_path(freelancer), method: :post, class: "btn btn--primary"

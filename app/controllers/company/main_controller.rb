@@ -16,8 +16,4 @@ class Company::MainController < Company::BaseController
     redirect_to company_registration_step_path(current_company.registration_step)
   end
 
-  def unsubscribed_redirect?
-    false
-  end
-
 end

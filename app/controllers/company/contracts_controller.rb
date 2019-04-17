@@ -43,10 +43,6 @@ class Company::ContractsController < Company::BaseController
 
   private
 
-  def unsubscribed_redirect?
-    false
-  end
-
   def set_job
     @job = current_user.company.jobs.find(params[:job_id])
   end

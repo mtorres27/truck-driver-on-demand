@@ -146,8 +146,6 @@ class FreelancerProfile < ApplicationRecord
       job_functions: "A",
       tagline: "A",
       bio: "A"
-  }, associated_against: {
-      freelancer: [:first_name, :last_name]
   }, using: {
       tsearch: { prefix: true, any_word: true }
   }

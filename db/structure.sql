@@ -304,7 +304,8 @@ CREATE TABLE companies (
     plan_id bigint,
     is_trial_applicable boolean DEFAULT true,
     waived_jobs integer DEFAULT 0,
-    registration_step character varying
+    registration_step character varying,
+    saved_freelancers_ids citext
 );
 
 
@@ -2556,6 +2557,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20181203174528'),
 ('20181203184841'),
 ('20181212151759'),
-('20190401182720');
+('20190401182720'),
+('20190417220517');
 
 

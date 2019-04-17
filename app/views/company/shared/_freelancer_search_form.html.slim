@@ -1,0 +1,42 @@
+= simple_form_for :search, url: company_freelancers_path, method: :get, html: { id: "freelancer_search_form", class:"grid-h grid-h--baseline js--freelancer-search-form"} do |f|
+  input type="hidden" value="#{params.dig(:search, :sort)}" id="sort" name="search[sort]"
+  input type="hidden" value="#{params.dig(:search, :distance)}" id="distance" class="js--distance" name="search[distance]"
+  .grid-cell.grid-cell--100
+    = f.input :keywords, placeholder: "Search by job function, skills etc", input_html: { value: @keywords }
+  .grid-cell.grid-cell--25
+    = f.input :country, collection: I18n.t('enumerize.country').map { |i, v| [i, v] }, label_method: :second, value_method: :first, label: "Country", prompt: "Country", selected: @country, input_html: { class: "js--country-select" }
+  .grid-cell.grid-cell--25
+    = f.label "State/Province"
+    select#search_state_province.js--state-province-select.form-control.select(name='search[state_province]')
+      option(value='')
+        | State/Province
+      = CS.states(:us).each do |index, value|
+        - selected = (!@state_province.nil? and @state_province == index.to_s)
+        - if selected
+          option.js--us_option(value="#{index}" selected)
+            = value
+        - else
+          option.js--us_option(value="#{index}")
+            = value
+        = CS.states(:ca).each do |index, value|
+          - selected = (!@state_province.nil? and @state_province == index.to_s)
+          - if selected
+            option.js--ca_option(value="#{index}" selected)
+              = value
+          - else
+            option.js--ca_option(value="#{index}")
+              = value
+  .grid-cell.grid-cell--25
+    = f.input :address, label: "City", placeholder: "City", input_html: { value: @address }
+  .grid-cell.grid-cell--25
+    = f.label "Distance", required: false
+    select#search_distance.form-control.select(name='search[distance]')
+      option(value="")
+        | Distance
+      = render partial: "shared/distance_options", locals: {distance: @distance}
+  /.grid-cell.grid-cell--75
+  /  label
+  /    = f.check_box :avatar_only, checked: @avatar_only
+  /    = " Profile picture"
+  .grid-cell.grid-cell--25
+    = f.submit "Search", class: "btn btn--primary"

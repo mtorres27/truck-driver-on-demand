@@ -48,10 +48,6 @@ class Company::RegistrationStepsController < Company::BaseController
     confirm_email_path
   end
 
-  def unsubscribed_redirect?
-    false
-  end
-
   def company_params
     params.require(:company).permit(
       :name,
