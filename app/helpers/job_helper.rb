@@ -19,7 +19,7 @@ module JobHelper
         company_job_path(job)
       end
     elsif job.contracted?
-      company_job_messages_path(job)
+      company_job_path(job)
     else
       company_job_review_path(job)
     end

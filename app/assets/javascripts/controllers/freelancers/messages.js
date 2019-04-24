@@ -25,16 +25,12 @@ document.addEventListener("turbolinks:load", function() {
 
     $(".js--message-form").submit(function(e) {
         var params = {};
-
-        params["job_id"] = $(".js--message-form").data("id");
+        params["chat_room_id"] = $(".js--message-form").data("id");
+        params["company_id"] = $(".js--message-form").data("company");
+        params["freelancer_id"] = $(".js--message-form").data("freelancer");
         params["authorable_type"] = $(".js--message-form").data("type");
         params["message"] = {};
         params["message"]["body"] = $(".js--message-input").val();
-        if ($(".js--message-checkin").is(":checked")) {
-            params["message"]["checkin"] = true;
-            params["message"]["lat"] = $(".js--message-lat").val();
-            params["message"]["lng"] = $(".js--message-lng").val();
-        }
         if ($(".js--message-attachment").get(0).files.length > 0) {
             var reader = new FileReader();
             reader.addEventListener("loadend", function() {
@@ -57,38 +53,6 @@ document.addEventListener("turbolinks:load", function() {
         return false;
     })
 });
-
-function success(position){
-    $("#message_lat").val(position.coords.latitude);
-    $("#message_lng").val(position.coords.longitude);
-    $("#message-submit").removeAttr("disabled");
-    $("#new-message__loading-notice").html("Your location has been successfully retrieved. Now you can send your message.");
-}
-
-function error(positionError) {
-    $("#new-message__loading-notice").html("");
-    $("#new-message__validation-errors").html("Error retrieving location: " + positionError.message + ". Please try again");
-    $("#message_checkin").prop("checked", false);
-    $("#message-submit").removeAttr("disabled");
-}
-
-var positionOptions = {
-    enableHighAccuracy: true,
-    timeout: 10 * 1000, // 10 seconds
-    maximumAge: 30 * 1000 // 30 seconds
-};
-
-function getGeolocation() {
-    var geolocation = null;
-
-    if (window.navigator && window.navigator.geolocation) {
-        geolocation = window.navigator.geolocation;
-    }
-
-    if (geolocation) {
-        geolocation.getCurrentPosition(success, error, positionOptions);
-    }
-}
 
 var validateMessage = function() {
     $("#new-message__validation-errors").html("");
@@ -118,14 +82,4 @@ var validateMessage = function() {
 
 var triggerFileUpload = function () {
     $("#message_attachment").click();
-};
-
-var triggerCheckin = function() {
-    if ($(".new-message__checkin").hasClass("new-message__checkin--active")) {
-        $(".new-message__checkin").removeClass("new-message__checkin--active");
-        $("#message_checkin").val("false");
-    } else {
-        $(".new-message__checkin").addClass("new-message__checkin--active");
-        $("#message_checkin").val("true");
-    }
 };

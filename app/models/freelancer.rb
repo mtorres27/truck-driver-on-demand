@@ -140,6 +140,10 @@ class Freelancer < User
 
   delegate :registration_completed?, to: :freelancer_profile, allow_nil: true
 
+  def messages_for_company(company)
+    Message.messages_for(company, self)
+  end
+
   def connected?
     freelancer_profile.stripe_account_id.present?
   end

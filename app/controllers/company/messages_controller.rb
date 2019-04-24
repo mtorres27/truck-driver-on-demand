@@ -1,6 +1,6 @@
 class Company::MessagesController < Company::BaseController
-  before_action :set_job
-  before_action :authorize_job
+  before_action :authorize_company
+  before_action :set_freelancer
 
   def index
     set_collection
@@ -8,15 +8,15 @@ class Company::MessagesController < Company::BaseController
 
   private
 
-  def set_job
-    @job = current_company.jobs.includes(messages: :authorable).find(params[:job_id])
+  def authorize_company
+    authorize current_company
   end
 
-  def authorize_job
-    authorize @job
+  def set_freelancer
+    @freelancer = Freelancer.find(params[:freelancer_id])
   end
 
   def set_collection
-    @messages = @job.messages
+    @messages = current_company.messages_for_freelancer(@freelancer)
   end
 end

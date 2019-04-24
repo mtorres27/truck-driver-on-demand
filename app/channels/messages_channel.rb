@@ -4,15 +4,16 @@ class MessagesChannel < ApplicationCable::Channel
   end
 
   def receive(payload)
-    job = Job.find(payload['job_id'])
-    message = job.messages.new(payload['message'])
+    message = Message.new(payload['message'])
     if payload['authorable_type'] == 'Company'
-      message.authorable = job.company
+      message.authorable = Company.find(payload['company_id'])
+      message.receivable = Freelancer.find(payload['freelancer_id'])
     elsif payload['authorable_type'] == 'Freelancer'
-      message.authorable = job.freelancer
+      message.authorable = Freelancer.find(payload['freelancer_id'])
+      message.receivable = Company.find(payload['company_id'])
     end
     if message.save
-      ActionCable.server.broadcast "messages_channel_#{payload['job_id']}", message: render_message(message)
+      ActionCable.server.broadcast "messages_channel_#{payload['chat_room_id']}", message: render_message(message)
       message.send_email_notifications
     end
   end

@@ -51,6 +51,7 @@ Rails.application.routes.draw do
       get :favourites, on: :collection
       post :add_favourites, on: :collection
       get :av_companies, on: :collection
+      resources :messages, only: [:index, :create]
     end
 
     resources :jobs, only: [:index, :show] do
@@ -63,7 +64,6 @@ Rails.application.routes.draw do
 
       resources :application, only: [:index, :create]
       resource :contract, only: [:show, :accept], as: "work_order", path: "work_order"
-      resources :messages, only: [:index, :create]
       resource :review, only: [:show, :create]
       resources :quotes, only: [:index, :create] do
         get :accept, on: :member
@@ -103,6 +103,7 @@ Rails.application.routes.draw do
       get :hired, on: :collection
       post :add_favourites, on: :collection
       post :save_freelancer, on: :member
+      resources :messages, only: [:index, :create]
     end
 
     resources :company_users, only: [:index, :show, :new, :create, :destroy, :edit, :update] do
@@ -143,7 +144,6 @@ Rails.application.routes.draw do
         end
       end
       resource :contract, only: [:show, :edit, :update], as: "work_order", path: "work_order"
-      resources :messages, only: [:index, :create]
       resource :review, only: [:show, :create]
       get :collaborators, on: :member
       get :contract_invoice, on: :member

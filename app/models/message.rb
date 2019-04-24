@@ -56,15 +56,21 @@ class Message < ApplicationRecord
 
   def send_email_notifications
     if authorable.is_a?(Company)
-      CompanyMailer.notice_message_sent(authorable, receivable.freelancer, self).deliver_later
-      Notification.create(title: receivable.title, body: "You have a new message", authorable: authorable, receivable: receivable.freelancer, url: Rails.application.routes.url_helpers.freelancer_job_messages_url(receivable))
-      FreelancerMailer.notice_message_received(authorable, receivable.freelancer, receivable, self).deliver_later
+      CompanyMailer.notice_message_sent(authorable, receivable, self).deliver_later
+      Notification.create(title: authorable.name, body: "You have a new message", authorable: authorable, receivable: receivable, url: Rails.application.routes.url_helpers.freelancer_company_messages_url(authorable))
+      FreelancerMailer.notice_message_received(authorable, receivable, self).deliver_later
     elsif authorable.is_a?(Freelancer)
-      FreelancerMailer.notice_message_sent(receivable.company, authorable, self).deliver_later
-      receivable.collaborators_for_notifications.each do |collaborator|
-        Notification.create(title: receivable.title, body: "You have a new message", authorable: authorable, receivable: collaborator, url: Rails.application.routes.url_helpers.company_job_messages_url(receivable))
-        CompanyMailer.notice_message_received(collaborator, authorable, receivable, self).deliver_later
+      FreelancerMailer.notice_message_sent(receivable, authorable, self).deliver_later
+      receivable.company_users.each do |company_user|
+        Notification.create(title: authorable.first_name_and_initial, body: "You have a new message", authorable: authorable, receivable: company_user, url: Rails.application.routes.url_helpers.company_freelancer_messages_url(authorable))
+        CompanyMailer.notice_message_received(company_user, authorable, self).deliver_later
       end
     end
+  end
+
+  def self.messages_for(company, freelancer)
+    company_messages = company.messages.where(receivable_id: freelancer.id)
+    freelancer_messages = freelancer.messages.where(receivable_id: company.id)
+    (company_messages + freelancer_messages).sort_by(&:created_at).reverse
   end
 end

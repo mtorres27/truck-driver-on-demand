@@ -46,13 +46,6 @@
           | Applicants
       - else
         | Applicants
-    .tab-bar__item class=("tab-bar__item--active" if request.path.index(/message/)) class=("tab-bar__item--inactive" if !job.freelancer )
-      - if !job.freelancer
-        | Progress
-      - else
-        - path = current_user.admin? ? admin_job_messages_path(job) : company_job_messages_path(job)
-        a href=path
-          | Progress
     .tab-bar__item class=("tab-bar__item--active" if request.path.index(/review/)) class=("tab-bar__item--inactive" unless job.completed?)
       - unless job.completed?
         | Review

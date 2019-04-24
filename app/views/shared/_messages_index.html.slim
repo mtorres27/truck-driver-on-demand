@@ -1,0 +1,9 @@
+.action-bar
+  h2.heading-h2.heading-h2--action-bar= recipient_name
+.grid-h
+  .grid-cell.grid-cell--100
+    = simple_form_for(:message, url: path, html: { class: "js--message-form", data: { id: "#{company.id}-#{freelancer.id}", company: company.id, freelancer: freelancer.id, type: authorable_type } }) do |f|
+      = render partial: "shared/new_message", locals: {f: f, n: recipient_name, type: "message"}
+  .grid-cell.grid-cell--100
+    .js--freelancer-job__message-history
+      = render "shared/messages_info"

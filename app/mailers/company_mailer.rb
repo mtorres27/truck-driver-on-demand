@@ -24,17 +24,15 @@ class CompanyMailer < ApplicationMailer
     mail(to: company_user.email, subject: 'Welcome to AVJunction!')
   end
 
-  def notice_message_received(company_user, freelancer, job, message)
+  def notice_message_received(company_user, freelancer, message)
     @company = company_user.company
     @freelancer = freelancer
     @message = message
-    @job = job
     headers 'X-SMTPAPI' => {
         sub: {
             '%company_name%' => [@company.name],
             '%freelancer_name%' => [@freelancer.first_name_and_initial],
             '%message_body%' => [@message.body],
-            '%job_id%' => [@job.id],
             '%root_url%' => [root_url]
         },
         filters: {

@@ -141,6 +141,10 @@ class Company < ApplicationRecord
   before_create :set_default_step
   after_save :send_confirmation_email
 
+  def messages_for_freelancer(freelancer)
+    Message.messages_for(self, freelancer)
+  end
+
   def freelancers
     Freelancer.where(id: saved_freelancers_ids)
   end

@@ -91,17 +91,15 @@ class FreelancerMailer < ApplicationMailer
     mail(to: @freelancer.email, subject: 'Received work order from company')
   end
 
-  def notice_message_received(company, freelancer, job, message)
+  def notice_message_received(company, freelancer, message)
     @company = company
     @freelancer = freelancer
     @message = message
-    @job = job
     headers 'X-SMTPAPI' => {
         sub: {
             '%company_name%' => [@company.name],
             '%freelancer_name%' => [@freelancer.first_name_and_initial],
             '%message_body%' => [@message.body],
-            '%job_id%' => [@job.id],
             '%root_url%' => [root_url]
         },
         filters: {
