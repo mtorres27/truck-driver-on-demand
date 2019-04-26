@@ -28,9 +28,6 @@ nav#top-nav.navbar
           - if current_company.subscription_active?
             li
               = link_to "Post a Job", company_job_job_build_index_path(job_id: :build_job), method: :post
-          - if current_company.jobs.count > 0
-            li( class=("active" if request.path.include?(company_projects_path)) )
-              = link_to "My Job Postings", company_projects_path
           - if current_company.subscription_active?
             li( class=("active" if request.path == hired_company_freelancers_path || request.path == favourites_company_freelancers_path) )
               = link_to "My Freelancers", hired_company_freelancers_path

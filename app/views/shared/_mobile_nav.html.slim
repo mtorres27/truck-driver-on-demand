@@ -64,9 +64,6 @@
           | Home
         - if current_company.subscription_active?
           = link_to "Post a Job", company_job_job_build_index_path(job_id: :build_job), method: :post, class: "mobile-nav__menu__item"
-        - if current_company.jobs.count > 0
-          a.mobile-nav__menu__item href=company_projects_path data-turbolinks="false"
-            | Job Postings
         - if current_company.subscription_active?
           a.mobile-nav__menu__item href=hired_company_freelancers_path data-turbolinks="false"
             | My Freelancers

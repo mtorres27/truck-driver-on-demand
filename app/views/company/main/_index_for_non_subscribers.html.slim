@@ -4,73 +4,17 @@ h1.heading-h1
 - content_for :secondary do
   .grid-h.grid-h--no-margin
     .grid-cell.grid-cell--100
-      .grid-h
-        - if current_user.role == "Owner"
-          = render 'company/subscription/plans_info'
-    .grid-cell.grid-cell--67
       .grid-h.grid-h--no-margin
         .grid-cell.grid-cell--100
-          h2.heading-h2 We are local, everywhere.
-          iframe style='height: 500px;' src='https://thexs-mapping.firebaseapp.com/mapping.html?fid=1HrvQqHYrlFjwJUv5CQhXGyzcE1fTq1Ls'
-        .grid-cell.grid-cell--100
-          .callout
-            h2.heading-h2 Questions You Might Have
-            h3.heading-h3 What payment services do you offer for subscriptions?
-            p We accept most major credit cards. Visa, MasterCard or American Express.
-            h3.heading-h3 How does the billing cycle work for subscriptions?
-            p When you subscribe to our monthly plan, you will be billed monthly and your plan renews each month based on your initial subscription date. Our Annual Plans have one-year billing cycles and are billed as one payment per year.
-            h3.heading-h3 Can I cancel my subscription?
-            p Monthly subscriptions are billed month to month. No contract. No obligation. You can cancel your monthly subscription at any time. Annual subscriptions come with a great discount and run on a one-year billing cycle with cancellation available the following year.
-            h3.heading-h3 Need Help?
-            p
-              | Contact us at
-              a href="mailto:info@avjunction.com"
-                |   info@avjunction.com
-            p
-              | Call us at
-              a href="tel:1-844-602-2000"
-                |   1-844-602-2000
-            a.btn-link href="https://www.avjunction.com/faq" target="_blank"
-              | More FAQ’s…
-    .grid-cell.grid-cell--33
-      .homepage__sidebar
-        .grid-v
-          .grid-cell
-            h2.heading-h2 How it Works
-          .grid-cell
-            h3.heading-h3 Post a Job
-            p
-              | Enter in a job summary, the location and type of freelancer you are looking for.
-            .buttons
-              a.btn-link href="https://www.avjunction.com/how-to-guide-av-company" target="_blank"
-                | Learn more
-          .grid-cell
-            h3.heading-h3 Get Instantly Matched
-            p
-              | We match qualified AV freelancers based on your job posting or Freelancers come direct to you.
-            a.btn-link href="https://www.avjunction.com/how-to-guide-av-company" target="_blank"
-              | Learn more
-          .grid-cell
-            h3.heading-h3 Message Candidates
-            p
-              | Contact candidates directly and request quotes with ease. Review several quotes at the same time to ensure you receive a fair price.
-            a.btn-link href="https://www.avjunction.com/how-to-guide-av-company" target="_blank"
-              | Learn more
-          .grid-cell
-            h3.heading-h3 Hire
-            p
-              | Create simple fixed price, hourly, or daily work order contracts and the ability to set payment terms for every hire.
-            a.btn-link href="https://www.avjunction.com/how-to-guide-av-company " target="_blank"
-              | Learn more
-          .grid-cell
-            h3.heading-h3 Manage Jobs & Repeat
-            p
-              | Collaborate easily. Chat, send files, track project milestones and receive timely progress reports, images and real time onsite check-in.
-            a.btn-link href="https://www.avjunction.com/how-to-guide-av-company" target="_blank"
-              | Learn more
-          .grid-cell
-            h3.heading-h3 Visit the Knowledge Center for more
-            p
-              a.btn-link href="https://www.avjunction.com/how-to-guide-av-company " target="_blank"
-                | To the Knowledge Center
+          p Thank you for creating an account with us! We are currently building new features that will deliver real value and make it easier than ever to connect with AV Freelancers for your projects.
+          p A new and improved version of AV Junction will be released soon!
+          p If you have any questions or would like to learn more about these new features please contact us at info@avjunction.com.
+          p We appreciate your support and patience.
+          p Thanks,
+          p AV Junction
+          hr
+        .grid-cell.grid-cell--75
+          p To get ready for the new version please update your company profile!
+        .grid-cell.grid-cell--25
+          = link_to 'Update Profile', company_profile_path, class: 'btn btn--primary'
 
