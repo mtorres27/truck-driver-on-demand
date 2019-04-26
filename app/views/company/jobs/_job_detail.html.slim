@@ -45,44 +45,6 @@
         - else
           = "Location Not Specified"
 
-    .grid-cell.grid-cell--100
-      h3.heading-h3 Work Order
-      .billboard.billboard--no-margin
-        - path = current_user.admin? ? edit_admin_job_work_order_path(@job) : edit_company_job_work_order_path(@job)
-        - if @job.freelancer.nil? && @job.applicants.count > 0
-          p
-            | #{@job.applicants.count} freelancers have applied for this job.
-          a.btn.btn--primary href=path
-            | Create Work Order
-        - elsif @job.freelancer.nil? && @job.applicants.count == 0
-          p
-            | There are no applicants for this job
-          div.btn.btn--primary.btn--primary--disabled
-            | Create Work Order
-        - elsif @job.pre_contracted? and @job.contract_sent == true
-          p
-            | Work order #{@job.work_order} sent to #{@job.freelancer.first_name_and_initial}. Awaiting response.
-          a.btn.btn--primary href=path
-            | Edit Work Order
-        - elsif @job.contracted?
-          p
-            | Work order #{@job.work_order} accepted by Freelancer.
-          - view_path = current_user.admin? ? admin_job_work_order_path(@job) : company_job_work_order_path(@job)
-          a.btn.btn--primary href=view_path
-            | View Work Order
-        - elsif @job.state == "completed"
-          p
-            | Job finished. Work order #{@job.work_order} completed by Freelancer.
-          - view_path = current_user.admin? ? admin_job_work_order_path(@job) : company_job_work_order_path(@job)
-          a.btn.btn--primary href=view_path
-            | View Work Order
-
-
-
-    - if @job.freelancer.present?
-      .grid-cell.grid-cell--100
-        = render partial: "company/shared/contract_meta", locals: { job: @job }
-
     .grid-cell.grid-cell--expand
       h3.heading-h3 Job Type
       p = @job.job_type.nil? ? "Not specified" : I18n.t("enumerize.job_types")[@job.job_type.to_sym]

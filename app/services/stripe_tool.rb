@@ -1,35 +1,5 @@
 module StripeTool
 
-  def self.update_company_info_with_subscription(company:, customer:, subscription:, plan:)
-    company.billing_period_ends_at    = Time.at(subscription.current_period_end).to_datetime
-    company.stripe_customer_id        = customer.id
-    company.stripe_subscription_id    = subscription.id
-    company.stripe_plan_id            = subscription.plan.id
-    company.plan_id                   = plan[:id]
-    company.subscription_cycle        = subscription.plan.interval
-    company.subscription_status       = subscription.status
-    company.is_subscription_cancelled = false
-    company.is_trial_applicable       = false if plan[:trial_period].positive?
-    if customer.sources.data.any?
-      company.last_4_digits             = customer.sources.data[0].last4
-      company.card_brand                = customer.sources.data[0].brand
-      company.exp_month                 = customer.sources.data[0].exp_month
-      company.exp_year                  = customer.sources.data[0].exp_year
-    end
-    company.save(validate: false)
-    # subscription
-    Subscription.where(company_id: company.id).update_all(is_active: false)
-    company.check_for_new_invoices
-  end
-
-  def self.update_company_card_info(company:, last_4_digits:, card_brand:, exp_month:, exp_year:)
-    company.last_4_digits = last_4_digits
-    company.card_brand = card_brand
-    company.exp_month = exp_month
-    company.exp_year = exp_year
-    company.save
-  end
-
   def self.updown_subscription()
 
   end

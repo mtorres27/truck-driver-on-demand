@@ -69,30 +69,6 @@ class CompanyMailer < ApplicationMailer
     mail(to: @company.owner.email, subject: 'Message Sent')
   end
 
-  def notice_work_order_accepted(company_user, freelancer, job)
-    @company = company_user.company
-    @freelancer = freelancer
-    @job = job
-    headers 'X-SMTPAPI' => {
-        sub: {
-            '%company_name%' => [@company.name],
-            '%freelancer_name%' => [@freelancer.first_name_and_initial],
-            '%job_title%' => [@job.title],
-            '%job_id%' => [@job.id],
-            '%root_url%' => [root_url]
-        },
-        filters: {
-            templates: {
-                settings: {
-                    enable: 1,
-                    template_id: '623136de-4771-4f89-979d-5afe4d58ec9e'
-                }
-            }
-        }
-    }.to_json
-    mail(to: company_user.email, subject: 'Received work order from company')
-  end
-
   def notice_freelancer_review(company_user, freelancer, review)
     @company = company_user.company
     @freelancer = freelancer

@@ -1,7 +1,6 @@
 class Company::JobsController < Company::BaseController
   before_action :set_job, except: [:job_countries, :new, :create]
   before_action :authorize_job, except: [:job_countries, :new, :create]
-  before_action :check_for_job_posting_availability, only: [:edit]
 
   def show
     redirect_to company_job_job_build_path(@job.creation_step, job_id: @job.id) unless @job.creation_completed?
@@ -17,20 +16,11 @@ class Company::JobsController < Company::BaseController
       return
     end
 
-    if job_params[:state] == 'published' && !current_company&.has_available_job_posting_slots?
+    if job_params[:state] == 'published'
       params[:job][:state] = 'created'
     end
 
     if @job.update(job_params)
-      if params.dig(:job, :send_contract).presence
-        @m = Message.new
-        @m.authorable = @job.company
-        @m.receivable = @job.freelancer
-        @m.send_contract = true
-        @m.body = "Hi #{@job.freelancer}! This is a note to let you know that we've just sent a contract to you. <a href='/freelancer/jobs/#{@job.id}/work_order'>Click here</a> to view it!"
-        @m.save
-      end
-
       if @job.state == 'published'
         flash[:notice] = "This job has been published."
         get_matches

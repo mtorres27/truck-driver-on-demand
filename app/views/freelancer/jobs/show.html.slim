@@ -98,10 +98,6 @@
                 = "You have completed the job for the work order #{@job.work_order}."
               - else
                 = "Your work order #{@job.work_order} is awaiting your acceptance."
-          - if @job.contract_sent == true
-            - path = current_user.admin? ? admin_job_work_order_path(@job) : freelancer_job_work_order_path(@job)
-            a.btn.btn--primary href=path
-              div View Work Order
 
     .grid-cell.grid-cell--50
       h3.heading-h3 Job Summary

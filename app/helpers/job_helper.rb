@@ -9,15 +9,7 @@ module JobHelper
     elsif job.quoted?
       company_job_applicants_path(job)
     elsif job.negotiated?
-      if job.contract_sent != true
-        if job.company.plan_id.blank?
-          company_job_applicants_path(job)
-        else
-          edit_company_job_work_order_path(job)
-        end
-      else
-        company_job_path(job)
-      end
+      company_job_path(job)
     elsif job.contracted?
       company_job_path(job)
     else
@@ -36,7 +28,7 @@ module JobHelper
       declined: :danger
     }
 
-    if !job.company.subscription_active? && job.state == 'published' && job.applicants.count == 0
+    if job.state == 'published' && job.applicants.count == 0
       sym = :created
       t = 'Not Published'
     else

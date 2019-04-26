@@ -254,7 +254,7 @@ class Freelancer::JobsController < Freelancer::BaseController
   private
 
   def valid_company_jobs
-    Job.joins(:company).where(companies: { disabled: false }).where.not(companies: { plan_id: nil })
+    Job.joins(:company).where(companies: { disabled: false })
   end
 
   def apply_params

@@ -1,22 +1,7 @@
 - if @applicant
   = simple_form_for(:message, url: company_job_applicant_quotes_path(@job, @applicant), html: { class: "js--applicant-message-form" }) do |f|
     .applicant-messages__messages
-      - if !@job.company.subscription_active?
-        .new-message--wrapper
-          .new-message_amount
-            .new-message__freelancer-selected
-              .new-message__freelancer-selected__text
-                b
-                  = "Subscribe to a plan in order to continue with the quoting process"
-                p
-                  = "You need to be subscribed to a plan in order to complete contracts with freelancers."
-                  = "Click the button below to check the available plans and subscribe."
-
-                div
-                - if current_user.company_user?
-                  a.btn.btn--primary href=company_plans_path
-                    | View plans
-      - elsif @applicants.where({state: "accepted"}).length == 0
+      - if @applicants.where({state: "accepted"}).length == 0
         - if current_user.company_user?
           = render partial: "company/shared/new_message", locals: { f: f, n: @applicant.freelancer.first_name_and_initial, type: "quote" }
       - else
@@ -29,17 +14,6 @@
                     .circle_profile__image.freelancer__image= @job.freelancer.name_initials
                 - else
                   = image_tag(@job.freelancer.freelancer_profile.avatar_url, size: "75x75")
-              .new-message__freelancer-selected__text
-                b
-                  = "Congratulations, you've selected #{@job.freelancer.first_name_and_initial} for this job."
-                p
-                  = "The next step is to create a work order with #{@job.freelancer.first_name_and_initial}. We've made this super simple by doing all the hard work for you. "
-                  = "Simply click the button below to proceed to creating a work order."
-
-                div
-                - path = current_user.admin? ? admin_job_work_order_path(@job) : company_job_work_order_path(@job)
-                a.btn.btn--primary href=path
-                  | view Work Order
       .applicant-messages__messages--inner class=("applicant-messages__messages--inner--inactive" if @applicant_accepted == true)
         - @messages.each_with_index do |message|
           .list-item.list-item--message class=(".list-item.list-item--message.list-item--message-has-quote")

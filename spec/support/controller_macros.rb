@@ -11,7 +11,7 @@ module ControllerMacros
   def login_company
     before(:each) do
       @request.env["devise.mapping"] = Devise.mappings[:company]
-      company = FactoryBot.create(:company, plan: FactoryBot.create(:plan, code: "some_plan"))
+      company = FactoryBot.create(:company)
       company_user = FactoryBot.create(:company_user, company: company)
       company_user.confirm
       sign_in company_user
