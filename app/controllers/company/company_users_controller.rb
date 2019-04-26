@@ -50,9 +50,9 @@ class Company::CompanyUsersController < Company::BaseController
         flash[:notice] = "Successfully updated"
       end
       if @company_user == current_user
-        redirect_to company_company_user_path(@company_user)
+        redirect_to edit_company_company_user_path(@company_user)
       else
-        redirect_to company_company_users_path
+        redirect_to edit_company_company_users_path
       end
     else
       flash.now[:error] = @company_user.errors.full_messages.to_sentence
@@ -109,5 +109,9 @@ class Company::CompanyUsersController < Company::BaseController
         :password,
         :password_confirmation
     )
+  end
+
+  def unsubscribed_redirect?
+    false
   end
 end
