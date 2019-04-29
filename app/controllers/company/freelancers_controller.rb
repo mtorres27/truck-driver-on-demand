@@ -153,13 +153,13 @@ class Company::FreelancersController < Company::BaseController
     end
     @freelancer.freelancer_profile.save
 
-    @favourite = current_company.favourites.where(freelancer_id: id).length > 0 ? true : false
+    @favourite = current_company.freelancers.where(id: id).length > 0 ? true : false
     if params.dig(:toggle_favourite) == "true"
       if @favourite == false
-        current_company.favourite_freelancers << @freelancer
+        current_company.update_attribute(:saved_freelancers_ids, current_company.saved_freelancers_ids + [@freelancer.id])
         @favourite = true
       else
-        current_company.favourites.where({freelancer_id: @freelancer.id}).destroy_all
+        current_company.update_attribute(:saved_freelancers_ids, current_company.saved_freelancers_ids - [@freelancer.id])
         @favourite = false
       end
     end

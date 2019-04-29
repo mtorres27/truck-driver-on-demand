@@ -69,7 +69,7 @@ module FreelancerHelper
 
 
   def is_favourite(freelancer)
-    favourites = current_company.favourites.where(freelancer_id: freelancer.id)
+    favourites = current_company.freelancers.where(id: freelancer.id)
 
     if favourites.count == 0
       return false
