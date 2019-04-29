@@ -16,9 +16,20 @@
         - if @freelancer.freelancer_profile.available
           .tag.tag--success.gutter-right
             | Available
-          = link_to "Message", company_freelancer_messages_path(@freelancer), class: "btn btn--primary"
         - else
           .tag.tag--warning
             | Unavailable
+        - if @favourite
+          a.btn-icon-link href="#{params[:id]}?toggle_favourite=true"
+            div class="zmdi zmdi-favorite"
+        - else
+          a.btn-icon-link href="#{params[:id]}?toggle_favourite=true"
+            div class="zmdi zmdi-favorite-outline"
+        a.btn-icon-link href="#{company_freelancer_messages_url(@freelancer)}"
+          - if current_company.messages_for_freelancer(@freelancer).count > 0
+            div class="zmdi zmdi-comment"
+          - else
+            div class="zmdi zmdi-comment-outline"
+
 
     = render "shared/profile-freelancer"

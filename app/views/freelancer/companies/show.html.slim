@@ -11,6 +11,12 @@
     .action-bar
       h2.heading-h2.heading-h2--action-bar
         = @company.name
+      .action-bar__actions
+        a.btn-icon-link href="#{freelancer_company_messages_url(@company)}"
+          - if current_user.messages_for_company(@company).count > 0
+            div class="zmdi zmdi-comment"
+          - else
+            div class="zmdi zmdi-comment-outline"
 
     = render "shared/profile_company", company: @company
 
