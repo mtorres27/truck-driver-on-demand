@@ -32,14 +32,6 @@ class CompanyPolicy < ApplicationPolicy
     admin?
   end
 
-  def subscription_checkout?
-    company_user? && company_owner?
-  end
-
-  def cancel_subscription?
-    company_user? && company_owner?
-  end
-
   def webhook?
     company_user? && company_owner?
   end
@@ -61,10 +53,6 @@ class CompanyPolicy < ApplicationPolicy
   end
 
   def invoices?
-    company_user? && company_owner?
-  end
-
-  def plans?
     company_user? && company_owner?
   end
 

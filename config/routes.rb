@@ -115,17 +115,6 @@ Rails.application.routes.draw do
 
     resources :applicants
     resources :projects
-    resources :subscription
-      get 'thanks', to: 'subscription#thanks', as: 'thanks'
-      get 'reset', to: 'subscription#reset_company', as: 'reset'
-      get 'plans', to: 'subscription#plans', as: 'plans'
-      get 'subscription_cancel', to: 'subscription#cancel', as: 'subscription_cancel'
-      get 'subscription_change', to: 'subscription#change_plan', as: 'subscription_change'
-      post 'subscription_checkout' => 'subscription#subscription_checkout'
-      post 'update_card_info' => 'subscription#update_card_info'
-      post 'webhooks' => 'subscription#webhooks'
-      get 'plans/invoices', to: 'subscription#invoices', as: 'invoices'
-      get 'plan/invoice', to: 'subscription#invoice', as: 'invoice'
 
     get 'job_country_currency', to: 'jobs#job_countries', as: 'job_country_currency'
 
@@ -143,7 +132,6 @@ Rails.application.routes.draw do
           get :decline, on: :member
         end
       end
-      resource :contract, only: [:show, :edit, :update], as: "work_order", path: "work_order"
       resource :review, only: [:show, :create]
       get :collaborators, on: :member
       get :contract_invoice, on: :member
@@ -193,11 +181,6 @@ Rails.application.routes.draw do
       resource :contract, only: [:show, :edit, :update], as: "work_order", path: "work_order"
       resources :messages, only: [:index, :create]
       resource :review, only: [:show, :create]
-    end
-
-    resources :plans, except: [:new, :create] do
-      get :disable, on: :member
-      get :enable, on: :member
     end
 
     resources :pages, only: [:index, :edit, :update]

@@ -4,7 +4,6 @@ class Company::JobBuildController < Company::BaseController
 
   before_action :set_job, except: [:index, :create]
   before_action :authorize_job, except: [:index, :create]
-  before_action :check_for_job_posting_availability
 
   steps :job_details, :candidate_details
 
@@ -26,20 +25,14 @@ class Company::JobBuildController < Company::BaseController
     job_slots_available = true
 
     if @job.creation_completed? && (@job.save_draft == "false" || @job.save_draft.blank?)
-      if current_company&.has_available_job_posting_slots?
-        @job.state = "published"
-        if @job.valid?
-          get_matches
-          @freelancers.each do |freelancer|
-            next if Notification.where(receivable: freelancer, url: freelancer_job_url(@job)).count > 0
-            Notification.create(title: @job.title, body: "New job in your area", authorable: @job.company, receivable: freelancer, url: freelancer_job_url(@job))
-            JobNotificationMailer.notify_job_posting(freelancer, @job).deliver_later
-          end
+      @job.state = "published"
+      if @job.valid?
+        get_matches
+        @freelancers.each do |freelancer|
+          next if Notification.where(receivable: freelancer, url: freelancer_job_url(@job)).count > 0
+          Notification.create(title: @job.title, body: "New job in your area", authorable: @job.company, receivable: freelancer, url: freelancer_job_url(@job))
+          JobNotificationMailer.notify_job_posting(freelancer, @job).deliver_later
         end
-      else
-        job_slots_available = false
-        @job.state = "created"
-        @job.save_draft = "true"
       end
     end
 

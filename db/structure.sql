@@ -282,17 +282,6 @@ CREATE TABLE companies (
     established_in integer,
     header_color character varying DEFAULT 'FF6C38'::character varying,
     country character varying,
-    stripe_customer_id character varying,
-    stripe_subscription_id character varying,
-    stripe_plan_id character varying,
-    subscription_cycle character varying,
-    is_subscription_cancelled boolean DEFAULT false,
-    subscription_status character varying,
-    billing_period_ends_at timestamp without time zone,
-    last_4_digits character varying,
-    card_brand character varying,
-    exp_month character varying,
-    exp_year character varying,
     header_source character varying DEFAULT 'default'::character varying,
     sales_tax_number character varying,
     line2 character varying,
@@ -301,9 +290,6 @@ CREATE TABLE companies (
     postal_code character varying,
     job_types citext,
     manufacturer_tags citext,
-    plan_id bigint,
-    is_trial_applicable boolean DEFAULT true,
-    waived_jobs integer DEFAULT 0,
     registration_step character varying,
     saved_freelancers_ids citext
 );
@@ -1152,46 +1138,6 @@ ALTER SEQUENCE pages_id_seq OWNED BY pages.id;
 
 
 --
--- Name: plans; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE plans (
-    id bigint NOT NULL,
-    name character varying,
-    code character varying,
-    trial_period integer,
-    subscription_fee numeric(10,2),
-    fee_schema json,
-    created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL,
-    description text,
-    period character varying DEFAULT 'yearly'::character varying,
-    is_canadian boolean DEFAULT false,
-    job_posting_limit integer,
-    user_limit integer DEFAULT 1
-);
-
-
---
--- Name: plans_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE plans_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: plans_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE plans_id_seq OWNED BY plans.id;
-
-
---
 -- Name: projects; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -1234,49 +1180,6 @@ ALTER SEQUENCE projects_id_seq OWNED BY projects.id;
 CREATE TABLE schema_migrations (
     version character varying NOT NULL
 );
-
-
---
--- Name: subscriptions; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE subscriptions (
-    id bigint NOT NULL,
-    company_id integer,
-    plan_id integer,
-    stripe_subscription_id character varying,
-    is_active boolean,
-    ends_at date,
-    billing_perios_ends_at date,
-    amount numeric,
-    created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL,
-    refund numeric(10,2) DEFAULT 0,
-    tax numeric(10,2) DEFAULT 0,
-    description character varying,
-    stripe_invoice_id character varying,
-    stripe_invoice_date timestamp without time zone,
-    stripe_invoice_number character varying
-);
-
-
---
--- Name: subscriptions_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE subscriptions_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: subscriptions_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE subscriptions_id_seq OWNED BY subscriptions.id;
 
 
 --
@@ -1528,24 +1431,10 @@ ALTER TABLE ONLY pages ALTER COLUMN id SET DEFAULT nextval('pages_id_seq'::regcl
 
 
 --
--- Name: plans id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY plans ALTER COLUMN id SET DEFAULT nextval('plans_id_seq'::regclass);
-
-
---
 -- Name: projects id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY projects ALTER COLUMN id SET DEFAULT nextval('projects_id_seq'::regclass);
-
-
---
--- Name: subscriptions id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY subscriptions ALTER COLUMN id SET DEFAULT nextval('subscriptions_id_seq'::regclass);
 
 
 --
@@ -1780,14 +1669,6 @@ ALTER TABLE ONLY pages
 
 
 --
--- Name: plans plans_pkey; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY plans
-    ADD CONSTRAINT plans_pkey PRIMARY KEY (id);
-
-
---
 -- Name: projects projects_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -1801,14 +1682,6 @@ ALTER TABLE ONLY projects
 
 ALTER TABLE ONLY schema_migrations
     ADD CONSTRAINT schema_migrations_pkey PRIMARY KEY (version);
-
-
---
--- Name: subscriptions subscriptions_pkey; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY subscriptions
-    ADD CONSTRAINT subscriptions_pkey PRIMARY KEY (id);
 
 
 --
@@ -1908,13 +1781,6 @@ CREATE INDEX index_companies_on_manufacturer_tags ON companies USING btree (manu
 --
 
 CREATE INDEX index_companies_on_name ON companies USING btree (name);
-
-
---
--- Name: index_companies_on_plan_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_companies_on_plan_id ON companies USING btree (plan_id);
 
 
 --
@@ -2257,14 +2123,6 @@ ALTER TABLE ONLY freelancer_reviews
 
 
 --
--- Name: companies fk_rails_2e8c071a79; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY companies
-    ADD CONSTRAINT fk_rails_2e8c071a79 FOREIGN KEY (plan_id) REFERENCES plans(id);
-
-
---
 -- Name: applicants fk_rails_32d387f70d; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -2558,6 +2416,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20181203184841'),
 ('20181212151759'),
 ('20190401182720'),
-('20190417220517');
+('20190417220517'),
+('20190426172935');
 
 

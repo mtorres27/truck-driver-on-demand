@@ -2,58 +2,44 @@
 #
 # Table name: companies
 #
-#  id                        :integer          not null, primary key
-#  token                     :string
-#  name                      :string
-#  address                   :string
-#  formatted_address         :string
-#  area                      :string
-#  lat                       :decimal(9, 6)
-#  lng                       :decimal(9, 6)
-#  hq_country                :string
-#  description               :string
-#  avatar_data               :text
-#  disabled                  :boolean          default(TRUE), not null
-#  created_at                :datetime         not null
-#  updated_at                :datetime         not null
-#  messages_count            :integer          default(0), not null
-#  company_reviews_count     :integer          default(0), not null
-#  profile_header_data       :text
-#  contract_preference       :string           default(NULL)
-#  job_markets               :citext
-#  technical_skill_tags      :citext
-#  profile_views             :integer          default(0), not null
-#  website                   :string
-#  phone_number              :string
-#  number_of_offices         :integer          default(0)
-#  number_of_employees       :string
-#  established_in            :integer
-#  header_color              :string           default("FF6C38")
-#  country                   :string
-#  stripe_customer_id        :string
-#  stripe_subscription_id    :string
-#  stripe_plan_id            :string
-#  subscription_cycle        :string
-#  is_subscription_cancelled :boolean          default(FALSE)
-#  subscription_status       :string
-#  billing_period_ends_at    :datetime
-#  last_4_digits             :string
-#  card_brand                :string
-#  exp_month                 :string
-#  exp_year                  :string
-#  header_source             :string           default("default")
-#  sales_tax_number          :string
-#  line2                     :string
-#  city                      :string
-#  state                     :string
-#  postal_code               :string
-#  job_types                 :citext
-#  manufacturer_tags         :citext
-#  plan_id                   :integer
-#  is_trial_applicable       :boolean          default(TRUE)
-#  waived_jobs               :integer          default(0)
-#  registration_step         :string
-#  saved_freelancers_ids     :citext
+#  id                    :integer          not null, primary key
+#  token                 :string
+#  name                  :string
+#  address               :string
+#  formatted_address     :string
+#  area                  :string
+#  lat                   :decimal(9, 6)
+#  lng                   :decimal(9, 6)
+#  hq_country            :string
+#  description           :string
+#  avatar_data           :text
+#  disabled              :boolean          default(TRUE), not null
+#  created_at            :datetime         not null
+#  updated_at            :datetime         not null
+#  messages_count        :integer          default(0), not null
+#  company_reviews_count :integer          default(0), not null
+#  profile_header_data   :text
+#  contract_preference   :string           default(NULL)
+#  job_markets           :citext
+#  technical_skill_tags  :citext
+#  profile_views         :integer          default(0), not null
+#  website               :string
+#  phone_number          :string
+#  number_of_offices     :integer          default(0)
+#  number_of_employees   :string
+#  established_in        :integer
+#  header_color          :string           default("FF6C38")
+#  country               :string
+#  header_source         :string           default("default")
+#  sales_tax_number      :string
+#  line2                 :string
+#  city                  :string
+#  state                 :string
+#  postal_code           :string
+#  job_types             :citext
+#  manufacturer_tags     :citext
+#  registration_step     :string
+#  saved_freelancers_ids :citext
 #
 # Indexes
 #
@@ -61,13 +47,8 @@
 #  index_companies_on_job_markets           (job_markets)
 #  index_companies_on_manufacturer_tags     (manufacturer_tags)
 #  index_companies_on_name                  (name)
-#  index_companies_on_plan_id               (plan_id)
 #  index_companies_on_technical_skill_tags  (technical_skill_tags)
 #  index_on_companies_loc                   (st_geographyfromtext((((('SRID=4326;POINT('::text || lng) || ' '::text) || lat) || ')'::text)))
-#
-# Foreign Keys
-#
-#  fk_rails_...  (plan_id => plans.id)
 #
 
 class Company < ApplicationRecord
@@ -81,8 +62,6 @@ class Company < ApplicationRecord
   include AvatarUploader[:avatar]
   include ProfileHeaderUploader[:profile_header]
 
-  belongs_to :plan, foreign_key: 'plan_id', optional: true
-
   has_many :projects, -> { order(updated_at: :desc) }, dependent: :destroy
   has_many :jobs, dependent: :destroy
   has_many :applicants, dependent: :destroy
@@ -95,7 +74,6 @@ class Company < ApplicationRecord
   has_many :company_installs, dependent: :destroy
   has_many :company_users, dependent: :destroy
   has_many :notifications, as: :receivable, dependent: :destroy
-  has_many :subscriptions
 
   attr_accessor :accept_terms_of_service, :accept_privacy_policy, :accept_code_of_conduct,
                 :enforce_profile_edit, :user_type, :skip_step
@@ -163,24 +141,6 @@ class Company < ApplicationRecord
 
   def open_jobs
     jobs.where(state: :published)
-  end
-
-  def has_available_job_posting_slots?
-    if plan.present?
-      plan.job_posting_limit.nil? ? true : open_jobs.count < plan.job_posting_limit
-    end
-  end
-
-  def has_ability_to_add_extra_users?
-    if plan.present?
-      plan.user_limit > 1
-    end
-  end
-
-  def has_available_user_slots?
-    if plan.present? && plan.user_limit > 1
-      company_users.count < plan.user_limit
-    end
   end
 
   def renew_month
@@ -312,41 +272,6 @@ class Company < ApplicationRecord
     owner
   end
 
-  def subscription_active?
-    ['trialing', 'active'].include?(subscription_status) || plan.present?
-  end
-
-  def trial_period_ends_at
-    trial_period_end = StripeTool.get_trial_period_end(company: self)
-    return unless trial_period_end.present? && trial_period_end > Time.now
-    trial_period_end
-  end
-
-  def trial_days_available
-    if trial_period_ends_at.present?
-      if trial_period_ends_at > Time.now
-        (trial_period_ends_at.to_date - Time.now.to_date).to_i
-      else
-        0
-      end
-    else
-      15
-    end
-  end
-
-  def check_for_new_invoices
-    if stripe_customer_id.present?
-      customer = Stripe::Customer.retrieve(stripe_customer_id)
-      invoices = StripeTool.get_invoices(customer: customer)
-      invoices.each do |invoice|
-        next if subscriptions.find_by(stripe_invoice_id: invoice.id).present?
-        stripe_subscription = Stripe::Subscription.retrieve(invoice.subscription)
-        plan = Plan.find_by(code: stripe_subscription.plan.id)
-        create_subscription(plan, stripe_subscription, invoice)
-      end
-    end
-  end
-
   def disable_all_users
     company_users.each do |company_user|
       next if company_user.role == "Owner"
@@ -363,22 +288,6 @@ class Company < ApplicationRecord
   end
 
   private
-
-  def create_subscription(plan, stripe_subscription, invoice)
-    company_subscription = Subscription.new
-    company_subscription.company_id = id
-    company_subscription.plan_id = plan.id
-    company_subscription.description = "Subscription to #{plan.name}."
-    company_subscription.stripe_subscription_id = stripe_subscription.id
-    company_subscription.stripe_invoice_number = invoice.number
-    company_subscription.stripe_invoice_id = invoice.id
-    company_subscription.is_active = true
-    company_subscription.ends_at = Time.at(stripe_subscription.current_period_end).to_datetime
-    company_subscription.stripe_invoice_date = Time.at(invoice.date).to_datetime
-    company_subscription.amount = invoice.subtotal.to_f / 100
-    company_subscription.tax = (invoice.tax.to_f / 100).to_f
-    company_subscription.save
-  end
 
   def add_to_hubspot
     return unless Rails.application.secrets.enabled_hubspot

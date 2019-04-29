@@ -4,8 +4,6 @@ class Company::MainController < Company::BaseController
 
   def index
     authorize current_company
-    @freelancers = Freelancer.joins(:freelancer_profile).where(freelancer_profiles: { disabled: false }).where('freelancer_profiles.profile_score > 15').order(created_at: 'DESC').limit(4)
-    get_plans
   end
 
   private

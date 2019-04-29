@@ -18,7 +18,6 @@ The easier way to hire and manage freelancers. We connect the best AV freelancer
 * [HubSpot](https://www.hubspot.com)
 * [Rollbar](https://www.rollbar.com)
 * [Sendgrid](https://sendgrid.com)
-* [Stripe](https://www.stripe.com)
 
 ## Instances
 

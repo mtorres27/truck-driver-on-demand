@@ -82,14 +82,10 @@ class Company::CompanyUsersController < Company::BaseController
 
   def enable
     authorize @company_user
-    if current_company.enabled_users.count < current_company.plan&.user_limit
-      if @company_user.update_attribute(:enabled, true)
-        flash[:notice] = "User enabled"
-      else
-        flash[:error] = "There was an error trying to enable the user"
-      end
+    if @company_user.update_attribute(:enabled, true)
+      flash[:notice] = "User enabled"
     else
-      flash[:error] = "You have reached the limit of enabled users available for your current plan. Upgrade to a better plan in order to enable more users."
+      flash[:error] = "There was an error trying to enable the user"
     end
     redirect_to company_company_users_path
   end
@@ -109,9 +105,5 @@ class Company::CompanyUsersController < Company::BaseController
         :password,
         :password_confirmation
     )
-  end
-
-  def unsubscribed_redirect?
-    false
   end
 end
