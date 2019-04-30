@@ -2,41 +2,45 @@
   input type="hidden" value="#{params.dig(:search, :sort)}" id="sort" name="search[sort]"
   input type="hidden" value="#{params.dig(:search, :distance)}" id="distance" class="js--distance" name="search[distance]"
   .grid-cell.grid-cell--100
-    = f.input :keywords, placeholder: "Search by job function, skills etc", input_html: { value: @keywords }
-  .grid-cell.grid-cell--25
-    = f.input :country, collection: I18n.t('enumerize.country').map { |i, v| [i, v] }, label_method: :second, value_method: :first, label: "Country", prompt: "Country", selected: @country, input_html: { class: "js--country-select" }
-  .grid-cell.grid-cell--25
-    = f.label "State/Province"
-    select#search_state_province.js--state-province-select.form-control.select(name='search[state_province]')
-      option(value='')
-        | State/Province
-      = CS.states(:us).each do |index, value|
-        - selected = (!@state_province.nil? and @state_province == index.to_s)
-        - if selected
-          option.js--us_option(value="#{index}" selected)
-            = value
-        - else
-          option.js--us_option(value="#{index}")
-            = value
-        = CS.states(:ca).each do |index, value|
-          - selected = (!@state_province.nil? and @state_province == index.to_s)
+    = f.input :keywords, required: false, label: "Keywords, job title, skills, etc.", placeholder: "E.g.. Extron Programmer", input_html: { value: @keywords }
+  .grid-cell.grid-cell--100
+    = f.input :address, label: "Location", placeholder: "Enter the city and state/province", input_html: {value: @address}
+  .grid-cell.grid-cell--100
+    a data-toggle="collapse" data-target="#advanced-search" aria-expanded="false" aria-controls="advanced-search" Advanced Options
+  .grid-cell.grid-cell--100
+    #advanced-search class="#{'collapse' if @job_type.blank? && @job_function.blank?}"
+      = f.label :job_type, required: false
+      select#search_job_type.js--job_type.form-control.select(name='search[job_type]')
+        option(value='')
+          | Select
+        = I18n.t("enumerize.job_types").each do |index, value|
+          - selected = (@job_type == index.to_s)
           - if selected
-            option.js--ca_option(value="#{index}" selected)
+            option(value="#{index}" selected)
               = value
           - else
-            option.js--ca_option(value="#{index}")
+            option(value="#{index}")
               = value
-  .grid-cell.grid-cell--25
-    = f.input :address, label: "City", placeholder: "City", input_html: { value: @address }
-  .grid-cell.grid-cell--25
-    = f.label "Distance", required: false
-    select#search_distance.form-control.select(name='search[distance]')
-      option(value="")
-        | Distance
-      = render partial: "shared/distance_options", locals: {distance: @distance}
-  /.grid-cell.grid-cell--75
-  /  label
-  /    = f.check_box :avatar_only, checked: @avatar_only
-  /    = " Profile picture"
+      br
+      = f.label :job_function, required: false
+      select#search_job_function.js--job_type_dependent_select.form-control.select(name='search[job_function]')
+        option.js--job_type_dependent_select_placeholder(value='')
+          | Select job type to unlock options
+        = I18n.t("enumerize.live_events_staging_and_rental_job_functions").each do |index, value|
+          - selected = (@job_function == index.to_s)
+          - if selected
+            option.js--live_events_staging_and_rental_option(value="#{index}" selected)
+              = value
+          - else
+            option.js--live_events_staging_and_rental_option(value="#{index}")
+              = value
+        = I18n.t("enumerize.system_integration_job_functions").each do |index, value|
+          - selected = (@job_function == index.to_s)
+          - if selected
+            option.js--system_integration_option(value="#{index}" selected)
+              = value
+          - else
+            option.js--system_integration_option(value="#{index}")
+              = value
   .grid-cell.grid-cell--25
     = f.submit "Search", class: "btn btn--primary"

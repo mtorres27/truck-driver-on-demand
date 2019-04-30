@@ -11,14 +11,18 @@ h1.heading-h1 Search for AV Freelancers
       span class="result-header__text--strong"
         - if params.dig(:search, :keywords).presence
           = params[:search][:keywords]
-      - if @address_for_geocode.present? && @address_for_geocode > ""
+      - if @address.present? && @address > ""
         = " near "
         span class="result-header__text--strong"
-          = @address_for_geocode
-      - if params.dig(:search, :country).presence && params[:search][:country] > "" && !@address_for_geocode.present?
-        = " in "
+          = @address
+      - if @job_type.present? && @job_type > ""
+        = " for "
         span class="result-header__text--strong"
-          = I18n.t("enumerize.country.#{params[:search][:country]}")
+          = @job_type.humanize
+      - if @job_function.present? && @job_function > ""
+        = ", "
+        span class="result-header__text--strong"
+          = @job_function.humanize
   .list
     - @freelancer_profiles.each do |freelancer_profile|
       = render partial: "company/shared/freelancer_info", locals: { freelancer: freelancer_profile.freelancer }
