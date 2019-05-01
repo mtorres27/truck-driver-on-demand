@@ -15,16 +15,19 @@ $(document).on("turbolinks:load", function () {
     $(".js--job_type").on("change", function() {
         if ($(this).val() == "system_integration") {
             $(".js--job_type_dependent_select").val("");
+            $(".js--job_type_dependent_select_placeholder").html("Select");
             $(".js--live_events_staging_and_rental_option").hide();
             $(".js--system_integration_option").show();
         }
         else if ($(this).val() == "live_events_staging_and_rental") {
             $(".js--job_type_dependent_select").val("");
+            $(".js--job_type_dependent_select_placeholder").html("Select");
             $(".js--live_events_staging_and_rental_option").show();
             $(".js--system_integration_option").hide();
         }
         else {
             $(".js--job_type_dependent_select").val("");
+            $(".js--job_type_dependent_select_placeholder").html("Select job type to unlock options");
             $(".js--live_events_staging_and_rental_option").hide();
             $(".js--system_integration_option").hide();
         }

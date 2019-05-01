@@ -4,11 +4,11 @@ class Company::FreelancersController < Company::BaseController
   def index
     @keywords = params.dig(:search, :keywords).presence
     @address = params.dig(:search, :address).presence
-    @state_province = params.dig(:search, :state_province).presence
-    @country = params.dig(:search, :country).presence
+    @job_type = params.dig(:search, :job_type).presence
+    @job_function = params.dig(:search, :job_function).presence
 
-    if params.has_key?(:search) && ( !@address || !@country || (['ca', 'us'].include?(@country) && ! @state_province) )
-      flash[:error] = "You'll need complete all the fields to search for freelancers"
+    if params.has_key?(:search) && !@address
+      flash[:error] = "You'll need to provide a location to search for freelancers"
       @freelancer_profiles = FreelancerProfile.none.page(params[:page]).per(10)
       return
     end
@@ -21,19 +21,16 @@ class Company::FreelancersController < Company::BaseController
       @freelancer_profiles = FreelancerProfile.search(@keywords).where(disabled: false)
     end
 
-    @freelancer_profiles = @freelancer_profiles.where(country: @country)
-
-    @address_for_geocode = @address.capitalize
-    @address_for_geocode += ", #{CS.states(@country.to_sym)[@state_province.to_sym]}" if @state_province.present?
-    @address_for_geocode += ", #{CS.countries[@country.upcase.to_sym]}" if @country.present?
+    @freelancer_profiles = @freelancer_profiles.where("job_types like ?", "%#{@job_type}%") if @job_type.present?
+    @freelancer_profiles = @freelancer_profiles.where("job_functions like ?", "%#{@job_function}%") if @job_function.present?
 
     # check for cached version of address
-    if Rails.cache.read(@address_for_geocode)
-      @geocode = Rails.cache.read(@address_for_geocode)
+    if Rails.cache.read(@address)
+      @geocode = Rails.cache.read(@address)
     else
       # save cached version of address
-      @geocode = do_geocode(@address_for_geocode)
-      Rails.cache.write(@address_for_geocode, @geocode)
+      @geocode = do_geocode(@address)
+      Rails.cache.write(@address, @geocode)
     end
 
     if @geocode

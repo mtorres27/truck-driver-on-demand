@@ -11,8 +11,8 @@
     .grid-cell.grid-cell--100
       = f.label :job_market, required: true
       select#job_job_market.js--job-required-field.js--job_type_dependent_select.form-control.select(name='job[job_market]')
-        option(value='')
-          | Select
+        option.js--job_type_dependent_select_placeholder(value='')
+          | Select job type to unlock options
         = I18n.t("enumerize.live_events_staging_and_rental_job_markets").each do |index, value|
           - selected = (!@job.job_market.nil? and @job.job_market == index.to_s)
           - if selected
@@ -32,8 +32,8 @@
     .grid-cell.grid-cell--100
       = f.label :job_function, required: true
       select#job_job_function.js--job-required-field.js--job_type_dependent_select.form-control.select(name='job[job_function]')
-        option(value='')
-          | Select
+        option.js--job_type_dependent_select_placeholder(value='')
+          | Select job type to unlock options
         = I18n.t("enumerize.live_events_staging_and_rental_job_functions").each do |index, value|
           - selected = (!@job.job_function.nil? and @job.job_function == index.to_s)
           - if selected
