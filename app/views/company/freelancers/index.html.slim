@@ -11,10 +11,10 @@ h1.heading-h1 Search for AV Freelancers
       span class="result-header__text--strong"
         - if params.dig(:search, :keywords).presence
           = params[:search][:keywords]
-      - if @address.present? && @address > ""
+      - if @address_for_geocode.present? && @address_for_geocode > ""
         = " near "
         span class="result-header__text--strong"
-          = @address
+          = @address_for_geocode
       - if @job_type.present? && @job_type > ""
         = " for "
         span class="result-header__text--strong"
