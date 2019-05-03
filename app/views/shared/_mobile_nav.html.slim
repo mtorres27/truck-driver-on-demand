@@ -45,6 +45,8 @@
           | my jobs
         a.mobile-nav__menu__item href=av_companies_freelancer_companies_path data-turbolinks="false"
           | av companies
+        a.mobile-nav__menu__item href=freelancer_messaging_index_path data-turbolinks="false"
+          | messages
         a.mobile-nav__menu__item.flex.flex-row.flex-align-center href=freelancer_profile_path data-turbolinks="false"
           - if current_user.freelancer_profile.avatar_data.nil?
             .dropdown-avatar.gutter-right
@@ -68,6 +70,8 @@
             | Job Postings
         a.mobile-nav__menu__item href=saved_company_freelancers_path data-turbolinks="false"
           | My Freelancers
+        a.mobile-nav__menu__item href=company_messaging_index_path data-turbolinks="false"
+          | Messages
         a.mobile-nav__menu__item href=company_profile_path data-turbolinks="false"
           = image_tag current_user.company.avatar_url
           | Settings

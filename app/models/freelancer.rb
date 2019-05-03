@@ -144,6 +144,14 @@ class Freelancer < User
     Message.messages_for(company, self)
   end
 
+  def companies_for_messaging
+    companies_with_messages = messages.map { |msg| msg.receivable }.uniq
+    Message.where(receivable_type: 'Freelancer', receivable_id: id).find_each do |msg|
+      companies_with_messages << msg.authorable if !companies_with_messages.include?(msg.authorable)
+    end
+    companies_with_messages
+  end
+
   def connected?
     freelancer_profile.stripe_account_id.present?
   end

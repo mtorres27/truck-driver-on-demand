@@ -77,6 +77,8 @@ Rails.application.routes.draw do
 
     end
 
+    resources :messaging, only: [:index]
+
     get "profile/bank_info", to: "banking#index", as: "profile_stripe_banking_info"
     get "profile/identity", to: "banking#identity", as: "profile_stripe_banking"
     get "profile/bank_account", to: "banking#bank_account", as: "profile_stripe_bank_account"
@@ -115,6 +117,7 @@ Rails.application.routes.draw do
 
     resources :applicants
     resources :projects
+    resources :messaging, only: [:index]
 
     get 'job_country_currency', to: 'jobs#job_countries', as: 'job_country_currency'
 

@@ -1,0 +1,29 @@
+.list-item.list-item--freelancer
+  - last_message = current_company.messages_for_freelancer(freelancer).first
+  .list__flex-expand.flex-align-start
+    a.list__img href=company_freelancer_path(hash_id(freelancer))
+      - if is_favourite(freelancer)
+        .list__fav
+          span.zmdi.zmdi-favorite
+      - if freelancer.freelancer_profile.avatar_data.present?
+        .list__img-overlay
+        = image_tag(freelancer.freelancer_profile.avatar_url, size: "75x75")
+      - else
+        .circle_profile__image.freelancer__image= freelancer.name_initials
+
+    a.list__group href=company_freelancer_messages_path(freelancer)
+      .list__title
+        = "#{freelancer.first_name_and_initial} "
+        - if is_verified(freelancer)
+          span.list__verified.zmdi.zmdi-check-circle
+
+      .list__desc
+        = last_message.body
+
+  .buttons
+    label= last_message.created_at
+    a.btn-icon-link href="#{company_freelancer_messages_url(freelancer)}"
+      - if current_company.messages_for_freelancer(freelancer).count > 0
+        div class="zmdi zmdi-comment"
+      - else
+        div class="zmdi zmdi-comment-outline"

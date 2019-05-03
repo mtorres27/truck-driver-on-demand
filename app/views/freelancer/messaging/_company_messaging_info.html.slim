@@ -1,0 +1,23 @@
+.list-item.list-item--freelancer
+  - last_message = current_user.messages_for_company(company).first
+  .list__flex-expand.flex-align-start
+    a.list__img href=freelancer_company_path(company)
+      - if company.avatar_data.present?
+        .list__img-overlay
+        = image_tag(company.avatar_url, size: "75x75")
+      - else
+        .circle_profile__image.freelancer__image= company.name_initials
+
+    a.list__group href=freelancer_company_messages_path(company)
+      .list__title
+        = "#{company.name} "
+      .list__desc
+        = last_message.body
+
+  .buttons
+    label= last_message.created_at
+    a.btn-icon-link href="#{freelancer_company_messages_url(company)}"
+      - if current_user.messages_for_company(company).count > 0
+        div class="zmdi zmdi-comment"
+      - else
+        div class="zmdi zmdi-comment-outline"
