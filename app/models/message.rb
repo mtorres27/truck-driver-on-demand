@@ -14,8 +14,6 @@
 #  checkin         :boolean          default(FALSE)
 #  send_contract   :boolean          default(FALSE)
 #  unread          :boolean          default(TRUE)
-#  lat             :decimal(9, 6)
-#  lng             :decimal(9, 6)
 #
 # Indexes
 #
@@ -30,7 +28,6 @@ class Message < ApplicationRecord
   belongs_to :receivable, polymorphic: true, counter_cache: true
 
   validate :must_have_body_or_attachment
-  validate :must_have_coordinates_when_checkin
 
   attr_accessor :status, 
     :counter_type, 
@@ -45,12 +42,6 @@ class Message < ApplicationRecord
   def must_have_body_or_attachment
     if body.blank? && attachment_data.blank?
       errors.add(:base, "A body or an attachment is required")
-    end
-  end
-
-  def must_have_coordinates_when_checkin
-    if checkin && (lat.blank? || lng.blank?)
-      errors.add(:base, "Message must have coordinates when checkin is marked")
     end
   end
 
