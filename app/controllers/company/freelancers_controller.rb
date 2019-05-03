@@ -4,11 +4,12 @@ class Company::FreelancersController < Company::BaseController
   def index
     @keywords = params.dig(:search, :keywords).presence
     @address = params.dig(:search, :address).presence
+    @country = params.dig(:search, :country).presence
     @job_type = params.dig(:search, :job_type).presence
     @job_function = params.dig(:search, :job_function).presence
 
-    if params.has_key?(:search) && !@address
-      flash[:error] = "You'll need to provide a location to search for freelancers"
+    if params.has_key?(:search) && (!@address || !@country)
+      flash[:error] = "You'll need to provide a location and country to search for freelancers"
       @freelancer_profiles = FreelancerProfile.none.page(params[:page]).per(10)
       return
     end
@@ -16,13 +17,15 @@ class Company::FreelancersController < Company::BaseController
     @distance = params.dig(:search, :distance).presence
 
     if @keywords.blank?
-      @freelancer_profiles = FreelancerProfile.where(disabled: false)
+      @freelancer_profiles = FreelancerProfile.where(disabled: false, country: @country)
     else
-      @freelancer_profiles = FreelancerProfile.search(@keywords).where(disabled: false)
+      @freelancer_profiles = FreelancerProfile.search(@keywords).where(disabled: false, country: @country)
     end
 
     @freelancer_profiles = @freelancer_profiles.where("job_types like ?", "%#{@job_type}%") if @job_type.present?
     @freelancer_profiles = @freelancer_profiles.where("job_functions like ?", "%#{@job_function}%") if @job_function.present?
+
+    @address_for_geocode = @address + ", " + @country.upcase
 
     # check for cached version of address
     if Rails.cache.read(@address)
