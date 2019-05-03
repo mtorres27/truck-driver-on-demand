@@ -14,8 +14,6 @@
 #  checkin         :boolean          default(FALSE)
 #  send_contract   :boolean          default(FALSE)
 #  unread          :boolean          default(TRUE)
-#  lat             :decimal(9, 6)
-#  lng             :decimal(9, 6)
 #
 # Indexes
 #
