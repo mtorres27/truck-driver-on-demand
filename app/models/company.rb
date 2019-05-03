@@ -123,6 +123,14 @@ class Company < ApplicationRecord
     Message.messages_for(self, freelancer)
   end
 
+  def freelancers_for_messaging
+    freelancers_with_messages = messages.map { |msg| msg.receivable }.uniq
+    Message.where(receivable_type: 'Company', receivable_id: id).find_each do |msg|
+      freelancers_with_messages << msg.authorable if !freelancers_with_messages.include?(msg.authorable)
+    end
+    freelancers_with_messages
+  end
+
   def freelancers
     Freelancer.where(id: saved_freelancers_ids)
   end

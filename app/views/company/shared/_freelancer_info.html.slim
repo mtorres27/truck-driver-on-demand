@@ -48,4 +48,8 @@
           .btn.btn--primary class="js--invite-to-quote-matches-btn-#{freelancer.id}" onclick="inviteToQuote(#{freelancer.id}, #{@job.id})" Invite to quote
       - unless current_company.has_saved_freelancer?(freelancer)
         = link_to "Save For Later", save_freelancer_company_freelancer_path(freelancer), method: :post, class: "btn btn--primary"
-      = link_to "Message", company_freelancer_messages_path(freelancer), class: "btn btn--primary"
+      a.btn-icon-link href="#{company_freelancer_messages_url(freelancer)}"
+        - if current_company.messages_for_freelancer(freelancer).count > 0
+          div class="zmdi zmdi-comment"
+        - else
+          div class="zmdi zmdi-comment-outline"
