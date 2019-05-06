@@ -61,7 +61,7 @@ GEM
     ast (2.3.0)
     audited (4.5.0)
       activerecord (>= 4.0, < 5.2)
-    autoprefixer-rails (7.1.1)
+    autoprefixer-rails (9.5.1.1)
       execjs
     avatax (17.9.1)
       faraday (>= 0.10)
@@ -77,9 +77,9 @@ GEM
       rack (>= 0.9.0)
     binding_of_caller (0.8.0)
       debug_inspector (>= 0.0.1)
-    bootstrap-sass (3.3.7)
+    bootstrap-sass (3.4.1)
       autoprefixer-rails (>= 5.2.1)
-      sass (>= 3.3.4)
+      sassc (>= 2.0.0)
     builder (3.2.3)
     bullet (5.5.1)
       activesupport (>= 3.0.0)
@@ -369,7 +369,14 @@ GEM
     ruby-progressbar (1.8.1)
     rubyzip (1.2.1)
     safe_yaml (1.0.4)
-    sass (3.4.24)
+    sass (3.7.4)
+      sass-listen (~> 4.0.0)
+    sass-listen (4.0.0)
+      rb-fsevent (~> 0.9, >= 0.9.4)
+      rb-inotify (~> 0.9, >= 0.9.7)
+    sassc (2.0.1)
+      ffi (~> 1.9)
+      rake
     schema_monkey (2.1.5)
       activerecord (>= 4.2)
       modware (~> 0.1)
@@ -483,7 +490,7 @@ DEPENDENCIES
   avatax
   better_errors
   binding_of_caller
-  bootstrap-sass (~> 3.3.7)
+  bootstrap-sass
   bullet (~> 5.5.1)
   capistrano (~> 3.8.1)
   capistrano-passenger

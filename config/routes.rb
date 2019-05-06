@@ -1,4 +1,9 @@
 Rails.application.routes.draw do
+  match '/search_professionals'            => 'main#search_professionals',               via: :get
+  
+
+
+
   mount ActionCable.server => '/cable'
 
   devise_for :users, skip: [:registrations], controllers: {sessions: "sessions" }
