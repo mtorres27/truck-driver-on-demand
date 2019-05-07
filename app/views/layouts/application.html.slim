@@ -5,8 +5,9 @@ html
     meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"
     meta name="turbolinks-cache-control" content="no-cache"
     link href="/stylesheets/webflow.css" rel="stylesheet" type="text/css"
-    link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet"
     link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/material-design-iconic-font/2.2.0/css/material-design-iconic-font.min.css"
+    link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous"
+    link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:regular,italic,600,700" media="all"
     = yield(:head)
     = csrf_meta_tags
     = stylesheet_link_tag "application", media: "all", "data-turbolinks-track": "reload"
@@ -34,48 +35,49 @@ html
 
 
   body(class = "#{controller.controller_name}-#{controller.action_name}")
-    .wrap
-      .section.section--header
-        .container.container--header
-          .container.container--nav
-            = render "shared/nav"
-            = render "shared/mobile_nav"
-            = render "shared/onboarding"
+    = yield
+    / .wrap
+    /   .section.section--header
+    /     .container.container--header
+    /       .container.container--nav
+    /         = render "shared/nav"
+    /         = render "shared/mobile_nav"
+    /         = render "shared/onboarding"
 
-      .section.section--body
-        = render "shared/flash"
-        - no_header_controllers = []
-        - no_header_controllers << { controller: "freelancer/companies" }
-        - no_header_controllers << { controller: "company/freelancers", action: "show" }
-        / - no_header_controllers << { controller: "company/profiles" }
+    /   .section.section--body
+    /     = render "shared/flash"
+    /     - no_header_controllers = []
+    /     - no_header_controllers << { controller: "freelancer/companies" }
+    /     - no_header_controllers << { controller: "company/freelancers", action: "show" }
+    /     / - no_header_controllers << { controller: "company/profiles" }
 
-        - header_controllers = []
-        - header_controllers << { controller: "freelancer/companies", action: "av_companies" }
-        - header_controllers << { controller: "freelancer/companies", action: "favourites" }
+    /     - header_controllers = []
+    /     - header_controllers << { controller: "freelancer/companies", action: "av_companies" }
+    /     - header_controllers << { controller: "freelancer/companies", action: "favourites" }
 
-        - show_header = true
-        - no_header_controllers.each do |controller|
-          - if params[:controller] == controller[:controller]
-            - if (!controller[:action].nil? and controller[:action] == params[:action]) or !controller[:action]
-              - show_header = false
+    /     - show_header = true
+    /     - no_header_controllers.each do |controller|
+    /       - if params[:controller] == controller[:controller]
+    /         - if (!controller[:action].nil? and controller[:action] == params[:action]) or !controller[:action]
+    /           - show_header = false
 
-        - header_controllers.each do |controller|
-          - if params[:controller] == controller[:controller]
-            - if (!controller[:action].nil? and controller[:action] == params[:action]) or !controller[:action]
-              - show_header = true
+    /     - header_controllers.each do |controller|
+    /       - if params[:controller] == controller[:controller]
+    /         - if (!controller[:action].nil? and controller[:action] == params[:action]) or !controller[:action]
+    /           - show_header = true
 
-        - if show_header
-          .container.container--header
-            .container= yield
-        - else
-          = yield
+    /     - if show_header
+    /       .container.container--header
+    /         .container= yield
+    /     - else
+    /       = yield
 
-        - if content_for(:secondary)
-          .container
-            .frame= yield :secondary
+    /     - if content_for(:secondary)
+    /       .container
+    /         .frame= yield :secondary
 
-      .section.section--footer
-        = render "shared/footer"
+    /   .section.section--footer
+    /     = render "shared/footer"
       /! Start of HubSpot Embed Code
       script#hs-script-loader async="" defer="" src="//js.hs-scripts.com/3224021.js" type="text/javascript"
       /! End of HubSpot Embed Code

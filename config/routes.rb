@@ -1,8 +1,7 @@
 Rails.application.routes.draw do
-  match '/search_professionals'            => 'main#search_professionals',               via: :get
-  
-
-
+  match '/search_professionals'     => 'main#search_professionals',   via: :get
+  match '/messages'                 => 'main#messages',               via: :get
+  match '/message_detail'           => 'main#message_detail',               via: :get
 
   mount ActionCable.server => '/cable'
 

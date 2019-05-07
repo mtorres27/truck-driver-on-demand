@@ -4,6 +4,12 @@ class MainController < ApplicationController
   def search_professionals
   end
 
+  def messages
+  end
+
+  def message_detail
+  end
+
   def index
   end
 
