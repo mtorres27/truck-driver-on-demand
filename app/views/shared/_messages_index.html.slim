@@ -1,9 +1,34 @@
-.action-bar
-  h2.heading-h2.heading-h2--action-bar= recipient_name
-.grid-h
-  .grid-cell.grid-cell--100
-    = simple_form_for(:message, url: path, html: { class: "js--message-form", data: { id: "#{company.id}-#{freelancer.id}", company: company.id, freelancer: freelancer.id, type: authorable_type } }) do |f|
-      = render partial: "shared/new_message", locals: {f: f, n: recipient_name, type: "message"}
-  .grid-cell.grid-cell--100
-    .js--freelancer-job__message-history
-      = render "shared/messages_info"
+.avj-section.avj-section__subhead
+  .container
+    .avj-subhead
+      .mr-4
+        .avj-avatar style="background:yellow"
+      div
+        h4= "Conversation with #{recipient_name}"
+
+.avj-section.avj-section__chat-input
+  .container.containter__content
+    = simple_form_for(:message, url: path, html: { class: "js--message-form avj-list-item m-0", data: { id: "#{company.id}-#{freelancer.id}", company: company.id, freelancer: freelancer.id, type: authorable_type } }) do |f|
+      a.mr-4 href="#"
+        - if current_company
+          .avj-avatar
+            = image_tag(current_company.avatar_url)
+        - else
+          - if current_user.freelancer_profile.avatar_data.nil?
+            .circle_profile__image.freelancer__image= current_user.name_initials
+          - else
+            .avj-avatar
+              = image_tag(current_user.freelancer_profile.avatar_url)
+      .d-flex.w-100
+        = f.text_area :body, as: :string, placeholder: "Send a message to #{recipient_name}", label: false, maxlength: 5000, class: "js--message-input form-control avj-body1 mr-2"
+        = f.input :attachment, as: :file, label: false, input_html: {class: "js--message-attachment hidden"}
+        button#new-message__submit.btn.btn-link onClick= "validateMessage();"
+          .zmdi.zmdi-mail-send
+    #new-message__validation-errors
+
+.avj-section.avj-section__main
+  .container.container__content
+    h2.d-none.d-md-block= "Your conversation history with #{recipient_name}"
+    .avj-message-list.js--freelancer-job__message-history
+      - @messages.each do |message|
+        = render "shared/message", message: message

@@ -68,6 +68,10 @@ class CompanyPolicy < ApplicationPolicy
     company_user? && company_owner?
   end
 
+  def delete_freelancer?
+    company_user? && company_owner?
+  end
+
   private
 
   def company_owner?

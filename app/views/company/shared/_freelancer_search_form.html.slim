@@ -1,48 +1,57 @@
-= simple_form_for :search, url: company_freelancers_path, method: :get, html: { id: "freelancer_search_form", class:"grid-h grid-h--baseline js--freelancer-search-form"} do |f|
+= simple_form_for :search, url: company_freelancers_path, method: :get, html: { id: 'freelancer_search_form'} do |f|
   input type="hidden" value="#{params.dig(:search, :sort)}" id="sort" name="search[sort]"
   input type="hidden" value="#{params.dig(:search, :distance)}" id="distance" class="js--distance" name="search[distance]"
-  .grid-cell.grid-cell--100
-    = f.input :keywords, required: false, label: "Keywords, job title, skills, etc.", placeholder: "E.g.. Extron Programmer", input_html: { value: @keywords }
-  .grid-cell.grid-cell--100
-    = f.input :country, collection: ([["Select country", ""]] + (I18n.t("enumerize.country").map { |k, v| [v, k] })), selected: @country, label: "Country", placeholder: "Select country"
-  .grid-cell.grid-cell--100
-    = f.input :address, label: "Location", placeholder: "Enter the city and state/province", input_html: {value: @address}
-  .grid-cell.grid-cell--100
-    a data-toggle="collapse" data-target="#advanced-search" aria-expanded="false" aria-controls="advanced-search" Advanced Options
-  .grid-cell.grid-cell--100
-    #advanced-search class="#{'collapse' if @job_type.blank? && @job_function.blank?}"
-      = f.label :job_type, required: false
-      select#search_job_type.js--job_type.form-control.select(name='search[job_type]')
-        option(value='')
-          | Select
-        = I18n.t("enumerize.job_types").each do |index, value|
-          - selected = (@job_type == index.to_s)
-          - if selected
-            option(value="#{index}" selected)
-              = value
-          - else
-            option(value="#{index}")
-              = value
-      br
-      = f.label :job_function, required: false
-      select#search_job_function.js--job_type_dependent_select.form-control.select(name='search[job_function]')
-        option.js--job_type_dependent_select_placeholder(value='')
-          | Select job type to unlock options
-        = I18n.t("enumerize.live_events_staging_and_rental_job_functions").each do |index, value|
-          - selected = (@job_function == index.to_s)
-          - if selected
-            option.js--live_events_staging_and_rental_option(value="#{index}" selected)
-              = value
-          - else
-            option.js--live_events_staging_and_rental_option(value="#{index}")
-              = value
-        = I18n.t("enumerize.system_integration_job_functions").each do |index, value|
-          - selected = (@job_function == index.to_s)
-          - if selected
-            option.js--system_integration_option(value="#{index}" selected)
-              = value
-          - else
-            option.js--system_integration_option(value="#{index}")
-              = value
-  .grid-cell.grid-cell--25
-    = f.submit "Search", class: "btn btn--primary"
+  .form-group
+    = f.input :keywords, required: false, label: 'Keywords', placeholder: 'Enter Keywords to Search', input_html: { value: @keywords }
+    small.avj-caption2 id="keywordshelp" class="form-text text-muted"
+      | Try using AV Installer or Extron Programmer
+  .row
+    .form-group.col-sm-6
+      = f.input :address, label: 'Location', placeholder: 'Enter the city and state/province', input_html: {value: @address}
+      small.avj-caption2 id="emailHelp" class="form-text text-muted"
+        | Get better local results when you add a city
+    .form-group.col-sm-6
+      = f.input :country, collection: ([["Select country", ""]] + (I18n.t("enumerize.country").map { |k, v| [v, k] })), selected: @country, label: "Country", placeholder: "Select country"
+      small.avj-caption2 id="emailHelp" class="form-text text-muted"
+        | Did you mean London UK or London Ontario?
+  .form-group
+    a.avj-body2 data-toggle="collapse" data-target="#advanced-search" aria-expanded="false" aria-controls="advanced-search"
+      | Advanced Search
+  .form-group#advanced-search class="#{'collapse' if @job_type.blank? && @job_function.blank?}"
+    = f.label :job_type, required: false
+    select#search_job_type.js--job_type.form-control.select(name='search[job_type]')
+      option(value='')
+        | Select
+      = I18n.t("enumerize.job_types").each do |index, value|
+        - selected = (@job_type == index.to_s)
+        - if selected
+          option(value="#{index}" selected)
+            = value
+        - else
+          option(value="#{index}")
+            = value
+    br
+    = f.label :job_function, required: false
+    select#search_job_function.js--job_type_dependent_select.form-control.select(name='search[job_function]')
+      option.js--job_type_dependent_select_placeholder(value='')
+        | Select job type to unlock options
+      = I18n.t("enumerize.live_events_staging_and_rental_job_functions").each do |index, value|
+        - selected = (@job_function == index.to_s)
+        - if selected
+          option.js--live_events_staging_and_rental_option(value="#{index}" selected)
+            = value
+        - else
+          option.js--live_events_staging_and_rental_option(value="#{index}")
+            = value
+      = I18n.t("enumerize.system_integration_job_functions").each do |index, value|
+        - selected = (@job_function == index.to_s)
+        - if selected
+          option.js--system_integration_option(value="#{index}" selected)
+            = value
+        - else
+          option.js--system_integration_option(value="#{index}")
+            = value
+    br
+  br
+  .form-group
+    = f.submit "Search for Freelancers", class: "btn btn-primary"

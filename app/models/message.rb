@@ -62,6 +62,6 @@ class Message < ApplicationRecord
   def self.messages_for(company, freelancer)
     company_messages = company.messages.where(receivable_id: freelancer.id)
     freelancer_messages = freelancer.messages.where(receivable_id: company.id)
-    (company_messages + freelancer_messages).sort_by(&:created_at).reverse
+    (company_messages + freelancer_messages).sort_by(&:created_at)
   end
 end
