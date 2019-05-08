@@ -1,2 +1,1 @@
-- content_for :secondary do
-  = render partial: "shared/messages_index", locals: { recipient_name: @freelancer.first_name_and_initial, path: company_freelancer_messages_path(@freelancer), company: current_company, freelancer: @freelancer, authorable_type: "Company" }
+= render partial: "shared/messages_index", locals: { recipient_name: @freelancer.first_name_and_initial, path: company_freelancer_messages_path(@freelancer), company: current_company, freelancer: @freelancer, authorable_type: "Company" }

@@ -1,30 +1,21 @@
-h1.heading-h1 Search for AV Freelancers
-= render "company/shared/freelancer_search_form"
+.avj-section.avj-section__main
+  .container.container__content
+    h2
+      | Search AV Professionals
+    = render 'company/shared/freelancer_search_form'
+.avj-section.avj-section__subhead
+  .container
+    .avj-subhead.justify-content-between
+      div
+        h4= "Found #{@freelancer_profiles.total_count} matching professionals"
+      div
+        .avj-body1.avj-text-color-primary.zmdi.zmdi-edit
+.avj-section.avj-section__main
+  .container.container__content
+    h2.d-none.d-md-block
+      | Search Results
+    div
+      - @freelancer_profiles.each do |freelancer_profile|
+        = render partial: "company/shared/freelancer_info", locals: {freelancer: freelancer_profile.freelancer}
 
-- content_for :secondary do
-  .action-bar
-    h2.heading-h2.heading-h2--action-bar
-      - if params.dig(:search, :keywords).presence
-        = "#{@freelancer_profiles.total_count} freelancers found for "
-      - else
-        = "#{@freelancer_profiles.total_count} freelancers found"
-      span class="result-header__text--strong"
-        - if params.dig(:search, :keywords).presence
-          = params[:search][:keywords]
-      - if @address_for_geocode.present? && @address_for_geocode > ""
-        = " near "
-        span class="result-header__text--strong"
-          = @address_for_geocode
-      - if @job_type.present? && @job_type > ""
-        = " for "
-        span class="result-header__text--strong"
-          = @job_type.humanize
-      - if @job_function.present? && @job_function > ""
-        = ", "
-        span class="result-header__text--strong"
-          = @job_function.humanize
-  .list
-    - @freelancer_profiles.each do |freelancer_profile|
-      = render partial: "company/shared/freelancer_info", locals: { freelancer: freelancer_profile.freelancer }
-
-    = paginate @freelancer_profiles
+      = paginate @freelancer_profiles

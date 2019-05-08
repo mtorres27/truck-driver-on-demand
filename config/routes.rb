@@ -113,6 +113,7 @@ Rails.application.routes.draw do
       get :hired, on: :collection
       post :add_favourites, on: :collection
       post :save_freelancer, on: :member
+      post :delete_freelancer, on: :member
       resources :messages, only: [:index, :create]
     end
 
