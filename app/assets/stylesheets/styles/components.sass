@@ -3,12 +3,10 @@ body
   display: flex
   flex-direction: column
   
-.section
+.avj-section
   margin-bottom: 24px
   &__head
-    background-color: $color-grey1
-    margin-bottom: 0px
-    margin: 0px
+    background-color: $avj-color-grey1
     padding: 0px
     position: sticky
     top: 0
@@ -19,7 +17,7 @@ body
     z-index: 100
     @media (max-width: $breakpoint-tablet)
       display: block
-      background-color: $color-grey1
+      background-color: $avj-color-grey1
       box-shadow: 1px 1px 5px 0 rgba(0, 0, 0, .2)
       margin-bottom: 0px
       position: fixed
@@ -29,14 +27,16 @@ body
       bottom: 0%
   &__main
     flex: 1
-    margin-bottom: $nav-height
+    margin-bottom: $avj-nav-height
   &__footer
-    background-color: $color-grey1
+    background-color: $avj-color-grey1
     padding-top: 16px
+    margin-bottom: 0px
     @media (max-width: $breakpoint-tablet)
       display: none
   &__subhead
-    background-color: $color-grey2
+    background-color: $avj-color-grey2
+    margin-top: -24px
     position: sticky
     margin-bottom: 0
     top: 0
@@ -47,11 +47,12 @@ body
       display: block
       margin-bottom: 24px
   &__chat-input
-    background-color : $color-grey2
+    background-color : $avj-color-grey2
+    margin-top: -24px
     margin-bottom: 24px
     padding: 16px 0 8px 0
     position: sticky
-    top: $nav-height
+    top: $avj-nav-height
     box-shadow: 1px 1px 2px 0 rgba(0, 0, 0, .2)
     z-index: 400
     @media (max-width: $breakpoint-tablet)   
@@ -63,47 +64,40 @@ body
       right: 0%
       bottom: 0%
 
-  
-.container 
-  max-width: 900px
-  &__content
-    margin-bottom: 24px
-    &:last-child
-      margin-bottom: 0px
 
-.header
+.avj-header
   display: flex
   justify-content: space-between
   @media (max-width: $breakpoint-tablet)
     justify-content: center
 
-.head-logo
+.avj-head-logo
   display: flex
   align-items: center
-  height: $nav-height
+  height: $avj-nav-height
   width: 160px
 
-.subhead
+.avj-subhead
   display: flex
   //justify-content: flex-start
   align-items: center
-  height: $nav-height
+  height: $avj-nav-height
 
-.nav-desktop
+.avj-nav-desktop
   display: flex
   @media (max-width: $breakpoint-tablet)
     display: none
 
-.nav-desktop-link
+.avj-nav-desktop-link
   display: flex
   align-items: center
-  height: $nav-height
+  height: $avj-nav-height
   margin-right: 24px
-  color: $color-primary
+  color: $avj-color-primary
   &:last-child
     margin-right: 0px
 
-.nav-mobile
+.avj-nav-mobile
   display: flex
   flex-direction: row
   justify-content: space-between
@@ -111,48 +105,59 @@ body
   list-style-type: none
   margin: 0px
   padding: 0px
-  height: $nav-height
+  height: $avj-nav-height
 
-.nav-mobile-link
+.avj-nav-mobile-link
   display: flex
   flex-direction: column
   align-items: center
   text-decoration: none
-  color: $color-primary
+  color: $avj-color-primary
 
-.btn-primary
-  background-color: $color-primary
-  padding: 12px 24px
-  border: none
-  text-transform: uppercase
-  letter-spacing: 1px
 
-.avatar
+
+.avj-avatar
   height: 44px
   width: 44px
-  border: 1px solid $color-grey2
+  border: 1px solid $avj-color-grey2
   border-radius: 4px
 
-.list-item
+.avj-list-item
   display: flex
   flex-direction: row
   margin-bottom: 24px
-  color: $color-black
+  color: $avj-color-black
   a
-    color: $color-black
+    color: $avj-color-black
 
-.message-list
+.avj-message-list
   display: flex
   flex-direction: column-reverse
   @media (max-width: $breakpoint-tablet)
     flex-direction: column
 
 
-.message-text
+.avj-message-text
   margin-top: 16px
   border-radius: 8px
   border: 1px solid rgba(0, 0, 0, .2)
   padding: 8px 16px 0px 16px
+
+//Bootstrap Overrides
+
+.container 
+  max-width: 900px
+  &__content
+    margin-bottom: 24px
+    &:last-child
+      margin-bottom: 0px
+
+.btn-primary
+  background-color: $avj-color-primary
+  padding: 12px 24px
+  border: none
+  text-transform: uppercase
+  letter-spacing: 1px
 
 .form-control
   height: 48px
