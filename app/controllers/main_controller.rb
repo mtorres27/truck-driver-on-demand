@@ -10,6 +10,9 @@ class MainController < ApplicationController
   def message_detail
   end
 
+  def search_results
+  end
+
   def index
   end
 

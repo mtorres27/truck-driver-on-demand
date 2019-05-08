@@ -34,7 +34,7 @@ body
     margin-bottom: 0px
     @media (max-width: $breakpoint-tablet)
       display: none
-  &__subhead
+  &__msg-subhead
     background-color: $avj-color-grey2
     margin-top: -24px
     position: sticky
@@ -63,6 +63,15 @@ body
       top: auto
       right: 0%
       bottom: 0%
+  &__subhead
+    background-color: $avj-color-grey2
+    position: relative
+    margin-top: -24px
+    @media (max-width: $breakpoint-tablet)
+      position: sticky
+      top: 0
+      box-shadow: 1px 1px 2px 0 rgba(0, 0, 0, .2)
+      z-index: 300
 
 
 .avj-header
