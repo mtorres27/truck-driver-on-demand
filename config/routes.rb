@@ -3,6 +3,9 @@ Rails.application.routes.draw do
   match '/messages'                 => 'main#messages',               via: :get
   match '/message_detail'           => 'main#message_detail',         via: :get
   match '/search_results'           => 'main#search_results',         via: :get
+  match '/jobs'                     => 'main#jobs',                   via: :get
+  match '/job_details'              => 'main#job_details',            via: :get
+  match '/job_post_form'            => 'main#job_post_form',          via: :get
 
   mount ActionCable.server => '/cable'
 

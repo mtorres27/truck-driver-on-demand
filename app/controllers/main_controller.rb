@@ -13,6 +13,15 @@ class MainController < ApplicationController
   def search_results
   end
 
+  def jobs
+  end
+
+  def job_detail
+  end
+
+  def job_post_form
+  end
+
   def index
   end
 
