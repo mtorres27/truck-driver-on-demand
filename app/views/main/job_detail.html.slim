@@ -1,0 +1,39 @@
+=render "header"
+=render "mobile_nav"
+
+.avj-section.avj-section__subhead
+  .container
+    .avj-subhead.justify-content-between
+      div
+        h4.ellipsis.ellipsis__subhead Tech needed for 2 day job for installation of several things
+      div
+        .avj-body1.avj-text-color-primary.zmdi.zmdi-edit
+
+.avj-section.avj-section__main
+  .container.container__content    
+    .avj-job-item
+      .avj-caption1.avj-text-color-black2
+        | Posted Aprit 24, 2019
+      a.avj-text-color-black href=""
+        .avj-body1.avj-text-emphasize
+          | Tech needed for 2 day job for installation
+        .avj-body2
+          | Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professor at Hampden-Sydney College in Virginia, looked up one of the more obscure Latin words, consectetur, from a Lorem Ipsum passage, and going through the cites of the word in classical literature, discovered the undoubtable source. Lorem Ipsum comes from sections 1.10.32 and 1.10.33 of "de Finibus Bonorum et Malorum" (The Extremes of Good and Evil) by Cicero, written in 45 BC. This book is a treatise on the theory of ethics, very popular during the Renaissance. The first line of Lorem Ipsum, "Lorem ipsum dolor sit amet..", comes from a line in section 1.10.32.
+      .d-flex
+        .zmdi.zmdi-pin.avj-text-color-black2.avj-text-sm.mr-2
+        .avj-caption1.avj-text-color-black2
+          | Boston, Massachusetts
+    
+    ul#myTab.nav.nav-tabs.mb-4 role="tablist" 
+      li.nav-item
+        a#replies-tab.nav-link.active aria-controls="replies" aria-selected="true" data-toggle="tab" href="#replies" role="tab"  4 Replies
+      li.nav-item
+        a#matches-tab.nav-link aria-controls="matches" aria-selected="false" data-toggle="tab" href="#matches" role="tab"  6 Matches
+    #myTabContent.tab-content
+      #replies.tab-pane.fade.show.active aria-labelledby="replies-tab" role="tabpanel"
+        =render "replies_matches"
+      #matches.tab-pane.fade aria-labelledby="matches-tab" role="tabpanel"
+        =render "replies_matches"
+
+      
+=render "footer"      
