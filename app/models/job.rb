@@ -233,10 +233,10 @@ class Job < ApplicationRecord
       # save cached version of address
       do_geocode
       geocode = { address: formatted_address, lat: lat, lng: lng }
-      Rails.cache.write(address_for_geocode, geocode)
+      Rails.cache.write(address_for_geocode, geocode) if geocode[:lat] && geocode[:lng]
     end
 
-    if geocode
+    if geocode[:lat] && geocode[:lng]
       point = OpenStruct.new(:lat => geocode[:lat], :lng => geocode[:lng])
       if distance.nil?
         distance = 160934
