@@ -4,7 +4,6 @@
 #
 #  id                                     :integer          not null, primary key
 #  company_id                             :integer          not null
-#  project_id                             :integer
 #  title                                  :string
 #  state                                  :string           default("created"), not null
 #  summary                                :text
@@ -72,13 +71,11 @@
 #  index_jobs_on_company_id         (company_id)
 #  index_jobs_on_creator_id         (creator_id)
 #  index_jobs_on_manufacturer_tags  (manufacturer_tags)
-#  index_jobs_on_project_id         (project_id)
 #
 # Foreign Keys
 #
 #  fk_rails_...  (company_id => companies.id)
 #  fk_rails_...  (creator_id => users.id)
-#  fk_rails_...  (project_id => projects.id)
 #
 
 class Job < ApplicationRecord
@@ -89,7 +86,6 @@ class Job < ApplicationRecord
   include ScopeFileUploader[:scope_file]
 
   belongs_to :company
-  belongs_to :project, optional: true
   belongs_to :creator, class_name: 'CompanyUser'
   has_many :applicants, -> { includes(:freelancer).order(updated_at: :desc) }, dependent: :destroy
   has_many :messages, -> { order(created_at: :desc) }, as: :receivable
@@ -136,7 +132,6 @@ class Job < ApplicationRecord
     :completed
   ], predicates: true, scope: true
 
-  validates :project_id, presence: true, if: -> { step_job_details? || creation_completed? }
   validates :budget, presence: true, numericality: true, sane_price: true, if: -> { step_job_details? || creation_completed? }
   validates :duration, numericality: { only_integer: true, greater_than_or_equal_to: 1 }, if: -> { step_job_details? || creation_completed? }
   validates :starts_on, presence: true, if: -> { step_job_details? || creation_completed? }
@@ -222,8 +217,35 @@ class Job < ApplicationRecord
   end
 
   def self.count
-    self.where(project_id: nil).destroy_all
     super
+  end
+
+  def matches(distance=nil)
+    freelancer_profiles = FreelancerProfile.where(disabled: false).where("job_types like ?", "%#{job_type}%")
+    address_for_geocode = address
+    address_for_geocode += ", #{CS.states(country.to_sym)[state_province.to_sym]}" if state_province.present?
+    address_for_geocode += ", #{CS.countries[country.upcase.to_sym]}" if country.present?
+
+    # check for cached version of address
+    if Rails.cache.read(address_for_geocode)
+      geocode = Rails.cache.read(address_for_geocode)
+    else
+      # save cached version of address
+      do_geocode
+      geocode = { address: formatted_address, lat: lat, lng: lng }
+      Rails.cache.write(address_for_geocode, geocode)
+    end
+
+    if geocode
+      point = OpenStruct.new(:lat => geocode[:lat], :lng => geocode[:lng])
+      if distance.nil?
+        distance = 160934
+      end
+      freelancer_profiles = freelancer_profiles.nearby(geocode[:lat], geocode[:lng], distance).with_distance(point).order("distance")
+      Freelancer.where(id: freelancer_profiles.map(&:freelancer_id))
+    else
+      Freelancer.none
+    end
   end
 
   private

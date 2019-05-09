@@ -125,12 +125,11 @@ Rails.application.routes.draw do
     get "freelancers/:id/invite_to_quote", to: "freelancers#invite_to_quote"
 
     resources :applicants
-    resources :projects
     resources :messaging, only: [:index]
 
     get 'job_country_currency', to: 'jobs#job_countries', as: 'job_country_currency'
 
-    resources :jobs, except: [:index] do
+    resources :jobs do
       resources :job_build, only: [:index, :show, :update, :create] do
         member do
           post :skip
@@ -178,11 +177,6 @@ Rails.application.routes.draw do
 
     resource :company do
       get :download_csv
-    end
-
-    resources :projects, except: [:new, :create] do
-      get :disable, on: :member
-      get :enable, on: :member
     end
 
     resources :jobs, except: [:new, :create] do

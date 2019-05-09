@@ -941,7 +941,6 @@ ALTER SEQUENCE job_invites_id_seq OWNED BY job_invites.id;
 CREATE TABLE jobs (
     id bigint NOT NULL,
     company_id bigint NOT NULL,
-    project_id bigint,
     title character varying,
     state character varying DEFAULT 'created'::character varying NOT NULL,
     summary text,
@@ -1133,42 +1132,6 @@ CREATE SEQUENCE pages_id_seq
 --
 
 ALTER SEQUENCE pages_id_seq OWNED BY pages.id;
-
-
---
--- Name: projects; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE projects (
-    id bigint NOT NULL,
-    company_id bigint NOT NULL,
-    external_project_id character varying,
-    name character varying NOT NULL,
-    formatted_address character varying,
-    lat numeric(9,6),
-    lng numeric(9,6),
-    created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
-);
-
-
---
--- Name: projects_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE projects_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: projects_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE projects_id_seq OWNED BY projects.id;
 
 
 --
@@ -1429,13 +1392,6 @@ ALTER TABLE ONLY pages ALTER COLUMN id SET DEFAULT nextval('pages_id_seq'::regcl
 
 
 --
--- Name: projects id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY projects ALTER COLUMN id SET DEFAULT nextval('projects_id_seq'::regclass);
-
-
---
 -- Name: users id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -1664,14 +1620,6 @@ ALTER TABLE ONLY notifications
 
 ALTER TABLE ONLY pages
     ADD CONSTRAINT pages_pkey PRIMARY KEY (id);
-
-
---
--- Name: projects projects_pkey; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY projects
-    ADD CONSTRAINT projects_pkey PRIMARY KEY (id);
 
 
 --
@@ -1943,13 +1891,6 @@ CREATE INDEX index_jobs_on_manufacturer_tags ON jobs USING btree (manufacturer_t
 
 
 --
--- Name: index_jobs_on_project_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_jobs_on_project_id ON jobs USING btree (project_id);
-
-
---
 -- Name: index_messages_on_authorable_type_and_authorable_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -1999,38 +1940,10 @@ CREATE INDEX index_on_freelancers_loc ON freelancer_profiles USING gist (st_geog
 
 
 --
--- Name: index_on_projects_loc; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_on_projects_loc ON projects USING gist (st_geographyfromtext((((('SRID=4326;POINT('::text || lng) || ' '::text) || lat) || ')'::text)));
-
-
---
 -- Name: index_pages_on_slug; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_pages_on_slug ON pages USING btree (slug);
-
-
---
--- Name: index_projects_on_company_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_projects_on_company_id ON projects USING btree (company_id);
-
-
---
--- Name: index_projects_on_external_project_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_projects_on_external_project_id ON projects USING btree (external_project_id);
-
-
---
--- Name: index_projects_on_name; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_projects_on_name ON projects USING btree (name);
 
 
 --
@@ -2105,14 +2018,6 @@ ALTER TABLE ONLY company_reviews
 
 
 --
--- Name: jobs fk_rails_1977e8b5a6; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY jobs
-    ADD CONSTRAINT fk_rails_1977e8b5a6 FOREIGN KEY (project_id) REFERENCES projects(id);
-
-
---
 -- Name: freelancer_reviews fk_rails_2d750cb05f; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -2126,14 +2031,6 @@ ALTER TABLE ONLY freelancer_reviews
 
 ALTER TABLE ONLY applicants
     ADD CONSTRAINT fk_rails_32d387f70d FOREIGN KEY (job_id) REFERENCES jobs(id);
-
-
---
--- Name: projects fk_rails_44a549d7b3; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY projects
-    ADD CONSTRAINT fk_rails_44a549d7b3 FOREIGN KEY (company_id) REFERENCES companies(id);
 
 
 --
@@ -2416,6 +2313,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20190401182720'),
 ('20190417220517'),
 ('20190426172935'),
-('20190503190656');
+('20190503190656'),
+('20190509185605');
 
 

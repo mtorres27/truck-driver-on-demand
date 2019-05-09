@@ -4,7 +4,6 @@
 #
 #  id                                     :integer          not null, primary key
 #  company_id                             :integer          not null
-#  project_id                             :integer
 #  title                                  :string
 #  state                                  :string           default("created"), not null
 #  summary                                :text
@@ -72,13 +71,11 @@
 #  index_jobs_on_company_id         (company_id)
 #  index_jobs_on_creator_id         (creator_id)
 #  index_jobs_on_manufacturer_tags  (manufacturer_tags)
-#  index_jobs_on_project_id         (project_id)
 #
 # Foreign Keys
 #
 #  fk_rails_...  (company_id => companies.id)
 #  fk_rails_...  (creator_id => users.id)
-#  fk_rails_...  (project_id => projects.id)
 #
 
 require 'rails_helper'
@@ -101,13 +98,11 @@ describe Job, type: :model do
   describe "triggers" do
     describe "accept_applicant" do
       let(:company) { create(:company) }
-      let(:project) { create(:project, company: company) }
       let(:job) { build(:job,
                         state_province: 'ON',
                         address: 'Toronto',
                         country: 'ca',
                         company: company,
-                        project: project,
                         contract_price: 200,
                         pay_type: 'variable',
                         variable_pay_type: 'daily',
@@ -139,8 +134,7 @@ describe Job, type: :model do
 
   describe "city_state_country" do
     let(:company) { create(:company) }
-    let(:project) { create(:project, company: company) }
-    let(:job) { build(:job, state_province: 'ON', address: 'Toronto', country: 'ca', company: company, project: project) }
+    let(:job) { build(:job, state_province: 'ON', address: 'Toronto', country: 'ca', company: company) }
 
     it "returns location with state" do
       expect(job.city_state_country).to eq("Toronto, Ontario, CA")

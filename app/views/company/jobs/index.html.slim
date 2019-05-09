@@ -1,0 +1,9 @@
+.avj-section.avj-section__main
+  .container.container__content
+    .d-flex.flex-row.justify-content-between.align-items-baseline
+      h2
+        | Job Posts
+      = link_to "Post a Job", company_job_job_build_index_path(job_id: :build_job), method: :post, class: "btn btn-primary"
+
+    - @jobs.each do |job|
+      = render partial: "job_list_detail", locals: { job: job }

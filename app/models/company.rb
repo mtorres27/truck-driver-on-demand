@@ -62,8 +62,7 @@ class Company < ApplicationRecord
   include AvatarUploader[:avatar]
   include ProfileHeaderUploader[:profile_header]
 
-  has_many :projects, -> { order(updated_at: :desc) }, dependent: :destroy
-  has_many :jobs, dependent: :destroy
+  has_many :jobs, -> { order(updated_at: :desc) }, dependent: :destroy
   has_many :applicants, dependent: :destroy
   has_many :messages, -> { order(created_at: :desc) }, as: :authorable
   has_many :freelancer_reviews, dependent: :nullify

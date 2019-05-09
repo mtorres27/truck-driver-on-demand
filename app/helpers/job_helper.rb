@@ -41,7 +41,7 @@ module JobHelper
       t = 'declined'
     end
 
-    content_tag(:span, class: "tag tag--#{mappings[sym]}") do
+    content_tag(:span, class: "avj-tag avj-tag--#{mappings[sym]}") do
       t
     end
   end
