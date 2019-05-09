@@ -2,13 +2,6 @@
   h2.heading-h2 Enter the details of the job you wish to post. Be as descriptive as possible while excluding specifics like client names, etc.
 .grid-cell.grid-cell--50
   .grid-h.grid-h--no-margin
-    .grid-cell.grid-cell--75
-      = f.association :project, collection: @job.company.projects, prompt: "Select"
-    .grid-cell.grid-cell--25.grid-cell--span25
-      br
-      .buttons
-        .btn.btn--secondary type="button" data-toggle="modal" data-target="#new_project"
-          | New Project
     .grid-cell.grid-cell--100
       = f.input :title, placeholder: "Enter the job title", required: true
     .grid-cell.grid-cell--50

@@ -35,6 +35,7 @@ html
 
 
   body(class = "#{controller.controller_name}-#{controller.action_name}")
+    = render "shared/flash"
     = yield
     - if content_for(:secondary)
       .container
