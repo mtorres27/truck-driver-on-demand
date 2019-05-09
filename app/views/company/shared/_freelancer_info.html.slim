@@ -13,11 +13,13 @@
         .avj-caption1.text-right= pluralize(freelancer.connections_count, "connection")
       .w-100
         .avj-body2= freelancer.freelancer_profile.tagline
-    - if current_company.has_saved_freelancer?(freelancer)
-      = link_to "", delete_freelancer_company_freelancer_url(freelancer), method: :post, class: "avj-body1 avj-text-color-primary zmdi zmdi-favorite"
-    - else
-      = link_to "", save_freelancer_company_freelancer_url(freelancer), method: :post, class: "avj-body1 avj-text-color-primary zmdi zmdi-favorite-outline"
-    - if current_company.messages_for_freelancer(freelancer).count > 0
-      = link_to "", company_freelancer_messages_url(freelancer), class: "avj-body1 avj-text-color-primary zmdi zmdi-comment"
-    - else
-      = link_to "", company_freelancer_messages_url(freelancer), class: "avj-body1 avj-text-color-primary zmdi zmdi-comment-outline"
+    .mr-4
+      - if current_company.has_saved_freelancer?(freelancer)
+        = link_to "", delete_freelancer_company_freelancer_url(freelancer), method: :post, class: "avj-body1 avj-text-color-primary zmdi zmdi-favorite"
+      - else
+        = link_to "", save_freelancer_company_freelancer_url(freelancer), method: :post, class: "avj-body1 avj-text-color-primary zmdi zmdi-favorite-outline"
+    div
+      - if current_company.messages_for_freelancer(freelancer).count > 0
+        = link_to "", company_freelancer_messages_url(freelancer), class: "avj-body1 avj-text-color-primary zmdi zmdi-comment"
+      - else
+        = link_to "", company_freelancer_messages_url(freelancer), class: "avj-body1 avj-text-color-primary zmdi zmdi-comment-outline"
