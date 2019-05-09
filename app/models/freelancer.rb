@@ -152,6 +152,10 @@ class Freelancer < User
     companies_with_messages
   end
 
+  def connections_count
+    companies_for_messaging.count
+  end
+
   def connected?
     freelancer_profile.stripe_account_id.present?
   end

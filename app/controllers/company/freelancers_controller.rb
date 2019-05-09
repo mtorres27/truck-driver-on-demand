@@ -177,10 +177,15 @@ class Company::FreelancersController < Company::BaseController
 
   def save_freelancer
     authorize current_company
-    freelancer = Freelancer.find(params[:id])
-    current_company.update_attribute(:saved_freelancers_ids, current_company.saved_freelancers_ids + [freelancer.id])
+    current_company.update_attribute(:saved_freelancers_ids, current_company.saved_freelancers_ids + [params[:id].to_i])
     flash[:notice] = "Freelancer added to saved for later."
     redirect_back fallback_location: root_path
   end
 
+  def delete_freelancer
+    authorize current_company
+    current_company.update_attribute(:saved_freelancers_ids, current_company.saved_freelancers_ids - [params[:id].to_i])
+    flash[:notice] = "Freelancer removed from saved for later."
+    redirect_back fallback_location: root_path
+  end
 end

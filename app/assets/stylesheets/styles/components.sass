@@ -152,9 +152,21 @@ body
   border: 1px solid rgba(0, 0, 0, .2)
   padding: 8px 16px 0px 16px
 
-
 .avj-job-item
   margin-bottom: 24px
+
+.avj-circle_profile__image
+  line-height: 44px
+  width: 44px
+  height: 44px
+  text-align: center
+  font-size: 18px
+  color: white
+  border-radius: 50%
+  &.freelancer__image
+    background-color: #EE6E39
+  &.company__image
+    background-color: #00AEDB
 
 //Bootstrap Overrides
 
@@ -172,5 +184,9 @@ body
   text-transform: uppercase
   letter-spacing: 1px
 
-.form-control
+.form-control, select.form-control:not([size]):not([multiple])
   height: 48px
+  font-size: 18px
+  @media (max-width: $breakpoint-tablet)
+    height: 40px
+    font-size: 16px

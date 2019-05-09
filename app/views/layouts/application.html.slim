@@ -36,6 +36,9 @@ html
 
   body(class = "#{controller.controller_name}-#{controller.action_name}")
     = yield
+    - if content_for(:secondary)
+      .container
+        .frame= yield :secondary
     / .wrap
     /   .section.section--header
     /     .container.container--header

@@ -1,13 +1,19 @@
+ 
 body
   font-family: $default-font
   color: $avj-color-black
+  font-size: 16px
   line-height : 120%
 
 a  
   text-decoration: none
   color: $avj-color-primary-dark
+  cursor: pointer
   &:hover
     text-decoration: none
+  &:not([href]):not([tabindex])
+    color: $avj-color-primary-dark
+
 
 h1
   margin-bottom : 16px
@@ -81,3 +87,7 @@ h3
   color: $avj-color-primary
   @media (max-width: $breakpoint-tablet)
     font-size: 24px
+
+//Forms
+label
+  font-weight: 400
