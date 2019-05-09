@@ -1,5 +1,5 @@
 .avj-list-item
-  - if (current_company && message.authorable == current_company) || (message.authorable == current_user)
+  - if user_is_author
     a.mr-4 href="#"
       .d-flex.flex-wrap.w-100
         .w-50
@@ -14,7 +14,7 @@
   - else
     a.mr-4 href="#"
       - if message.authorable.is_a?(Freelancer) && message.authorable.freelancer_profile.avatar_data.nil?
-        .circle_profile__image.freelancer__image= message.authorable.name_initials
+        .avj-circle_profile__image.freelancer__image= message.authorable.name_initials
       - else
         .avj-avatar
           = image_tag(message.authorable.user_data.avatar_url)

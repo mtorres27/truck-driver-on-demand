@@ -2,20 +2,28 @@
   .container
     .avj-subhead
       .mr-4
-        .avj-avatar style="background:yellow"
+        - if current_company
+          - if freelancer.freelancer_profile.avatar_data.nil?
+            .avj-circle_profile__image.freelancer__image= freelancer.name_initials
+          - else
+            .avj-avatar
+              = image_tag(freelancer.freelancer_profile.avatar_url)
+        - else
+          .avj-avatar
+            = image_tag(company.avatar_url)
       div
         h4= "Conversation with #{recipient_name}"
 
 .avj-section.avj-section__chat-input
   .container.containter__content
-    = simple_form_for(:message, url: path, html: { class: "js--message-form avj-list-item m-0", data: { id: "#{company.id}-#{freelancer.id}", company: company.id, freelancer: freelancer.id, type: authorable_type } }) do |f|
+    = simple_form_for(:message, url: path, html: { class: "js--message-form avj-list-item m-0", data: { id: "#{authorable_type}-#{company.id}-#{freelancer.id}", company: company.id, freelancer: freelancer.id, type: authorable_type } }) do |f|
       a.mr-4 href="#"
         - if current_company
           .avj-avatar
             = image_tag(current_company.avatar_url)
         - else
           - if current_user.freelancer_profile.avatar_data.nil?
-            .circle_profile__image.freelancer__image= current_user.name_initials
+            .avj-circle_profile__image.freelancer__image= current_user.name_initials
           - else
             .avj-avatar
               = image_tag(current_user.freelancer_profile.avatar_url)
@@ -31,4 +39,5 @@
     h2.d-none.d-md-block= "Your conversation history with #{recipient_name}"
     .avj-message-list.js--freelancer-job__message-history
       - @messages.each do |message|
-        = render "shared/message", message: message
+        - user_is_author = (current_company && message.authorable == current_company) || (message.authorable == current_user)
+        = render "shared/message", message: message, user_is_author: user_is_author
