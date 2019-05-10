@@ -223,14 +223,10 @@ textarea
       margin-bottom: 0px
 
 .btn
-  //padding: 8px 24px
   text-transform: uppercase
   letter-spacing: 1px
-  //height: 48px
   @media (max-width: $breakpoint-tablet)
-    //padding: 8px 12px
     line-height: 1.4
-    //height: 40px
   &-primary
     background-color: $avj-color-primary
     &:hover
@@ -239,8 +235,12 @@ textarea
     border-color: $avj-color-primary
     &:hover
       background-color: $avj-color-primary
-
-
+  &-secondary
+    background-color: $avj-color-secondary
+    border-color: $avj-color-secondary
+    &:hover, &:not(:disabled):not(.disabled):active
+      background-color: $avj-color-secondary-dark
+      border-color: $avj-color-secondary-dark
 
 .form-control, select.form-control:not([size]):not([multiple])
   height: 48px
