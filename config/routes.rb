@@ -1,10 +1,12 @@
 Rails.application.routes.draw do
+  match '/login'                    => 'main#login',                  via: :get
+  match '/company_register'         => 'main#company_register',       via: :get
   match '/search_professionals'     => 'main#search_professionals',   via: :get
   match '/messages'                 => 'main#messages',               via: :get
   match '/message_detail'           => 'main#message_detail',         via: :get
   match '/search_results'           => 'main#search_results',         via: :get
   match '/jobs'                     => 'main#jobs',                   via: :get
-  match '/job_detail'              => 'main#job_detail',            via: :get
+  match '/job_detail'               => 'main#job_detail',             via: :get
   match '/job_post_form'            => 'main#job_post_form',          via: :get
 
   mount ActionCable.server => '/cable'
