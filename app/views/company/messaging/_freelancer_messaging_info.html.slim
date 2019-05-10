@@ -1,4 +1,4 @@
-- last_message = current_company.messages_for_freelancer(freelancer).first
+- last_message = current_company.messages_for_freelancer(freelancer).last
 .avj-list-item
   a.mr-4 href=company_freelancer_url(hash_id(freelancer))
     - if freelancer.freelancer_profile.avatar_data.present?
