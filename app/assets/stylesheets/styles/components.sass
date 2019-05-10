@@ -2,6 +2,10 @@ body
   min-height: 100vh
   display: flex
   flex-direction: column
+
+img
+  max-width: 100%
+  display: inline-block
   
 .avj-section
   margin-bottom: 24px
@@ -207,12 +211,28 @@ body
     &:last-child
       margin-bottom: 0px
 
-.btn-primary
-  background-color: $avj-color-primary
+.btn
   padding: 12px 24px
-  border: none
   text-transform: uppercase
   letter-spacing: 1px
+  &-primary
+    background-color: $avj-color-primary
+    &:hover
+      background-color: $avj-color-primary-dark
+  &-outline-primary
+    border-color: $avj-color-primary
+    &:hover
+      background-color: $avj-color-primary
 
 .form-control
   height: 48px
+
+.form-control, select.form-control:not([size]):not([multiple])
+  height: 48px
+  font-size: 18px
+  @media (max-width: $breakpoint-tablet)
+    height: 40px
+    font-size: 16px
+
+.progress-bar
+  background-color: $avj-color-secondary
