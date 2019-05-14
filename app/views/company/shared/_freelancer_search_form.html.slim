@@ -15,9 +15,9 @@
       small.avj-caption2 id="emailHelp" class="form-text text-muted"
         | Did you mean London UK or London Ontario?
   .form-group
-    a.avj-body2 data-toggle="collapse" data-target="#advanced-search" aria-expanded="false" aria-controls="advanced-search"
+    a#avj-collapse-btn.avj-body2
       | Advanced Search
-  .form-group#advanced-search class="#{'collapse' if @job_type.blank? && @job_function.blank?}"
+  .form-group#avj-collapse-div class="#{'collapse' if @job_type.blank? && @job_function.blank?}"
     = f.label :job_type, required: false
     select#search_job_type.js--job_type.form-control.select(name='search[job_type]')
       option(value='')
