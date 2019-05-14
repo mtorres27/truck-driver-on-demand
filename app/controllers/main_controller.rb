@@ -28,6 +28,9 @@ class MainController < ApplicationController
   def job_post_form
   end
 
+  def company_profile 
+  end
+
   def index
   end
 
