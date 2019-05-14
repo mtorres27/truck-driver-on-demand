@@ -30,9 +30,7 @@ Given("I am on company step {int}") do |step|
     expect(page).to have_content("Company Name")
     expect(page).to have_content("State/province")
   when 3
-    expect(page).to have_content("Please select a Job type")
-  when 4
-    expect(page).to have_content("Company Logo")
+    expect(page).to have_content("System Integration")
   else
     pending
   end
@@ -44,8 +42,6 @@ Then("I should be on company registration step {int}") do |step|
     expect(current_path).to eq(company_registration_step_path(:personal))
   when 3
     expect(current_path).to eq(company_registration_step_path(:job_info))
-  when 4
-    expect(current_path).to eq(company_registration_step_path(:profile))
   else
     pending
   end

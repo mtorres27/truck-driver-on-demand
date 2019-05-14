@@ -1,10 +1,10 @@
 .avj-section.avj-section__head
   .container
     .avj-header
-      a.avj-head-logo href="#"
+      a.avj-head-logo href=root_url
         = image_tag "avjlogo-2-0.png"
       .avj-nav-desktop
-        - if current_user&.is_a?(CompanyUser)
+        - if current_user&.is_a?(CompanyUser) && current_company&.registration_step == "wicked_finish"
           .avj-nav-desktop-link
             = link_to "Search", company_root_path, class: "avj-body2 avj-nav-desktop-link"
           .avj-nav-desktop-link

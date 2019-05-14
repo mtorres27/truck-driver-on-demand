@@ -5,7 +5,7 @@ class Company::RegistrationStepsController < Company::BaseController
   skip_before_action :authenticate_user!, only: [:show]
   skip_before_action :redirect_if_not_company, only: [:show]
 
-  steps :personal, :job_info, :profile
+  steps :personal, :job_info
 
   rescue_from Wicked::Wizard::InvalidStepError do
     redirect_to new_user_session_path
@@ -29,17 +29,14 @@ class Company::RegistrationStepsController < Company::BaseController
     current_company.attributes = params[:company] ? company_params : {}
     current_company.registration_step = next_step
 
-    sign_out current_user if next_step == "wicked_finish" && current_company.profile_form_filled?
+    sign_out current_user if next_step == "wicked_finish"
 
     render_wizard current_company
   end
 
-  def skip
-    current_company.update(registration_step: next_step, skip_step: true)
-
-    sign_out current_user if next_step == "wicked_finish"
-
-    redirect_to company_registration_step_path(next_step)
+  def previous
+    current_company.update(registration_step: previous_step)
+    redirect_to company_registration_step_path(previous_step)
   end
 
   private
@@ -54,15 +51,9 @@ class Company::RegistrationStepsController < Company::BaseController
       :city,
       :state,
       :country,
-      :avatar,
-      :description,
-      :established_in,
-      :number_of_employees,
-      :number_of_offices,
       :website,
       :area,
       :phone_number,
-      job_types: I18n.t("enumerize.job_types").keys,
       job_markets: (I18n.t("enumerize.live_events_staging_and_rental_job_markets").keys + I18n.t("enumerize.system_integration_job_markets").keys).uniq
     )
   end

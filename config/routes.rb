@@ -107,7 +107,7 @@ Rails.application.routes.draw do
     resource :profile, only: [:show, :edit, :update]
     resources :registration_steps, only: [:show, :update, :index] do
       member do
-        post :skip
+        post :previous
       end
     end
 
