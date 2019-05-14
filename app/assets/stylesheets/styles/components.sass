@@ -32,6 +32,9 @@ img
   &__main
     flex: 1
     margin-bottom: $avj-nav-height
+  &__chat
+    flex: 1
+    margin-bottom: 108px
   &__footer
     background-color: $avj-color-grey1
     padding-top: 16px
@@ -190,6 +193,9 @@ img
   margin: 8px 8px 0px 0px
   border-color: #a7a7a7
   background-color: $avj-color-grey3
+  &__published
+    border-color: rgba(0, 0, 0, 0.2)
+    background-color: #fff501
   // &__in-progress
   //   border-color: rgba(0, 0, 0, 0.2)
   //   background-color: #fff501
@@ -208,6 +214,9 @@ img
 
 //Bootstrap Overrides
 
+textarea
+  height: auto !important
+
 .container 
   max-width: $max-width
   &__content
@@ -216,14 +225,14 @@ img
       margin-bottom: 0px
 
 .btn
-  padding: 8px 24px
+  //padding: 8px 24px
   text-transform: uppercase
   letter-spacing: 1px
-  height: 48px
+  //height: 48px
   @media (max-width: $breakpoint-tablet)
-    padding: 8px 12px
+    //padding: 8px 12px
     line-height: 1.4
-    height: 40px
+    //height: 40px
   &-primary
     background-color: $avj-color-primary
     &:hover
@@ -232,6 +241,7 @@ img
     border-color: $avj-color-primary
     &:hover
       background-color: $avj-color-primary
+
 
 
 .form-control, select.form-control:not([size]):not([multiple])

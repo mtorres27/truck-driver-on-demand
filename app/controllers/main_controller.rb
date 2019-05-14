@@ -25,7 +25,7 @@ class MainController < ApplicationController
   def job_detail
   end
 
-  def job_post_form
+  def job_form
   end
 
   def company_profile 
