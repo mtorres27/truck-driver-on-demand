@@ -1,18 +1,19 @@
 .avj-section.avj-section__nav-mobile
   .container
     .avj-nav-mobile
-      a.avj-nav-mobile-link href=company_root_url
-        .avj-body1.m-0.zmdi.zmdi-search
-        .avj-caption2.m-0.avj-text-emphasize Search
-      a.avj-nav-mobile-link href=company_messaging_index_url
-        .avj-body1.m-0.zmdi.zmdi-comment-outline
-        .avj-caption2.m-0.avj-text-emphasize Messages
-      a.avj-nav-mobile-link href=company_jobs_url
-        .avj-body1.m-0.zmdi.zmdi-folder-outline
-        .avj-caption2.m-0.avj-text-emphasize Job Posts
-      a.avj-nav-mobile-link href=saved_company_freelancers_url
-        .avj-body1.m-0.zmdi.zmdi-favorite-outline
-        .avj-caption2.m-0.avj-text-emphasize Favorites
-      a.avj-nav-mobile-link href=company_profile_url
-        .avj-body1.m-0.zmdi.zmdi-account-o
-        .avj-caption2.m-0 Profile
+      - if current_user&.is_a?(CompanyUser)
+        a.avj-nav-mobile-link href=company_root_url
+          .avj-body1.m-0.zmdi.zmdi-search
+          .avj-caption2.m-0.avj-text-emphasize Search
+        a.avj-nav-mobile-link href=company_messaging_index_url
+          .avj-body1.m-0.zmdi.zmdi-comment-outline
+          .avj-caption2.m-0.avj-text-emphasize Messages
+        a.avj-nav-mobile-link href=company_jobs_url
+          .avj-body1.m-0.zmdi.zmdi-folder-outline
+          .avj-caption2.m-0.avj-text-emphasize Job Posts
+        a.avj-nav-mobile-link href=saved_company_freelancers_url
+          .avj-body1.m-0.zmdi.zmdi-favorite-outline
+          .avj-caption2.m-0.avj-text-emphasize Favorites
+        a.avj-nav-mobile-link href=company_profile_url
+          .avj-body1.m-0.zmdi.zmdi-account-o
+          .avj-caption2.m-0 Profile
