@@ -2,6 +2,10 @@ body
   min-height: 100vh
   display: flex
   flex-direction: column
+
+img
+  max-width: 100%
+  display: inline-block
   
 .avj-section
   margin-bottom: 24px
@@ -62,7 +66,7 @@ body
       left: 0%
       top: auto
       right: 0%
-      bottom: 0%
+      bottom: $avj-nav-height
   &__subhead
     background-color: $avj-color-grey2
     position: relative
@@ -128,6 +132,7 @@ body
   width: 44px
   border: 1px solid $avj-color-grey2
   border-radius: 4px
+  overflow: hidden
 
 .avj-list-item
   display: flex
@@ -146,7 +151,7 @@ body
 
 .avj-message-text
   margin-top: 16px
-  border-radius: 8px
+  border-radius: 4px
   border: 1px solid rgba(0, 0, 0, .2)
   padding: 8px 16px 0px 16px
 
@@ -160,12 +165,14 @@ body
   text-align: center
   font-size: 18px
   color: white
-  border-radius: 50%
+  border: 1px solid $avj-color-grey2
+  border-radius: 4px
   &.freelancer__image
     background-color: #EE6E39
   &.company__image
     background-color: #00AEDB
 
+//Tags
 .avj-tag
   display: inline-block
   padding: 8px
@@ -173,28 +180,14 @@ body
   border-width: 1px
   border-color: rgba(0, 0, 0, 0.2)
   border-radius: 4px
-  background-color: #fff
   font-size: 10px
   line-height: 10px
   font-weight: 600
   text-transform: uppercase
   color: black
-  &.avj-tag--grey
-    margin: 4px 8px 4px 0px
-    border-color: #a7a7a7
-    background-color: #e2e2e2
-  &.avj-tag--in-progress
-    border-color: rgba(0, 0, 0, 0.2)
-    background-color: #fff501
-  &.avj-tag--success
-    border-color: rgba(0, 0, 0, 0.2)
-    background-color: #8ff696
-  &.avj-tag--active
-    background-color: #ffa400
-    color: #fff
-  &avj-tag--hollow
-    border-color: rgba(0, 0, 0, 0.2)
-    background-color: white
+  margin: 4px 8px 0px 0px
+  border-color: #a7a7a7
+  background-color: $avj-color-grey3
 
 //Bootstrap Overrides
 
@@ -205,12 +198,33 @@ body
     &:last-child
       margin-bottom: 0px
 
-.btn-primary
-  background-color: $avj-color-primary
-  padding: 12px 24px
-  border: none
+.btn
+  padding: 8px 24px
   text-transform: uppercase
   letter-spacing: 1px
+  height: 48px
+  @media (max-width: $breakpoint-tablet)
+    padding: 8px 12px
+    line-height: 1.4
+    height: 40px
+  &-primary
+    background-color: $avj-color-primary
+    &:hover
+      background-color: $avj-color-primary-dark
+  &-outline-primary
+    border-color: $avj-color-primary
+    &:hover
+      background-color: $avj-color-primary
 
 .form-control
   height: 48px
+
+.form-control, select.form-control:not([size]):not([multiple])
+  height: 48px
+  font-size: 18px
+  @media (max-width: $breakpoint-tablet)
+    height: 40px
+    font-size: 16px
+
+.progress-bar
+  background-color: $avj-color-secondary

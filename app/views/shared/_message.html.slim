@@ -1,16 +1,16 @@
 .avj-list-item
   - if user_is_author
     a.mr-4 href="#"
-      .d-flex.flex-wrap.w-100
-        .w-50
-          .avj-body1.m-0 You
-        .w-50
-          .avj-caption1.m-0.text-right= "#{time_ago_in_words(message.created_at)} ago"
-        .avj-message-text.w-100.avj-bg-gorange
-          .avj-body2= message.body
-        - if message.attachment
-          .new-message__image
-            = attachment_image_link(message.attachment)
+    .d-flex.flex-wrap.w-100
+      .w-50
+        .avj-body1.m-0 You
+      .w-50
+        .avj-caption1.m-0.text-right= "#{time_ago_in_words(message.created_at)} ago"
+      .avj-message-text.w-100
+        .avj-body2= message.body
+      - if message.attachment
+        .new-message__image
+          = attachment_image_link(message.attachment)
   - else
     a.mr-4 href="#"
       - if message.authorable.is_a?(Freelancer) && message.authorable.freelancer_profile.avatar_data.nil?
@@ -23,7 +23,7 @@
         .avj-body1.m-0= message.authorable.first_name_and_initial
       .w-50
         .avj-caption1.m-0.text-right= "#{time_ago_in_words(message.created_at)} ago"
-      .avj-message-text.w-100
+      .avj-message-text.w-100.avj-bg-gorange
         .avj-body2= message.body
       - if message.attachment
         .new-message__image
