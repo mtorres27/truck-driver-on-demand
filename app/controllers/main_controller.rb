@@ -34,6 +34,9 @@ class MainController < ApplicationController
   def company_profile_edit 
   end
 
+  def company_profile 
+  end
+
   def index
   end
 

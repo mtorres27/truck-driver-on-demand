@@ -194,20 +194,13 @@ img
   &__published
     border-color: rgba(0, 0, 0, 0.2)
     background-color: #fff501
-  // &__in-progress
-  //   border-color: rgba(0, 0, 0, 0.2)
-  //   background-color: #fff501
-  // &__success
-  //   border-color: rgba(0, 0, 0, 0.2)
-  //   background-color: #8ff696
-  // &__active
-  //   background-color: #ffa400
-  //   color: #fff
-  // &__hollow
-  //   border-color: rgba(0, 0, 0, 0.2)
-  //   background-color: white
-
-
+    &::before
+      content: "published"
+  &__draft
+    border-color: rgba(0, 0, 0, 0.2)
+    background-color: #FFF
+    &::before
+      content: "draft"
 
 
 //Bootstrap Overrides

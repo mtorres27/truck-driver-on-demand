@@ -11,6 +11,7 @@ Rails.application.routes.draw do
   match '/company_profile_edit'     => 'main#company_profile_edit',   via: :get
   match '/job_detail'               => 'main#job_detail',             via: :get
   match '/job_post_form'            => 'main#job_post_form',          via: :get
+  match '/company_profile'          => 'main#company_profile',        via: :get
 
   mount ActionCable.server => '/cable'
 
