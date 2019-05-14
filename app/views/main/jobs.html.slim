@@ -1,18 +1,20 @@
 =render "header"
 =render "mobile_nav"
 
+.avj-section.avj-section__msg-subhead.d-block.mb-4
+  .container
+    .avj-subhead
+      h4.ellipsis.m-0 Job Posts
+      .w-100.d-flex.align-items-center.justify-content-end
+        button.btn.btn-primary.btn-sm type="submit"
+          | Post a Job
+
 .avj-section.avj-section__main
-  .container.container__content
-    .d-flex.flex-row.justify-content-between.align-items-baseline
-      h2
-        | Job Posts
-      button.btn.btn-primary type="submit"
-        | Post a Job
-        
+  .container        
     .avj-job-item
       .avj-caption1.avj-text-color-black2
         | Posted Aprit 24, 2019
-      a.avj-text-color-black href=""
+      a.avj-text-color-black href="/job_detail"
         .avj-body1.avj-text-emphasize
           | Tech needed for 2 day job for installation
         .avj-body2
