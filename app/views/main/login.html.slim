@@ -1,0 +1,36 @@
+/*Desktop Navigation*/
+=render "header"
+=render "mobile_nav"
+
+.avj-section.avj-section__main
+  .container.container__content
+    h2
+      | Hey there, login to get started
+    form
+      .row
+        .col-md-8
+          .form-group
+            label.avj-caption1 for="keywords"
+              | Email Address
+            input.form-control.avj-body2 type="text" id="keywords" aria-describedby="keywords" placeholder="Enter your email address"
+      .row  
+        .col-md-8
+          .form-group
+            label.avj-caption1 for="keywords"
+              | Password
+            input.form-control.avj-body2 type="password" id="keywords" aria-describedby="keywords" placeholder="Enter your email address"
+      .row.mb-4  
+        .col-md-8
+          .d-flex.align-items-center
+            button.btn.btn-primary.mr-4 type="submit"
+              | Login to AV Junction
+            a.avj-body2 href=""
+              | Forgot Password
+      .row
+        .col-md-8
+          .avj-body2
+            | Haven't got an account? 
+            a.span 
+              | Register Here.    
+
+=render "footer"
