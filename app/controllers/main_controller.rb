@@ -1,10 +1,10 @@
 class MainController < ApplicationController
   before_action :redirect_if_logged_in, only: [:index]
 
-  def login 
+  def login
   end
 
-  def company_register 
+  def company_register
   end
 
   def search_professionals
@@ -28,17 +28,23 @@ class MainController < ApplicationController
   def job_form
   end
 
-  def company_profile 
+  def company_profile
   end
 
-  def company_profile_edit 
+  def company_profile_edit
   end
 
-  def company_profile 
+  def company_user_edit
   end
 
-  def company_profile_edit 
+
+  def avpro_profile
   end
+
+
+
+
+
 
   def index
   end
