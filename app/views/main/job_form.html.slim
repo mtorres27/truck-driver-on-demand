@@ -1,0 +1,339 @@
+=render "header"
+=render "mobile_nav"
+
+.avj-section.avj-section__msg-subhead.d-block.mb-4
+  .container
+    .avj-subhead
+      h4.ellipsis.m-0 New Job Post
+      .d-flex.align-items-center.justify-content-end
+        button.btn.btn-outline-primary.btn-sm.mr-2 type="submit"
+          | Cancel
+        button.btn.btn-outline-primary.btn-sm.mr-2 type="submit"
+          | Draft
+        button.btn.btn-primary.btn-sm type="submit"
+          | Post
+
+.avj-section.avj-section__main
+  .container.container__content
+    form
+      .row
+        .col-md-4.col-12
+          h2 
+            | Describe the job.
+            br/
+            | In 50-75 words.
+        .col-md-8.col-12
+          .form-group
+            label.avj-caption1 for="keywords"
+              | Job Title
+            input.form-control.avj-body2 type="text" id="keywords" aria-describedby="keywords" placeholder="Job Title"
+          
+          .form-group
+            label.avj-caption1 for="keywords"
+              | Job Description
+            textarea.form-control.avj-body2 type="text" id="keywords" aria-describedby="keywords" placeholder="Job Description" rows="6" height="200px"
+      .row.mb-2
+        .col
+          .dropdown-divider
+      
+      .row
+        .col-md-4.col-12
+          h2 Where is the opportunity located?
+        .col-md-8.col-12
+          .row
+            .col-md-6
+              .form-group
+                label.avj-caption1 for="keywords"
+                  | Country
+                select.form-control.avj-body2 id="country"
+                  option Select
+            .col-md-6
+              .form-group
+                label.avj-caption1 for="keywords"
+                  | State/Province
+                select.form-control.avj-body2 id="country"
+                  option Select
+            .col-md-6
+              .form-group
+                label.avj-caption1 for="keywords"
+                  | City
+                input.form-control.avj-body2 type="text" id="keywords" aria-describedby="keywords" placeholder="HQ Address"
+            .col-md-6
+              .form-group
+                label.avj-caption1 for="keywords"
+                  | ZIP/Postal Code
+                input.form-control.avj-body2 type="text" id="keywords" aria-describedby="keywords" placeholder="HQ Address"
+        
+      .row.mb-2
+        .col
+          .dropdown-divider
+
+      .row.mb-2
+        .col
+          h2 We match AV professionals to your jobs with the below items. Check all that apply.
+      
+      .row
+        .col-md-4.col-12.d-md-block.d-none
+          h2 Select the skills related to this job
+          
+        .col-md-8.col-12
+          .row
+            .col-12
+              .form-group
+                label.avj-body1 for="Job_types"
+                  | Special Skills
+                .row
+                  .col-md-4.col-6
+                    .form-check
+                      input.form-check-input type="checkbox" id="agreeterms"
+                      label.form-check-label.avj-body2 for="agreeterms"
+                        | Audio 
+                  .col-md-4.col-6
+                    .form-check
+                      input.form-check-input type="checkbox" id="agreeterms"
+                      label.form-check-label.avj-body2 for="agreeterms"
+                        | Auto Cad  
+                  .col-md-4.col-6
+                    .form-check
+                      input.form-check-input type="checkbox" id="agreeterms"
+                      label.form-check-label.avj-body2 for="agreeterms"
+                        | Cable Pull
+                  .col-md-4.col-6
+                    .form-check
+                      input.form-check-input type="checkbox" id="agreeterms"
+                      label.form-check-label.avj-body2 for="agreeterms"
+                        | Cable Termination 
+                  .col-md-4.col-6
+                    .form-check
+                      input.form-check-input type="checkbox" id="agreeterms"
+                      label.form-check-label.avj-body2 for="agreeterms"
+                        | Camera 
+                  .col-md-4.col-6
+                    .form-check
+                      input.form-check-input type="checkbox" id="agreeterms"
+                      label.form-check-label.avj-body2 for="agreeterms"
+                        | Digital Content
+                  .col-md-4.col-6
+                    .form-check
+                      input.form-check-input type="checkbox" id="agreeterms"
+                      label.form-check-label.avj-body2 for="agreeterms"
+                        | Digital Signage 
+                  .col-md-4.col-6
+                    .form-check
+                      input.form-check-input type="checkbox" id="agreeterms"
+                      label.form-check-label.avj-body2 for="agreeterms"
+                        | Drafting
+                  .col-md-4.col-6
+                    .form-check
+                      input.form-check-input type="checkbox" id="agreeterms"
+                      label.form-check-label.avj-body2 for="agreeterms"
+                        | Flat Panel Displays
+                  .col-md-4.col-6
+                    .form-check
+                      input.form-check-input type="checkbox" id="agreeterms"
+                      label.form-check-label.avj-body2 for="agreeterms"
+                        | General Laborer 
+                  .col-md-4.col-6
+                    .form-check
+                      input.form-check-input type="checkbox" id="agreeterms"
+                      label.form-check-label.avj-body2 for="agreeterms"
+                        | Graphics 
+                  .col-md-4.col-6
+                    .form-check
+                      input.form-check-input type="checkbox" id="agreeterms"
+                      label.form-check-label.avj-body2 for="agreeterms"
+                        | Installation 
+                  .col-md-4.col-6
+                    .form-check
+                      input.form-check-input type="checkbox" id="agreeterms"
+                      label.form-check-label.avj-body2 for="agreeterms"
+                        | Interactive Displays 
+                  .col-md-4.col-6
+                    .form-check
+                      input.form-check-input type="checkbox" id="agreeterms"
+                      label.form-check-label.avj-body2 for="agreeterms"
+                        | LED Lighting 
+                  .col-md-4.col-6
+                    .form-check
+                      input.form-check-input type="checkbox" id="agreeterms"
+                      label.form-check-label.avj-body2 for="agreeterms"
+                        | Programming 
+                              
+                      
+            .col-12
+              .form-group
+                label.avj-body1 for="Job_types"
+                  | Manufacturers 
+                .row
+                  .col-md-4.col-6
+                    .form-check
+                      input.form-check-input type="checkbox" id="agreeterms"
+                      label.form-check-label.avj-body2 for="agreeterms"
+                        | Absen 
+                  .col-md-4.col-6
+                    .form-check
+                      input.form-check-input type="checkbox" id="agreeterms"
+                      label.form-check-label.avj-body2 for="agreeterms"
+                        | AMX
+                  .col-md-4.col-6
+                    .form-check
+                      input.form-check-input type="checkbox" id="agreeterms"
+                      label.form-check-label.avj-body2 for="agreeterms"
+                        | Atlas
+                  .col-md-4.col-6
+                    .form-check
+                      input.form-check-input type="checkbox" id="agreeterms"
+                      label.form-check-label.avj-body2 for="agreeterms"
+                        | Avenview
+                  .col-md-4.col-6
+                    .form-check
+                      input.form-check-input type="checkbox" id="agreeterms"
+                      label.form-check-label.avj-body2 for="agreeterms"
+                        | Avocor
+                  .col-md-4.col-6
+                    .form-check
+                      input.form-check-input type="checkbox" id="agreeterms"
+                      label.form-check-label.avj-body2 for="agreeterms"
+                        | Barco
+                  .col-md-4.col-6
+                    .form-check
+                      input.form-check-input type="checkbox" id="agreeterms"
+                      label.form-check-label.avj-body2 for="agreeterms"
+                        | Biamp
+                  .col-md-4.col-6
+                    .form-check
+                      input.form-check-input type="checkbox" id="agreeterms"
+                      label.form-check-label.avj-body2 for="agreeterms"
+                        | Brightsign
+
+      
+      
+      
+      .row.mb-2
+        .col
+          .dropdown-divider
+      
+      .row
+        .col-md-4.col-12.d-md-block.d-none
+          h2 Select the job types relevant for this job
+        .col-md-8.col-12
+          .row
+            .col-12
+              .form-group
+                label.avj-body1 for="Job_types"
+                  | System Integration 
+                .row
+                  .col-6
+                    .form-check
+                      input.form-check-input type="checkbox" id="agreeterms"
+                      label.form-check-label.avj-body2 for="agreeterms"
+                        | Broadcast 
+                  .col-6  
+                    .form-check
+                      input.form-check-input type="checkbox" id="agreeterms"
+                      label.form-check-label.avj-body2 for="agreeterms"
+                        | Government Installation 
+                  .col-6  
+                    .form-check
+                      input.form-check-input type="checkbox" id="agreeterms"
+                      label.form-check-label.avj-body2 for="agreeterms"
+                        | House of Worship
+                  .col-6  
+                    .form-check
+                      input.form-check-input type="checkbox" id="agreeterms"
+                      label.form-check-label.avj-body2 for="agreeterms"
+                        | Retail Installation 
+                  .col-6  
+                    .form-check
+                      input.form-check-input type="checkbox" id="agreeterms"
+                      label.form-check-label.avj-body2 for="agreeterms"
+                        | Commercial Installation 
+                  .col-6 
+                    .form-check
+                      input.form-check-input type="checkbox" id="agreeterms"
+                      label.form-check-label.avj-body2 for="agreeterms"
+                        | Higher Education
+                  .col-6  
+                    .form-check
+                      input.form-check-input type="checkbox" id="agreeterms"
+                      label.form-check-label.avj-body2 for="agreeterms"
+                        | K12 Education
+                  .col-6  
+                    .form-check
+                      input.form-check-input type="checkbox" id="agreeterms"
+                      label.form-check-label.avj-body2 for="agreeterms"
+                        | Corporate Installation
+                  .col-6  
+                    .form-check
+                      input.form-check-input type="checkbox" id="agreeterms"
+                      label.form-check-label.avj-body2 for="agreeterms"
+                        | Hospitality
+                  .col-6  
+                    .form-check
+                      input.form-check-input type="checkbox" id="agreeterms"
+                      label.form-check-label.avj-body2 for="agreeterms"
+                        | Residential Installation
+                              
+                      
+            .col-12
+              .form-group
+                label.avj-body1 for="Job_types"
+                  | Live Events, Staging and Rental 
+                .row
+                  .col-md-6
+                    .form-check
+                      input.form-check-input type="checkbox" id="agreeterms"
+                      label.form-check-label.avj-body2 for="agreeterms"
+                        | Concerts 
+                    .form-check
+                      input.form-check-input type="checkbox" id="agreeterms"
+                      label.form-check-label.avj-body2 for="agreeterms"
+                        | Government Meetings
+                    .form-check
+                      input.form-check-input type="checkbox" id="agreeterms"
+                      label.form-check-label.avj-body2 for="agreeterms"
+                        | Special Events
+                    .form-check
+                      input.form-check-input type="checkbox" id="agreeterms"
+                      label.form-check-label.avj-body2 for="agreeterms"
+                        | Theatres
+                  .col-md-6  
+                    .form-check
+                      input.form-check-input type="checkbox" id="agreeterms"
+                      label.form-check-label.avj-body2 for="agreeterms"
+                        | Corporate Meetings
+                    .form-check
+                      input.form-check-input type="checkbox" id="agreeterms"
+                      label.form-check-label.avj-body2 for="agreeterms"
+                        | House of Worship
+                    .form-check
+                      input.form-check-input type="checkbox" id="agreeterms"
+                      label.form-check-label.avj-body2 for="agreeterms"
+                        | Sporting Events
+                    .form-check
+                      input.form-check-input type="checkbox" id="agreeterms"
+                      label.form-check-label.avj-body2 for="agreeterms"
+                        | Trade Shows
+      .row.mb-2
+        .col
+          .dropdown-divider  
+
+
+      .row.mb-4
+        .col-12.d-flex.align-items-center.justify-content-end
+          button.btn.btn-outline-primary.mr-4 type="submit"
+            | Cancel
+          button.btn.btn-outline-primary.mr-4 type="submit"
+            | Save Draft
+          button.btn.btn-primary type="submit"
+            | Post Job
+
+
+    
+    
+
+      
+
+
+      
+=render "footer"      
