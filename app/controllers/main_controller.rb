@@ -34,6 +34,20 @@ class MainController < ApplicationController
   def company_profile_edit 
   end
 
+  def company_user_edit 
+  end
+
+
+  def avpro_profile 
+  end
+
+
+
+
+
+
+
+
   def index
   end
 

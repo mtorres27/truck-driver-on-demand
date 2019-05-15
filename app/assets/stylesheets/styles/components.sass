@@ -84,8 +84,7 @@ img
 .avj-header
   display: flex
   justify-content: space-between
-  @media (max-width: $breakpoint-tablet)
-    justify-content: center
+  align-items: center
 
 .avj-head-logo
   display: flex
@@ -110,8 +109,7 @@ img
   height: $avj-nav-height
   margin-right: 24px
   color: $avj-color-primary
-  &:last-child
-    margin-right: 0px
+
 
 .avj-nav-mobile
   display: flex
@@ -196,20 +194,13 @@ img
   &__published
     border-color: rgba(0, 0, 0, 0.2)
     background-color: #fff501
-  // &__in-progress
-  //   border-color: rgba(0, 0, 0, 0.2)
-  //   background-color: #fff501
-  // &__success
-  //   border-color: rgba(0, 0, 0, 0.2)
-  //   background-color: #8ff696
-  // &__active
-  //   background-color: #ffa400
-  //   color: #fff
-  // &__hollow
-  //   border-color: rgba(0, 0, 0, 0.2)
-  //   background-color: white
-
-
+    &::before
+      content: "published"
+  &__draft
+    border-color: rgba(0, 0, 0, 0.2)
+    background-color: #FFF
+    &::before
+      content: "draft"
 
 
 //Bootstrap Overrides
@@ -225,14 +216,10 @@ textarea
       margin-bottom: 0px
 
 .btn
-  //padding: 8px 24px
   text-transform: uppercase
   letter-spacing: 1px
-  //height: 48px
   @media (max-width: $breakpoint-tablet)
-    //padding: 8px 12px
     line-height: 1.4
-    //height: 40px
   &-primary
     background-color: $avj-color-primary
     &:hover
@@ -241,7 +228,12 @@ textarea
     border-color: $avj-color-primary
     &:hover
       background-color: $avj-color-primary
-
+  &-secondary
+    background-color: $avj-color-secondary
+    border-color: $avj-color-secondary
+    &:hover, &:not(:disabled):not(.disabled):active
+      background-color: $avj-color-secondary-dark
+      border-color: $avj-color-secondary-dark
 
 
 .form-control, select.form-control:not([size]):not([multiple])
