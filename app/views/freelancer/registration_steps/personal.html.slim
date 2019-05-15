@@ -1,6 +1,5 @@
 - content_for :secondary do
   h1.text-center.heading-h1 = "Register as a Freelancer"
-  = render partial: "shared/registration_progress_bar", locals: { step: 2 }
   = simple_form_for(current_freelancer_profile, url: wizard_path) do |f|
     .grid-h
       .grid-cell.grid-cell--100

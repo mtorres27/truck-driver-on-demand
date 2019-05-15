@@ -1,23 +1,10 @@
-= render partial: "/company/shared/profile_sub_nav"
-
-- content_for :title, "AVJunction - Profile"
-
-- content_for :secondary do
-  .action-bar
-    h2.heading-h2.heading-h2--action-bar Profile Info
-    - if current_user.role == "Owner"
-      .action-bar--actions
-        a.btn.btn--primary href=edit_company_profile_path
-          | Edit
+.avj-section.avj-section__msg-subhead.d-block.mb-4
+  .container
+    .avj-subhead
+      h4.ellipsis.m-0= current_company.name
+      a.btn.btn-primary.btn-sm href=edit_company_profile_path
+        | Edit
 
 
-  - if current_company.header_source == 'default'
-    .profile__wallpaper style="background-image: url(#{image_path('profile_header/default_wallpaper.jpg')});"
-  - elsif current_company.profile_header_url.include?("missing") || current_company.header_source == "color"
-    .profile__wallpaper style="background-color: #{ current_company.header_color.include?("#") ? "" : "#"}#{current_company.header_color}"
-  - else
-    .profile__wallpaper style="background-image: url(#{current_company.profile_header_url.include?("missing") ? "" : current_company.profile_header_url});"
-
-
-  = render "shared/profile_company", company: current_company
+= render "shared/profile_company", company: current_company
 

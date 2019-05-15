@@ -1,6 +1,10 @@
 class Company::JobsController < Company::BaseController
-  before_action :set_job, except: [:job_countries, :new, :create]
-  before_action :authorize_job, except: [:job_countries, :new, :create]
+  before_action :set_job, except: [:job_countries, :new, :create, :index]
+  before_action :authorize_job, except: [:job_countries, :new, :create, :index]
+
+  def index
+    @jobs = current_company.jobs
+  end
 
   def show
     redirect_to company_job_job_build_path(@job.creation_step, job_id: @job.id) unless @job.creation_completed?
@@ -10,7 +14,6 @@ class Company::JobsController < Company::BaseController
   end
 
   def update
-    validate_ownership
     if @job.errors.size > 0
       render :edit
       return
@@ -40,7 +43,7 @@ class Company::JobsController < Company::BaseController
 
   def destroy
     @job.destroy
-    redirect_to company_projects_path, notice: "Job removed."
+    redirect_to company_jobs_path, notice: "Job removed."
   end
 
   def freelancer_matches
@@ -116,15 +119,8 @@ class Company::JobsController < Company::BaseController
     authorize @job
   end
 
-  def validate_ownership
-    unless job_params[:project_id].present? && current_company.projects.find(job_params[:project_id])
-      @job.errors[:project_id] << "Invalid project selected"
-    end
-  end
-
   def job_params
     params.require(:job).permit(
-      :project_id,
       :title,
       :summary,
       :scope_of_work,

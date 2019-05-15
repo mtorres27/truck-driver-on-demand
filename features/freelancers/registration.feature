@@ -5,7 +5,7 @@ Feature: Freelancer Registration
 Scenario: Filling fields for Step 1
   Given I go to the homepage
   When I press "Register as a Freelancer"
-  Then I should see "Register as a Freelancer"
+  Then I should see "By creating an account, you agree to the AV JunctionTerms & Conditions,PrivacyandCode of Conduct"
   When I fill in the fields
     | First Name        | John          |
     | Last Name         | Doe           |
@@ -13,7 +13,7 @@ Scenario: Filling fields for Step 1
     | Enter a password  | password      |
     | Confirm password  | password      |
   And I check "freelancer_accept_terms_of_service"
-  And I press "Continue"
+  And I press "Next Step"
   Then I should be on freelancer registration step 2
 
 Scenario: Filling fields for Step 2

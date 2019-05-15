@@ -6,8 +6,16 @@ Rails.application.routes.draw do
   match '/message_detail'           => 'main#message_detail',         via: :get
   match '/search_results'           => 'main#search_results',         via: :get
   match '/jobs'                     => 'main#jobs',                   via: :get
+<<<<<<< HEAD
   match '/job_detail'               => 'main#job_detail',             via: :get
   match '/job_form'                 => 'main#job_form',               via: :get
+=======
+  match '/job_form'                 => 'main#job_form',               via: :get
+  match '/company_profile_style'    => 'main#company_profile',        via: :get
+  match '/company_profile_edit'     => 'main#company_profile_edit',   via: :get
+  match '/job_detail'               => 'main#job_detail',             via: :get
+  match '/job_post_form'            => 'main#job_post_form',          via: :get
+>>>>>>> baa6e4726e87f23ec924389ea97bb0f498010868
   match '/company_profile'          => 'main#company_profile',        via: :get
   match '/company_profile_edit'     => 'main#company_profile_edit',   via: :get
   match '/company_user_edit'        => 'main#company_user_edit',      via: :get
@@ -111,7 +119,7 @@ Rails.application.routes.draw do
     resource :profile, only: [:show, :edit, :update]
     resources :registration_steps, only: [:show, :update, :index] do
       member do
-        post :skip
+        post :previous
       end
     end
 
@@ -132,12 +140,11 @@ Rails.application.routes.draw do
     get "freelancers/:id/invite_to_quote", to: "freelancers#invite_to_quote"
 
     resources :applicants
-    resources :projects
     resources :messaging, only: [:index]
 
     get 'job_country_currency', to: 'jobs#job_countries', as: 'job_country_currency'
 
-    resources :jobs, except: [:index] do
+    resources :jobs do
       resources :job_build, only: [:index, :show, :update, :create] do
         member do
           post :skip
@@ -185,11 +192,6 @@ Rails.application.routes.draw do
 
     resource :company do
       get :download_csv
-    end
-
-    resources :projects, except: [:new, :create] do
-      get :disable, on: :member
-      get :enable, on: :member
     end
 
     resources :jobs, except: [:new, :create] do

@@ -76,9 +76,6 @@ RSpec.describe Company::RegistrationStepsController, type: :controller do
       context "when job types are selected" do
         let(:company_params) do
           {
-            job_types: {
-              system_integration: "1"
-            },
             job_markets: {
               broadcast: "1"
             }
@@ -87,44 +84,6 @@ RSpec.describe Company::RegistrationStepsController, type: :controller do
 
         it "updates the company with the correct params" do
           put :update, params: { id: :job_info, company: company_params }
-          expect(company_user.company.reload).to have_attributes(company_params)
-        end
-      end
-    end
-
-    describe "step :profile" do
-      before do
-        company_user.company.update_attribute(:registration_step, "profile")
-      end
-
-      context "when user does not fill the fields" do
-        let(:company_params) { { description: nil, established_in: nil, number_of_employees: nil, number_of_offices: nil, website: nil, area: nil} }
-
-        it "does not update the company" do
-          put :update, params: { id: :profile, company: company_params }
-          expect(company_user.company.reload.description).not_to be_empty
-          expect(company_user.company.established_in).not_to be_nil
-          expect(company_user.company.number_of_employees).not_to be_empty
-          expect(company_user.company.number_of_offices).not_to be_nil
-          expect(company_user.company.website).not_to be_empty
-          expect(company_user.company.area).not_to be_empty
-        end
-      end
-
-      context "when user fills the fields" do
-        let(:company_params) {
-          {
-            description: "my description",
-            established_in: 2018,
-            number_of_employees: "one_to_ten",
-            number_of_offices: 1,
-            website: "www.avjunction.com",
-            area: "USA"
-          }
-        }
-
-        it "updates profile information" do
-          put :update, params: { id: :profile, company: company_params }
           expect(company_user.company.reload).to have_attributes(company_params)
         end
       end

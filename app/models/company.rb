@@ -62,8 +62,7 @@ class Company < ApplicationRecord
   include AvatarUploader[:avatar]
   include ProfileHeaderUploader[:profile_header]
 
-  has_many :projects, -> { order(updated_at: :desc) }, dependent: :destroy
-  has_many :jobs, dependent: :destroy
+  has_many :jobs, -> { order(updated_at: :desc) }, dependent: :destroy
   has_many :applicants, dependent: :destroy
   has_many :messages, -> { order(created_at: :desc) }, as: :authorable
   has_many :freelancer_reviews, dependent: :nullify
@@ -76,12 +75,11 @@ class Company < ApplicationRecord
   has_many :notifications, as: :receivable, dependent: :destroy
 
   attr_accessor :accept_terms_of_service, :accept_privacy_policy, :accept_code_of_conduct,
-                :enforce_profile_edit, :user_type, :skip_step
+                :enforce_profile_edit, :user_type
 
   validates :phone_number, length: { minimum: 7 }, allow_blank: true
-  validates :name, :country, :city, presence: true, on: :update,  if: :step_job_info?
+  validates :name, :country, :city, :website, :area, presence: true, on: :update,  if: :step_job_info?
   validates :job_types, presence: true, on: :update, if: :step_profile?
-  validates :description, :established_in, :number_of_employees, :number_of_offices, :website, :area, presence: true, on: :update, if: -> { registration_completed? && !skip_step }
 
   enumerize :contract_preference, in: [:prefer_fixed, :prefer_hourly, :prefer_daily]
 
@@ -145,6 +143,14 @@ class Company < ApplicationRecord
 
   def owner
     company_users.where(role: 'Owner').first
+  end
+
+  def city_state_province
+    "#{city}#{ ", #{state}" unless state.blank?}"
+  end
+
+  def postal_code_country
+    "#{"#{postal_code}, " unless postal_code.blank?}#{ I18n.t("enumerize.country.#{country}") }"
   end
 
   def open_jobs
@@ -257,11 +263,6 @@ class Company < ApplicationRecord
 
   def registration_completed?
     registration_step == "wicked_finish"
-  end
-
-  def profile_form_filled?
-    avatar.present? && description.present? && established_in.present? && area.present? &&
-    number_of_employees.present? && number_of_offices.present? && website.present?
   end
 
   def full_name

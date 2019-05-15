@@ -4,7 +4,6 @@ describe Company::FreelancersController, type: :controller  do
   login_company
   let(:company) { subject.current_user.company }
   let(:job) { create(:job,
-                     project: create(:project, company: company),
                      company: company,
                      address: 'Toronto',
                      state_province: 'ON',

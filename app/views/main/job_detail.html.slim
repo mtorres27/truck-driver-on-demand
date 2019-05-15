@@ -1,4 +1,4 @@
-=render "header"
+= render "header"
 =render "mobile_nav"
 
 .avj-section.avj-section__msg-subhead.d-block.mb-4
@@ -10,7 +10,7 @@
           | Edit
 
 .avj-section.avj-section__main
-  .container.container__content    
+  .container.container__content
     .avj-job-item
       .avj-caption1.avj-text-color-black2.mb-0
         | Posted Aprit 24, 2019
@@ -25,17 +25,17 @@
         .zmdi.zmdi-pin.avj-text-color-black2.avj-text-sm.mr-2
         .avj-caption1.avj-text-color-black2
           | Boston, Massachusetts
-    
-    ul#myTab.nav.nav-tabs.mb-4 role="tablist" 
+
+    ul#myTab.nav.nav-tabs.mb-4 role="tablist"
       li.nav-item
         a#replies-tab.nav-link.active aria-controls="replies" aria-selected="true" data-toggle="tab" href="#replies" role="tab"  4 Replies
       li.nav-item
         a#matches-tab.nav-link aria-controls="matches" aria-selected="false" data-toggle="tab" href="#matches" role="tab"  6 Matches
     #myTabContent.tab-content
       #replies.tab-pane.fade.show.active aria-labelledby="replies-tab" role="tabpanel"
-        =render "replies_matches"
+        = render "replies_matches"
       #matches.tab-pane.fade aria-labelledby="matches-tab" role="tabpanel"
-        =render "replies_matches"
+        = render "replies_matches"
 
-      
-=render "footer"      
+
+  = render "footer"

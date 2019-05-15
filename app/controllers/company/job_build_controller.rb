@@ -63,7 +63,6 @@ class Company::JobBuildController < Company::BaseController
 
   def job_params
     params.require(:job).permit(
-        :project_id,
         :title,
         :summary,
         :scope_of_work,
