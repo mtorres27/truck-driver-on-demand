@@ -145,6 +145,14 @@ class Company < ApplicationRecord
     company_users.where(role: 'Owner').first
   end
 
+  def city_state_province
+    "#{city}#{ ", #{state}" unless state.blank?}"
+  end
+
+  def postal_code_country
+    "#{"#{postal_code}, " unless postal_code.blank?}#{ I18n.t("enumerize.country.#{country}") }"
+  end
+
   def open_jobs
     jobs.where(state: :published)
   end

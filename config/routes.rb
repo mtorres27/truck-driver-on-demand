@@ -8,7 +8,7 @@ Rails.application.routes.draw do
   match '/jobs'                     => 'main#jobs',                   via: :get
   match '/job_detail'               => 'main#job_detail',             via: :get
   match '/job_form'                 => 'main#job_form',               via: :get
-  match '/company_profile'          => 'main#company_profile',        via: :get
+  match '/company_profile_style'    => 'main#company_profile',        via: :get
   match '/company_profile_edit'     => 'main#company_profile_edit',   via: :get
 
   mount ActionCable.server => '/cable'
