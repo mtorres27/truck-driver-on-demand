@@ -24,4 +24,4 @@
       a.avj-caption1 href=""
         | 5 Replies
       - if job.address.present?
-        = link_to pluralize(job.matches.count, "Match"), freelancer_matches_company_job_path(job), class: "avj-caption1"
+        = link_to pluralize(job.matches.count, "Match"), company_job_url(job), class: "avj-caption1"

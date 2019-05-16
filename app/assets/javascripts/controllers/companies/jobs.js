@@ -33,18 +33,6 @@ $(document).on("turbolinks:load", function () {
         }
     });
 
-    // Submit search on distance change
-    $(".company-freelancer-matches__distance").on("change", function() {
-        $("#company-freelancer-matches__form").submit()
-    })
-
-    if ($('.js--country-select').val() != "" && $('.js--country-select').val() != undefined ) {
-        get_currencies($('.js--country-select').val())
-    }
-    $('.js--country-select').on('change', function () {
-        get_currencies($(this).val())
-    });
-
     $('#replies-tab').on('click', function() {
         $(this).addClass('active');
         $('#matches-tab').removeClass('active');
@@ -54,23 +42,3 @@ $(document).on("turbolinks:load", function () {
         $('#replies-tab').removeClass('active');
     });
 });
-
-function get_currencies(country) {
-    $.get("/job_country_currency", {country: country})
-        .done(function (data) {
-            var select = $('#job_currency');
-            select.empty().append(data);
-        });
-}
-
-function inviteToQuote(freelancer_id, job_id) {
-    $.get("/company/freelancers/"+ freelancer_id + "/invite_to_quote", { job_to_invite: job_id})
-        .done(function( data ) {
-            if (data.success == 1) {
-                $(".js--invite-to-quote-matches-btn-" + freelancer_id).html(data.message);
-            } else {
-                $(".js--invite-to-quote-matches-btn-" + freelancer_id).html(data.message);
-            }
-            $(".js--invite-to-quote-matches-btn-" + freelancer_id).attr("disabled", true)
-        });
-}

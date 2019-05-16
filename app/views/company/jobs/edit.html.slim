@@ -1,18 +1,4 @@
 - controller = current_user.company_user? ? :company : :admin
 = simple_form_for([controller, @job]) do |f|
-  .avj-section.avj-section__msg-subhead.d-block.mb-4
-    .container
-      .avj-subhead
-        h4.ellipsis.m-0 New Job Post
-        .d-flex.align-items-center.justify-content-end
-          a.btn.btn-outline-primary.btn-sm.mr-2 href=company_jobs_url
-            | Cancel
-          - unless @job.new_record?
-            = link_to "Delete", company_job_path(@job), data: {confirm: "Are you sure you want to permanently delete this job posting?"}, method: :delete, class: "btn btn-danger btn-sm mr-2"
-          - if (action_name == "new" || action_name == "create") && @job.state != 'published'
-            = f.button :submit, "Draft", class: "btn btn-outline-primary btn-sm mr-2"
-            = f.button :button, "Post", name: "job[state]", value: "published", class: "btn btn-primary btn-sm"
-          - else
-            = f.button :submit, "Update", class: "btn btn-primary btn-sm"
-
+  = render "edit_job_sub_nav", f: f
   = render "edit_job_form", company: current_company, f: f

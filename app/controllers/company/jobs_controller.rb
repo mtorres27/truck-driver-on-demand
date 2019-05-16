@@ -46,10 +46,6 @@ class Company::JobsController < Company::BaseController
       return
     end
 
-    if job_params[:state] == 'published'
-      params[:job][:state] = 'created'
-    end
-
     if @job.update(job_params)
       if @job.state == 'published'
         flash[:notice] = "This job has been published."
@@ -71,11 +67,6 @@ class Company::JobsController < Company::BaseController
   def destroy
     @job.destroy
     redirect_to company_jobs_path, notice: "Job removed."
-  end
-
-  def freelancer_matches
-    get_matches
-    @jobs = current_company.jobs.where(state: "published").order(title: :asc)
   end
 
   def mark_as_finished
@@ -150,25 +141,11 @@ class Company::JobsController < Company::BaseController
     params.require(:job).permit(
       :title,
       :summary,
-      :scope_of_work,
-      :scope_file,
-      :budget,
       :country,
-      :currency,
-      :job_type,
-      :job_function,
-      :pay_type,
-      :starts_on,
-      :duration,
-      :freelancer_type,
-      :invite_only,
-      :scope_is_public,
-      :budget_is_public,
       :state,
       :address,
       :state_province,
-      attachments_attributes: [:id, :file, :title, :_destroy],
-      job_market: I18n.t("enumerize.system_integration_job_markets").keys + I18n.t("enumerize.live_events_staging_and_rental_job_markets").keys,
+      job_markets: I18n.t("enumerize.system_integration_job_markets").keys + I18n.t("enumerize.live_events_staging_and_rental_job_markets").keys,
       technical_skill_tags: I18n.t("enumerize.technical_skill_tags").keys,
       manufacturer_tags: I18n.t("enumerize.manufacturer_tags").keys,
     )

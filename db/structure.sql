@@ -944,64 +944,17 @@ CREATE TABLE jobs (
     title character varying,
     state character varying DEFAULT 'created'::character varying NOT NULL,
     summary text,
-    scope_of_work text,
-    budget numeric(10,2),
-    job_function character varying,
-    starts_on date,
-    ends_on date,
-    duration integer,
-    pay_type character varying,
-    freelancer_type character varying,
-    technical_skill_tags text,
-    invite_only boolean DEFAULT false NOT NULL,
-    scope_is_public boolean DEFAULT true NOT NULL,
-    budget_is_public boolean DEFAULT false NOT NULL,
-    working_days text[] DEFAULT '{}'::text[] NOT NULL,
-    working_time character varying,
-    contract_price numeric(10,2),
-    payment_schedule jsonb DEFAULT '"{}"'::jsonb NOT NULL,
-    reporting_frequency character varying,
-    require_photos_on_updates boolean DEFAULT false NOT NULL,
-    require_checkin boolean DEFAULT false NOT NULL,
-    require_uniform boolean DEFAULT false NOT NULL,
-    addendums text,
-    applicants_count integer DEFAULT 0 NOT NULL,
-    messages_count integer DEFAULT 0 NOT NULL,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
-    currency character varying,
     address character varying,
     lat numeric(9,6),
     lng numeric(9,6),
     formatted_address character varying,
-    contract_sent boolean DEFAULT false,
-    opt_out_of_freelance_service_agreement boolean DEFAULT false,
     country character varying,
-    scope_file_data text,
-    applicable_sales_tax numeric(10,2),
-    stripe_charge_id character varying,
-    stripe_balance_transaction_id character varying,
-    funds_available_on integer,
-    funds_available boolean DEFAULT false,
-    job_type citext,
-    job_market citext,
+    job_markets citext,
     manufacturer_tags citext,
-    company_plan_fees numeric(10,2) DEFAULT 0,
-    contracted_at timestamp without time zone,
     state_province character varying,
-    creation_step character varying,
-    plan_fee numeric(10,2) DEFAULT 0,
-    paid_by_company boolean DEFAULT false,
-    total_amount numeric(10,2),
-    tax_amount numeric(10,2),
-    stripe_fees numeric(10,2),
-    amount_subtotal numeric(10,2),
-    variable_pay_type character varying,
-    overtime_rate numeric(10,2),
-    payment_terms integer,
-    expired boolean DEFAULT false,
-    fee_schema json,
-    creator_id bigint
+    technical_skill_tags text
 );
 
 
@@ -1877,13 +1830,6 @@ CREATE INDEX index_jobs_on_company_id ON jobs USING btree (company_id);
 
 
 --
--- Name: index_jobs_on_creator_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_jobs_on_creator_id ON jobs USING btree (creator_id);
-
-
---
 -- Name: index_jobs_on_manufacturer_tags; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -2122,14 +2068,6 @@ ALTER TABLE ONLY freelancer_reviews
 
 
 --
--- Name: jobs fk_rails_f251f165d2; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY jobs
-    ADD CONSTRAINT fk_rails_f251f165d2 FOREIGN KEY (creator_id) REFERENCES users(id);
-
-
---
 -- PostgreSQL database dump complete
 --
 
@@ -2314,6 +2252,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20190417220517'),
 ('20190426172935'),
 ('20190503190656'),
-('20190509185605');
+('20190509185605'),
+('20190516194711');
 
 
