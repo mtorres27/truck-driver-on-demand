@@ -4,8 +4,8 @@
       a.avj-head-logo href=root_url
         = image_tag "avjlogo-2-0.png"
       .d-flex.justify-content-end.align-items-center
-        .avj-nav-desktop
-          - if current_user&.is_a?(CompanyUser) && current_company&.registration_step == "wicked_finish"
+        - if current_user&.is_a?(CompanyUser) && current_company&.registration_step == "wicked_finish"
+          .avj-nav-desktop
             .avj-nav-desktop-link
               = link_to "Search", company_root_path, class: "text-uppercase avj-text-emphasize"
             .avj-nav-desktop-link
@@ -18,5 +18,5 @@
               = link_to "Profile", company_profile_path, class: "text-uppercase avj-text-emphasize"
             .avj-nav-desktop-link
               = link_to "Logout", destroy_user_session_path, method: :delete, class: "text-uppercase avj-text-emphasize"
-        .avj-nav-kc
-          a.zmdi.zmdi-library href="https://www.avjunction.com/how-to-guide-av-company"
+          .avj-nav-kc
+            a.zmdi.zmdi-library href="https://www.avjunction.com/how-to-guide-av-company"
