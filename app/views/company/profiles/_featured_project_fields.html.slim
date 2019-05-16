@@ -1,21 +1,15 @@
-.featured-project__item
-  div
-    .freelancer-profile__image.float-left
+.row
+  .col-md-9.col-12
+    = f.input :name, as: :string, placeholder: "Project Name", label: "Project Name", label_html: { class: "avj-caption1" }
+  .col-md-3.col-8
+    .form-group
+      label.avj-caption1 for="keywords"
+        | Project Image
       - if !f.object.file_url.include?('missing.png')
-        a.authorable_attachment--full href=f.object.file_url target="_blank"
-          img src=f.object.file_url
-        .freelancer-profile__image-upload onclick="uploadFeaturedProject(#{f.index})"
-          span class="fa fa-camera"
+        img.mb-1.authorable_attachment--full src=f.object.file_url
+        a.zmdi.zmdi-camera onclick="uploadFeaturedProject(#{f.index})"
       - else
-        .authorable_attachment--full
-          img src=""
-        .freelancer-profile__image-upload onclick="uploadFeaturedProject()"
-          span class="fa fa-camera"
-
-  .nested_fields
-    .nested_fields-title
-      | Project Name
-
-      = f.input :name, as: :string, placeholder: "Enter a name for this project.", label: false
-      = f.file_field :file, label: false, :accept => 'image/png,image/gif,image/jpeg', class: "file-input--hidden"
+        img.mb-1.authorable_attachment--full src=""
+        a.zmdi.zmdi-camera onclick="uploadFeaturedProject()"
     = link_to_remove_association "X", f, { onClick: "hide_remove_association(this)"}
+  = f.file_field :file, label: false, :accept => 'image/png,image/gif,image/jpeg', class: "avj-hidden-important file-input--hidden"

@@ -15,6 +15,9 @@
           - if company.address.present?
             = company.address
             br/
+          - if company.line2.present?
+            = company.line2
+            br/
           = company.city_state_province
           br/
           = company.postal_code_country
