@@ -6,21 +6,17 @@ Rails.application.routes.draw do
   match '/message_detail'           => 'main#message_detail',         via: :get
   match '/search_results'           => 'main#search_results',         via: :get
   match '/jobs'                     => 'main#jobs',                   via: :get
-<<<<<<< HEAD
-  match '/job_detail'               => 'main#job_detail',             via: :get
-  match '/job_form'                 => 'main#job_form',               via: :get
-=======
   match '/job_form'                 => 'main#job_form',               via: :get
   match '/company_profile_style'    => 'main#company_profile',        via: :get
   match '/company_profile_edit'     => 'main#company_profile_edit',   via: :get
   match '/job_detail'               => 'main#job_detail',             via: :get
   match '/job_post_form'            => 'main#job_post_form',          via: :get
->>>>>>> baa6e4726e87f23ec924389ea97bb0f498010868
   match '/company_profile'          => 'main#company_profile',        via: :get
   match '/company_profile_edit'     => 'main#company_profile_edit',   via: :get
   match '/company_user_edit'        => 'main#company_user_edit',      via: :get
 
   match '/avpro_profile'            => 'main#avpro_profile',          via: :get
+  match '/avpro_profile_edit'       => 'main#avpro_profile_edit',     via: :get
 
   mount ActionCable.server => '/cable'
 

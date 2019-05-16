@@ -6,14 +6,14 @@
       .avj-nav-desktop
         - if current_user&.is_a?(CompanyUser) && current_company&.registration_step == "wicked_finish"
           .avj-nav-desktop-link
-            = link_to "Search", company_root_path, class: "avj-body2 avj-nav-desktop-link"
+            = link_to "Search", company_root_path, class: "avj-body2"
           .avj-nav-desktop-link
-            = link_to "Messages", company_messaging_index_path, class: "avj-body2 avj-nav-desktop-link"
+            = link_to "Messages", company_messaging_index_path, class: "avj-body2"
           .avj-nav-desktop-link
-            = link_to "Job Posts", company_jobs_path, class: "avj-body2 avj-nav-desktop-link"
+            = link_to "Job Posts", company_jobs_path, class: "avj-body2"
           .avj-nav-desktop-link
-            = link_to "Favourites", saved_company_freelancers_path, class: "avj-body2 avj-nav-desktop-link"
+            = link_to "Favourites", saved_company_freelancers_path, class: "avj-body2"
           .avj-nav-desktop-link
-            = link_to "Profile", company_profile_path, class: "avj-body2 avj-nav-desktop-link"
+            = link_to "Profile", company_profile_path, class: "avj-body2"
           .avj-nav-desktop-link
-            = link_to "Logout", destroy_user_session_path, method: :delete, class: "avj-body2 avj-nav-desktop-link"
+            = link_to "Logout", destroy_user_session_path, method: :delete, class: "avj-body2"

@@ -41,6 +41,8 @@ class MainController < ApplicationController
   def avpro_profile
   end
 
+  def avpro_profile_edit
+  end
 
 
 
