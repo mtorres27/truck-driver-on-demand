@@ -86,7 +86,6 @@ class Job < ApplicationRecord
   include ScopeFileUploader[:scope_file]
 
   belongs_to :company
-  belongs_to :creator, class_name: 'CompanyUser'
   has_many :applicants, -> { includes(:freelancer).order(updated_at: :desc) }, dependent: :destroy
   has_many :messages, -> { order(created_at: :desc) }, as: :receivable
   has_many :change_orders, -> { order(updated_at: :desc) }, dependent: :destroy
@@ -101,8 +100,6 @@ class Job < ApplicationRecord
   attr_accessor :send_contract, :accepted_applicant_id, :enforce_contract_creation, :save_draft
 
   after_save :check_if_should_do_geocode
-  after_save :accept_applicant, if: :enforce_contract_creation
-  after_create :set_creator_as_collaborator
 
   enumerize :job_type, in: I18n.t('enumerize.job_types').keys
 
@@ -125,31 +122,16 @@ class Job < ApplicationRecord
 
   enumerize :state, in: [
     :created,
-    :published,
-    :quoted,
-    :negotiated,
-    :contracted,
-    :completed
+    :published
   ], predicates: true, scope: true
 
-  validates :budget, presence: true, numericality: true, sane_price: true, if: -> { step_job_details? || creation_completed? }
-  validates :duration, numericality: { only_integer: true, greater_than_or_equal_to: 1 }, if: -> { step_job_details? || creation_completed? }
-  validates :starts_on, presence: true, if: -> { step_job_details? || creation_completed? }
-  validate :scope_or_file, if: -> { step_job_details? || creation_completed? }
-  validates :pay_type, inclusion: { in: pay_type.values }, allow_blank: true, if: :creation_completed?
-  validates :freelancer_type, inclusion: { in: freelancer_type.values }, allow_blank: true, if: :creation_completed?
-  validates :job_function, :job_market, :job_type, :freelancer_type, :pay_type, presence: true, if: :is_published?
-  validates :title, :summary, :address, :currency, :country, presence: true, if: -> { step_job_details? || is_published? }
-  validates :freelancer_type, :job_type, :job_market, :job_function, presence: true, if: -> { is_published? }
-  validates :accepted_applicant_id, presence: true, if: :enforce_contract_creation
-  validates :contract_price, :payment_terms, numericality: { greater_than_or_equal_to: 1 }, if: :enforce_contract_creation
-  validates :overtime_rate, numericality: { greater_than_or_equal_to: 1 }, allow_blank: true
-  validate :validate_sales_tax, if: :creation_completed?
+  validates :title, :summary, :address, :country, presence: true, if: :is_published?
 
   schema_validations except: :working_days
 
   serialize :technical_skill_tags
   serialize :manufacturer_tags
+  serialize :job_market
 
   audited
 
@@ -249,13 +231,6 @@ class Job < ApplicationRecord
   end
 
   private
-
-  def set_creator_as_collaborator
-    job_collaborators.create(user: creator)
-    unless creator.role == "Owner"
-      job_collaborators.create(user: company.owner)
-    end
-  end
 
   def scope_or_file
     if scope_of_work.blank? and scope_file_url.nil?

@@ -17,11 +17,10 @@
 .avj-section.avj-section__chat-input
   .container.containter__content
     = simple_form_for(:message, url: path, html: { class: "js--message-form avj-list-item m-0", data: { id: "#{authorable_type}-#{company.id}-#{freelancer.id}", company: company.id, freelancer: freelancer.id, type: authorable_type } }) do |f|
-      .d-flex.w-100
+      .d-flex.w-100.align-items-start
         = f.text_area :body, as: :string, placeholder: "Send a message to #{recipient_name}", label: false, maxlength: 5000, class: "js--message-input form-control avj-body1 mr-2"
-        = f.input :attachment, as: :file, label: false, input_html: {class: "js--message-attachment hidden"}
-        button#new-message__submit.btn.btn-link onClick= "validateMessage();"
-          .zmdi.zmdi-mail-send
+        button#new-message__submit.btn.btn-primary onClick= "validateMessage();"
+          | Send
     #new-message__validation-errors
 
 .avj-section.avj-section__main

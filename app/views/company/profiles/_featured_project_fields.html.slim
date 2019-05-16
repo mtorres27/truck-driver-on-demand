@@ -7,9 +7,12 @@
         | Project Image
       - if !f.object.file_url.include?('missing.png')
         img.mb-1.authorable_attachment--full src=f.object.file_url
-        a.zmdi.zmdi-camera onclick="uploadFeaturedProject(#{f.index})"
       - else
         img.mb-1.authorable_attachment--full src=""
-        a.zmdi.zmdi-camera onclick="uploadFeaturedProject()"
-    = link_to_remove_association "X", f, { onClick: "hide_remove_association(this)"}
+      .d-flex.justify-content-between
+        - if !f.object.file_url.include?('missing.png')
+          a.zmdi.zmdi-camera onclick="uploadFeaturedProject(#{f.index})"
+        - else
+          a.zmdi.zmdi-camera onclick="uploadFeaturedProject()"
+        = link_to_remove_association content_tag(:span, "", class: "zmdi zmdi-delete"), f, { onClick: "hide_remove_association(this)"}
   = f.file_field :file, label: false, :accept => 'image/png,image/gif,image/jpeg', class: "avj-hidden-important file-input--hidden"

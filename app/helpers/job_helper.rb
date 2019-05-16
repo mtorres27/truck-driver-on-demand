@@ -28,13 +28,8 @@ module JobHelper
       declined: :danger
     }
 
-    if job.state == 'published' && job.applicants.count == 0
-      sym = :created
-      t = 'Not Published'
-    else
-      sym = job.state.to_sym
-      t = job.state.text
-    end
+    sym = job.state.to_sym
+    t = job.state.text
 
     if current_user.freelancer? && job.applicants.where({freelancer_id: current_user.id, state: 'declined'}).count > 0
       sym = :declined

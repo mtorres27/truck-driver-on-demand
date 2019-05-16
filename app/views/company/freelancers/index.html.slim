@@ -1,15 +1,9 @@
-.avj-section.avj-section__main
-  .container.container__content
-    h2
-      | Search AV Professionals
-    = render 'company/shared/freelancer_search_form'
-.avj-section.avj-section__subhead
+.avj-section.avj-section__msg-subhead.d-block.mb-4
   .container
-    .avj-subhead.justify-content-between
-      div
-        h4= "Found #{@freelancer_profiles.total_count} matching professionals"
-      div
-        .avj-body1.avj-text-color-primary.zmdi.zmdi-edit
+    .avj-subhead
+      h4.ellipsis.m-0= "Found #{@freelancer_profiles.total_count} matching professionals"
+      button.btn.btn-primary.btn-sm type="submit"
+        | Edit Search
 .avj-section.avj-section__main
   .container.container__content
     h2.d-none.d-md-block

@@ -61,9 +61,8 @@ en:
         twentyone_to_thirty: "21 - 30"
         more_than_thirty: "30+"
       state:
-        created: "Not Published"
-        published: "Accepting Applicants"
-        negotiated: "Quote Accepted"
+        created: "Draft"
+        published: "Published"
 
       working_time:
         standard_workday: "Standard Workday (Mon-Fri, 9AM-5PM)"

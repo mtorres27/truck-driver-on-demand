@@ -10,6 +10,33 @@ class Company::JobsController < Company::BaseController
     redirect_to company_job_job_build_path(@job.creation_step, job_id: @job.id) unless @job.creation_completed?
   end
 
+  def new
+    @job = current_company.jobs.new
+  end
+
+  def create
+    @job = current_company.jobs.new(job_params)
+
+    if @job.save
+      if @job.state == 'published'
+        flash[:notice] = "This job has been published."
+        get_matches
+        @freelancers.each do |freelancer|
+          next if Notification.where(receivable: freelancer, url: freelancer_job_url(@job)).count > 0
+          Notification.create(title: @job.title, body: "New job in your area", authorable: @job.company, receivable: freelancer, url: freelancer_job_url(@job))
+          JobNotificationMailer.notify_job_posting(freelancer, @job).deliver_later
+        end
+      else
+        flash[:notice] = "This job has been published."
+      end
+      redirect_to company_jobs_path
+    else
+      binding.pry
+      flash[:error] = "Please provide valid information"
+      render :new
+    end
+  end
+
   def edit
   end
 
@@ -129,7 +156,6 @@ class Company::JobsController < Company::BaseController
       :country,
       :currency,
       :job_type,
-      :job_market,
       :job_function,
       :pay_type,
       :starts_on,
@@ -142,8 +168,9 @@ class Company::JobsController < Company::BaseController
       :address,
       :state_province,
       attachments_attributes: [:id, :file, :title, :_destroy],
-      technical_skill_tags:  I18n.t("enumerize.technical_skill_tags").keys,
-      manufacturer_tags:  I18n.t("enumerize.manufacturer_tags").keys,
+      job_market: I18n.t("enumerize.system_integration_job_markets").keys + I18n.t("enumerize.live_events_staging_and_rental_job_markets").keys,
+      technical_skill_tags: I18n.t("enumerize.technical_skill_tags").keys,
+      manufacturer_tags: I18n.t("enumerize.manufacturer_tags").keys,
     )
   end
 end
