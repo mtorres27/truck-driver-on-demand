@@ -138,11 +138,6 @@ Rails.application.routes.draw do
     get 'job_country_currency', to: 'jobs#job_countries', as: 'job_country_currency'
 
     resources :jobs do
-      resources :job_build, only: [:index, :show, :update, :create] do
-        member do
-          post :skip
-        end
-      end
       resources :applicants do
         get :request_quote, on: :member
         get :ignore, on: :member

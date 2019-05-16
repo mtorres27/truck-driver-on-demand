@@ -44,6 +44,15 @@ $(document).on("turbolinks:load", function () {
     $('.js--country-select').on('change', function () {
         get_currencies($(this).val())
     });
+
+    $('#replies-tab').on('click', function() {
+        $(this).addClass('active');
+        $('#matches-tab').removeClass('active');
+    });
+    $('#matches-tab').on('click', function() {
+        $(this).addClass('active');
+        $('#replies-tab').removeClass('active');
+    });
 });
 
 function get_currencies(country) {

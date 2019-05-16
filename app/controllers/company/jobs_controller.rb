@@ -7,7 +7,7 @@ class Company::JobsController < Company::BaseController
   end
 
   def show
-    redirect_to company_job_job_build_path(@job.creation_step, job_id: @job.id) unless @job.creation_completed?
+    get_matches
   end
 
   def new

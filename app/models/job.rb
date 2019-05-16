@@ -251,10 +251,6 @@ class Job < ApplicationRecord
     update_columns(lat: lat, lng: lng)
   end
 
-  def step_job_details?
-    creation_step == "candidate_details"
-  end
-
   def accept_applicant
     applicants.where(id: accepted_applicant_id).first&.update_attribute(:state, "accepted")
     applicants.where.not(id: accepted_applicant_id, state: "declined").each do |applicant|
