@@ -13,3 +13,9 @@ document.addEventListener("turbolinks:load", function(){
         window.location = "/company/freelancers/favourites?location="+this.value;
     });
 });
+
+function toggleSearch() {
+    $("#search-form").removeClass("avj-hidden-important");
+    $("#search-subheader").addClass("avj-hidden-important");
+    $("#search-results").addClass("avj-hidden-important");
+}

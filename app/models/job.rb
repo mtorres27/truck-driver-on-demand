@@ -57,7 +57,8 @@ class Job < ApplicationRecord
 
   enumerize :state, in: [
     :created,
-    :published
+    :published,
+    :completed
   ], predicates: true, scope: true
 
   validates :title, :summary, :address, :country, presence: true, if: :is_published?

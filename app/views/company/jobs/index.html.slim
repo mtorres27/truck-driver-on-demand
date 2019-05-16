@@ -7,3 +7,5 @@
 
     - @jobs.each do |job|
       = render partial: "job_list_detail", locals: { job: job }
+
+    = paginate @jobs

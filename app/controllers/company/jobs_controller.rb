@@ -4,6 +4,7 @@ class Company::JobsController < Company::BaseController
 
   def index
     @jobs = current_company.jobs
+    @jobs = @jobs.page(params[:page]).per(10)
   end
 
   def show
@@ -71,8 +72,6 @@ class Company::JobsController < Company::BaseController
 
   def mark_as_finished
     @job.update(state: :completed)
-    Notification.create(title: @job.title, body: "This job has been completed", authorable: @job.company, receivable: @job.freelancer, url: freelancer_job_review_url(@job))
-    FreelancerMailer.notice_job_complete_freelancer(current_company, @job.freelancer, @job).deliver_later
     @job.collaborators_for_notifications.each do |collaborator|
       CompanyMailer.notice_job_complete_company(collaborator, @job.freelancer, @job).deliver_later
     end
