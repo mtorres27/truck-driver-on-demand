@@ -1,17 +1,23 @@
 .avj-section.avj-section__msg-subhead.d-block.mb-4
   .container
     .avj-subhead
-      .avj-avatar.mr-2 style="background:#F95F1E"
       h4.ellipsis.mb-0 User T
-      button.btn.btn-primary.btn-sm type="submit"
-        | Edit
+      .d-flex.align-items-center.justify-content-end
+        button.btn.btn-outline-primary.btn-sm.mr-2 type="submit"
+          | Edit
+        button.btn.btn-primary.btn-sm type="submit"
+          | Log Out
 
 
 .avj-section.avj-section__main
   .container.container__content
-    .avj-body2 Your Profile is 55% complete
-    .progress.mb-4
-      .progress-bar role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 33%"
+    .avj-body2 Your Profile is 55% complete. Your chances of making a good impression dramatically increase when it's over 80%.
+    .progress.mb-2
+      .progress-bar role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 55%"
+
+    .avj-caption1 Below this line is how your profile appears on AV Junction
+    .dropdown-divider.mb-4 
+
 
     .row.mb-4
       .col-md-2.col-3
@@ -107,7 +113,10 @@
       a.col-md-4.col-6
         img src="/assets/profile_header/default_wallpaper.jpg"
         .avj-caption1
-          | Boardroom
+          | Boardroom 
+
+    h2 Affiliations
+    .row
       a.col-md-4.col-6
         img src="/assets/profile_header/default_wallpaper.jpg"
         .avj-caption1
@@ -116,7 +125,22 @@
         img src="/assets/profile_header/default_wallpaper.jpg"
         .avj-caption1
           | Boardroom
+
+
+    h2 Security Clearances
+    .row
       a.col-md-4.col-6
         img src="/assets/profile_header/default_wallpaper.jpg"
         .avj-caption1
-          | Boardroom  
+          | Boardroom
+      a.col-md-4.col-6
+        img src="/assets/profile_header/default_wallpaper.jpg"
+        .avj-caption1
+          | Boardroom
+
+    h2 Insurance
+    .row
+      a.col-md-4.col-6
+        img src="/assets/profile_header/default_wallpaper.jpg"
+        .avj-caption1
+          | Boardroom
