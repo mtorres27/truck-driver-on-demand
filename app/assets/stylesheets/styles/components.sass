@@ -34,7 +34,8 @@ img
     margin-bottom: $avj-nav-height
   &__chat
     flex: 1
-    margin-bottom: 108px
+    @media (max-width: $breakpoint-tablet)
+      margin-bottom: 144px
   &__footer
     background-color: $avj-color-grey1
     padding-top: 16px

@@ -44,6 +44,21 @@ class MainController < ApplicationController
   def avpro_profile_edit
   end
 
+  def avpro_register
+  end
+
+  def avpro_jobs
+  end
+
+  def avpro_messages
+  end
+
+  def avpro_job_detail
+  end
+  
+  def avpro_message_detail
+  end
+
 
 
 
