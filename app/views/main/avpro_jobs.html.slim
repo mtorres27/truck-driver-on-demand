@@ -2,7 +2,40 @@
 =render "mobile_nav_avpro"
 
 .avj-section.avj-section__main
-  .container.container__content        
+  .container.container__content
+    h2
+      | Search Jobs
+    form.row.mb-4
+      .col-12
+        .form-group
+          label.avj-caption1 for="keywords"
+            | Keywords
+          input.form-control.avj-body2 type="text" id="keywords" aria-describedby="keywords" placeholder="Enter Keywords to Search"
+            small.avj-caption2 id="keywordshelp" class="form-text text-muted"
+              | Try using AV Installer or Crestron Programmer
+      .col-sm-6
+        .form-group
+          label.avj-caption1 for="Location"
+            | Location
+          input.form-control.avj-body2 type="text" id="location" placeholder="Enter the City"
+            small.avj-caption2 id="emailHelp" class="form-text text-muted"
+              | Get better local results when you add a city
+      .col-sm-6
+        .form-group
+          label.avj-caption1 for="Country"
+            | Country
+          select.form-control.avj-body2 id="country"
+            option Canada
+            option United States
+          small.avj-caption2 id="emailHelp" class="form-text text-muted"
+            | Did you mean London UK or London Ontario?
+      .col-12
+        button.btn.btn-primary type="submit"
+          | Search
+
+
+    h2
+      | Job Feed  
     .avj-job-item
       .d-flex.align-items-start
         .mr-2
