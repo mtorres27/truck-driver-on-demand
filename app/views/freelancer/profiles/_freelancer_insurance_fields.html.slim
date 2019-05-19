@@ -1,22 +1,18 @@
-.authorable_attachment__item
-  .profile__meta__details__1-1
-    .profile__meta__info
-      .freelancer-profile__image.float-left
-        - if !f.object.image_url.nil? && !f.object.image_url.include?('missing.pdf')
-          - url = is_image(f.object.image_url) ? f.object.image_url : "/assets/insurance/placeholder.png"
-          a.authorable_attachment--full href=f.object.image_url target="_blank"
-            img src=url
-          .freelancer-profile__image-upload onclick="uploadInsuranceImage(#{f.index})"
-            span class="zmdi zmdi-upload"
+.row
+  .col-md-9.col-12
+    = f.input :name, as: :string, placeholder: "Insurance Name", label: "Insurance Name", label_html: {class: "avj-caption1"}
+  .col-md-3.col-8
+    .form-group
+      label.avj-caption1
+        | Insurance Image
+      - if !f.object.image_url&.include?('missing.png') && f.index != 'new_freelancer_insurances'
+        img.mb-1.authorable_attachment--full src=f.object.image_url
+      - else
+        img.mb-1.authorable_attachment--full src=""
+      .d-flex.justify-content-between
+        - if !f.object.image_url.include?('missing.png') && f.index != 'new_freelancer_insurances'
+          a.zmdi.zmdi-camera onclick="uploadInsuranceImage(#{f.index})"
         - else
-          .authorable_attachment--full
-            img src=""
-          .freelancer-profile__image-upload onclick="uploadInsuranceImage()"
-            span class="zmdi zmdi-upload"
-
-      = f.input :name, as: :string, placeholder: "Enter the insurance name", label: "Insurance Name"
-
-    .profile__meta__info
-      = f.file_field :image, :accept => 'image/gif,image/jpg,image/jpeg,image/png,document/pdf,application/pdf,application/x-pdf', label: false, class: "file-input--hidden"
-      = f.input :description, label: "Tell something about this insurance", placeholder: "Insurance description", :input_html => { :class => 'form__profile-bio-textarea' }
-    = link_to_remove_association "", f, { onClick: "hide_remove_association(this)", class: "btn-icon-link"}
+          a.zmdi.zmdi-camera onclick="uploadInsuranceImage()"
+        = link_to_remove_association content_tag(:span, "", class: "zmdi zmdi-delete"), f, {onClick: "hide_remove_association(this)"}
+  = f.file_field :image, label: false, :accept => 'image/gif,image/jpg,image/jpeg,image/png,document/pdf,application/pdf,application/x-pdf', class: "avj-hidden-important file-input--hidden"

@@ -10,7 +10,7 @@ $(window).scroll(function() {
 });
 
 var hide_remove_association = function (obj, hard) {
-  $(obj).parent().parent().fadeOut();
+  $(obj).parent().parent().parent().parent().fadeOut();
   if (hard) $(obj).parent().parent().remove();
 };
 

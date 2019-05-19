@@ -1,23 +1,18 @@
-.authorable_attachment__item
-  .profile__meta__details__1-1
-    .freelancer-profile__image.float-left
-      - if !f.object.certificate_url.include?('missing.pdf')
-        - url = is_image(f.object.certificate_url) ? f.object.certificate_url : "/assets/certification/placeholder.png"
-        a.authorable_attachment--full href=f.object.certificate_url target="_blank"
-          img src=url
-        .freelancer-profile__image-upload onclick="uploadCertificate(#{f.index})"
-          span class="zmdi zmdi-upload"
+.row
+  .col-md-9.col-12
+    = f.input :name, as: :string, placeholder: "Certificate Name", label: "Certificate Name", label_html: {class: "avj-caption1"}
+  .col-md-3.col-8
+    .form-group
+      label.avj-caption1
+        | Certificate Image
+      - if !f.object.certificate_url&.include?('missing.png') && f.index != 'new_certifications'
+        img.mb-1.authorable_attachment--full src=f.object.certificate_url
       - else
-        .authorable_attachment--full
-          img src=""
-        .freelancer-profile__image-upload onclick="uploadCertificate()"
-          span class="zmdi zmdi-upload"
-
-    .profile__meta__info
-      = f.file_field :certificate, :accept => 'image/gif,image/jpg,image/jpeg,image/png,document/pdf,application/pdf,application/x-pdf', label: false, class: "file-input--hidden"
-      = f.input :name, as: :string, placeholder: "Enter the certificate's name", label: "Certificate Name"
-      = f.radio_button :cert_type, "skill"
-      = f.label :cert_type_onsite, "Skill Certificate"
-      = f.radio_button :cert_type, "onsite"
-      = f.label :cert_type_onsite, "Onsite Certificate"
-    = link_to_remove_association "", f, { onClick: "hide_remove_association(this)", class: "btn-icon-link"}
+        img.mb-1.authorable_attachment--full src=""
+      .d-flex.justify-content-between
+        - if !f.object.certificate_url.include?('missing.png') && f.index != 'new_certifications'
+          a.zmdi.zmdi-camera onclick="uploadCertificate(#{f.index})"
+        - else
+          a.zmdi.zmdi-camera onclick="uploadCertificate()"
+        = link_to_remove_association content_tag(:span, "", class: "zmdi zmdi-delete"), f, {onClick: "hide_remove_association(this)"}
+  = f.file_field :certificate, label: false, :accept => 'image/gif,image/jpg,image/jpeg,image/png,document/pdf,application/pdf,application/x-pdf', class: "avj-hidden-important file-input--hidden"
