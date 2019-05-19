@@ -14,6 +14,12 @@ Rails.application.routes.draw do
   match '/company_user_edit'        => 'main#company_user_edit',      via: :get
 
   match '/avpro_profile'            => 'main#avpro_profile',          via: :get
+  match '/avpro_profile_edit'       => 'main#avpro_profile_edit',     via: :get
+  match '/avpro_register'           => 'main#avpro_register',         via: :get
+  match '/avpro_jobs'               => 'main#avpro_jobs',             via: :get
+  match '/avpro_messages'           => 'main#avpro_messages',         via: :get
+  match '/avpro_job_detail'         => 'main#avpro_job_detail',       via: :get
+  match '/avpro_message_detail'     => 'main#avpro_message_detail',   via: :get
 
   mount ActionCable.server => '/cable'
 
