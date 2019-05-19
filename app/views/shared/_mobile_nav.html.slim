@@ -1,7 +1,7 @@
 .avj-section.avj-section__nav-mobile
   .container
     .avj-nav-mobile
-      - if current_user&.is_a?(CompanyUser)
+      - if current_user&.is_a?(CompanyUser) && current_company&.registration_step == "wicked_finish"
         a.avj-nav-mobile-link href=company_root_url
           .avj-body1.m-0.zmdi.zmdi-search
           .avj-caption2.m-0.avj-text-emphasize Search
@@ -17,3 +17,13 @@
         a.avj-nav-mobile-link href=company_profile_url
           .avj-body1.m-0.zmdi.zmdi-account-o
           .avj-caption2.m-0 Profile
+      - elsif current_user&.is_a?(Freelancer) && current_user&.freelancer_profile&.registration_step == "wicked_finish"
+        a.avj-nav-mobile-link href="/avpro_jobs"
+          .material-icons-outlined folder
+          .avj-caption2.m-0.text-uppercase Job Posts
+        a.avj-nav-mobile-link href="/avpro_messages"
+          .material-icons chat_bubble_outline
+          .avj-caption2.m-0.text-uppercase Messages
+        a.avj-nav-mobile-link href="/avpro_profile"
+          .material-icons person_outline
+          .avj-caption2.m-0.text-uppercase Profile

@@ -12,7 +12,6 @@ Rails.application.routes.draw do
   match '/company_profilestyle'     => 'main#company_profile',        via: :get
   match '/company_profile_edit'     => 'main#company_profile_edit',   via: :get
   match '/company_user_edit'        => 'main#company_user_edit',      via: :get
-
   match '/avpro_profile'            => 'main#avpro_profile',          via: :get
   match '/avpro_profile_edit'       => 'main#avpro_profile_edit',     via: :get
   match '/avpro_register'           => 'main#avpro_register',         via: :get

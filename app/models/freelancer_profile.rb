@@ -181,6 +181,18 @@ class FreelancerProfile < ApplicationRecord
     freelancer
   end
 
+  def city_state_province
+    "#{city}#{ ", #{state}" unless state.blank?}"
+  end
+
+  def type_and_company
+    if freelancer_type.present?
+      freelancer_type.humanize + (", #{company_name}" if company_name.present?)
+    else
+      company_name
+    end
+  end
+
   private
 
   def set_profile_score

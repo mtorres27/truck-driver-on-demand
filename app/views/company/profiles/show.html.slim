@@ -2,8 +2,9 @@
   .container
     .avj-subhead
       h4.ellipsis.m-0= current_company.name
-      a.btn.btn-primary.btn-sm href=edit_company_profile_path
+      a.btn.btn-outline-primary.btn-sm.mr-2 href=edit_company_profile_path
         | Edit
+      = link_to "Log Out", destroy_user_session_path, method: :delete, class: "btn btn-primary btn-sm"
 
 
 = render "shared/profile_company", company: current_company
