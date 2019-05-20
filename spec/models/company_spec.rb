@@ -56,23 +56,6 @@ require 'rails_helper'
 describe Company, type: :model do
   describe "hooks" do
     describe "after save" do
-      describe "add_to_hubspot" do
-        before { allow(Rails.application.secrets).to receive(:enabled_hubspot).and_return(true) }
-
-        context "when registration is completed and profile form is filled" do
-          it "creates or update a hubspot contact" do
-            expect(Hubspot::Contact).to receive(:createOrUpdate)
-            create(:company, name: "Acme", registration_step: 'wicked_finish' )
-          end
-        end
-
-        context "when registration is not completed" do
-          it "does not creates or update a hubspot contact" do
-            expect(Hubspot::Contact).not_to receive(:createOrUpdate)
-            create(:company, name: "Acme", registration_step: 'job_info' )
-          end
-        end
-      end
 
       describe "send_confirmation_email" do
         let(:company) { create(:company) }
@@ -82,13 +65,6 @@ describe Company, type: :model do
           it "calls send_confirmation_email" do
             expect(company).to receive(:send_confirmation_email)
             company.update(company_params)
-          end
-        end
-
-        context "when the company user is confirmed" do
-          it "does not send the confirmation mail" do
-            company.owner.confirm
-            expect { company.update(company_params) }.to change(ActionMailer::Base.deliveries, :count).by(0)
           end
         end
       end
@@ -111,12 +87,6 @@ describe Company, type: :model do
       it { is_expected.to validate_presence_of(:name) }
       it { is_expected.to validate_presence_of(:country) }
       it { is_expected.to validate_presence_of(:city) }
-    end
-
-    describe "step job_info" do
-      subject { create(:company, registration_step: "profile") }
-
-      it { is_expected.to validate_presence_of(:job_types) }
     end
 
     describe "#registration_completed" do

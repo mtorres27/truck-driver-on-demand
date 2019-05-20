@@ -8,7 +8,7 @@ end
 Given("I filled company registration step {int}") do |step|
   case step
   when 1
-    company = FactoryBot.create(:company, name: nil, country: nil, city: nil, state: nil)
+    company = FactoryBot.create(:company, name: nil, country: nil, city: nil, state: nil, registration_step: "personal")
     user = FactoryBot.create(:company_user, company: company)
   when 2
     company = FactoryBot.create(:company, job_types: nil, job_markets: nil, registration_step: "job_info")

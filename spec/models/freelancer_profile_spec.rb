@@ -133,26 +133,4 @@ describe FreelancerProfile, type: :model do
       end
     end
   end
-
-  describe "validations" do
-    describe "step personal information" do
-      subject { create(:freelancer_profile, registration_step: "job_info") }
-
-      it { is_expected.to validate_presence_of(:country) }
-      it { is_expected.to validate_presence_of(:city) }
-    end
-
-    describe "step job_info" do
-      subject { create(:freelancer_profile, registration_step: "profile") }
-
-      it { is_expected.to validate_presence_of(:job_types) }
-    end
-
-    describe "step profile" do
-      subject { create(:freelancer_profile, registration_step: "wicked_finish", freelancer: create(:freelancer)) }
-
-      it { is_expected.to validate_presence_of(:bio) }
-      it { is_expected.to validate_presence_of(:tagline) }
-    end
-  end
 end

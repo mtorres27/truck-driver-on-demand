@@ -300,7 +300,7 @@ class Company < ApplicationRecord
   end
 
   def set_default_step
-    registration_step ||= "personal"
+    self.registration_step ||= "personal"
   end
 
   def send_confirmation_email

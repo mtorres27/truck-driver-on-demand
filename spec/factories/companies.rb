@@ -67,15 +67,6 @@ FactoryBot.define do
     website { Faker::Lorem.word }
     area { "USA" }
 
-    after(:build) do |company|
-      company.company_users.build(first_name: Faker::Name.unique.name,
-                                  last_name: Faker::Name.unique.name,
-                                  email: Faker::Internet.unique.email,
-                                  password: "password", password_confirmation: "password",
-                                  confirmed_at: Time.current,
-                                  role: "Owner")
-    end
-
     trait :registration_completed do
       registration_step "wicked_finish"
     end
