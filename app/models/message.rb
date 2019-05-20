@@ -14,11 +14,17 @@
 #  checkin         :boolean          default(FALSE)
 #  send_contract   :boolean          default(FALSE)
 #  unread          :boolean          default(TRUE)
+#  job_id          :integer
 #
 # Indexes
 #
 #  index_messages_on_authorable_type_and_authorable_id  (authorable_type,authorable_id)
+#  index_messages_on_job_id                             (job_id)
 #  index_messages_on_receivable_type_and_receivable_id  (receivable_type,receivable_id)
+#
+# Foreign Keys
+#
+#  fk_rails_...  (job_id => jobs.id)
 #
 
 class Message < ApplicationRecord
@@ -26,6 +32,7 @@ class Message < ApplicationRecord
 
   belongs_to :authorable, polymorphic: true, counter_cache: true
   belongs_to :receivable, polymorphic: true, counter_cache: true
+  belongs_to :job, optional: true
 
   validate :must_have_body_or_attachment
 

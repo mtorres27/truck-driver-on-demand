@@ -993,7 +993,8 @@ CREATE TABLE messages (
     updated_at timestamp without time zone NOT NULL,
     checkin boolean DEFAULT false,
     send_contract boolean DEFAULT false,
-    unread boolean DEFAULT true
+    unread boolean DEFAULT true,
+    job_id bigint
 );
 
 
@@ -1844,6 +1845,13 @@ CREATE INDEX index_messages_on_authorable_type_and_authorable_id ON messages USI
 
 
 --
+-- Name: index_messages_on_job_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_messages_on_job_id ON messages USING btree (job_id);
+
+
+--
 -- Name: index_messages_on_receivable_type_and_receivable_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -2052,6 +2060,14 @@ ALTER TABLE ONLY job_collaborators
 
 
 --
+-- Name: messages fk_rails_d7e012c0bb; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY messages
+    ADD CONSTRAINT fk_rails_d7e012c0bb FOREIGN KEY (job_id) REFERENCES jobs(id);
+
+
+--
 -- Name: company_reviews fk_rails_dfd5a40d4e; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -2253,6 +2269,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20190426172935'),
 ('20190503190656'),
 ('20190509185605'),
-('20190516194711');
+('20190516194711'),
+('20190520194631');
 
 

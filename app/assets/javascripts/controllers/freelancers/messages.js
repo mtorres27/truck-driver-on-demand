@@ -31,24 +31,10 @@ document.addEventListener("turbolinks:load", function() {
         params["authorable_type"] = $(".js--message-form").data("type");
         params["message"] = {};
         params["message"]["body"] = $(".js--message-input").val();
-        if ($(".js--message-attachment").get(0).files.length > 0) {
-            var reader = new FileReader();
-            reader.addEventListener("loadend", function() {
-                params['message']['attachment_data_uri'] = reader.result;
-                App.messages.send(params);
-                $("#new-message__loading-notice").html("");
-            });
-            reader.addEventListener("progress", function() {
-                $("#new-message__loading-notice").html("Please wait while your message is uploaded.");
-            });
-            reader.addEventListener("error", function() {
-                $("#new-message__loading-notice").html("There was an error uploading your file. Please try again.");
-            });
-            reader.readAsDataURL($(".js--message-attachment").get(0).files[0]);
+        if ($("#message_job_id").length) {
+            params["message"]["job_id"] = $("#message_job_id").val();
         }
-        else {
-            App.messages.send(params);
-        }
+        App.messages.send(params);
         e.preventDefault();
         return false;
     })
@@ -71,10 +57,7 @@ var validateMessage = function() {
     if (safe) {
         if ($(".js--message-form").length > 0) {
             $(".js--message-form").submit();
-            $(".js--message-form")[0].reset();
-        }
-        else if ($(".js--applicant-message-form").length > 0) {
-            $(".js--applicant-message-form").submit();
+            $(".js--message-input").val("");
         }
     }
 };

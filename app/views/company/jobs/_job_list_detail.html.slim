@@ -10,18 +10,15 @@
     .zmdi.zmdi-pin.avj-text-color-black2.avj-text-sm.mr-2
     .avj-caption1.avj-text-color-black2= job.city_state_country
   .d-flex
-    a.mr-1 href="#"
-      .avj-avatar style="background:yellow"
-    a.mr-1 href="#"
-      .avj-avatar style="background:green"
-    a.mr-1 href="#"
-      .avj-avatar style="background:pink"
-    a.mr-1 href="#"
-      .avj-avatar style="background:blue"
-    a.mr-1 href="#"
-      .avj-avatar style="background:orange"
+    - repliers = job.repliers
+    - repliers.last(5).each do |freelancer|
+      a.mr-1 href=company_freelancer_messages_path(freelancer)
+        - if freelancer.freelancer_profile.avatar_data.present?
+          .avj-avatar
+            = image_tag(freelancer.freelancer_profile.avatar_url)
+        - else
+          .avj-circle_profile__image.freelancer__image= freelancer.name_initials
     .d-flex.flex-column.ml-4.justify-content-between
-      a.avj-caption1 href=""
-        | 5 Replies
+      = link_to pluralize(repliers.count, "Reply"), company_job_url(job), class: "avj-caption1"
       - if job.address.present?
         = link_to pluralize(job.matches.count, "Match"), company_job_url(job), class: "avj-caption1"

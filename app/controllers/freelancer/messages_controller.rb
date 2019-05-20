@@ -4,6 +4,7 @@ class Freelancer::MessagesController < Freelancer::BaseController
 
   def index
     set_collection
+    @job = Job.find(params[:job_id]) if params[:job_id].present?
   end
 
   private

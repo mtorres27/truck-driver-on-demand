@@ -109,6 +109,7 @@ Rails.application.routes.draw do
     post "jobs/:id", to: "jobs#apply"
     post "job/apply", to: "jobs#apply"
     get "jobs/:id/work_order/accept", to: "contracts#accept"
+    get "companies/:company_id/messages(/job/:job_id)", to: "messages#index", as: "messages_for_job"
   end
 
   namespace :company do

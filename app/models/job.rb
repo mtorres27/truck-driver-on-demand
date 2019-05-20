@@ -37,7 +37,7 @@ class Job < ApplicationRecord
 
   belongs_to :company
   has_many :applicants, -> { includes(:freelancer).order(updated_at: :desc) }, dependent: :destroy
-  has_many :messages, -> { order(created_at: :desc) }, as: :receivable
+  has_many :messages
   has_many :change_orders, -> { order(updated_at: :desc) }, dependent: :destroy
   has_many :attachments, dependent: :destroy
   has_one :freelancer_review, dependent: :nullify
@@ -83,6 +83,11 @@ class Job < ApplicationRecord
 
   def collaborators_for_notifications
     job_collaborators.where(receive_notifications: true).map(&:user)
+  end
+
+  def repliers
+    freelancer_ids = messages.pluck(:authorable_id).uniq
+    Freelancer.where(id: freelancer_ids)
   end
 
   def city_state_country
