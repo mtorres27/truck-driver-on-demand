@@ -667,31 +667,21 @@ CREATE TABLE freelancer_profiles (
     area character varying,
     lat numeric(9,6),
     lng numeric(9,6),
-    pay_unit_time_preference character varying,
-    pay_per_unit_time character varying,
     tagline character varying,
     bio text,
     job_markets citext,
     years_of_experience integer DEFAULT 0 NOT NULL,
     profile_views integer DEFAULT 0 NOT NULL,
-    projects_completed integer DEFAULT 0 NOT NULL,
     available boolean DEFAULT true NOT NULL,
     disabled boolean DEFAULT true NOT NULL,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
     freelancer_reviews_count integer DEFAULT 0 NOT NULL,
     technical_skill_tags citext,
-    profile_header_data text,
     verified boolean DEFAULT false,
-    header_color character varying DEFAULT 'FF6C38'::character varying,
     country character varying,
     freelancer_team_size character varying,
     freelancer_type character varying,
-    header_source character varying DEFAULT 'default'::character varying,
-    stripe_account_id character varying,
-    stripe_account_status text,
-    currency character varying,
-    sales_tax_number character varying,
     line2 character varying,
     state character varying,
     postal_code character varying,
@@ -702,15 +692,11 @@ CREATE TABLE freelancer_profiles (
     valid_driver boolean,
     own_tools boolean,
     company_name character varying,
-    job_types citext,
     job_functions citext,
     manufacturer_tags citext,
-    special_avj_fees numeric(10,2),
-    avj_credit numeric(10,2) DEFAULT NULL::numeric,
     registration_step character varying,
     province character varying,
-    freelancer_id integer,
-    business_tax_number character varying
+    freelancer_id integer
 );
 
 
@@ -2270,6 +2256,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20190503190656'),
 ('20190509185605'),
 ('20190516194711'),
-('20190520194631');
+('20190520194631'),
+('20190520231702');
 
 
