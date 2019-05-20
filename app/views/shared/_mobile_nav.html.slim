@@ -18,12 +18,12 @@
           .avj-body1.m-0.zmdi.zmdi-account-o
           .avj-caption2.m-0 Profile
       - elsif current_user&.is_a?(Freelancer) && current_user&.freelancer_profile&.registration_step == "wicked_finish"
-        a.avj-nav-mobile-link href="/avpro_jobs"
+        a.avj-nav-mobile-link href=freelancer_root_url
           .material-icons-outlined folder
           .avj-caption2.m-0.text-uppercase Job Posts
-        a.avj-nav-mobile-link href="/avpro_messages"
+        a.avj-nav-mobile-link href=freelancer_messaging_index_url
           .material-icons chat_bubble_outline
           .avj-caption2.m-0.text-uppercase Messages
-        a.avj-nav-mobile-link href="/avpro_profile"
+        a.avj-nav-mobile-link href=freelancer_profile_url
           .material-icons person_outline
           .avj-caption2.m-0.text-uppercase Profile

@@ -1,32 +1,15 @@
-= simple_form_for :search, url: freelancer_jobs_path, method: :get, html: { id: "company_search_form", class:"grid-h" } do |f|
-  input type="hidden" value="#{params.dig(:search, :sort)}" id="sort" name="search[sort]"
-  input type="hidden" value="#{params.dig(:search, :distance)}" id="distance" name="search[distance]"
-  .grid-cell.grid-cell--100= f.input :keywords, label: false, placeholder: "Search by job function, skills etc", input_html: { value: @keywords }
-  .grid-cell.grid-cell--25= f.input :country, collection: I18n.t('enumerize.country').map { |i, v| [i, v] }, label_method: :second, value_method: :first, label: false, prompt: "Select Country", selected: @country, input_html: { class: "js--country-select" }
-  .grid-cell.grid-cell--25
-    select#search_state_province.js--state-province-select.form-control.select(name='search[state_province]')
-      option(value='')
-        | State/Province
-      = CS.states(:us).each do |index, value|
-        - selected = (!@state_province.nil? and @state_province == index.to_s)
-        - if selected
-          option.js--us_option(value="#{index}" selected)
-            = value
-        - else
-          option.js--us_option(value="#{index}")
-            = value
-      = CS.states(:ca).each do |index, value|
-        - selected = (!@state_province.nil? and @state_province == index.to_s)
-        - if selected
-          option.js--ca_option(value="#{index}" selected)
-            = value
-        - else
-          option.js--ca_option(value="#{index}")
-            = value
-  .grid-cell.grid-cell--25= f.input :address, label: false, placeholder: "City", input_html: { value: @address }
-  .grid-cell.grid-cell--25
-    select#search_distance.form-control.select(name='search[distance]')
-      option(value="")
-        | Radius
-      = render partial: "shared/distance_options", locals: { distance: @distance }
-  .grid-cell.grid-cell--50= f.submit "Search jobs", class: "btn btn--primary"
+= simple_form_for :search, url: freelancer_jobs_path, method: :get, html: { id: "company_search_form", class:"row mb-4" } do |f|
+  .col-12
+    = f.input :keywords, required: false, placeholder: "Enter Keywords to Search", input_html: { value: @keywords }, label_html: { class: "avj-caption1" }, wrapper_html: { class: "mb-0" }
+    small.avj-caption2 id="keywordshelp" class="form-text text-muted"
+      | Try using AV Installer or Crestron Programmer
+  .col-sm-6
+    = f.input :address, required: false, label: "Location", placeholder: "Enter the City", input_html: { value: @address }, label_html: { class: "avj-caption1" }, wrapper_html: { class: "mb-0" }
+    small.avj-caption2 id="emailHelp" class="form-text text-muted"
+      | Get better local results when you add a city
+  .col-sm-6
+    = f.input :country, required: false, label: "Country", collection: I18n.t('enumerize.country').map { |i, v| [i, v] }, label_method: :second, value_method: :first, prompt: "Select Country", selected: @country, label_html: { class: "avj-caption1" }, wrapper_html: { class: "mb-0" }
+    small.avj-caption2 id="emailHelp" class="form-text text-muted"
+      | Did you mean London UK or London Ontario?
+  .col-12
+    = f.submit "Search jobs", class: "btn btn-primary"

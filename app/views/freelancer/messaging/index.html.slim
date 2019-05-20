@@ -1,7 +1,7 @@
-h1.heading-h1 Messages
-- content_for :secondary do
-  .action-bar
-    h2.heading-h2.heading-h2--action-bar Messages
-  .list
-    - @companies.each do |company|
-      = render partial: "company_messaging_info", locals: { company: company }
+.avj-section.avj-section__main
+  .container.container__content
+    h2
+      | Messages
+    div
+      - @companies.each do |company|
+        = render partial: "company_messaging_info", locals: {company: company}

@@ -22,11 +22,9 @@
         - elsif current_user&.is_a?(Freelancer) && current_user&.freelancer_profile&.registration_step == "wicked_finish"
           .avj-nav-desktop
             .avj-nav-desktop-link
-              a.text-uppercase.avj-text-emphasize href="/avpro_jobs"
-                | Job Posts
+              = link_to "Job Posts", freelancer_root_path, class: "text-uppercase avj-text-emphasize"
             .avj-nav-desktop-link
-              a.text-uppercase.avj-text-emphasize href="/avpro_messages"
-                | Messages
+              = link_to "Messages", freelancer_messaging_index_path, class: "text-uppercase avj-text-emphasize"
             .avj-nav-desktop-link
               = link_to "Profile", freelancer_profile_path, class: "text-uppercase avj-text-emphasize"
           .avj-nav-kc

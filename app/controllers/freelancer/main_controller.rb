@@ -4,13 +4,7 @@ class Freelancer::MainController < Freelancer::BaseController
 
   def index
     authorize current_user
-    # @companies =  Company.where(:disabled => false).order(id: 'DESC').limit(4)
-    # @companies = Company.find([67, 13, 64, 59]);
-    @companies ||= []
-    begin
-      @companies = Company.find([67, 13, 64, 59]);
-    rescue Exception
-    end
+    @jobs = Job.where(state: 'published').last(10).reverse
   end
 
   private

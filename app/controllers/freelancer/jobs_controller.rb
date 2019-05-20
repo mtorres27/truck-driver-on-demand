@@ -4,32 +4,16 @@ class Freelancer::JobsController < Freelancer::BaseController
   def index
     authorize current_user
 
-    if params[:search].nil? || (params[:search][:keywords].blank? && params[:search][:country].blank? && params[:search][:state_province].blank? && params[:search][:address].blank?)
+    if params[:search].nil? || (params[:search][:keywords].blank? && params[:search][:country].blank? && params[:search][:address].blank?)
       flash[:error] = "You'll need to add some search criteria to narrow your search results!"
       redirect_to freelancer_root_path
     end
 
     @keywords = params.dig(:search, :keywords).presence
     @country = params.dig(:search, :country).presence
-    @state_province = params.dig(:search, :state_province).presence
     @address = params.dig(:search, :address).presence
 
-    @sort = params.dig(:search, :sort).presence
-    @distance = params.dig(:search, :distance).presence
-
-    if @sort == "ASC"
-      sort = :asc
-    elsif @sort == "DESC"
-      sort = :desc
-    elsif @sort == "RELEVANCE"
-      sort = nil
-    end
-
-    if sort != nil
-      @jobs = valid_company_jobs.where(state: "published", expired: false).order(name: sort)
-    else
-      @jobs = valid_company_jobs.where(state: "published", expired: false).all
-    end
+    @jobs = valid_company_jobs.where(state: "published").all
 
     if @address
       # check for cached version of address
@@ -46,9 +30,7 @@ class Freelancer::JobsController < Freelancer::BaseController
 
       if @geocode
         point = OpenStruct.new(:lat => @geocode[:lat], :lng => @geocode[:lng])
-        if @distance.nil?
-          @distance = 60000
-        end
+        @distance = 60000
         @jobs = @jobs.nearby(@geocode[:lat], @geocode[:lng], @distance).with_distance(point).order("distance")
       else
         @jobs = Job.none
@@ -57,7 +39,6 @@ class Freelancer::JobsController < Freelancer::BaseController
 
     @jobs = @jobs.search(@keywords) if @keywords
     @jobs = @jobs.where(country: @country) if @country
-    @jobs = @jobs.where(state_province: @state_province) if @state_province
 
     @jobs = @jobs.page(params[:page]).per(50)
   end

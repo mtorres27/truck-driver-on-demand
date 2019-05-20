@@ -69,7 +69,7 @@
           .row
             .col-md-9.col-12
               = f.input :first_name, required: true, label: "First Name", placeholder: "First Name", label_html: { class: "avj-caption1" }
-              = f.input :last_name, required: true, label: "Last Name", placeholder: "Last Name", label_html: { class: "avj-caption1" }
+              = f.input :last_name, required: true, label: "Last Name", placeholder: "Last Name", label_html: { class: "avj-caption1" }, wrapper_html: { class: "mb-0" }
               small.avj-caption2 id="emailHelp" class="form-text text-muted"
                 | Only the first initial of your last name is shown on your AV Junction Profile
             .col-md-3.col-8
