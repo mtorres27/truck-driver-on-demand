@@ -130,10 +130,7 @@ Rails.application.routes.draw do
       resources :messages, only: [:index, :create]
     end
 
-    resources :company_users, only: [:index, :show, :new, :create, :destroy, :edit, :update] do
-      post :disable, on: :member
-      post :enable, on: :member
-    end
+    resources :company_users, only: [:edit, :update]
 
     get "freelancers/:id/invite_to_quote", to: "freelancers#invite_to_quote"
 

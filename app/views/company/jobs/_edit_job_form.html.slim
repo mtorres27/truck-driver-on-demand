@@ -132,7 +132,7 @@
 
       .row.mb-4
         .col-12.d-flex.align-items-center.justify-content-end
-          button.btn.btn-outline-primary.mr-4 href=company_jobs_url
+          a.btn.btn-outline-primary.mr-4 href=company_jobs_url
             | Cancel
           - unless @job.new_record?
             = link_to "Delete Job", company_job_path(@job), data: { confirm: "Are you sure you want to permanently delete this job posting?" }, method: :delete, class: "btn btn-danger mr-4"

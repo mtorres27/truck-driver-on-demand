@@ -71,8 +71,8 @@ class Company < ApplicationRecord
   has_many :favourites
   has_many :favourite_freelancers, through: :favourites, source: :freelancer
   has_many :company_installs, dependent: :destroy
-  has_many :company_users, dependent: :destroy
   has_many :notifications, as: :receivable, dependent: :destroy
+  has_one :company_user, dependent: :destroy
 
   attr_accessor :accept_terms_of_service, :accept_privacy_policy, :accept_code_of_conduct,
                 :enforce_profile_edit, :user_type
@@ -108,7 +108,7 @@ class Company < ApplicationRecord
 
   accepts_nested_attributes_for :featured_projects, allow_destroy: true, reject_if: :reject_featured_projects
   accepts_nested_attributes_for :company_installs, allow_destroy: true, reject_if: :reject_company_installs
-  accepts_nested_attributes_for :company_users
+  accepts_nested_attributes_for :company_user
 
   scope :new_registrants, -> { where(disabled: true, registration_step: "wicked_finish") }
   scope :incomplete_registrations, -> { where.not(registration_step: "wicked_finish") }
@@ -139,10 +139,6 @@ class Company < ApplicationRecord
         where(jobs: { company_id: id }).
         where(applicants: { state: :accepted }).
         order(first_name: :desc, last_name: :desc)
-  end
-
-  def owner
-    company_users.where(role: 'Owner').first
   end
 
   def city_state_province
@@ -193,7 +189,7 @@ class Company < ApplicationRecord
   pg_search_scope :name_or_email_search, against: {
     name: "A",
   }, associated_against: {
-    company_users: [:email]
+    company_user: [:email]
   }, using: {
     tsearch: { prefix: true }
   }
@@ -277,23 +273,12 @@ class Company < ApplicationRecord
     self
   end
 
-  def user
-    owner
-  end
-
-  def disable_all_users
-    company_users.each do |company_user|
-      next if company_user.role == "Owner"
-      company_user.update_attribute(:enabled, false)
-    end
-  end
-
-  def enabled_users
-    company_users.where(enabled: true)
-  end
-
   def has_saved_freelancer?(freelancer)
     saved_freelancers_ids.include?(freelancer.id)
+  end
+
+  def owner
+    company_user
   end
 
   private
@@ -320,7 +305,7 @@ class Company < ApplicationRecord
   end
 
   def set_default_step
-    self.registration_step ||= "personal"
+    registration_step ||= "personal"
   end
 
   def send_confirmation_email
