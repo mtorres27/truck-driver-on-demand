@@ -79,7 +79,6 @@ class Company < ApplicationRecord
 
   validates :phone_number, length: { minimum: 7 }, allow_blank: true
   validates :name, :country, :city, :website, :area, presence: true, on: :update,  if: :step_job_info?
-  validates :job_types, presence: true, on: :update, if: :step_profile?
 
   enumerize :contract_preference, in: [:prefer_fixed, :prefer_hourly, :prefer_daily]
 
@@ -294,10 +293,6 @@ class Company < ApplicationRecord
       lifecyclestage: "customer",
       im_an: "AV Company",
     )
-  end
-
-  def step_profile?
-    registration_step == "profile"
   end
 
   def step_job_info?

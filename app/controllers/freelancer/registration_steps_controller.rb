@@ -4,7 +4,7 @@ class Freelancer::RegistrationStepsController < Freelancer::BaseController
   skip_before_action :authenticate_user!, only: [:show]
   skip_before_action :redirect_if_not_freelancer, only: [:show]
 
-  steps :personal, :job_info, :profile
+  steps :personal, :job_info
 
   rescue_from Wicked::Wizard::InvalidStepError do
     redirect_to new_user_session_path
@@ -28,15 +28,14 @@ class Freelancer::RegistrationStepsController < Freelancer::BaseController
     current_freelancer_profile.attributes = params[:freelancer_profile].present? ? freelancer_profile_params : {}
     current_freelancer_profile.registration_step = next_step
 
-    sign_out current_user if next_step == "wicked_finish" && current_freelancer_profile.profile_form_filled?
+    sign_out current_user if next_step == "wicked_finish"
 
     render_wizard current_freelancer_profile
   end
 
-  def skip
-    current_freelancer_profile.update_attribute(:registration_step, next_step)
-    sign_out current_user if next_step == "wicked_finish"
-    redirect_to freelancer_registration_step_path(next_step)
+  def previous
+    current_freelancer_profile.update(registration_step: previous_step)
+    redirect_to freelancer_registration_step_path(previous_step)
   end
 
   private
@@ -55,7 +54,7 @@ class Freelancer::RegistrationStepsController < Freelancer::BaseController
       :bio,
       :tagline,
       :phone_number,
-      job_types: I18n.t("enumerize.job_types").keys,
+      :service_areas,
       job_markets: (I18n.t("enumerize.live_events_staging_and_rental_job_markets").keys + I18n.t("enumerize.system_integration_job_markets").keys).uniq,
       job_functions: (I18n.t("enumerize.system_integration_job_functions").keys + I18n.t("enumerize.live_events_staging_and_rental_job_functions").keys).uniq
     )

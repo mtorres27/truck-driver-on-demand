@@ -101,8 +101,6 @@ class FreelancerProfile < ApplicationRecord
   validates :years_of_experience, numericality: { only_integer: true }
   validates :phone_number, length: { minimum: 7 }, allow_blank: true
   validates :phone_number, length: { minimum: 7 }, on: :update, allow_blank: true
-  validates :job_types, presence: true, on: :update, if: :step_profile?
-  validates :tagline, :bio, presence: true, on: :update, if: :registration_completed?
   validates :country, :city, presence: true, on: :update, if: :step_job_info?
   validates :address, :city, :country, presence: true, if: :enforce_profile_edit
 
@@ -165,16 +163,8 @@ class FreelancerProfile < ApplicationRecord
     registration_step == "wicked_finish"
   end
 
-  def step_profile?
-    registration_step == "profile"
-  end
-
   def step_job_info?
     registration_step == "job_info"
-  end
-
-  def profile_form_filled?
-    avatar.present? && bio.present? && tagline.present?
   end
 
   def user

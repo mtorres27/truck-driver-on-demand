@@ -75,7 +75,6 @@ class Freelancer < User
                 :accept_code_of_conduct, :enforce_profile_edit, :user_type
 
   validates :email, presence: true, if: :enforce_profile_edit
-  validates :first_name, :last_name, presence: true, on: :update, if: :step_job_info?
   validates :freelancer_profile, presence: true
   validates_associated :freelancer_profile
 
@@ -264,10 +263,6 @@ class Freelancer < User
 
   def initialize_freelancer_profile
     self.freelancer_profile ||= build_freelancer_profile
-  end
-
-  def step_profile?
-    freelancer_profile&.registration_step == "profile"
   end
 
   def step_job_info?

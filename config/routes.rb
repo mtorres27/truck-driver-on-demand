@@ -64,7 +64,7 @@ Rails.application.routes.draw do
 
     resources :registration_steps, only: [:show, :update, :index] do
       member do
-        post :skip
+        post :previous
       end
     end
 
