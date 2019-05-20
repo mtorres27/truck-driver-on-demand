@@ -8,6 +8,13 @@
       button.btn.btn-primary.btn-sm onClick="toggleSearch();"
         | Edit Search
 .avj-section.avj-section__main#search-results
+  - unless @featured_freelancers.blank?
+    .container.container__content
+      h2.d-none.d-md-block
+        | Featured Professionals
+      div
+        - @featured_freelancers.each do |freelancer_profile|
+          = render partial: "company/shared/freelancer_info", locals: {freelancer: freelancer_profile.freelancer}
   .container.container__content
     h2.d-none.d-md-block
       | Search Results
