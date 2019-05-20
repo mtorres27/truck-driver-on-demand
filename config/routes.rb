@@ -76,13 +76,6 @@ Rails.application.routes.draw do
     end
 
     resources :jobs, only: [:index, :show] do
-      get :favourites, on: :collection
-      post :add_favourites, on: :collection
-      get :my_jobs, on: :collection
-      get :my_applications, on: :collection
-      get :job_matches, on: :collection
-      post :apply, on: :collection
-
       resources :application, only: [:index, :create]
       resource :contract, only: [:show, :accept], as: "work_order", path: "work_order"
       resource :review, only: [:show, :create]

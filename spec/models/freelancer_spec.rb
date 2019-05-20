@@ -80,20 +80,13 @@ describe Freelancer, type: :model do
   describe "#search" do
     let!(:freelancer_1) { create(:freelancer, last_name: "Doe") }
     let(:freelancer_2) { create(:freelancer) }
-    let!(:profile) { create(:freelancer_profile, freelancer: freelancer_2, job_types: { system_integration: 1 }) }
+    let!(:profile) { create(:freelancer_profile, freelancer: freelancer_2) }
 
     context "when searching by name (first_name or last_name)" do
       subject { described_class.search("Doe") }
 
       it { is_expected.to include(freelancer_1) }
       it { is_expected.not_to include(freelancer_2) }
-    end
-
-    context "when searching by job_types" do
-      subject { described_class.search("system integration") }
-
-      it { is_expected.to include(freelancer_2) }
-      it { is_expected.not_to include(freelancer_1) }
     end
 
     context "when search does not match any criteria" do

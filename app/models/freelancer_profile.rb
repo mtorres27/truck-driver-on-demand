@@ -123,7 +123,6 @@ class FreelancerProfile < ApplicationRecord
   ]
 
   pg_search_scope :search, against: {
-      job_types: "A",
       job_markets: "A",
       technical_skill_tags: "A",
       manufacturer_tags: "A",

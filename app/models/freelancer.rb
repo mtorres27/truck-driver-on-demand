@@ -96,7 +96,7 @@ class Freelancer < User
     last_name: "A"
   }, associated_against: {
     freelancer_profile: [
-      :job_types, :job_markets, :technical_skill_tags, :manufacturer_tags, :job_functions, :tagline, :bio
+      :job_markets, :technical_skill_tags, :manufacturer_tags, :job_functions, :tagline, :bio
     ]
   }, using: {
     tsearch: { prefix: true, any_word: true }
@@ -125,7 +125,6 @@ class Freelancer < User
           :city,
           :phone_number,
           :company_name,
-          :job_types,
           :job_markets,
           :technical_skill_tags,
           :manufacturer_tags,
