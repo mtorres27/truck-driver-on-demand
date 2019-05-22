@@ -13,16 +13,18 @@
         .zmdi.zmdi-pin.avj-text-color-black2.avj-text-sm.mr-2
         .avj-caption1.avj-text-color-black2
           = @job.city_state_country
-
     ul#myTab.nav.nav-tabs.mb-4 role="tablist"
       li.nav-item
-        a#replies-tab.nav-link.active aria-controls="replies" aria-selected="true" data-toggle="tab" href="#replies" role="tab"  4 Replies
+        a#replies-tab.nav-link.active aria-controls="replies" aria-selected="true" data-toggle="tab" href="#replies" role="tab"
+          = pluralize(@repliers.count, "Reply")
       li.nav-item
         a#matches-tab.nav-link aria-controls="matches" aria-selected="false" data-toggle="tab" href="#matches" role="tab"
-          = "#{@freelancers.count} Matches"
+          = pluralize(@freelancers.count, "Match")
     #myTabContent.tab-content
       #replies.tab-pane.fade.show.active aria-labelledby="replies-tab" role="tabpanel"
-        = render "main/replies_matches"
+        div
+          - @repliers.each do |freelancer|
+            = render partial: "company/shared/freelancer_info", locals: {freelancer: freelancer}
       #matches.tab-pane.fade.show aria-labelledby="matches-tab" role="tabpanel"
         div
           - @freelancers.each do |freelancer|

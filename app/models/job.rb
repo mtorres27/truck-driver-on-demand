@@ -108,11 +108,16 @@ class Job < ApplicationRecord
 
   def matches(distance=nil)
     if has_system_integration_job_markets && has_live_events_staging_and_rental_job_markets
-      freelancer_profiles = FreelancerProfile.where(disabled: false).where("job_types like ? or job_types like ?", "%system_integration%", "%live_events_staging_and_rental%")
+      system_integration_job_markets = I18n.t("enumerize.system_integration_job_markets").keys.map {|val| "%#{val}%" }
+      live_events_staging_and_rental_job_markets = I18n.t("enumerize.live_events_staging_and_rental_job_markets").keys.map {|val| "%#{val}%" }
+      job_markets = system_integration_job_markets + live_events_staging_and_rental_job_markets
+      freelancer_profiles = FreelancerProfile.where(disabled: false).where("job_markets ilike any ( array[?] )", job_markets)
     elsif has_system_integration_job_markets
-      freelancer_profiles = FreelancerProfile.where(disabled: false).where("job_types like ?", "%system_integration%")
+      job_markets = I18n.t("enumerize.system_integration_job_markets").keys.map {|val| "%#{val}%" }
+      freelancer_profiles = FreelancerProfile.where(disabled: false).where("job_markets ilike any ( array[?] )", job_markets)
     elsif has_live_events_staging_and_rental_job_markets
-      freelancer_profiles = FreelancerProfile.where(disabled: false).where("job_types like ?", "%live_events_staging_and_rental%")
+      job_markets = I18n.t("enumerize.live_events_staging_and_rental_job_markets").keys.map {|val| "%#{val}%" }
+      freelancer_profiles = FreelancerProfile.where(disabled: false).where("job_markets ilike any ( array[?] )", job_markets)
     else
       freelancer_profiles = FreelancerProfile.where(disabled: false)
     end

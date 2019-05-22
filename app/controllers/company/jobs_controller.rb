@@ -9,6 +9,7 @@ class Company::JobsController < Company::BaseController
 
   def show
     get_matches
+    @repliers = @job.repliers
   end
 
   def new

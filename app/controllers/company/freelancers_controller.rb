@@ -22,7 +22,10 @@ class Company::FreelancersController < Company::BaseController
       @freelancer_profiles = FreelancerProfile.search(@keywords).where(disabled: false, country: @country)
     end
 
-    @freelancer_profiles = @freelancer_profiles.where("job_types like ?", "%#{@job_type}%") if @job_type.present?
+    if @job_type.present?
+      job_markets = I18n.t("enumerize.#{@job_type}_job_markets").keys.map {|val| "%#{val}%" }
+      @freelancer_profiles = @freelancer_profiles.where("job_markets ilike any ( array[?] )", job_markets)
+    end
     @freelancer_profiles = @freelancer_profiles.where("job_functions like ?", "%#{@job_function}%") if @job_function.present?
 
     @address_for_geocode = @address + ", " + @country.upcase

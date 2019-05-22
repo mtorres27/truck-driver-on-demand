@@ -90,7 +90,6 @@ class FreelancerProfile < ApplicationRecord
   validates :country, :city, presence: true, on: :update, if: :step_job_info?
   validates :address, :city, :country, presence: true, if: :enforce_profile_edit
 
-  serialize :job_types
   serialize :job_markets
   serialize :technical_skill_tags
   serialize :job_functions

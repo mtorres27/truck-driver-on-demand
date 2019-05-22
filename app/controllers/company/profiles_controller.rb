@@ -45,7 +45,6 @@ class Company::ProfilesController < Company::BaseController
       :established_in,
       :website,
       :header_source,
-      job_types: I18n.t("enumerize.job_types").keys,
       job_markets: (I18n.t("enumerize.live_events_staging_and_rental_job_markets").keys + I18n.t("enumerize.system_integration_job_markets").keys).uniq,
       technical_skill_tags:  I18n.t("enumerize.technical_skill_tags").keys,
       manufacturer_tags:  I18n.t("enumerize.manufacturer_tags").keys,

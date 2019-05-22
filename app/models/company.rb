@@ -89,7 +89,6 @@ class Company < ApplicationRecord
     :more_than_one_thousand
   ]
 
-  serialize :job_types
   serialize :job_markets
   serialize :technical_skill_tags
   serialize :manufacturer_tags
@@ -173,7 +172,6 @@ class Company < ApplicationRecord
   pg_search_scope :search, against: {
     name: "A",
     area: "B",
-    job_types: "B",
     job_markets: "B",
     technical_skill_tags: "B",
     manufacturer_tags: "B",
