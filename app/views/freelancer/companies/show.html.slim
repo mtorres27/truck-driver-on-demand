@@ -1,21 +1,12 @@
-.container.container--header
-  - if @company.header_source == 'default'
-    .profile__wallpaper style="background-image: url(#{image_path('profile_header/default_wallpaper.jpg')});"
-  - elsif @company.profile_header_url.include?("missing") or @company.header_source == "color"
-    .profile__wallpaper.profile__wallpaper--wide style="background-color: #{ @company.header_color.include?("#") ? "" : "#"}#{@company.header_color}"
-  - else
-    .profile__wallpaper.profile__wallpaper--wide style="background-image: url(#{@company.profile_header_url.include?("missing") ? "" : @company.profile_header_url});"
-
-.container.container--profile--company
-  .frame
-    .action-bar
-      h2.heading-h2.heading-h2--action-bar
-        = @company.name
-      .action-bar__actions
+.avj-section.avj-section__msg-subhead.d-block.mb-4
+  .container
+    .avj-subhead
+      h4.ellipsis.mb-0= @company.name
+      .d-flex.align-items-center.justify-content-end
         a.btn-icon-link href="#{freelancer_company_messages_url(@company)}"
           - if current_user.messages_for_company(@company).count > 0
             div class="zmdi zmdi-comment"
           - else
             div class="zmdi zmdi-comment-outline"
 
-    = render "shared/profile_company", company: @company
+= render "shared/profile_company", company: @company

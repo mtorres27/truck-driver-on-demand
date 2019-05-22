@@ -5,7 +5,7 @@
         .avj-body1.m-0 You
       .w-50
         .avj-caption1.m-0.text-right= "#{time_ago_in_words(message.created_at)} ago"
-      .avj-message-text.w-100
+      .avj-message-text.w-100.avj-bg-gorange
         .avj-body2= message.body
       - if message.attachment
         .new-message__image
@@ -22,7 +22,7 @@
         .avj-body1.m-0= message.authorable.first_name_and_initial
       .w-50
         .avj-caption1.m-0.text-right= "#{time_ago_in_words(message.created_at)} ago"
-      .avj-message-text.w-100.avj-bg-gorange
+      .avj-message-text.w-100
         .avj-body2= message.body
       - if message.attachment
         .new-message__image

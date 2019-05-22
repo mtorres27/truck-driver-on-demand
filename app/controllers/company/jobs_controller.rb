@@ -21,20 +21,15 @@ class Company::JobsController < Company::BaseController
 
     if @job.save
       if @job.state == 'published'
-        flash[:notice] = "This job has been published."
         get_matches
         @freelancers.each do |freelancer|
           next if Notification.where(receivable: freelancer, url: freelancer_job_url(@job)).count > 0
           Notification.create(title: @job.title, body: "New job in your area", authorable: @job.company, receivable: freelancer, url: freelancer_job_url(@job))
           JobNotificationMailer.notify_job_posting(freelancer, @job).deliver_later
         end
-      else
-        flash[:notice] = "This job has been published."
       end
       redirect_to company_jobs_path
     else
-      binding.pry
-      flash[:error] = "Please provide valid information"
       render :new
     end
   end

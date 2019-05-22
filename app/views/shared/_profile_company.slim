@@ -1,5 +1,13 @@
 .avj-section.avj-section__main
   .container.container__content
+    - if current_user.is_a?(CompanyUser)
+      .row.mb-4
+        .col-md-8.col
+          .avj-body2
+            | This company account is managed by #{current_user.full_name}
+        .col-md-4.col-3.d-flex.justify-content-end.align-items-center
+          a.btn.btn-secondary.btn-sm href=edit_company_company_user_path(current_company.company_user)
+            | Edit
     .row.mb-4
       .col-md-2.col-sm-4.col-12
         - if company.avatar_data.nil?

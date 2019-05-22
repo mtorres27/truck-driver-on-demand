@@ -1,35 +1,12 @@
-.container.container--header
-  - if @freelancer.freelancer_profile.header_source == 'default'
-    .profile__wallpaper style="background-image: url(#{image_path('profile_header/default_wallpaper.jpg')});"
-  - elsif @freelancer.freelancer_profile.profile_header_url.include?("missing") or @freelancer.freelancer_profile.header_source == "color"
-    .profile__wallpaper.profile__wallpaper--wide style="background-color: #{ @freelancer.freelancer_profile.header_color.include?("#") ? "" : "#"}#{@freelancer.freelancer_profile.header_color}"
-  - else
-    .profile__wallpaper.profile__wallpaper--wide style="background-image: url(#{@freelancer.freelancer_profile.profile_header_url.include?("missing") ? "" : @freelancer.freelancer_profile.profile_header_url});"
-
-
-.container.container--profile
-  .frame
-    .action-bar
-      h2.heading-h2.heading-h2--action-bar
-        = @freelancer.first_name_and_initial
-      .action-bar__actions
-        - if @freelancer.freelancer_profile.available
-          .tag.tag--success.gutter-right
-            | Available
-        - else
-          .tag.tag--warning
-            | Unavailable
-        - if @favourite
-          a.btn-icon-link href="#{params[:id]}?toggle_favourite=true"
-            div class="zmdi zmdi-favorite"
-        - else
-          a.btn-icon-link href="#{params[:id]}?toggle_favourite=true"
-            div class="zmdi zmdi-favorite-outline"
+.avj-section.avj-section__msg-subhead.d-block.mb-4
+  .container
+    .avj-subhead
+      h4.ellipsis.mb-0= @freelancer.first_name_and_initial
+      .d-flex.align-items-center.justify-content-end
         a.btn-icon-link href="#{company_freelancer_messages_url(@freelancer)}"
           - if current_company.messages_for_freelancer(@freelancer).count > 0
             div class="zmdi zmdi-comment"
           - else
             div class="zmdi zmdi-comment-outline"
 
-
-    = render "shared/profile-freelancer"
+= render "shared/profile-freelancer"

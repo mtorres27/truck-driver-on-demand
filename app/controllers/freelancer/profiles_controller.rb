@@ -18,9 +18,8 @@ class Freelancer::ProfilesController < Freelancer::BaseController
     authorize @freelancer
 
     if @freelancer.update(freelancer_params)
-      redirect_to freelancer_profile_path(@freelancer), notice: "Freelancer profile updated."
+      redirect_to freelancer_profile_path(@freelancer)
     else
-      flash[:error] = 'There are errors with the form, please review and resubmit.'
       render :edit
     end
   end

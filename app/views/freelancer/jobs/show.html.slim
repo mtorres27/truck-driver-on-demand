@@ -9,12 +9,28 @@
 .avj-section.avj-section__main
   .container.container__content
     .avj-job-item
-      .d-flex.align-items-start
+      .d-flex.align-items-start.mb-4
         .mr-2
-          a href="#"
-            .avj-avatar style="background:yellow"
+          a href=freelancer_company_path(@job.company)
+            - if @job.company.avatar_data.nil?
+              .avj-circle_profile__image.company__image= @job.company.company_user.name_initials
+            - else
+              .avj-avatar= image_tag(@job.company.avatar_url)
         div
           .avj-caption1.avj-text-color-black2.mb-0= "Posted #{@job.created_at.strftime('%B %d, %Y')}"
           .avj-body1.avj-text-emphasize.mb-0= @job.title
-          .avj-caption1.avj-text-color-black2= @job.city_state_country
+          .d-flex
+            .zmdi.zmdi-pin.avj-text-color-black2.avj-text-sm.mr-2
+            .avj-caption1.avj-text-color-black2= @job.city_state_country
+          .d-flex
+            - if @job.has_system_integration_job_markets
+              .avj-tag System Integration
+            - if @job.has_live_events_staging_and_rental_job_markets
+              .avj-tag Live Events Staging & Rental
+            - @job.job_markets&.each do |key, _|
+              .avj-tag= I18n.t("enumerize.system_integration_job_markets").merge(I18n.t("enumerize.live_events_staging_and_rental_job_markets"))[key.to_sym]
+            - @job.technical_skill_tags&.each do |key, _|
+              .avj-tag= I18n.t("enumerize.technical_skill_tags.#{key}")
+            - @job.manufacturer_tags&.each do |key, _|
+              .avj-tag= I18n.t("enumerize.manufacturer_tags.#{key}")
       .avj-body1= @job.summary

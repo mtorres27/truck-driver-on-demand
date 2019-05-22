@@ -28,9 +28,9 @@
 .avj-section.avj-section__main
   .container.container__content
     h2.d-none.d-md-block= "Your conversation history with #{recipient_name}"
+    - if @messages.count == 0
+      .avj-body1.js--messages-beginning= "This is the very begining of your message history with #{recipient_name}"
     .avj-message-list.js--freelancer-job__message-history
-      - if @messages.count == 0
-        .avj-body1= "This is the very begining of your message history with #{recipient_name}"
       - @messages.each do |message|
         - user_is_author = (current_company && message.authorable == current_company) || (message.authorable == current_user)
         = render "shared/message", message: message, user_is_author: user_is_author

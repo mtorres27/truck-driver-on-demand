@@ -17,7 +17,7 @@
             .avj-nav-desktop-link
               = link_to "Profile", company_profile_path, class: "text-uppercase avj-text-emphasize"
           .avj-nav-kc
-            a.material-icons-outlined href="https://www.avjunction.com/how-to-guide-av-company"
+            a.material-icons-outlined href="https://www.avjunction.com/how-to-guide-av-company" target="_blank"
 
         - elsif current_user&.is_a?(Freelancer) && current_user&.freelancer_profile&.registration_step == "wicked_finish"
           .avj-nav-desktop
@@ -28,5 +28,9 @@
             .avj-nav-desktop-link
               = link_to "Profile", freelancer_profile_path, class: "text-uppercase avj-text-emphasize"
           .avj-nav-kc
-            a.material-icons-outlined href="https://www.avjunction.com/how-to-guide-av-freelancer"
+            a.material-icons-outlined href="https://www.avjunction.com/how-to-guide-av-freelancer" target="_blank"
               | school
+        - elsif current_user&.is_a?(Admin)
+          .avj-nav-desktop
+            .avj-nav-desktop-link
+              = link_to "Log Out", destroy_user_session_path, method: :delete, class: "text-uppercase avj-text-emphasize"

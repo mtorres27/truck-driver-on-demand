@@ -9,7 +9,6 @@ class Company::FreelancersController < Company::BaseController
     @job_function = params.dig(:search, :job_function).presence
 
     if params.has_key?(:search) && (!@address || !@country)
-      flash[:error] = "You'll need to provide a location and country to search for freelancers"
       @freelancer_profiles = FreelancerProfile.none.page(params[:page]).per(10)
       return
     end

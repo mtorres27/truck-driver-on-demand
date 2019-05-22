@@ -5,7 +5,7 @@
       a.avj-text-color-black href=""
         .avj-body1.avj-text-emphasize
           = @job.title
-          span
+          span.ml-2
             = job_state_label(@job)
         .avj-body2
           = @job.summary
@@ -13,6 +13,17 @@
         .zmdi.zmdi-pin.avj-text-color-black2.avj-text-sm.mr-2
         .avj-caption1.avj-text-color-black2
           = @job.city_state_country
+      .d-flex
+        - if @job.has_system_integration_job_markets
+          .avj-tag System Integration
+        - if @job.has_live_events_staging_and_rental_job_markets
+          .avj-tag Live Events Staging & Rental
+        - @job.job_markets&.each do |key, _|
+          .avj-tag= I18n.t("enumerize.system_integration_job_markets").merge(I18n.t("enumerize.live_events_staging_and_rental_job_markets"))[key.to_sym]
+        - @job.technical_skill_tags&.each do |key, _|
+          .avj-tag= I18n.t("enumerize.technical_skill_tags.#{key}")
+        - @job.manufacturer_tags&.each do |key, _|
+          .avj-tag= I18n.t("enumerize.manufacturer_tags.#{key}")
     ul#myTab.nav.nav-tabs.mb-4 role="tablist"
       li.nav-item
         a#replies-tab.nav-link.active aria-controls="replies" aria-selected="true" data-toggle="tab" href="#replies" role="tab"
