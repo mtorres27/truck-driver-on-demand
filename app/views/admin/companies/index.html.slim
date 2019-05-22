@@ -41,7 +41,6 @@
         th Email
         th State/Province
         th Country
-        th Subscription
         th Date Created
         th Account confirmed?
         th Disabled?
@@ -54,7 +53,6 @@
           td= mail_to company.owner.email
           td= company.state
           td= company.country.try(:upcase)
-          td= company.plan.present? ? company.plan.name : "Not subscribed"
           td= company.created_at.strftime('%b %-d, %Y')
           td= company.owner.confirmed?
           td= company.disabled

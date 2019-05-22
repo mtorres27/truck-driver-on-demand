@@ -1,20 +1,25 @@
-- content_for :secondary do
-    .action-bar
-      h2.heading-h2.heading-h2--action-bar Login to AV Junction
+.avj-section.avj-section__main
+  .container.container__content
+    h2
+      | Hey there, login to get started
     = simple_form_for(resource, as: resource_name, url: session_path(resource_name)) do |f|
       = f.error_notification
-      .grid-h
-        .grid-cell.grid-cell--100
-          = f.input :email, as: :string, label: "Email Address", required: true, autofocus: true, placeholder: "Enter your email address"
-        .grid-cell.grid-cell--100
-          = f.input :password, required: true, label: "Password", placeholder: "Enter your password"
-        .grid-cell.grid-cell--50
-          = f.button :submit, "Login", class:"btn btn--primary"
-        .grid-cell.grid-cell--50
-          - if devise_mapping.recoverable? && controller_name != 'passwords' && controller_name != 'registrations'
-            a.btn.btn--clear href=new_password_path(resource_name)
-              | Forgot your password?
-        .grid-cell.grid-cell--100
-          = render "devise/shared/links"
-
-
+      .row
+        .col-md-8
+          = f.input :email, as: :string, label: "Email Address", autofocus: true, placeholder: "Enter your email address", label_html: { class: "avj-caption1" }
+      .row
+        .col-md-8
+          = f.input :password, label: "Password", placeholder: "Enter your password", label_html: { class: "avj-caption1" }
+      .row.mb-4
+        .col-md-8
+          .d-flex.align-items-center
+            = f.button :submit, "Login to AV Junction", class:"btn btn-primary mr-4"
+            - if devise_mapping.recoverable? && controller_name != 'passwords' && controller_name != 'registrations'
+              a.avj-body2 href=new_password_path(resource_name)
+                | Forgot your password
+      .row
+        .col-md-8
+          .avj-body2
+            | Haven't got an account? &nbsp;
+            a.span href=root_path
+              | Register Here.

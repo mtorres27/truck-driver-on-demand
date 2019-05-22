@@ -1,22 +1,17 @@
 h1.heading-h1 My Freelancers
 
 .tab-bar
+  a.tab-bar__item href="/company/freelancers/saved" class=("tab-bar__item--active" if request.path == "/company/freelancers/saved")
+    | Saved
   a.tab-bar__item href="/company/freelancers/hired" class=("tab-bar__item--active" if request.path == "/company/freelancers/hired")
     | Hired
-  a.tab-bar__item href="/company/freelancers/favourites" class=("tab-bar__item--active" if request.path == "/company/freelancers/favourites")
-    | Favourites
 
 - content_for :secondary do
   .action-bar
     h2.heading-h2.heading-h2--action-bar Hired
-    .action-bar__actions
-        span class="result-header__distance-text"
-          | filter by location
-        select id="freelancer_hired_location" class="company-freelancer__distance"
-          = render "location_options"
 
   .list
     - @freelancers.each do |freelancer|
       = render partial: "company/shared/freelancer_info", locals: { freelancer: freelancer }
 
-  = paginate @freelancers
+    = paginate @freelancers

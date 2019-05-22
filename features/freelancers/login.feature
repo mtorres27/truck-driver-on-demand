@@ -10,8 +10,7 @@ Scenario: A Freelancer user enters valid credentials
   And I fill "Password" with "password"
   And I press "Login"
   Then I should be on "/freelancer"
-  And I should see "welcome to AV Junction"
-  And I should see "Search for Jobs"
+  And I should see "Search Jobs"
 
 Scenario: A Freelancer user enters invalid credentials
   Given Exists an full registered freelancer user with email "john@doe.com" and password "password"

@@ -1,29 +1,29 @@
-.list-item.flex-row.flex-no-wrap
-  - if message.authorable.is_a?(Freelancer)
-    - if message.authorable.freelancer_profile.avatar_data.nil?
-      .dropdown-avatar
-        .circle_profile__image.freelancer__image= message.authorable.name_initials
-    - else
-      .common__user-avatar style="background-image: url(#{message.authorable.user_data.avatar_url})"
+.avj-list-item
+  - if user_is_author
+    .d-flex.flex-wrap.w-100
+      .w-50
+        .avj-body1.m-0 You
+      .w-50
+        .avj-caption1.m-0.text-right= "#{time_ago_in_words(message.created_at)} ago"
+      .avj-message-text.w-100.avj-bg-gorange
+        .avj-body2= message.body
+      - if message.attachment
+        .new-message__image
+          = attachment_image_link(message.attachment)
   - else
-    .common__user-avatar style="background-image: url(#{message.authorable.user_data.avatar_url})"
-  .gutter-left
-    .freelancer-job__msg-user-name= message.authorable.first_name_and_initial
-    .freelancer-job__msg-created-at= "#{time_ago_in_words(message.created_at)} ago"
-    p.freelancer-job__msg-text
-      - if message.send_contract != true
-        - if !message.checkin
-          = message.body
-        - else
-          = message.body
-          br
-          span class="new-message__checkin fa fa-map-marker"
-          = "Checked in at job site #{message.created_at.strftime("%B %d, %Y at %l:%M %P")}:"
-          br
-          .map
-            img(src="https://maps.googleapis.com/maps/api/staticmap?center=#{message.lat},#{message.lng}&zoom=16&size=260x260&markers=color:red%7C#{message.lat},#{message.lng}&key=#{Rails.application.secrets.google_maps_js_api_key}")
+    a.mr-4 href="#"
+      - if message.authorable.is_a?(Freelancer) && message.authorable.freelancer_profile.avatar_data.nil?
+        .avj-circle_profile__image.freelancer__image= message.authorable.name_initials
       - else
-        = message.body.html_safe
-    - if message.attachment
-      .new-message__image
-        = attachment_image_link(message.attachment)
+        .avj-avatar
+          = image_tag(message.authorable.user_data.avatar_url)
+    .d-flex.flex-wrap.w-100
+      .w-50
+        .avj-body1.m-0= message.authorable.first_name_and_initial
+      .w-50
+        .avj-caption1.m-0.text-right= "#{time_ago_in_words(message.created_at)} ago"
+      .avj-message-text.w-100
+        .avj-body2= message.body
+      - if message.attachment
+        .new-message__image
+          = attachment_image_link(message.attachment)

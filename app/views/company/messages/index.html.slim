@@ -1,17 +1,1 @@
-= render partial: "company/shared/job_nav", locals: { job: @job }
-
-- content_for :secondary do
-  .action-bar
-    h2.heading-h2.heading-h2--action-bar Progress
-    .action-bar__actions
-  .grid-h
-    .grid-cell.grid-cell--100
-      = simple_form_for(:message, url: company_job_messages_path(@job), html: { class: "js--message-form", data: { id: @job.id, type: "Company" } }) do |f|
-        - if @job.freelancer.nil?
-          - n = ""
-        - else
-          - n = @job.freelancer.first_name_and_initial
-        = render partial: "company/shared/new_message", locals: {f: f, n: n, type: "message"}
-    .grid-cell.grid-cell--100
-      .js--freelancer-job__message-history
-        = render "messages_info"
+= render partial: "shared/messages_index", locals: { recipient_name: @freelancer.first_name_and_initial, path: company_freelancer_messages_path(@freelancer), company: current_company, freelancer: @freelancer, authorable_type: "Company" }

@@ -1,7 +1,7 @@
 class CompanyUserPolicy < ApplicationPolicy
 
   def index?
-    plan_has_extra_users?
+    true
   end
 
   def show?
@@ -37,11 +37,6 @@ class CompanyUserPolicy < ApplicationPolicy
   end
 
   private
-
-  def plan_has_extra_users?
-    return false unless user.company_user?
-    user.company.plan&.user_limit > 1
-  end
 
   def company_owner?
     user.role == "Owner" && record.company == user.company

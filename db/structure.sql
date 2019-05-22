@@ -282,17 +282,6 @@ CREATE TABLE companies (
     established_in integer,
     header_color character varying DEFAULT 'FF6C38'::character varying,
     country character varying,
-    stripe_customer_id character varying,
-    stripe_subscription_id character varying,
-    stripe_plan_id character varying,
-    subscription_cycle character varying,
-    is_subscription_cancelled boolean DEFAULT false,
-    subscription_status character varying,
-    billing_period_ends_at timestamp without time zone,
-    last_4_digits character varying,
-    card_brand character varying,
-    exp_month character varying,
-    exp_year character varying,
     header_source character varying DEFAULT 'default'::character varying,
     sales_tax_number character varying,
     line2 character varying,
@@ -301,10 +290,8 @@ CREATE TABLE companies (
     postal_code character varying,
     job_types citext,
     manufacturer_tags citext,
-    plan_id bigint,
-    is_trial_applicable boolean DEFAULT true,
-    waived_jobs integer DEFAULT 0,
-    registration_step character varying
+    registration_step character varying,
+    saved_freelancers_ids citext
 );
 
 
@@ -680,31 +667,21 @@ CREATE TABLE freelancer_profiles (
     area character varying,
     lat numeric(9,6),
     lng numeric(9,6),
-    pay_unit_time_preference character varying,
-    pay_per_unit_time character varying,
     tagline character varying,
     bio text,
     job_markets citext,
     years_of_experience integer DEFAULT 0 NOT NULL,
     profile_views integer DEFAULT 0 NOT NULL,
-    projects_completed integer DEFAULT 0 NOT NULL,
     available boolean DEFAULT true NOT NULL,
     disabled boolean DEFAULT true NOT NULL,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
     freelancer_reviews_count integer DEFAULT 0 NOT NULL,
     technical_skill_tags citext,
-    profile_header_data text,
     verified boolean DEFAULT false,
-    header_color character varying DEFAULT 'FF6C38'::character varying,
     country character varying,
     freelancer_team_size character varying,
     freelancer_type character varying,
-    header_source character varying DEFAULT 'default'::character varying,
-    stripe_account_id character varying,
-    stripe_account_status text,
-    currency character varying,
-    sales_tax_number character varying,
     line2 character varying,
     state character varying,
     postal_code character varying,
@@ -715,15 +692,11 @@ CREATE TABLE freelancer_profiles (
     valid_driver boolean,
     own_tools boolean,
     company_name character varying,
-    job_types citext,
     job_functions citext,
     manufacturer_tags citext,
-    special_avj_fees numeric(10,2),
-    avj_credit numeric(10,2) DEFAULT NULL::numeric,
     registration_step character varying,
     province character varying,
-    freelancer_id integer,
-    business_tax_number character varying
+    freelancer_id integer
 );
 
 
@@ -954,68 +927,20 @@ ALTER SEQUENCE job_invites_id_seq OWNED BY job_invites.id;
 CREATE TABLE jobs (
     id bigint NOT NULL,
     company_id bigint NOT NULL,
-    project_id bigint,
     title character varying,
     state character varying DEFAULT 'created'::character varying NOT NULL,
     summary text,
-    scope_of_work text,
-    budget numeric(10,2),
-    job_function character varying,
-    starts_on date,
-    ends_on date,
-    duration integer,
-    pay_type character varying,
-    freelancer_type character varying,
-    technical_skill_tags text,
-    invite_only boolean DEFAULT false NOT NULL,
-    scope_is_public boolean DEFAULT true NOT NULL,
-    budget_is_public boolean DEFAULT false NOT NULL,
-    working_days text[] DEFAULT '{}'::text[] NOT NULL,
-    working_time character varying,
-    contract_price numeric(10,2),
-    payment_schedule jsonb DEFAULT '"{}"'::jsonb NOT NULL,
-    reporting_frequency character varying,
-    require_photos_on_updates boolean DEFAULT false NOT NULL,
-    require_checkin boolean DEFAULT false NOT NULL,
-    require_uniform boolean DEFAULT false NOT NULL,
-    addendums text,
-    applicants_count integer DEFAULT 0 NOT NULL,
-    messages_count integer DEFAULT 0 NOT NULL,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
-    currency character varying,
     address character varying,
     lat numeric(9,6),
     lng numeric(9,6),
     formatted_address character varying,
-    contract_sent boolean DEFAULT false,
-    opt_out_of_freelance_service_agreement boolean DEFAULT false,
     country character varying,
-    scope_file_data text,
-    applicable_sales_tax numeric(10,2),
-    stripe_charge_id character varying,
-    stripe_balance_transaction_id character varying,
-    funds_available_on integer,
-    funds_available boolean DEFAULT false,
-    job_type citext,
-    job_market citext,
+    job_markets citext,
     manufacturer_tags citext,
-    company_plan_fees numeric(10,2) DEFAULT 0,
-    contracted_at timestamp without time zone,
     state_province character varying,
-    creation_step character varying,
-    plan_fee numeric(10,2) DEFAULT 0,
-    paid_by_company boolean DEFAULT false,
-    total_amount numeric(10,2),
-    tax_amount numeric(10,2),
-    stripe_fees numeric(10,2),
-    amount_subtotal numeric(10,2),
-    variable_pay_type character varying,
-    overtime_rate numeric(10,2),
-    payment_terms integer,
-    expired boolean DEFAULT false,
-    fee_schema json,
-    creator_id bigint
+    technical_skill_tags text
 );
 
 
@@ -1055,8 +980,7 @@ CREATE TABLE messages (
     checkin boolean DEFAULT false,
     send_contract boolean DEFAULT false,
     unread boolean DEFAULT true,
-    lat numeric(9,6),
-    lng numeric(9,6)
+    job_id bigint
 );
 
 
@@ -1151,131 +1075,12 @@ ALTER SEQUENCE pages_id_seq OWNED BY pages.id;
 
 
 --
--- Name: plans; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE plans (
-    id bigint NOT NULL,
-    name character varying,
-    code character varying,
-    trial_period integer,
-    subscription_fee numeric(10,2),
-    fee_schema json,
-    created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL,
-    description text,
-    period character varying DEFAULT 'yearly'::character varying,
-    is_canadian boolean DEFAULT false,
-    job_posting_limit integer,
-    user_limit integer DEFAULT 1
-);
-
-
---
--- Name: plans_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE plans_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: plans_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE plans_id_seq OWNED BY plans.id;
-
-
---
--- Name: projects; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE projects (
-    id bigint NOT NULL,
-    company_id bigint NOT NULL,
-    external_project_id character varying,
-    name character varying NOT NULL,
-    formatted_address character varying,
-    lat numeric(9,6),
-    lng numeric(9,6),
-    created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
-);
-
-
---
--- Name: projects_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE projects_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: projects_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE projects_id_seq OWNED BY projects.id;
-
-
---
 -- Name: schema_migrations; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE schema_migrations (
     version character varying NOT NULL
 );
-
-
---
--- Name: subscriptions; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE subscriptions (
-    id bigint NOT NULL,
-    company_id integer,
-    plan_id integer,
-    stripe_subscription_id character varying,
-    is_active boolean,
-    ends_at date,
-    billing_perios_ends_at date,
-    amount numeric,
-    created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL,
-    refund numeric(10,2) DEFAULT 0,
-    tax numeric(10,2) DEFAULT 0,
-    description character varying,
-    stripe_invoice_id character varying,
-    stripe_invoice_date timestamp without time zone,
-    stripe_invoice_number character varying
-);
-
-
---
--- Name: subscriptions_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE subscriptions_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: subscriptions_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE subscriptions_id_seq OWNED BY subscriptions.id;
 
 
 --
@@ -1527,27 +1332,6 @@ ALTER TABLE ONLY pages ALTER COLUMN id SET DEFAULT nextval('pages_id_seq'::regcl
 
 
 --
--- Name: plans id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY plans ALTER COLUMN id SET DEFAULT nextval('plans_id_seq'::regclass);
-
-
---
--- Name: projects id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY projects ALTER COLUMN id SET DEFAULT nextval('projects_id_seq'::regclass);
-
-
---
--- Name: subscriptions id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY subscriptions ALTER COLUMN id SET DEFAULT nextval('subscriptions_id_seq'::regclass);
-
-
---
 -- Name: users id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -1779,35 +1563,11 @@ ALTER TABLE ONLY pages
 
 
 --
--- Name: plans plans_pkey; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY plans
-    ADD CONSTRAINT plans_pkey PRIMARY KEY (id);
-
-
---
--- Name: projects projects_pkey; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY projects
-    ADD CONSTRAINT projects_pkey PRIMARY KEY (id);
-
-
---
 -- Name: schema_migrations schema_migrations_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY schema_migrations
     ADD CONSTRAINT schema_migrations_pkey PRIMARY KEY (version);
-
-
---
--- Name: subscriptions subscriptions_pkey; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY subscriptions
-    ADD CONSTRAINT subscriptions_pkey PRIMARY KEY (id);
 
 
 --
@@ -1907,13 +1667,6 @@ CREATE INDEX index_companies_on_manufacturer_tags ON companies USING btree (manu
 --
 
 CREATE INDEX index_companies_on_name ON companies USING btree (name);
-
-
---
--- Name: index_companies_on_plan_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_companies_on_plan_id ON companies USING btree (plan_id);
 
 
 --
@@ -2064,13 +1817,6 @@ CREATE INDEX index_jobs_on_company_id ON jobs USING btree (company_id);
 
 
 --
--- Name: index_jobs_on_creator_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_jobs_on_creator_id ON jobs USING btree (creator_id);
-
-
---
 -- Name: index_jobs_on_manufacturer_tags; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -2078,17 +1824,17 @@ CREATE INDEX index_jobs_on_manufacturer_tags ON jobs USING btree (manufacturer_t
 
 
 --
--- Name: index_jobs_on_project_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_jobs_on_project_id ON jobs USING btree (project_id);
-
-
---
 -- Name: index_messages_on_authorable_type_and_authorable_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_messages_on_authorable_type_and_authorable_id ON messages USING btree (authorable_type, authorable_id);
+
+
+--
+-- Name: index_messages_on_job_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_messages_on_job_id ON messages USING btree (job_id);
 
 
 --
@@ -2134,38 +1880,10 @@ CREATE INDEX index_on_freelancers_loc ON freelancer_profiles USING gist (st_geog
 
 
 --
--- Name: index_on_projects_loc; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_on_projects_loc ON projects USING gist (st_geographyfromtext((((('SRID=4326;POINT('::text || lng) || ' '::text) || lat) || ')'::text)));
-
-
---
 -- Name: index_pages_on_slug; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_pages_on_slug ON pages USING btree (slug);
-
-
---
--- Name: index_projects_on_company_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_projects_on_company_id ON projects USING btree (company_id);
-
-
---
--- Name: index_projects_on_external_project_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_projects_on_external_project_id ON projects USING btree (external_project_id);
-
-
---
--- Name: index_projects_on_name; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_projects_on_name ON projects USING btree (name);
 
 
 --
@@ -2240,14 +1958,6 @@ ALTER TABLE ONLY company_reviews
 
 
 --
--- Name: jobs fk_rails_1977e8b5a6; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY jobs
-    ADD CONSTRAINT fk_rails_1977e8b5a6 FOREIGN KEY (project_id) REFERENCES projects(id);
-
-
---
 -- Name: freelancer_reviews fk_rails_2d750cb05f; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -2256,27 +1966,11 @@ ALTER TABLE ONLY freelancer_reviews
 
 
 --
--- Name: companies fk_rails_2e8c071a79; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY companies
-    ADD CONSTRAINT fk_rails_2e8c071a79 FOREIGN KEY (plan_id) REFERENCES plans(id);
-
-
---
 -- Name: applicants fk_rails_32d387f70d; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY applicants
     ADD CONSTRAINT fk_rails_32d387f70d FOREIGN KEY (job_id) REFERENCES jobs(id);
-
-
---
--- Name: projects fk_rails_44a549d7b3; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY projects
-    ADD CONSTRAINT fk_rails_44a549d7b3 FOREIGN KEY (company_id) REFERENCES companies(id);
 
 
 --
@@ -2352,6 +2046,14 @@ ALTER TABLE ONLY job_collaborators
 
 
 --
+-- Name: messages fk_rails_d7e012c0bb; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY messages
+    ADD CONSTRAINT fk_rails_d7e012c0bb FOREIGN KEY (job_id) REFERENCES jobs(id);
+
+
+--
 -- Name: company_reviews fk_rails_dfd5a40d4e; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -2365,14 +2067,6 @@ ALTER TABLE ONLY company_reviews
 
 ALTER TABLE ONLY freelancer_reviews
     ADD CONSTRAINT fk_rails_f184aba2e9 FOREIGN KEY (job_id) REFERENCES jobs(id);
-
-
---
--- Name: jobs fk_rails_f251f165d2; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY jobs
-    ADD CONSTRAINT fk_rails_f251f165d2 FOREIGN KEY (creator_id) REFERENCES users(id);
 
 
 --
@@ -2556,6 +2250,13 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20181203174528'),
 ('20181203184841'),
 ('20181212151759'),
-('20190401182720');
+('20190401182720'),
+('20190417220517'),
+('20190426172935'),
+('20190503190656'),
+('20190509185605'),
+('20190516194711'),
+('20190520194631'),
+('20190520231702');
 
 

@@ -1,4 +1,5 @@
-- if current_company.subscription_active?
-  = render "index_for_subscribers"
-- else
-  = render "index_for_non_subscribers"
+.avj-section.avj-section__main
+  .container.container__content
+    h2
+      | Search AV Professionals
+    = render 'company/shared/freelancer_search_form'

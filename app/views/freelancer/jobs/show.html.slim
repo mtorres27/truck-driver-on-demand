@@ -1,201 +1,36 @@
-.container__body-header
-  = render partial: "/freelancer/shared/job_meta"
-  - if @have_applied
-    = render partial: "/freelancer/shared/job_shared_nav", locals: { job: @job }
+.avj-section.avj-section__msg-subhead.d-block.mb-4
+  .container
+    .avj-subhead
+      h4.ellipsis.m-0= @job.title
+      .d-flex.align-items-center.justify-content-end
+        a.btn.btn-primary.btn-sm href=freelancer_messages_for_job_url(company_id: @job.company.id, job_id: @job.id)
+          | Message
 
-- content_for :secondary do
-  .action-bar
-    h2.heading-h2.heading-h2--action-bar Job Detail
-    .action-bar__actions
-      - if @have_applied == false
-          a.btn.btn--primary href="#" id="apply-for-job"
-            | Apply Now
-      - else
-        a href="/freelancer/profile/bank_info"
-          | Already applied
-      = job_state_label(@job)
-
-
-  .grid-h
-    .grid-cell.grid-cell--33.grid-cell--span33
-      h3.heading-h3 Job Type
-      div
-        - if @job.job_type.nil?
-          = "N/A"
-        - else
-          = t("enumerize.job_types.#{@job.job_type}")
-    .grid-cell.grid-cell--33.grid-cell--span33
-      h3.heading-h3 Job Market
-      div
-        - if @job.job_market.nil?
-          = "N/A"
-        - else
-          = Job.all_job_markets[@job.job_market.to_sym]
-    .grid-cell.grid-cell--33.grid-cell--span33
-      h3.heading-h3 Job Function
-      div
-        - if @job.job_function.nil?
-          = "N/A"
-        - else
-          = Job.all_job_functions[@job.job_function.to_sym]
-    .grid-cell.grid-cell--33.grid-cell--span33
-      h3.heading-h3 Location
-      div
-        - if @job.address.nil?
-          = "N/A"
-        - else
-          = "#{@job.city_state_country}"
-    .grid-cell.grid-cell--33.grid-cell--span33
-      h3.heading-h3 Est. Start
-      div
-        - if @job.starts_on.nil?
-          = "N/A"
-        - else
-          = @job.starts_on
-    .grid-cell.grid-cell--33.grid-cell--span33
-      h3.heading-h3 Duration
-      div
-        - if  @job.duration.nil?
-          = "N/A"
-        - else
-          = @job.duration
-    .grid-cell.grid-cell--33.grid-cell--span33
-      h3.heading-h3 Preferred pay type
-      div
-        - if @job.pay_type.nil?
-          = "N/A"
-        - else
-          = t("enumerize.job.pay_type.#{@job.pay_type}")
-    .grid-cell.grid-cell--33.grid-cell--span33
-      h3.heading-h3 Freelancer Type
-      div
-        - if @job.freelancer_type.nil?
-          = "N/A"
-        - else
-          = t("enumerize.job.freelancer_type.#{@job.freelancer_type}")
-
-    - if @job.budget_is_public
-      .grid-cell.grid-cell--33.grid-cell--span33
-        h3.heading-h3 Job Budget
-        div
-          = number_to_currency(@job.budget, precision: 2) + " "
-          - if @job.currency
-            = @job.currency.upcase
-
-
-
-    - if @have_applied and @job.freelancer&.id == current_user&.id
-      .grid-cell.grid-cell--100
-        h3.heading-h3 Work Order
-        .billboard
-          p
-            - if @job.contract_sent == false
-                = "Your work order #{@job.work_order} is still being created."
+.avj-section.avj-section__main
+  .container.container__content
+    .avj-job-item
+      .d-flex.align-items-start.mb-4
+        .mr-2
+          a href=freelancer_company_path(@job.company)
+            - if @job.company.avatar_data.nil?
+              .avj-circle_profile__image.company__image= @job.company.company_user.name_initials
             - else
-              - if @job.state == "contracted"
-                = "You have accepted the work order #{@job.work_order}."
-              - elsif @job.state == "completed"
-                = "You have completed the job for the work order #{@job.work_order}."
-              - else
-                = "Your work order #{@job.work_order} is awaiting your acceptance."
-          - if @job.contract_sent == true
-            - path = current_user.admin? ? admin_job_work_order_path(@job) : freelancer_job_work_order_path(@job)
-            a.btn.btn--primary href=path
-              div View Work Order
-
-    .grid-cell.grid-cell--50
-      h3.heading-h3 Job Summary
-      p= @job.summary
-      - if !@job.technical_skill_tags.nil? and @job.technical_skill_tags.kind_of?(Hash)
-        h3.heading-h3 Technical Skill Tags
+              .avj-avatar= image_tag(@job.company.avatar_url)
         div
-          - @job.technical_skill_tags.each do |index, value|
-            .grey.tag
-              = I18n.t("enumerize.technical_skill_tags.#{index}")
-      - if !@job.manufacturer_tags.nil? and @job.manufacturer_tags.kind_of?(Hash)
-        h3.heading-h3 Manufacturer Tags
-        div
-          - @job.manufacturer_tags.each do |index, value|
-            .grey.tag
-              = I18n.t("enumerize.manufacturer_tags.#{index}")
-
-    .grid-cell.grid-cell--50
-      h3.heading-h3 Scope of Work
-      - if @job.scope_of_work
-        p= @job.scope_of_work
-      - if !@job.scope_file.nil?
-        h4.heading-h4 Download Attachements
-        p
-          a href=@job.scope_file_url target="_blank"
-            = @job.scope_file.original_filename
-
-.popup
-  .container.container--popup
-    .frame
-      .popup__title-bar
-        h2.heading-h2 Apply for this job
-        .buttons
-          a.btn-icon-link href="#" id="close-modal"
-            span.zmdi.zmdi-close
-
-      = simple_form_for "freelancer_job_apply_path", html: { multipart: true }  do |f|
-        = f.hidden_field :job, value: @job.id
-        h2.common__h2-modal= @job.title
-        .grid-h
-          .grid-cell.grid-cell--100
-            .attachment.common__text-field-group
-              label.common__field-label.required-field for="name-4"
-                = "Send a message to #{@job.company.name}"
-              = f.file_field :attachment, as: :file, id: "message_attachment", label: false, :accept => 'document/pdf,application/pdf,application/x-pdf,image/png,image/jpg,image/jpeg,image/gif',  class: "file-input--hidden"
-              = f.text_area :message, as: :string, placeholder: "Enter your message", label: false, maxlength: 5000, class: "w-input"
-          .grid-cell.grid-cell--100
-            = f.input :attachment, as: :file, label: "Attachments", required: false
-          .grid-cell.grid-cell--100
-            .buttons
-              .freelancer-job__apply-modal__errors
-              = f.button :submit, prompt: "Post Message", value: "Post Message", data: { disable_with: "Submitting..." }, class: "btn btn-primary", onClick: "return validateQuote()"
-              .btn.btn--secondary id="close-modal-2"
-                | cancel
-
-javascript:
-
-  var validateQuote = function( ){
-    $(".freelancer-job__apply-modal__errors").html("");
-
-    if ($("#freelancer_job_apply_path_message").val() == "") {
-      safe = false;
-    }
-
-    if (!safe) {
-      $(".freelancer-job__apply-modal__errors").append("Unable to submit quote: please fill out amount and a message.");
-    }
-
-    return safe;
-  };
-
-
-  var triggerFileUpload = function () {
-    $("#message_attachment").click();
-  };
-
-  $(document).ready(function(){
-    $("#message_attachment").change(function() {
-      $("#attach_indicator").find(".common__icon-attach").addClass("common__icon-attach--active");
-    });
-
-    $("#apply-for-job").on('click', function(e) {
-      e.preventDefault();
-      $(".popup").css('display','flex');
-    });
-
-    $("#close-modal").on('click', function(e) {
-      e.preventDefault();
-      $(".popup").hide();
-    });
-
-    $("#close-modal-2").on('click', function(e) {
-      e.preventDefault();
-      $(".popup").hide();
-    });
-  });
-
+          .avj-caption1.avj-text-color-black2.mb-0= "Posted #{@job.created_at.strftime('%B %d, %Y')}"
+          .avj-body1.avj-text-emphasize.mb-0= @job.title
+          .d-flex
+            .zmdi.zmdi-pin.avj-text-color-black2.avj-text-sm.mr-2
+            .avj-caption1.avj-text-color-black2= @job.city_state_country
+          .d-flex
+            - if @job.has_system_integration_job_markets
+              .avj-tag System Integration
+            - if @job.has_live_events_staging_and_rental_job_markets
+              .avj-tag Live Events Staging & Rental
+            - @job.job_markets&.each do |key, _|
+              .avj-tag= I18n.t("enumerize.system_integration_job_markets").merge(I18n.t("enumerize.live_events_staging_and_rental_job_markets"))[key.to_sym]
+            - @job.technical_skill_tags&.each do |key, _|
+              .avj-tag= I18n.t("enumerize.technical_skill_tags.#{key}")
+            - @job.manufacturer_tags&.each do |key, _|
+              .avj-tag= I18n.t("enumerize.manufacturer_tags.#{key}")
+      .avj-body1= @job.summary

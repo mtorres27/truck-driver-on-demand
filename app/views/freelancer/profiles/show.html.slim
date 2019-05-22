@@ -1,25 +1,10 @@
-= render partial: "/freelancer/shared/profile_sub_nav"
+.avj-section.avj-section__msg-subhead.d-block.mb-4
+  .container
+    .avj-subhead
+      h4.ellipsis.mb-0= @freelancer.first_name_and_initial
+      .d-flex.align-items-center.justify-content-end
+        a.btn.btn-outline-primary.btn-sm.mr-2 href=edit_freelancer_profile_path
+          | Edit
+        = link_to "Log Out", destroy_user_session_path, method: :delete, class: "btn btn-primary btn-sm"
 
-- content_for :title, "AVJunction - Edit Profile"
-
-- content_for :secondary do
-  .action-bar
-    h2.heading-h2.heading-h2--action-bar Profile
-    .action-bar__actions
-      a.btn.btn--primary href=edit_freelancer_profile_path
-        | Edit
-      - unless @freelancer.freelancer_profile.verified
-        a.btn.btn--primary href="mailto:info@avjunction.com?subject=I would like my account to be verified" target="_blank"
-          | Verify
-
-
-
-
-  - if @freelancer.freelancer_profile.header_source == 'default'
-    .profile__wallpaper style="background-image: url(#{image_path('profile_header/default_wallpaper.jpg')});"
-  - elsif @freelancer.freelancer_profile.profile_header_url.include?("missing") or @freelancer.freelancer_profile.header_source == "color"
-    .profile__wallpaper style="background-color: #{ @freelancer.freelancer_profile.header_color.include?("#") ? "" : "#"}#{@freelancer.freelancer_profile.header_color}"
-  - else
-    .profile__wallpaper style="background-image: url(#{@freelancer.freelancer_profile.profile_header_url.include?("missing") ? "" : @freelancer.freelancer_profile.profile_header_url});"
-
-  = render "shared/profile-freelancer"
+= render "shared/profile-freelancer"

@@ -1,0 +1,25 @@
+.avj-section.avj-section__main.avj-hidden-important#search-form
+  .container.container__content
+    = render 'company/shared/freelancer_search_form'
+.avj-section.avj-section__msg-subhead.d-block.mb-4#search-subheader
+  .container
+    .avj-subhead
+      h4.ellipsis.m-0= "Found #{@freelancer_profiles.total_count} matching professionals"
+      button.btn.btn-primary.btn-sm onClick="toggleSearch();"
+        | Edit Search
+.avj-section.avj-section__main#search-results
+  - unless @featured_freelancers.blank?
+    .container.container__content
+      h2.d-none.d-md-block
+        | Featured Professionals
+      div
+        - @featured_freelancers.each do |freelancer_profile|
+          = render partial: "company/shared/freelancer_info", locals: {freelancer: freelancer_profile.freelancer}
+  .container.container__content
+    h2.d-none.d-md-block
+      | Search Results
+    div
+      - @freelancer_profiles.each do |freelancer_profile|
+        = render partial: "company/shared/freelancer_info", locals: {freelancer: freelancer_profile.freelancer}
+
+      = paginate @freelancer_profiles

@@ -75,7 +75,6 @@ class Freelancer < User
                 :accept_code_of_conduct, :enforce_profile_edit, :user_type
 
   validates :email, presence: true, if: :enforce_profile_edit
-  validates :first_name, :last_name, presence: true, on: :update, if: :step_job_info?
   validates :freelancer_profile, presence: true
   validates_associated :freelancer_profile
 
@@ -97,7 +96,7 @@ class Freelancer < User
     last_name: "A"
   }, associated_against: {
     freelancer_profile: [
-      :job_types, :job_markets, :technical_skill_tags, :manufacturer_tags, :job_functions, :tagline, :bio
+      :job_markets, :technical_skill_tags, :manufacturer_tags, :job_functions, :tagline, :bio
     ]
   }, using: {
     tsearch: { prefix: true, any_word: true }
@@ -126,7 +125,6 @@ class Freelancer < User
           :city,
           :phone_number,
           :company_name,
-          :job_types,
           :job_markets,
           :technical_skill_tags,
           :manufacturer_tags,
@@ -139,6 +137,22 @@ class Freelancer < User
   }
 
   delegate :registration_completed?, to: :freelancer_profile, allow_nil: true
+
+  def messages_for_company(company)
+    Message.messages_for(company, self)
+  end
+
+  def companies_for_messaging
+    companies_with_messages = messages.map { |msg| msg.receivable }.uniq
+    Message.where(receivable_type: 'Freelancer', receivable_id: id).find_each do |msg|
+      companies_with_messages << msg.authorable if !companies_with_messages.include?(msg.authorable)
+    end
+    companies_with_messages
+  end
+
+  def connections_count
+    companies_for_messaging.count
+  end
 
   def connected?
     freelancer_profile.stripe_account_id.present?
@@ -248,10 +262,6 @@ class Freelancer < User
 
   def initialize_freelancer_profile
     self.freelancer_profile ||= build_freelancer_profile
-  end
-
-  def step_profile?
-    freelancer_profile&.registration_step == "profile"
   end
 
   def step_job_info?

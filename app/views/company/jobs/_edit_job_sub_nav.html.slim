@@ -1,0 +1,11 @@
+.avj-section.avj-section__msg-subhead.d-block.mb-4
+  .container
+    .avj-subhead
+      h4.ellipsis.m-0= @job.new_record? ? "New Job Post" : "Edit Job Post"
+      .d-flex.align-items-center.justify-content-end
+        a.btn.btn-outline-primary.btn-sm.mr-2 href=company_jobs_url
+          | Cancel
+        - unless @job.new_record?
+          = link_to "Delete", company_job_path(@job), data: {confirm: "Are you sure you want to permanently delete this job posting?"}, method: :delete, class: "btn btn-danger btn-sm mr-2"
+        = f.button :button, "Draft", name: "job[state]", value: "created", class: "btn btn-outline-primary btn-sm mr-2"
+        = f.button :button, "Post", name: "job[state]", value: "published", class: "btn btn-primary btn-sm"

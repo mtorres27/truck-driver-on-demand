@@ -1,54 +1,47 @@
-- content_for :secondary do
-  h1.text-center.heading-h1 = "Register as a Company"
-  = render partial: "shared/registration_progress_bar", locals: { step: 3 }
-  = simple_form_for(current_company, url: wizard_path) do |f|
-    .grid-h
-      .grid-cell.grid-cell--100
-        .form__field-label Job Types
-        - if current_company.errors.full_messages.include?("Job types can't be blank")
-          .has-error
-            .help-block
-              | One job type must be selected.
-        .company-profile__checkboxes
-          - I18n.t('enumerize.job_types').each do |index, value|
-            - tag_name = "company[job_types][#{index.to_s}]"
-            - if current_company.job_types.present? and current_company.job_types.include?(index.to_s)
-              - checked = true
-            - else
-              - checked = false
-            .company-profile__checkbox
-              = check_box_tag tag_name, "1", checked
-              = " #{value}"
-        .company_please_select_job_type_message.company-profile__checkboxes
-          | Please select a Job type
-      .grid-cell.grid-cell--100
-        .form__field-label.company_system_integration_checkboxes Job Markets / System Integration
-        .company_system_integration_checkboxes.company-profile__checkboxes
-          - I18n.t('enumerize.system_integration_job_markets').each do |index, value|
-            - tag_name = "company[job_markets][#{index.to_s}]"
-            - if current_company.job_markets.present? and current_company.job_markets.include?(index.to_s) and current_company.job_types.present? and current_company.job_types.include?('system_integration')
-              - checked = true
-            - else
-              - checked = false
-            .company-profile__checkbox
-              = check_box_tag tag_name, "1", checked, class: 'company_system_integration_check_box'
-              = " #{value}"
-        .form__field-label.company_live_events_staging_and_rental_checkboxes Job Markets / Live Events Staging & Rental
-        .company_live_events_staging_and_rental_checkboxes.company-profile__checkboxes
-          - I18n.t('enumerize.live_events_staging_and_rental_job_markets').each do |index, value|
-            - tag_name = "company[job_markets][#{index.to_s}]"
-            - if current_company.job_markets.present? and current_company.job_markets.include?(index.to_s) and current_company.job_types.present? and current_company.job_types.include?('live_events_staging_and_rental')
-              - checked = true
-            - else
-              - checked = false
-            .freelancer-profile__checkbox
-              = check_box_tag tag_name, "1", checked, class: 'company_live_events_staging_and_rental_check_box'
-              = " #{value}"
-      .grid-cell.grid-cell--100
-        .grid-h
-          .grid-cell.grid-cell--33
-            = f.button :submit, "Continue", class: "btn btn--primary"
-          .grid-cell.grid-cell--33
-            = link_to "Skip", skip_company_registration_step_path(:job_info), method: :post, class: "btn btn--secondary"
-          .grid-cell.grid-cell--33
-            = link_to "Use another account", destroy_user_session_path,  method: :delete, class: "btn btn--clear"
+.avj-section.avj-section__main
+  .container.container__content
+    h2
+      | Select the types of jobs for which your company typically hires.
+    .progress.mb-4
+      .progress-bar role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 100%"
+    = simple_form_for(current_company, url: wizard_path) do |f|
+      .row
+        .col-12
+          .form-group
+            label.avj-body1 for="Job_types"
+              | System Integration
+            .row
+              - I18n.t('enumerize.system_integration_job_markets').each do |index, value|
+                - tag_name = "company[job_markets][#{index.to_s}]"
+                - if current_company.job_markets.present? and current_company.job_markets.include?(index.to_s)
+                  - checked = true
+                - else
+                  - checked = false
+                .col-md-6
+                  .form-check
+                    = check_box_tag tag_name, "1", checked, class: "form-check-input"
+                    label.form-check-label.avj-body2
+                      = " #{value}"
+
+        .col-12
+          .form-group
+            label.avj-body1 for="Job_types"
+              | Live Events, Staging and Rental
+            .row
+              - I18n.t('enumerize.live_events_staging_and_rental_job_markets').each do |index, value|
+                - tag_name = "company[job_markets][#{index.to_s}]"
+                - if current_company.job_markets.present? and current_company.job_markets.include?(index.to_s)
+                  - checked = true
+                - else
+                  - checked = false
+                .col-md-6
+                  .form-check
+                    = check_box_tag tag_name, "1", checked, class: "form-check-input"
+                    label.form-check-label.avj-body2
+                      = " #{value}"
+        .col-12
+          .d-flex.align-items-center.justify-content-between
+            = link_to "Start Over", previous_company_registration_step_path(:job_info), method: :post, class: "avj-body2 mr-4"
+            = f.button :submit, "Complete Registration", class: "btn btn-primary"
+          .d-flex.align-items-center.justify-content-between
+            = link_to "Use another account", destroy_user_session_path, method: :delete, class: "avj-body2 mr-4"

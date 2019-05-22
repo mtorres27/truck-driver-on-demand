@@ -1,0 +1,36 @@
+.avj-section.avj-section__msg-subhead
+  .container
+    .avj-subhead
+      .mr-4
+        - if current_company
+          - if freelancer.freelancer_profile.avatar_data.nil?
+            .avj-circle_profile__image.freelancer__image= freelancer.name_initials
+          - else
+            .avj-avatar
+              = image_tag(freelancer.freelancer_profile.avatar_url)
+        - else
+          .avj-avatar
+            = image_tag(company.avatar_url)
+      div
+        h4= "Conversation with #{recipient_name}"
+
+.avj-section.avj-section__chat-input
+  .container.containter__content
+    = simple_form_for(:message, url: path, html: { class: "js--message-form avj-list-item m-0", data: { id: "#{authorable_type}-#{company.id}-#{freelancer.id}", company: company.id, freelancer: freelancer.id, type: authorable_type } }) do |f|
+      .d-flex.w-100.align-items-start
+        = f.text_area :body, as: :string, placeholder: "Send a message to #{recipient_name}", label: false, maxlength: 5000, class: "js--message-input form-control avj-body1 mr-2", value: ("I'm interested in learning more about the job you posted. Re: #{@job.title}" if @job.present?)
+        - if @job.present?
+          =f.hidden_field :job_id, value: @job.id
+        button#new-message__submit.btn.btn-primary onClick= "validateMessage();"
+          | Send
+    #new-message__validation-errors
+
+.avj-section.avj-section__main
+  .container.container__content
+    h2.d-none.d-md-block= "Your conversation history with #{recipient_name}"
+    - if @messages.count == 0
+      .avj-body1.js--messages-beginning= "This is the very begining of your message history with #{recipient_name}"
+    .avj-message-list.js--freelancer-job__message-history
+      - @messages.each do |message|
+        - user_is_author = (current_company && message.authorable == current_company) || (message.authorable == current_user)
+        = render "shared/message", message: message, user_is_author: user_is_author

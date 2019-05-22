@@ -2,57 +2,44 @@
 #
 # Table name: companies
 #
-#  id                        :integer          not null, primary key
-#  token                     :string
-#  name                      :string
-#  address                   :string
-#  formatted_address         :string
-#  area                      :string
-#  lat                       :decimal(9, 6)
-#  lng                       :decimal(9, 6)
-#  hq_country                :string
-#  description               :string
-#  avatar_data               :text
-#  disabled                  :boolean          default(TRUE), not null
-#  created_at                :datetime         not null
-#  updated_at                :datetime         not null
-#  messages_count            :integer          default(0), not null
-#  company_reviews_count     :integer          default(0), not null
-#  profile_header_data       :text
-#  contract_preference       :string           default(NULL)
-#  job_markets               :citext
-#  technical_skill_tags      :citext
-#  profile_views             :integer          default(0), not null
-#  website                   :string
-#  phone_number              :string
-#  number_of_offices         :integer          default(0)
-#  number_of_employees       :string
-#  established_in            :integer
-#  header_color              :string           default("FF6C38")
-#  country                   :string
-#  stripe_customer_id        :string
-#  stripe_subscription_id    :string
-#  stripe_plan_id            :string
-#  subscription_cycle        :string
-#  is_subscription_cancelled :boolean          default(FALSE)
-#  subscription_status       :string
-#  billing_period_ends_at    :datetime
-#  last_4_digits             :string
-#  card_brand                :string
-#  exp_month                 :string
-#  exp_year                  :string
-#  header_source             :string           default("default")
-#  sales_tax_number          :string
-#  line2                     :string
-#  city                      :string
-#  state                     :string
-#  postal_code               :string
-#  job_types                 :citext
-#  manufacturer_tags         :citext
-#  plan_id                   :integer
-#  is_trial_applicable       :boolean          default(TRUE)
-#  waived_jobs               :integer          default(0)
-#  registration_step         :string
+#  id                    :integer          not null, primary key
+#  token                 :string
+#  name                  :string
+#  address               :string
+#  formatted_address     :string
+#  area                  :string
+#  lat                   :decimal(9, 6)
+#  lng                   :decimal(9, 6)
+#  hq_country            :string
+#  description           :string
+#  avatar_data           :text
+#  disabled              :boolean          default(TRUE), not null
+#  created_at            :datetime         not null
+#  updated_at            :datetime         not null
+#  messages_count        :integer          default(0), not null
+#  company_reviews_count :integer          default(0), not null
+#  profile_header_data   :text
+#  contract_preference   :string           default(NULL)
+#  job_markets           :citext
+#  technical_skill_tags  :citext
+#  profile_views         :integer          default(0), not null
+#  website               :string
+#  phone_number          :string
+#  number_of_offices     :integer          default(0)
+#  number_of_employees   :string
+#  established_in        :integer
+#  header_color          :string           default("FF6C38")
+#  country               :string
+#  header_source         :string           default("default")
+#  sales_tax_number      :string
+#  line2                 :string
+#  city                  :string
+#  state                 :string
+#  postal_code           :string
+#  job_types             :citext
+#  manufacturer_tags     :citext
+#  registration_step     :string
+#  saved_freelancers_ids :citext
 #
 # Indexes
 #
@@ -60,13 +47,8 @@
 #  index_companies_on_job_markets           (job_markets)
 #  index_companies_on_manufacturer_tags     (manufacturer_tags)
 #  index_companies_on_name                  (name)
-#  index_companies_on_plan_id               (plan_id)
 #  index_companies_on_technical_skill_tags  (technical_skill_tags)
 #  index_on_companies_loc                   (st_geographyfromtext((((('SRID=4326;POINT('::text || lng) || ' '::text) || lat) || ')'::text)))
-#
-# Foreign Keys
-#
-#  fk_rails_...  (plan_id => plans.id)
 #
 
 class Company < ApplicationRecord
@@ -80,10 +62,7 @@ class Company < ApplicationRecord
   include AvatarUploader[:avatar]
   include ProfileHeaderUploader[:profile_header]
 
-  belongs_to :plan, foreign_key: 'plan_id', optional: true
-
-  has_many :projects, -> { order(updated_at: :desc) }, dependent: :destroy
-  has_many :jobs, dependent: :destroy
+  has_many :jobs, -> { order(updated_at: :desc) }, dependent: :destroy
   has_many :applicants, dependent: :destroy
   has_many :messages, -> { order(created_at: :desc) }, as: :authorable
   has_many :freelancer_reviews, dependent: :nullify
@@ -92,17 +71,14 @@ class Company < ApplicationRecord
   has_many :favourites
   has_many :favourite_freelancers, through: :favourites, source: :freelancer
   has_many :company_installs, dependent: :destroy
-  has_many :company_users, dependent: :destroy
   has_many :notifications, as: :receivable, dependent: :destroy
-  has_many :subscriptions
+  has_one :company_user, dependent: :destroy
 
   attr_accessor :accept_terms_of_service, :accept_privacy_policy, :accept_code_of_conduct,
-                :enforce_profile_edit, :user_type, :skip_step
+                :enforce_profile_edit, :user_type
 
   validates :phone_number, length: { minimum: 7 }, allow_blank: true
-  validates :name, :country, :city, presence: true, on: :update,  if: :step_job_info?
-  validates :job_types, presence: true, on: :update, if: :step_profile?
-  validates :description, :established_in, :number_of_employees, :number_of_offices, :website, :area, presence: true, on: :update, if: -> { registration_completed? && !skip_step }
+  validates :name, :country, :city, :website, :area, presence: true, on: :update,  if: :step_job_info?
 
   enumerize :contract_preference, in: [:prefer_fixed, :prefer_hourly, :prefer_daily]
 
@@ -113,10 +89,10 @@ class Company < ApplicationRecord
     :more_than_one_thousand
   ]
 
-  serialize :job_types
   serialize :job_markets
   serialize :technical_skill_tags
   serialize :manufacturer_tags
+  serialize :saved_freelancers_ids, Array
 
   enumerize :country, in: [
     :at, :au, :be, :ca, :ch, :de, :dk, :es, :fi, :fr, :gb, :hk, :ie, :it, :jp, :lu, :nl, :no, :nz, :pt, :se, :sg, :us
@@ -130,7 +106,7 @@ class Company < ApplicationRecord
 
   accepts_nested_attributes_for :featured_projects, allow_destroy: true, reject_if: :reject_featured_projects
   accepts_nested_attributes_for :company_installs, allow_destroy: true, reject_if: :reject_company_installs
-  accepts_nested_attributes_for :company_users
+  accepts_nested_attributes_for :company_user
 
   scope :new_registrants, -> { where(disabled: true, registration_step: "wicked_finish") }
   scope :incomplete_registrations, -> { where.not(registration_step: "wicked_finish") }
@@ -139,38 +115,40 @@ class Company < ApplicationRecord
   before_create :set_default_step
   after_save :send_confirmation_email
 
-  def freelancers
-    Freelancer.
-      joins(:freelancer_profile, applicants: :job).
-      where(jobs: { company_id: id }).
-      where(applicants: { state: :accepted }).
-      order(first_name: :desc, last_name: :desc)
+  def messages_for_freelancer(freelancer)
+    Message.messages_for(self, freelancer)
   end
 
-  def owner
-    company_users.where(role: 'Owner').first
+  def freelancers_for_messaging
+    freelancers_with_messages = messages.map { |msg| msg.receivable }.uniq
+    Message.where(receivable_type: 'Company', receivable_id: id).find_each do |msg|
+      freelancers_with_messages << msg.authorable if !freelancers_with_messages.include?(msg.authorable)
+    end
+    freelancers_with_messages
+  end
+
+  def freelancers
+    Freelancer.where(id: saved_freelancers_ids)
+  end
+
+  def hired_freelancers
+    Freelancer.
+        joins(:freelancer_profile, applicants: :job).
+        where(jobs: { company_id: id }).
+        where(applicants: { state: :accepted }).
+        order(first_name: :desc, last_name: :desc)
+  end
+
+  def city_state_province
+    "#{city}#{ ", #{state}" unless state.blank?}"
+  end
+
+  def postal_code_country
+    "#{"#{postal_code}, " unless postal_code.blank?}#{ I18n.t("enumerize.country.#{country}") }"
   end
 
   def open_jobs
     jobs.where(state: :published)
-  end
-
-  def has_available_job_posting_slots?
-    if plan.present?
-      plan.job_posting_limit.nil? ? true : open_jobs.count < plan.job_posting_limit
-    end
-  end
-
-  def has_ability_to_add_extra_users?
-    if plan.present?
-      plan.user_limit > 1
-    end
-  end
-
-  def has_available_user_slots?
-    if plan.present? && plan.user_limit > 1
-      company_users.count < plan.user_limit
-    end
   end
 
   def renew_month
@@ -194,7 +172,6 @@ class Company < ApplicationRecord
   pg_search_scope :search, against: {
     name: "A",
     area: "B",
-    job_types: "B",
     job_markets: "B",
     technical_skill_tags: "B",
     manufacturer_tags: "B",
@@ -209,7 +186,7 @@ class Company < ApplicationRecord
   pg_search_scope :name_or_email_search, against: {
     name: "A",
   }, associated_against: {
-    company_users: [:email]
+    company_user: [:email]
   }, using: {
     tsearch: { prefix: true }
   }
@@ -281,11 +258,6 @@ class Company < ApplicationRecord
     registration_step == "wicked_finish"
   end
 
-  def profile_form_filled?
-    avatar.present? && description.present? && established_in.present? && area.present? &&
-    number_of_employees.present? && number_of_offices.present? && website.present?
-  end
-
   def full_name
     name
   end
@@ -298,73 +270,15 @@ class Company < ApplicationRecord
     self
   end
 
-  def user
-    owner
+  def has_saved_freelancer?(freelancer)
+    saved_freelancers_ids.include?(freelancer.id)
   end
 
-  def subscription_active?
-    ['trialing', 'active'].include?(subscription_status) || plan.present?
-  end
-
-  def trial_period_ends_at
-    trial_period_end = StripeTool.get_trial_period_end(company: self)
-    return unless trial_period_end.present? && trial_period_end > Time.now
-    trial_period_end
-  end
-
-  def trial_days_available
-    if trial_period_ends_at.present?
-      if trial_period_ends_at > Time.now
-        (trial_period_ends_at.to_date - Time.now.to_date).to_i
-      else
-        0
-      end
-    else
-      15
-    end
-  end
-
-  def check_for_new_invoices
-    if stripe_customer_id.present?
-      customer = Stripe::Customer.retrieve(stripe_customer_id)
-      invoices = StripeTool.get_invoices(customer: customer)
-      invoices.each do |invoice|
-        next if subscriptions.find_by(stripe_invoice_id: invoice.id).present?
-        stripe_subscription = Stripe::Subscription.retrieve(invoice.subscription)
-        plan = Plan.find_by(code: stripe_subscription.plan.id)
-        create_subscription(plan, stripe_subscription, invoice)
-      end
-    end
-  end
-
-  def disable_all_users
-    company_users.each do |company_user|
-      next if company_user.role == "Owner"
-      company_user.update_attribute(:enabled, false)
-    end
-  end
-
-  def enabled_users
-    company_users.where(enabled: true)
+  def owner
+    company_user
   end
 
   private
-
-  def create_subscription(plan, stripe_subscription, invoice)
-    company_subscription = Subscription.new
-    company_subscription.company_id = id
-    company_subscription.plan_id = plan.id
-    company_subscription.description = "Subscription to #{plan.name}."
-    company_subscription.stripe_subscription_id = stripe_subscription.id
-    company_subscription.stripe_invoice_number = invoice.number
-    company_subscription.stripe_invoice_id = invoice.id
-    company_subscription.is_active = true
-    company_subscription.ends_at = Time.at(stripe_subscription.current_period_end).to_datetime
-    company_subscription.stripe_invoice_date = Time.at(invoice.date).to_datetime
-    company_subscription.amount = invoice.subtotal.to_f / 100
-    company_subscription.tax = (invoice.tax.to_f / 100).to_f
-    company_subscription.save
-  end
 
   def add_to_hubspot
     return unless Rails.application.secrets.enabled_hubspot
@@ -377,10 +291,6 @@ class Company < ApplicationRecord
       lifecyclestage: "customer",
       im_an: "AV Company",
     )
-  end
-
-  def step_profile?
-    registration_step == "profile"
   end
 
   def step_job_info?

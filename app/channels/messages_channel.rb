@@ -4,22 +4,25 @@ class MessagesChannel < ApplicationCable::Channel
   end
 
   def receive(payload)
-    job = Job.find(payload['job_id'])
-    message = job.messages.new(payload['message'])
+    message = Message.new(payload['message'])
     if payload['authorable_type'] == 'Company'
-      message.authorable = job.company
+      message.authorable = Company.find(payload['company_id'])
+      message.receivable = Freelancer.find(payload['freelancer_id'])
     elsif payload['authorable_type'] == 'Freelancer'
-      message.authorable = job.freelancer
+      message.authorable = Freelancer.find(payload['freelancer_id'])
+      message.receivable = Company.find(payload['company_id'])
     end
     if message.save
-      ActionCable.server.broadcast "messages_channel_#{payload['job_id']}", message: render_message(message)
+      chat_room_number = "#{payload['company_id']}-#{payload['freelancer_id']}"
+      ActionCable.server.broadcast "messages_channel_Company-#{chat_room_number}", message: render_message(message, payload['authorable_type'] == 'Company')
+      ActionCable.server.broadcast "messages_channel_Freelancer-#{chat_room_number}", message: render_message(message, payload['authorable_type'] == 'Freelancer')
       message.send_email_notifications
     end
   end
 
   private
 
-  def render_message(message)
-    ApplicationController.renderer.render(partial: 'shared/message', locals: { message: message })
+  def render_message(message, user_is_author)
+    ApplicationController.renderer.render(partial: 'shared/message', locals: { message: message, user_is_author: user_is_author })
   end
 end

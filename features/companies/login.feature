@@ -10,8 +10,7 @@ Scenario: A company user enters valid credentials
   And I fill "Password" with "password"
   And I press "Login"
   Then I should be on "/company"
-  And I should see "welcome to AV Junction"
-  And I should see "Post a job"
+  And I should see "Search AV Professionals"
 
 Scenario: A company user enters invalid credentials
   Given Exists an full registered company user with email "john@doe.com" and password "password"
