@@ -22,7 +22,7 @@
           .d-flex
             .zmdi.zmdi-pin.avj-text-color-black2.avj-text-sm.mr-2
             .avj-caption1.avj-text-color-black2= @job.city_state_country
-          .d-flex
+          .d-flex.flex-wrap
             - if @job.has_system_integration_job_markets
               .avj-tag System Integration
             - if @job.has_live_events_staging_and_rental_job_markets
