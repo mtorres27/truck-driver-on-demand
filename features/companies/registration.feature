@@ -4,7 +4,7 @@ Feature: Company Registration
 
 Scenario: Filling fields for Step 1
   Given I go to the homepage
-  When I press "Register as a company"
+  When I press "Register as a Company"
   Then I should see "You're on your way to finding your next great hire."
   When I fill in the fields
     | First Name        | John          |

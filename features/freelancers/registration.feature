@@ -4,7 +4,7 @@ Feature: Freelancer Registration
 
 Scenario: Filling fields for Step 1
   Given I go to the homepage
-  When I press "Register as a Freelancer"
+  When I press "Register as an AV Pro"
   Then I should see "By creating an account, you agree to the AV JunctionTerms & Conditions,PrivacyandCode of Conduct"
   When I fill in the fields
     | First Name        | John          |
