@@ -37,7 +37,7 @@ class Job < ApplicationRecord
 
   belongs_to :company
   has_many :applicants, -> { includes(:freelancer).order(updated_at: :desc) }, dependent: :destroy
-  has_many :messages
+  has_many :messages, dependent: :nullify
   has_many :change_orders, -> { order(updated_at: :desc) }, dependent: :destroy
   has_many :attachments, dependent: :destroy
   has_one :freelancer_review, dependent: :nullify
@@ -79,10 +79,6 @@ class Job < ApplicationRecord
 
   def is_published?
     state != :created
-  end
-
-  def collaborators_for_notifications
-    job_collaborators.where(receive_notifications: true).map(&:user)
   end
 
   def repliers

@@ -4,6 +4,9 @@ class Company::MessagesController < Company::BaseController
 
   def index
     set_collection
+    current_company.notifications.where(authorable: @freelancer).each do |notification|
+      notification.mark_as_read
+    end
   end
 
   private

@@ -160,8 +160,10 @@ class FreelancerProfile < ApplicationRecord
   end
 
   def type_and_company
+    str = ""
     if freelancer_type.present?
-      freelancer_type.humanize + (", #{company_name}" if company_name.present?)
+      str += freelancer_type.humanize
+      str += ", #{company_name}" if company_name.present?
     else
       company_name
     end

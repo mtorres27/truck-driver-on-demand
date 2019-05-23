@@ -52,6 +52,7 @@ class Company::FreelancersController < Company::BaseController
 
     @freelancer_profiles_with_distances = @freelancer_profiles
     @featured_freelancers = @freelancer_profiles.where(verified: true)
+    @freelancer_profiles = @freelancer_profiles.where.not(verified: true)
     @freelancer_profiles = @freelancer_profiles.page(params[:page]).per(10)
   end
 
@@ -66,55 +67,6 @@ class Company::FreelancersController < Company::BaseController
     @freelancers = current_company.freelancers
     @freelancers = @freelancers.page(params[:page]).per(10)
   end
-
-  def invite_to_quote
-    if params[:job_to_invite].nil? or params[:job_to_invite] == ""
-      result = 0
-    else
-      @job_id = params[:job_to_invite].to_i
-      if Job.find(@job_id).nil? or Job.find(@job_id).state != "published"
-        result = 0
-      else
-        @job = Job.find(@job_id)
-        authorize @job
-
-        @freelancer = Freelancer.find(params[:id])
-
-        if @job.applicants.where({ freelancer_id: params[:id] }).count > 0
-          result = 2
-        elsif @job.job_invites.where({ freelancer_id: params[:id]}).count > 0
-          result = 3
-        else
-          # freelancer is clear to be invited
-          Notification.create(title: @job.title, body: "You've been invited to apply", authorable: @job.company, receivable: @freelancer, url: freelancer_job_url(@job))
-          JobInviteMailer.invite_to_quote(@freelancer, @job).deliver_later
-          @invite = JobInvite.new
-          @invite.freelancer_id = @freelancer.id
-          @invite.job_id = @job.id
-
-          @invite.save
-          result = 1
-        end
-      end
-    end
-
-    if result == 1
-      ret = { success: 1, message: "Invite Sent!"}
-    else
-      if result == 0
-        message = "Unable to send invite. Please try again."
-      elsif result == 2
-        message = "Already applied."
-      elsif result == 3
-        message = "Already invited."
-      end
-
-      ret = { success: 0, message: message}
-    end
-
-    render json: ret
-  end
-
 
   def show
     hashids = Hashids.new(Rails.application.secrets.hash_ids_salt, 8)

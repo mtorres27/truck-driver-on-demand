@@ -127,6 +127,10 @@ class Company < ApplicationRecord
     freelancers_with_messages
   end
 
+  def has_new_messages_from_freelancer(freelancer)
+    notifications.where(authorable: freelancer, read_at: nil).count > 0
+  end
+
   def freelancers
     Freelancer.where(id: saved_freelancers_ids)
   end
@@ -232,7 +236,7 @@ class Company < ApplicationRecord
     all_job_markets = I18n.t("enumerize.#{job_type}_job_markets")
     return [] unless all_job_markets.kind_of?(Hash)
     freelancer_job_markets = []
-    job_markets.each do |index, value|
+    job_markets&.each do |index, value|
       if all_job_markets[index.to_sym]
         freelancer_job_markets << all_job_markets[index.to_sym]
       end

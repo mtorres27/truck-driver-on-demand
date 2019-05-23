@@ -5,6 +5,9 @@ class Freelancer::MessagesController < Freelancer::BaseController
   def index
     set_collection
     @job = Job.find(params[:job_id]) if params[:job_id].present?
+    current_user.notifications.where(authorable: @company).each do |notification|
+      notification.mark_as_read
+    end
   end
 
   private

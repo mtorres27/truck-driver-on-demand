@@ -6,7 +6,12 @@
           .avj-body1.m-0.zmdi.zmdi-search
           .avj-caption2.m-0.avj-text-emphasize Search
         a.avj-nav-mobile-link href=company_messaging_index_url
-          .avj-body1.m-0.zmdi.zmdi-comment-outline
+          .d-flex
+            .avj-body1.m-0.zmdi.zmdi-comment-outline
+            .avj-notification-badge.js--notifications data-id="#{current_user.id}"
+              - notification_count = current_user.notifications.unread.count
+              - if notification_count > 0
+                = notification_count
           .avj-caption2.m-0.avj-text-emphasize Messages
         a.avj-nav-mobile-link href=company_jobs_url
           .avj-body1.m-0.zmdi.zmdi-folder-outline
@@ -19,11 +24,16 @@
           .avj-caption2.m-0 Profile
       - elsif current_user&.is_a?(Freelancer) && current_user&.freelancer_profile&.registration_step == "wicked_finish"
         a.avj-nav-mobile-link href=freelancer_root_url
-          .material-icons-outlined folder
+          .avj-body1.m-0.zmdi.zmdi-folder-outline
           .avj-caption2.m-0.text-uppercase Job Posts
         a.avj-nav-mobile-link href=freelancer_messaging_index_url
-          .material-icons chat_bubble_outline
+          .d-flex
+            .avj-body1.m-0.zmdi.zmdi-comment-outline
+            .avj-notification-badge.js--notifications data-id="#{current_user.id}"
+              - notification_count = current_user.notifications.unread.count
+              - if notification_count > 0
+                = notification_count
           .avj-caption2.m-0.text-uppercase Messages
         a.avj-nav-mobile-link href=freelancer_profile_url
-          .material-icons person_outline
+          .avj-body1.m-0.zmdi.zmdi-account-o
           .avj-caption2.m-0.text-uppercase Profile

@@ -1,5 +1,5 @@
 - last_message = current_user.messages_for_company(company).last
-.avj-list-item
+.avj-list-item class="#{"avj-text-emphasize" if current_user.has_new_messages_from_company(company)}"
   a.mr-4 href=freelancer_company_url(company)
     - if company.avatar_data.present?
       .avj-avatar

@@ -10,9 +10,7 @@ class NotificationsChannel < ApplicationCable::Channel
   def receive(payload)
     user = User.find(payload['id'])
     unread_notifications = user.notifications.unread
-    last_notifications = user.notifications.to_show
-    notifications = (unread_notifications + last_notifications).uniq
-    ActionCable.server.broadcast "notifications_channel_#{payload['id']}", message: render_notifications(notifications), count: unread_notifications.count
+    ActionCable.server.broadcast "notifications_channel_#{payload['id']}", count: unread_notifications.count
   end
 
   private
