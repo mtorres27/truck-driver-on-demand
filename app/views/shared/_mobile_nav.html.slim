@@ -4,20 +4,20 @@
       - if current_user&.is_a?(CompanyUser) && current_company&.registration_step == "wicked_finish"
         a.avj-nav-mobile-link href=company_root_url
           - if controller_name == 'main' || (controller_name == 'freelancers' && action_name != 'saved')
-            .avj-body1.m-0.avj-text-emphasize.zmdi.zmdi-search
-            .avj-caption2.m-0.avj-text-emphasize Search
+            .avj-body1.m-0.avj-text-color-secondary.zmdi.zmdi-search
+            .avj-caption2.m-0.avj-text-color-secondary Search
           - else
             .avj-body1.m-0.zmdi.zmdi-search
             .avj-caption2.m-0 Search
         a.avj-nav-mobile-link href=company_messaging_index_url
           - if controller_name == 'messages' || controller_name == 'messaging'
             .d-flex
-              .avj-body1.m-0.zmdi.zmdi-comment
-              .avj-notification-badge.js--notifications data-id="#{current_user.id}"
+              .avj-body1.m-0.zmdi.zmdi-comment-outline.avj-text-color-secondary
+              .avj-notification-badge.avj-text-color-secondary.js--notifications data-id="#{current_user.id}"
                 - notification_count = current_user.notifications.unread.count
                 - if notification_count > 0
                   = notification_count
-            .avj-caption2.m-0.avj-text-emphasize Messages
+            .avj-caption2.m-0.avj-text-color-secondary Messages
           - else
             .d-flex
               .avj-body1.m-0.zmdi.zmdi-comment-outline
@@ -28,42 +28,42 @@
             .avj-caption2.m-0 Messages
         a.avj-nav-mobile-link href=company_jobs_url
           - if controller_name == 'jobs'
-            .avj-body1.m-0.zmdi.zmdi-folder
-            .avj-caption2.m-0.avj-text-emphasize Job Posts
+            .avj-body1.m-0.zmdi.zmdi-folder-outline.avj-text-color-secondary
+            .avj-caption2.m-0.avj-text-color-secondary Job Posts
           - else
             .avj-body1.m-0.zmdi.zmdi-folder-outline
             .avj-caption2.m-0 Job Posts
         a.avj-nav-mobile-link href=saved_company_freelancers_url
           - if controller_name == 'freelancers' && action_name == 'saved'
-            .avj-body1.m-0.zmdi.zmdi-favorite
-            .avj-caption2.m-0.avj-text-emphasize Favorites
+            .avj-body1.m-0.zmdi.zmdi-favorite-outline.avj-text-color-secondary
+            .avj-caption2.m-0.avj-text-color-secondary Favorites
           - else
             .avj-body1.m-0.zmdi.zmdi-favorite-outline
             .avj-caption2.m-0 Favorites
         a.avj-nav-mobile-link href=company_profile_url
           - if controller_name == 'profiles'
-            .avj-body1.m-0.zmdi.zmdi-account
-            .avj-caption2.m-0.avj-text-emphasize Profile
+            .avj-body1.m-0.zmdi.zmdi-account-o.avj-text-color-secondary
+            .avj-caption2.m-0.avj-text-color-secondary Profile
           - else
             .avj-body1.m-0.zmdi.zmdi-account-o
             .avj-caption2.m-0 Profile
       - elsif current_user&.is_a?(Freelancer) && current_user&.freelancer_profile&.registration_step == "wicked_finish"
         a.avj-nav-mobile-link href=freelancer_root_url
           - if controller_name == 'main' || controller_name == 'jobs'
-            .avj-body1.m-0.zmdi.zmdi-folder
-            .avj-caption2.m-0.avj-text-emphasize Job Posts
+            .avj-body1.m-0.zmdi.zmdi-folder-outline.avj-text-color-secondary
+            .avj-caption2.m-0.avj-text-color-secondary Job Posts
           - else
             .avj-body1.m-0.zmdi.zmdi-folder-outline
             .avj-caption2.m-0 Job Posts
         a.avj-nav-mobile-link href=freelancer_messaging_index_url
           - if controller_name == 'messages' || controller_name == 'messaging'
             .d-flex
-              .avj-body1.m-0.zmdi.zmdi-comment
-              .avj-notification-badge.js--notifications data-id="#{current_user.id}"
+              .avj-body1.m-0.zmdi.zmdi-comment-outline.avj-text-color-secondary
+              .avj-notification-badge.avj-text-color-secondary.js--notifications data-id="#{current_user.id}"
                 - notification_count = current_user.notifications.unread.count
                 - if notification_count > 0
                   = notification_count
-            .avj-caption2.m-0.avj-text-emphasize Messages
+            .avj-caption2.m-0.avj-text-color-secondary Messages
           - else
             .d-flex
               .avj-body1.m-0.zmdi.zmdi-comment-outline
@@ -74,8 +74,8 @@
             .avj-caption2.m-0 Messages
         a.avj-nav-mobile-link href=freelancer_profile_url
           - if controller_name == 'profiles'
-            .avj-body1.m-0.zmdi.zmdi-account
-            .avj-caption2.m-0.avj-text-emphasize Profile
+            .avj-body1.m-0.zmdi.zmdi-account-o.avj-text-color-secondary
+            .avj-caption2.m-0.avj-text-color-secondary Profile
           - else
             .avj-body1.m-0.zmdi.zmdi-account-o
             .avj-caption2.m-0 Profile
