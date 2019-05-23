@@ -18,4 +18,4 @@ Scenario: A Freelancer user enters invalid credentials
   And I fill "Email Address" with "john@doe.com"
   And I fill "Password" with "no-valid"
   And I press "Login"
-  Then I should see "Invalid Email or password"
+  Then I should see "Hey there, login to get started"
