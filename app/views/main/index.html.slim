@@ -1,29 +1,27 @@
-h1.center-text.heading-h1 Choose the type of account you'd like to continue with!
-- content_for :secondary do
-  .landing-container
-    .landing__user-role
-      div.center-text.gutter-bottom
-        = image_tag("company-folder.png")
-      h3.center.heading-h2 AV Company
-      .landing__subtitle
-        | I want to hire quality AV professionals. Find, hire and manage industry experts.
-        br/
-        br/
-      .landing__sign-in-actions
-        a.btn-primary--active.w-inline-block.width-100 href=new_company_user_registration_path
-          div Register as a company
-        a.btn-ghost--active.w-inline-block.width-100 href=new_user_session_path
-          div Login
-    .landing__user-role
-      div.center-text.gutter-bottom
-        = image_tag("person-blue.png")
-      h3.center.heading-h2 AV Freelancer
-      .landing__subtitle
-        | I want to find AV work. Find jobs that excite you and grow your business.
-        br/
-        br/
-      .landing__sign-in-actions
-        a.btn-primary--active.w-inline-block.width-100 href=new_freelancer_registration_path
-          div Register as a Freelancer
-        a.btn-ghost--active.w-inline-block.width-100 href=new_user_session_path
-          div Login
+.avj-section.avj-section__main
+  .container.container__content
+    .row
+      .col-12
+        h2 Choose the type of account you'd like to continue with!
+    .row
+      .col-md-6.col-12.mb-4
+        h4 For AV Companies
+        .avj-body1
+          | I want to hire quality AV Professionals. Find, hire and manage industry experts.
+        button.btn.btn-primary.mb-4 type="submit" onclick="window.location.href= '#{new_company_user_registration_path}';"
+          | Register as a Company
+        .avj-body2  
+          | Already Registered? 
+          a.span href=new_user_session_path
+            | Company Login
+
+      .col-md-6.col-12
+        h4 For AV Professionals
+        .avj-body1
+          | I want to find AV work. Find jobs that excite you and grow your business.
+        button.btn.btn-primary.mb-4 type="submit" onclick="window.location.href = '#{new_freelancer_registration_path}';"
+          | Register as an AV Pro
+        .avj-body2  
+          | Already Registered? 
+          a.span href=new_user_session_path
+            | AV Pro Login
