@@ -3,10 +3,15 @@
     .avj-subhead
       h4.ellipsis.mb-0= @freelancer.first_name_and_initial
       .d-flex.align-items-center.justify-content-end
-        a.btn-icon-link href="#{company_freelancer_messages_url(@freelancer)}"
-          - if current_company.messages_for_freelancer(@freelancer).count > 0
-            div class="zmdi zmdi-comment"
+        .mr-4
+          - if current_company.has_saved_freelancer?(@freelancer)
+            = link_to "", delete_freelancer_company_freelancer_url(@freelancer), method: :post, class: "avj-body1 avj-text-color-primary zmdi zmdi-favorite"
           - else
-            div class="zmdi zmdi-comment-outline"
+            = link_to "", save_freelancer_company_freelancer_url(@freelancer), method: :post, class: "avj-body1 avj-text-color-primary zmdi zmdi-favorite-outline"
+        div
+          - if current_company.messages_for_freelancer(@freelancer).count > 0
+            = link_to "", company_freelancer_messages_url(@freelancer), class: "avj-body1 avj-text-color-primary zmdi zmdi-comment"
+          - else
+            = link_to "", company_freelancer_messages_url(@freelancer), class: "avj-body1 avj-text-color-primary zmdi zmdi-comment-outline"
 
 = render "shared/profile-freelancer"

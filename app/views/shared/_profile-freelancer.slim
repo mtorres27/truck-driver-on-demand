@@ -28,7 +28,7 @@
     h2 Areas of Expertise
     - system_integration_job_markets = []
     - I18n.t("enumerize.system_integration_job_markets").each do |key, value|
-      - if @freelancer.freelancer_profile.job_markets.include?(key)
+      - if @freelancer.freelancer_profile.job_markets&.include?(key)
         - system_integration_job_markets << value
     - if system_integration_job_markets.count > 0
       .avj-body1
@@ -38,7 +38,7 @@
           .avj-tag= value
     - live_events_staging_and_rental_job_markets = []
     - I18n.t("enumerize.live_events_staging_and_rental_job_markets").each do |key, value|
-      - if @freelancer.freelancer_profile.job_markets.include?(key)
+      - if @freelancer.freelancer_profile.job_markets&.include?(key)
         - live_events_staging_and_rental_job_markets << value
     - if live_events_staging_and_rental_job_markets.count > 0
       .avj-body1

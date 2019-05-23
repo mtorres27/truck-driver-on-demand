@@ -18,11 +18,7 @@ class Company::CompanyUsersController < Company::BaseController
       else
         flash[:notice] = "Successfully updated"
       end
-      if @company_user == current_user
-        redirect_to edit_company_company_user_path(@company_user)
-      else
-        redirect_to edit_company_company_users_path
-      end
+      redirect_to company_profile_path
     else
       flash.now[:error] = @company_user.errors.full_messages.to_sentence
       render :edit

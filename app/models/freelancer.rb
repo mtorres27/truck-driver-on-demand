@@ -150,6 +150,10 @@ class Freelancer < User
     companies_with_messages
   end
 
+  def has_new_messages_from_company(company)
+    notifications.where(authorable: company, read_at: nil).count > 0
+  end
+
   def connections_count
     companies_for_messaging.count
   end

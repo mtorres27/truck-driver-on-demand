@@ -76,7 +76,7 @@
               .form-group
                 label.avj-caption1
                   | Profile Picture
-                = image_tag(@freelancer.freelancer_profile.avatar_url, id: "freelancer-edit-profile__avatar")
+                = image_tag(@freelancer.freelancer_profile.avatar_url, id: "freelancer-edit-profile__avatar", class: "mr-2")
                 a.zmdi.zmdi-camera onclick="updateProfilePicture()"
                 = f.file_field :avatar, label: false, :accept => 'image/png,image/gif,image/jpeg', id: "edit-freelancer-profile-avatar", class: "avj-hidden-important file-input--hidden"
 

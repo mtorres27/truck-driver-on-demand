@@ -55,8 +55,6 @@ Rails.application.routes.draw do
   get "confirm_email", to: "main#confirm_email"
   get "job_country_currency", to: "main#job_countries", as: "job_country_currency"
 
-  resources :notifications, only: [:show]
-
   namespace :freelancer do
 
     root "main#index"
@@ -75,16 +73,8 @@ Rails.application.routes.draw do
       resources :messages, only: [:index, :create]
     end
 
-    resources :jobs, only: [:index, :show] do
-      resources :application, only: [:index, :create]
-      resource :contract, only: [:show, :accept], as: "work_order", path: "work_order"
-      resource :review, only: [:show, :create]
-      resources :quotes, only: [:index, :create] do
-        get :accept, on: :member
-        get :decline, on: :member
-      end
+    resources :jobs, only: [:index, :show]
 
-    end
     resource :profile, only: [:show, :edit, :update] do
       resource :banking, only: [:index, :edit, :update, :verify, :update_verify]
       resource :settings, only: [:index, :edit, :update]
@@ -133,26 +123,8 @@ Rails.application.routes.draw do
 
     get 'job_country_currency', to: 'jobs#job_countries', as: 'job_country_currency'
 
-    resources :jobs do
-      resources :applicants do
-        get :request_quote, on: :member
-        get :ignore, on: :member
-        resources :quotes, only: [:index, :create] do
-          get :accept, on: :member
-          get :decline, on: :member
-        end
-      end
-      resource :review, only: [:show, :create]
-      get :collaborators, on: :member
-      get :contract_invoice, on: :member
-      get :freelancer_matches, on: :member
-      post :mark_as_finished, on: :member
-    end
+    resources :jobs
 
-    post "jobs/:id/add_collaborator/:company_user_id", to: "jobs#add_collaborator"
-    post "jobs/:id/remove_collaborator/:company_user_id", to: "jobs#remove_collaborator"
-    post "jobs/:id/unsubscribe_collaborator/:company_user_id", to: "jobs#unsubscribe_collaborator"
-    post "jobs/:id/subscribe_collaborator/:company_user_id", to: "jobs#subscribe_collaborator"
     get "jobs/:id/publish", to: "jobs#publish"
   end
 
