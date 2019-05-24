@@ -20,7 +20,7 @@
               = link_to "Favourites", saved_company_freelancers_path, class: "text-uppercase avj-text-emphasize"
             .avj-nav-desktop-link
               = link_to "Profile", company_profile_path, class: "text-uppercase avj-text-emphasize"
-          .avj-nav-kc
+          .avj-nav-kc.mt-1
             a.material-icons-outlined href="https://www.avjunction.com/how-to-guide-av-company" target="_blank"
               | school
 
@@ -36,7 +36,7 @@
                   = notification_count
             .avj-nav-desktop-link
               = link_to "Profile", freelancer_profile_path, class: "text-uppercase avj-text-emphasize"
-          .avj-nav-kc
+          .avj-nav-kc.mt-1
             a.material-icons-outlined href="https://www.avjunction.com/how-to-guide-av-freelancer" target="_blank"
               | school
         - elsif current_user&.is_a?(Admin)
