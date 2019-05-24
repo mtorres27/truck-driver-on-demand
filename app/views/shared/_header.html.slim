@@ -21,8 +21,7 @@
             .avj-nav-desktop-link
               = link_to "Profile", company_profile_path, class: "text-uppercase avj-text-emphasize"
           .avj-nav-kc.mt-1
-            a.material-icons-outlined href="https://www.avjunction.com/how-to-guide-av-company" target="_blank"
-              | school
+            a.zmdi.zmdi-graduation-cap.avj-text-color-primary href="https://www.avjunction.com/how-to-guide-av-company" target="_blank"
 
         - elsif current_user&.is_a?(Freelancer) && current_user&.freelancer_profile&.registration_step == "wicked_finish"
           .avj-nav-desktop
@@ -37,8 +36,7 @@
             .avj-nav-desktop-link
               = link_to "Profile", freelancer_profile_path, class: "text-uppercase avj-text-emphasize"
           .avj-nav-kc.mt-1
-            a.material-icons-outlined href="https://www.avjunction.com/how-to-guide-av-freelancer" target="_blank"
-              | school
+            a.zmdi.zmdi-graduation-cap.avj-text-color-primary href="https://www.avjunction.com/how-to-guide-av-freelancer" target="_blank"
         - elsif current_user&.is_a?(Admin)
           .avj-nav-desktop
             .avj-nav-desktop-link

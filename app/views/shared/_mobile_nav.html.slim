@@ -13,7 +13,7 @@
           - if controller_name == 'messages' || controller_name == 'messaging'
             .d-flex
               .avj-body1.m-0.zmdi.zmdi-comment-outline.avj-text-color-secondary
-              .avj-notification-badge.avj-notification-badge--mobile.avj-text-color-secondary.js--notifications data-id="#{current_user.id}"
+              .avj-notification-badge.avj-notification-badge--mobile.avj-bg-secondary.js--notifications data-id="#{current_user.id}"
                 - notification_count = current_user.notifications.unread.count
                 - if notification_count > 0
                   = notification_count
