@@ -32,7 +32,7 @@ img
       bottom: 0%
   &__main
     flex: 1
-    margin-bottom: $avj-nav-height
+    margin-bottom: calc(#{$avj-nav-height} + 24px)
     margin-top: 24px
   &__chat
     flex: 1
@@ -109,8 +109,9 @@ img
   display: flex
   align-items: center
   height: $avj-nav-height
-  margin-right: 24px
+  padding: 0 16px
   color: $avj-color-primary
+  position: relative
 
 
 .avj-nav-mobile
@@ -129,6 +130,35 @@ img
   align-items: center
   text-decoration: none
   color: $avj-color-primary
+  position: relative
+
+.avj-notification-badge
+  min-width: 20px
+  height: 20px
+  padding : 0 4px
+  background-color: $avj-color-primary
+  color: white
+  border-radius: 16px
+  border: 2px solid $avj-color-grey2
+  font-size: 12px
+  line-height: 0px
+  display: flex
+  align-items: center
+  justify-content: center
+  position: absolute
+  position: absolute
+  top: auto
+  right: 0px
+  left: auto
+  bottom: 26px
+  &--mobile
+    position: absolute
+    top: 0px
+    right: 0px
+    left: auto
+    bottom: auto
+
+
 
 .avj-avatar
   height: 44px
@@ -177,6 +207,10 @@ img
 
 .avj-hidden-important
   display: none !important
+
+
+
+
 
 //Tags
 .avj-tag
