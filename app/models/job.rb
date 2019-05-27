@@ -82,7 +82,7 @@ class Job < ApplicationRecord
   end
 
   def repliers
-    freelancer_ids = messages.pluck(:authorable_id).uniq
+    freelancer_ids = messages.where(receivable_type: 'Company').pluck(:authorable_id).uniq
     Freelancer.where(id: freelancer_ids)
   end
 

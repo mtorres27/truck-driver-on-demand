@@ -4,6 +4,11 @@ class Company::MessagesController < Company::BaseController
 
   def index
     set_collection
+    if params[:job_id] == 'profile'
+      @job_or_profile = 'profile'
+    elsif params[:job_id].present? && @messages.select { |msg| msg.job_id == params[:job_id].to_i }.count == 0
+      @job_or_profile = Job.find(params[:job_id])
+    end
     current_company.notifications.where(authorable: @freelancer).each do |notification|
       notification.mark_as_read
     end
