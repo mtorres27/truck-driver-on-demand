@@ -38,6 +38,10 @@ document.addEventListener("turbolinks:load", function() {
         e.preventDefault();
         return false;
     })
+
+    if (window.matchMedia("(max-width: 768px)").matches) {
+        window.scrollTo(0,document.body.scrollHeight);
+    }
 });
 
 var validateMessage = function() {
