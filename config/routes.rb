@@ -126,6 +126,7 @@ Rails.application.routes.draw do
     resources :jobs
 
     get "jobs/:id/publish", to: "jobs#publish"
+    get "freelancers/:freelancer_id/messages(/job/:job_id)", to: "messages#index", as: "messages_for_job"
   end
 
   namespace :admin do

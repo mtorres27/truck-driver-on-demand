@@ -18,9 +18,19 @@
   .container.containter__content
     = simple_form_for(:message, url: path, html: { class: "js--message-form avj-list-item m-0", data: { id: "#{authorable_type}-#{company.id}-#{freelancer.id}", company: company.id, freelancer: freelancer.id, type: authorable_type } }) do |f|
       .d-flex.w-100.align-items-start
-        = f.text_area :body, as: :string, placeholder: "Send a message to #{recipient_name}", label: false, maxlength: 5000, class: "js--message-input form-control avj-body1 mr-2", value: ("I'm interested in learning more about the job you posted. Re: #{@job.title}" if @job.present?)
-        - if @job.present?
-          =f.hidden_field :job_id, value: @job.id
+        - message_text = nil
+        - if @job_or_profile.present?
+          - if current_user.is_a?(CompanyUser)
+            - message_text = "Hi #{recipient_name} this is #{current_user.full_name} from #{current_company.name}. "
+            - if @job_or_profile == 'profile'
+              - message_text += "Your profile matches our hiring needs, would you be interested in discussing further?"
+            - else
+              - message_text += "I've noticed you've been matched with the job I just posted Re: #{@job_or_profile.title}. Would you be interested in discussing further?"
+          - elsif current_user.is_a?(Freelancer)
+            - message_text = "I'm interested in learning more about the job you posted. Re: #{@job_or_profile.title}"
+        = f.text_area :body, as: :string, placeholder: "Send a message to #{recipient_name}", label: false, maxlength: 5000, class: "js--message-input form-control avj-body1 mr-2", value: message_text
+        - if @job_or_profile.present? && @job_or_profile != 'profile'
+          =f.hidden_field :job_id, value: @job_or_profile.id
         button#new-message__submit.btn.btn-primary onClick= "validateMessage();"
           | Send
     #new-message__validation-errors

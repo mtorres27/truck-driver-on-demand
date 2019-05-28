@@ -4,7 +4,7 @@ class Freelancer::MessagesController < Freelancer::BaseController
 
   def index
     set_collection
-    @job = Job.find(params[:job_id]) if params[:job_id].present?
+    @job_or_profile = Job.find(params[:job_id]) if params[:job_id].present? && @messages.select { |msg| msg.job_id == params[:job_id].to_i }.count == 0
     current_user.notifications.where(authorable: @company).each do |notification|
       notification.mark_as_read
     end

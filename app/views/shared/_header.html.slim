@@ -10,7 +10,7 @@
               = link_to "Search", company_root_path, class: "text-uppercase avj-text-emphasize"
             .avj-nav-desktop-link
               = link_to "Messages", company_messaging_index_path, class: "text-uppercase avj-text-emphasize"
-              .avj-notification-badge.js--notifications data-id="#{current_user.id}"
+              .avj-notification-badge.js--notifications-count.js--notifications data-id="#{current_user.id}"
                 - notification_count = current_user.notifications.unread.count
                 - if notification_count > 0
                   = notification_count
@@ -20,9 +20,8 @@
               = link_to "Favourites", saved_company_freelancers_path, class: "text-uppercase avj-text-emphasize"
             .avj-nav-desktop-link
               = link_to "Profile", company_profile_path, class: "text-uppercase avj-text-emphasize"
-          .avj-nav-kc
-            a.material-icons-outlined href="https://www.avjunction.com/how-to-guide-av-company" target="_blank"
-              | school
+          .avj-nav-kc.mt-1
+            a.zmdi.zmdi-graduation-cap.avj-text-color-primary href="https://www.avjunction.com/how-to-guide-av-company" target="_blank"
 
         - elsif current_user&.is_a?(Freelancer) && current_user&.freelancer_profile&.registration_step == "wicked_finish"
           .avj-nav-desktop
@@ -30,15 +29,14 @@
               = link_to "Job Posts", freelancer_root_path, class: "text-uppercase avj-text-emphasize"
             .avj-nav-desktop-link
               = link_to "Messages", freelancer_messaging_index_path, class: "text-uppercase avj-text-emphasize"
-              .avj-notification-badge.js--notifications data-id="#{current_user.id}"
+              .avj-notification-badge.js--notifications-count.js--notifications data-id="#{current_user.id}"
                 - notification_count = current_user.notifications.unread.count
                 - if notification_count > 0
                   = notification_count
             .avj-nav-desktop-link
               = link_to "Profile", freelancer_profile_path, class: "text-uppercase avj-text-emphasize"
-          .avj-nav-kc
-            a.material-icons-outlined href="https://www.avjunction.com/how-to-guide-av-freelancer" target="_blank"
-              | school
+          .avj-nav-kc.mt-1
+            a.zmdi.zmdi-graduation-cap.avj-text-color-primary href="https://www.avjunction.com/how-to-guide-av-freelancer" target="_blank"
         - elsif current_user&.is_a?(Admin)
           .avj-nav-desktop
             .avj-nav-desktop-link

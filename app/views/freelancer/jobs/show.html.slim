@@ -17,7 +17,10 @@
             - else
               .avj-avatar= image_tag(@job.company.avatar_url)
         div
-          .avj-caption1.avj-text-color-black2.mb-0= "Posted #{@job.created_at.strftime('%B %d, %Y')}"
+          .avj-caption1.avj-text-color-black2.mb-0
+            = "Posted #{@job.created_at.strftime('%B %d, %Y')} by"
+            | &nbsp;
+            = link_to @job.company.name, freelancer_company_path(@job.company)
           .avj-body1.avj-text-emphasize.mb-0= @job.title
           .d-flex
             .zmdi.zmdi-pin.avj-text-color-black2.avj-text-sm.mr-2

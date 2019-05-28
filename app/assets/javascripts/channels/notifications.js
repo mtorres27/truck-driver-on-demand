@@ -19,6 +19,7 @@ document.addEventListener("turbolinks:load", function(){
                     received: function(data) {
                         // Called when there's incoming data on the websocket for this channel
                         if (data.count > 0) {
+                            $(".js--notifications-count").show();
                             $(".js--notifications").html(data.count);
                         }
                     }

@@ -19,7 +19,8 @@
       - else
         = link_to "", save_freelancer_company_freelancer_url(freelancer), method: :post, class: "avj-body1 avj-text-color-primary zmdi zmdi-favorite-outline"
     div
+      - messages_url = @job.present? ? company_messages_for_job_url(freelancer, @job) : company_freelancer_messages_url(freelancer)
       - if current_company.messages_for_freelancer(freelancer).count > 0
-        = link_to "", company_freelancer_messages_url(freelancer), class: "avj-body1 avj-text-color-primary zmdi zmdi-comment"
+        = link_to "", messages_url, class: "avj-body1 avj-text-color-primary zmdi zmdi-comment"
       - else
-        = link_to "", company_freelancer_messages_url(freelancer), class: "avj-body1 avj-text-color-primary zmdi zmdi-comment-outline"
+        = link_to "", messages_url, class: "avj-body1 avj-text-color-primary zmdi zmdi-comment-outline"
