@@ -21,6 +21,7 @@ class Company::JobsController < Company::BaseController
 
     if @job.save
       if @job.state == 'published'
+        JobNotificationMailer.notify_job_posting_company(current_company, @job).deliver_later
         get_matches
         @freelancers.each do |freelancer|
           JobNotificationMailer.notify_job_posting(freelancer, @job).deliver_later
@@ -44,6 +45,7 @@ class Company::JobsController < Company::BaseController
     if @job.update(job_params)
       if @job.state == 'published'
         flash[:notice] = "This job has been published."
+        JobNotificationMailer.notify_job_posting_company(current_company, @job).deliver_later
         get_matches
         @freelancers.each do |freelancer|
           JobNotificationMailer.notify_job_posting(freelancer, @job).deliver_later
