@@ -7,7 +7,8 @@
         - else
           .avj-avatar= image_tag(job.company.avatar_url)
     a.w-100.mr-2 href=freelancer_job_path(job)
-      .avj-caption1.avj-text-color-black2.mb-0= "Posted #{job.created_at.strftime('%B %d, %Y')}"
+      .avj-caption1.avj-text-color-black2.mb-0
+        = "Posted #{job.created_at.strftime('%B %d, %Y')} by #{job.company.name}"
       .avj-body1.avj-text-emphasize.mb-0= job.title
       .avj-caption1.avj-text-color-black2= job.city_state_country
     a.btn.btn-primary.btn-sm href=freelancer_messages_for_job_url(company_id: job.company.id, job_id: job.id)

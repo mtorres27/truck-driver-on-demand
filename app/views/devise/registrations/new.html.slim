@@ -28,6 +28,7 @@
             = f.check_box :accept_terms_of_service, required: true, class: 'form-check-input'
             label.form-check-label.avj-body2 for="agreeterms" class=(terms_of_service_error == true ? "text-danger" : "")
               | By creating an account, you agree to the AV Junction
+              | &nbsp;
               a.span href="http://www.avjunction.com/term-of-service" target="_blank"
                 | Terms & Conditions
               | ,
@@ -41,6 +42,7 @@
           .d-flex.align-items-center.justify-content-between
             .avj-body2.mr-4
               | Already have an account?
+              | &nbsp;
               a.span href=new_user_session_url
                 | Sign in.
             = f.button :submit, "Next Step", class: "btn btn-primary"

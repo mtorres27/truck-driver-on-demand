@@ -11,7 +11,11 @@
         .new-message__image
           = attachment_image_link(message.attachment)
   - else
-    a.mr-4 href="#"
+    - if message.authorable.is_a?(Freelancer)
+      - url = company_freelancer_path(hash_id(message.authorable))
+    - else
+      - url = freelancer_company_path(message.authorable)
+    a.mr-4 href=url
       - if message.authorable.is_a?(Freelancer) && message.authorable.freelancer_profile.avatar_data.nil?
         .avj-circle_profile__image.freelancer__image= message.authorable.name_initials
       - else

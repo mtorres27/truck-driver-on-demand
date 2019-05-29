@@ -10,7 +10,12 @@
     .zmdi.zmdi-pin.avj-text-color-black2.avj-text-sm.mr-2
     .avj-caption1.avj-text-color-black2= job.city_state_country
   .d-flex
-    - repliers = job.repliers
+    - if job.state == "published"
+      - repliers = job.repliers
+      - matches = job.matches
+    - else
+      - repliers = Freelancer.none
+      - matches = Freelancer.none
     - repliers.last(5).each do |freelancer|
       a.mr-1 href=company_freelancer_messages_path(freelancer)
         - if freelancer.freelancer_profile.avatar_data.present?
@@ -21,4 +26,4 @@
     .d-flex.flex-column.ml-4.justify-content-between
       = link_to pluralize(repliers.count, "Reply"), company_job_url(job), class: "avj-caption1"
       - if job.address.present?
-        = link_to pluralize(job.matches.count, "Match"), company_job_url(job), class: "avj-caption1"
+        = link_to pluralize(matches.count, "Match"), company_job_url(job), class: "avj-caption1"

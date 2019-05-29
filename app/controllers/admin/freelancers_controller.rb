@@ -1,7 +1,7 @@
 class Admin::FreelancersController < Admin::BaseController
   include LoginAs
 
-  before_action :set_freelancer, only: [:show, :edit, :update, :destroy, :enable, :disable, :login_as]
+  before_action :set_freelancer, only: [:show, :edit, :update, :destroy, :enable, :disable, :verify, :unverify, :login_as]
   before_action :authorize_freelancer, only: [:show, :edit, :update, :destroy, :enable, :disable, :login_as]
 
   def index
@@ -94,6 +94,16 @@ class Admin::FreelancersController < Admin::BaseController
     redirect_to admin_freelancers_path, notice: "Freelancer disabled."
   end
 
+  def verify
+    @freelancer.freelancer_profile.update_column(:verified, true)
+    redirect_to admin_freelancers_path, notice: "Freelancer verified."
+  end
+
+  def unverify
+    @freelancer.freelancer_profile.update_column(:verified, false)
+    redirect_to admin_freelancers_path, notice: "Freelancer unverified."
+  end
+
   def download_csv
     authorize current_user
     @freelancer_profiles = FreelancerProfile.order('created_at DESC')
@@ -123,43 +133,51 @@ class Admin::FreelancersController < Admin::BaseController
   def freelancer_params
     # params.fetch(:freelancer, {})
     params.require(:freelancer).permit(
-      :id,
-      :email,
-      freelancer_profile_attributes: [
-          :id,
-          :name,
-          :address,
-          :line2,
-          :city,
-          :state,
-          :postal_code,
-          :country,
-          :tagline,
-          :bio,
-          :years_of_experience,
-          :available,
-          :service_areas,
-          :sales_tax_number,
-          :avatar,
-          :pay_unit_time_preference,
-          :disabled,
-          :verified,
-          :special_avj_fees,
-          :header_color,
-          :profile_header,
-          :header_source,
-          :business_tax_number,
-          job_types: I18n.t("enumerize.job_types").keys,
-          job_markets: (I18n.t("enumerize.live_events_staging_and_rental_job_markets").keys + I18n.t("enumerize.system_integration_job_markets").keys).uniq,
-          job_functions: (I18n.t("enumerize.system_integration_job_functions").keys + I18n.t("enumerize.live_events_staging_and_rental_job_functions").keys).uniq,
-          technical_skill_tags:  I18n.t("enumerize.technical_skill_tags").keys,
-          manufacturer_tags:  I18n.t("enumerize.manufacturer_tags").keys
-      ],
-      certifications_attributes: [:id, :certificate, :cert_type, :name, :_destroy],
-      freelancer_affiliations_attributes: [:id, :name, :image, :_destroy],
-      freelancer_insurances_attributes: [:id, :name, :description, :image, :_destroy],
-      freelancer_clearances_attributes: [:id, :description, :image, :_destroy],
-      freelancer_portfolios_attributes: [:id, :name, :image, :_destroy]
+        :id,
+        :first_name,
+        :last_name,
+        :email,
+        :enforce_profile_edit,
+        freelancer_profile_attributes: [
+            :id,
+            :name,
+            :country,
+            :verified,
+            :address,
+            :line2,
+            :city,
+            :state,
+            :postal_code,
+            :tagline,
+            :bio,
+            :company_name,
+            :own_tools,
+            :valid_driver,
+            :service_areas,
+            :sales_tax_number,
+            :years_of_experience,
+            :available,
+            :verified,
+            :avatar,
+            :header_color,
+            :profile_header,
+            :header_source,
+            :freelancer_type,
+            :phone_number,
+            :freelancer_team_size,
+            :pay_unit_time_preference,
+            :pay_per_unit_time,
+            :business_tax_number,
+            job_markets: (I18n.t("enumerize.live_events_staging_and_rental_job_markets").keys + I18n.t("enumerize.system_integration_job_markets").keys).uniq,
+            job_functions: (I18n.t("enumerize.system_integration_job_functions").keys + I18n.t("enumerize.live_events_staging_and_rental_job_functions").keys).uniq,
+            technical_skill_tags:  I18n.t("enumerize.technical_skill_tags").keys,
+            manufacturer_tags:  I18n.t("enumerize.manufacturer_tags").keys
+        ],
+        certifications_attributes: [:id, :certificate, :cert_type, :name, :_destroy],
+        freelancer_affiliations_attributes: [:id, :name, :image, :_destroy],
+        freelancer_insurances_attributes: [:id, :name, :description, :image, :_destroy],
+        freelancer_clearances_attributes: [:id, :description, :image, :_destroy],
+        freelancer_portfolios_attributes: [:id, :name, :image, :_destroy],
     )
   end
 end

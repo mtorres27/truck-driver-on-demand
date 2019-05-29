@@ -135,6 +135,8 @@ Rails.application.routes.draw do
     resources :freelancers, except: [:new, :create] do
       get :disable, on: :member
       get :enable, on: :member
+      get :verify, on: :member
+      get :unverify, on: :member
     end
 
     resource :freelancer do
@@ -155,14 +157,7 @@ Rails.application.routes.draw do
       get :freelancer_matches, on: :member
       get :mark_as_expired, on: :member
       get :unmark_as_expired, on: :member
-      resources :applicants
-      resource :contract, only: [:show, :edit, :update], as: "work_order", path: "work_order"
-      resources :messages, only: [:index, :create]
-      resource :review, only: [:show, :create]
     end
-
-    resources :pages, only: [:index, :edit, :update]
-    resources :audits, only: [:index]
 
     resources :new_registrants, only: [:index]
     resource :new_registrant, only: [:download_csv] do

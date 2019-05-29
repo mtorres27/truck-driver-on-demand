@@ -1,7 +1,11 @@
 .avj-section.avj-section__msg-subhead
   .container
     .avj-subhead
-      .mr-4
+      - if current_company
+        - url = company_freelancer_path(hash_id(freelancer))
+      - else
+        - url = freelancer_company_path(company)
+      a.mr-4 href=url
         - if current_company
           - if freelancer.freelancer_profile.avatar_data.nil?
             .avj-circle_profile__image.freelancer__image= freelancer.name_initials

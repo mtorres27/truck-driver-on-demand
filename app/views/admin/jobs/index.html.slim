@@ -1,9 +1,16 @@
-.row
-  .col-xs-12.col-sm-6
-    h2 Jobs
-  .col-xs-12.col-sm-6
-    .search-form
-      = simple_form_for :search, url: admin_jobs_path, method: :get do |f|
-        = f.input :keywords, label: false, placeholder: "Search", input_html: { value: @keywords }
+.avj-section.avj-section__msg-subhead.d-block.mb-4
+  .container
+    .avj-subhead
+      h4.ellipsis.mb-0 Jobs
 
-= render "jobs_table"
+.avj-section.avj-section__main
+  .ml-4.mr-4
+    .row
+      .col-xs-12.col-sm-6
+        h2 Jobs
+      .col-xs-12.col-sm-6
+        .search-form
+          = simple_form_for :search, url: admin_jobs_path, method: :get do |f|
+            = f.input :keywords, label: false, placeholder: "Search", input_html: { value: @keywords }
+
+    = render "jobs_table"

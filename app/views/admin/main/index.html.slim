@@ -1,27 +1,32 @@
-h2 Dashboard
+.avj-section.avj-section__msg-subhead.d-block.mb-4
+  .container
+    .avj-subhead
+      h4.ellipsis.mb-0 Dashboard
 
-.row
-  - ['Incomplete Registrations', 'New Registrant', 'Company', 'Freelancer', 'Job', 'Applicant', 'Message'].each do |klass|
-    - if %w(Company Freelancer Job).include?(klass)
-      a href="/admin/#{klass.downcase.pluralize}"
-        .col-xs-12.col-sm-6.col-md-4.col-lg-3
-          .bs-callout.bs-callout-primary
-            h2= klass.constantize.count
-            p= klass.pluralize
-    - elsif klass == 'New Registrant'
-      a href="/admin/new_registrants"
-        .col-xs-12.col-sm-6.col-md-4.col-lg-3
-          .bs-callout.bs-callout-primary
-            h2= Company.new_registrants.count + FreelancerProfile.new_registrants.count
-            p= klass.pluralize
-    - elsif klass == 'Incomplete Registrations'
-      a href="/admin/incomplete_registrations"
-        .col-xs-12.col-sm-6.col-md-4.col-lg-3
-          .bs-callout.bs-callout-primary
-            h2= Company.incomplete_registrations.count + FreelancerProfile.incomplete_registrations.count
-            p= klass.pluralize
-    - else
-      .col-xs-12.col-sm-6.col-md-4.col-lg-3
-        .bs-callout.bs-callout-primary
-          h2= number_to_human(klass.constantize.count)
-          p= klass.pluralize
+.avj-section.avj-section__main
+  .container.container__content
+    .row
+      - ['Incomplete Registrations', 'New Registrant', 'Company', 'Freelancer', 'Job', 'Message'].each do |klass|
+        - if %w(Company Freelancer Job).include?(klass)
+          a href="/admin/#{klass.downcase.pluralize}"
+            .col-xs-12.col-sm-6.col-md-4.col-lg-3
+              .bs-callout.bs-callout-primary
+                h2= klass.constantize.count
+                p= klass.pluralize
+        - elsif klass == 'New Registrant'
+          a href="/admin/new_registrants"
+            .col-xs-12.col-sm-6.col-md-4.col-lg-3
+              .bs-callout.bs-callout-primary
+                h2= Company.new_registrants.count + FreelancerProfile.new_registrants.count
+                p= klass.pluralize
+        - elsif klass == 'Incomplete Registrations'
+          a href="/admin/incomplete_registrations"
+            .col-xs-12.col-sm-6.col-md-4.col-lg-3
+              .bs-callout.bs-callout-primary
+                h2= Company.incomplete_registrations.count + FreelancerProfile.incomplete_registrations.count
+                p= klass.pluralize
+        - else
+          .col-xs-12.col-sm-6.col-md-4.col-lg-3
+            .bs-callout.bs-callout-primary
+              h2= number_to_human(klass.constantize.count)
+              p= klass.pluralize

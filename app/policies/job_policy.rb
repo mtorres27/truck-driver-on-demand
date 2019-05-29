@@ -21,7 +21,7 @@ class JobPolicy < ApplicationPolicy
   end
 
   def show?
-    (company_user? && company_owner?) || freelancer? || admin?
+    (company_user? && company_owner?) || (freelancer? && job_published?) || admin?
   end
 
   def edit?
@@ -124,6 +124,10 @@ class JobPolicy < ApplicationPolicy
 
   def freelancer_hired?
     record.freelancer&.id == user.id
+  end
+
+  def job_published?
+    record.state == "published"
   end
 
 end

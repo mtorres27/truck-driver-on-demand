@@ -8,8 +8,13 @@ class Company::JobsController < Company::BaseController
   end
 
   def show
-    get_matches
-    @repliers = @job.repliers
+    if @job.state == "published"
+      get_matches
+      @repliers = @job.repliers
+    else
+      @freelancers = Freelancer.none
+      @repliers = Freelancer.none
+    end
   end
 
   def new

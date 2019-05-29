@@ -4,6 +4,7 @@
       | Messages
     div
       - @freelancers.each do |freelancer|
-        = render partial: "freelancer_messaging_info", locals: {freelancer: freelancer}
+        - if freelancer.present?
+          = render partial: "freelancer_messaging_info", locals: {freelancer: freelancer}
 
 

@@ -24,24 +24,22 @@ document.addEventListener("turbolinks:load", function() {
     });
 
     $(".js--message-form").submit(function(e) {
-        var params = {};
-        params["chat_room_id"] = $(".js--message-form").data("id");
-        params["company_id"] = $(".js--message-form").data("company");
-        params["freelancer_id"] = $(".js--message-form").data("freelancer");
-        params["authorable_type"] = $(".js--message-form").data("type");
-        params["message"] = {};
-        params["message"]["body"] = $(".js--message-input").val();
-        if ($("#message_job_id").length) {
-            params["message"]["job_id"] = $("#message_job_id").val();
-        }
-        App.messages.send(params);
         e.preventDefault();
+        if ($(".js--message-input").val() != ""){
+            var params = {};
+            params["chat_room_id"] = $(".js--message-form").data("id");
+            params["company_id"] = $(".js--message-form").data("company");
+            params["freelancer_id"] = $(".js--message-form").data("freelancer");
+            params["authorable_type"] = $(".js--message-form").data("type");
+            params["message"] = {};
+            params["message"]["body"] = $(".js--message-input").val();
+            if ($("#message_job_id").length) {
+                params["message"]["job_id"] = $("#message_job_id").val();
+            }
+            App.messages.send(params);
+        }
         return false;
     });
-
-    if (window.matchMedia("(max-width: 768px)").matches) {
-        window.scrollTo(0,document.body.scrollHeight);
-    }
 });
 
 var validateMessage = function() {

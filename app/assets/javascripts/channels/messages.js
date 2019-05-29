@@ -1,6 +1,9 @@
 document.addEventListener("turbolinks:load", function(){
 
     if ($(".js--message-form").length > 0) {
+        if (window.matchMedia("(max-width: 768px)").matches) {
+            window.scrollTo(0,document.body.scrollHeight);
+        }
         if (!App.messages) {
             App.messages = App.cable.subscriptions.create(
                 {
@@ -9,7 +12,7 @@ document.addEventListener("turbolinks:load", function(){
                 },
                 {
                     connected: function() {
-                        console.log("connected");
+                        console.log("connected to messages_channel");
                         // Called when the subscription is ready for use on the server
                     },
 
@@ -29,5 +32,8 @@ document.addEventListener("turbolinks:load", function(){
                     }
                 });
         }
+    }
+    else {
+        window.scrollTo(0,0);
     }
 });

@@ -63,7 +63,6 @@ class FreelancerProfile < ApplicationRecord
   extend Enumerize
   include Geocodable
   include AvatarUploader[:avatar]
-  include ProfileHeaderUploader[:profile_header]
   include Disableable
   include EasyPostgis
   include PgSearch

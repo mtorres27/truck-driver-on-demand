@@ -28,14 +28,14 @@
           - else
             option.js--live_events_staging_and_rental_option(value="#{index}")
               = value
-            = I18n.t("enumerize.system_integration_job_functions").each do |index, value|
-              - selected = (@job_function == index.to_s)
-              - if selected
-                option.js--system_integration_option(value="#{index}" selected)
-                  = value
-              - else
-                option.js--system_integration_option(value="#{index}")
-                  = value  
+        = I18n.t("enumerize.system_integration_job_functions").each do |index, value|
+          - selected = (@job_function == index.to_s)
+          - if selected
+            option.js--system_integration_option(value="#{index}" selected)
+              = value
+          - else
+            option.js--system_integration_option(value="#{index}")
+              = value
   .row
     .col-sm-6
       = f.input :address, label: 'Location', placeholder: 'Enter the city and state/province', input_html: {value: @address, class:'mb-0"'}
