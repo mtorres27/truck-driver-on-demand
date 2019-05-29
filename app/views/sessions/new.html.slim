@@ -1,7 +1,10 @@
 .avj-section.avj-section__main
   .container.container__content
     h2
-      | Hey there, login to get started
+      - if flash[:notice]
+        = flash[:notice]
+      - else
+        | Hey there, login to get started
     = simple_form_for(resource, as: resource_name, url: session_path(resource_name)) do |f|
       = f.error_notification
       .row

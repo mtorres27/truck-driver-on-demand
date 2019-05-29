@@ -136,7 +136,7 @@ class Job < ApplicationRecord
       if distance.nil?
         distance = 160934
       end
-      freelancer_profiles = freelancer_profiles.nearby(geocode[:lat], geocode[:lng], distance).with_distance(point).order("distance")
+      freelancer_profiles = freelancer_profiles.nearby(geocode[:lat], geocode[:lng], distance).with_distance(point).order("verified DESC, profile_score DESC, distance")
       Freelancer.where(id: freelancer_profiles.map(&:freelancer_id))
     else
       Freelancer.none
