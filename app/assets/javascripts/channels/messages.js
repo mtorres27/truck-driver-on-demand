@@ -9,7 +9,7 @@ document.addEventListener("turbolinks:load", function(){
                 },
                 {
                     connected: function() {
-                        console.log("connected");
+                        console.log("connected to messages_channel");
                         // Called when the subscription is ready for use on the server
                     },
 
