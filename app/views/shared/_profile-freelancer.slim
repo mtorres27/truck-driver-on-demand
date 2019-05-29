@@ -63,7 +63,7 @@
               - src = url
             - else
               - src = "/assets/certification/placeholder.png"
-            img src=src
+            img.h-100 src=src
             .avj-caption1= portfolio.name
 
     - if @freelancer.certifications.any?
@@ -76,7 +76,7 @@
               - src = url
             - else
               - src = "/assets/certification/placeholder.png"
-            img src=src
+            img.h-100 src=src
             .avj-caption1= certification.name
 
     - if @freelancer.freelancer_insurances.any?
@@ -89,7 +89,7 @@
               - src = url
             - else
               - src = "/assets/insurance/placeholder.png"
-            img src=src
+            img.h-100 src=src
             .avj-caption1= insurance.name
 
     - if @freelancer.freelancer_affiliations.any?
@@ -102,7 +102,7 @@
               - src = url
             - else
               - src = "/assets/freelancer_affiliation/placeholder.png"
-            img src=src
+            img.h-100 src=src
             .avj-caption1= affiliation.name
 
     - if @freelancer.freelancer_clearances.any?
@@ -115,5 +115,5 @@
               - src = url
             - else
               - src = "/assets/security_clearance/placeholder.png"
-            img src=src
+            img.h-100 src=src
             .avj-caption1= clearance.description

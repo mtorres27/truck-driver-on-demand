@@ -1,33 +1,10 @@
-h1.headin-h1 Freelancer Profile
-
-- content_for :secondary do
-  .action-bar
-    h2.heading-h2.heading-h2--action-bar Profile Info
-    .action-bar__actions
-      a.btn.btn--primary href=edit_admin_freelancer_path(@freelancer)
-        | Edit
-      a.btn.btn--primary href=admin_freelancers_path
-        | Cancel
-
-  - if @freelancer.freelancer_profile.header_source == 'default'
-    .profile__wallpaper style="background-image: url(#{image_path('profile_header/default_wallpaper.jpg')});"
-  - elsif @freelancer.freelancer_profile.profile_header_url.include?("missing") or @freelancer.freelancer_profile.header_source == "color"
-    .profile__wallpaper style="background-color: #{ @freelancer.freelancer_profile.header_color.include?("#") ? "" : "#"}#{@freelancer.freelancer_profile.header_color}"
-  - else
-    .profile__wallpaper style="background-image: url(#{@freelancer.freelancer_profile.profile_header_url.include?("missing") ? "" : @freelancer.freelancer_profile.profile_header_url});"
-  - if @freelancer.freelancer_profile.phone_number?
-    h4.heading-h4
-      | Phone:
-      = " #{@freelancer.freelancer_profile.phone_number}"
-      - if @freelancer.freelancer_profile.address?
-    h4.heading-h4
-      | Address:
-      = " #{@freelancer.freelancer_profile.address}#{@freelancer.freelancer_profile.line2? ? ", #{@freelancer.freelancer_profile.line2}" : "" }, #{@freelancer.freelancer_profile.city}, #{@freelancer.freelancer_profile.state}, #{@freelancer.freelancer_profile.country.try(:upcase)}, #{@freelancer.freelancer_profile.postal_code}"
-  - if @freelancer.confirmed_at.nil? && @freelancer.confirmation_token.present?
-    .confirmation_link
-      .confirmation_label
-        strong<> Confirmation Link:
-        = confirmation_url(@freelancer, confirmation_token: @freelancer.confirmation_token)
-  - if @freelancer.freelancer_profile.special_avj_fees?
-    h4.heading-h4= "Special AVJ Fee #{@freelancer.freelancer_profile.special_avj_fees}"
-  = render "shared/profile-freelancer"
+.avj-section.avj-section__msg-subhead.d-block.mb-4
+  .container
+    .avj-subhead
+      h4.ellipsis.mb-0= @freelancer.full_name
+      .d-flex.align-items-center.justify-content-end
+        a.btn.btn-outline-primary.btn-sm.mr-2 href=admin_freelancers_path
+          | Back
+        a.btn.btn-primary.btn-sm.mr-2 href=edit_admin_freelancer_path(@freelancer)
+          | Edit
+= render "shared/profile-freelancer"

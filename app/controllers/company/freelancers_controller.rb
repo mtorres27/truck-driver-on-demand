@@ -51,8 +51,6 @@ class Company::FreelancersController < Company::BaseController
     end
 
     @freelancer_profiles_with_distances = @freelancer_profiles
-    @featured_freelancers = @freelancer_profiles.where(verified: true)
-    @freelancer_profiles = @freelancer_profiles.where.not(verified: true)
     @freelancer_profiles = @freelancer_profiles.page(params[:page]).per(10)
   end
 

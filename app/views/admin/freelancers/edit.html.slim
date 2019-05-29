@@ -1,24 +1,19 @@
-h1 Editing Freelancer
-
+- content_for :title, "Edit Profile"
 = simple_form_for([:admin, @freelancer]) do |f|
-  = f.error_notification
+  = f.hidden_field :enforce_profile_edit, value: true
+  .avj-section.avj-section__msg-subhead.d-block.mb-4
+    .container
+      .avj-subhead
+        h4.ellipsis.m-0 Edit Freelancer
+        .d-flex.align-items-center.justify-content-end
+          = link_to "Cancel", admin_freelancer_path(@freelancer), class: "btn btn-outline-primary btn-sm mr-2"
+          = f.button :submit, "Update", class: "btn btn-primary btn-sm"
   = render "/freelancer/profiles/edit_freelancer_profile", f: f
-  = f.simple_fields_for :freelancer_profile do |df|
-    = df.input :special_avj_fees, label: 'Special AVJ fee'
-    = df.input :verified
-    = df.input :disabled
-  .form-actions
-    = f.button :submit, class: "btn btn--primary", prompt: "Select"
-
-hr
-= link_to 'Show', admin_freelancer_path(@freelancer)
-'  |
-= link_to 'Back', admin_freelancers_path
 
 javascript:
-  var updateHeaderImage = function() {
+  var updateHeaderImage = function () {
     $("#edit-freelancer-profile-header").click();
-    $("#edit-freelancer-profile-header").on('change', function() {
+    $("#edit-freelancer-profile-header").on('change', function () {
       var imgPath = $(this)[0].value;
       var extn = imgPath.substring(imgPath.lastIndexOf('.') + 1).toLowerCase();
       var image_holder = $("#freelancer-edit-profile__header");
@@ -38,9 +33,9 @@ javascript:
     });
   }
 
-  var updateProfilePicture = function() {
+  var updateProfilePicture = function () {
     $("#edit-freelancer-profile-avatar").click();
-    $("#edit-freelancer-profile-avatar").on('change', function() {
+    $("#edit-freelancer-profile-avatar").on('change', function () {
       var imgPath = $(this)[0].value;
       var extn = imgPath.substring(imgPath.lastIndexOf('.') + 1).toLowerCase();
       var image_holder = $("#freelancer-edit-profile__avatar");
@@ -61,47 +56,18 @@ javascript:
   }
 
 
-  function uploadCertificate (index) {
+  function uploadCertificate(index) {
     if (index != undefined) {
-      var ref = $("#freelancer_certifications_attributes_"+index+"_certificate");
+      var ref = $("#freelancer_certifications_attributes_" + index + "_certificate");
     } else {
-      var ref = $(".add-new-certificate").prev('div').find(".profile__meta__info").find(".file-input--hidden");
+      var ref = $(".add-new-certificate").prev('div').find(".file-input--hidden");
     }
 
-    ref.on('change', function() {
+    ref.on('change', function () {
       var imgPath = $(this)[0].value;
       var extn = imgPath.substring(imgPath.lastIndexOf('.') + 1).toLowerCase();
-      var image_holder = $(this).parent().parent().find(".freelancer-profile__image").find(".authorable_attachment--full").find("img");
-      if (extn == "gif" || extn == "png" || extn == "jpg" || extn == "jpeg") {
-        if (typeof (FileReader) != "undefined") {
-          var reader = new FileReader();
-          reader.onload = function (e) {
-            image_holder.attr('src', e.target.result)
-          }
-
-          reader.readAsDataURL($(this)[0].files[0]);
-        }
-      } else if (extn == "pdf") {
-        image_holder.attr('src', "/assets/certification/placeholder.png")
-      } else {
-        alert("Only images can be selected.");
-      }
-    });
-
-    ref.click();
-  }
-
-  function uploadAffiliateImage (index) {
-    if (index != undefined) {
-      var ref = $("#freelancer_freelancer_affiliations_attributes_"+index+"_image");
-    } else {
-      var ref = $(".add-new-affiliation").prev('div').find(".profile__meta__info").find(".file-input--hidden");
-    }
-
-    ref.on('change', function() {
-      var imgPath = $(this)[0].value;
-      var extn = imgPath.substring(imgPath.lastIndexOf('.') + 1).toLowerCase();
-      var image_holder = $(this).parent().parent().find(".freelancer-profile__image").find(".authorable_attachment--full").find("img");
+      var image_holder = $(this).parent().find(".authorable_attachment--full");
+      console.log(image_holder);
       if (extn == "gif" || extn == "png" || extn == "jpg" || extn == "jpeg") {
         if (typeof (FileReader) != "undefined") {
           var reader = new FileReader();
@@ -121,17 +87,49 @@ javascript:
     ref.click();
   }
 
-  function uploadClearanceImage (index) {
+  function uploadAffiliateImage(index) {
     if (index != undefined) {
-      var ref = $("#freelancer_freelancer_clearances_attributes_"+index+"_image");
+      var ref = $("#freelancer_freelancer_affiliations_attributes_" + index + "_image");
     } else {
-      var ref = $(".add-new-clearance").prev('div').find(".profile__meta__info").find(".file-input--hidden");
+      var ref = $(".add-new-affiliation").prev('div').find(".file-input--hidden");
     }
 
-    ref.on('change', function() {
+    ref.on('change', function () {
       var imgPath = $(this)[0].value;
       var extn = imgPath.substring(imgPath.lastIndexOf('.') + 1).toLowerCase();
-      var image_holder = $(this).parent().parent().find(".freelancer-profile__image").find(".authorable_attachment--full").find("img");
+      var image_holder = $(this).parent().find(".authorable_attachment--full");
+      console.log(image_holder);
+      if (extn == "gif" || extn == "png" || extn == "jpg" || extn == "jpeg") {
+        if (typeof (FileReader) != "undefined") {
+          var reader = new FileReader();
+          reader.onload = function (e) {
+            image_holder.attr('src', e.target.result)
+          }
+
+          reader.readAsDataURL($(this)[0].files[0]);
+        }
+      } else if (extn == "pdf") {
+        image_holder.attr('src', "/assets/freelancer_affiliation/placeholder.png")
+      } else {
+        alert("Only images/pdfs can be selected.");
+      }
+    });
+
+    ref.click();
+  }
+
+  function uploadClearanceImage(index) {
+    if (index != undefined) {
+      var ref = $("#freelancer_freelancer_clearances_attributes_" + index + "_image");
+    } else {
+      var ref = $(".add-new-clearance").prev('div').find(".file-input--hidden");
+    }
+
+    ref.on('change', function () {
+      var imgPath = $(this)[0].value;
+      var extn = imgPath.substring(imgPath.lastIndexOf('.') + 1).toLowerCase();
+      var image_holder = $(this).parent().find(".authorable_attachment--full");
+      console.log(image_holder);
       if (extn == "gif" || extn == "png" || extn == "jpg" || extn == "jpeg") {
         if (typeof (FileReader) != "undefined") {
           var reader = new FileReader();
@@ -151,17 +149,18 @@ javascript:
     ref.click();
   }
 
-  function uploadPortfolioImage (index) {
+  function uploadPortfolioImage(index) {
     if (index != undefined) {
-      var ref = $("#freelancer_freelancer_portfolios_attributes_"+index+"_image");
+      var ref = $("#freelancer_freelancer_portfolios_attributes_" + index + "_image");
     } else {
-      var ref = $(".add-new-portfolio").prev('div').find(".profile__meta__info").find(".file-input--hidden");
+      var ref = $(".add-new-portfolio").prev('div').find(".file-input--hidden");
     }
 
-    ref.on('change', function() {
+    ref.on('change', function () {
       var imgPath = $(this)[0].value;
       var extn = imgPath.substring(imgPath.lastIndexOf('.') + 1).toLowerCase();
-      var image_holder = $(this).parent().parent().find(".freelancer-profile__image").find(".authorable_attachment--full").find("img");
+      var image_holder = $(this).parent().find(".authorable_attachment--full");
+      console.log(image_holder);
       if (extn == "gif" || extn == "png" || extn == "jpg" || extn == "jpeg") {
         if (typeof (FileReader) != "undefined") {
           var reader = new FileReader();
@@ -185,13 +184,14 @@ javascript:
     if (index != undefined) {
       var ref = $("#freelancer_freelancer_insurances_attributes_" + index + "_image");
     } else {
-      var ref = $(".add-new-insurance").prev('div').find(".profile__meta__info").find(".file-input--hidden");
+      var ref = $(".add-new-insurance").prev('div').find(".file-input--hidden");
     }
 
     ref.on('change', function () {
       var imgPath = $(this)[0].value;
       var extn = imgPath.substring(imgPath.lastIndexOf('.') + 1).toLowerCase();
-      var image_holder = $(this).parent().parent().find(".freelancer-profile__image").find(".authorable_attachment--full").find("img");
+      var image_holder = $(this).parent().find(".authorable_attachment--full");
+      console.log(image_holder);
       if (extn == "gif" || extn == "png" || extn == "jpg" || extn == "jpeg") {
         if (typeof (FileReader) != "undefined") {
           var reader = new FileReader();

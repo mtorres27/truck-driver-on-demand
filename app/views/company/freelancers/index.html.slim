@@ -4,22 +4,19 @@
 .avj-section.avj-section__msg-subhead.d-block.mb-4#search-subheader
   .container
     .avj-subhead
-      h4.ellipsis.m-0= "Found #{@freelancer_profiles.total_count} matching professionals"
+      - if !@address || !@country
+        h4.ellipsis.m-0= "Please provide a location and country"
+      - else
+        h4.ellipsis.m-0= "Found #{@freelancer_profiles.total_count} matching professionals near #{@address_for_geocode}"
       button.btn.btn-primary.btn-sm onClick="toggleSearch();"
         | Edit Search
 .avj-section.avj-section__main#search-results
-  - unless @featured_freelancers.blank?
+  - unless @freelancer_profiles.blank?
     .container.container__content
       h2.d-none.d-md-block
-        | Featured Professionals
+        | Search Results
       div
-        - @featured_freelancers.each do |freelancer_profile|
+        - @freelancer_profiles.each do |freelancer_profile|
           = render partial: "company/shared/freelancer_info", locals: {freelancer: freelancer_profile.freelancer}
-  .container.container__content
-    h2.d-none.d-md-block
-      | Search Results
-    div
-      - @freelancer_profiles.each do |freelancer_profile|
-        = render partial: "company/shared/freelancer_info", locals: {freelancer: freelancer_profile.freelancer}
 
-      = paginate @freelancer_profiles
+        = paginate @freelancer_profiles
