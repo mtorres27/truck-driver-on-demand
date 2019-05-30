@@ -15,6 +15,7 @@ class Company::JobsController < Company::BaseController
       @freelancers = Freelancer.none
       @repliers = Freelancer.none
     end
+    @freelancers = @freelancers.page(params[:page]).per(10)
   end
 
   def new

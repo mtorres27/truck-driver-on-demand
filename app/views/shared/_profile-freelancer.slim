@@ -19,7 +19,7 @@
         .d-flex
           h2.mb-0.mr-2= @freelancer.first_name_and_initial
           - if @freelancer.freelancer_profile.verified?
-            span.zmdi.zmdi-check-circle
+            span.zmdi.zmdi-check-circle.align-self-center
         .avj-body1= @freelancer.freelancer_profile.tagline
         .avj-body2= @freelancer.freelancer_profile.city_state_province
         .avj-body2= "#{@freelancer.freelancer_profile.years_of_experience} years of experience"

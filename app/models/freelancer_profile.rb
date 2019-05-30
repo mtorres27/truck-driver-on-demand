@@ -192,7 +192,7 @@ class FreelancerProfile < ApplicationRecord
       firstname: freelancer&.first_name,
       lastname: freelancer&.last_name,
       lifecyclestage: "customer",
-      im_an: "AV Freelancer",
+      im_an: "AV Professional",
     )
   end
 end

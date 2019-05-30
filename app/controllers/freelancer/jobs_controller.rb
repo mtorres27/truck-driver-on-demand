@@ -40,7 +40,7 @@ class Freelancer::JobsController < Freelancer::BaseController
     @jobs = @jobs.search(@keywords) if @keywords
     @jobs = @jobs.where(country: @country) if @country
 
-    @jobs = @jobs.page(params[:page]).per(50)
+    @jobs = @jobs.page(params[:page]).per(10)
   end
 
   def show
