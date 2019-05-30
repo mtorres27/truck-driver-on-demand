@@ -54,7 +54,7 @@
             - if registrant.class == FreelancerProfile
               tr
                 td= link_to registrant.freelancer.full_name, admin_freelancer_path(registrant.freelancer)
-                td Freelancer
+                td Professional
                 td= mail_to registrant.freelancer.email
                 td= "(##{I18n.t("registration_step_numbers.#{registrant.registration_step}")})#{registrant.registration_step}"
                 td= registrant.state

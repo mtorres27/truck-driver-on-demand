@@ -25,7 +25,7 @@
         - message_text = nil
         - if @job_or_profile.present?
           - if current_user.is_a?(CompanyUser)
-            - message_text = "Hi #{recipient_name} this is #{current_user.full_name} from #{current_company.name}. "
+            - message_text = "Hi, this is #{current_user.full_name} from #{current_company.name}. "
             - if @job_or_profile == 'profile'
               - message_text += "Your profile matches our hiring needs, would you be interested in discussing further?"
             - else

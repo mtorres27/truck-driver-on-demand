@@ -120,11 +120,8 @@ class Company < ApplicationRecord
   end
 
   def freelancers_for_messaging
-    freelancers_with_messages = messages.map { |msg| msg.receivable }.uniq
-    Message.where(receivable_type: 'Company', receivable_id: id).find_each do |msg|
-      freelancers_with_messages << msg.authorable if !freelancers_with_messages.include?(msg.authorable)
-    end
-    freelancers_with_messages
+    all_messages = messages.to_a + Message.where(receivable_type: 'Company', receivable_id: id).to_a
+    all_messages.sort_by { |a| a.created_at }.reverse.map { |msg| msg.authorable.is_a?(Freelancer) ? msg.authorable : msg.receivable }.uniq
   end
 
   def has_new_messages_from_freelancer(freelancer)

@@ -67,4 +67,12 @@ class Message < ApplicationRecord
     freelancer_messages = freelancer.messages.where(receivable_id: company.id)
     (company_messages + freelancer_messages).sort_by(&:created_at)
   end
+
+  def self.total_conversations
+    total_count = 0
+    Company.find_each do |company|
+      total_count += company.freelancers_for_messaging.count
+    end
+    total_count
+  end
 end

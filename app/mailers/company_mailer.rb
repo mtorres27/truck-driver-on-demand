@@ -33,6 +33,7 @@ class CompanyMailer < ApplicationMailer
             '%company_name%' => [@company.name],
             '%freelancer_name%' => [@freelancer.first_name_and_initial],
             '%message_body%' => [@message.body],
+            '%freelancer_id%' => [@freelancer.id],
             '%root_url%' => [root_url]
         },
         filters: {
