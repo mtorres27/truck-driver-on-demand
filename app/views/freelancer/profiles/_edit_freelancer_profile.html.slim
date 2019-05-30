@@ -78,7 +78,7 @@
                   | Profile Picture
                 = image_tag(@freelancer.freelancer_profile.avatar_url, id: "freelancer-edit-profile__avatar", class: "mr-2")
                 a.zmdi.zmdi-camera onclick="updateProfilePicture()"
-                = f.file_field :avatar, label: false, :accept => 'image/png,image/gif,image/jpeg', id: "edit-freelancer-profile-avatar", class: "avj-hidden-important file-input--hidden"
+                = df.file_field :avatar, label: false, :accept => 'image/png,image/gif,image/jpeg', id: "edit-freelancer-profile-avatar", class: "avj-hidden-important file-input--hidden"
 
 
       .row.mb-2

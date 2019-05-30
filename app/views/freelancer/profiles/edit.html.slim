@@ -45,7 +45,7 @@ javascript:
           var reader = new FileReader();
           reader.onload = function (e) {
             image_holder.attr('src', e.target.result)
-          }
+          };
 
           reader.readAsDataURL($(this)[0].files[0]);
         }

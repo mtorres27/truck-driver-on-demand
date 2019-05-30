@@ -1,9 +1,5 @@
-h1 Editing Job
-
-= render "company/jobs/edit_job_form", company: @company
-
-hr
-= link_to 'Show', admin_job_path(@job)
-'  |
-= link_to 'Back', admin_jobs_path
+- controller = current_user.company_user? ? :company : :admin
+= simple_form_for([controller, @job]) do |f|
+  = render "company/jobs/edit_job_sub_nav", f: f
+  = render "company/jobs/edit_job_form", company: @job.company, f: f
 
