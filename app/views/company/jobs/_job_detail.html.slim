@@ -30,7 +30,7 @@
           = pluralize(@repliers.count, "Reply")
       li.nav-item
         a#matches-tab.nav-link aria-controls="matches" aria-selected="false" data-toggle="tab" href="#matches" role="tab"
-          = pluralize(@freelancers.count, "Match")
+          = pluralize(@freelancers.total_count, "Match")
     #myTabContent.tab-content
       #replies.tab-pane.fade.show.active aria-labelledby="replies-tab" role="tabpanel"
         div
@@ -40,4 +40,5 @@
         div
           - @freelancers.each do |freelancer|
             = render partial: "company/shared/freelancer_info", locals: {freelancer: freelancer}
+          = paginate @freelancers
 

@@ -104,7 +104,7 @@ describe FreelancerProfile, type: :model do
                 firstname: "John",
                 lastname: "Doe",
                 lifecyclestage: "customer",
-                im_an: "AV Freelancer",
+                im_an: "AV Professional",
             )
             freelancer.freelancer_profile.update(registration_step: "wicked_finish")
           end
