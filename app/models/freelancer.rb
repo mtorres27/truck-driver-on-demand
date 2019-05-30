@@ -143,11 +143,8 @@ class Freelancer < User
   end
 
   def companies_for_messaging
-    companies_with_messages = messages.map { |msg| msg.receivable }.uniq
-    Message.where(receivable_type: 'User', receivable_id: id).find_each do |msg|
-      companies_with_messages << msg.authorable if !companies_with_messages.include?(msg.authorable)
-    end
-    companies_with_messages
+    all_messages = messages.to_a + Message.where(receivable_type: 'User', receivable_id: id).to_a
+    all_messages.sort_by { |a| a.created_at }.reverse.map { |msg| msg.authorable.is_a?(Company) ? msg.authorable : msg.receivable }.uniq
   end
 
   def has_new_messages_from_company(company)

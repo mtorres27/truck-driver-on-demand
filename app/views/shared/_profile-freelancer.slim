@@ -16,7 +16,10 @@
         - else
           = image_tag(@freelancer.freelancer_profile.avatar_url, class: 'mb-4')
       .col-md-10.col-9
-        h2.mb-0= @freelancer.first_name_and_initial
+        .d-flex
+          h2.mb-0.mr-2= @freelancer.first_name_and_initial
+          - if @freelancer.freelancer_profile.verified?
+            span.zmdi.zmdi-check-circle
         .avj-body1= @freelancer.freelancer_profile.tagline
         .avj-body2= @freelancer.freelancer_profile.city_state_province
         .avj-body2= "#{@freelancer.freelancer_profile.years_of_experience} years of experience"
@@ -59,12 +62,12 @@
       .row
         - @freelancer.freelancer_portfolios.each do |portfolio|
           - url = portfolio.image_url.include?("missing.pdf") ? "/assets/certification/placeholder.png" : portfolio.image_url
-          a.col-md-4.col-6 href=url target="_blank"
+          a.col-md-3.col-6 href=url target="_blank"
             - if is_image(url)
               - src = url
             - else
               - src = "/assets/certification/placeholder.png"
-            img.h-100 src=src
+            img src=src
             .avj-caption1= portfolio.name
 
     - if @freelancer.certifications.any?
@@ -72,12 +75,12 @@
       .row
         - @freelancer.certifications.each do |certification|
           - url = certification.certificate_url.include?("missing.pdf") ? "/assets/certification/placeholder.png" : certification.certificate_url
-          a.col-md-4.col-6 href=url target="_blank"
+          a.col-md-3.col-6 href=url target="_blank"
             - if is_image(url)
               - src = url
             - else
               - src = "/assets/certification/placeholder.png"
-            img.h-100 src=src
+            img src=src
             .avj-caption1= certification.name
 
     - if @freelancer.freelancer_insurances.any?
@@ -85,12 +88,12 @@
       .row
         - @freelancer.freelancer_insurances.each do |insurance|
           - url = insurance.image_url.include?("missing.pdf") ? "/assets/certification/placeholder.png" : insurance.image_url
-          a.col-md-4.col-6 href=url target="_blank"
+          a.col-md-3.col-6 href=url target="_blank"
             - if is_image(url)
               - src = url
             - else
               - src = "/assets/insurance/placeholder.png"
-            img.h-100 src=src
+            img src=src
             .avj-caption1= insurance.name
 
     - if @freelancer.freelancer_affiliations.any?
@@ -98,12 +101,12 @@
       .row
         - @freelancer.freelancer_affiliations.each do |affiliation|
           - url = affiliation.image_url.include?("missing.pdf") ? "/assets/certification/placeholder.png" : affiliation.image_url
-          a.col-md-4.col-6 href=url target="_blank"
+          a.col-md-3.col-6 href=url target="_blank"
             - if is_image(url)
               - src = url
             - else
               - src = "/assets/freelancer_affiliation/placeholder.png"
-            img.h-100 src=src
+            img src=src
             .avj-caption1= affiliation.name
 
     - if @freelancer.freelancer_clearances.any?
@@ -111,10 +114,10 @@
       .row
         - @freelancer.freelancer_clearances.each do |clearance|
           - url = clearance.image_url.include?("missing.pdf") ? "/assets/certification/placeholder.png" : clearance.image_url
-          a.col-md-4.col-6 href=url target="_blank"
+          a.col-md-3.col-6 href=url target="_blank"
             - if is_image(url)
               - src = url
             - else
               - src = "/assets/security_clearance/placeholder.png"
-            img.h-100 src=src
+            img src=src
             .avj-caption1= clearance.description

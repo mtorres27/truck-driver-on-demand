@@ -6,13 +6,19 @@
 .avj-section.avj-section__main
   .container.container__content
     .row
-      - ['Incomplete Registrations', 'New Registrant', 'Company', 'Freelancer', 'Job', 'Message'].each do |klass|
-        - if %w(Company Freelancer Job).include?(klass)
+      - ['Incomplete Registrations', 'New Registrant', 'Company', 'Freelancer', 'Job', 'Message', 'Connection'].each do |klass|
+        - if %w(Company Job).include?(klass)
           a href="/admin/#{klass.downcase.pluralize}"
             .col-xs-12.col-sm-6.col-md-4.col-lg-3
               .bs-callout.bs-callout-primary
                 h2= klass.constantize.count
                 p= klass.pluralize
+        - elsif klass == 'Freelancer'
+          a href="/admin/#{klass.downcase.pluralize}"
+            .col-xs-12.col-sm-6.col-md-4.col-lg-3
+              .bs-callout.bs-callout-primary
+                h2= klass.constantize.count
+                p= 'Professional'.pluralize
         - elsif klass == 'New Registrant'
           a href="/admin/new_registrants"
             .col-xs-12.col-sm-6.col-md-4.col-lg-3
@@ -25,6 +31,11 @@
               .bs-callout.bs-callout-primary
                 h2= Company.incomplete_registrations.count + FreelancerProfile.incomplete_registrations.count
                 p= klass.pluralize
+        - elsif klass == 'Connection'
+          .col-xs-12.col-sm-6.col-md-4.col-lg-3
+            .bs-callout.bs-callout-primary
+              h2= number_to_human(Message.total_conversations)
+              p= klass.pluralize
         - else
           .col-xs-12.col-sm-6.col-md-4.col-lg-3
             .bs-callout.bs-callout-primary
