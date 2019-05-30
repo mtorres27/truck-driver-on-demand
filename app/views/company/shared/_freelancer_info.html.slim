@@ -1,11 +1,15 @@
 .avj-list-item
-  a.mr-4 href=company_freelancer_url(hash_id(freelancer))
+  - if current_user.is_a?(CompanyUser)
+    - url = company_freelancer_url(hash_id(freelancer))
+  - elsif current_user.is_a?(Admin)
+    - url = admin_freelancer_url(freelancer)
+  a.mr-4 href=url
     - if freelancer.freelancer_profile.avatar_data.present?
       .avj-avatar
         = image_tag(freelancer.freelancer_profile.avatar_url)
     - else
       .avj-circle_profile__image.freelancer__image= freelancer.name_initials
-  a.d-flex.w-100 href=company_freelancer_url(hash_id(freelancer))
+  a.d-flex.w-100 href=url
     .d-flex.flex-wrap.w-100.mr-4
       .w-50.d-flex
         .avj-body1.mb-0.mr-2= freelancer.first_name_and_initial
@@ -17,14 +21,15 @@
         .avj-caption1= freelancer.freelancer_profile.city_state_province
       .w-100
         .avj-body2= freelancer.freelancer_profile.tagline
-    .mr-4
-      - if current_company.has_saved_freelancer?(freelancer)
-        = link_to "", delete_freelancer_company_freelancer_url(freelancer), method: :post, class: "avj-body1 avj-text-color-primary zmdi zmdi-favorite"
-      - else
-        = link_to "", save_freelancer_company_freelancer_url(freelancer), method: :post, class: "avj-body1 avj-text-color-primary zmdi zmdi-favorite-outline"
-    div
-      - messages_url = @job.present? ? company_messages_for_job_url(freelancer, @job) : company_freelancer_messages_url(freelancer)
-      - if current_company.messages_for_freelancer(freelancer).count > 0
-        = link_to "", messages_url, class: "avj-body1 avj-text-color-primary zmdi zmdi-comment"
-      - else
-        = link_to "", messages_url, class: "avj-body1 avj-text-color-primary zmdi zmdi-comment-outline"
+    - if current_company.present?
+      .mr-4
+        - if current_company.has_saved_freelancer?(freelancer)
+          = link_to "", delete_freelancer_company_freelancer_url(freelancer), method: :post, class: "avj-body1 avj-text-color-primary zmdi zmdi-favorite"
+        - else
+          = link_to "", save_freelancer_company_freelancer_url(freelancer), method: :post, class: "avj-body1 avj-text-color-primary zmdi zmdi-favorite-outline"
+      div
+        - messages_url = @job.present? ? company_messages_for_job_url(freelancer, @job) : company_freelancer_messages_url(freelancer)
+        - if current_company.messages_for_freelancer(freelancer).count > 0
+          = link_to "", messages_url, class: "avj-body1 avj-text-color-primary zmdi zmdi-comment"
+        - else
+          = link_to "", messages_url, class: "avj-body1 avj-text-color-primary zmdi zmdi-comment-outline"

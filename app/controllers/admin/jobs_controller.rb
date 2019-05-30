@@ -13,6 +13,13 @@ class Admin::JobsController < Admin::BaseController
   end
 
   def show
+    if @job.state == "published"
+      get_matches
+      @repliers = @job.repliers
+    else
+      @freelancers = Freelancer.none
+      @repliers = Freelancer.none
+    end
   end
 
   def edit
