@@ -1,46 +1,17 @@
-.container.container--header
-  - if @freelancer.freelancer_profile.header_source == 'default'
-    .profile__wallpaper style="background-image: url(#{image_path('profile_header/default_wallpaper.jpg')});"
-  - elsif @freelancer.freelancer_profile.profile_header_url.include?("missing") or @freelancer.freelancer_profile.header_source == "color"
-    .profile__wallpaper.profile__wallpaper--wide style="background-color: #{ @freelancer.freelancer_profile.header_color.include?("#") ? "" : "#"}#{@freelancer.freelancer_profile.header_color}"
-  - else
-    .profile__wallpaper.profile__wallpaper--wide style="background-image: url(#{@freelancer.freelancer_profile.profile_header_url.include?("missing") ? "" : @freelancer.freelancer_profile.profile_header_url});"
+.avj-section.avj-section__msg-subhead.d-block.mb-4
+  .container
+    .avj-subhead
+      h4.ellipsis.mb-0= @freelancer.first_name_and_initial
+      .d-flex.align-items-center.justify-content-end
+        .mr-4
+          - if current_company.has_saved_freelancer?(@freelancer)
+            = link_to "", delete_freelancer_company_freelancer_url(@freelancer), method: :post, class: "avj-body1 avj-text-color-primary zmdi zmdi-favorite"
+          - else
+            = link_to "", save_freelancer_company_freelancer_url(@freelancer), method: :post, class: "avj-body1 avj-text-color-primary zmdi zmdi-favorite-outline"
+        div
+          - if current_company.messages_for_freelancer(@freelancer).count > 0
+            = link_to "", company_messages_for_job_url(@freelancer, job_id: 'profile'), class: "avj-body1 avj-text-color-primary zmdi zmdi-comment"
+          - else
+            = link_to "", company_messages_for_job_url(@freelancer, job_id: 'profile'), class: "avj-body1 avj-text-color-primary zmdi zmdi-comment-outline"
 
-
-.container.container--profile
-  .frame
-    .action-bar
-      h2.heading-h2.heading-h2--action-bar
-        = @freelancer.first_name_and_initial
-      .action-bar__actions
-        - if @freelancer.freelancer_profile.available
-          .tag.tag--success.gutter-right
-            | Available
-          - if current_company.subscription_active?
-            .btn.btn--primary onclick="togglePopOver()" Invite to quote
-            .popover--blanket onclick="hidePopOver()"
-            .popover
-
-              label.form__field-label for="field"  Invite to quote
-              select.form__select-field.w-select name="job_to_invite" id="job_to_invite"
-                option value=""
-                  | Select Job
-                - @jobs.each do |job|
-                  option value="#{job.id}"
-                    | #{job.title}
-              .btn.btn--primary id="job_invite_button" style="cursor: pointer" onclick="submitInvitation(#{@freelancer.id})" class="btn btn--primary btn--primary--disabled"
-                div invite
-
-              span.popover-response--error
-              span.popover-response--success
-        - else
-          .tag.tag--warning
-            | Unavailable
-        - if @favourite
-          a.btn-icon-link href="#{params[:id]}?toggle_favourite=true"
-            div class="zmdi zmdi-favorite"
-        - else
-          a.btn-icon-link href="#{params[:id]}?toggle_favourite=true"
-            div class="zmdi zmdi-favorite-outline"
-
-    = render "shared/profile-freelancer"
+= render "shared/profile-freelancer"

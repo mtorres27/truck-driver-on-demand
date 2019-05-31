@@ -10,31 +10,21 @@
 #  area                     :string
 #  lat                      :decimal(9, 6)
 #  lng                      :decimal(9, 6)
-#  pay_unit_time_preference :string
-#  pay_per_unit_time        :string
 #  tagline                  :string
 #  bio                      :text
 #  job_markets              :citext
 #  years_of_experience      :integer          default(0), not null
 #  profile_views            :integer          default(0), not null
-#  projects_completed       :integer          default(0), not null
 #  available                :boolean          default(TRUE), not null
 #  disabled                 :boolean          default(TRUE), not null
 #  created_at               :datetime         not null
 #  updated_at               :datetime         not null
 #  freelancer_reviews_count :integer          default(0), not null
 #  technical_skill_tags     :citext
-#  profile_header_data      :text
 #  verified                 :boolean          default(FALSE)
-#  header_color             :string           default("FF6C38")
 #  country                  :string
 #  freelancer_team_size     :string
 #  freelancer_type          :string
-#  header_source            :string           default("default")
-#  stripe_account_id        :string
-#  stripe_account_status    :text
-#  currency                 :string
-#  sales_tax_number         :string
 #  line2                    :string
 #  state                    :string
 #  postal_code              :string
@@ -45,15 +35,11 @@
 #  valid_driver             :boolean
 #  own_tools                :boolean
 #  company_name             :string
-#  job_types                :citext
 #  job_functions            :citext
 #  manufacturer_tags        :citext
-#  special_avj_fees         :decimal(10, 2)
-#  avj_credit               :decimal(10, 2)
 #  registration_step        :string
 #  province                 :string
 #  freelancer_id            :integer
-#  business_tax_number      :string
 #
 # Indexes
 #
@@ -118,7 +104,7 @@ describe FreelancerProfile, type: :model do
                 firstname: "John",
                 lastname: "Doe",
                 lifecyclestage: "customer",
-                im_an: "AV Freelancer",
+                im_an: "AV Professional",
             )
             freelancer.freelancer_profile.update(registration_step: "wicked_finish")
           end
@@ -131,28 +117,6 @@ describe FreelancerProfile, type: :model do
           end
         end
       end
-    end
-  end
-
-  describe "validations" do
-    describe "step personal information" do
-      subject { create(:freelancer_profile, registration_step: "job_info") }
-
-      it { is_expected.to validate_presence_of(:country) }
-      it { is_expected.to validate_presence_of(:city) }
-    end
-
-    describe "step job_info" do
-      subject { create(:freelancer_profile, registration_step: "profile") }
-
-      it { is_expected.to validate_presence_of(:job_types) }
-    end
-
-    describe "step profile" do
-      subject { create(:freelancer_profile, registration_step: "wicked_finish", freelancer: create(:freelancer)) }
-
-      it { is_expected.to validate_presence_of(:bio) }
-      it { is_expected.to validate_presence_of(:tagline) }
     end
   end
 end

@@ -1,25 +1,7 @@
 - if @applicant
   .freelancer-job__detail-cont
     .freelancer-job__quote-cont
-      - if !@applicant_accepted
-        = render partial: "freelancer/shared/new_quote", locals: { n: @applicant.company.name, type: "quote" }
-      - else
-        .new-message--wrapper
-          .new-message_amount
-            .new-message__freelancer-selected
-              .new-message__freelancer-selected__text
-                - if @applicant_accepted
-                  b
-                    = "Congratulations, you've been selected for this job."
-                  p
-                    = "Click the link below to view the particulars of the job with #{@job.company.name}:"
-                  div
-                    a.btn.btn--primary href=freelancer_job_work_order_path(@job)
-                      = "view work order #{@job.work_order}"
-                - else
-                  p
-                    | Unfortunately, you haven't been selected for this job.
-
+      = render partial: "freelancer/shared/new_quote", locals: { n: @applicant.company.name, type: "quote" }
       .freelancer-job__message-history
         - @messages.each_with_index do |message|
           .freelancer-job__quote-msg class=(".freelancer-job_quote-msg.freelance-job__quote-msg-has-quote")

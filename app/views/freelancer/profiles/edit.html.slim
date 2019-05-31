@@ -1,19 +1,14 @@
-= render partial: "/freelancer/shared/profile_sub_nav"
 - content_for :title, "Edit Profile"
-- content_for :secondary do
-  = simple_form_for(@freelancer, url: freelancer_profile_path) do |f|
-    = f.hidden_field :enforce_profile_edit, value: true
-    .action-bar
-      h2.heading-h2.heading-h2--action-bar= "Edit Profile (#{@freelancer.freelancer_profile.profile_score}% complete)"
-      .action-bar__actions
-        = f.button :submit, "Update", class: "btn btn--primary"
-        a.btn.btn--secondary href=freelancer_profile_path Cancel
-
-    = render "/freelancer/profiles/edit_freelancer_profile", f: f
-    .grid-cell.grid-cell--67
-      .buttons
-        = f.button :submit, "Update", class: "btn btn--primary"
-        a.btn.btn--secondary href=freelancer_profile_path Cancel
+= simple_form_for(@freelancer, url: freelancer_profile_path) do |f|
+  = f.hidden_field :enforce_profile_edit, value: true
+  .avj-section.avj-section__msg-subhead.d-block.mb-4
+    .container
+      .avj-subhead
+        h4.ellipsis.m-0 Edit Profile
+        .d-flex.align-items-center.justify-content-end
+          = link_to "Cancel", freelancer_profile_path, class: "btn btn-outline-primary btn-sm mr-2"
+          = f.button :submit, "Update", class: "btn btn-primary btn-sm"
+  = render "/freelancer/profiles/edit_freelancer_profile", f: f
 
 javascript:
   var updateHeaderImage = function() {
@@ -50,7 +45,7 @@ javascript:
           var reader = new FileReader();
           reader.onload = function (e) {
             image_holder.attr('src', e.target.result)
-          }
+          };
 
           reader.readAsDataURL($(this)[0].files[0]);
         }
@@ -63,15 +58,16 @@ javascript:
 
   function uploadCertificate (index) {
     if (index != undefined) {
-      var ref = $("#freelancer_certifications_attributes_"+index+"_certificate");
+      var ref = $("#freelancer_certifications_attributes_" + index + "_certificate");
     } else {
-      var ref = $(".add-new-certificate").prev('div').find(".profile__meta__info").find(".file-input--hidden");
+      var ref = $(".add-new-certificate").prev('div').find(".file-input--hidden");
     }
 
-    ref.on('change', function() {
+    ref.on('change', function () {
       var imgPath = $(this)[0].value;
       var extn = imgPath.substring(imgPath.lastIndexOf('.') + 1).toLowerCase();
-      var image_holder = $(this).parent().parent().find(".freelancer-profile__image").find(".authorable_attachment--full").find("img");
+      var image_holder = $(this).parent().find(".authorable_attachment--full");
+      console.log(image_holder);
       if (extn == "gif" || extn == "png" || extn == "jpg" || extn == "jpeg") {
         if (typeof (FileReader) != "undefined") {
           var reader = new FileReader();
@@ -84,7 +80,7 @@ javascript:
       } else if (extn == "pdf") {
         image_holder.attr('src', "/assets/certification/placeholder.png")
       } else {
-        alert("Only images can be selected.");
+        alert("Only images/pdfs can be selected.");
       }
     });
 
@@ -93,15 +89,16 @@ javascript:
 
   function uploadAffiliateImage (index) {
     if (index != undefined) {
-      var ref = $("#freelancer_freelancer_affiliations_attributes_"+index+"_image");
+      var ref = $("#freelancer_freelancer_affiliations_attributes_" + index + "_image");
     } else {
-      var ref = $(".add-new-affiliation").prev('div').find(".profile__meta__info").find(".file-input--hidden");
+      var ref = $(".add-new-affiliation").prev('div').find(".file-input--hidden");
     }
 
-    ref.on('change', function() {
+    ref.on('change', function () {
       var imgPath = $(this)[0].value;
       var extn = imgPath.substring(imgPath.lastIndexOf('.') + 1).toLowerCase();
-      var image_holder = $(this).parent().parent().find(".freelancer-profile__image").find(".authorable_attachment--full").find("img");
+      var image_holder = $(this).parent().find(".authorable_attachment--full");
+      console.log(image_holder);
       if (extn == "gif" || extn == "png" || extn == "jpg" || extn == "jpeg") {
         if (typeof (FileReader) != "undefined") {
           var reader = new FileReader();
@@ -123,15 +120,16 @@ javascript:
 
   function uploadClearanceImage (index) {
     if (index != undefined) {
-      var ref = $("#freelancer_freelancer_clearances_attributes_"+index+"_image");
+      var ref = $("#freelancer_freelancer_clearances_attributes_" + index + "_image");
     } else {
-      var ref = $(".add-new-clearance").prev('div').find(".profile__meta__info").find(".file-input--hidden");
+      var ref = $(".add-new-clearance").prev('div').find(".file-input--hidden");
     }
 
-    ref.on('change', function() {
+    ref.on('change', function () {
       var imgPath = $(this)[0].value;
       var extn = imgPath.substring(imgPath.lastIndexOf('.') + 1).toLowerCase();
-      var image_holder = $(this).parent().parent().find(".freelancer-profile__image").find(".authorable_attachment--full").find("img");
+      var image_holder = $(this).parent().find(".authorable_attachment--full");
+      console.log(image_holder);
       if (extn == "gif" || extn == "png" || extn == "jpg" || extn == "jpeg") {
         if (typeof (FileReader) != "undefined") {
           var reader = new FileReader();
@@ -153,15 +151,16 @@ javascript:
 
   function uploadPortfolioImage (index) {
     if (index != undefined) {
-      var ref = $("#freelancer_freelancer_portfolios_attributes_"+index+"_image");
+      var ref = $("#freelancer_freelancer_portfolios_attributes_" + index + "_image");
     } else {
-      var ref = $(".add-new-portfolio").prev('div').find(".profile__meta__info").find(".file-input--hidden");
+      var ref = $(".add-new-portfolio").prev('div').find(".file-input--hidden");
     }
 
-    ref.on('change', function() {
+    ref.on('change', function () {
       var imgPath = $(this)[0].value;
       var extn = imgPath.substring(imgPath.lastIndexOf('.') + 1).toLowerCase();
-      var image_holder = $(this).parent().parent().find(".freelancer-profile__image").find(".authorable_attachment--full").find("img");
+      var image_holder = $(this).parent().find(".authorable_attachment--full");
+      console.log(image_holder);
       if (extn == "gif" || extn == "png" || extn == "jpg" || extn == "jpeg") {
         if (typeof (FileReader) != "undefined") {
           var reader = new FileReader();
@@ -185,13 +184,14 @@ javascript:
     if (index != undefined) {
       var ref = $("#freelancer_freelancer_insurances_attributes_" + index + "_image");
     } else {
-      var ref = $(".add-new-insurance").prev('div').find(".profile__meta__info").find(".file-input--hidden");
+      var ref = $(".add-new-insurance").prev('div').find(".file-input--hidden");
     }
 
     ref.on('change', function () {
       var imgPath = $(this)[0].value;
       var extn = imgPath.substring(imgPath.lastIndexOf('.') + 1).toLowerCase();
-      var image_holder = $(this).parent().parent().find(".freelancer-profile__image").find(".authorable_attachment--full").find("img");
+      var image_holder = $(this).parent().find(".authorable_attachment--full");
+      console.log(image_holder);
       if (extn == "gif" || extn == "png" || extn == "jpg" || extn == "jpeg") {
         if (typeof (FileReader) != "undefined") {
           var reader = new FileReader();

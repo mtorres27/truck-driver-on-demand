@@ -6,10 +6,8 @@ class JobNotificationMailer < ApplicationMailer
         sub: {
             '%freelancer_name%' => [@freelancer.first_name_and_initial],
             '%job_title%' => [@job.title],
+            '%job_summary%' => [@job.summary],
             '%job_location%' => ["#{@job.address}, #{@job.state_province}"],
-            '%job_type%' => [@job.job_type.present? ? I18n.t("enumerize.job_types.#{@job.job_type}") : nil],
-            '%job_function%' => [@job.job_function.present? ? I18n.t("enumerize.#{@job.job_type}_job_functions.#{@job.job_function}") : nil],
-            '%job_market%' => [@job.job_market.present? ? I18n.t("enumerize.#{@job.job_type}_job_markets.#{@job.job_market}") : nil],
             '%company_name%' => [@job.company.name],
             '%job_id%' => [@job.id],
             '%root_url%' => [root_url]
@@ -24,5 +22,30 @@ class JobNotificationMailer < ApplicationMailer
         }
     }.to_json
     mail(to: @freelancer.email, subject: I18n.t('job_posted_in_the_area_email_subject'))
+  end
+
+  def notify_job_posting_company(company, job)
+    @freelancer = freelancer
+    @job = job
+    headers 'X-SMTPAPI' => {
+        sub: {
+            '%user_name%' => [company.company_user.first_name_and_initial],
+            '%job_title%' => [@job.title],
+            '%job_summary%' => [@job.summary],
+            '%job_location%' => ["#{@job.address}, #{@job.state_province}"],
+            '%company_name%' => [@job.company.name],
+            '%job_id%' => [@job.id],
+            '%root_url%' => [root_url]
+        },
+        filters: {
+            templates: {
+                settings: {
+                    enable: 1,
+                    template_id: 'c220f885-4e59-497c-b931-36f991f55e05'
+                }
+            }
+        }
+    }.to_json
+    mail(to: company.company_user.email, subject: 'Your new AV Junction job post')
   end
 end

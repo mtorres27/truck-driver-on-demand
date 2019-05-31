@@ -25,9 +25,7 @@ Given("I am on freelancer step {int}") do |step|
     expect(page).to have_content("Company Name")
     expect(page).to have_content("State/province")
   when 3
-    expect(page).to have_content("Please select a Job type")
-  when 4
-    expect(page).to have_content("Profile Picture")
+    expect(page).to have_content("System Integration")
   else
     pending
   end

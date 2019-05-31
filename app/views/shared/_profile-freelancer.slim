@@ -1,195 +1,128 @@
-.grid-h
-  .grid-cell.grid-cell--33
-    = render "shared/freelancer_profile_heading_column_1"
-  .grid-cell.grid-cell--33
-    = render "shared/freelancer_profile_heading_column_2"
-  .grid-cell.grid-cell--33
-    = render "shared/freelancer_profile_heading_column_3"
+.avj-section.avj-section__main
+  .container.container__content
+    - if current_user == @freelancer
+      .avj-body2= "Your Profile is #{current_user.freelancer_profile.profile_score}% complete. Your chances of making a good impression dramatically increase when it's over 80%."
+      .progress.mb-2
+        .progress-bar role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: #{current_user.freelancer_profile.profile_score}%"
 
-  .grid-cell.grid-cell--100
-    hr
+      .avj-caption1 Below this line is how your profile appears on AV Junction
+      .dropdown-divider.mb-4
 
-  .grid-cell.grid-cell--50
-    h3.heading-h3 Bio
-    p
-      - if @freelancer.freelancer_profile.bio.blank?
-        | This freelancer has not yet added a bio.
-      - else
-        = "#{@freelancer.freelancer_profile.bio}"
-  .grid-cell.grid-cell--50
-    .list-item.list-item--profile
-      .list-bar
-        h4.heading-h4 Years of Experience
-        h3.heading-h3 ="#{@freelancer.freelancer_profile.years_of_experience} years"
-    .list-item.list-item--profile
-      .list-bar
-        h4.heading-h4 Type
-        h3.heading-h3
-          - if @freelancer.freelancer_profile.freelancer_type.nil?
-            | N/A
-          - else
-            - if @freelancer.freelancer_profile.freelancer_type == :independent
-              = @freelancer.freelancer_profile.freelancer_type.text
-            - else
-              = "#{@freelancer.freelancer_profile.freelancer_type.text} "
-              - if @freelancer.freelancer_profile.freelancer_team_size.nil?
-                = ""
-              - else
-                = "(#{t("enumerize.job.freelancer_team_size.#{@freelancer.freelancer_profile.freelancer_team_size}")})"
-    - if @freelancer.freelancer_profile.company_name.present? && !current_user.is_a?(CompanyUser)
-      .list-item.list-item--profile
-        .list-bar
-          h4.heading-h4 Company Name
-          h3.heading-h3 = @freelancer.freelancer_profile.company_name
-    - if @freelancer.freelancer_profile.valid_driver
-      .list-item.list-item--profile
-        .list-bar
-          h4.heading-h4 Has Driver License
-          h3.heading-h3 Yes
-    - if @freelancer.freelancer_profile.own_tools
-      .list-item.list-item--profile
-        .list-bar
-          h4.heading-h4 Has Own Tools
-          h3.heading-h3 Yes
 
-  .grid-cell.grid-cell--100
-    hr
+    .row.mb-4
+      .col-md-2.col-3
+        - if @freelancer.freelancer_profile.avatar_data.nil?
+          .avj-circle_profile__image.freelancer__image= @freelancer.name_initials
+        - else
+          = image_tag(@freelancer.freelancer_profile.avatar_url, class: 'mb-4')
+      .col-md-10.col-9
+        .d-flex
+          h2.mb-0.mr-2= @freelancer.first_name_and_initial
+          - if @freelancer.freelancer_profile.verified?
+            span.zmdi.zmdi-check-circle.align-self-center
+        .avj-body1= @freelancer.freelancer_profile.tagline
+        .avj-body2= @freelancer.freelancer_profile.city_state_province
+        .avj-body2= "#{@freelancer.freelancer_profile.years_of_experience} years of experience"
+        .avj-body2= pluralize(@freelancer.connections_count, "connection")
+        .avj-body2= @freelancer.freelancer_profile.type_and_company
 
-  - if !@freelancer.job_markets_for_job_type("system_integration").empty? and @freelancer.freelancer_profile.job_types.present? and @freelancer.freelancer_profile.job_types.include?("system_integration")
-    .grid-cell.grid-cell--50
-      h3.heading-h3 System Integration
-      div
-        - @freelancer.job_markets_for_job_type("system_integration").each do |value|
-          .tag.tag--grey
-            = value
-        - @freelancer.job_functions_for_job_type("system_integration").each do |value|
-          .tag.tag--grey
-            = value
+    h2 Bio
+    .avj-body1= @freelancer.freelancer_profile.bio
 
-  - if !@freelancer.job_markets_for_job_type("live_events_staging_and_rental").empty? and @freelancer.freelancer_profile.job_types.present? and @freelancer.freelancer_profile.job_types.include?("live_events_staging_and_rental")
-    .grid-cell.grid-cell--50
-      h3.heading-h3 Live Events Staging & Rental
-      div
-        - @freelancer.job_markets_for_job_type("live_events_staging_and_rental").each do |value|
-          .tag.tag--grey
-            = value
-        - @freelancer.job_functions_for_job_type("live_events_staging_and_rental").each do |value|
-          .tag.tag--grey
-            = value
+    h2 Areas of Expertise
+    - system_integration_job_markets = []
+    - I18n.t("enumerize.system_integration_job_markets").each do |key, value|
+      - if @freelancer.freelancer_profile.job_markets&.include?(key)
+        - system_integration_job_markets << value
+    - if system_integration_job_markets.count > 0
+      .avj-body1
+        | System Integration
+      .d-inline-flex.flex-wrap.mb-4
+        - system_integration_job_markets.each do |value|
+          .avj-tag= value
+    - live_events_staging_and_rental_job_markets = []
+    - I18n.t("enumerize.live_events_staging_and_rental_job_markets").each do |key, value|
+      - if @freelancer.freelancer_profile.job_markets&.include?(key)
+        - live_events_staging_and_rental_job_markets << value
+    - if live_events_staging_and_rental_job_markets.count > 0
+      .avj-body1
+        | Live Events Staging & Rental
+      .d-inline-flex.flex-wrap.mb-4
+        - live_events_staging_and_rental_job_markets.each do |value|
+          .avj-tag= value
+    - if @freelancer.freelancer_profile.technical_skill_tags.present?
+      .avj-body1
+        | Technical Skills
+      .d-inline-flex.flex-wrap.mb-4
+        - @freelancer.freelancer_profile.technical_skill_tags.each do |key, _|
+          .avj-tag= I18n.t("enumerize.technical_skill_tags.#{key}")
 
-  - if @freelancer.freelancer_profile.technical_skill_tags.present? and @freelancer.freelancer_profile.technical_skill_tags.kind_of?(Hash)
-    .grid-cell.grid-cell--50
-      h3.heading-h3 Technical Skills
-      div
-        - @freelancer.freelancer_profile.technical_skill_tags.each do |index, value|
-          .tag.tag--grey
-            = I18n.t("enumerize.technical_skill_tags.#{index}")
-
-  - if @freelancer.freelancer_profile.manufacturer_tags.present? and @freelancer.freelancer_profile.manufacturer_tags.kind_of?(Hash)
-    .grid-cell.grid-cell--50
-      h3.heading-h3 Manufacturers
-      div
-        - @freelancer.freelancer_profile.manufacturer_tags.each do |index, value|
-          .tag.tag--grey
-            = I18n.t("enumerize.manufacturer_tags.#{index}")
-
-  .grid-cell.grid-cell--100
-    hr
-
-  - if @freelancer.freelancer_portfolios.any?
-    .grid-cell.grid-cell--50
-      h3.heading-h3 Portfolio gallery
-      .profile__certifications__container
+    - if @freelancer.freelancer_portfolios.any?
+      h2 Featured Projects
+      .row
         - @freelancer.freelancer_portfolios.each do |portfolio|
-          .profile__certifications__certificate
-            - url = portfolio.image_url.include?("missing.pdf") ? "/assets/certification/placeholder.png" : portfolio.image_url
-            a href=url target="_blank"
-              - if is_image(url)
-                - src=url
-              - else
-                - src="/assets/certification/placeholder.png"
-              .profile__certification
-                img.profile__certification__image sizes="185px" src=src
-                .profile__certification__label= portfolio.name
+          - url = portfolio.image_url.include?("missing.pdf") ? "/assets/certification/placeholder.png" : portfolio.image_url
+          a.col-md-3.col-6.d-flex.flex-column.justify-content-between href=url target="_blank"
+            - if is_image(url)
+              - src = url
+            - else
+              - src = "/assets/certification/placeholder.png"
+            .avj-projects
+              img.avj-fit-img src=src
+            .avj-caption1= portfolio.name
 
-  - if @freelancer.certifications.any?
-    .grid-cell.grid-cell--50
-      h3.heading-h3 Certifications
-      .profile__certifications__container
+    - if @freelancer.certifications.any?
+      h2 Certifications
+      .row
         - @freelancer.certifications.each do |certification|
-          .profile__certifications__certificate
-            - url = certification.certificate_url.include?("missing.pdf") ? "/assets/certification/placeholder.png" : certification.certificate_url
-            a href=url target="_blank"
-              - if is_image(url)
-                - src=url
-              - else
-                - src="/assets/certification/placeholder.png"
-              .profile__certification
-                img.profile__certification__image sizes="185px" src=src
-                .profile__certification__label= certification.name
+          - url = certification.certificate_url.include?("missing.pdf") ? "/assets/certification/placeholder.png" : certification.certificate_url
+          a.col-md-3.col-6 href=url target="_blank"
+            - if is_image(url)
+              - src = url
+            - else
+              - src = "/assets/certification/placeholder.png"
+            .avj-projects
+              img.avj-fit-img src=src
+            .avj-caption1= certification.name
 
-  - if @freelancer.freelancer_insurances.any?
-    .grid-cell.grid-cell--50
-      h3.heading-h3 Insurances
-      .profile__certifications__container
+    - if @freelancer.freelancer_insurances.any?
+      h2 Insurance
+      .row
         - @freelancer.freelancer_insurances.each do |insurance|
-          .profile__certifications__certificate
-            - url = insurance.image_url.include?("missing.pdf") ? "/assets/insurance/placeholder.png" : insurance.image_url
-            a href=url target="_blank"
-              - if is_image(url)
-                - src=url
-              - else
-                - src="/assets/insurance/placeholder.png"
-              .profile__certification
-                img.profile__certification__image sizes="185px" src=src
-                .profile__certification__label= insurance.name
-                .profile__certification__label= insurance.description
+          - url = insurance.image_url.include?("missing.pdf") ? "/assets/certification/placeholder.png" : insurance.image_url
+          a.col-md-3.col-6 href=url target="_blank"
+            - if is_image(url)
+              - src = url
+            - else
+              - src = "/assets/insurance/placeholder.png"
+            .avj-projects
+              img.avj-fit-img src=src
+            .avj-caption1= insurance.name
 
-  - if @freelancer.freelancer_affiliations.any?
-    .grid-cell.grid-cell--50
-      h3.heading-h3 Affiliates
-      .profile__certifications__container
-        - @freelancer.freelancer_affiliations.each do |affiliate|
-          .profile__certifications__certificate
-            - url = affiliate.image_url.include?("missing.pdf") ? "/assets/freelancer_affiliation/placeholder.png" : affiliate.image_url
-            a href=url target="_blank"
-              - if is_image(url)
-                - src=url
-              - else
-                - src="/assets/freelancer_affiliation/placeholder.png"
-              .profile__certification
-                img.profile__certification__image sizes="185px" src=src
-                .profile__certification__label= affiliate.name
+    - if @freelancer.freelancer_affiliations.any?
+      h2 Affiliations
+      .row
+        - @freelancer.freelancer_affiliations.each do |affiliation|
+          - url = affiliation.image_url.include?("missing.pdf") ? "/assets/certification/placeholder.png" : affiliation.image_url
+          a.col-md-3.col-6 href=url target="_blank"
+            - if is_image(url)
+              - src = url
+            - else
+              - src = "/assets/freelancer_affiliation/placeholder.png"
+            .avj-projects
+              img.avj-fit-img src=src
+            .avj-caption1= affiliation.name
 
-  - if @freelancer.freelancer_clearances.any?
-    .grid-cell.grid-cell--50
-      h3.heading-h3 Security clearances
-      .profile__certifications__container
+    - if @freelancer.freelancer_clearances.any?
+      h2 Security Clearances
+      .row
         - @freelancer.freelancer_clearances.each do |clearance|
-          .profile__certifications__certificate
-            - url = clearance.image_url.include?("missing.pdf") ? "/assets/security_clearance/placeholder.png" : clearance.image_url
-            a href=url target="_blank"
-              - if is_image(url)
-                - src=url
-              - else
-                - src="/assets/security_clearance/placeholder.png"
-              .profile__certification
-                img.profile__certification__image sizes="185px" src=src
-                .profile__certification__label= clearance.description
-
-
-  - if @freelancer.freelancer_reviews.any?
-    .grid-cell.grid-cell--100
-      hr
-
-    .grid-cell.grid-cell--100
-      a name="reviews"
-        h3.heading-h3 Reviews
-        .grid-h
-          - @freelancer.freelancer_reviews.each do |review|
-            .grid-cell.grid-cell--50
-              p
-                = review.comments
-              p
-                i
-                  = "#{review.company.owner.first_name_and_initial}, #{review.company.name}"
+          - url = clearance.image_url.include?("missing.pdf") ? "/assets/certification/placeholder.png" : clearance.image_url
+          a.col-md-3.col-6 href=url target="_blank"
+            - if is_image(url)
+              - src = url
+            - else
+              - src = "/assets/security_clearance/placeholder.png"
+            .avj-projects
+              img.avj-fit-img src=src
+            .avj-caption1= clearance.description

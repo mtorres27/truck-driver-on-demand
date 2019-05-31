@@ -10,31 +10,21 @@
 #  area                     :string
 #  lat                      :decimal(9, 6)
 #  lng                      :decimal(9, 6)
-#  pay_unit_time_preference :string
-#  pay_per_unit_time        :string
 #  tagline                  :string
 #  bio                      :text
 #  job_markets              :citext
 #  years_of_experience      :integer          default(0), not null
 #  profile_views            :integer          default(0), not null
-#  projects_completed       :integer          default(0), not null
 #  available                :boolean          default(TRUE), not null
 #  disabled                 :boolean          default(TRUE), not null
 #  created_at               :datetime         not null
 #  updated_at               :datetime         not null
 #  freelancer_reviews_count :integer          default(0), not null
 #  technical_skill_tags     :citext
-#  profile_header_data      :text
 #  verified                 :boolean          default(FALSE)
-#  header_color             :string           default("FF6C38")
 #  country                  :string
 #  freelancer_team_size     :string
 #  freelancer_type          :string
-#  header_source            :string           default("default")
-#  stripe_account_id        :string
-#  stripe_account_status    :text
-#  currency                 :string
-#  sales_tax_number         :string
 #  line2                    :string
 #  state                    :string
 #  postal_code              :string
@@ -45,15 +35,11 @@
 #  valid_driver             :boolean
 #  own_tools                :boolean
 #  company_name             :string
-#  job_types                :citext
 #  job_functions            :citext
 #  manufacturer_tags        :citext
-#  special_avj_fees         :decimal(10, 2)
-#  avj_credit               :decimal(10, 2)
 #  registration_step        :string
 #  province                 :string
 #  freelancer_id            :integer
-#  business_tax_number      :string
 #
 # Indexes
 #
@@ -77,7 +63,6 @@ class FreelancerProfile < ApplicationRecord
   extend Enumerize
   include Geocodable
   include AvatarUploader[:avatar]
-  include ProfileHeaderUploader[:profile_header]
   include Disableable
   include EasyPostgis
   include PgSearch
@@ -101,12 +86,9 @@ class FreelancerProfile < ApplicationRecord
   validates :years_of_experience, numericality: { only_integer: true }
   validates :phone_number, length: { minimum: 7 }, allow_blank: true
   validates :phone_number, length: { minimum: 7 }, on: :update, allow_blank: true
-  validates :job_types, presence: true, on: :update, if: :step_profile?
-  validates :tagline, :bio, presence: true, on: :update, if: :registration_completed?
   validates :country, :city, presence: true, on: :update, if: :step_job_info?
-  validates :address, :city, :postal_code, :country, :freelancer_type, :service_areas, :bio, :years_of_experience, :pay_unit_time_preference, presence: true, if: :enforce_profile_edit
+  validates :address, :city, :country, presence: true, if: :enforce_profile_edit
 
-  serialize :job_types
   serialize :job_markets
   serialize :technical_skill_tags
   serialize :job_functions
@@ -139,15 +121,12 @@ class FreelancerProfile < ApplicationRecord
   ]
 
   pg_search_scope :search, against: {
-      job_types: "A",
       job_markets: "A",
       technical_skill_tags: "A",
       manufacturer_tags: "A",
       job_functions: "A",
       tagline: "A",
       bio: "A"
-  }, associated_against: {
-      freelancer: [:first_name, :last_name]
   }, using: {
       tsearch: { prefix: true, any_word: true }
   }
@@ -167,20 +146,26 @@ class FreelancerProfile < ApplicationRecord
     registration_step == "wicked_finish"
   end
 
-  def step_profile?
-    registration_step == "profile"
-  end
-
   def step_job_info?
     registration_step == "job_info"
   end
 
-  def profile_form_filled?
-    avatar.present? && bio.present? && tagline.present?
-  end
-
   def user
     freelancer
+  end
+
+  def city_state_province
+    "#{city}#{ ", #{state}" unless state.blank?}"
+  end
+
+  def type_and_company
+    str = ""
+    if freelancer_type.present?
+      str += freelancer_type.humanize
+      str += ", #{company_name}" if company_name.present?
+    else
+      company_name
+    end
   end
 
   private
@@ -207,7 +192,7 @@ class FreelancerProfile < ApplicationRecord
       firstname: freelancer&.first_name,
       lastname: freelancer&.last_name,
       lifecyclestage: "customer",
-      im_an: "AV Freelancer",
+      im_an: "AV Professional",
     )
   end
 end

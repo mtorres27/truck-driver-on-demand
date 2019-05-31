@@ -1,83 +1,88 @@
-= simple_form_for :search, url: admin_incomplete_registrations_path, html: { class: "js--admin-search-form" }, method: :get do |f|
-  .row
-    .col-xs-12.col-sm-6
-      h2 Incomplete Registrations
-    .col-xs-12.col-sm-6
-      .search-form
-        = f.input :keywords, label: false, placeholder: "Search", input_html: {value: @keywords}
-  .row
-    .col-xs-12.col-sm-3
-      a.btn.btn--primary.btn-download-csv href=download_csv_admin_incomplete_registration_path
-        | Export to CSV
-    .col-xs-12.col-sm-12 style="padding-bottom:5px; margin-bottom:5px;"
-      label Sort by: &nbsp
-      select#search_sort name="search[sort]"
-        option value= 'full_name' selected=("selected" if params.dig(:search, :sort) == 'full_name')
-          | Name
-        option value= 'type' selected=("selected" if params.dig(:search, :sort) == 'type')
-          | User Type
-        option value= 'email' selected=("selected" if params.dig(:search, :sort) == 'email')
-          | Email
-        option value= 'registration_step' selected=("selected" if params.dig(:search, :sort) == 'registration_step')
-          | Registration Step
-        option value= 'state' selected=("selected" if params.dig(:search, :sort) == 'state')
-          | State/Province
-        option value= 'country' selected=("selected" if params.dig(:search, :sort) == 'country')
-          | Country
-        option value= 'created_at' selected=("selected" if params.dig(:search, :sort) == 'created_at')
-          | Date Created ASC
-        option value= 'created_at DESC' selected=("selected" if params.dig(:search, :sort) == 'created_at DESC' || params.dig(:search, :sort).blank?)
-          | Date Created DESC
+.avj-section.avj-section__msg-subhead.d-block.mb-4
+  .container
+    .avj-subhead
+      h4.ellipsis.mb-0 Incomplete Registrations
 
-.table-responsive
-  table.table.table-striped#admin-incomplete-registrations-table
-    thead
-      tr
-        th Name
-        th User Type
-        th Email
-        th Registration Step
-        th State/Province
-        th Country
-        th Date Created
-        th Account confirmed?
-        th Disabled?
-        th.text-right Actions
+.avj-section.avj-section__main
+  .ml-4.mr-4
+    = simple_form_for :search, url: admin_incomplete_registrations_path, html: { class: "js--admin-search-form" }, method: :get do |f|
+      .row
+        .col-xs-12.col-sm-6
+          .search-form
+            = f.input :keywords, label: false, placeholder: "Search", input_html: {value: @keywords}
+      .row
+        .col-xs-12.col-sm-3
+          a.btn.btn--primary.btn-download-csv href=download_csv_admin_incomplete_registration_path
+            | Export to CSV
+        .col-xs-12.col-sm-12 style="padding-bottom:5px; margin-bottom:5px;"
+          label Sort by: &nbsp
+          select#search_sort name="search[sort]"
+            option value= 'full_name' selected=("selected" if params.dig(:search, :sort) == 'full_name')
+              | Name
+            option value= 'type' selected=("selected" if params.dig(:search, :sort) == 'type')
+              | User Type
+            option value= 'email' selected=("selected" if params.dig(:search, :sort) == 'email')
+              | Email
+            option value= 'registration_step' selected=("selected" if params.dig(:search, :sort) == 'registration_step')
+              | Registration Step
+            option value= 'state' selected=("selected" if params.dig(:search, :sort) == 'state')
+              | State/Province
+            option value= 'country' selected=("selected" if params.dig(:search, :sort) == 'country')
+              | Country
+            option value= 'created_at' selected=("selected" if params.dig(:search, :sort) == 'created_at')
+              | Date Created ASC
+            option value= 'created_at DESC' selected=("selected" if params.dig(:search, :sort) == 'created_at DESC' || params.dig(:search, :sort).blank?)
+              | Date Created DESC
 
-    tbody
-      - @registrants.each do |registrant|
-        - if registrant.class == FreelancerProfile
+    .table-responsive
+      table.table.table-striped#admin-incomplete-registrations-table
+        thead
           tr
-            td= link_to registrant.freelancer.full_name, admin_freelancer_path(registrant.freelancer)
-            td Freelancer
-            td= mail_to registrant.freelancer.email
-            td= "(##{I18n.t("registration_step_numbers.#{registrant.registration_step}")})#{registrant.registration_step}"
-            td= registrant.state
-            td= registrant.country.try(:upcase)
-            td= registrant.created_at.strftime('%b %-d, %Y')
-            td= !registrant.freelancer.confirmed_at.nil?
-            td= registrant.disabled
-            td.text-right
-              = link_to 'Edit', edit_admin_freelancer_path(registrant.freelancer)
-              '  |
-              = link_to 'Enable', enable_admin_freelancer_path(registrant.freelancer)
-              '  |
-              = link_to 'Delete', admin_freelancer_path(registrant.freelancer), data: {confirm: "Are you sure?"}, method: :delete
-        - elsif registrant.class == Company
-          tr
-            td= link_to registrant.name, admin_company_path(registrant)
-            td Company
-            td= mail_to registrant.owner.email
-            td= "(##{I18n.t("registration_step_numbers.#{registrant.registration_step}")})#{registrant.registration_step}"
-            td= registrant.state
-            td= registrant.country.try(:upcase)
-            td= registrant.created_at.strftime('%b %-d, %Y')
-            td= !registrant.owner.confirmed_at.nil?
-            td= registrant.disabled
-            td.text-right
-              = link_to 'Edit', edit_admin_company_path(registrant)
-              '  |
-              = link_to 'Enable', enable_admin_company_path(registrant)
-              '  |
-              = link_to 'Delete', admin_company_path(registrant), data: { confirm: "Are you sure?" }, method: :delete
-= paginate @registrants
+            th Name
+            th User Type
+            th Email
+            th Registration Step
+            th State/Province
+            th Country
+            th Date Created
+            th Account confirmed?
+            th Disabled?
+            th.text-right Actions
+
+        tbody
+          - @registrants.each do |registrant|
+            - if registrant.class == FreelancerProfile
+              tr
+                td= link_to registrant.freelancer.full_name, admin_freelancer_path(registrant.freelancer)
+                td Professional
+                td= mail_to registrant.freelancer.email
+                td= "(##{I18n.t("registration_step_numbers.#{registrant.registration_step}")})#{registrant.registration_step}"
+                td= registrant.state
+                td= registrant.country.try(:upcase)
+                td= registrant.created_at.strftime('%b %-d, %Y')
+                td= !registrant.freelancer.confirmed_at.nil?
+                td= registrant.disabled
+                td.text-right
+                  = link_to 'Edit', edit_admin_freelancer_path(registrant.freelancer)
+                  '  |
+                  = link_to 'Enable', enable_admin_freelancer_path(registrant.freelancer)
+                  '  |
+                  = link_to 'Delete', admin_freelancer_path(registrant.freelancer), data: {confirm: "Are you sure?"}, method: :delete
+            - elsif registrant.class == Company
+              tr
+                td= link_to registrant.name, admin_company_path(registrant)
+                td Company
+                td= mail_to registrant.owner.email
+                td= "(##{I18n.t("registration_step_numbers.#{registrant.registration_step}")})#{registrant.registration_step}"
+                td= registrant.state
+                td= registrant.country.try(:upcase)
+                td= registrant.created_at.strftime('%b %-d, %Y')
+                td= !registrant.owner.confirmed_at.nil?
+                td= registrant.disabled
+                td.text-right
+                  = link_to 'Edit', edit_admin_company_path(registrant)
+                  '  |
+                  = link_to 'Enable', enable_admin_company_path(registrant)
+                  '  |
+                  = link_to 'Delete', admin_company_path(registrant), data: { confirm: "Are you sure?" }, method: :delete
+    = paginate @registrants

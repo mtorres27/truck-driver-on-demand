@@ -1,99 +1,111 @@
-= simple_form_for :search, url: admin_freelancers_path, html: { class: "js--admin-search-form" }, method: :get do |f|
-  .row
-    .col-xs-12.col-sm-12
-      h2 Freelancers
-    .col-xs-12.col-sm-12
-      .search-form
-        = f.input :keywords, label: false, placeholder: "Search", input_html: { value: @keywords }
-    .col-xs-12.col-sm-3
-      .search-form
-        = f.input :country, collection: I18n.t("enumerize.country").map { |k, v| [v, k] }, selected: @country, label: false, prompt: "Country", input_html: { class: "js--country-select" }
-    .col-xs-12.col-sm-3
-      .search-form
-        select#search_state_province.js--state-province-select.form-control.select(name='search[state_province]')
-          option(value='')
-            | State/Province
-          = CS.states(:us).each do |index, value|
-            - selected = (@state_province == index.to_s)
-            - if selected
-              option.js--us_option(value="#{index}" selected)
-                = value
-            - else
-              option.js--us_option(value="#{index}")
-                = value
-          = CS.states(:ca).each do |index, value|
-            - selected = (@state_province == index.to_s)
-            - if selected
-              option.js--ca_option(value="#{index}" selected)
-                = value
-            - else
-              option.js--ca_option(value="#{index}")
-                = value
-    .col-xs-12.col-sm-4
-      .search-form
-        = f.input :city, label: false, placeholder: "City", input_html: {value: @city}
-    .col-xs-12.col-sm-2
-      .search-form
-        = f.submit "Search", class: "btn btn--primary"
-    .col-xs-12.col-sm-3
-      .search-form
-        a.btn.btn--primary.btn-download-csv href=download_csv_admin_freelancer_path
-          | Export to CSV
-    .col-xs-12.col-sm-12 style="padding-bottom:5px; margin-bottom:5px;"
-      label Display options: &nbsp
-      select#search_filter_by_disabled name="search[filter_by_disabled]"
-        option value= 'nil'
-          | All records
-        option value= 'false' selected=("selected" if params.dig(:search, :filter_by_disabled) == 'false')
-          | Enabled only
-        option value= 'true' selected=("selected" if params.dig(:search, :filter_by_disabled) == 'true')
-          | Disabled only
-    .col-xs-12.col-sm-12 style="padding-bottom:5px; margin-bottom:5px;"
-      label Sort by: &nbsp
-      select#search_sort name="search[sort]"
-        option value= 'first_name' selected=("selected" if params.dig(:search, :sort) == 'first_name')
-          | Name
-        option value= 'email' selected=("selected" if params.dig(:search, :sort) == 'email')
-          | Email
-        option value= 'state' selected=("selected" if params.dig(:search, :sort) == 'state')
-          | State/Province
-        option value= 'country' selected=("selected" if params.dig(:search, :sort) == 'country')
-          | Country
-        option value= 'created_at' selected=("selected" if params.dig(:search, :sort) == 'created_at')
-          | Date Created ASC
-        option value= 'created_at DESC' selected=("selected" if params.dig(:search, :sort) == 'created_at DESC' || params.dig(:search, :sort).blank?)
-          | Date Created DESC
+.avj-section.avj-section__msg-subhead.d-block.mb-4
+  .container
+    .avj-subhead
+      h4.ellipsis.mb-0 Professionals
 
-.table-responsive
-  table.table.table-striped#admin-freelancers-table
-    thead
-      tr
-        th Name
-        th Email
-        th State/Province
-        th Country
-        th Date Created
-        th Account confirmed?
-        th Disabled?
-        th.text-right Actions
+.avj-section.avj-section__main
+  .ml-4.mr-4
+    = simple_form_for :search, url: admin_freelancers_path, html: { class: "js--admin-search-form" }, method: :get do |f|
+      .row
+        .col-xs-12.col-sm-12
+          .search-form
+            = f.input :keywords, label: false, placeholder: "Search", input_html: { value: @keywords }
+        .col-xs-12.col-sm-3
+          .search-form
+            = f.input :country, collection: I18n.t("enumerize.country").map { |k, v| [v, k] }, selected: @country, label: false, prompt: "Country", input_html: { class: "js--country-select" }
+        .col-xs-12.col-sm-3
+          .search-form
+            select#search_state_province.js--state-province-select.form-control.select(name='search[state_province]')
+              option(value='')
+                | State/Province
+              = CS.states(:us).each do |index, value|
+                - selected = (@state_province == index.to_s)
+                - if selected
+                  option.js--us_option(value="#{index}" selected)
+                    = value
+                - else
+                  option.js--us_option(value="#{index}")
+                    = value
+              = CS.states(:ca).each do |index, value|
+                - selected = (@state_province == index.to_s)
+                - if selected
+                  option.js--ca_option(value="#{index}" selected)
+                    = value
+                - else
+                  option.js--ca_option(value="#{index}")
+                    = value
+        .col-xs-12.col-sm-4
+          .search-form
+            = f.input :city, label: false, placeholder: "City", input_html: {value: @city}
+        .col-xs-12.col-sm-2
+          .search-form
+            = f.submit "Search", class: "btn btn--primary"
+        .col-xs-12.col-sm-3
+          .search-form
+            a.btn.btn--primary.btn-download-csv href=download_csv_admin_freelancer_path
+              | Export to CSV
+        .col-xs-12.col-sm-12 style="padding-bottom:5px; margin-bottom:5px;"
+          label Display options: &nbsp
+          select#search_filter_by_disabled name="search[filter_by_disabled]"
+            option value= 'nil'
+              | All records
+            option value= 'false' selected=("selected" if params.dig(:search, :filter_by_disabled) == 'false')
+              | Enabled only
+            option value= 'true' selected=("selected" if params.dig(:search, :filter_by_disabled) == 'true')
+              | Disabled only
+        .col-xs-12.col-sm-12 style="padding-bottom:5px; margin-bottom:5px;"
+          label Sort by: &nbsp
+          select#search_sort name="search[sort]"
+            option value= 'first_name' selected=("selected" if params.dig(:search, :sort) == 'first_name')
+              | Name
+            option value= 'email' selected=("selected" if params.dig(:search, :sort) == 'email')
+              | Email
+            option value= 'state' selected=("selected" if params.dig(:search, :sort) == 'state')
+              | State/Province
+            option value= 'country' selected=("selected" if params.dig(:search, :sort) == 'country')
+              | Country
+            option value= 'created_at' selected=("selected" if params.dig(:search, :sort) == 'created_at')
+              | Date Created ASC
+            option value= 'created_at DESC' selected=("selected" if params.dig(:search, :sort) == 'created_at DESC' || params.dig(:search, :sort).blank?)
+              | Date Created DESC
 
-    tbody
-      - @freelancers.each do |freelancer|
-        tr
-          td= link_to freelancer.full_name, admin_freelancer_path(freelancer)
-          td= mail_to freelancer.email
-          td= freelancer.freelancer_profile.state
-          td= freelancer.freelancer_profile.country.try(:upcase)
-          td= freelancer.freelancer_profile.created_at.strftime('%b %-d, %Y')
-          td= !freelancer.confirmed_at.nil?
-          td= freelancer.freelancer_profile.disabled
-          td.text-right
-            = link_to 'Edit', edit_admin_freelancer_path(freelancer)
-            '  |
-            - if freelancer.freelancer_profile.disabled?
-              = link_to 'Enable', enable_admin_freelancer_path(freelancer)
-              '  |
-              = link_to 'Delete', admin_freelancer_path(freelancer), data: { confirm: 'Are you sure?' }, method: :delete
-            - else
-              = link_to 'Disable', disable_admin_freelancer_path(freelancer)
-= paginate @freelancers
+    .table-responsive
+      table.table.table-striped#admin-freelancers-table
+        thead
+          tr
+            th Name
+            th Email
+            th State/Province
+            th Country
+            th Date Created
+            th Account confirmed?
+            th Verified?
+            th Disabled?
+            th.text-right Actions
+
+        tbody
+          - @freelancers.each do |freelancer|
+            tr
+              td= link_to freelancer.full_name, admin_freelancer_path(freelancer)
+              td= mail_to freelancer.email
+              td= freelancer.freelancer_profile.state
+              td= freelancer.freelancer_profile.country.try(:upcase)
+              td= freelancer.freelancer_profile.created_at.strftime('%b %-d, %Y')
+              td= !freelancer.confirmed_at.nil?
+              td= freelancer.freelancer_profile.verified
+              td= freelancer.freelancer_profile.disabled
+              td.text-right
+                = link_to 'Edit', edit_admin_freelancer_path(freelancer)
+                '  |
+                - if freelancer.freelancer_profile.disabled?
+                  = link_to 'Enable', enable_admin_freelancer_path(freelancer)
+                  '  |
+                  = link_to 'Delete', admin_freelancer_path(freelancer), data: { confirm: 'Are you sure?' }, method: :delete
+                - else
+                  = link_to 'Disable', disable_admin_freelancer_path(freelancer)
+                '  |
+                - if freelancer.freelancer_profile.verified?
+                  = link_to 'Unverify', unverify_admin_freelancer_path(freelancer)
+                - else
+                  = link_to 'Verify', verify_admin_freelancer_path(freelancer)
+    = paginate @freelancers

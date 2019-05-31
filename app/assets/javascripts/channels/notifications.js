@@ -18,16 +18,9 @@ document.addEventListener("turbolinks:load", function(){
 
                     received: function(data) {
                         // Called when there's incoming data on the websocket for this channel
-                        $(".js--notifications").html(data.message);
                         if (data.count > 0) {
-                            $(".js--notifications-icon").addClass("zmdi-notifications-active");
-                            $(".js--notifications-icon").removeClass("zmdi-notifications-none");
-                            $(".js--notifications-count").html(data.count)
                             $(".js--notifications-count").show();
-                        } else {
-                            $(".js--notifications-icon").removeClass("zmdi-notifications-active");
-                            $(".js--notifications-icon").addClass("zmdi-notifications-none");
-                            $(".js--notifications-count").hide();
+                            $(".js--notifications").html(data.count);
                         }
                     }
                 });

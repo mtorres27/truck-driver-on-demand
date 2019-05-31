@@ -1,6 +1,22 @@
-.grid-cell.grid-cell--50
-  = f.input :first_name, as: :string, placeholder: "First Name", required: true
-.grid-cell.grid-cell--50
-  = f.input :last_name, as: :string, placeholder: "Last Name", required: true
-.grid-cell.grid-cell--100
-  = f.input :email, as: :string, placeholder: "Email", required: true
+.avj-section.avj-section__main
+  .container.container__content
+    form
+      .row
+        .col-md-6
+          = f.input :first_name, placeholder: "Enter your first name", required: true, label_html: { class: "avj-caption1" }
+        .col-md-6
+          = f.input :last_name, placeholder: "Enter your last name", required: true, label_html: { class: "avj-caption1" }
+        .col-md-6
+          = f.input :email, as: :string, label: "Email Address", placeholder: "Enter your email address", required: true, label_html: { class: "avj-caption1" }
+        .col-md-6
+          = f.input :phone_number, placeholder: "Enter your phone number", required: false, label_html: { class: "avj-caption1" }
+        .col-md-6
+          = f.input :password, as: :password, placeholder: "New Password", label: "New Password", label_html: { class: "avj-caption1" }
+        .col-md-6
+          = f.input :password_confirmation, as: :password, placeholder: "Confirm your password", label: "Confirm Password", label_html: { class: "avj-caption1" }
+        .col-md-12
+      .row.mb-4
+        .col-12.d-flex.align-items-center.justify-content-end
+          a.btn.btn-outline-primary.mr-4 href=company_profile_path
+            | Cancel
+          = f.button :submit, "Update", class: "btn btn-primary"

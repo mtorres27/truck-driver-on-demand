@@ -1,0 +1,298 @@
+body 
+  min-height: 100vh
+  display: flex
+  flex-direction: column
+
+img
+  max-width: 100%
+  display: inline-block
+  
+.avj-section
+  margin-bottom: 24px
+  &__head
+    background-color: $avj-color-grey1
+    padding: 0px
+    position: sticky
+    top: 0
+    box-shadow: 1px 1px 2px 0 rgba(0, 0, 0, .2)
+    z-index: 200
+    margin-bottom: 0px
+  &__nav-mobile
+    display: none
+    z-index: 100
+    @media (max-width: $breakpoint-tablet)
+      display: block
+      background-color: $avj-color-grey1
+      box-shadow: 1px 1px 5px 0 rgba(0, 0, 0, .2)
+      margin-bottom: 0px
+      position: fixed
+      left: 0%
+      top: auto
+      right: 0%
+      bottom: 0%
+  &__main
+    flex: 1
+    margin-bottom: calc(#{$avj-nav-height} + 24px)
+    margin-top: 24px
+  &__chat
+    flex: 1
+    @media (max-width: $breakpoint-tablet)
+      margin-bottom: 144px
+  &__footer
+    background-color: $avj-color-grey1
+    padding-top: 16px
+    margin-bottom: 0px
+    @media (max-width: $breakpoint-tablet)
+      display: none
+  &__msg-subhead
+    background-color: $avj-color-grey2
+    margin-top: 0px
+    position: sticky
+    margin-bottom: 0
+    top: 0
+    box-shadow: 1px 1px 2px 0 rgba(0, 0, 0, .2)
+    z-index: 300
+    display: none
+    @media (max-width: $breakpoint-tablet)
+      display: block
+      margin-bottom: 24px
+  &__chat-input
+    background-color : $avj-color-grey2
+    margin-bottom: 24px
+    padding: 16px 0 8px 0
+    position: sticky
+    top: $avj-nav-height
+    box-shadow: 1px 1px 2px 0 rgba(0, 0, 0, .2)
+    z-index: 400
+    @media (max-width: $breakpoint-tablet)   
+      padding: 8px 0 0 0   
+      margin-bottom: 0
+      position: fixed
+      left: 0%
+      top: auto
+      right: 0%
+      bottom: $avj-nav-height
+  &__subhead
+    background-color: $avj-color-grey2
+    position: relative
+    margin-top: -24px
+    @media (max-width: $breakpoint-tablet)
+      position: sticky
+      top: 0
+      box-shadow: 1px 1px 2px 0 rgba(0, 0, 0, .2)
+      z-index: 300
+
+
+.avj-header
+  display: flex
+  justify-content: space-between
+  align-items: center
+
+.avj-head-logo
+  display: flex
+  align-items: center
+  height: $avj-nav-height
+  width: 160px
+
+.avj-subhead
+  display: flex
+  //justify-content: flex-start
+  align-items: center
+  height: $avj-nav-height
+
+.avj-nav-desktop
+  display: flex
+  @media (max-width: $breakpoint-tablet)
+    display: none
+
+.avj-nav-desktop-link
+  display: flex
+  align-items: center
+  height: $avj-nav-height
+  padding: 0 16px
+  color: $avj-color-primary
+  position: relative
+
+
+.avj-nav-mobile
+  display: flex
+  flex-direction: row
+  justify-content: space-around
+  align-items: center
+  list-style-type: none
+  margin: 0px
+  padding: 0px
+  height: $avj-nav-height
+
+.avj-nav-mobile-link
+  display: flex
+  flex-direction: column
+  align-items: center
+  text-decoration: none
+  color: $avj-color-primary
+  position: relative
+
+.avj-notification-badge
+  min-width: 20px
+  height: 20px
+  padding : 0 4px
+  background-color: $avj-color-primary
+  color: white
+  border-radius: 16px
+  border: 2px solid $avj-color-grey2
+  font-size: 12px
+  line-height: 0px
+  display: flex
+  align-items: center
+  justify-content: center
+  position: absolute
+  position: absolute
+  top: auto
+  right: 0px
+  left: auto
+  bottom: 26px
+  &--mobile
+    position: absolute
+    top: 0px
+    right: 0px
+    left: auto
+    bottom: auto
+
+
+
+.avj-avatar
+  height: 44px
+  width: 44px
+  border: 1px solid $avj-color-grey2
+  border-radius: 4px
+  overflow: hidden
+
+.avj-list-item
+  display: flex
+  flex-direction: row
+  margin-bottom: 24px
+  color: $avj-color-black
+  a
+    color: $avj-color-black
+
+.avj-message-list
+  display: flex
+  flex-direction: column-reverse
+  @media (max-width: $breakpoint-tablet)
+    flex-direction: column
+
+
+.avj-message-text
+  margin-top: 16px
+  border-radius: 4px
+  border: 1px solid rgba(0, 0, 0, .2)
+  padding: 8px 16px 0px 16px
+
+.avj-job-item
+  margin-bottom: 24px
+
+.avj-circle_profile__image
+  line-height: 44px
+  width: 44px
+  height: 44px
+  text-align: center
+  font-size: 18px
+  color: white
+  border: 1px solid $avj-color-grey2
+  border-radius: 4px
+  &.freelancer__image
+    background-color: #EE6E39
+  &.company__image
+    background-color: #00AEDB
+
+.avj-hidden-important
+  display: none !important
+
+.avj-profile-image
+  height: 150px
+
+.avj-projects
+  height: 100%
+  min-height: 100px
+  display: flex
+  align-items: center
+
+.avj-fit-img
+  object-fit: cover
+  object-position: center
+  width: 100%
+  height: 100%
+
+//Tags
+.avj-tag
+  display: inline-block
+  padding: 8px
+  border-style: solid
+  border-width: 1px
+  border-color: rgba(0, 0, 0, 0.2)
+  border-radius: 4px
+  font-size: 10px
+  line-height: 10px
+  font-weight: 600
+  text-transform: uppercase
+  color: black
+  margin: 8px 8px 0px 0px
+  border-color: #a7a7a7
+  background-color: $avj-color-grey3
+  &__published
+    border-color: rgba(0, 0, 0, 0.2)
+    background-color: #fff501
+    &::before
+      content: "published"
+  &__draft
+    border-color: rgba(0, 0, 0, 0.2)
+    background-color: #FFF
+    &::before
+      content: "draft"
+
+
+//Bootstrap Overrides
+
+textarea
+  height: auto !important
+
+.container 
+  max-width: $max-width
+  &__content
+    margin-bottom: 24px
+    &:last-child
+      margin-bottom: 0px
+
+.btn
+  text-transform: uppercase
+  letter-spacing: 1px
+  @media (max-width: $breakpoint-tablet)
+    line-height: 1.4
+  &-primary
+    background-color: $avj-color-primary
+    &:hover
+      background-color: $avj-color-primary-dark
+  &-outline-primary
+    border-color: $avj-color-primary
+    &:hover
+      background-color: $avj-color-primary
+  &-secondary
+    background-color: $avj-color-secondary
+    border-color: $avj-color-secondary
+    &:hover, &:not(:disabled):not(.disabled):active
+      background-color: $avj-color-secondary-dark
+      border-color: $avj-color-secondary-dark
+
+
+.form-control, select.form-control:not([size]):not([multiple])
+  height: 48px
+  font-size: 18px
+  @media (max-width: $breakpoint-tablet)
+    height: 40px
+    font-size: 16px
+
+.progress-bar
+  background-color: $avj-color-secondary
+
+.help-block
+  color: red

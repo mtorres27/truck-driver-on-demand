@@ -1,6 +1,68 @@
 class MainController < ApplicationController
   before_action :redirect_if_logged_in, only: [:index]
 
+  def login
+  end
+
+  def company_register
+  end
+
+  def search_professionals
+  end
+
+  def messages
+  end
+
+  def message_detail
+  end
+
+  def search_results
+  end
+
+  def jobs
+  end
+
+  def job_detail
+  end
+
+  def job_form
+  end
+
+  def company_profile
+  end
+
+  def company_profile_edit
+  end
+
+  def company_user_edit
+  end
+
+
+  def avpro_profile
+  end
+
+  def avpro_profile_edit
+  end
+
+  def avpro_register
+  end
+
+  def avpro_jobs
+  end
+
+  def avpro_messages
+  end
+
+  def avpro_job_detail
+  end
+  
+  def avpro_message_detail
+  end
+
+
+
+
+
   def index
   end
 

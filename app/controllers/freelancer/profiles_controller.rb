@@ -18,9 +18,8 @@ class Freelancer::ProfilesController < Freelancer::BaseController
     authorize @freelancer
 
     if @freelancer.update(freelancer_params)
-      redirect_to freelancer_profile_path(@freelancer), notice: "Freelancer profile updated."
+      redirect_to freelancer_profile_path(@freelancer)
     else
-      flash[:error] = 'There are errors with the form, please review and resubmit.'
       render :edit
     end
   end
@@ -64,7 +63,6 @@ class Freelancer::ProfilesController < Freelancer::BaseController
           :pay_unit_time_preference,
           :pay_per_unit_time,
           :business_tax_number,
-          job_types: I18n.t("enumerize.job_types").keys,
           job_markets: (I18n.t("enumerize.live_events_staging_and_rental_job_markets").keys + I18n.t("enumerize.system_integration_job_markets").keys).uniq,
           job_functions: (I18n.t("enumerize.system_integration_job_functions").keys + I18n.t("enumerize.live_events_staging_and_rental_job_functions").keys).uniq,
           technical_skill_tags:  I18n.t("enumerize.technical_skill_tags").keys,

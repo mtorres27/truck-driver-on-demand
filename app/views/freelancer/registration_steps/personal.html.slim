@@ -1,40 +1,42 @@
-- content_for :secondary do
-  h1.text-center.heading-h1 = "Register as a Freelancer"
-  = render partial: "shared/registration_progress_bar", locals: { step: 2 }
-  = simple_form_for(current_freelancer_profile, url: wizard_path) do |f|
-    .grid-h
-      .grid-cell.grid-cell--100
-        = f.input :company_name, as: :string, label: "Company Name", autofocus: true, placeholder:  "Enter your company name"
-      .grid-cell.grid-cell--33
-        = f.input :country, required: true, label: "Country", prompt: "Select Country", input_html: { class: "js--country-select" }
-      .grid-cell.grid-cell--33
-        = f.label "State/Province"
-        select#freelancer_profile_state.js--state-province-select.form-control.select(name='freelancer_profile[state]')
-          option(value='')
-            | Select
-          = CS.states(:us).each do |index, value|
-            - selected = (!current_freelancer_profile.state.nil? and current_freelancer_profile.state == index.to_s)
-            - if selected
-              option.js--us_option(value="#{index}" selected)
-                = value
-            - else
-              option.js--us_option(value="#{index}")
-                = value
-          = CS.states(:ca).each do |index, value|
-            - selected = (!current_freelancer_profile.state.nil? and current_freelancer_profile.state == index.to_s)
-            - if selected
-              option.js--ca_option(value="#{index}" selected)
-                = value
-            - else
-              option.js--ca_option(value="#{index}")
-                = value
-      .grid-cell.grid-cell--33
-        = f.input :city, required: true, label: "City", placeholder: "Enter your city"
-      .grid-cell.grid-cell--100
-        = f.input :phone_number, as: :string, label: "Phone Number", autofocus: true, placeholder: "Enter your phone number"
-      .grid-cell.grid-cell--100
-        .grid-h
-          .grid-cell.grid-cell--50
-            = f.button :submit, "Continue", class: "btn btn--primary"
-          .grid-cell.grid-cell--50
-            = link_to "Use another account", destroy_user_session_path,  method: :delete, class: "btn btn--clear"
+.avj-section.avj-section__main
+  .container.container__content
+    h2
+      | Next up, your company info.
+    .progress.mb-4
+      .progress-bar role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 66%"
+    = simple_form_for(current_freelancer_profile, url: wizard_path) do |f|
+      .row
+        .col-md-12
+          = f.input :company_name, as: :string, label: "Company Name", autofocus: true, placeholder:  "Enter your company's name"
+        .col-md-4
+          = f.input :country, required: true, label: "Country", prompt: "Select Country", input_html: { class: "js--country-select" }
+        .col-md-4
+          .form-group
+            = f.label "State/Province"
+            select#freelancer_profile_state.js--state-province-select.form-control.avj-body2(name='freelancer_profile[state]')
+              option(value='')
+                | Select
+              = CS.states(:us).each do |index, value|
+                - selected = (!current_freelancer_profile.state.nil? and current_freelancer_profile.state == index.to_s)
+                - if selected
+                  option.js--us_option(value="#{index}" selected)
+                    = value
+                - else
+                  option.js--us_option(value="#{index}")
+                    = value
+              = CS.states(:ca).each do |index, value|
+                - selected = (!current_freelancer_profile.state.nil? and current_freelancer_profile.state == index.to_s)
+                - if selected
+                  option.js--ca_option(value="#{index}" selected)
+                    = value
+                - else
+                  option.js--ca_option(value="#{index}")
+                    = value
+        .col-md-4
+          = f.input :city, required: true, label: "City", placeholder: "Enter your city"
+        .col-md-12
+          = f.input :service_areas, required: false, label: "Service Areas", placeholder: "Enter the cities your company services"
+        .col-12
+          .d-flex.align-items-center.justify-content-between
+            = link_to "Use another account", destroy_user_session_path, method: :delete, class: "avj-body2 mr-4"
+            = f.button :submit, "Next Step", class: "btn btn-primary"

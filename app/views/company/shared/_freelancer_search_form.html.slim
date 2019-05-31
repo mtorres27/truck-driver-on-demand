@@ -1,0 +1,57 @@
+= simple_form_for :search, url: company_freelancers_path, method: :get, html: {id: 'freelancer_search_form'} do |f|
+  input type="hidden" value="#{params.dig(:search, :sort)}" id="sort" name="search[sort]"
+  input type="hidden" value="#{params.dig(:search, :distance)}" id="distance" class="js--distance" name="search[distance]"
+  .row
+    .col-sm-6.form-group
+      = f.label :job_type, required: false, class:'avj-caption1'
+      select#search_job_type.js--job_type.form-control.select(name='search[job_type]')
+        option(value='')
+          | Select
+        = I18n.t("enumerize.job_types").each do |index, value|
+          - selected = (@job_type == index.to_s)
+          - if selected
+            option(value="#{index}" selected)
+              = value
+          - else
+            option(value="#{index}")
+              = value
+    .col-sm-6.form-group
+      = f.label :job_function, required: false, class:'avj-caption1'
+      select#search_job_function.js--job_type_dependent_select.form-control.select(name='search[job_function]')
+        option.js--job_type_dependent_select_placeholder(value='')
+          | Select job type to unlock options
+        = I18n.t("enumerize.live_events_staging_and_rental_job_functions").each do |index, value|
+          - selected = (@job_function == index.to_s)
+          - if selected
+            option.js--live_events_staging_and_rental_option(value="#{index}" selected)
+              = value
+          - else
+            option.js--live_events_staging_and_rental_option(value="#{index}")
+              = value
+        = I18n.t("enumerize.system_integration_job_functions").each do |index, value|
+          - selected = (@job_function == index.to_s)
+          - if selected
+            option.js--system_integration_option(value="#{index}" selected)
+              = value
+          - else
+            option.js--system_integration_option(value="#{index}")
+              = value
+  .row
+    .col-sm-6
+      = f.input :address, label: 'Location', placeholder: 'Enter the city and state/province', input_html: {value: @address, class:'mb-0"'}
+    .col-sm-6
+      = f.input :country, collection: ([["Select country", ""]] + (I18n.t("enumerize.country").map { |k, v| [v, k] })), selected: @country, label: "Country", placeholder: "Select country"
+  .row 
+    .col-12.form-group 
+        a#avj-collapse-btn.avj-body2
+          | Advanced Search
+  
+  .row#avj-collapse-div class="#{'collapse' if @job_type.blank? && @job_function.blank?}"
+    .col-sm-12.form-group
+      = f.input :keywords, required: false, label: 'Keywords', placeholder: 'Enter Keywords to Search', input_html: {value: @keywords}
+      small.avj-caption2 id="keywordshelp" class="form-text text-muted"
+        | Try using AV Installer or Crestron Programmer
+  
+  .row
+    .col-sm-6
+      = f.submit "Search", class: "btn btn-primary"

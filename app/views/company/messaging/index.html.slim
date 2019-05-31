@@ -1,0 +1,10 @@
+.avj-section.avj-section__main
+  .container.container__content
+    h2
+      | Messages
+    div
+      - @freelancers.each do |freelancer|
+        - if freelancer.present?
+          = render partial: "freelancer_messaging_info", locals: {freelancer: freelancer}
+
+

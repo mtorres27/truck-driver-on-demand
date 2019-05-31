@@ -1,8 +1,4 @@
-= render partial: "company/shared/job_nav", locals: { job: @job }
-
-- content_for :secondary do
-  .action-bar
-    h2.heading-h2.heading-h2--action-bar Edit Job
-    .action-bar__actions
-
-  = render "edit_job_form", company: current_company
+- controller = current_user.company_user? ? :company : :admin
+= simple_form_for([controller, @job]) do |f|
+  = render "edit_job_sub_nav", f: f
+  = render "edit_job_form", company: current_company, f: f

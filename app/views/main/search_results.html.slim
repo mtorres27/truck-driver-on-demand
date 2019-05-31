@@ -1,0 +1,29 @@
+=render "header"
+=render "mobile_nav"
+
+.avj-section.avj-section__msg-subhead.d-block.mb-4
+  .container
+    .avj-subhead
+      h4.ellipsis.m-0 Found 6 matching professionals
+      button.btn.btn-primary.btn-sm type="submit"
+        | Edit Search
+
+.avj-section.avj-section__main
+  .container.container__content
+    h2.d-none.d-md-block
+      | Search Results
+    div
+      .avj-list-item
+        a.mr-4 href="#" 
+          .avj-avatar style="background:yellow"
+        a.d-flex.w-100 href="/message_detail"
+          .d-flex.flex-wrap.w-100.mr-4
+            .w-100
+              .avj-body1.m-0 Robert S
+            .w-100
+              .avj-body2 Great technical av work and awesome customer service...what more could you want?
+          .avj-text-color-primary.material-icons chat_bubble_outline
+      
+      
+      
+=render "footer"      

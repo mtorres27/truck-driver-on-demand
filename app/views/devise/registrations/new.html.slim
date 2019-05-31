@@ -1,48 +1,49 @@
-- content_for :secondary do
-  - resource_class_name = resource.class == CompanyUser ? "Company" : "Freelancer"
-  h1.center.heading-h1 = "Register as a #{resource_class_name}"
-  = render partial: "shared/registration_progress_bar", locals: { step: 1 }
-  = simple_form_for(resource, url: registration_path(resource_name)) do |f|
-    .grid-h
-      .grid-cell.grid-cell--50
-        = f.input :first_name, required: true, label: "First Name", placeholder: "Enter your first name", autofocus: true
-      .grid-cell.grid-cell--50
-        = f.input :last_name, required: true, label: "Last Name", placeholder: "Enter your last name"
-      .grid-cell.grid-cell--100
-        = f.input :email, as: :string, label: "Email Address", required: true, placeholder: "Enter your email address"
-      .grid-cell.grid-cell--50
-        = f.input :password, required: true, label: "Enter a password", placeholder: "Enter a password"
-      .grid-cell.grid-cell--50
-        = f.input :password_confirmation, label: "Confirm password", required: true, placeholder: "Confirm your password"
+.avj-section.avj-section__main
+  .container.container__content
+    - if resource.class == CompanyUser
+      h2
+        | You're on your way to finding your next great hire.
+    .progress.mb-4
+      .progress-bar role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 33%"
+    = simple_form_for(resource, url: registration_path(resource_name)) do |f|
+      .row
+        .col-md-6
+          = f.input :first_name, required: true, label: "First Name", placeholder: "Enter your first name", autofocus: true, label_html: { class: "avj-caption1" }
+        .col-md-6
+          = f.input :last_name, required: true, label: "Last Name", placeholder: "Enter your last name", label_html: { class: "avj-caption1" }
+        .col-md-6
+          = f.input :email, as: :string, label: "Email Address", required: true, placeholder: "Enter your email address", label_html: { class: "avj-caption1" }
+        .col-md-6
+          = f.input :phone_number, label: "Phone Number", placeholder: "Enter your phone number", label_html: { class: "avj-caption1" }
+        .col-md-6
+          = f.input :password, required: true, label: "Password", placeholder: "Enter a password", label_html: { class: "avj-caption1" }
+        .col-md-6
+          = f.input :password_confirmation, label: "Confirm password", required: true, placeholder: "Confirm your password", label_html: { class: "avj-caption1" }
+        .col-md-12
+          - terms_of_service_error = false
+          - resource.errors.full_messages.each do |error|
+            - if error.include?("terms of service")
+              - terms_of_service_error = true
+          .form-group.form-check
+            = f.check_box :accept_terms_of_service, required: true, class: 'form-check-input'
+            label.form-check-label.avj-body2 for="agreeterms" class=(terms_of_service_error == true ? "text-danger" : "")
+              | By creating an account, you agree to the AV Junction
+              | &nbsp;
+              a.span href="http://www.avjunction.com/term-of-service" target="_blank"
+                | Terms & Conditions
+              | ,&nbsp;
+              a.span href="http://www.avjunction.com/privacy-policy" target="_blank"
+                | Privacy
+              | &nbsp;and&nbsp;
+              a.span href="http://www.avjunction.com/code-of-conduct" target="_blank"
+                | Code of Conduct
+              |.
 
-      - privacy_policy_error = false
-      - terms_of_service_error = false
-      - code_of_conduct_error = false
-
-      - resource.errors.full_messages.each do |error|
-        - if error.include?("privacy policy")
-          - privacy_policy_error = true
-        - elsif error.include?("terms of service")
-          - terms_of_service_error = true
-        - elsif error.include?("code of conduct")
-          - code_of_conduct_error = true
-
-      .grid-cell.grid-cell--100
-        span class=(terms_of_service_error == true ? "validation-error" : "")
-          = f.check_box :accept_terms_of_service, required: true
-          = " "
-          | By creating an account, you agree to the AV Junction
-          a href="http://www.avjunction.com/term-of-service" target="_blank"
-            |   Terms & Conditions
-          |,
-          a href="http://www.avjunction.com/privacy-policy" target="_blank"
-            |   Privacy
-          |   and
-          a href="http://www.avjunction.com/code-of-conduct" target="_blank"
-            |  Code of Conduct
-      .grid-cell.grid-cell--100
-        .grid-h
-          .grid-cell.grid-cell--50
-            = f.button :submit, "Continue", class: "btn btn--primary"
-      .grid-cell.grid-cell--100
-        = render "devise/shared/links"
+        .col-12
+          .d-flex.align-items-center.justify-content-between
+            .avj-body2.mr-4
+              | Already have an account?
+              | &nbsp;
+              a.span href=new_user_session_url
+                | Sign in.
+            = f.button :submit, "Next Step", class: "btn btn-primary"

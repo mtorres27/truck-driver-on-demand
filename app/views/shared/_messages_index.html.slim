@@ -1,0 +1,50 @@
+.avj-section.avj-section__msg-subhead
+  .container
+    .avj-subhead
+      - if current_company
+        - url = company_freelancer_path(hash_id(freelancer))
+      - else
+        - url = freelancer_company_path(company)
+      a.mr-4 href=url
+        - if current_company
+          - if freelancer.freelancer_profile.avatar_data.nil?
+            .avj-circle_profile__image.freelancer__image= freelancer.name_initials
+          - else
+            .avj-avatar
+              = image_tag(freelancer.freelancer_profile.avatar_url)
+        - else
+          .avj-avatar
+            = image_tag(company.avatar_url)
+      div
+        h4= "Conversation with #{recipient_name}"
+
+.avj-section.avj-section__chat-input
+  .container.containter__content
+    = simple_form_for(:message, url: path, html: { class: "js--message-form avj-list-item m-0", data: { id: "#{authorable_type}-#{company.id}-#{freelancer.id}", company: company.id, freelancer: freelancer.id, type: authorable_type } }) do |f|
+      .d-flex.w-100.align-items-start
+        - message_text = nil
+        - if @job_or_profile.present?
+          - if current_user.is_a?(CompanyUser)
+            - message_text = "Hi, this is #{current_user.full_name} from #{current_company.name}. "
+            - if @job_or_profile == 'profile'
+              - message_text += "Your profile matches our hiring needs, would you be interested in discussing further?"
+            - else
+              - message_text += "I've noticed you've been matched with the job I just posted Re: #{@job_or_profile.title}. Would you be interested in discussing further?"
+          - elsif current_user.is_a?(Freelancer)
+            - message_text = "I'm interested in learning more about the job you posted. Re: #{@job_or_profile.title}"
+        = f.text_area :body, as: :string, placeholder: "Send a message to #{recipient_name}", label: false, maxlength: 5000, class: "js--message-input form-control avj-body1 mr-2", value: message_text
+        - if @job_or_profile.present? && @job_or_profile != 'profile'
+          =f.hidden_field :job_id, value: @job_or_profile.id
+        button#new-message__submit.btn.btn-primary onClick= "validateMessage();"
+          | Send
+    #new-message__validation-errors
+
+.avj-section.avj-section__chat
+  .container.container__content
+    h2.d-none.d-md-block= "Your conversation history with #{recipient_name}"
+    - if @messages.count == 0
+      .avj-body1.js--messages-beginning= "This is the very begining of your message history with #{recipient_name}"
+    .avj-message-list.js--freelancer-job__message-history
+      - @messages.each do |message|
+        - user_is_author = (current_company && message.authorable == current_company) || (message.authorable == current_user)
+        = render "shared/message", message: message, user_is_author: user_is_author

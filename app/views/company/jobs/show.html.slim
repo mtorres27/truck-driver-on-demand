@@ -1,2 +1,9 @@
-= render partial: "company/shared/job_nav", locals: { job: @job }
+.avj-section.avj-section__msg-subhead.d-block.mb-4
+  .container
+    .avj-subhead
+      h4.ellipsis.m-0= @job.title
+      .d-flex.align-items-center.justify-content-end
+        a.button.btn.btn-primary.btn-sm href=edit_company_job_url(@job)
+          | Edit
+
 = render "job_detail"

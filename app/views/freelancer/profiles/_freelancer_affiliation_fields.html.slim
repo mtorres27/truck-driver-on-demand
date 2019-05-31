@@ -1,19 +1,18 @@
-.authorable_attachment__item
-  .profile__meta__details__1-1
-    .freelancer-profile__image.float-left
-      - if !f.object.image_url.nil? && !f.object.image_url.include?('missing.pdf')
-        - url = is_image(f.object.image_url) ? f.object.image_url : "/assets/freelancer_affiliation/placeholder.png"
-        a.authorable_attachment--full href=f.object.image_url target="_blank"
-          img src=url
-        .freelancer-profile__image-upload onclick="uploadAffiliateImage(#{f.index})"
-          span class="zmdi zmdi-upload"
+.row
+  .col-md-9.col-12
+    = f.input :name, as: :string, placeholder: "Affiliate Name", label: "Affiliate Name", label_html: {class: "avj-caption1"}
+  .col-md-3.col-8
+    .form-group
+      label.avj-caption1
+        | Affiliate Image
+      - if !f.object.image_url&.include?('missing.png') && f.index != 'new_freelancer_affiliations'
+        img.mb-1.authorable_attachment--full src=f.object.image_url
       - else
-        .authorable_attachment--full
-          img src=""
-        .freelancer-profile__image-upload onclick="uploadAffiliateImage()"
-          span class="zmdi zmdi-upload"
-
-    .profile__meta__info
-      = f.file_field :image, :accept => 'image/gif,image/jpg,image/jpeg,image/png,document/pdf,application/pdf,application/x-pdf', label: false, class: "file-input--hidden"
-      = f.input :name, as: :string, placeholder: "Enter the affiliate name", label: "Affiliate Name"
-    = link_to_remove_association "", f, { onClick: "hide_remove_association(this)", class: "btn-icon-link"}
+        img.mb-1.authorable_attachment--full src=""
+      .d-flex.justify-content-between
+        - if !f.object.image_url.include?('missing.png') && f.index != 'new_freelancer_affiliations'
+          a.zmdi.zmdi-camera onclick="uploadAffiliateImage(#{f.index})"
+        - else
+          a.zmdi.zmdi-camera onclick="uploadAffiliateImage()"
+        = link_to_remove_association content_tag(:span, "", class: "zmdi zmdi-delete"), f, {onClick: "hide_remove_association(this)"}
+  = f.file_field :image, label: false, :accept => 'image/gif,image/jpg,image/jpeg,image/png,document/pdf,application/pdf,application/x-pdf', class: "avj-hidden-important file-input--hidden"

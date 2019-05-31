@@ -1,23 +1,141 @@
-- controller = current_user.company_user? ? :company : :admin
-= simple_form_for([controller, @job]) do |f|
-  .grid-h
+.avj-section.avj-section__main
+  .container.container__content
+    form
+      .row
+        .col-md-4.col-12
+          h2
+            | Describe the job.
+            br/
+            | In 50-75 words.
+        .col-md-8.col-12
+          = f.input :title, label: "Job Title", placeholder: "Job Title", required: true, label_html: { class: "avj-caption1" }
+          = f.input :summary, label: "Job Description", placeholder: "Job Description", required: true, input_html: { rows: "6" }, label_html: { class: "avj-caption1" }
+      .row.mb-2
+        .col
+          .dropdown-divider
 
-    = render "company/job_build/job_details_fields", f: f
-    .grid-cell.grid-cell--100
-      hr/
-    = render "company/job_build/candidate_details_fields", f: f
+      .row
+        .col-md-4.col-12
+          h2 Where is the opportunity located?
+        .col-md-8.col-12
+          .row
+            .col-md-6
+              = f.input :country, prompt: "Select", required: true, input_html: { class: "js--country-select" }, label_html: { class: "avj-caption1" }
+            .col-md-6
+              .form-group
+                = f.label "State/Province"
+                select#job_state_province.js--state-province-select.form-control.avj-body2(name='job[state_province]')
+                  option(value='')
+                    | Select
+                  = CS.states(:us).each do |index, value|
+                    - selected = (!@job.state_province.nil? and @job.state_province == index.to_s)
+                    - if selected
+                      option.js--us_option(value="#{index}" selected)
+                        = value
+                    - else
+                      option.js--us_option(value="#{index}")
+                        = value
+                  = CS.states(:ca).each do |index, value|
+                    - selected = (!@job.state_province.nil? and @job.state_province == index.to_s)
+                    - if selected
+                      option.js--ca_option(value="#{index}" selected)
+                        = value
+                    - else
+                      option.js--ca_option(value="#{index}")
+                        = value
+            .col-12
+              = f.input :address, label: "City", placeholder: "City", required: true, label_html: { class: "avj-caption1" }
 
-    .grid-cell.grid-cell--expand
-    .grid-cell
-      .buttons
-        - if (action_name == "new" || action_name == "create" || (@job.company.subscription_active?)) && @job.state != 'published'
-          = f.button :button, "Publish", name: "job[state]", value: "published", class: "btn btn--primary"
-          = f.button :submit, "Save as Draft", class: "btn btn--secondary"
-        - else
-          = f.button :submit, "Update Job", class: "btn btn--primary"
-        - unless @job.new_record?
-          .btn.btn--danger
-            = link_to "Delete Job", company_job_path(@job), data: {confirm: "Are you sure you want to permanently delete this job posting?", class: "btn btn--danger"}, method: :delete
+      .row.mb-2
+        .col
+          .dropdown-divider
+
+      .row.mb-2
+        .col
+          h2 We match AV professionals to your jobs with the below items. Check all that apply.
+
+      .row
+        .col-md-4.col-12.d-md-block.d-none
+          h2 Select the skills related to this job
+
+        .col-md-8.col-12
+          .row
+            .col-12
+              .form-group
+                label.avj-body1 for="Job_types"
+                  | Special Skills
+                .row
+                  - I18n.t('enumerize.technical_skill_tags').each do |index, value|
+                    - tag_name = "job[technical_skill_tags][#{index.to_s}]"
+                    - checked = !@job.technical_skill_tags.nil? && @job.technical_skill_tags.include?(index.to_s)
+                    .col-md-4.col-6
+                      .form-check
+                        = check_box_tag tag_name, "1", checked, class: "form-check-input"
+                        label.form-check-label.avj-body2 for="agreeterms"
+                          = value
+
+            .col-12
+              .form-group
+                label.avj-body1 for="Job_types"
+                  | Manufacturers
+                .row
+                  - I18n.t('enumerize.manufacturer_tags').each do |index, value|
+                    - tag_name = "job[manufacturer_tags][#{index.to_s}]"
+                    - checked = !@job.manufacturer_tags.nil? && @job.manufacturer_tags.include?(index.to_s)
+                    .col-md-4.col-6
+                      .form-check
+                        = check_box_tag tag_name, "1", checked, class: "form-check-input"
+                        label.form-check-label.avj-body2 for="agreeterms"
+                          = value
+
+      .row.mb-2
+        .col
+          .dropdown-divider
+
+      .row
+        .col-md-4.col-12.d-md-block.d-none
+          h2 Select the job types relevant for this job
+        .col-md-8.col-12
+          .row
+            .col-12
+              .form-group
+                label.avj-body1 for="Job_types"
+                  | System Integration
+                .row
+                  - I18n.t("enumerize.system_integration_job_markets").each do |index, value|
+                    - tag_name = "job[job_markets][#{index.to_s}]"
+                    - checked = (!@job.job_markets.nil? and @job.job_markets.include?(index.to_s))
+                    .col-md-6
+                      .form-check
+                        = check_box_tag tag_name, "1", checked, class: "form-check-input"
+                        label.form-check-label.avj-body2 for="agreeterms"
+                          = value
 
 
-= render "company/jobs/new_project_modal", company: company
+            .col-12
+              .form-group
+                label.avj-body1 for="Job_types"
+                  | Live Events, Staging and Rental
+                .row
+                  - I18n.t("enumerize.live_events_staging_and_rental_job_markets").each do |index, value|
+                    - tag_name = "job[job_markets][#{index.to_s}]"
+                    - checked = (!@job.job_markets.nil? and @job.job_markets.include?(index.to_s))
+                    .col-md-6
+                      .form-check
+                        = check_box_tag tag_name, "1", checked, class: "form-check-input"
+                        label.form-check-label.avj-body2 for="agreeterms"
+                          = value
+
+      .row.mb-2
+        .col
+          .dropdown-divider
+
+      .row.mb-4
+        .col-12.d-flex.align-items-center.justify-content-end
+          a.btn.btn-outline-primary.mr-4 href=company_jobs_url
+            | Cancel
+          - unless @job.new_record?
+            = link_to "Delete Job", company_job_path(@job), data: { confirm: "Are you sure you want to permanently delete this job posting?" }, method: :delete, class: "btn btn-danger mr-4"
+          = f.button :button, "Save Draft", name: "job[state]", value: "created", class: "btn btn-outline-primary mr-4"
+          = f.button :button, "Post Job", name: "job[state]", value: "published", class: "btn btn-primary"
+

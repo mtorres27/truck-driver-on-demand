@@ -76,11 +76,7 @@ class CompanyUser < User
   end
 
   def notifications
-    if role == "Owner"
-      Notification.where(receivable_id: id, receivable_type: "User").or(Notification.where(receivable_id: company.id, receivable_type: "Company"))
-    else
-      Notification.where(receivable_id: id, receivable_type: "User")
-    end
+    Notification.where(receivable_id: id, receivable_type: "User").or(Notification.where(receivable_id: company.id, receivable_type: "Company"))
   end
 
   protected

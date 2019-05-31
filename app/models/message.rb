@@ -14,13 +14,17 @@
 #  checkin         :boolean          default(FALSE)
 #  send_contract   :boolean          default(FALSE)
 #  unread          :boolean          default(TRUE)
-#  lat             :decimal(9, 6)
-#  lng             :decimal(9, 6)
+#  job_id          :integer
 #
 # Indexes
 #
 #  index_messages_on_authorable_type_and_authorable_id  (authorable_type,authorable_id)
+#  index_messages_on_job_id                             (job_id)
 #  index_messages_on_receivable_type_and_receivable_id  (receivable_type,receivable_id)
+#
+# Foreign Keys
+#
+#  fk_rails_...  (job_id => jobs.id)
 #
 
 class Message < ApplicationRecord
@@ -28,9 +32,9 @@ class Message < ApplicationRecord
 
   belongs_to :authorable, polymorphic: true, counter_cache: true
   belongs_to :receivable, polymorphic: true, counter_cache: true
+  belongs_to :job, optional: true
 
   validate :must_have_body_or_attachment
-  validate :must_have_coordinates_when_checkin
 
   attr_accessor :status, 
     :counter_type, 
@@ -48,23 +52,27 @@ class Message < ApplicationRecord
     end
   end
 
-  def must_have_coordinates_when_checkin
-    if checkin && (lat.blank? || lng.blank?)
-      errors.add(:base, "Message must have coordinates when checkin is marked")
+  def send_email_notifications
+    if authorable.is_a?(Company)
+      Notification.create(title: authorable.name, body: "You have a new message", authorable: authorable, receivable: receivable, url: Rails.application.routes.url_helpers.freelancer_company_messages_url(authorable))
+      FreelancerMailer.notice_message_received(authorable, receivable, self).deliver_later
+    elsif authorable.is_a?(Freelancer)
+      Notification.create(title: authorable.first_name_and_initial, body: "You have a new message", authorable: authorable, receivable: receivable, url: Rails.application.routes.url_helpers.company_freelancer_messages_url(authorable))
+      CompanyMailer.notice_message_received(receivable.company_user, authorable, self).deliver_later
     end
   end
 
-  def send_email_notifications
-    if authorable.is_a?(Company)
-      CompanyMailer.notice_message_sent(authorable, receivable.freelancer, self).deliver_later
-      Notification.create(title: receivable.title, body: "You have a new message", authorable: authorable, receivable: receivable.freelancer, url: Rails.application.routes.url_helpers.freelancer_job_messages_url(receivable))
-      FreelancerMailer.notice_message_received(authorable, receivable.freelancer, receivable, self).deliver_later
-    elsif authorable.is_a?(Freelancer)
-      FreelancerMailer.notice_message_sent(receivable.company, authorable, self).deliver_later
-      receivable.collaborators_for_notifications.each do |collaborator|
-        Notification.create(title: receivable.title, body: "You have a new message", authorable: authorable, receivable: collaborator, url: Rails.application.routes.url_helpers.company_job_messages_url(receivable))
-        CompanyMailer.notice_message_received(collaborator, authorable, receivable, self).deliver_later
-      end
+  def self.messages_for(company, freelancer)
+    company_messages = company.messages.where(receivable_id: freelancer.id)
+    freelancer_messages = freelancer.messages.where(receivable_id: company.id)
+    (company_messages + freelancer_messages).sort_by(&:created_at)
+  end
+
+  def self.total_conversations
+    total_count = 0
+    Company.find_each do |company|
+      total_count += company.freelancers_for_messaging.count
     end
+    total_count
   end
 end

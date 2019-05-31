@@ -1,14 +1,14 @@
 include Warden::Test::Helpers
 
 Given("Exists an full registered company user with email {string} and password {string}") do |email, password|
-  company = FactoryBot.create(:company, :registration_completed, plan: FactoryBot.create(:plan))
+  company = FactoryBot.create(:company, :registration_completed)
   user = FactoryBot.create(:company_user, :confirmed, email: email, password: password, company: company, role: "Owner")
 end
 
 Given("I filled company registration step {int}") do |step|
   case step
   when 1
-    company = FactoryBot.create(:company, name: nil, country: nil, city: nil, state: nil)
+    company = FactoryBot.create(:company, name: nil, country: nil, city: nil, state: nil, registration_step: "personal")
     user = FactoryBot.create(:company_user, company: company)
   when 2
     company = FactoryBot.create(:company, job_types: nil, job_markets: nil, registration_step: "job_info")
@@ -30,9 +30,7 @@ Given("I am on company step {int}") do |step|
     expect(page).to have_content("Company Name")
     expect(page).to have_content("State/province")
   when 3
-    expect(page).to have_content("Please select a Job type")
-  when 4
-    expect(page).to have_content("Company Logo")
+    expect(page).to have_content("System Integration")
   else
     pending
   end
@@ -44,8 +42,6 @@ Then("I should be on company registration step {int}") do |step|
     expect(current_path).to eq(company_registration_step_path(:personal))
   when 3
     expect(current_path).to eq(company_registration_step_path(:job_info))
-  when 4
-    expect(current_path).to eq(company_registration_step_path(:profile))
   else
     pending
   end

@@ -1,23 +1,14 @@
-= render partial: "/company/shared/profile_sub_nav"
+= simple_form_for(current_company, url: company_profile_path) do |f|
+  .avj-section.avj-section__msg-subhead.d-block.mb-4
+    .container
+      .avj-subhead
+        h4.ellipsis.m-0 Edit Profile
+        .d-flex.align-items-center.justify-content-end
+          a.btn.btn-outline-primary.btn-sm.mr-2 href=company_profile_path
+            | Cancel
+          = f.button :submit, "Update", class: "btn btn-primary btn-sm"
 
-- content_for :title, "AVJunction - Profile"
-
-- content_for :secondary do
-  = simple_form_for(current_company, url: company_profile_path) do |f|
-    = f.hidden_field :enforce_profile_edit, value: true
-    .action-bar
-        h2.heading-h2.heading-h2--action-bar Edit Your Profile
-        .action-bar__actions
-          = f.button :submit, "Update", class: "btn btn--primary"
-          a.btn.btn--secondary href=company_profile_path(@company) Cancel
-
-    = render "edit_company_profile", f: f, company: current_company
-
-    .grid-cell.grid-cell--67
-      .buttons
-        = f.button :submit, class: "btn btn--primary", label: "Update"
-        a.btn.btn--secondary href=company_profile_path(@company)
-          | Cancel
+  = render "edit_company_profile", f: f, company: current_company
 
 
 javascript:
@@ -69,13 +60,14 @@ javascript:
     if (index != undefined) {
       var ref = $("#company_featured_projects_attributes_"+index+"_file");
     } else {
-      var ref = $(".add-new-project").prev('div').find(".nested_fields").find(".file-input--hidden");
+      var ref = $(".add-new-project").prev('div').find(".file-input--hidden");
     }
 
     ref.on('change', function() {
       var imgPath = $(this)[0].value;
       var extn = imgPath.substring(imgPath.lastIndexOf('.') + 1).toLowerCase();
-      var image_holder = $(this).parent().parent().parent().find(".freelancer-profile__image > .authorable_attachment--full > img");
+      var image_holder = $(this).parent().find(".authorable_attachment--full");
+      console.log(image_holder);
       if (extn == "gif" || extn == "png" || extn == "jpg" || extn == "jpeg") {
         if (typeof (FileReader) != "undefined") {
           var reader = new FileReader();

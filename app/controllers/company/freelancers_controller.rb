@@ -1,82 +1,70 @@
 class Company::FreelancersController < Company::BaseController
   include FreelancerHelper
 
-  def hired
-    authorize current_company, :index?
-    @locations = current_company.freelancers.uniq.pluck(:city)
-    @freelancers = current_company.freelancers.distinct
+  def index
+    @keywords = params.dig(:search, :keywords).presence
+    @address = params.dig(:search, :address).presence
+    @country = params.dig(:search, :country).presence
+    @job_type = params.dig(:search, :job_type).presence
+    @job_function = params.dig(:search, :job_function).presence
 
-    if params[:location].present?
-      freelancer_profiles = FreelancerProfile.where(freelancer_id: @freelancers.map(&:id))
-      freelancer_profiles = freelancer_profiles.where(city: params[:location])
-      @freelancers = Freelancer.where(id: freelancer_profiles.map(&:freelancer_id))
+    if params.has_key?(:search) && (!@address || !@country)
+      @freelancer_profiles = FreelancerProfile.none.page(params[:page]).per(10)
+      return
     end
 
+    @distance = params.dig(:search, :distance).presence
+
+    if @keywords.blank?
+      @freelancer_profiles = FreelancerProfile.where(disabled: false, country: @country)
+    else
+      @freelancer_profiles = FreelancerProfile.search(@keywords).where(disabled: false, country: @country)
+    end
+
+    if @job_type.present?
+      job_markets = I18n.t("enumerize.#{@job_type}_job_markets").keys.map {|val| "%#{val}%" }
+      @freelancer_profiles = @freelancer_profiles.where("job_markets ilike any ( array[?] )", job_markets)
+    end
+    @freelancer_profiles = @freelancer_profiles.where("job_functions like ?", "%#{@job_function}%") if @job_function.present?
+
+    @address_for_geocode = @address + ", " + @country.upcase
+
+    # check for cached version of address
+    if Rails.cache.read(@address)
+      @geocode = Rails.cache.read(@address)
+    else
+      # save cached version of address
+      @geocode = do_geocode(@address)
+      Rails.cache.write(@address, @geocode)
+    end
+
+    if @geocode
+      point = OpenStruct.new(:lat => @geocode[:lat], :lng => @geocode[:lng])
+      if @distance.nil?
+        @distance_int = 60000
+      else
+        @distance_int = @distance.to_i
+      end
+      @freelancer_profiles = @freelancer_profiles.nearby(@geocode[:lat], @geocode[:lng], @distance_int).with_distance(point).order("verified DESC, profile_score DESC, distance")
+    else
+      @freelancer_profiles = FreelancerProfile.none
+    end
+
+    @freelancer_profiles_with_distances = @freelancer_profiles
+    @freelancer_profiles = @freelancer_profiles.page(params[:page]).per(10)
+  end
+
+  def hired
+    authorize current_company, :index?
+    @freelancers = current_company.hired_freelancers.distinct
     @freelancers = @freelancers.page(params[:page]).per(10)
   end
 
-  def favourites
+  def saved
     authorize current_company, :index?
-    @locations = current_company.favourite_freelancers.uniq.pluck(:city)
-    @freelancers = current_company.favourite_freelancers
-
-    if params[:location] && params[:location] != ""
-      freelancer_profiles = FreelancerProfile.where(freelancer_id: @freelancers.map(&:id))
-      freelancer_profiles = freelancer_profiles.where(city: params[:location])
-      @freelancers = Freelancer.where(id: freelancer_profiles.map(&:freelancer_id))
-    end
-
-    @freelancers = @freelancers.page(params[:page]).per(50)
+    @freelancers = current_company.freelancers
+    @freelancers = @freelancers.page(params[:page]).per(10)
   end
-
-  def invite_to_quote
-    if params[:job_to_invite].nil? or params[:job_to_invite] == ""
-      result = 0
-    else
-      @job_id = params[:job_to_invite].to_i
-      if Job.find(@job_id).nil? or Job.find(@job_id).state != "published"
-        result = 0
-      else
-        @job = Job.find(@job_id)
-        authorize @job
-
-        @freelancer = Freelancer.find(params[:id])
-
-        if @job.applicants.where({ freelancer_id: params[:id] }).count > 0
-          result = 2
-        elsif @job.job_invites.where({ freelancer_id: params[:id]}).count > 0
-          result = 3
-        else
-          # freelancer is clear to be invited
-          Notification.create(title: @job.title, body: "You've been invited to apply", authorable: @job.company, receivable: @freelancer, url: freelancer_job_url(@job))
-          JobInviteMailer.invite_to_quote(@freelancer, @job).deliver_later
-          @invite = JobInvite.new
-          @invite.freelancer_id = @freelancer.id
-          @invite.job_id = @job.id
-
-          @invite.save
-          result = 1
-        end
-      end
-    end
-
-    if result == 1
-      ret = { success: 1, message: "Invite Sent!"}
-    else
-      if result == 0
-        message = "Unable to send invite. Please try again."
-      elsif result == 2
-        message = "Already applied."
-      elsif result == 3
-        message = "Already invited."
-      end
-
-      ret = { success: 0, message: message}
-    end
-
-    render json: ret
-  end
-
 
   def show
     hashids = Hashids.new(Rails.application.secrets.hash_ids_salt, 8)
@@ -118,13 +106,13 @@ class Company::FreelancersController < Company::BaseController
     end
     @freelancer.freelancer_profile.save
 
-    @favourite = current_company.favourites.where(freelancer_id: id).length > 0 ? true : false
+    @favourite = current_company.freelancers.where(id: id).length > 0 ? true : false
     if params.dig(:toggle_favourite) == "true"
       if @favourite == false
-        current_company.favourite_freelancers << @freelancer
+        current_company.update_attribute(:saved_freelancers_ids, current_company.saved_freelancers_ids + [@freelancer.id])
         @favourite = true
       else
-        current_company.favourites.where({freelancer_id: @freelancer.id}).destroy_all
+        current_company.update_attribute(:saved_freelancers_ids, current_company.saved_freelancers_ids - [@freelancer.id])
         @favourite = false
       end
     end
@@ -140,29 +128,17 @@ class Company::FreelancersController < Company::BaseController
     end
   end
 
-  def add_favourites
+  def save_freelancer
     authorize current_company
-    id = current_user.id
-    if params[:freelancers].nil?
-      render json: { status: 'parameter missing' }
-      return
-    end
-
-    params[:freelancers].each do |id|
-      f = Freelancer.where({ id: id.to_i })
-
-      if f.length > 0
-        current_user.company.favourite_freelancers << f.first
-      end
-    end
-
-    render json: { status: 'success', freelancers: params[:freelancers] }
+    current_company.update_attribute(:saved_freelancers_ids, current_company.saved_freelancers_ids + [params[:id].to_i])
+    flash[:notice] = "Freelancer added to saved for later."
+    redirect_back fallback_location: root_path
   end
 
-  private
-
-  def unsubscribed_redirect?
-    false
+  def delete_freelancer
+    authorize current_company
+    current_company.update_attribute(:saved_freelancers_ids, current_company.saved_freelancers_ids - [params[:id].to_i])
+    flash[:notice] = "Freelancer removed from saved for later."
+    redirect_back fallback_location: root_path
   end
-
 end

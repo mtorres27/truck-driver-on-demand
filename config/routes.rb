@@ -1,4 +1,25 @@
 Rails.application.routes.draw do
+  match '/login'                    => 'main#login',                  via: :get
+  match '/company_register'         => 'main#company_register',       via: :get
+  match '/search_professionals'     => 'main#search_professionals',   via: :get
+  match '/messages'                 => 'main#messages',               via: :get
+  match '/message_detail'           => 'main#message_detail',         via: :get
+  match '/search_results'           => 'main#search_results',         via: :get
+  match '/jobs'                     => 'main#jobs',                   via: :get
+  match '/job_form'                 => 'main#job_form',               via: :get
+  match '/job_detail'               => 'main#job_detail',             via: :get
+  match '/job_post_form'            => 'main#job_post_form',          via: :get
+  match '/company_profilestyle'     => 'main#company_profile',        via: :get
+  match '/company_profile_edit'     => 'main#company_profile_edit',   via: :get
+  match '/company_user_edit'        => 'main#company_user_edit',      via: :get
+  match '/avpro_profile'            => 'main#avpro_profile',          via: :get
+  match '/avpro_profile_edit'       => 'main#avpro_profile_edit',     via: :get
+  match '/avpro_register'           => 'main#avpro_register',         via: :get
+  match '/avpro_jobs'               => 'main#avpro_jobs',             via: :get
+  match '/avpro_messages'           => 'main#avpro_messages',         via: :get
+  match '/avpro_job_detail'         => 'main#avpro_job_detail',       via: :get
+  match '/avpro_message_detail'     => 'main#avpro_message_detail',   via: :get
+
   mount ActionCable.server => '/cable'
 
   devise_for :users, skip: [:registrations], controllers: {sessions: "sessions" }
@@ -34,8 +55,6 @@ Rails.application.routes.draw do
   get "confirm_email", to: "main#confirm_email"
   get "job_country_currency", to: "main#job_countries", as: "job_country_currency"
 
-  resources :notifications, only: [:show]
-
   namespace :freelancer do
 
     root "main#index"
@@ -43,7 +62,7 @@ Rails.application.routes.draw do
 
     resources :registration_steps, only: [:show, :update, :index] do
       member do
-        post :skip
+        post :previous
       end
     end
 
@@ -51,31 +70,18 @@ Rails.application.routes.draw do
       get :favourites, on: :collection
       post :add_favourites, on: :collection
       get :av_companies, on: :collection
-    end
-
-    resources :jobs, only: [:index, :show] do
-      get :favourites, on: :collection
-      post :add_favourites, on: :collection
-      get :my_jobs, on: :collection
-      get :my_applications, on: :collection
-      get :job_matches, on: :collection
-      post :apply, on: :collection
-
-      resources :application, only: [:index, :create]
-      resource :contract, only: [:show, :accept], as: "work_order", path: "work_order"
       resources :messages, only: [:index, :create]
-      resource :review, only: [:show, :create]
-      resources :quotes, only: [:index, :create] do
-        get :accept, on: :member
-        get :decline, on: :member
-      end
-
     end
+
+    resources :jobs, only: [:index, :show]
+
     resource :profile, only: [:show, :edit, :update] do
       resource :banking, only: [:index, :edit, :update, :verify, :update_verify]
       resource :settings, only: [:index, :edit, :update]
 
     end
+
+    resources :messaging, only: [:index]
 
     get "profile/bank_info", to: "banking#index", as: "profile_stripe_banking_info"
     get "profile/identity", to: "banking#identity", as: "profile_stripe_banking"
@@ -86,6 +92,7 @@ Rails.application.routes.draw do
     post "jobs/:id", to: "jobs#apply"
     post "job/apply", to: "jobs#apply"
     get "jobs/:id/work_order/accept", to: "contracts#accept"
+    get "companies/:company_id/messages(/job/:job_id)", to: "messages#index", as: "messages_for_job"
   end
 
   namespace :company do
@@ -94,67 +101,32 @@ Rails.application.routes.draw do
     resource :profile, only: [:show, :edit, :update]
     resources :registration_steps, only: [:show, :update, :index] do
       member do
-        post :skip
+        post :previous
       end
     end
 
-    resources :freelancers, only: [:show] do
+    resources :freelancers, only: [:show, :index] do
+      get :saved, on: :collection
       get :hired, on: :collection
-      get :favourites, on: :collection
       post :add_favourites, on: :collection
+      post :save_freelancer, on: :member
+      post :delete_freelancer, on: :member
+      resources :messages, only: [:index, :create]
     end
 
-    resources :company_users, only: [:index, :show, :new, :create, :destroy, :edit, :update] do
-      post :disable, on: :member
-      post :enable, on: :member
-    end
+    resources :company_users, only: [:edit, :update]
 
     get "freelancers/:id/invite_to_quote", to: "freelancers#invite_to_quote"
 
     resources :applicants
-    resources :projects
-    resources :subscription
-      get 'thanks', to: 'subscription#thanks', as: 'thanks'
-      get 'reset', to: 'subscription#reset_company', as: 'reset'
-      get 'plans', to: 'subscription#plans', as: 'plans'
-      get 'subscription_cancel', to: 'subscription#cancel', as: 'subscription_cancel'
-      get 'subscription_change', to: 'subscription#change_plan', as: 'subscription_change'
-      post 'subscription_checkout' => 'subscription#subscription_checkout'
-      post 'update_card_info' => 'subscription#update_card_info'
-      post 'webhooks' => 'subscription#webhooks'
-      get 'plans/invoices', to: 'subscription#invoices', as: 'invoices'
-      get 'plan/invoice', to: 'subscription#invoice', as: 'invoice'
+    resources :messaging, only: [:index]
 
     get 'job_country_currency', to: 'jobs#job_countries', as: 'job_country_currency'
 
-    resources :jobs, except: [:index] do
-      resources :job_build, only: [:index, :show, :update, :create] do
-        member do
-          post :skip
-        end
-      end
-      resources :applicants do
-        get :request_quote, on: :member
-        get :ignore, on: :member
-        resources :quotes, only: [:index, :create] do
-          get :accept, on: :member
-          get :decline, on: :member
-        end
-      end
-      resource :contract, only: [:show, :edit, :update], as: "work_order", path: "work_order"
-      resources :messages, only: [:index, :create]
-      resource :review, only: [:show, :create]
-      get :collaborators, on: :member
-      get :contract_invoice, on: :member
-      get :freelancer_matches, on: :member
-      post :mark_as_finished, on: :member
-    end
+    resources :jobs
 
-    post "jobs/:id/add_collaborator/:company_user_id", to: "jobs#add_collaborator"
-    post "jobs/:id/remove_collaborator/:company_user_id", to: "jobs#remove_collaborator"
-    post "jobs/:id/unsubscribe_collaborator/:company_user_id", to: "jobs#unsubscribe_collaborator"
-    post "jobs/:id/subscribe_collaborator/:company_user_id", to: "jobs#subscribe_collaborator"
     get "jobs/:id/publish", to: "jobs#publish"
+    get "freelancers/:freelancer_id/messages(/job/:job_id)", to: "messages#index", as: "messages_for_job"
   end
 
   namespace :admin do
@@ -163,6 +135,8 @@ Rails.application.routes.draw do
     resources :freelancers, except: [:new, :create] do
       get :disable, on: :member
       get :enable, on: :member
+      get :verify, on: :member
+      get :unverify, on: :member
     end
 
     resource :freelancer do
@@ -179,28 +153,11 @@ Rails.application.routes.draw do
       get :download_csv
     end
 
-    resources :projects, except: [:new, :create] do
-      get :disable, on: :member
-      get :enable, on: :member
-    end
-
     resources :jobs, except: [:new, :create] do
       get :freelancer_matches, on: :member
       get :mark_as_expired, on: :member
       get :unmark_as_expired, on: :member
-      resources :applicants
-      resource :contract, only: [:show, :edit, :update], as: "work_order", path: "work_order"
-      resources :messages, only: [:index, :create]
-      resource :review, only: [:show, :create]
     end
-
-    resources :plans, except: [:new, :create] do
-      get :disable, on: :member
-      get :enable, on: :member
-    end
-
-    resources :pages, only: [:index, :edit, :update]
-    resources :audits, only: [:index]
 
     resources :new_registrants, only: [:index]
     resource :new_registrant, only: [:download_csv] do

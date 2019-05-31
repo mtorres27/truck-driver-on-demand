@@ -1,112 +1,81 @@
-.mobile-nav
-  .mobile-nav__header
-    .mobile-nav__header__toggle
-      .mobile-nav__header__toggle--on
-        span class="fa fa-align-justify"
-      .mobile-nav__header__toggle--off
-        span class="fa fa-close"
-
-    .mobile-nav__header__title
-      = image_tag "avjunction_logo.png"
-
-    - if current_user.present?
-      .mobile-nav__header__right
-        a href="#" class="dropdown-toggle btn-icon-link" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"
-          - if current_user.notifications.unread.count > 0
-            span.zmdi.zmdi-notifications-active.js--notifications-icon
+.avj-section.avj-section__nav-mobile
+  .container
+    .avj-nav-mobile
+      - if current_user&.is_a?(CompanyUser) && current_company&.registration_step == "wicked_finish"
+        a.avj-nav-mobile-link href=company_root_url
+          - if controller_name == 'main' || (controller_name == 'freelancers' && action_name != 'saved')
+            .avj-body1.m-0.avj-text-color-secondary.zmdi.zmdi-search
+            .avj-caption2.m-0.avj-text-color-secondary Search
           - else
-            span.zmdi.zmdi-notifications-none.js--notifications-icon
-          .notification-badge.js--notifications-count
-            = current_user.notifications.unread.count if current_user.notifications.unread.count > 0
-        .dropdown-menu.mobile-dropdown
-          .notifications
-            .list-notification.js--notifications data-id="#{current_user.id}"
-              - if current_user.notifications.to_show.count > 0
-                - (current_user.notifications.unread + current_user.notifications.to_show).uniq.each do |notification|
-                  = render "shared/notification", notification: notification
-              - else
-                .list-item.notifications.w-inline-block href="#"
-                  .list__title Nothing to see here
-                  .list__desc You don't have any new notifications for the moment
-
-  .mobile-nav__blocker
-    |
-  .mobile-nav__menu
-    - if request.path.index('freelancer') == 1
-      - if current_user.nil?
-        a.mobile-nav__menu__item href=new_user_session_path data-turbolinks="false"
-          | Login
-        a.mobile-nav__menu__item href=new_freelancer_registration_path data-turbolinks="false"
-          | Register
-      - elsif current_user.freelancer? && current_user.freelancer_profile.present?
-        a.mobile-nav__menu__item href=freelancer_root_path data-turbolinks="false"
-          | search for jobs
-        a.mobile-nav__menu__item href=my_jobs_freelancer_jobs_path data-turbolinks="false"
-          | my jobs
-        a.mobile-nav__menu__item href=av_companies_freelancer_companies_path data-turbolinks="false"
-          | av companies
-        a.mobile-nav__menu__item.flex.flex-row.flex-align-center href=freelancer_profile_path data-turbolinks="false"
-          - if current_user.freelancer_profile.avatar_data.nil?
-            .dropdown-avatar.gutter-right
-              .circle_profile__image.freelancer__image= current_user.name_initials
+            .avj-body1.m-0.zmdi.zmdi-search
+            .avj-caption2.m-0 Search
+        a.avj-nav-mobile-link href=company_messaging_index_url
+          - if controller_name == 'messages' || controller_name == 'messaging'
+            .d-flex
+              .avj-body1.m-0.zmdi.zmdi-comment-outline.avj-text-color-secondary
+              .avj-notification-badge.js--notifications-count.avj-notification-badge--mobile.avj-bg-secondary.js--notifications data-id="#{current_user.id}"
+                - notification_count = current_user.notifications.unread.count
+                - if notification_count > 0
+                  = notification_count
+            .avj-caption2.m-0.avj-text-color-secondary Messages
           - else
-            = image_tag(current_user.freelancer_profile.avatar_url)
-          | my profile
-        = link_to "Logout", destroy_user_session_path, method: :delete, class: "mobile-nav__menu__item"
-    - elsif request.path.index('company') == 1
-      - if current_user.nil?
-        a.mobile-nav__menu__item href=new_user_session_path data-turbolinks="false"
-          | Login
-        a.mobile-nav__menu__item href=new_company_user_registration_path data-turbolinks="false"
-          | Register
-      - elsif current_user.company_user?
-        a.mobile-nav__menu__item href=company_root_path data-turbolinks="false"
-          | Home
-        - if current_company.subscription_active?
-          = link_to "Post a Job", company_job_job_build_index_path(job_id: :build_job), method: :post, class: "mobile-nav__menu__item"
-        - if current_company.subscription_active?
-          a.mobile-nav__menu__item href=hired_company_freelancers_path data-turbolinks="false"
-            | My Freelancers
-        a.mobile-nav__menu__item href=company_plans_path data-turbolinks="false"
-          | Subscription
-        a.mobile-nav__menu__item href=company_profile_path data-turbolinks="false"
-          = image_tag current_user.company.avatar_url
-          | Settings
-        = link_to "Logout", destroy_user_session_path, method: :delete, class: "mobile-nav__menu__item"
-    - elsif request.path.index('admin') == 1
-      - if current_user&.admin?
-        a.mobile-nav__menu__item href=admin_root_path data-turbolinks="false"
-          | Dashboard
-        a.mobile-nav__menu__item href=admin_companies_path data-turbolinks="false"
-          | Companies
-        a.mobile-nav__menu__item href=admin_freelancers_path data-turbolinks="false"
-          | Freelancers
-        a.mobile-nav__menu__item href=admin_pages_path data-turbolinks="false"
-          | Pages
-        = link_to "Logout", destroy_user_session_path, method: :delete, class: "mobile-nav__menu__item"
-
-
-javascript:
-  var hideNav = function() {
-    $(".mobile-nav__header__toggle--off").hide();
-    $(".mobile-nav__header__toggle--on").show();
-    $(".mobile-nav__blocker").removeClass("mobile-nav__blocker--visible");
-    $(".mobile-nav__menu").removeClass("mobile-nav__menu--visible");
-  }
-
-  $(".mobile-nav__header__toggle--on").on('click', function() {
-    $(".mobile-nav__header__toggle--off").show();
-    $(".mobile-nav__header__toggle--on").hide();
-    $(".mobile-nav__blocker").addClass("mobile-nav__blocker--visible");
-    $(".mobile-nav__blocker").height($(window).height());
-    $(".mobile-nav__menu").addClass("mobile-nav__menu--visible");
-  });
-
-  $(".mobile-nav__header__toggle--off").on('click', function() {
-    hideNav();
-  });
-
-  $("mobile-nav__blocker").on('click', function() {
-    hideNav();
-  })
-
+            .d-flex
+              .avj-body1.m-0.zmdi.zmdi-comment-outline
+              .avj-notification-badge.js--notifications-count.avj-notification-badge--mobile.js--notifications data-id="#{current_user.id}"
+                - notification_count = current_user.notifications.unread.count
+                - if notification_count > 0
+                  = notification_count
+            .avj-caption2.m-0 Messages
+        a.avj-nav-mobile-link href=company_jobs_url
+          - if controller_name == 'jobs'
+            .avj-body1.m-0.zmdi.zmdi-folder-outline.avj-text-color-secondary
+            .avj-caption2.m-0.avj-text-color-secondary Job Posts
+          - else
+            .avj-body1.m-0.zmdi.zmdi-folder-outline
+            .avj-caption2.m-0 Job Posts
+        a.avj-nav-mobile-link href=saved_company_freelancers_url
+          - if controller_name == 'freelancers' && action_name == 'saved'
+            .avj-body1.m-0.zmdi.zmdi-favorite-outline.avj-text-color-secondary
+            .avj-caption2.m-0.avj-text-color-secondary Favourites
+          - else
+            .avj-body1.m-0.zmdi.zmdi-favorite-outline
+            .avj-caption2.m-0 Favourites
+        a.avj-nav-mobile-link href=company_profile_url
+          - if controller_name == 'profiles'
+            .avj-body1.m-0.zmdi.zmdi-account-o.avj-text-color-secondary
+            .avj-caption2.m-0.avj-text-color-secondary Profile
+          - else
+            .avj-body1.m-0.zmdi.zmdi-account-o
+            .avj-caption2.m-0 Profile
+      - elsif current_user&.is_a?(Freelancer) && current_user&.freelancer_profile&.registration_step == "wicked_finish"
+        a.avj-nav-mobile-link href=freelancer_root_url
+          - if controller_name == 'main' || controller_name == 'jobs'
+            .avj-body1.m-0.zmdi.zmdi-folder-outline.avj-text-color-secondary
+            .avj-caption2.m-0.avj-text-color-secondary Job Posts
+          - else
+            .avj-body1.m-0.zmdi.zmdi-folder-outline
+            .avj-caption2.m-0 Job Posts
+        a.avj-nav-mobile-link href=freelancer_messaging_index_url
+          - if controller_name == 'messages' || controller_name == 'messaging'
+            .d-flex
+              .avj-body1.m-0.zmdi.zmdi-comment-outline.avj-text-color-secondary
+              .avj-notification-badge.js--notifications-count.avj-notification-badge--mobile.avj-text-color-secondary.js--notifications data-id="#{current_user.id}"
+                - notification_count = current_user.notifications.unread.count
+                - if notification_count > 0
+                  = notification_count
+            .avj-caption2.m-0.avj-text-color-secondary Messages
+          - else
+            .d-flex
+              .avj-body1.m-0.zmdi.zmdi-comment-outline
+              .avj-notification-badge.js--notifications-count.avj-notification-badge--mobile.js--notifications data-id="#{current_user.id}"
+                - notification_count = current_user.notifications.unread.count
+                - if notification_count > 0
+                  = notification_count
+            .avj-caption2.m-0 Messages
+        a.avj-nav-mobile-link href=freelancer_profile_url
+          - if controller_name == 'profiles'
+            .avj-body1.m-0.zmdi.zmdi-account-o.avj-text-color-secondary
+            .avj-caption2.m-0.avj-text-color-secondary Profile
+          - else
+            .avj-body1.m-0.zmdi.zmdi-account-o
+            .avj-caption2.m-0 Profile
