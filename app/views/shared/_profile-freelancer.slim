@@ -59,7 +59,7 @@
 
     - if @freelancer.freelancer_portfolios.any?
       h2 Featured Projects
-      .row
+      .row.mb-4
         - @freelancer.freelancer_portfolios.each do |portfolio|
           - url = portfolio.image_url.include?("missing.pdf") ? "/assets/certification/placeholder.png" : portfolio.image_url
           a.col-md-3.col-6.d-flex.flex-column.justify-content-between href=url target="_blank"
@@ -73,10 +73,10 @@
 
     - if @freelancer.certifications.any?
       h2 Certifications
-      .row
+      .row.mb-4
         - @freelancer.certifications.each do |certification|
           - url = certification.certificate_url.include?("missing.pdf") ? "/assets/certification/placeholder.png" : certification.certificate_url
-          a.col-md-3.col-6 href=url target="_blank"
+          a.col-md-3.col-6.d-flex.flex-column.justify-content-between href=url target="_blank"
             - if is_image(url)
               - src = url
             - else
@@ -87,10 +87,10 @@
 
     - if @freelancer.freelancer_insurances.any?
       h2 Insurance
-      .row
+      .row.mb-4
         - @freelancer.freelancer_insurances.each do |insurance|
           - url = insurance.image_url.include?("missing.pdf") ? "/assets/certification/placeholder.png" : insurance.image_url
-          a.col-md-3.col-6 href=url target="_blank"
+          a.col-md-3.col-6.d-flex.flex-column.justify-content-between href=url target="_blank"
             - if is_image(url)
               - src = url
             - else
@@ -101,10 +101,10 @@
 
     - if @freelancer.freelancer_affiliations.any?
       h2 Affiliations
-      .row
+      .row.mb-4
         - @freelancer.freelancer_affiliations.each do |affiliation|
           - url = affiliation.image_url.include?("missing.pdf") ? "/assets/certification/placeholder.png" : affiliation.image_url
-          a.col-md-3.col-6 href=url target="_blank"
+          a.col-md-3.col-6.d-flex.flex-column.justify-content-between href=url target="_blank"
             - if is_image(url)
               - src = url
             - else
@@ -115,10 +115,10 @@
 
     - if @freelancer.freelancer_clearances.any?
       h2 Security Clearances
-      .row
+      .row.mb-4
         - @freelancer.freelancer_clearances.each do |clearance|
           - url = clearance.image_url.include?("missing.pdf") ? "/assets/certification/placeholder.png" : clearance.image_url
-          a.col-md-3.col-6 href=url target="_blank"
+          a.col-md-3.col-6.d-flex.flex-column.justify-content-between href=url target="_blank"
             - if is_image(url)
               - src = url
             - else
