@@ -14,7 +14,7 @@
       .w-50.d-flex
         .avj-body1.mb-0.mr-2= freelancer.first_name_and_initial
         - if freelancer.freelancer_profile.verified?
-          span.zmdi.zmdi-check-circle
+          span.zmdi.zmdi-check-circle.icon-small
       .w-50
         .avj-caption1.text-right= pluralize(freelancer.connections_count, "connection")
       .w-100
