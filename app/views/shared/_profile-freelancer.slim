@@ -62,12 +62,13 @@
       .row
         - @freelancer.freelancer_portfolios.each do |portfolio|
           - url = portfolio.image_url.include?("missing.pdf") ? "/assets/certification/placeholder.png" : portfolio.image_url
-          a.col-md-3.col-6 href=url target="_blank"
+          a.col-md-3.col-6.d-flex.flex-column.justify-content-between href=url target="_blank"
             - if is_image(url)
               - src = url
             - else
               - src = "/assets/certification/placeholder.png"
-            img src=src
+            .avj-projects
+              img.avj-fit-img src=src
             .avj-caption1= portfolio.name
 
     - if @freelancer.certifications.any?
@@ -80,7 +81,8 @@
               - src = url
             - else
               - src = "/assets/certification/placeholder.png"
-            img src=src
+            .avj-projects
+              img.avj-fit-img src=src
             .avj-caption1= certification.name
 
     - if @freelancer.freelancer_insurances.any?
@@ -93,7 +95,8 @@
               - src = url
             - else
               - src = "/assets/insurance/placeholder.png"
-            img src=src
+            .avj-projects
+              img.avj-fit-img src=src
             .avj-caption1= insurance.name
 
     - if @freelancer.freelancer_affiliations.any?
@@ -106,7 +109,8 @@
               - src = url
             - else
               - src = "/assets/freelancer_affiliation/placeholder.png"
-            img src=src
+            .avj-projects
+              img.avj-fit-img src=src
             .avj-caption1= affiliation.name
 
     - if @freelancer.freelancer_clearances.any?
@@ -119,5 +123,6 @@
               - src = url
             - else
               - src = "/assets/security_clearance/placeholder.png"
-            img src=src
+            .avj-projects
+              img.avj-fit-img src=src
             .avj-caption1= clearance.description
