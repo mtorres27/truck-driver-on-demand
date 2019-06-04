@@ -68,11 +68,14 @@ class Message < ApplicationRecord
     (company_messages + freelancer_messages).sort_by(&:created_at)
   end
 
-  def self.total_conversations
-    total_count = 0
+  def self.connections
+    connections = []
     Company.find_each do |company|
-      total_count += company.freelancers_for_messaging.count
+      company.freelancers_for_messaging.each do |freelancer|
+        next if freelancer.nil?
+        connections << { company_id: company.id, company_name: company.name, freelancer_id: freelancer.id, freelancer_name: freelancer.full_name }
+      end
     end
-    total_count
+    connections
   end
 end

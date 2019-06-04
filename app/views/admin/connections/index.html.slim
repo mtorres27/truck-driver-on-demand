@@ -1,0 +1,25 @@
+.avj-section.avj-section__msg-subhead.d-block.mb-4
+  .container
+    .avj-subhead
+      h4.ellipsis.mb-0 Connections
+
+.avj-section.avj-section__main
+  .ml-4.mr-4
+    = simple_form_for :search, url: admin_connections_path, html: {class: "js--admin-search-form"}, method: :get do |f|
+      .row
+        .col-xs-12.col-sm-6
+          .search-form
+            = f.input :keywords, label: false, placeholder: "Search", input_html: {value: @keywords}
+    .table-responsive
+      table.table.table-striped#admin-incomplete-registrations-table
+        thead
+          tr
+            th Company
+            th Freelancer
+
+        tbody
+          - @connections.each do |conection|
+            tr
+              td= link_to conection[:company_name], admin_company_path(conection[:company_id])
+              td= link_to conection[:freelancer_name], admin_freelancer_path(conection[:freelancer_id])
+    = paginate @connections

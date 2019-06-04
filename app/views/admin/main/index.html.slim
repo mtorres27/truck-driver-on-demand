@@ -6,7 +6,7 @@
 .avj-section.avj-section__main
   .container.container__content
     .row
-      - ['Incomplete Registrations', 'New Registrant', 'Company', 'Freelancer', 'Job', 'Message', 'Connection'].each do |klass|
+      - ['Incomplete Registrations', 'New Registrant', 'Company', 'Freelancer', 'Job', 'Connection', 'Message'].each do |klass|
         - if %w(Company Job).include?(klass)
           a href="/admin/#{klass.downcase.pluralize}"
             .col-xs-12.col-sm-6.col-md-4.col-lg-3
@@ -32,10 +32,11 @@
                 h2= Company.incomplete_registrations.count + FreelancerProfile.incomplete_registrations.count
                 p= klass.pluralize
         - elsif klass == 'Connection'
-          .col-xs-12.col-sm-6.col-md-4.col-lg-3
-            .bs-callout.bs-callout-primary
-              h2= number_to_human(Message.total_conversations)
-              p= klass.pluralize
+          a href="/admin/connections"
+            .col-xs-12.col-sm-6.col-md-4.col-lg-3
+              .bs-callout.bs-callout-primary
+                h2= number_to_human(Message.connections.length)
+                p= klass.pluralize
         - else
           .col-xs-12.col-sm-6.col-md-4.col-lg-3
             .bs-callout.bs-callout-primary
