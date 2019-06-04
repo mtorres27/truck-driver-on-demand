@@ -163,10 +163,13 @@ Rails.application.routes.draw do
     resource :new_registrant, only: [:download_csv] do
       get :download_csv
     end
+
     resources :incomplete_registrations, only: [:index]
     resource :incomplete_registration, only: [:download_csv] do
       get :download_csv
     end
+
+    resources :connections, only: [:index]
   end
 
   get "*any", via: :all, to: "errors#not_found"

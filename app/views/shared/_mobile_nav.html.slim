@@ -59,7 +59,7 @@
           - if controller_name == 'messages' || controller_name == 'messaging'
             .d-flex
               .avj-body1.m-0.zmdi.zmdi-comment-outline.avj-text-color-secondary
-              .avj-notification-badge.js--notifications-count.avj-notification-badge--mobile.avj-text-color-secondary.js--notifications data-id="#{current_user.id}"
+              .avj-notification-badge.js--notifications-count.avj-notification-badge--mobile.avj-bg-secondary.js--notifications data-id="#{current_user.id}"
                 - notification_count = current_user.notifications.unread.count
                 - if notification_count > 0
                   = notification_count
@@ -79,3 +79,5 @@
           - else
             .avj-body1.m-0.zmdi.zmdi-account-o
             .avj-caption2.m-0 Profile
+      - elsif current_user&.is_a?(Admin)
+        = link_to content_tag(:div, "#{content_tag(:div, "", class: "avj-body1 m-0 zmdi zmdi-account-o")}#{content_tag(:div, "Log Out", class: "avj-caption2 m-0")}".html_safe, class: "avj-nav-mobile-link"), destroy_user_session_path, method: :delete

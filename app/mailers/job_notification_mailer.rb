@@ -25,15 +25,10 @@ class JobNotificationMailer < ApplicationMailer
   end
 
   def notify_job_posting_company(company, job)
-    @freelancer = freelancer
     @job = job
     headers 'X-SMTPAPI' => {
         sub: {
             '%user_name%' => [company.company_user.first_name_and_initial],
-            '%job_title%' => [@job.title],
-            '%job_summary%' => [@job.summary],
-            '%job_location%' => ["#{@job.address}, #{@job.state_province}"],
-            '%company_name%' => [@job.company.name],
             '%job_id%' => [@job.id],
             '%root_url%' => [root_url]
         },

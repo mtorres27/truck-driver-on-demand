@@ -1,5 +1,10 @@
 .avj-section.avj-section__msg-subhead.d-block.mb-4
   .container
+    - if @freelancer.confirmed_at.nil? && @freelancer.confirmation_token.present?
+      .avj-subhead
+        div
+          strong<> Confirmation Link:
+          = confirmation_url(@freelancer, confirmation_token: @freelancer.confirmation_token)
     .avj-subhead
       h4.ellipsis.mb-0= @freelancer.full_name
       .d-flex.align-items-center.justify-content-end
