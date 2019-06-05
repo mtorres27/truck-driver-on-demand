@@ -68,12 +68,13 @@ class Message < ApplicationRecord
     (company_messages + freelancer_messages).sort_by(&:created_at)
   end
 
-  def self.connections
+  def self.connections(load_dates=false)
     connections = []
     Company.find_each do |company|
       company.freelancers_for_messaging.each do |freelancer|
         next if freelancer.nil?
-        connections << { company_id: company.id, company_name: company.name, freelancer_id: freelancer.id, freelancer_name: freelancer.full_name }
+        first_message = messages_for(company, freelancer).first if load_dates
+        connections << { company_id: company.id, company_name: company.name, freelancer_id: freelancer.id, freelancer_name: freelancer.full_name, date_conected: first_message&.created_at }
       end
     end
     connections
