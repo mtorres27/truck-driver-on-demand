@@ -16,10 +16,12 @@
           tr
             th Company
             th Freelancer
+            th Date Conected
 
         tbody
           - @connections.each do |conection|
             tr
               td= link_to conection[:company_name], admin_company_path(conection[:company_id])
               td= link_to conection[:freelancer_name], admin_freelancer_path(conection[:freelancer_id])
+              td= conection[:date_conected].strftime('%b %-d, %Y')
     = paginate @connections
