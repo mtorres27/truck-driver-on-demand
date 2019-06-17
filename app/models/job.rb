@@ -145,14 +145,14 @@ class Job < ApplicationRecord
 
   def has_system_integration_job_markets
     I18n.t("enumerize.system_integration_job_markets").each do |key, _|
-      return true if job_markets && job_markets[key] == '1'
+      return true if job_markets.present? && job_markets[key] == '1'
     end
     false
   end
 
   def has_live_events_staging_and_rental_job_markets
     I18n.t("enumerize.live_events_staging_and_rental_job_markets").each do |key, _|
-      return true if job_markets && job_markets[key] == '1'
+      return true if job_markets.present? && job_markets[key] == '1'
     end
     false
   end

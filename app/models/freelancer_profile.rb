@@ -168,6 +168,49 @@ class FreelancerProfile < ApplicationRecord
     end
   end
 
+  def job_types
+    has_system_integration = has_system_integration_job_markets || has_system_integration_job_functions
+    has_live_events_staging_and_rental = has_live_events_staging_and_rental_job_markets || has_live_events_staging_and_rental_job_functions
+
+    return "System Integration & Live Events Staging And Rental" if has_live_events_staging_and_rental && has_system_integration
+
+    if has_system_integration
+      "System Integration"
+    elsif has_live_events_staging_and_rental
+      "Live Events Staging And Rental"
+    else
+      "None"
+    end
+  end
+
+  def has_system_integration_job_markets
+    I18n.t("enumerize.system_integration_job_markets").each do |key, _|
+      return true if job_markets.present? && job_markets[key] == '1'
+    end
+    false
+  end
+
+  def has_live_events_staging_and_rental_job_markets
+    I18n.t("enumerize.live_events_staging_and_rental_job_markets").each do |key, _|
+      return true if job_markets.present? && job_markets[key] == '1'
+    end
+    false
+  end
+
+  def has_system_integration_job_functions
+    I18n.t("enumerize.system_integration_job_functions").each do |key, _|
+      return true if job_functions.present? && job_functions[key] == '1'
+    end
+    false
+  end
+
+  def has_live_events_staging_and_rental_job_functions
+    I18n.t("enumerize.live_events_staging_and_rental_job_functions").each do |key, _|
+      return true if job_functions.present? && job_functions[key] == '1'
+    end
+    false
+  end
+
   private
 
   def set_profile_score
