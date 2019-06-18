@@ -8,7 +8,7 @@ class Company::FreelancersController < Company::BaseController
     @job_type = params.dig(:search, :job_type).presence
     @job_function = params.dig(:search, :job_function).presence
 
-    if params.has_key?(:search) && (!@address || !@country)
+    if params.has_key?(:search) && !@country
       @freelancer_profiles = FreelancerProfile.none.page(params[:page]).per(10)
       return
     end
@@ -27,27 +27,31 @@ class Company::FreelancersController < Company::BaseController
     end
     @freelancer_profiles = @freelancer_profiles.where("job_functions like ?", "%#{@job_function}%") if @job_function.present?
 
-    @address_for_geocode = @address + ", " + @country.upcase
+    if @address.present?
+      @address_for_geocode = @address + ", " + @country.upcase
 
-    # check for cached version of address
-    if Rails.cache.read(@address)
-      @geocode = Rails.cache.read(@address)
-    else
-      # save cached version of address
-      @geocode = do_geocode(@address)
-      Rails.cache.write(@address, @geocode)
-    end
-
-    if @geocode
-      point = OpenStruct.new(:lat => @geocode[:lat], :lng => @geocode[:lng])
-      if @distance.nil?
-        @distance_int = 60000
+      # check for cached version of address
+      if Rails.cache.read(@address_for_geocode)
+        @geocode = Rails.cache.read(@address_for_geocode)
       else
-        @distance_int = @distance.to_i
+        # save cached version of address
+        @geocode = do_geocode(@address_for_geocode)
+        Rails.cache.write(@address_for_geocode, @geocode)
       end
-      @freelancer_profiles = @freelancer_profiles.nearby(@geocode[:lat], @geocode[:lng], @distance_int).with_distance(point).order("verified DESC, profile_score DESC, distance")
+
+      if @geocode
+        point = OpenStruct.new(:lat => @geocode[:lat], :lng => @geocode[:lng])
+        if @distance.nil?
+          @distance_int = 60000
+        else
+          @distance_int = @distance.to_i
+        end
+        @freelancer_profiles = @freelancer_profiles.nearby(@geocode[:lat], @geocode[:lng], @distance_int).with_distance(point).order("verified DESC, profile_score DESC, distance")
+      else
+        @freelancer_profiles = FreelancerProfile.none
+      end
     else
-      @freelancer_profiles = FreelancerProfile.none
+      @address_for_geocode = I18n.t("enumerize.country.#{@country}")
     end
 
     @freelancer_profiles_with_distances = @freelancer_profiles

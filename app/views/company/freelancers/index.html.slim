@@ -4,8 +4,8 @@
 .avj-section.avj-section__msg-subhead.d-block.mb-4#search-subheader
   .container
     .avj-subhead
-      - if !@address || !@country
-        h4.ellipsis.m-0= "Please provide a location and country"
+      - if !@country
+        h4.ellipsis.m-0= "Please provide a country"
       - else
         h4.ellipsis.m-0= "Found #{@freelancer_profiles.total_count} matching professionals near #{@address_for_geocode}"
       button.btn.btn-primary.btn-sm onClick="toggleSearch();"

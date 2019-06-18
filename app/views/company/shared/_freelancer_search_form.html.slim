@@ -38,7 +38,7 @@
               = value
   .row
     .col-sm-6
-      = f.input :address, label: 'Location', placeholder: 'Enter the city and state/province', input_html: {value: @address, class:'mb-0"'}
+      = f.input :address, label: 'Location', placeholder: 'Enter the city and state/province', input_html: {value: @address, class:'mb-0"'}, required: false
     .col-sm-6
       = f.input :country, collection: ([["Select country", ""]] + (I18n.t("enumerize.country").map { |k, v| [v, k] })), selected: @country, label: "Country", placeholder: "Select country"
   .row 
