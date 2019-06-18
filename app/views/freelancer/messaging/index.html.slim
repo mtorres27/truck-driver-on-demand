@@ -4,4 +4,4 @@
       | Messages
     div
       - @companies.each do |company|
-        = render partial: "company_messaging_info", locals: {company: company}
+        = render partial: "company_messaging_info", locals: {company: company, freelancer: current_user}

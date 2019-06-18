@@ -8,8 +8,8 @@
     .avj-subhead
       h4.ellipsis.mb-0= @freelancer.full_name
       .d-flex.align-items-center.justify-content-end
-        a.btn.btn-outline-primary.btn-sm.mr-2 href=admin_freelancers_path
-          | Back
+        a.btn.btn-primary.btn-sm.mr-2 href=messaging_admin_freelancer_path(@freelancer)
+          | Messages
         a.btn.btn-primary.btn-sm.mr-2 href=edit_admin_freelancer_path(@freelancer)
           | Edit
 = render "shared/profile-freelancer"
