@@ -52,6 +52,7 @@ class Company::FreelancersController < Company::BaseController
       end
     else
       @address_for_geocode = I18n.t("enumerize.country.#{@country}")
+      @freelancer_profiles = @freelancer_profiles.order("verified DESC, profile_score DESC")
     end
 
     @freelancer_profiles_with_distances = @freelancer_profiles
