@@ -2,7 +2,9 @@
   .container
     .avj-subhead
       h4.ellipsis.mb-0= @company.name
-      a.btn.btn-primary.btn-sm.mr-2 href=edit_admin_company_path
+      a.btn.btn-primary.btn-sm.mr-2 href=messaging_admin_company_path(@company)
+        | Messages
+      a.btn.btn-primary.btn-sm.mr-2 href=edit_admin_company_path(@company)
         | Edit
 
 = render "shared/profile_company", company: @company

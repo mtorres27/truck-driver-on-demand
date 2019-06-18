@@ -1,12 +1,15 @@
-- last_message = current_user.messages_for_company(company).last
-.avj-list-item class="#{"avj-text-emphasize" if current_user.has_new_messages_from_company(company)}"
-  a.mr-4 href=freelancer_company_url(company)
+- last_message = freelancer.messages_for_company(company).last
+.avj-list-item class="#{"avj-text-emphasize" if freelancer.has_new_messages_from_company(company)}"
+  - is_admin = current_user.is_a?(Admin)
+  - path = is_admin ? admin_company_url(company) : freelancer_company_url(company)
+  a.mr-4 href=path
     - if company.avatar_data.present?
       .avj-avatar
         = image_tag(company.avatar_url)
     - else
       .avj-circle_profile__image.company__image= company.company_user.name_initials
-  a.d-flex.w-100 href=freelancer_company_messages_url(company)
+  - path = is_admin ? admin_messages_url(company, freelancer) : freelancer_company_messages_url(company)
+  a.d-flex.w-100 href=path
     .d-flex.flex-wrap.w-100.mr-4
       .w-50
         .avj-body1.m-0= "#{company.name} "

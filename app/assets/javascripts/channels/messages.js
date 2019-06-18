@@ -34,6 +34,16 @@ document.addEventListener("turbolinks:load", function(){
         }
     }
     else {
-        window.scrollTo(0,0);
+        if ($(".avj-section__chat").length > 0) {
+            if (window.matchMedia("(max-width: 768px)").matches) {
+                window.scrollTo(0,document.body.scrollHeight);
+            }
+            else{
+                window.scrollTo(0,0);
+            }
+        }
+        else {
+            window.scrollTo(0,0);
+        }
     }
 });

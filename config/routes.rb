@@ -137,6 +137,7 @@ Rails.application.routes.draw do
       get :enable, on: :member
       get :verify, on: :member
       get :unverify, on: :member
+      get :messaging, on: :member
     end
 
     resource :freelancer do
@@ -147,6 +148,7 @@ Rails.application.routes.draw do
       get :disable, on: :member
       get :enable, on: :member
       get :jobs
+      get :messaging, on: :member
     end
 
     resource :company do
@@ -170,6 +172,8 @@ Rails.application.routes.draw do
     end
 
     resources :connections, only: [:index]
+
+    get "companies/:company_id/messages/freelancer/:freelancer_id", to: "messages#index", as: "messages"
   end
 
   get "*any", via: :all, to: "errors#not_found"

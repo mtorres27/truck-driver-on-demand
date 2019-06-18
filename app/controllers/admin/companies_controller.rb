@@ -1,7 +1,7 @@
 class Admin::CompaniesController < Admin::BaseController
   include LoginAs
 
-  before_action :set_company, only: [:show, :edit, :update, :destroy, :enable, :disable, :login_as]
+  before_action :set_company, only: [:show, :edit, :update, :destroy, :enable, :disable, :login_as, :messaging]
 
   def index
     authorize current_user
@@ -37,6 +37,10 @@ class Admin::CompaniesController < Admin::BaseController
     authorize @company
     @jobs = @company.jobs
     @jobs = @jobs.page(params[:page])
+  end
+
+  def messaging
+    @freelancers = @company.freelancers_for_messaging
   end
 
   def show
