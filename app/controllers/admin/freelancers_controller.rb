@@ -1,7 +1,7 @@
 class Admin::FreelancersController < Admin::BaseController
   include LoginAs
 
-  before_action :set_freelancer, only: [:show, :edit, :update, :destroy, :enable, :disable, :verify, :unverify, :login_as]
+  before_action :set_freelancer, only: [:show, :edit, :update, :destroy, :enable, :disable, :verify, :unverify, :login_as, :messaging]
   before_action :authorize_freelancer, only: [:show, :edit, :update, :destroy, :enable, :disable, :login_as]
 
   def index
@@ -109,6 +109,10 @@ class Admin::FreelancersController < Admin::BaseController
     @freelancer_profiles = FreelancerProfile.order('created_at DESC')
     create_csv
     send_data @csv_file, :type => 'text/csv; charset=iso-8859-1; header=present', :disposition => 'attachment; filename=freelancers.csv'
+  end
+
+  def messaging
+    @companies = @freelancer.companies_for_messaging
   end
 
   private

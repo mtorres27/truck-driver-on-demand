@@ -1,0 +1,15 @@
+.avj-section.avj-section__msg-subhead.d-block.mb-4
+  .container
+    .avj-subhead
+      h4.ellipsis.mb-0= "Messages for #{@company.name}"
+      .d-flex.align-items-center.justify-content-end
+        a.btn.btn-primary.btn-sm.mr-2 href=admin_company_path(@company)
+          | Back
+.avj-section.avj-section__main
+  .container.container__content
+    div
+      - @freelancers.each do |freelancer|
+        - if freelancer.present?
+          = render partial: "company/messaging/freelancer_messaging_info", locals: {freelancer: freelancer, company: @company}
+
+
