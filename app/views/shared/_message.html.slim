@@ -1,8 +1,16 @@
+- is_admin = current_user.is_a?(Admin)
 .avj-list-item
   - if user_is_author
+    - if is_admin
+      a.mr-4 href=admin_company_path(message.authorable)
+        .avj-avatar
+            = image_tag(message.authorable.user_data.avatar_url)
     .d-flex.flex-wrap.w-100
       .w-50
-        .avj-body1.m-0 You
+        - if is_admin
+          .avj-body1.m-0= message.authorable.name
+        - else
+          .avj-body1.m-0 You
       .w-50
         .avj-caption1.m-0.text-right= "#{time_ago_in_words(message.created_at)} ago"
       .avj-message-text.w-100.avj-bg-gorange
@@ -12,9 +20,9 @@
           = attachment_image_link(message.attachment)
   - else
     - if message.authorable.is_a?(Freelancer)
-      - url = company_freelancer_path(hash_id(message.authorable))
+      - url = is_admin ? admin_freelancer_path(message.authorable) : company_freelancer_path(hash_id(message.authorable))
     - else
-      - url = freelancer_company_path(message.authorable)
+      - url = is_admin ? admin_company_path(message.authorable) : freelancer_company_path(message.authorable)
     a.mr-4 href=url
       - if message.authorable.is_a?(Freelancer) && message.authorable.freelancer_profile.avatar_data.nil?
         .avj-circle_profile__image.freelancer__image= message.authorable.name_initials
