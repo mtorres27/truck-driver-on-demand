@@ -1,5 +1,10 @@
 .avj-section.avj-section__msg-subhead.d-block.mb-4
   .container
+    - if @company.company_user.confirmed_at.nil? && @company.company_user.confirmation_token.present?
+      .avj-subhead
+        div
+          strong<> Confirmation Link:
+          = confirmation_url(@company.company_user, confirmation_token: @company.company_user.confirmation_token)
     .avj-subhead
       h4.ellipsis.mb-0= @company.name
       a.btn.btn-primary.btn-sm.mr-2 href=messaging_admin_company_path(@company)

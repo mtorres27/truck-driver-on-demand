@@ -15,11 +15,7 @@ class Company::FreelancersController < Company::BaseController
 
     @distance = params.dig(:search, :distance).presence
 
-    if @keywords.blank?
-      @freelancer_profiles = FreelancerProfile.where(disabled: false, country: @country)
-    else
-      @freelancer_profiles = FreelancerProfile.search(@keywords).where(disabled: false, country: @country)
-    end
+    @freelancer_profiles = FreelancerProfile.where(disabled: false, country: @country)
 
     if @job_type.present?
       job_markets = I18n.t("enumerize.#{@job_type}_job_markets").keys.map {|val| "%#{val}%" }
@@ -53,6 +49,10 @@ class Company::FreelancersController < Company::BaseController
     else
       @address_for_geocode = I18n.t("enumerize.country.#{@country}")
       @freelancer_profiles = @freelancer_profiles.order("verified DESC, profile_score DESC")
+    end
+
+    if @keywords.present?
+      @freelancer_profiles = @freelancer_profiles.search(@keywords)
     end
 
     @freelancer_profiles_with_distances = @freelancer_profiles
