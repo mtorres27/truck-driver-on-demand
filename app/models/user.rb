@@ -55,7 +55,7 @@ class User < ApplicationRecord
   has_many :notifications, as: :receivable, dependent: :destroy
 
   validates :email, uniqueness: { case_sensitive: false }
-  validates :first_name, :last_name, presence: true
+  validates :first_name, :last_name, :phone_number, presence: true
 
   def full_name
     "#{first_name} #{last_name}"

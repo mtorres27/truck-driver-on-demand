@@ -10,6 +10,7 @@ Scenario: Filling fields for Step 1
     | First Name        | John          |
     | Last Name         | Doe           |
     | Email Address     | john@doe.com  |
+    | Phone Number      | 1234567890    |
     | Enter a password  | password      |
     | Confirm password  | password      |
   And I check "company_user_accept_terms_of_service"
