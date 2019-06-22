@@ -33,6 +33,7 @@ class Freelancer::ProfilesController < Freelancer::BaseController
       :last_name,
       :email,
       :enforce_profile_edit,
+      :phone_number,
       freelancer_profile_attributes: [
           :id,
           :name,
