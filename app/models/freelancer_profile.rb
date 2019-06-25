@@ -237,8 +237,7 @@ class FreelancerProfile < ApplicationRecord
       state_region: state,
       city: city,
       company_name: company_name,
-      av_junction_id: company_name,
-      company_name: freelancer&.id,
+      av_junction_id: freelancer&.id,
       job_types: job_types
     )
   end
