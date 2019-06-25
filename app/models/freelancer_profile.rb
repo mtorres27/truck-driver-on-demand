@@ -238,7 +238,8 @@ class FreelancerProfile < ApplicationRecord
       state: state,
       company: company_name,
       av_junction_id: freelancer&.id,
-      job_types: job_types
+      job_types: job_types,
+      phone: freelancer&.phone_number
     )
   end
 end
