@@ -59,7 +59,6 @@ class Freelancer::ProfilesController < Freelancer::BaseController
           :profile_header,
           :header_source,
           :freelancer_type,
-          :phone_number,
           :freelancer_team_size,
           :pay_unit_time_preference,
           :pay_per_unit_time,

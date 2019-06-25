@@ -30,7 +30,6 @@
 #  postal_code              :string
 #  service_areas            :string
 #  city                     :string
-#  phone_number             :string
 #  profile_score            :integer
 #  valid_driver             :boolean
 #  own_tools                :boolean

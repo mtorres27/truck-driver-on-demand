@@ -141,6 +141,7 @@ class Admin::FreelancersController < Admin::BaseController
         :first_name,
         :last_name,
         :email,
+        :phone_number,
         :enforce_profile_edit,
         freelancer_profile_attributes: [
             :id,
@@ -167,7 +168,6 @@ class Admin::FreelancersController < Admin::BaseController
             :profile_header,
             :header_source,
             :freelancer_type,
-            :phone_number,
             :freelancer_team_size,
             :pay_unit_time_preference,
             :pay_per_unit_time,
