@@ -160,6 +160,35 @@ class Company < ApplicationRecord
     self.expires_at = Date.today + 1.year
   end
 
+  def job_types
+    has_system_integration = has_system_integration_job_markets
+    has_live_events_staging_and_rental = has_live_events_staging_and_rental_job_markets
+
+    return "System Integration & Live Events Staging And Rental" if has_live_events_staging_and_rental && has_system_integration
+
+    if has_system_integration
+      "System Integration"
+    elsif has_live_events_staging_and_rental
+      "Live Events Staging And Rental"
+    else
+      "None"
+    end
+  end
+
+  def has_system_integration_job_markets
+    I18n.t("enumerize.system_integration_job_markets").each do |key, _|
+      return true if job_markets.present? && job_markets[key] == '1'
+    end
+    false
+  end
+
+  def has_live_events_staging_and_rental_job_markets
+    I18n.t("enumerize.live_events_staging_and_rental_job_markets").each do |key, _|
+      return true if job_markets.present? && job_markets[key] == '1'
+    end
+    false
+  end
+
   validates_presence_of :name,
     :address,
     :city,
@@ -295,7 +324,8 @@ class Company < ApplicationRecord
       state: state,
       city: city,
       phone: phone_number,
-      av_junction_id: id
+      av_junction_id: id,
+      job_types: job_types
     )
   end
 
