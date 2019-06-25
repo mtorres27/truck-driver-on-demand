@@ -125,7 +125,6 @@ class Freelancer < User
           :state,
           :service_areas,
           :city,
-          :phone_number,
           :company_name,
           :job_markets,
           :technical_skill_tags,
