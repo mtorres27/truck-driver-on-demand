@@ -57,6 +57,20 @@
         - @freelancer.freelancer_profile.technical_skill_tags.each do |key, _|
           .avj-tag= I18n.t("enumerize.technical_skill_tags.#{key}")
 
+    - if @freelancer.freelancer_affiliations.any?
+      h2 Resume
+      .row.mb-4
+      - @freelancer.freelancer_affiliations.each do |affiliation|
+        - url = affiliation.image_url.include?("missing.pdf") ? "/assets/certification/placeholder.png" : affiliation.image_url
+        a.col-md-3.col-6.d-flex.flex-column.justify-content-between href=url target="_blank"
+          - if is_image(url)
+            - src = url
+          - else
+            - src = "/assets/freelancer_affiliation/placeholder.png"
+          .avj-projects
+            img.avj-fit-img src=src
+          .avj-caption1= affiliation.name
+
     - if @freelancer.freelancer_portfolios.any?
       h2 Featured Projects
       .row.mb-4
@@ -98,20 +112,6 @@
             .avj-projects
               img.avj-fit-img src=src
             .avj-caption1= insurance.name
-
-    - if @freelancer.freelancer_affiliations.any?
-      h2 Affiliations
-      .row.mb-4
-        - @freelancer.freelancer_affiliations.each do |affiliation|
-          - url = affiliation.image_url.include?("missing.pdf") ? "/assets/certification/placeholder.png" : affiliation.image_url
-          a.col-md-3.col-6.d-flex.flex-column.justify-content-between href=url target="_blank"
-            - if is_image(url)
-              - src = url
-            - else
-              - src = "/assets/freelancer_affiliation/placeholder.png"
-            .avj-projects
-              img.avj-fit-img src=src
-            .avj-caption1= affiliation.name
 
     - if @freelancer.freelancer_clearances.any?
       h2 Security Clearances
