@@ -30,7 +30,6 @@
 #  postal_code              :string
 #  service_areas            :string
 #  city                     :string
-#  phone_number             :string
 #  profile_score            :integer
 #  valid_driver             :boolean
 #  own_tools                :boolean
@@ -84,8 +83,6 @@ class FreelancerProfile < ApplicationRecord
   accepts_nested_attributes_for :freelancer
 
   validates :years_of_experience, numericality: { only_integer: true }
-  validates :phone_number, length: { minimum: 7 }, allow_blank: true
-  validates :phone_number, length: { minimum: 7 }, on: :update, allow_blank: true
   validates :country, :city, presence: true, on: :update, if: :step_job_info?
   validates :address, :city, :country, presence: true, if: :enforce_profile_edit
 

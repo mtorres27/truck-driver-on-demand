@@ -75,6 +75,7 @@ class Freelancer < User
                 :accept_code_of_conduct, :enforce_profile_edit, :user_type
 
   validates :email, presence: true, if: :enforce_profile_edit
+  validates :phone_number, length: { minimum: 7 }, allow_blank: true
   validates :freelancer_profile, presence: true
   validates_associated :freelancer_profile
 
@@ -113,7 +114,8 @@ class Freelancer < User
   pg_search_scope :admin_search, against: {
       email: "A",
       first_name: "A",
-      last_name: "A"
+      last_name: "A",
+      phone_number: "A"
   }, associated_against: {
       freelancer_profile: [
           :address,
@@ -203,7 +205,7 @@ class Freelancer < User
     score += 1 if self.freelancer_profile.city.present?
     score += 1 if self.freelancer_profile.state.present?
     score += 1 if self.freelancer_profile.postal_code.present?
-    score += 1 if self.freelancer_profile.phone_number.present?
+    score += 1 if self.phone_number.present?
     score += 1 if self.freelancer_profile.bio.present?
     score += 1 if self.freelancer_profile.tagline.present?
     score += 1 if self.freelancer_profile.company_name.present?

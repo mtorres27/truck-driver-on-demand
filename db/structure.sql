@@ -687,7 +687,6 @@ CREATE TABLE freelancer_profiles (
     postal_code character varying,
     service_areas character varying,
     city character varying,
-    phone_number character varying,
     profile_score smallint,
     valid_driver boolean,
     own_tools boolean,
@@ -2257,6 +2256,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20190509185605'),
 ('20190516194711'),
 ('20190520194631'),
-('20190520231702');
+('20190520231702'),
+('20190625164931');
 
 
