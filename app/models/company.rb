@@ -291,6 +291,11 @@ class Company < ApplicationRecord
       lastname: owner.last_name,
       lifecyclestage: "customer",
       im_an: "AV Company",
+      country: country,
+      state: state,
+      city: city,
+      phone: phone_number,
+      av_junction_id: id
     )
   end
 
