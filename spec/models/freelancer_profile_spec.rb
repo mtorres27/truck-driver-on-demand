@@ -98,13 +98,7 @@ describe FreelancerProfile, type: :model do
           let(:freelancer) { create(:freelancer, email: "test@test.com", first_name: "John" , last_name: "Doe") }
 
           it "creates or update a hubspot contact" do
-            expect(Hubspot::Contact).to receive(:createOrUpdate).with(
-                "test@test.com",
-                firstname: "John",
-                lastname: "Doe",
-                lifecyclestage: "customer",
-                im_an: "AV Professional",
-            )
+            expect(Hubspot::Contact).to receive(:createOrUpdate)
             freelancer.freelancer_profile.update(registration_step: "wicked_finish")
           end
         end

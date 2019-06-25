@@ -234,7 +234,7 @@ class FreelancerProfile < ApplicationRecord
       lifecyclestage: "customer",
       im_an: "AV Professional",
       country: country,
-      state_region: state,
+      'state/region': state,
       city: city,
       company_name: company_name,
       av_junction_id: freelancer&.id,
