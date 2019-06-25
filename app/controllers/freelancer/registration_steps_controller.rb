@@ -53,7 +53,6 @@ class Freelancer::RegistrationStepsController < Freelancer::BaseController
       :avatar,
       :bio,
       :tagline,
-      :phone_number,
       :service_areas,
       job_markets: (I18n.t("enumerize.live_events_staging_and_rental_job_markets").keys + I18n.t("enumerize.system_integration_job_markets").keys).uniq,
       job_functions: (I18n.t("enumerize.system_integration_job_functions").keys + I18n.t("enumerize.live_events_staging_and_rental_job_functions").keys).uniq
