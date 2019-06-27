@@ -23,6 +23,6 @@ class MessagesChannel < ApplicationCable::Channel
   private
 
   def render_message(message, user_is_author)
-    ApplicationController.renderer.render(partial: 'shared/message', locals: { message: message, user_is_author: user_is_author })
+    ApplicationController.renderer.render(partial: 'shared/message', locals: { message: message, user_is_author: user_is_author, is_admin: false })
   end
 end
