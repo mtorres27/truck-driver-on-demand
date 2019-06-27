@@ -4,7 +4,7 @@ class Freelancer::MainController < Freelancer::BaseController
 
   def index
     authorize current_user
-    @jobs = Job.where(state: 'published').last(10).reverse
+    @jobs = Job.where(state: 'published').order('created_at DESC')
   end
 
   private
