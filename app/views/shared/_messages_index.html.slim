@@ -39,10 +39,14 @@
             - elsif current_user.is_a?(Freelancer)
               - message_text = "I'm interested in learning more about the job you posted. Re: #{@job_or_profile.title}"
           = f.text_area :body, as: :string, placeholder: "Send a message to #{recipient_name}", label: false, maxlength: 5000, class: "js--message-input form-control avj-body1 mr-2", value: message_text
+          = f.input :attachment, as: :file, label: false, input_html: { class: "js--message-attachment inputfile" }
           - if @job_or_profile.present? && @job_or_profile != 'profile'
             =f.hidden_field :job_id, value: @job_or_profile.id
+          label.btn.btn-ghost.mr-2(for="message_attachment")
+            span.zmdi.zmdi-attachment-alt
           button#new-message__submit.btn.btn-primary onClick= "validateMessage();"
             | Send
+      #new-message__loading-notice
       #new-message__validation-errors
 
 .avj-section.avj-section__chat
