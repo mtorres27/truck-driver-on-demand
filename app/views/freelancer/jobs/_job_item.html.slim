@@ -2,13 +2,13 @@
   .d-flex.align-items-start
     .mr-2
       - url = current_user.present? ? freelancer_company_path(job.company) : new_freelancer_registration_path
-      a href=url
+      a href=url target="#{'_blank' unless current_user.present?}"
         - if job.company.avatar_data.nil?
           .avj-circle_profile__image.company__image= job.company.company_user.name_initials
         - else
           .avj-avatar= image_tag(job.company.avatar_url)
     - url = current_user.present? ? freelancer_job_path(job) : new_freelancer_registration_path
-    a.w-100.mr-2 href=url
+    a.w-100.mr-2 href=url target="#{'_blank' unless current_user.present?}"
       .avj-caption1.avj-text-color-black2.mb-0
         = "Posted #{job.created_at.strftime('%B %d, %Y')} by #{job.company.name}"
       .avj-body1.avj-text-emphasize.mb-0= job.title
@@ -17,5 +17,5 @@
       a.btn.btn-primary.btn-sm href=freelancer_messages_for_job_url(company_id: job.company.id, job_id: job.id)
         | Message
   - url = current_user.present? ? freelancer_job_path(job) : new_freelancer_registration_path
-  a.avj-body1.avj-text-color-black2 href=url
+  a.avj-body1.avj-text-color-black2 href=url target="#{'_blank' unless current_user.present?}"
     = job.summary.truncate(280)
