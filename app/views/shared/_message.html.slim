@@ -14,9 +14,16 @@
         .avj-caption1.m-0.text-right= "#{time_ago_in_words(message.created_at)} ago"
       .avj-message-text.w-100.avj-bg-gorange
         .avj-body2= message.body
-      - if message.attachment
-        .new-message__image
-          = attachment_image_link(message.attachment)
+        - if message.attachment
+          - url = message.attachment_url.include?("missing.pdf") ? "/assets/certification/placeholder.png" : message.attachment_url
+          a.mb-2.col-md-3.col-6.d-flex.flex-column.justify-content-between href=url target="_blank"
+            - if is_image(url)
+              .avj-projects
+                img.avj-fit-img src=url
+            - else
+              .d-flex
+                span.zmdi.zmdi-hc-5x.zmdi-file-text.mr-1
+                label Attachment
   - else
     - if message.authorable.is_a?(Freelancer)
       - url = is_admin ? admin_freelancer_path(message.authorable) : company_freelancer_path(hash_id(message.authorable))
@@ -35,6 +42,13 @@
         .avj-caption1.m-0.text-right= "#{time_ago_in_words(message.created_at)} ago"
       .avj-message-text.w-100
         .avj-body2= message.body
-      - if message.attachment
-        .new-message__image
-          = attachment_image_link(message.attachment)
+        - if message.attachment
+          - url = message.attachment_url.include?("missing.pdf") ? "/assets/certification/placeholder.png" : message.attachment_url
+          a.mb-2.col-md-3.col-6.d-flex.flex-column.justify-content-between href=url target="_blank"
+            - if is_image(url)
+              .avj-projects
+                img.avj-fit-img src=url
+            - else
+              .d-flex
+                span.zmdi.zmdi-hc-5x.zmdi-file-text.mr-1
+                label Attachment

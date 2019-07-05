@@ -36,7 +36,26 @@ document.addEventListener("turbolinks:load", function() {
             if ($("#message_job_id").length) {
                 params["message"]["job_id"] = $("#message_job_id").val();
             }
-            App.messages.send(params);
+            if ($(".js--message-attachment").get(0).files.length > 0) {
+                var reader = new FileReader();
+                reader.addEventListener("loadend", function() {
+                    params['message']['attachment_data_uri'] = reader.result;
+                    App.messages.send(params);
+                    $("#new-message__loading-notice").html("File uploaded successfully.");
+                    $(".js--message-attachment").val("");
+                });
+                reader.addEventListener("progress", function() {
+                    $("#new-message__loading-notice").html("Please wait while your message is uploaded.");
+                });
+                reader.addEventListener("error", function() {
+                    $("#new-message__loading-notice").html("There was an error uploading your file. Please try again.");
+                });
+                reader.readAsDataURL($(".js--message-attachment").get(0).files[0]);
+            }
+            else {
+                $("#new-message__loading-notice").html("File uploaded successfully.");
+                App.messages.send(params);
+            }
         }
         return false;
     });
