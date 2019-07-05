@@ -10,7 +10,7 @@ class PublicPagesController < ApplicationController
     @country = params.dig(:search, :country).presence
     @address = params.dig(:search, :address).presence
 
-    @jobs = valid_company_jobs.where(state: "published").all
+    @jobs = valid_company_jobs.where(state: "published").order("created_at DESC").all
 
     if @address
       # check for cached version of address
