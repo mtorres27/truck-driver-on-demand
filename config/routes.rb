@@ -1,24 +1,4 @@
 Rails.application.routes.draw do
-  match '/login'                    => 'main#login',                  via: :get
-  match '/company_register'         => 'main#company_register',       via: :get
-  match '/search_professionals'     => 'main#search_professionals',   via: :get
-  match '/messages'                 => 'main#messages',               via: :get
-  match '/message_detail'           => 'main#message_detail',         via: :get
-  match '/search_results'           => 'main#search_results',         via: :get
-  match '/jobs'                     => 'main#jobs',                   via: :get
-  match '/job_form'                 => 'main#job_form',               via: :get
-  match '/job_detail'               => 'main#job_detail',             via: :get
-  match '/job_post_form'            => 'main#job_post_form',          via: :get
-  match '/company_profilestyle'     => 'main#company_profile',        via: :get
-  match '/company_profile_edit'     => 'main#company_profile_edit',   via: :get
-  match '/company_user_edit'        => 'main#company_user_edit',      via: :get
-  match '/avpro_profile'            => 'main#avpro_profile',          via: :get
-  match '/avpro_profile_edit'       => 'main#avpro_profile_edit',     via: :get
-  match '/avpro_register'           => 'main#avpro_register',         via: :get
-  match '/avpro_jobs'               => 'main#avpro_jobs',             via: :get
-  match '/avpro_messages'           => 'main#avpro_messages',         via: :get
-  match '/avpro_job_detail'         => 'main#avpro_job_detail',       via: :get
-  match '/avpro_message_detail'     => 'main#avpro_message_detail',   via: :get
 
   mount ActionCable.server => '/cable'
 
@@ -54,6 +34,8 @@ Rails.application.routes.draw do
   get "freelance-service-agreement", to: "main#freelance_service_agreement"
   get "confirm_email", to: "main#confirm_email"
   get "job_country_currency", to: "main#job_countries", as: "job_country_currency"
+
+  match '/public_jobs'     => 'public_pages#public_jobs',   via: :get
 
   namespace :freelancer do
 

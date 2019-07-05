@@ -1,17 +1,21 @@
 .avj-job-item
   .d-flex.align-items-start
     .mr-2
-      a href=freelancer_company_path(job.company)
+      - url = current_user.present? ? freelancer_company_path(job.company) : new_freelancer_registration_path
+      a href=url
         - if job.company.avatar_data.nil?
           .avj-circle_profile__image.company__image= job.company.company_user.name_initials
         - else
           .avj-avatar= image_tag(job.company.avatar_url)
-    a.w-100.mr-2 href=freelancer_job_path(job)
+    - url = current_user.present? ? freelancer_job_path(job) : new_freelancer_registration_path
+    a.w-100.mr-2 href=url
       .avj-caption1.avj-text-color-black2.mb-0
         = "Posted #{job.created_at.strftime('%B %d, %Y')} by #{job.company.name}"
       .avj-body1.avj-text-emphasize.mb-0= job.title
       .avj-caption1.avj-text-color-black2= job.city_state_country
-    a.btn.btn-primary.btn-sm href=freelancer_messages_for_job_url(company_id: job.company.id, job_id: job.id)
-      | Message
-  a.avj-body1.avj-text-color-black2 href=freelancer_job_path(job)
+    - if current_user.present?
+      a.btn.btn-primary.btn-sm href=freelancer_messages_for_job_url(company_id: job.company.id, job_id: job.id)
+        | Message
+  - url = current_user.present? ? freelancer_job_path(job) : new_freelancer_registration_path
+  a.avj-body1.avj-text-color-black2 href=url
     = job.summary.truncate(280)
