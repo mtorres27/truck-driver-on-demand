@@ -77,6 +77,6 @@ class Message < ApplicationRecord
         connections << { company_id: company.id, company_name: company.name, freelancer_id: freelancer.id, freelancer_name: freelancer.full_name, date_conected: first_message&.created_at }
       end
     end
-    connections
+    connections.sort_by{ |connection| connection[:date_conected] }.reverse
   end
 end
