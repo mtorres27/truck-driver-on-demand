@@ -10,5 +10,5 @@
       h2= "Found #{ pluralize(@jobs.total_count, 'job posting') } matching your criteria"
     - @jobs.each do |job|
       = render "freelancer/jobs/job_item", job: job
-      - unless controller_name == 'main'
-        = paginate @jobs
+    - unless controller_name == 'main'
+      = paginate @jobs
