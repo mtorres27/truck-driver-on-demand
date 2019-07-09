@@ -9,7 +9,9 @@
             | In 50-75 words.
         .col-md-8.col-12
           = f.input :title, label: "Job Title", placeholder: "Job Title", required: true, label_html: { class: "avj-caption1" }
-          = f.input :summary, label: "Job Description", placeholder: "Job Description", required: true, input_html: { rows: "6" }, label_html: { class: "avj-caption1" }
+          = f.hidden_field :summary, label: "Job Description", placeholder: "Job Description", required: true, input_html: { rows: "6" }, label_html: { class: "avj-caption1" }
+          = f.label "Job Description", required: true
+          trix-editor input='job_summary'
       .row.mb-2
         .col
           .dropdown-divider

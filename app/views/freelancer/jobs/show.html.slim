@@ -36,4 +36,4 @@
               .avj-tag= I18n.t("enumerize.technical_skill_tags.#{key}")
             - @job.manufacturer_tags&.each do |key, _|
               .avj-tag= I18n.t("enumerize.manufacturer_tags.#{key}")
-      .avj-body1= @job.summary
+      .avj-body1= @job.summary.html_safe

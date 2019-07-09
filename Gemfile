@@ -86,6 +86,9 @@ gem "bullet", "~> 5.5.1" # TODO: Remove bullet from production
 # States and provinces
 gem "city-state"
 
+# Rich text
+gem "trix"
+
 group :development do
   gem "annotate"
   gem "binding_of_caller"
