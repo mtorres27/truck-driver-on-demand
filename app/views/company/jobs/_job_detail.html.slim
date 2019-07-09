@@ -8,7 +8,7 @@
           span.ml-2
             = job_state_label(@job)
         .avj-body2
-          = @job.summary
+          = @job.summary.html_safe
       .d-flex
         .zmdi.zmdi-pin.avj-text-color-black2.avj-text-sm.mr-2
         .avj-caption1.avj-text-color-black2

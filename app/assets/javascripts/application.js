@@ -7,5 +7,6 @@
 //= require cable
 //= require Chart.bundle
 //= require chartkick
+//= require trix
 //= require_tree ./controllers
 //= require_tree ./channels

@@ -5,7 +5,7 @@
     = job_state_label(job)
   a.avj-text-color-black href=company_job_url(job)
     .avj-body1.avj-text-emphasize= job.title
-    .avj-body2= job.summary
+    .avj-body2= job.summary.html_safe
   .d-flex
     .zmdi.zmdi-pin.avj-text-color-black2.avj-text-sm.mr-2
     .avj-caption1.avj-text-color-black2= job.city_state_country
