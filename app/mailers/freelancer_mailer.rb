@@ -1,5 +1,26 @@
 class FreelancerMailer < ApplicationMailer
 
+  def request_profile_verification(freelancer)
+    @freelancer = freelancer
+    headers 'X-SMTPAPI' => {
+        sub: {
+            '%freelancer_name%' => [@freelancer.first_name_and_initial],
+            '%freelancer_email%' => [@freelancer.email],
+            '%freelancer_id%' => [@freelancer.id],
+            '%root_url%' => [root_url]
+        },
+        filters: {
+            templates: {
+                settings: {
+                    enable: 1,
+                    template_id: '15291d85-bb06-49cc-86c6-cbc7ad75cd82'
+                }
+            }
+        }
+    }.to_json
+    mail(to: 'info@avjunction.com', subject: 'Freelancer applied for profile verification')
+  end
+
   def verify_your_identity(freelancer)
     @freelancer = freelancer
     headers 'X-SMTPAPI' => {
