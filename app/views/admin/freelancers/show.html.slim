@@ -12,4 +12,10 @@
           | Messages
         a.btn.btn-primary.btn-sm.mr-2 href=edit_admin_freelancer_path(@freelancer)
           | Edit
+        - if @freelancer.freelancer_profile.verified?
+          a.btn.btn-outline-primary.btn-sm.mr-2 href=unverify_admin_freelancer_path(@freelancer)
+            | Unverify
+        - else
+          a.btn.btn-outline-primary.btn-sm.mr-2 href=verify_admin_freelancer_path(@freelancer)
+            | Verify
 = render "shared/profile-freelancer"

@@ -695,7 +695,8 @@ CREATE TABLE freelancer_profiles (
     manufacturer_tags citext,
     registration_step character varying,
     province character varying,
-    freelancer_id integer
+    freelancer_id integer,
+    requested_verification boolean DEFAULT false
 );
 
 
@@ -2257,6 +2258,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20190516194711'),
 ('20190520194631'),
 ('20190520231702'),
-('20190625164931');
+('20190625164931'),
+('20190715185000');
 
 

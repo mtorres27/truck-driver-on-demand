@@ -40,7 +40,11 @@ Rails.application.routes.draw do
   namespace :freelancer do
 
     root "main#index"
-    resource :freelancer, only: [:show]
+    resource :freelancer, only: [:show] do
+      collection do
+        post :request_verification
+      end
+    end
 
     resources :registration_steps, only: [:show, :update, :index] do
       member do

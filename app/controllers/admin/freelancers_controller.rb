@@ -96,12 +96,12 @@ class Admin::FreelancersController < Admin::BaseController
 
   def verify
     @freelancer.freelancer_profile.update_column(:verified, true)
-    redirect_to admin_freelancers_path, notice: "Freelancer verified."
+    redirect_to admin_freelancer_path(@freelancer), notice: "Freelancer verified."
   end
 
   def unverify
     @freelancer.freelancer_profile.update_column(:verified, false)
-    redirect_to admin_freelancers_path, notice: "Freelancer unverified."
+    redirect_to admin_freelancer_path(@freelancer), notice: "Freelancer unverified."
   end
 
   def download_csv

@@ -39,6 +39,7 @@
 #  registration_step        :string
 #  province                 :string
 #  freelancer_id            :integer
+#  requested_verification   :boolean          default(FALSE)
 #
 # Indexes
 #
