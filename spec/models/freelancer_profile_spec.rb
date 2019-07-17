@@ -40,6 +40,7 @@
 #  province                 :string
 #  freelancer_id            :integer
 #  requested_verification   :boolean          default(FALSE)
+#  pay_unit_time_preference :string
 #
 # Indexes
 #
