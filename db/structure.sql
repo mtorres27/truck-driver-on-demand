@@ -696,7 +696,8 @@ CREATE TABLE freelancer_profiles (
     registration_step character varying,
     province character varying,
     freelancer_id integer,
-    requested_verification boolean DEFAULT false
+    requested_verification boolean DEFAULT false,
+    pay_unit_time_preference character varying
 );
 
 
@@ -2259,6 +2260,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20190520194631'),
 ('20190520231702'),
 ('20190625164931'),
-('20190715185000');
+('20190715185000'),
+('20190717141752');
 
 
