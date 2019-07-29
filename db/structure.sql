@@ -697,7 +697,8 @@ CREATE TABLE freelancer_profiles (
     province character varying,
     freelancer_id integer,
     requested_verification boolean DEFAULT false,
-    pay_unit_time_preference character varying
+    pay_unit_time_preference character varying,
+    pay_rate double precision
 );
 
 
@@ -2261,6 +2262,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20190520231702'),
 ('20190625164931'),
 ('20190715185000'),
-('20190717141752');
+('20190717141752'),
+('20190729175718');
 
 

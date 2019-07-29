@@ -89,6 +89,9 @@ gem "city-state"
 # Rich text
 gem "trix"
 
+# Truncate HTML
+gem "truncato"
+
 group :development do
   gem "annotate"
   gem "binding_of_caller"

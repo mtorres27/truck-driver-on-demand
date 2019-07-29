@@ -18,4 +18,4 @@
         | Message
   - url = current_user.present? ? freelancer_job_path(job) : new_freelancer_registration_path
   a.avj-body1.avj-text-color-black2 href=url target="#{'_blank' unless current_user.present?}"
-    = job.summary.truncate(280).html_safe
+    = Truncato.truncate(job.summary, max_length: 280).html_safe

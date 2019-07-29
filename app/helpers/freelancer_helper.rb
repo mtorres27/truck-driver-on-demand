@@ -91,4 +91,13 @@ module FreelancerHelper
     hashids = Hashids.new(Rails.application.secrets.hash_ids_salt, 8)
     hashids.encode(freelancer.id)
   end
+
+  def payment_rate(freelancer)
+    return unless freelancer.freelancer_profile&.pay_rate.present?
+    if freelancer.freelancer_profile&.pay_unit_time_preference == :hourly
+      "#{number_to_currency(freelancer.freelancer_profile.pay_rate)}/hour"
+    elsif freelancer.freelancer_profile&.pay_unit_time_preference == :daily
+      "#{number_to_currency(freelancer.freelancer_profile.pay_rate)}/day"
+    end
+  end
 end
