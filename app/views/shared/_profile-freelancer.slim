@@ -25,6 +25,8 @@
         .avj-body2= "#{@freelancer.freelancer_profile.years_of_experience} years of experience"
         - if @freelancer.freelancer_profile.pay_unit_time_preference.present?
           .avj-body2= "Payment preference: #{@freelancer.freelancer_profile.pay_unit_time_preference}"
+        - if @freelancer.freelancer_profile.pay_unit_time_preference != :fixed
+          .avj-body2= payment_rate(@freelancer)
         .avj-body2= pluralize(@freelancer.connections_count, "connection")
         .avj-body2= @freelancer.freelancer_profile.type_and_company
 

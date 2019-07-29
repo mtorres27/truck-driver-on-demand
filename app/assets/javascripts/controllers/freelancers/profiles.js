@@ -16,6 +16,13 @@ $(document).on("turbolinks:load", function () {
         $(".freelancer_system_integration_checkboxes").hide();
     }
 
+    if ($("#freelancer_freelancer_profile_attributes_pay_unit_time_preference").val() == "fixed" || $("#freelancer_freelancer_profile_attributes_pay_unit_time_preference").val() == "") {
+        $("#freelancer_freelancer_profile_attributes_pay_rate").val("");
+        $(".js--pay-rate").hide();
+    } else {
+        $(".js--pay-rate").show();
+    }
+
     $("#freelancer_freelancer_profile_attributes_job_types_live_events_staging_and_rental").on("change", function() {
         if ($(this).is(":checked")) {
             $(".freelancer_please_select_job_type_message").hide();
@@ -41,6 +48,15 @@ $(document).on("turbolinks:load", function () {
             if (!$("#freelancer_freelancer_profile_attributes_job_types_live_events_staging_and_rental").is(":checked")) {
                 $(".freelancer_please_select_job_type_message").show();
             }
+        }
+    });
+
+    $("#freelancer_freelancer_profile_attributes_pay_unit_time_preference").on("change", function() {
+        if ($(this).val() == "fixed" || $(this).val() == "") {
+            $("#freelancer_freelancer_profile_attributes_pay_rate").val("");
+            $(".js--pay-rate").hide();
+        } else {
+            $(".js--pay-rate").show();
         }
     });
 });

@@ -193,6 +193,7 @@ GEM
     hashdiff (0.3.7)
     hashids (1.0.4)
     hashie (3.5.6)
+    htmlentities (4.3.4)
     http (2.2.2)
       addressable (~> 2.3)
       http-cookie (~> 1.0)
@@ -449,6 +450,9 @@ GEM
     timecop (0.9.1)
     trix (0.11.1)
       rails (> 4.1, < 5.2)
+    truncato (0.7.11)
+      htmlentities (~> 4.3.1)
+      nokogiri (>= 1.7.0, <= 2.0)
     turbolinks (5.1.1)
       turbolinks-source (~> 5.1)
     turbolinks-source (5.1.0)
@@ -555,6 +559,7 @@ DEPENDENCIES
   therubyracer
   timecop
   trix
+  truncato
   turbolinks (~> 5)
   tzinfo-data
   uglifier (~> 3.2.0)

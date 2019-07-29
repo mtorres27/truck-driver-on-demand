@@ -170,7 +170,7 @@ class Admin::FreelancersController < Admin::BaseController
             :freelancer_type,
             :freelancer_team_size,
             :pay_unit_time_preference,
-            :pay_per_unit_time,
+            :pay_rate,
             :business_tax_number,
             job_markets: (I18n.t("enumerize.live_events_staging_and_rental_job_markets").keys + I18n.t("enumerize.system_integration_job_markets").keys).uniq,
             job_functions: (I18n.t("enumerize.system_integration_job_functions").keys + I18n.t("enumerize.live_events_staging_and_rental_job_functions").keys).uniq,

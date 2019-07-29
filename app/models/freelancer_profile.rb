@@ -41,6 +41,7 @@
 #  freelancer_id            :integer
 #  requested_verification   :boolean          default(FALSE)
 #  pay_unit_time_preference :string
+#  pay_rate                 :float
 #
 # Indexes
 #
@@ -85,6 +86,7 @@ class FreelancerProfile < ApplicationRecord
   accepts_nested_attributes_for :freelancer
 
   validates :years_of_experience, numericality: { only_integer: true }
+  validates :pay_rate, numericality: { greater_than: 0 }, allow_nil: true
   validates :country, :city, presence: true, on: :update, if: :step_job_info?
   validates :address, :city, :country, presence: true, if: :enforce_profile_edit
 
