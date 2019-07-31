@@ -53,7 +53,6 @@ document.addEventListener("turbolinks:load", function() {
                 reader.readAsDataURL($(".js--message-attachment").get(0).files[0]);
             }
             else {
-                $("#new-message__loading-notice").html("File uploaded successfully.");
                 App.messages.send(params);
             }
         }
