@@ -22,8 +22,8 @@
 
 FactoryBot.define do
   factory :notification do
-    title "Title"
-    body "Body"
-    url "www.example.com"
+    title { "Title" }
+    body { "Body" }
+    url { "www.example.com" }
   end
 end

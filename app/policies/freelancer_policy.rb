@@ -16,10 +16,6 @@ class FreelancerPolicy < ApplicationPolicy
     freelancer? && freelancer_owner?
   end
 
-  def stripe_upload?
-    freelancer? && freelancer_owner?
-  end
-
   def bank_account?
     freelancer? && freelancer_owner?
   end
@@ -81,10 +77,6 @@ class FreelancerPolicy < ApplicationPolicy
   end
 
   def job_matches?
-    freelancer? && freelancer_owner?
-  end
-
-  def stripe?
     freelancer? && freelancer_owner?
   end
 

@@ -72,7 +72,7 @@ class Company::FreelancersController < Company::BaseController
   end
 
   def show
-    hashids = Hashids.new(Rails.application.secrets.hash_ids_salt, 8)
+    hashids = Hashids.new(ENV['hash_ids_salt'], 8)
     id = hashids.decode(params[:id])
 
     if id.count == 0

@@ -1,12 +1,12 @@
 Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
 
-  Rails.application.routes.default_url_options[:host] = 'https://app.avjunction.com'
+   Rails.application.routes.default_url_options[:host] = 'https://truck-driver-on-demand.herokuapp.com'
+  
+  config.secret_key_base = ENV['SECRET_KEY_BASE']
 
   # Code is not reloaded between requests.
   config.cache_classes = true
-
-  config.secret_key_base = Rails.application.secrets.secret_key_base
 
   # Eager load code on boot. This eager loads most of Rails and
   # your application in memory, allowing both threaded web servers
@@ -15,10 +15,10 @@ Rails.application.configure do
   config.eager_load = true
 
   # Attempt to read encrypted secrets from `config/secrets.yml.enc`.
-  # Requires an encryption key in `ENV["RAILS_MASTER_KEY"]` or
-  # `config/secrets.yml.key`.
-  config.read_encrypted_secrets = false
-
+   # Requires an encryption key in `ENV["RAILS_MASTER_KEY"]` or
+   # `config/secrets.yml.key`.
+   config.read_encrypted_secrets = false
+  
   # Full error reports are disabled and caching is turned on.
   config.consider_all_requests_local       = false
   config.action_controller.perform_caching = true
@@ -31,9 +31,6 @@ Rails.application.configure do
   config.assets.js_compressor = :uglifier
   # config.assets.css_compressor = :sass
 
-  # Do not fallback to assets pipeline if a precompiled asset is missed.
-  # config.assets.compile = false
-
   # `config.assets.precompile` and `config.assets.version` have moved to config/initializers/assets.rb
 
   # Enable serving of images, stylesheets, and JavaScripts from an asset server.
@@ -45,9 +42,9 @@ Rails.application.configure do
 
   # Mount Action Cable outside main process or domain
   # config.action_cable.mount_path = nil
-  config.web_socket_server_url = 'wss://app.avjunction.com/cable'
-  config.action_cable.url = 'wss://app.avjunction.com/cable'
-  config.action_cable.allowed_request_origins = [ 'app.avjunction.com', 'https://app.avjunction.com', /https:\/\/avjunction.*/ ]
+  config.web_socket_server_url = 'wss://truck-driver-on-demand.herokuapp.com/cable'
+  config.action_cable.url = 'wss://truck-driver-on-demand.herokuapp.com/cable'
+  config.action_cable.allowed_request_origins = [ 'truck-driver-on-demand.herokuapp.com', 'https://truck-driver-on-demand.herokuapp.com' ]
 
   # Force all access to the app over SSL, use Strict-Transport-Security, and use secure cookies.
   # config.force_ssl = true
@@ -64,20 +61,20 @@ Rails.application.configure do
 
   # Use a real queuing backend for Active Job (and separate queues per environment)
   # config.active_job.queue_adapter     = :resque
-  # config.active_job.queue_name_prefix = "avjunction_#{Rails.env}"
+  # config.active_job.queue_name_prefix = "truck-driver-on-demand_#{Rails.env}"
   config.action_mailer.perform_caching = false
 
   # Ignore bad email addresses and do not raise email delivery errors.
   # Set this to true and configure the email server for immediate delivery to raise delivery errors.
   # config.action_mailer.raise_delivery_errors = false
-
-  config.action_mailer.default_url_options = { host: 'app.avjunction.com' }
-  config.action_mailer.asset_host = "http://app.avjunction.com"
+  
+  config.action_mailer.default_url_options = { host: 'truck-driver-on-demand.herokuapp.com' }
+  config.action_mailer.asset_host = "http://truck-driver-on-demand.herokuapp.com"
   config.action_mailer.delivery_method = :smtp
   config.action_mailer.smtp_settings = {
-      user_name: Rails.application.secrets.sendgrid_username,
-      password: Rails.application.secrets.sendgrid_password,
-      domain: 'mg.avjunction.com',
+      user_name: ENV['sendgrid_username'],
+      password: ENV['sendgrid_password'],
+      domain: 'mg.truck-driver-on-demand.herokuapp.com',
       address: 'smtp.sendgrid.net',
       port: 587,
       authentication: :plain,
@@ -94,11 +91,6 @@ Rails.application.configure do
   # Use default logging formatter so that PID and timestamp are not suppressed.
   config.log_formatter = ::Logger::Formatter.new
 
-  # AVJ fees
-  config.avj_fees = Rails.application.secrets.avj_fees
-
-  config.avj_sales_tax_number = Rails.application.secrets.avj_sales_tax_number
-
   # Use a different logger for distributed setups.
   # require 'syslog/logger'
   # config.logger = ActiveSupport::TaggedLogging.new(Syslog::Logger.new 'app-name')
@@ -111,7 +103,7 @@ Rails.application.configure do
 
   # Do not dump schema after migrations.
   config.active_record.dump_schema_after_migration = false
-
+  
   config.action_dispatch.default_headers = {
       'X-Frame-Options' => 'ALLOWALL'
   }

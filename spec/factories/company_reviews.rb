@@ -30,13 +30,12 @@
 
 FactoryBot.define do
   factory :company_review do
-    company nil
-    freelancer nil
-    job nil
-    quality_of_information_provided "MyString"
-    promptness_of_payment "MyString"
-    material_available_on_site "MyString"
-    communication "MyString"
-    comments "MyText"
+    company { nil }
+    freelancer { nil }
+    job { nil }
+    promptness_of_payment { "MyString" }
+    material_available_on_site { "MyString" }
+    communication { "MyString" }
+    comments { "MyString" }
   end
 end

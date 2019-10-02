@@ -29,9 +29,9 @@
 
 FactoryBot.define do
   factory :message do
-    job nil
-    authorable nil
-    body "MyText"
-    attachment_data "MyText"
+    job { nil }
+    authorable { nil }
+    body { "MyText" }
+    attachment_data { "MyText" }
   end
 end

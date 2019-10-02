@@ -12,7 +12,7 @@ jobs:
             RACK_ENV: test
        - image: mdillon/postgis:9.6
          environment:
-            POSTGRES_DB: avj_test
+            POSTGRES_DB: truck_driver_on_demand_test
             POSTGRES_USER: postgres
 
     steps:
@@ -67,7 +67,7 @@ jobs:
             bundle exec rails db:create
             bundle exec rails db:setup
           environment:
-            DATABASE_URL: "postgres://postgres@localhost:5432/avj_test"
+            DATABASE_URL: "postgres://postgres@localhost:5432/truck_driver_on_demand_test"
 
       # run feature tests!
       - run:

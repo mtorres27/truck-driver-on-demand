@@ -45,7 +45,7 @@ module Geocodable
   end
 
   def do_geocode
-    url = "https://maps.googleapis.com/maps/api/geocode/json?address=#{url_encode(compile_address)}&key=#{Rails.application.secrets.google_maps_js_api_key}"
+    url = "https://maps.googleapis.com/maps/api/geocode/json?address=#{url_encode(compile_address)}&key=#{ENV['google_maps_js_api_key']}"
     # Make the API request
     begin
       res = JSON.parse(Net::HTTP.get(URI.parse(url)), symbolize_names: true)

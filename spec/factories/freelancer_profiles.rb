@@ -59,7 +59,7 @@
 
 FactoryBot.define do
   factory :freelancer_profile do
-    country [:es, :fi, :fr, :gb, :pt, :us].sample
+    country { [:es, :fi, :fr, :gb, :pt, :us].sample }
     city { Faker::Address.city }
     state { Faker::Address.state }
     bio { Faker::Lorem }
@@ -67,7 +67,7 @@ FactoryBot.define do
     avatar { fixture_file_upload(Rails.root.join("spec", "fixtures", "image.png"), "image/png") }
 
     trait :registration_completed do
-      registration_step "wicked_finish"
+      registration_step { "wicked_finish" }
     end
   end
 end

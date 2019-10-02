@@ -27,7 +27,7 @@
 
 FactoryBot.define do
   factory :applicant do
-    job nil
-    freelancer nil
+    job { nil }
+    freelancer { nil }
   end
 end

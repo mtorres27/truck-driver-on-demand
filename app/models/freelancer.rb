@@ -156,10 +156,6 @@ class Freelancer < User
     companies_for_messaging.count
   end
 
-  def connected?
-    freelancer_profile.stripe_account_id.present?
-  end
-
   def rating
     if freelancer_reviews.count > 0
       freelancer_reviews.average("(#{FreelancerReview::RATING_ATTRS.map(&:to_s).join('+')}) / #{FreelancerReview::RATING_ATTRS.length}").round

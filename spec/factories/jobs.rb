@@ -31,9 +31,9 @@
 
 FactoryBot.define do
   factory :job do
-    title "MyString"
-    summary "MyText"
-    address "Address"
-    country "ca"
+    title { "MyString" }
+    summary { "MyText" }
+    address { "Address" }
+    country { "ca" }
   end
 end

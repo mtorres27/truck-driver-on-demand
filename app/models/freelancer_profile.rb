@@ -75,7 +75,6 @@ class FreelancerProfile < ApplicationRecord
   scope :incomplete_registrations, -> { where.not(registration_step: "wicked_finish") }
 
   after_save :check_if_should_do_geocode
-  after_save :add_to_hubspot
   after_save :send_welcome_email, if: :registration_step_changed?
   before_save :set_profile_score
   before_create :set_default_step
@@ -225,25 +224,5 @@ class FreelancerProfile < ApplicationRecord
   def send_welcome_email
     return if freelancer&.confirmed? || !registration_completed? || freelancer&.confirmation_sent_at.present?
     freelancer&.send_confirmation_instructions
-  end
-
-  def add_to_hubspot
-    return unless Rails.application.secrets.enabled_hubspot
-    return if !registration_completed? || changes[:registration_step].nil?
-
-    Hubspot::Contact.createOrUpdate(
-      freelancer&.email,
-      firstname: freelancer&.first_name,
-      lastname: freelancer&.last_name,
-      lifecyclestage: "customer",
-      im_an: "AV Professional",
-      country: country,
-      city: city,
-      state: state,
-      company: company_name,
-      av_junction_id: freelancer&.id,
-      job_types: job_types,
-      phone: freelancer&.phone_number
-    )
   end
 end

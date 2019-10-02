@@ -56,7 +56,7 @@ include ActionDispatch::TestProcess
 FactoryBot.define do
   factory :company do
     name { Faker::Company.unique.name }
-    country [:es, :fi, :fr, :gb, :pt, :us].sample
+    country { [:es, :fi, :fr, :gb, :pt, :us].sample }
     city { Faker::Address.city }
     state { Faker::Address.state}
     avatar { fixture_file_upload(Rails.root.join("spec", "fixtures", "image.png"), "image/png") }
@@ -68,7 +68,7 @@ FactoryBot.define do
     area { "USA" }
 
     trait :registration_completed do
-      registration_step "wicked_finish"
+      registration_step { "wicked_finish" }
     end
   end
 end

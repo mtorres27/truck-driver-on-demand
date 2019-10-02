@@ -21,18 +21,18 @@ FactoryBot.define do
   factory :identity do
     factory :freelancer_google_identity do
       association :loginable, factory: :freelancer
-      provider Faker::Omniauth.google["provider"]
-      uid Faker::Omniauth.google["uid"]
+      provider { Faker::Omniauth.google["provider"] }
+      uid { Faker::Omniauth.google["uid"] }
     end
     factory :freelancer_facebook_identity do
       association :loginable, factory: :freelancer
-      provider Faker::Omniauth.facebook["provider"]
-      uid Faker::Omniauth.facebook["uid"]
+      provider { Faker::Omniauth.facebook["provider"] }
+      uid { Faker::Omniauth.facebook["uid"] }
     end
     factory :freelancer_linkedin_identity do
       association :loginable, factory: :freelancer
-      provider Faker::Omniauth.linkedin["provider"]
-      uid Faker::Omniauth.linkedin["uid"]
+      provider { Faker::Omniauth.linkedin["provider"] }
+      uid { Faker::Omniauth.linkedin["uid"] }
     end
     # factory :company_google_identity do
     #   association :loginable, factory: :company

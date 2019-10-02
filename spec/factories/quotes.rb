@@ -37,7 +37,7 @@
 
 FactoryBot.define do
   factory :quote do
-    applicant nil
-    amount "9.99"
+    applicant { nil }
+    amount { "9.99" }
   end
 end

@@ -111,7 +111,6 @@ class Company < ApplicationRecord
   scope :new_registrants, -> { where(disabled: true, registration_step: "wicked_finish") }
   scope :incomplete_registrations, -> { where.not(registration_step: "wicked_finish") }
 
-  after_save :add_to_hubspot
   before_create :set_default_step
   after_save :send_confirmation_email
 
@@ -309,25 +308,6 @@ class Company < ApplicationRecord
   end
 
   private
-
-  def add_to_hubspot
-    return unless Rails.application.secrets.enabled_hubspot
-    return if !registration_completed? || changes[:registration_step].nil?
-
-    Hubspot::Contact.createOrUpdate(owner.email,
-      company: name,
-      firstname: owner.first_name,
-      lastname: owner.last_name,
-      lifecyclestage: "customer",
-      im_an: "AV Company",
-      country: country,
-      state: state,
-      city: city,
-      phone: phone_number,
-      av_junction_id: id,
-      job_types: job_types
-    )
-  end
 
   def step_job_info?
     registration_step == "job_info"

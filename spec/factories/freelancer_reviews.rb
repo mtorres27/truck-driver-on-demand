@@ -30,9 +30,9 @@
 
 FactoryBot.define do
   factory :freelancer_review do
-    freelancer nil
-    company nil
-    job nil
-    comments "MyText"
+    freelancer { nil }
+    company { nil }
+    job { nil }
+    comments { "MyText" }
   end
 end

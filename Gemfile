@@ -1,96 +1,118 @@
-source "https://rubygems.org"
+source 'https://rubygems.org'
+
+ruby "2.6.0"
 
 git_source(:github) do |repo_name|
   repo_name = "#{repo_name}/#{repo_name}" unless repo_name.include?("/")
   "https://github.com/#{repo_name}.git"
 end
 
-# App
-gem "rails", "~> 5.1.0.rc2"
-gem "puma", "~> 3.9"
+
+# Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
+gem 'rails', '~> 5.1.0.rc2'
+# Use postgres as the database for Active Record
 gem "pg", "~> 0.18"
-
-# Models
-gem "pg_search", "~> 2.0.1"
-gem "schema_validations", "~> 2.2.1"
-gem "enumerize", "~> 2.1.2"
-gem "audited", "~> 4.5.0"
-gem "easy_postgis"
-gem "activejob-perform_later", "~> 1.0.2"
-
-# Assets
-gem "sass-rails", github: "rails/sass-rails"
-gem "uglifier", "~> 3.2.0"
-gem "turbolinks", "~> 5"
+# Use Puma as the app server
+gem 'puma', '~> 3.7'
+# Use SCSS for stylesheets
+gem "sass-rails", github: 'rails/sass-rails'
+# Use Bootstrap SASS
 gem "bootstrap-sass"
+# Use FontAwesome
 gem "font-awesome-rails", "~> 4.7.0"
+# Use Uglifier as compressor for JavaScript assets
+gem 'uglifier', '~> 3.2.0'
+# Use JQuery
 gem "jquery-rails", "~> 4.3.1"
+# Use JQuery Datatables
 gem "jquery-datatables"
-gem "chartkick"
-
-# Authentication & Authorization
-gem "devise"
+# Use Chartkick
+gem "chartkick", "~> 3.2.0"
+# Use CoffeeScript for .coffee assets and views
+gem 'coffee-rails', '~> 4.2'
+# Turbolinks makes navigating your web application faster. Read more: https://github.com/turbolinks/turbolinks
+gem 'turbolinks', '~> 5'
+# Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
+gem 'jbuilder', '~> 2.5'
+# Use PG Search
+gem "pg_search", "~> 2.0.1"
+# Use Enumerize
+gem "enumerize", "~> 2.1.2"
+# Use audited
+gem "audited", "~> 4.5.0"
+# Use easy_postgis
+gem "easy_postgis"
+# Use activejob-perform_later
+gem "activejob-perform_later", "~> 1.0.2"
+# Use Devise for authentication
+gem "devise", "~> 4.7.1"
+# Use Devise Invitable
 gem "devise_invitable"
+# Use Pundit for authorization
 gem "pundit"
-
-# Views
+# Use SLIM
 gem "slim-rails", "~> 3.1.2"
-gem "simple_form", "~> 3.5.0"
+# Use Simple Form
+gem "simple_form", "~> 5.0.0"
+# Use Cocoon
 gem "cocoon", "~> 1.2.10"
-gem "jbuilder", "~> 2.5"
-
-# General purpose
+# Use Avatax
 gem "avatax"
+# Use Taxjar-Ruby
 gem "taxjar-ruby", require: "taxjar"
+# Use Kaminari
 gem "kaminari", "~> 1.0.1"
+# Use TheRubyRacer
 gem "therubyracer", platforms: :ruby
+# Use Coderay
 gem "coderay", "~> 1.1.1"
+# Use RedCarpet
 gem "redcarpet", "~> 3.4.0"
+# Use Wickerd PDF
 gem "wicked_pdf", "~> 1.1.0"
+# Use wkhtmltopdf-binary
 gem "wkhtmltopdf-binary", "~> 0.12.3.1"
+# Use Wiked
 gem "wicked"
+# Use hashids
 gem "hashids"
-
-# Services
-gem "rollbar"
-
-# Images
+# Use Carrierwave
 gem "carrierwave", "~> 1.0.0"
+# Use Shrine
 gem "shrine", "~> 2.6.1"
+# Use Image Processing
 gem "image_processing", "~> 0.4.1"
+# Use FastImage
 gem "fastimage", "~> 2.1.0" # TODO: Do we use this gem?
-gem "mini_magick", "~> 4.7.0"
-
-# Payments
-gem "stripe"
-
-# Currency
-gem "money-open-exchange-rates"
-
-# Jobs
+# Use MiniMagick
+gem "mini_magick", "~> 4.9.4"
+# Use whenever
 gem "whenever", require: false
-
-# Marketing
-gem "hubspot-ruby"
-
-# Emails
+# Use SMTP
 gem "smtpapi"
+# Use Listen
 gem "listen"
-
-# Profiling
+# Use Rack Mini Profiler
 gem "rack-mini-profiler", "~> 0.10.2"
+# Use Flamegraph
 gem "flamegraph", "~> 0.9.5"
+# Use Stackprof
 gem "stackprof", "~> 0.2.10"
-gem "bullet", "~> 5.5.1" # TODO: Remove bullet from production
-
-# States and provinces
+# Use Bullet
+gem "bullet", "~> 5.5.1"
+# Use CityState
 gem "city-state"
-
-# Rich text
+# Use TRIX
 gem "trix"
-
-# Truncate HTML
+# Use Truncato
 gem "truncato"
+
+group :development, :test do
+  gem "factory_bot_rails"
+  gem "faker"
+  gem "pry-byebug"
+  gem "rspec-rails"
+end
 
 group :development do
   gem "annotate"
@@ -100,16 +122,6 @@ group :development do
   gem "capistrano-rails", "~> 1.2.3"
   gem "capistrano-passenger"
   gem "rails-erd"
-end
-
-group :development, :test do
-  gem "factory_bot_rails"
-  gem "faker"
-  gem "pry-byebug"
-  gem "rspec-rails"
-end
-
-group :dev, :development do
   gem "better_errors"
 end
 
@@ -130,4 +142,4 @@ group :test do
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
-gem "tzinfo-data", platforms: [:mingw, :mswin, :x64_mingw, :jruby]
+gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]

@@ -4,14 +4,6 @@ development:
 test:
   adapter: async
 
-dev:
-  adapter: async
-  channel_prefix: avjunction_dev
-
-staging:
-  adapter: async
-  channel_prefix: avjunction_staging
-
 production:
   adapter: async
-  channel_prefix: avjunction_production
+  channel_prefix: truck_driver_on_demand_production

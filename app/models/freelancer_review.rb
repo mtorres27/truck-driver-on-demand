@@ -43,7 +43,5 @@ class FreelancerReview < ApplicationRecord
   belongs_to :freelancer, class_name: 'User', foreign_key: 'freelancer_id'
   belongs_to :job
 
-  schema_validations auto_create: false
-
   audited
 end

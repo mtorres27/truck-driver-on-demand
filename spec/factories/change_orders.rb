@@ -24,8 +24,8 @@
 
 FactoryBot.define do
   factory :change_order do
-    job nil
-    amount "9.99"
-    description "MyText"
+    job { nil }
+    amount { "9.99" }
+    description { "MyText" }
   end
 end

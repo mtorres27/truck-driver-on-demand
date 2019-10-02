@@ -17,10 +17,9 @@ class ApplicationController < ActionController::Base
     rescue_from ActionController::RoutingError, with: :render_404
     rescue_from ActiveRecord::RecordNotFound, with: :render_404
     rescue_from ActionView::MissingTemplate, with: :render_404
-    rescue_from StandardError do |e|
-      Rollbar.error(e)
-      render_500
-    end
+    # rescue_from StandardError do |e|
+    #   render_500
+    # end
   end
 
   rescue_from Pundit::NotAuthorizedError, with: :render_401
@@ -41,7 +40,7 @@ class ApplicationController < ActionController::Base
   end
 
   def do_geocode(address)
-    url = "https://maps.googleapis.com/maps/api/geocode/json?address=#{url_encode(address)}&key=#{Rails.application.secrets.google_maps_js_api_key}"
+    url = "https://maps.googleapis.com/maps/api/geocode/json?address=#{url_encode(address)}&key=#{ENV['google_maps_js_api_key']}"
     # Make the API request
     begin
       res = JSON.parse(Net::HTTP.get(URI.parse(url)), symbolize_names: true)
