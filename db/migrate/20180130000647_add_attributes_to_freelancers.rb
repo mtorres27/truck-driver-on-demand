@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AddAttributesToFreelancers < ActiveRecord::Migration[5.1]
   def change
     add_column :freelancers, :profile_score, :integer, limit: 1

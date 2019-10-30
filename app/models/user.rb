@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # == Schema Information
 #
 # Table name: users
@@ -88,4 +90,5 @@ class User < ApplicationRecord
       freelancer_profile
     end
   end
+
 end

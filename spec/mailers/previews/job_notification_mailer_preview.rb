@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class JobNotificationMailerPreview < ActionMailer::Preview
 
   def notify_job_posting

@@ -1,32 +1,33 @@
+# frozen_string_literal: true
+
 Rails.application.routes.draw do
+  mount ActionCable.server => "/cable"
 
-  mount ActionCable.server => '/cable'
+  devise_for :users, skip: [:registrations], controllers: { sessions: "sessions" }
 
-  devise_for :users, skip: [:registrations], controllers: {sessions: "sessions" }
-
-  devise_for :company_users, path: 'company',
+  devise_for :company_users, path: "company",
                              path_names: { sign_up: "register" },
-                             controllers: {registrations: "company/registrations", sessions: "sessions" },
-                             skip: [:devise, :passwords, :confirmations]
+                             controllers: { registrations: "company/registrations", sessions: "sessions" },
+                             skip: %i[devise passwords confirmations]
 
-  devise_for :freelancers, path: 'freelancer',
+  devise_for :freelancers, path: "freelancer",
                            path_names: { sign_up: "register" },
-                           controllers: {registrations: "freelancer/registrations", sessions: "sessions" },
-                           skip: [:devise, :passwords, :confirmations]
+                           controllers: { registrations: "freelancer/registrations", sessions: "sessions" },
+                           skip: %i[devise passwords confirmations]
 
   devise_scope :company_user do
-    match 'active'            => 'sessions#active',               via: :get
-    match 'timeout'           => 'sessions#timeout',              via: :get
+    match "active"            => "sessions#active",               via: :get
+    match "timeout"           => "sessions#timeout",              via: :get
   end
 
   devise_scope :freelancer do
-    match 'active'            => 'sessions#active',               via: :get
-    match 'timeout'           => 'sessions#timeout',              via: :get
+    match "active"            => "sessions#active",               via: :get
+    match "timeout"           => "sessions#timeout",              via: :get
   end
 
   devise_scope :admin do
-    match 'active'            => 'sessions#active',               via: :get
-    match 'timeout'           => 'sessions#timeout',              via: :get
+    match "active"            => "sessions#active",               via: :get
+    match "timeout"           => "sessions#timeout",              via: :get
   end
 
   root "main#index"
@@ -35,10 +36,9 @@ Rails.application.routes.draw do
   get "confirm_email", to: "main#confirm_email"
   get "job_country_currency", to: "main#job_countries", as: "job_country_currency"
 
-  match '/public_jobs'     => 'public_pages#public_jobs',   via: :get
+  match "/public_jobs" => "public_pages#public_jobs",   via: :get
 
   namespace :freelancer do
-
     root "main#index"
     resource :freelancer, only: [:show] do
       collection do
@@ -46,29 +46,28 @@ Rails.application.routes.draw do
       end
     end
 
-    resources :registration_steps, only: [:show, :update, :index] do
+    resources :registration_steps, only: %i[show update index] do
       member do
         post :previous
       end
     end
 
-    resources :companies, only: [:index, :show] do
+    resources :companies, only: %i[index show] do
       get :favourites, on: :collection
       post :add_favourites, on: :collection
       get :av_companies, on: :collection
-      resources :messages, only: [:index, :create]
+      resources :messages, only: %i[index create]
     end
 
-    resources :jobs, only: [:index, :show]
+    resources :jobs, only: %i[index show]
 
-    resource :profile, only: [:show, :edit, :update] do
-      resource :banking, only: [:index, :edit, :update, :verify, :update_verify]
-      resource :settings, only: [:index, :edit, :update]
-
+    resource :profile, only: %i[show edit update] do
+      resource :banking, only: %i[index edit update verify update_verify]
+      resource :settings, only: %i[index edit update]
     end
 
     resources :messaging, only: [:index]
-    
+
     get "profile/settings", to: "settings#index"
     post "jobs/:id", to: "jobs#apply"
     post "job/apply", to: "jobs#apply"
@@ -79,30 +78,30 @@ Rails.application.routes.draw do
   namespace :company do
     root "main#index"
 
-    resource :profile, only: [:show, :edit, :update]
-    resources :registration_steps, only: [:show, :update, :index] do
+    resource :profile, only: %i[show edit update]
+    resources :registration_steps, only: %i[show update index] do
       member do
         post :previous
       end
     end
 
-    resources :freelancers, only: [:show, :index] do
+    resources :freelancers, only: %i[show index] do
       get :saved, on: :collection
       get :hired, on: :collection
       post :add_favourites, on: :collection
       post :save_freelancer, on: :member
       post :delete_freelancer, on: :member
-      resources :messages, only: [:index, :create]
+      resources :messages, only: %i[index create]
     end
 
-    resources :company_users, only: [:edit, :update]
+    resources :company_users, only: %i[edit update]
 
     get "freelancers/:id/invite_to_quote", to: "freelancers#invite_to_quote"
 
     resources :applicants
     resources :messaging, only: [:index]
 
-    get 'job_country_currency', to: 'jobs#job_countries', as: 'job_country_currency'
+    get "job_country_currency", to: "jobs#job_countries", as: "job_country_currency"
 
     resources :jobs
 
@@ -113,7 +112,7 @@ Rails.application.routes.draw do
   namespace :admin do
     root "main#index"
 
-    resources :freelancers, except: [:new, :create] do
+    resources :freelancers, except: %i[new create] do
       get :disable, on: :member
       get :enable, on: :member
       get :verify, on: :member
@@ -125,7 +124,7 @@ Rails.application.routes.draw do
       get :download_csv
     end
 
-    resources :companies, except: [:new, :create] do
+    resources :companies, except: %i[new create] do
       get :disable, on: :member
       get :enable, on: :member
       get :jobs
@@ -136,7 +135,7 @@ Rails.application.routes.draw do
       get :download_csv
     end
 
-    resources :jobs, except: [:new, :create] do
+    resources :jobs, except: %i[new create] do
       get :freelancer_matches, on: :member
       get :mark_as_expired, on: :member
       get :unmark_as_expired, on: :member

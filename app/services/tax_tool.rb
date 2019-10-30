@@ -1,4 +1,7 @@
+# frozen_string_literal: true
+
 class TaxTool
+
   def initialize(origin_params, detination_params)
     @from_address = origin_params
     @to_address   = detination_params
@@ -12,4 +15,5 @@ class TaxTool
   def calculate_tax
     TaxjarTool.calculate(@from_address, @to_address, @lines)
   end
+
 end

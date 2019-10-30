@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # == Schema Information
 #
 # Table name: jobs
@@ -30,6 +32,7 @@
 #
 
 class Job < ApplicationRecord
+
   extend Enumerize
   include Geocodable
   include PgSearch
@@ -51,17 +54,17 @@ class Job < ApplicationRecord
 
   after_save :check_if_should_do_geocode
 
-  enumerize :country, in: [
-    :at, :au, :be, :ca, :ch, :de, :dk, :es, :fi, :fr, :gb, :hk, :ie, :it, :jp, :lu, :nl, :no, :nz, :pt, :se, :sg, :us
+  enumerize :country, in: %i[
+    at au be ca ch de dk es fi fr gb hk ie it jp lu nl no nz pt se sg us
   ]
 
-  enumerize :state, in: [
-    :created,
-    :published,
-    :completed
+  enumerize :state, in: %i[
+    created
+    published
+    completed
   ], predicates: true, scope: true
 
-  validates :title, :summary, :address, :country, presence: true, if: :is_published?
+  validates :title, :summary, :address, :country, presence: true, if: :published?
 
   serialize :technical_skill_tags
   serialize :manufacturer_tags
@@ -74,15 +77,15 @@ class Job < ApplicationRecord
     manufacturer_tags: "B",
     summary: "C",
   }, using: {
-    tsearch: { prefix: true, any_word: true }
+    tsearch: { prefix: true, any_word: true },
   }
 
-  def is_published?
+  def published?
     state != :created
   end
 
   def repliers
-    freelancer_ids = messages.where(receivable_type: 'Company').pluck(:authorable_id).uniq
+    freelancer_ids = messages.where(receivable_type: "Company").pluck(:authorable_id).uniq
     Freelancer.where(id: freelancer_ids)
   end
 
@@ -90,30 +93,38 @@ class Job < ApplicationRecord
     str = ""
     str += "#{address}, " if address.present?
     str += "#{CS.states(country.to_sym)[state_province.to_sym]}, " if state_province.present?
-    str += "#{country.upcase}" if country.present?
+    str += country.upcase.to_s if country.present?
     str
   end
 
   def self.all_job_functions
-    I18n.t("enumerize.system_integration_job_functions").merge(I18n.t("enumerize.live_events_staging_and_rental_job_functions"))
+    I18n.t("enumerize.system_integration_job_functions")
+        .merge(I18n.t("enumerize.live_events_staging_and_rental_job_functions"))
   end
 
   def self.all_job_markets
-    I18n.t("enumerize.system_integration_job_markets").merge(I18n.t("enumerize.live_events_staging_and_rental_job_markets"))
+    I18n.t("enumerize.system_integration_job_markets")
+        .merge(I18n.t("enumerize.live_events_staging_and_rental_job_markets"))
   end
 
-  def matches(distance=nil)
-    if has_system_integration_job_markets && has_live_events_staging_and_rental_job_markets
-      system_integration_job_markets = I18n.t("enumerize.system_integration_job_markets").keys.map {|val| "%#{val}%" }
-      live_events_staging_and_rental_job_markets = I18n.t("enumerize.live_events_staging_and_rental_job_markets").keys.map {|val| "%#{val}%" }
+  # rubocop:disable Metrics/MethodLength
+  # rubocop:disable Metrics/AbcSize
+  def matches(distance = nil)
+    if system_integration_job_markets? && live_events_staging_and_rental_job_markets?
+      system_integration_job_markets = I18n.t("enumerize.system_integration_job_markets").keys.map { |val| "%#{val}%" }
+      live_events_staging_and_rental_job_markets = I18n.t("enumerize.live_events_staging_and_rental_job_markets")
+                                                       .keys.map { |val| "%#{val}%" }
       job_markets = system_integration_job_markets + live_events_staging_and_rental_job_markets
-      freelancer_profiles = FreelancerProfile.where(disabled: false).where("job_markets ilike any ( array[?] )", job_markets)
-    elsif has_system_integration_job_markets
-      job_markets = I18n.t("enumerize.system_integration_job_markets").keys.map {|val| "%#{val}%" }
-      freelancer_profiles = FreelancerProfile.where(disabled: false).where("job_markets ilike any ( array[?] )", job_markets)
-    elsif has_live_events_staging_and_rental_job_markets
-      job_markets = I18n.t("enumerize.live_events_staging_and_rental_job_markets").keys.map {|val| "%#{val}%" }
-      freelancer_profiles = FreelancerProfile.where(disabled: false).where("job_markets ilike any ( array[?] )", job_markets)
+      freelancer_profiles = FreelancerProfile.where(disabled: false)
+                                             .where("job_markets ilike any ( array[?] )", job_markets)
+    elsif system_integration_job_markets?
+      job_markets = I18n.t("enumerize.system_integration_job_markets").keys.map { |val| "%#{val}%" }
+      freelancer_profiles = FreelancerProfile.where(disabled: false)
+                                             .where("job_markets ilike any ( array[?] )", job_markets)
+    elsif live_events_staging_and_rental_job_markets?
+      job_markets = I18n.t("enumerize.live_events_staging_and_rental_job_markets").keys.map { |val| "%#{val}%" }
+      freelancer_profiles = FreelancerProfile.where(disabled: false)
+                                             .where("job_markets ilike any ( array[?] )", job_markets)
     else
       freelancer_profiles = FreelancerProfile.where(disabled: false)
     end
@@ -132,27 +143,29 @@ class Job < ApplicationRecord
     end
 
     if geocode[:lat] && geocode[:lng]
-      point = OpenStruct.new(:lat => geocode[:lat], :lng => geocode[:lng])
-      if distance.nil?
-        distance = 160934
-      end
-      freelancer_profiles = freelancer_profiles.nearby(geocode[:lat], geocode[:lng], distance).with_distance(point).order("verified DESC, profile_score DESC, distance")
+      point = OpenStruct.new(lat: geocode[:lat], lng: geocode[:lng])
+      distance = 160_934 if distance.nil?
+      freelancer_profiles = freelancer_profiles.nearby(geocode[:lat], geocode[:lng], distance)
+                                               .with_distance(point)
+                                               .order("verified DESC, profile_score DESC, distance")
       Freelancer.where(id: freelancer_profiles.map(&:freelancer_id))
     else
       Freelancer.none
     end
   end
+  # rubocop:enable Metrics/MethodLength
+  # rubocop:enable Metrics/AbcSize
 
-  def has_system_integration_job_markets
+  def system_integration_job_markets?
     I18n.t("enumerize.system_integration_job_markets").each do |key, _|
-      return true if job_markets.present? && job_markets[key] == '1'
+      return true if job_markets.present? && job_markets[key] == "1"
     end
     false
   end
 
-  def has_live_events_staging_and_rental_job_markets
+  def live_events_staging_and_rental_job_markets?
     I18n.t("enumerize.live_events_staging_and_rental_job_markets").each do |key, _|
-      return true if job_markets.present? && job_markets[key] == '1'
+      return true if job_markets.present? && job_markets[key] == "1"
     end
     false
   end
@@ -161,7 +174,9 @@ class Job < ApplicationRecord
 
   def check_if_should_do_geocode
     return unless saved_changes.include?("address") || (!address.nil? && lat.nil?)
+
     do_geocode
     update_columns(lat: lat, lng: lng)
   end
+
 end

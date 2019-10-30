@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AddNewFieldsToUsers < ActiveRecord::Migration[5.1]
   def change
     change_table :users do |t|
@@ -13,6 +15,6 @@ class AddNewFieldsToUsers < ActiveRecord::Migration[5.1]
       t.references  :company
     end
 
-    add_index :users, :confirmation_token,   unique: true
+    add_index :users, :confirmation_token, unique: true
   end
 end

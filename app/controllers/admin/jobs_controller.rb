@@ -1,14 +1,15 @@
+# frozen_string_literal: true
+
 class Admin::JobsController < Admin::BaseController
-  before_action :set_job, only: [:show, :edit, :update, :destroy, :freelancer_matches, :mark_as_expired, :unmark_as_expired]
-  before_action :authorize_job, only: [:show, :edit, :update, :destroy, :freelancer_matches, :mark_as_expired, :unmark_as_expired]
+
+  before_action :set_job, only: %i[show edit update destroy freelancer_matches mark_as_expired unmark_as_expired]
+  before_action :authorize_job, only: %i[show edit update destroy freelancer_matches mark_as_expired unmark_as_expired]
 
   def index
     authorize current_user
     @keywords = params.dig(:search, :keywords).presence
     @jobs = Job.order(created_at: :desc)
-    if @keywords
-      @jobs = @jobs.search(@keywords)
-    end
+    @jobs = @jobs.search(@keywords) if @keywords
     @jobs = @jobs.page(params[:page])
   end
 
@@ -30,11 +31,15 @@ class Admin::JobsController < Admin::BaseController
   def update
     @company = @job.company
     if @job.update(job_params)
-      if params.dig(:job, :state) == 'published'
+      if params.dig(:job, :state) == "published"
         flash[:notice] = "This job has been published."
         get_matches
         @freelancers.each do |freelancer|
-          Notification.create(title: @job.title, body: "New job in your area", authorable: @job.company, receivable: freelancer, url: freelancer_job_url(@job))
+          Notification.create(title: @job.title,
+                              body: "New job in your area",
+                              authorable: @job.company,
+                              receivable: freelancer,
+                              url: freelancer_job_url(@job))
           JobNotificationMailer.notify_job_posting(freelancer, @job).deliver_later
         end
       end
@@ -73,6 +78,7 @@ class Admin::JobsController < Admin::BaseController
     authorize @job
   end
 
+  # rubocop:disable Metrics/MethodLength
   def job_params
     params.require(:job).permit(
       :title,
@@ -98,9 +104,10 @@ class Admin::JobsController < Admin::BaseController
       :require_checkin,
       :require_uniform,
       :state_province,
-      technical_skill_tags:  I18n.t("enumerize.technical_skill_tags").keys,
-      manufacturer_tags:  I18n.t("enumerize.manufacturer_tags").keys,
+      technical_skill_tags: I18n.t("enumerize.technical_skill_tags").keys,
+      manufacturer_tags: I18n.t("enumerize.manufacturer_tags").keys,
     )
   end
+  # rubocop:enable Metrics/MethodLength
+
 end
-  

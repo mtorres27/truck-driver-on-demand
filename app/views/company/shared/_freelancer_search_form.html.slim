@@ -3,7 +3,7 @@
   input type="hidden" value="#{params.dig(:search, :distance)}" id="distance" class="js--distance" name="search[distance]"
   .row
     .col-sm-6.form-group
-      = f.label :job_type, required: false, class:'avj-caption1'
+      = f.label :job_type, required: false, class:'truckker-caption1'
       select#search_job_type.js--job_type.form-control.select(name='search[job_type]')
         option(value='')
           | Select
@@ -16,7 +16,7 @@
             option(value="#{index}")
               = value
     .col-sm-6.form-group
-      = f.label :job_function, required: false, class:'avj-caption1'
+      = f.label :job_function, required: false, class:'truckker-caption1'
       select#search_job_function.js--job_type_dependent_select.form-control.select(name='search[job_function]')
         option.js--job_type_dependent_select_placeholder(value='')
           | Select job type to unlock options
@@ -43,13 +43,13 @@
       = f.input :country, collection: ([["Select country", ""]] + (I18n.t("enumerize.country").map { |k, v| [v, k] })), selected: @country, label: "Country", placeholder: "Select country"
   .row 
     .col-12.form-group 
-        a#avj-collapse-btn.avj-body2
+        a#truckker-collapse-btn.truckker-body2
           | Advanced Search
   
-  .row#avj-collapse-div class="#{'collapse' if @job_type.blank? && @job_function.blank?}"
+  .row#truckker-collapse-div class="#{'collapse' if @job_type.blank? && @job_function.blank?}"
     .col-sm-12.form-group
       = f.input :keywords, required: false, label: 'Keywords', placeholder: 'Enter Keywords to Search', input_html: {value: @keywords}
-      small.avj-caption2 id="keywordshelp" class="form-text text-muted"
+      small.truckker-caption2 id="keywordshelp" class="form-text text-muted"
         | Try using AV Installer or Crestron Programmer
   
   .row

@@ -1,16 +1,16 @@
-.avj-section.avj-section__main.avj-hidden-important#search-form
+.truckker-section.truckker-section__main.truckker-hidden-important#search-form
   .container.container__content
     = render 'company/shared/freelancer_search_form'
-.avj-section.avj-section__msg-subhead.d-block.mb-4#search-subheader
+.truckker-section.truckker-section__msg-subhead.d-block.mb-4#search-subheader
   .container
-    .avj-subhead
+    .truckker-subhead
       - if !@country
         h4.ellipsis.m-0= "Please provide a country"
       - else
         h4.ellipsis.m-0= "Found #{@freelancer_profiles.total_count} matching professionals near #{@address_for_geocode}"
       button.btn.btn-primary.btn-sm onClick="toggleSearch();"
         | Edit Search
-.avj-section.avj-section__main#search-results
+.truckker-section.truckker-section__main#search-results
   - unless @freelancer_profiles.blank?
     .container.container__content
       h2.d-none.d-md-block

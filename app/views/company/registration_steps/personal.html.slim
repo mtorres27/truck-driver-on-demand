@@ -1,4 +1,4 @@
-.avj-section.avj-section__main
+.truckker-section.truckker-section__main
   .container.container__content
     h2
       | Next up, your company info.
@@ -7,17 +7,17 @@
     = simple_form_for(current_company, url: wizard_path) do |f|
       .row
         .col-md-6
-          = f.input :name, as: :string, label: "Company Name", required: true, autofocus: true, placeholder:  "Enter your company's name", label_html: { class: "avj-caption1" }
+          = f.input :name, as: :string, label: "Company Name", required: true, autofocus: true, placeholder:  "Enter your company's name", label_html: { class: "truckker-caption1" }
         .col-md-6
-          = f.input :phone_number, as: :string, label: "Business Phone", autofocus: true, placeholder: "Enter your business phone number", label_html: { class: "avj-caption1" }
+          = f.input :phone_number, as: :string, label: "Business Phone", autofocus: true, placeholder: "Enter your business phone number", label_html: { class: "truckker-caption1" }
         .col-md-12
-          = f.input :website, as: :string, label: "Website Address", required: true, autofocus: true, placeholder: "http://", label_html: { class: "avj-caption1" }
+          = f.input :website, as: :string, label: "Website Address", required: true, autofocus: true, placeholder: "http://", label_html: { class: "truckker-caption1" }
         .col-md-4
-          = f.input :country, required: true, label: "Country", prompt: "Select Country", input_html: { class: "js--country-select" }, label_html: { class: "avj-caption1" }
+          = f.input :country, required: true, label: "Country", prompt: "Select Country", input_html: { class: "js--country-select" }, label_html: { class: "truckker-caption1" }
         .col-md-4
           .form-group
-            = f.label "State/Province", class: "avj-caption1", required: true
-            select#company_state.js--state-province-select.form-control.avj-body2(name='company[state]')
+            = f.label "State/Province", class: "truckker-caption1", required: true
+            select#company_state.js--state-province-select.form-control.truckker-body2(name='company[state]')
               option(value='')
                 | Select
               = CS.states(:us).each do |index, value|
@@ -37,10 +37,10 @@
                       option.js--ca_option(value="#{index}")
                         = value
         .col-md-4
-          = f.input :city, required: true, label: "City", placeholder: "Enter your city", label_html: { class: "avj-caption1" }
+          = f.input :city, required: true, label: "City", placeholder: "Enter your city", label_html: { class: "truckker-caption1" }
         .col-md-12
-          = f.input :area, required: true, label: "Service Areas", placeholder: "Enter the cities your company services", label_html: { class: "avj-caption1" }
+          = f.input :area, required: true, label: "Service Areas", placeholder: "Enter the cities your company services", label_html: { class: "truckker-caption1" }
         .col-12
           .d-flex.align-items-center.justify-content-between
-            = link_to "Use another account", destroy_user_session_path, method: :delete, class: "avj-body2 mr-4"
+            = link_to "Use another account", destroy_user_session_path, method: :delete, class: "truckker-body2 mr-4"
             = f.button :submit, "Next Step", class: "btn btn-primary"

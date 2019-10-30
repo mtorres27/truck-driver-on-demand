@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CreateFreelancerPortfolios < ActiveRecord::Migration[5.1]
   def change
     create_table :freelancer_portfolios do |t|

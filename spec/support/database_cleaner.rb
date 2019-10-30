@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 RSpec.configure do |config|
   config.use_transactional_fixtures = false
 
@@ -15,10 +17,10 @@ RSpec.configure do |config|
     # driver_shares_db_connection_with_specs = Capybara.current_driver == :rack_test
 
     # unless driver_shares_db_connection_with_specs
-      # Driver is probably for an external browser with an app
-      # under test that does *not* share a database connection with the
-      # specs, so use truncation strategy.
-      # DatabaseCleaner.strategy = :truncation
+    # Driver is probably for an external browser with an app
+    # under test that does *not* share a database connection with the
+    # specs, so use truncation strategy.
+    # DatabaseCleaner.strategy = :truncation
     # end
   end
 

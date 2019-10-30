@@ -1,4 +1,7 @@
+# frozen_string_literal: true
+
 module Reviewable
+
   extend ActiveSupport::Concern
 
   included do |base|
@@ -12,4 +15,5 @@ module Reviewable
       end.to_f / base::RATING_ATTRS.length).round
     end
   end
+
 end

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class RemoveFieldsFromFreelancerProfiles < ActiveRecord::Migration[5.1]
   def change
     remove_column :freelancer_profiles, :pay_unit_time_preference, :string

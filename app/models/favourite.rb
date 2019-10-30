@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # == Schema Information
 #
 # Table name: favourites
@@ -10,6 +12,8 @@
 #
 
 class Favourite < ApplicationRecord
+
   belongs_to :freelancer
   belongs_to :company
+
 end

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 include Warden::Test::Helpers
 
 Given("Exists an full registered company user with email {string} and password {string}") do |email, password|
@@ -16,7 +18,8 @@ Given("I filled company registration step {int}") do |step|
   when 3
     company = FactoryBot.create(
       :company, job_types: { live_events_staging_and_rental: "1" }, description: nil,
-      established_in: nil, number_of_employees: nil, number_of_offices: nil, website: nil, area: nil, registration_step: "profile"
+                established_in: nil, number_of_employees: nil, number_of_offices: nil,
+                website: nil, area: nil, registration_step: "profile"
     )
     user = FactoryBot.create(:company_user, company: company)
   end

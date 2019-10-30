@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AddSkillsFieldsToFreelancers < ActiveRecord::Migration[5.1]
   def change
     add_column :freelancers, :job_types, :citext

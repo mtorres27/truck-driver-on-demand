@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Company::RegistrationStepsController < Company::BaseController
 
   include Wicked::Wizard
@@ -54,7 +56,10 @@ class Company::RegistrationStepsController < Company::BaseController
       :website,
       :area,
       :phone_number,
-      job_markets: (I18n.t("enumerize.live_events_staging_and_rental_job_markets").keys + I18n.t("enumerize.system_integration_job_markets").keys).uniq
+      # rubocop:disable Metrics/LineLength
+      job_markets: (I18n.t("enumerize.live_events_staging_and_rental_job_markets").keys + I18n.t("enumerize.system_integration_job_markets").keys).uniq,
+      # rubocop:enable Metrics/LineLength
     )
   end
+
 end

@@ -1,8 +1,15 @@
-class PublicPagesController < ApplicationController
-  layout 'public_pages'
+# frozen_string_literal: true
 
+class PublicPagesController < ApplicationController
+
+  layout "public_pages"
+
+  # rubocop:disable Metrics/MethodLength
+  # rubocop:disable Metrics/AbcSize
   def public_jobs
+    # rubocop:disable Metrics/LineLength
     if params[:search].present? && params[:search][:keywords].blank? && params[:search][:country].blank? && params[:search][:address].blank?
+      # rubocop:enable Metrics/LineLength
       flash[:error] = "You'll need to add some search criteria to narrow your search results!"
     end
 
@@ -26,8 +33,8 @@ class PublicPagesController < ApplicationController
       end
 
       if @geocode
-        point = OpenStruct.new(:lat => @geocode[:lat], :lng => @geocode[:lng])
-        @distance = 60000
+        point = OpenStruct.new(lat: @geocode[:lat], lng: @geocode[:lng])
+        @distance = 60_000
         @jobs = @jobs.nearby(@geocode[:lat], @geocode[:lng], @distance).with_distance(point).order("distance")
       else
         @jobs = Job.none
@@ -39,10 +46,13 @@ class PublicPagesController < ApplicationController
 
     @jobs = @jobs.page(params[:page]).per(10)
   end
+  # rubocop:enable Metrics/MethodLength
+  # rubocop:enable Metrics/AbcSize
 
   private
 
   def valid_company_jobs
     Job.joins(:company).where(companies: { disabled: false })
   end
+
 end

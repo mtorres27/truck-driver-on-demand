@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 include Warden::Test::Helpers
 
 Given("Exists an full registered freelancer user with email {string} and password {string}") do |email, password|
@@ -7,13 +9,14 @@ end
 
 Given("I filled freelancer registration step {int}") do |step|
   profile = case step
-    when 1
-      FactoryBot.create(:freelancer_profile)
-    when 2
-      FactoryBot.create(:freelancer_profile, registration_step: "job_info")
-    when 3
-      FactoryBot.create(:freelancer_profile, job_types: { live_events_staging_and_rental: "1" }, registration_step: "profile")
-    end
+            when 1
+              FactoryBot.create(:freelancer_profile)
+            when 2
+              FactoryBot.create(:freelancer_profile, registration_step: "job_info")
+            when 3
+              FactoryBot.create(:freelancer_profile,
+                                job_types: { live_events_staging_and_rental: "1" }, registration_step: "profile")
+            end
   user = FactoryBot.create(:freelancer, :confirmed, freelancer_profile: profile)
   login_as user, scope: :user
 end

@@ -5,7 +5,7 @@ Feature: Freelancer Registration
 Scenario: Filling fields for Step 1
   Given I go to the homepage
   When I press "Register as an AV Pro"
-  Then I should see "By creating an account, you agree to the AV Junction Terms & Conditions, Privacy and Code of Conduct"
+  Then I should see "By creating an account, you agree to the Truckker Terms & Conditions, Privacy and Code of Conduct"
   When I fill in the fields
     | First Name        | John          |
     | Last Name         | Doe           |

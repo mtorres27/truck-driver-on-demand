@@ -1,10 +1,17 @@
+# frozen_string_literal: true
+
 class Freelancer::JobsController < Freelancer::BaseController
+
   include JobHelper
 
+  # rubocop:disable Metrics/MethodLength
+  # rubocop:disable Metrics/AbcSize
   def index
     authorize current_user
 
+    # rubocop:disable Metrics/LineLength
     if params[:search].nil? || (params[:search][:keywords].blank? && params[:search][:country].blank? && params[:search][:address].blank?)
+      # rubocop:enable Metrics/LineLength
       flash[:error] = "You'll need to add some search criteria to narrow your search results!"
       redirect_to freelancer_root_path
     end
@@ -29,8 +36,8 @@ class Freelancer::JobsController < Freelancer::BaseController
       end
 
       if @geocode
-        point = OpenStruct.new(:lat => @geocode[:lat], :lng => @geocode[:lng])
-        @distance = 60000
+        point = OpenStruct.new(lat: @geocode[:lat], lng: @geocode[:lng])
+        @distance = 60_000
         @jobs = @jobs.nearby(@geocode[:lat], @geocode[:lng], @distance).with_distance(point).order("distance")
       else
         @jobs = Job.none
@@ -42,26 +49,24 @@ class Freelancer::JobsController < Freelancer::BaseController
 
     @jobs = @jobs.page(params[:page]).per(10)
   end
+  # rubocop:enable Metrics/MethodLength
+  # rubocop:enable Metrics/AbcSize
 
   def show
     @job = Job.find(params[:id])
     authorize @job
 
-    if @job.applicants.where({freelancer_id: current_user.id}).count == 0
-      @have_applied = false
-    else
-      @have_applied = true
-    end
+    @have_applied = @job.applicants.where(freelancer_id: current_user.id).count != 0
 
-    @favourite = current_user.job_favourites.where({job_id: params[:id]}).length > 0 ? true : false
-    if params.dig(:toggle_favourite) == "true"
-      if @favourite == false
-        current_user.favourite_jobs << @job
-        @favourite = true
-      else
-        current_user.job_favourites.where({job_id: @job.id}).destroy_all
-        @favourite = false
-      end
+    @favourite = !current_user.job_favourites.where(job_id: params[:id]).empty?
+    return unless params.dig(:toggle_favourite) == "true"
+
+    if @favourite == false
+      current_user.favourite_jobs << @job
+      @favourite = true
+    else
+      current_user.job_favourites.where(job_id: @job.id).destroy_all
+      @favourite = false
     end
   end
 
@@ -76,7 +81,8 @@ class Freelancer::JobsController < Freelancer::BaseController
       :job,
       :message,
       :attachment,
-      :body
+      :body,
     )
   end
+
 end

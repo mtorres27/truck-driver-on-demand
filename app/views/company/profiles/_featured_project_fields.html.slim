@@ -1,9 +1,9 @@
 .row
   .col-md-9.col-12
-    = f.input :name, as: :string, placeholder: "Project Name", label: "Project Name", label_html: { class: "avj-caption1" }
+    = f.input :name, as: :string, placeholder: "Project Name", label: "Project Name", label_html: { class: "truckker-caption1" }
   .col-md-3.col-8
     .form-group
-      label.avj-caption1 for="keywords"
+      label.truckker-caption1 for="keywords"
         | Project Image
       - if !f.object.file_url.include?('missing.png')
         img.mb-1.authorable_attachment--full src=f.object.file_url
@@ -15,4 +15,4 @@
         - else
           a.zmdi.zmdi-camera onclick="uploadFeaturedProject()"
         = link_to_remove_association content_tag(:span, "", class: "zmdi zmdi-delete"), f, { onClick: "hide_remove_association(this)"}
-  = f.file_field :file, label: false, :accept => 'image/png,image/gif,image/jpeg', class: "avj-hidden-important file-input--hidden"
+  = f.file_field :file, label: false, :accept => 'image/png,image/gif,image/jpeg', class: "truckker-hidden-important file-input--hidden"

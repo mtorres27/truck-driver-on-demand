@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CreateFriendInvites < ActiveRecord::Migration[5.1]
   def change
     create_table :friend_invites do |t|

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Admin::ConnectionsController < Admin::BaseController
 
   def index
@@ -11,4 +13,5 @@ class Admin::ConnectionsController < Admin::BaseController
 
     @connections = Kaminari.paginate_array(@connections).page(params[:page]).per(10)
   end
+
 end

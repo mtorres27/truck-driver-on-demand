@@ -1,83 +1,83 @@
-.avj-section.avj-section__nav-mobile
+.truckker-section.truckker-section__nav-mobile
   .container
-    .avj-nav-mobile
+    .truckker-nav-mobile
       - if current_user&.is_a?(CompanyUser) && current_company&.registration_step == "wicked_finish"
-        a.avj-nav-mobile-link href=company_root_url
+        a.truckker-nav-mobile-link href=company_root_url
           - if controller_name == 'main' || (controller_name == 'freelancers' && action_name != 'saved')
-            .avj-body1.m-0.avj-text-color-secondary.zmdi.zmdi-search
-            .avj-caption2.m-0.avj-text-color-secondary Search
+            .truckker-body1.m-0.truckker-text-color-secondary.zmdi.zmdi-search
+            .truckker-caption2.m-0.truckker-text-color-secondary Search
           - else
-            .avj-body1.m-0.zmdi.zmdi-search
-            .avj-caption2.m-0 Search
-        a.avj-nav-mobile-link href=company_messaging_index_url
+            .truckker-body1.m-0.zmdi.zmdi-search
+            .truckker-caption2.m-0 Search
+        a.truckker-nav-mobile-link href=company_messaging_index_url
           - if controller_name == 'messages' || controller_name == 'messaging'
             .d-flex
-              .avj-body1.m-0.zmdi.zmdi-comment-outline.avj-text-color-secondary
-              .avj-notification-badge.js--notifications-count.avj-notification-badge--mobile.avj-bg-secondary.js--notifications data-id="#{current_user.id}"
+              .truckker-body1.m-0.zmdi.zmdi-comment-outline.truckker-text-color-secondary
+              .truckker-notification-badge.js--notifications-count.truckker-notification-badge--mobile.truckker-bg-secondary.js--notifications data-id="#{current_user.id}"
                 - notification_count = current_user.notifications.unread.count
                 - if notification_count > 0
                   = notification_count
-            .avj-caption2.m-0.avj-text-color-secondary Messages
+            .truckker-caption2.m-0.truckker-text-color-secondary Messages
           - else
             .d-flex
-              .avj-body1.m-0.zmdi.zmdi-comment-outline
-              .avj-notification-badge.js--notifications-count.avj-notification-badge--mobile.js--notifications data-id="#{current_user.id}"
+              .truckker-body1.m-0.zmdi.zmdi-comment-outline
+              .truckker-notification-badge.js--notifications-count.truckker-notification-badge--mobile.js--notifications data-id="#{current_user.id}"
                 - notification_count = current_user.notifications.unread.count
                 - if notification_count > 0
                   = notification_count
-            .avj-caption2.m-0 Messages
-        a.avj-nav-mobile-link href=company_jobs_url
+            .truckker-caption2.m-0 Messages
+        a.truckker-nav-mobile-link href=company_jobs_url
           - if controller_name == 'jobs'
-            .avj-body1.m-0.zmdi.zmdi-folder-outline.avj-text-color-secondary
-            .avj-caption2.m-0.avj-text-color-secondary Job Posts
+            .truckker-body1.m-0.zmdi.zmdi-folder-outline.truckker-text-color-secondary
+            .truckker-caption2.m-0.truckker-text-color-secondary Job Posts
           - else
-            .avj-body1.m-0.zmdi.zmdi-folder-outline
-            .avj-caption2.m-0 Job Posts
-        a.avj-nav-mobile-link href=saved_company_freelancers_url
+            .truckker-body1.m-0.zmdi.zmdi-folder-outline
+            .truckker-caption2.m-0 Job Posts
+        a.truckker-nav-mobile-link href=saved_company_freelancers_url
           - if controller_name == 'freelancers' && action_name == 'saved'
-            .avj-body1.m-0.zmdi.zmdi-favorite-outline.avj-text-color-secondary
-            .avj-caption2.m-0.avj-text-color-secondary Favourites
+            .truckker-body1.m-0.zmdi.zmdi-favorite-outline.truckker-text-color-secondary
+            .truckker-caption2.m-0.truckker-text-color-secondary Favourites
           - else
-            .avj-body1.m-0.zmdi.zmdi-favorite-outline
-            .avj-caption2.m-0 Favourites
-        a.avj-nav-mobile-link href=company_profile_url
+            .truckker-body1.m-0.zmdi.zmdi-favorite-outline
+            .truckker-caption2.m-0 Favourites
+        a.truckker-nav-mobile-link href=company_profile_url
           - if controller_name == 'profiles'
-            .avj-body1.m-0.zmdi.zmdi-account-o.avj-text-color-secondary
-            .avj-caption2.m-0.avj-text-color-secondary Profile
+            .truckker-body1.m-0.zmdi.zmdi-account-o.truckker-text-color-secondary
+            .truckker-caption2.m-0.truckker-text-color-secondary Profile
           - else
-            .avj-body1.m-0.zmdi.zmdi-account-o
-            .avj-caption2.m-0 Profile
+            .truckker-body1.m-0.zmdi.zmdi-account-o
+            .truckker-caption2.m-0 Profile
       - elsif current_user&.is_a?(Freelancer) && current_user&.freelancer_profile&.registration_step == "wicked_finish"
-        a.avj-nav-mobile-link href=freelancer_root_url
+        a.truckker-nav-mobile-link href=freelancer_root_url
           - if controller_name == 'main' || controller_name == 'jobs'
-            .avj-body1.m-0.zmdi.zmdi-folder-outline.avj-text-color-secondary
-            .avj-caption2.m-0.avj-text-color-secondary Job Posts
+            .truckker-body1.m-0.zmdi.zmdi-folder-outline.truckker-text-color-secondary
+            .truckker-caption2.m-0.truckker-text-color-secondary Job Posts
           - else
-            .avj-body1.m-0.zmdi.zmdi-folder-outline
-            .avj-caption2.m-0 Job Posts
-        a.avj-nav-mobile-link href=freelancer_messaging_index_url
+            .truckker-body1.m-0.zmdi.zmdi-folder-outline
+            .truckker-caption2.m-0 Job Posts
+        a.truckker-nav-mobile-link href=freelancer_messaging_index_url
           - if controller_name == 'messages' || controller_name == 'messaging'
             .d-flex
-              .avj-body1.m-0.zmdi.zmdi-comment-outline.avj-text-color-secondary
-              .avj-notification-badge.js--notifications-count.avj-notification-badge--mobile.avj-bg-secondary.js--notifications data-id="#{current_user.id}"
+              .truckker-body1.m-0.zmdi.zmdi-comment-outline.truckker-text-color-secondary
+              .truckker-notification-badge.js--notifications-count.truckker-notification-badge--mobile.truckker-bg-secondary.js--notifications data-id="#{current_user.id}"
                 - notification_count = current_user.notifications.unread.count
                 - if notification_count > 0
                   = notification_count
-            .avj-caption2.m-0.avj-text-color-secondary Messages
+            .truckker-caption2.m-0.truckker-text-color-secondary Messages
           - else
             .d-flex
-              .avj-body1.m-0.zmdi.zmdi-comment-outline
-              .avj-notification-badge.js--notifications-count.avj-notification-badge--mobile.js--notifications data-id="#{current_user.id}"
+              .truckker-body1.m-0.zmdi.zmdi-comment-outline
+              .truckker-notification-badge.js--notifications-count.truckker-notification-badge--mobile.js--notifications data-id="#{current_user.id}"
                 - notification_count = current_user.notifications.unread.count
                 - if notification_count > 0
                   = notification_count
-            .avj-caption2.m-0 Messages
-        a.avj-nav-mobile-link href=freelancer_profile_url
+            .truckker-caption2.m-0 Messages
+        a.truckker-nav-mobile-link href=freelancer_profile_url
           - if controller_name == 'profiles'
-            .avj-body1.m-0.zmdi.zmdi-account-o.avj-text-color-secondary
-            .avj-caption2.m-0.avj-text-color-secondary Profile
+            .truckker-body1.m-0.zmdi.zmdi-account-o.truckker-text-color-secondary
+            .truckker-caption2.m-0.truckker-text-color-secondary Profile
           - else
-            .avj-body1.m-0.zmdi.zmdi-account-o
-            .avj-caption2.m-0 Profile
+            .truckker-body1.m-0.zmdi.zmdi-account-o
+            .truckker-caption2.m-0 Profile
       - elsif current_user&.is_a?(Admin)
-        = link_to content_tag(:div, "#{content_tag(:div, "", class: "avj-body1 m-0 zmdi zmdi-account-o")}#{content_tag(:div, "Log Out", class: "avj-caption2 m-0")}".html_safe, class: "avj-nav-mobile-link"), destroy_user_session_path, method: :delete
+        = link_to content_tag(:div, "#{content_tag(:div, "", class: "truckker-body1 m-0 zmdi zmdi-account-o")}#{content_tag(:div, "Log Out", class: "truckker-caption2 m-0")}".html_safe, class: "truckker-nav-mobile-link"), destroy_user_session_path, method: :delete

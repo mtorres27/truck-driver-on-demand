@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # == Schema Information
 #
 # Table name: messages
@@ -28,6 +30,7 @@
 #
 
 class Message < ApplicationRecord
+
   include AttachmentUploader[:attachment]
 
   belongs_to :authorable, polymorphic: true, counter_cache: true
@@ -36,28 +39,34 @@ class Message < ApplicationRecord
 
   validate :must_have_body_or_attachment
 
-  attr_accessor :status, 
-    :counter_type, 
-    :counter, 
-    :counter_hourly_rate, 
-    :counter_daily_rate,
-    :counter_number_of_hours,
-    :counter_number_of_days
+  attr_accessor :status,
+                :counter_type,
+                :counter,
+                :counter_hourly_rate,
+                :counter_daily_rate,
+                :counter_number_of_hours,
+                :counter_number_of_days
 
   audited
 
   def must_have_body_or_attachment
-    if body.blank? && attachment_data.blank?
-      errors.add(:base, "A body or an attachment is required")
-    end
+    errors.add(:base, "A body or an attachment is required") if body.blank? && attachment_data.blank?
   end
 
   def send_email_notifications
     if authorable.is_a?(Company)
-      Notification.create(title: authorable.name, body: "You have a new message", authorable: authorable, receivable: receivable, url: Rails.application.routes.url_helpers.freelancer_company_messages_url(authorable))
+      Notification.create(title: authorable.name,
+                          body: "You have a new message",
+                          authorable: authorable,
+                          receivable: receivable,
+                          url: Rails.application.routes.url_helpers.freelancer_company_messages_url(authorable))
       FreelancerMailer.notice_message_received(authorable, receivable, self).deliver_later
     elsif authorable.is_a?(Freelancer)
-      Notification.create(title: authorable.first_name_and_initial, body: "You have a new message", authorable: authorable, receivable: receivable, url: Rails.application.routes.url_helpers.company_freelancer_messages_url(authorable))
+      Notification.create(title: authorable.first_name_and_initial,
+                          body: "You have a new message",
+                          authorable: authorable,
+                          receivable: receivable,
+                          url: Rails.application.routes.url_helpers.company_freelancer_messages_url(authorable))
       CompanyMailer.notice_message_received(receivable.company_user, authorable, self).deliver_later
     end
   end
@@ -68,15 +77,19 @@ class Message < ApplicationRecord
     (company_messages + freelancer_messages).sort_by(&:created_at)
   end
 
-  def self.connections(load_dates=false)
+  def self.connections(load_dates = false)
     connections = []
     Company.find_each do |company|
       company.freelancers_for_messaging.each do |freelancer|
         next if freelancer.nil?
+
         first_message = messages_for(company, freelancer).first if load_dates
-        connections << { company_id: company.id, company_name: company.name, freelancer_id: freelancer.id, freelancer_name: freelancer.full_name, date_conected: first_message&.created_at }
+        connections << { company_id: company.id, company_name: company.name,
+                         freelancer_id: freelancer.id, freelancer_name: freelancer.full_name,
+                         date_conected: first_message&.created_at }
       end
     end
-    connections.sort_by{ |connection| connection[:date_conected] }.reverse
+    connections.sort_by { |connection| connection[:date_conected] }.reverse
   end
+
 end

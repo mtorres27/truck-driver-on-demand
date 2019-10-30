@@ -1,6 +1,11 @@
+# frozen_string_literal: true
+
 class Freelancer::CompaniesController < Freelancer::BaseController
+
   include CompanyHelper
 
+  # rubocop:disable Metrics/MethodLength
+  # rubocop:disable Metrics/AbcSize
   def index
     authorize current_user
 
@@ -20,11 +25,11 @@ class Freelancer::CompaniesController < Freelancer::BaseController
 
     # TODO: MAKE THIS ONLY SHOW JOBS WHERE COMPANY ISN'T DISABLED
 
-    if sort != nil
-      @jobs = Job.joins(:company).where(:companies => {:disabled => false}).where({ state: "published" }).order(name: sort)
-    else
-      @jobs = Job.joins(:company).where(:companies => {:disabled => false}).where({ state: "published" }).all
-    end
+    @jobs = if !sort.nil?
+              Job.joins(:company).where(companies: { disabled: false }).where(state: "published").order(name: sort)
+            else
+              Job.joins(:company).where(companies: { disabled: false }).where(state: "published").all
+            end
 
     if @address
       # check for cached version of address
@@ -37,23 +42,20 @@ class Freelancer::CompaniesController < Freelancer::BaseController
       end
 
       if @geocode
-        point = OpenStruct.new(:lat => @geocode[:lat], :lng => @geocode[:lng])
-        if @distance.nil?
-          @distance = 60000
-        end
+        point = OpenStruct.new(lat: @geocode[:lat], lng: @geocode[:lng])
+        @distance = 60_000 if @distance.nil?
         @jobs = @jobs.nearby(@geocode[:lat], @geocode[:lng], @distance).with_distance(point).order("distance")
       else
         @jobs = Job.none
       end
     end
 
-    if @keywords and !@keywords.blank?
-      @jobs = @jobs.search(@keywords)
-    end
+    @jobs = @jobs.search(@keywords) if @keywords && !@keywords.blank?
 
     @jobs = @jobs.page(params[:page]).per(50)
   end
-
+  # rubocop:enable Metrics/MethodLength
+  # rubocop:enable Metrics/AbcSize
 
   def favourites
     authorize current_user
@@ -70,7 +72,6 @@ class Freelancer::CompaniesController < Freelancer::BaseController
     @companies = @companies.uniq
   end
 
-
   def show
     @company = Company.find(params[:id])
     authorize @company
@@ -79,18 +80,17 @@ class Freelancer::CompaniesController < Freelancer::BaseController
     @company.profile_views += 1
     @company.save
 
-    @favourite = current_user.company_favourites.where({company_id: params[:id]}).length > 0 ? true : false
-    if params.dig(:toggle_favourite) == "true"
-      if @favourite == false
-        current_user.favourite_companies << @company
-        @favourite = true
-      else
-        current_user.company_favourites.where({company_id: @company.id}).destroy_all
-        @favourite = false
-      end
+    @favourite = !current_user.company_favourites.where(company_id: params[:id]).empty?
+    return unless params.dig(:toggle_favourite) == "true"
+
+    if @favourite == false
+      current_user.favourite_companies << @company
+      @favourite = true
+    else
+      current_user.company_favourites.where(company_id: @company.id).destroy_all
+      @favourite = false
     end
   end
-
 
   def av_companies
     authorize current_user
@@ -99,44 +99,40 @@ class Freelancer::CompaniesController < Freelancer::BaseController
     @companies = []
 
     if params[:location] && params[:location] != ""
-      current_user.applicants.where({ state: "accepted" }).where({ city: params[:location] }).each do |job|
+      current_user.applicants.where(state: "accepted").where(city: params[:location]).each do |job|
         @locations << job.company.area
         @companies << job.company
       end
     else
 
-      current_user.applicants.where({ state: "accepted" }).each do |job|
+      current_user.applicants.where(state: "accepted").each do |job|
         @locations << job.company.area
         @companies << job.company
       end
     end
 
-
     @locations = @locations.uniq
     @companies = @companies.uniq
   end
-
 
   def show_job
     @job = Job.find(params[:id])
     authorize @job, :show?
   end
 
-
   def add_favourites
     authorize current_user
     if params[:companies].nil?
-      render json: { status: 'parameter missing' }
+      render json: { status: "parameter missing" }
       return
     end
     params[:companies].each do |id|
-      c = Company.where({ id: id.to_i })
+      c = Company.where(id: id.to_i)
 
-      if f.length > 0
-        current_user.favourite_companies << c.first
-      end
+      current_user.favourite_companies << c.first unless f.empty?
     end
 
-    render json: { status: 'success', companies: params[:companies] }
+    render json: { status: "success", companies: params[:companies] }
   end
+
 end

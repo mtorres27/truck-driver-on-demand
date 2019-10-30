@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Freelancer::FreelancersController < Freelancer::BaseController
 
   def show

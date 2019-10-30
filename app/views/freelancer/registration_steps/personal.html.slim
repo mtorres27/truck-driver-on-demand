@@ -1,4 +1,4 @@
-.avj-section.avj-section__main
+.truckker-section.truckker-section__main
   .container.container__content
     h2
       | Next up, your company info.
@@ -13,7 +13,7 @@
         .col-md-4
           .form-group
             = f.label "State/Province"
-            select#freelancer_profile_state.js--state-province-select.form-control.avj-body2(name='freelancer_profile[state]')
+            select#freelancer_profile_state.js--state-province-select.form-control.truckker-body2(name='freelancer_profile[state]')
               option(value='')
                 | Select
               = CS.states(:us).each do |index, value|
@@ -38,5 +38,5 @@
           = f.input :service_areas, required: false, label: "Service Areas", placeholder: "Enter the cities your company services"
         .col-12
           .d-flex.align-items-center.justify-content-between
-            = link_to "Use another account", destroy_user_session_path, method: :delete, class: "avj-body2 mr-4"
+            = link_to "Use another account", destroy_user_session_path, method: :delete, class: "truckker-body2 mr-4"
             = f.button :submit, "Next Step", class: "btn btn-primary"

@@ -1,4 +1,7 @@
+# frozen_string_literal: true
+
 module LoginAs
+
   extend ActiveSupport::Concern
 
   def login_as
@@ -10,4 +13,5 @@ module LoginAs
 
     redirect_to send("#{section}_root_path")
   end
+
 end

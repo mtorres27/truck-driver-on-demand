@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Company::MainController < Company::BaseController
 
   before_action :redirect_to_registration_step, if: :current_company_registering?

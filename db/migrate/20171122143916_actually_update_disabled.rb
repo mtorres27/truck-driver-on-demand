@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class ActuallyUpdateDisabled < ActiveRecord::Migration[5.1]
   def change
     change_column :freelancers, :disabled, :boolean, default: true, index: true

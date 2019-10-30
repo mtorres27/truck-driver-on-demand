@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class DropSubscriptions < ActiveRecord::Migration[5.1]
   def change
     remove_column :companies, :plan_id, :integer

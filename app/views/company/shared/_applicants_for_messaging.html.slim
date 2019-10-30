@@ -8,7 +8,7 @@
               .circle_profile__image.freelancer__image= applicant.freelancer.name_initials
           - else
             = image_tag(applicant.freelancer.freelancer_profile.avatar_url, size: "40x40")
-          - if is_verified(applicant.freelancer)
+          - if verified?(applicant.freelancer)
             span class="freelancer-verified fa fa-check-circle"
         .list__info.list__info--with-padding.list__info--expand
           - applicant.freelancer.tap do |freelancer|

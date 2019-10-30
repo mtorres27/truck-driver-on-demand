@@ -15,14 +15,14 @@ var hide_remove_association = function (obj, hard) {
 };
 
 $(document).on("turbolinks:load", function () {
-    $("#avj-collapse-btn").on("click", function (){
-        if ($("#avj-collapse-div").hasClass("collapse")) {
-            $("#avj-collapse-div").removeClass("collapse");
-            $("#avj-collapse-div").addClass("collapsein");
+    $("#truckker-collapse-btn").on("click", function (){
+        if ($("#truckker-collapse-div").hasClass("collapse")) {
+            $("#truckker-collapse-div").removeClass("collapse");
+            $("#truckker-collapse-div").addClass("collapsein");
         }
         else {
-            $("#avj-collapse-div").addClass("collapse");
-            $("#avj-collapse-div").removeClass("collapsein");
+            $("#truckker-collapse-div").addClass("collapse");
+            $("#truckker-collapse-div").removeClass("collapsein");
         }
     });
 });

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # == Schema Information
 #
 # Table name: jobs
@@ -29,7 +31,7 @@
 #  fk_rails_...  (company_id => companies.id)
 #
 
-require 'rails_helper'
+require "rails_helper"
 
 describe Job, type: :model do
   describe "validations" do
@@ -43,7 +45,7 @@ describe Job, type: :model do
 
   describe "city_state_country" do
     let(:company) { create(:company) }
-    let(:job) { build(:job, state_province: 'ON', address: 'Toronto', country: 'ca', company: company) }
+    let(:job) { build(:job, state_province: "ON", address: "Toronto", country: "ca", company: company) }
 
     it "returns location with state" do
       expect(job.city_state_country).to eq("Toronto, Ontario, CA")

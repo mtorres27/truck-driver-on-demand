@@ -1,17 +1,17 @@
-.avj-section.avj-section__msg-subhead.d-block.mb-4
+.truckker-section.truckker-section__msg-subhead.d-block.mb-4
   .container
-    .avj-subhead
+    .truckker-subhead
       h4.ellipsis.mb-0= @freelancer.first_name_and_initial
       .d-flex.align-items-center.justify-content-end
         .mr-4
-          - if current_company.has_saved_freelancer?(@freelancer)
-            = link_to "", delete_freelancer_company_freelancer_url(@freelancer), method: :post, class: "avj-body1 avj-text-color-primary zmdi zmdi-favorite"
+          - if current_company.saved_freelancer?(@freelancer)
+            = link_to "", delete_freelancer_company_freelancer_url(@freelancer), method: :post, class: "truckker-body1 truckker-text-color-primary zmdi zmdi-favorite"
           - else
-            = link_to "", save_freelancer_company_freelancer_url(@freelancer), method: :post, class: "avj-body1 avj-text-color-primary zmdi zmdi-favorite-outline"
+            = link_to "", save_freelancer_company_freelancer_url(@freelancer), method: :post, class: "truckker-body1 truckker-text-color-primary zmdi zmdi-favorite-outline"
         div
           - if current_company.messages_for_freelancer(@freelancer).count > 0
-            = link_to "", company_messages_for_job_url(@freelancer, job_id: 'profile'), class: "avj-body1 avj-text-color-primary zmdi zmdi-comment"
+            = link_to "", company_messages_for_job_url(@freelancer, job_id: 'profile'), class: "truckker-body1 truckker-text-color-primary zmdi zmdi-comment"
           - else
-            = link_to "", company_messages_for_job_url(@freelancer, job_id: 'profile'), class: "avj-body1 avj-text-color-primary zmdi zmdi-comment-outline"
+            = link_to "", company_messages_for_job_url(@freelancer, job_id: 'profile'), class: "truckker-body1 truckker-text-color-primary zmdi zmdi-comment-outline"
 
 = render "shared/profile-freelancer"

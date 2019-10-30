@@ -1,4 +1,7 @@
+# frozen_string_literal: true
+
 class Freelancer::RegistrationStepsController < Freelancer::BaseController
+
   include Wicked::Wizard
 
   skip_before_action :authenticate_user!, only: [:show]
@@ -54,13 +57,17 @@ class Freelancer::RegistrationStepsController < Freelancer::BaseController
       :bio,
       :tagline,
       :service_areas,
+      # rubocop:disable Metrics/LineLength
       job_markets: (I18n.t("enumerize.live_events_staging_and_rental_job_markets").keys + I18n.t("enumerize.system_integration_job_markets").keys).uniq,
-      job_functions: (I18n.t("enumerize.system_integration_job_functions").keys + I18n.t("enumerize.live_events_staging_and_rental_job_functions").keys).uniq
+      job_functions: (I18n.t("enumerize.system_integration_job_functions").keys + I18n.t("enumerize.live_events_staging_and_rental_job_functions").keys).uniq,
+      # rubocop:enable Metrics/LineLength
     )
   end
 
   def verify_current_freelancer
     return if current_user.freelancer?
+
     redirect_to new_freelancer_session_path
   end
+
 end

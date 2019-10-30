@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # == Schema Information
 #
 # Table name: applicants
@@ -26,11 +28,12 @@
 #
 
 class Applicant < ApplicationRecord
+
   extend Enumerize
 
   belongs_to :company
   belongs_to :job, counter_cache: true
-  belongs_to :freelancer, class_name: "User", foreign_key: 'freelancer_id'
+  belongs_to :freelancer, class_name: "User", foreign_key: "freelancer_id"
   has_many :messages, -> { includes(:authorable).order(created_at: :desc) }, as: :receivable
   accepts_nested_attributes_for :messages
 
@@ -38,17 +41,17 @@ class Applicant < ApplicationRecord
 
   audited
 
-  enumerize :state, in: [
-    :ignored,
-    :quoting,
-    :accepted,
-    :declined
+  enumerize :state, in: %i[
+    ignored
+    quoting
+    accepted
+    declined
   ], predicates: true, scope: true
 
   def only_one_can_be_accepted
-    if accepted? && job.applicants.with_state(:accepted).where.not(id: id).any?
-      errors.add(:base, "Only one applicant may be accepted for a job.")
-    end
+    return unless accepted? && job.applicants.with_state(:accepted).where.not(id: id).any?
+
+    errors.add(:base, "Only one applicant may be accepted for a job.")
   end
 
   def request_quote!
@@ -66,9 +69,9 @@ class Applicant < ApplicationRecord
     save
   end
 
-
   def ignore!
     self.state = :ignored
     save
   end
+
 end

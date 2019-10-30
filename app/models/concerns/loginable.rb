@@ -1,4 +1,7 @@
+# frozen_string_literal: true
+
 module Loginable
+
   extend ActiveSupport::Concern
 
   class_methods do
@@ -9,7 +12,7 @@ module Loginable
       identity = Identity.find_or_initialize_by(
         loginable_type: name,
         provider: auth_hash[:provider],
-        uid: auth_hash[:uid].to_s
+        uid: auth_hash[:uid].to_s,
       )
 
       # Three options:
@@ -42,4 +45,5 @@ module Loginable
   included do
     has_secure_token
   end
+
 end

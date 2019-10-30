@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class FreelancerPolicy < ApplicationPolicy
 
   def index?
@@ -84,6 +86,7 @@ class FreelancerPolicy < ApplicationPolicy
 
   def freelancer_owner?
     return false unless freelancer?
+
     record.id == user.id
   end
 

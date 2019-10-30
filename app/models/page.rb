@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # == Schema Information
 #
 # Table name: pages
@@ -15,5 +17,7 @@
 #
 
 class Page < ApplicationRecord
+
   audited
+
 end

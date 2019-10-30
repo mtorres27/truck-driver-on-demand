@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class RemoveDeviseFromAdmins < ActiveRecord::Migration[5.1]
   def self.up
     drop_table :admins
@@ -25,4 +27,3 @@ class RemoveDeviseFromAdmins < ActiveRecord::Migration[5.1]
     change_column :admins, :sign_in_count, :integer, null: false
   end
 end
-

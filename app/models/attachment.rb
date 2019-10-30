@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # == Schema Information
 #
 # Table name: attachments
@@ -11,5 +13,7 @@
 #
 
 class Attachment < ApplicationRecord
+
   include AddendaUploader[:file]
+
 end

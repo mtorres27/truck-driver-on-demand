@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Admin::NewRegistrantsController < Admin::BaseController
 
   def index
@@ -12,14 +14,16 @@ class Admin::NewRegistrantsController < Admin::BaseController
       companies = companies.name_or_email_search(@keywords)
     end
 
-    if @sort.blank? || @sort == 'created_at DESC'
-      @new_registrants = (freelancer_profiles + companies).sort_by { |registrant| registrant.created_at }.reverse
+    if @sort.blank? || @sort == "created_at DESC"
+      @new_registrants = (freelancer_profiles + companies).sort_by(&:created_at).reverse
     else
-      if ['full_name', 'state', 'country', 'created_at', 'registration_step'].include?(@sort)
-        @new_registrants = (freelancer_profiles + companies).sort_by { |registrant| registrant.try(@sort.to_sym) || "" }
-      else
-        @new_registrants = (freelancer_profiles + companies).sort_by { |registrant| registrant.user.try(@sort.to_sym) || "" }
-      end
+      @new_registrants = if %w[full_name state country created_at registration_step].include?(@sort)
+                           (freelancer_profiles + companies).sort_by { |registrant| registrant.try(@sort.to_sym) || "" }
+                         else
+                           # rubocop:disable Metrics/LineLength
+                           (freelancer_profiles + companies).sort_by { |registrant| registrant.user.try(@sort.to_sym) || "" }
+                           # rubocop:enable Metrics/LineLength
+                         end
     end
 
     @new_registrants = Kaminari.paginate_array(@new_registrants).page(params[:page]).per(10)
@@ -29,9 +33,11 @@ class Admin::NewRegistrantsController < Admin::BaseController
     authorize current_user
     freelancers = FreelancerProfile.new_registrants.map(&:freelancer)
     companies = Company.new_registrants.map(&:owner)
-    @registrants = (freelancers + companies).sort_by { |registrant| registrant.created_at }.reverse
+    @registrants = (freelancers + companies).sort_by(&:created_at).reverse
     create_csv
-    send_data @csv_file, :type => 'text/csv; charset=iso-8859-1; header=present', :disposition => 'attachment; filename=new_registrants.csv'
+    # rubocop:disable Metrics/LineLength
+    send_data @csv_file, type: "text/csv; charset=iso-8859-1; header=present", disposition: "attachment; filename=new_registrants.csv"
+    # rubocop:enable Metrics/LineLength
   end
 
   private
@@ -44,4 +50,5 @@ class Admin::NewRegistrantsController < Admin::BaseController
       end
     end
   end
+
 end

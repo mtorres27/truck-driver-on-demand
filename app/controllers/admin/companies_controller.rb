@@ -1,31 +1,31 @@
+# frozen_string_literal: true
+
 class Admin::CompaniesController < Admin::BaseController
+
   include LoginAs
 
-  before_action :set_company, only: [:show, :edit, :update, :destroy, :enable, :disable, :login_as, :messaging]
-
+  before_action :set_company, only: %i[show edit update destroy enable disable login_as messaging]
   def index
     authorize current_user
     @keywords = params.dig(:search, :keywords).presence
     @filter_by_disabled = params.dig(:search, :filter_by_disabled).presence
     @sort = params.dig(:search, :sort).presence
 
-    if @keywords
-      @company_ids = Company.name_or_email_search(@keywords).pluck(:id)
-    else
-      @company_ids = Company.pluck(:id)
-    end
+    @company_ids = if @keywords
+                     Company.name_or_email_search(@keywords).pluck(:id)
+                   else
+                     Company.pluck(:id)
+                   end
 
-    if @sort.blank?
-      @companies = Company.where(id: @company_ids).order('created_at DESC')
-    else
-      if ['name', 'state', 'country', 'created_at', 'created_at DESC'].include?(@sort)
-        @companies = Company.where(id: @company_ids).order(@sort)
-      else
-        @companies = Company.includes(:company_user).where(id: @company_ids).order("users.#{@sort}")
-      end
-    end
+    @companies = if @sort.blank?
+                   Company.where(id: @company_ids).order("created_at DESC")
+                 elsif ["name", "state", "country", "created_at", "created_at DESC"].include?(@sort)
+                   Company.where(id: @company_ids).order(@sort)
+                 else
+                   Company.includes(:company_user).where(id: @company_ids).order("users.#{@sort}")
+                 end
 
-    if @filter_by_disabled.present? && @filter_by_disabled != 'nil'
+    if @filter_by_disabled.present? && @filter_by_disabled != "nil"
       @companies = @companies.where(disabled: @filter_by_disabled)
     end
 
@@ -80,10 +80,12 @@ class Admin::CompaniesController < Admin::BaseController
   end
 
   def download_csv
-    @companies = Company.order('created_at DESC')
+    @companies = Company.order("created_at DESC")
     authorize current_user
     create_csv
-    send_data @csv_file, :type => 'text/csv; charset=iso-8859-1; header=present', :disposition => 'attachment; filename=companies.csv'
+    # rubocop:disable Metrics/LineLength
+    send_data @csv_file, type: "text/csv; charset=iso-8859-1; header=present", disposition: "attachment; filename=companies.csv"
+    # rubocop:enable Metrics/LineLength
   end
 
   private
@@ -101,6 +103,7 @@ class Admin::CompaniesController < Admin::BaseController
     @company = Company.find(params[:id])
   end
 
+  # rubocop:disable Metrics/MethodLength
   def company_params
     # params.fetch(:company, {:name, :email})
     params.require(:company).permit(
@@ -129,11 +132,15 @@ class Admin::CompaniesController < Admin::BaseController
       :profile_header,
       :header_source,
       job_types: I18n.t("enumerize.job_types").keys,
+      # rubocop:disable Metrics/LineLength
       job_markets: (I18n.t("enumerize.live_events_staging_and_rental_job_markets").keys + I18n.t("enumerize.system_integration_job_markets").keys).uniq,
-      technical_skill_tags:  I18n.t("enumerize.technical_skill_tags").keys,
-      manufacturer_tags:  I18n.t("enumerize.manufacturer_tags").keys,
-      company_installs_attributes: [:id, :year, :installs, :_destroy],
-      featured_projects_attributes: [:id, :file, :name, :_destroy]
+      # rubocop:enable Metrics/LineLength
+      technical_skill_tags: I18n.t("enumerize.technical_skill_tags").keys,
+      manufacturer_tags: I18n.t("enumerize.manufacturer_tags").keys,
+      company_installs_attributes: %i[id year installs _destroy],
+      featured_projects_attributes: %i[id file name _destroy],
     )
   end
+  # rubocop:enable Metrics/MethodLength
+
 end

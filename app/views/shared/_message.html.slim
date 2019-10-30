@@ -1,25 +1,25 @@
-.avj-list-item
+.truckker-list-item
   - if user_is_author
     - if is_admin
       a.mr-4 href=admin_company_path(message.authorable)
-        .avj-avatar
+        .truckker-avatar
             = image_tag(message.authorable.user_data.avatar_url)
     .d-flex.flex-wrap.w-100
       .w-50
         - if is_admin
-          .avj-body1.m-0= message.authorable.name
+          .truckker-body1.m-0= message.authorable.name
         - else
-          .avj-body1.m-0 You
+          .truckker-body1.m-0 You
       .w-50
-        .avj-caption1.m-0.text-right= "#{time_ago_in_words(message.created_at)} ago"
-      .avj-message-text.w-100.avj-bg-gorange
-        .avj-body2= message.body
+        .truckker-caption1.m-0.text-right= "#{time_ago_in_words(message.created_at)} ago"
+      .truckker-message-text.w-100.truckker-bg-gorange
+        .truckker-body2= message.body
         - if message.attachment
           - url = message.attachment_url.include?("missing.pdf") ? "/assets/certification/placeholder.png" : message.attachment_url
           a.mb-2.col-md-3.col-6.d-flex.flex-column.justify-content-between href=url target="_blank"
-            - if is_image(url)
-              .avj-projects
-                img.avj-fit-img src=url
+            - if image?(url)
+              .truckker-projects
+                img.truckker-fit-img src=url
             - else
               .d-flex
                 span.zmdi.zmdi-hc-5x.zmdi-file-text.mr-1
@@ -31,23 +31,23 @@
       - url = is_admin ? admin_company_path(message.authorable) : freelancer_company_path(message.authorable)
     a.mr-4 href=url
       - if message.authorable.is_a?(Freelancer) && message.authorable.freelancer_profile.avatar_data.nil?
-        .avj-circle_profile__image.freelancer__image= message.authorable.name_initials
+        .truckker-circle_profile__image.freelancer__image= message.authorable.name_initials
       - else
-        .avj-avatar
+        .truckker-avatar
           = image_tag(message.authorable.user_data.avatar_url)
     .d-flex.flex-wrap.w-100
       .w-50
-        .avj-body1.m-0= message.authorable.first_name_and_initial
+        .truckker-body1.m-0= message.authorable.first_name_and_initial
       .w-50
-        .avj-caption1.m-0.text-right= "#{time_ago_in_words(message.created_at)} ago"
-      .avj-message-text.w-100
-        .avj-body2= message.body
+        .truckker-caption1.m-0.text-right= "#{time_ago_in_words(message.created_at)} ago"
+      .truckker-message-text.w-100
+        .truckker-body2= message.body
         - if message.attachment
           - url = message.attachment_url.include?("missing.pdf") ? "/assets/certification/placeholder.png" : message.attachment_url
           a.mb-2.col-md-3.col-6.d-flex.flex-column.justify-content-between href=url target="_blank"
-            - if is_image(url)
-              .avj-projects
-                img.avj-fit-img src=url
+            - if image?(url)
+              .truckker-projects
+                img.truckker-fit-img src=url
             - else
               .d-flex
                 span.zmdi.zmdi-hc-5x.zmdi-file-text.mr-1

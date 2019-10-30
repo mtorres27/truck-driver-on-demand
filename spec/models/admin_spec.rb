@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # == Schema Information
 #
 # Table name: users
@@ -47,7 +49,7 @@
 #  index_users_on_reset_password_token               (reset_password_token) UNIQUE
 #
 
-require 'rails_helper'
+require "rails_helper"
 
 describe Company, type: :model do
   describe "hooks" do

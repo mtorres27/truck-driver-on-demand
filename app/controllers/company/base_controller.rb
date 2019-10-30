@@ -1,5 +1,8 @@
+# frozen_string_literal: true
+
 class Company::BaseController < ApplicationController
-  layout 'company/layouts/application'
+
+  layout "company/layouts/application"
 
   before_action :authenticate_user!
   before_action :redirect_if_not_company
@@ -19,6 +22,7 @@ class Company::BaseController < ApplicationController
 
   def redirect_if_disabled
     return if (current_user.present? && current_user.enabled) || !current_user.present?
+
     sign_out current_user
     flash[:error] = "Your account has been disabled"
     redirect_to root_path
@@ -27,4 +31,5 @@ class Company::BaseController < ApplicationController
   def current_company_registering?
     !current_company.registration_completed?
   end
+
 end

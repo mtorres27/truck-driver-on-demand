@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 When("I press {string}") do |label|
   click_on label
 end

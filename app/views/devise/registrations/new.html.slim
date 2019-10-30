@@ -1,4 +1,4 @@
-.avj-section.avj-section__main
+.truckker-section.truckker-section__main
   .container.container__content
     - if resource.class == CompanyUser
       h2
@@ -11,17 +11,17 @@
     = simple_form_for(resource, url: registration_path(resource_name)) do |f|
       .row
         .col-md-6
-          = f.input :first_name, required: true, label: "First Name", placeholder: "Enter your first name", autofocus: true, label_html: { class: "avj-caption1" }
+          = f.input :first_name, required: true, label: "First Name", placeholder: "Enter your first name", autofocus: true, label_html: { class: "truckker-caption1" }
         .col-md-6
-          = f.input :last_name, required: true, label: "Last Name", placeholder: "Enter your last name", label_html: { class: "avj-caption1" }
+          = f.input :last_name, required: true, label: "Last Name", placeholder: "Enter your last name", label_html: { class: "truckker-caption1" }
         .col-md-6
-          = f.input :email, as: :string, label: "Email Address", required: true, placeholder: "Enter your email address", label_html: { class: "avj-caption1" }
+          = f.input :email, as: :string, label: "Email Address", required: true, placeholder: "Enter your email address", label_html: { class: "truckker-caption1" }
         .col-md-6
-          = f.input :phone_number, required: true, label: "Phone Number", placeholder: "Enter your phone number", label_html: { class: "avj-caption1" }
+          = f.input :phone_number, required: true, label: "Phone Number", placeholder: "Enter your phone number", label_html: { class: "truckker-caption1" }
         .col-md-6
-          = f.input :password, required: true, label: "Password", placeholder: "Enter a password", label_html: { class: "avj-caption1" }
+          = f.input :password, required: true, label: "Password", placeholder: "Enter a password", label_html: { class: "truckker-caption1" }
         .col-md-6
-          = f.input :password_confirmation, label: "Confirm password", required: true, placeholder: "Confirm your password", label_html: { class: "avj-caption1" }
+          = f.input :password_confirmation, label: "Confirm password", required: true, placeholder: "Confirm your password", label_html: { class: "truckker-caption1" }
         .col-md-12
           - terms_of_service_error = false
           - resource.errors.full_messages.each do |error|
@@ -29,22 +29,22 @@
               - terms_of_service_error = true
           .form-group.form-check
             = f.check_box :accept_terms_of_service, required: true, class: 'form-check-input'
-            label.form-check-label.avj-body2 for="agreeterms" class=(terms_of_service_error == true ? "text-danger" : "")
-              | By creating an account, you agree to the AV Junction
+            label.form-check-label.truckker-body2 for="agreeterms" class=(terms_of_service_error == true ? "text-danger" : "")
+              | By creating an account, you agree to the Truckker
               | &nbsp;
-              a.span href="http://www.avjunction.com/term-of-service" target="_blank"
+              a.span href="http://www.truckker.com/term-of-service" target="_blank"
                 | Terms & Conditions
               | ,&nbsp;
-              a.span href="http://www.avjunction.com/privacy-policy" target="_blank"
+              a.span href="http://www.truckker.com/privacy-policy" target="_blank"
                 | Privacy
               | &nbsp;and&nbsp;
-              a.span href="http://www.avjunction.com/code-of-conduct" target="_blank"
+              a.span href="http://www.truckker.com/code-of-conduct" target="_blank"
                 | Code of Conduct
               |.
 
         .col-12
           .d-flex.align-items-center.justify-content-between
-            .avj-body2.mr-4
+            .truckker-body2.mr-4
               | Already have an account?
               | &nbsp;
               a.span href=new_user_session_url

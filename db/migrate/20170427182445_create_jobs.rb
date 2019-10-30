@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CreateJobs < ActiveRecord::Migration[5.1]
   def change
     create_table :jobs do |t|
@@ -21,7 +23,7 @@ class CreateJobs < ActiveRecord::Migration[5.1]
       t.text :working_days, array: true, null: false, default: []
       t.string :working_time
       t.decimal :contract_price, precision: 10, scale: 2
-      t.jsonb :payment_schedule, null: false, default: '{}'
+      t.jsonb :payment_schedule, null: false, default: "{}"
       t.string :reporting_frequency
       t.boolean :require_photos_on_updates, null: false, default: false
       t.boolean :require_checkin, null: false, default: false

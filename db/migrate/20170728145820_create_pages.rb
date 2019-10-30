@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CreatePages < ActiveRecord::Migration[5.1]
   def change
     create_table :pages do |t|
@@ -11,13 +13,13 @@ class CreatePages < ActiveRecord::Migration[5.1]
     Page.create(
       slug: "privacy-policy",
       title: "AV Junction Privacy Policy",
-      body: "This should be markdown and / or html."
+      body: "This should be markdown and / or html.",
     )
 
     Page.create(
       slug: "terms-of-service",
       title: "AV Juction Terms of Service",
-      body: "This should be markdown and / or html."
+      body: "This should be markdown and / or html.",
     )
   end
 end

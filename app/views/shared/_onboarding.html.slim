@@ -7,7 +7,7 @@
 - else
   - sign_in_count = -1
 
-- if sign_in_count <= 1000000000 and sign_in_count > -1 and has_seen_onboarding == false
+- if sign_in_count <= 1000000000 and sign_in_count > -1 and seen_onboarding? == false
   - if current_user && current_user.freelancer? && current_user.registration_completed?
       - set_has_seen_onboarding
         .onboarding-container
@@ -16,8 +16,8 @@
             span class="fa fa-close" onClick="hideOnboard()"
           .onboarding-content-container
             .onboarding-content
-              h1.onboarding-title Welcome to AV Junction
-              p Finding new work outside of your network is difficult—that’s why we created AV Junction—to empower you with the freedom and flexibility to work on your terms by connecting you with AV jobs from reputable AV Companies all over the world.
+              h1.onboarding-title Welcome to Truckker
+              p Finding new work outside of your network is difficult—that’s why we created Truckker—to empower you with the freedom and flexibility to work on your terms by connecting you with AV jobs from reputable AV Companies all over the world.
               p Cali today, NYC tomorrow… we know what you’re thinking. But before we get ahead of ourselves we’ll need put your best foot forward and create a killer profile.
               p Ready? Let’s do it.
               .btn.btn--primary onClick="showFreelancerProfile()"
@@ -31,8 +31,8 @@
           span class="fa fa-close" onClick="hideOnboard()"
         .onboarding-content-container
           .onboarding-content
-            h1.onboarding-title Welcome to AV Junction
-            p Finding great talent to fulfill the overwhelming new business you've just landed is difficult—that’s why we created AV Junction—to empower you with access to hundreds of AV professionals from around the world.
+            h1.onboarding-title Welcome to Truckker
+            p Finding great talent to fulfill the overwhelming new business you've just landed is difficult—that’s why we created Truckker—to empower you with access to hundreds of AV professionals from around the world.
             p You're going global, Cali today, NYC tomorrow… we know what you’re thinking. But before we get ahead of ourselves we’ll need put your best foot forward and create a killer profile to attract the best talent.
             p Ready? Let’s do it.
             .btn.btn--primary onClick="showCompanyProfile()"

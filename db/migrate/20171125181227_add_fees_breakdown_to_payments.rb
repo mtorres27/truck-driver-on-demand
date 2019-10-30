@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AddFeesBreakdownToPayments < ActiveRecord::Migration[5.1]
   def change
     add_column :payments, :avj_fees, :decimal, precision: 10, scale: 2, null: true

@@ -1,4 +1,4 @@
-.avj-section.avj-section__main
+.truckker-section.truckker-section__main
   .container.container__content
     form
       .row
@@ -7,15 +7,15 @@
         .col-md-8.col-12
           .row
             .col-md-9.col-12
-              = f.input :name, required: true, label: "Company Name", placeholder: "Company Name", label_html: { class: "avj-caption1" }
-              = f.input :phone_number, label: "Business Phone", placeholder: "Business Phone", label_html: { class: "avj-caption1" }
+              = f.input :name, required: true, label: "Company Name", placeholder: "Company Name", label_html: { class: "truckker-caption1" }
+              = f.input :phone_number, label: "Business Phone", placeholder: "Business Phone", label_html: { class: "truckker-caption1" }
             .col-md-3.col-8
               .form-group
-                label.avj-caption1 for="keywords"
+                label.truckker-caption1 for="keywords"
                   | Company Logo
                 = image_tag(company.avatar_url, id: "company-edit-profile__avatar", class: "mr-2")
                 a.zmdi.zmdi-camera onclick="updateProfilePicture()"
-                = f.file_field :avatar, label: false, :accept => 'image/png,image/gif,image/jpeg', id: "edit-company-profile-avatar", class: "avj-hidden-important file-input--hidden"
+                = f.file_field :avatar, label: false, :accept => 'image/png,image/gif,image/jpeg', id: "edit-company-profile-avatar", class: "truckker-hidden-important file-input--hidden"
       .row.mb-2
         .col
           .dropdown-divider
@@ -26,15 +26,15 @@
         .col-md-8.col-12
           .row
             .col-12
-              = f.input :address, label: "HQ Address", placeholder: "HQ Address", label_html: { class: "avj-caption1" }
+              = f.input :address, label: "HQ Address", placeholder: "HQ Address", label_html: { class: "truckker-caption1" }
             .col-12
-              = f.input :line2, label: "Address Line 2", placeholder: "HQ Address", label_html: { class: "avj-caption1" }
+              = f.input :line2, label: "Address Line 2", placeholder: "HQ Address", label_html: { class: "truckker-caption1" }
             .col-md-6
-              = f.input :country, required: true, label: "Country", prompt: "Select", input_html: { class: "js--country-select" }, label_html: { class: "avj-caption1" }
+              = f.input :country, required: true, label: "Country", prompt: "Select", input_html: { class: "js--country-select" }, label_html: { class: "truckker-caption1" }
             .col-md-6
               .form-group
-                = f.label "State/Province", class: "avj-caption1"
-                select#company_state.js--state-province-select.form-control.avj-body2(name='company[state]')
+                = f.label "State/Province", class: "truckker-caption1"
+                select#company_state.js--state-province-select.form-control.truckker-body2(name='company[state]')
                   option(value='')
                     | Select
                   = CS.states(:us).each do |index, value|
@@ -54,9 +54,9 @@
                       option.js--ca_option(value="#{index}")
                         = value
             .col-md-6
-              = f.input :city, label: "City", placeholder: "HQ Address", label_html: { class: "avj-caption1" }
+              = f.input :city, label: "City", placeholder: "HQ Address", label_html: { class: "truckker-caption1" }
             .col-md-6
-              = f.input :postal_code, label: "ZIP/Postal Code", placeholder: "HQ Address", label_html: { class: "avj-caption1" }
+              = f.input :postal_code, label: "ZIP/Postal Code", placeholder: "HQ Address", label_html: { class: "truckker-caption1" }
 
       .row.mb-2
         .col
@@ -68,17 +68,17 @@
         .col-md-8.col-12
           .row
             .col-12
-              = f.input :description, as: :text, label: "About the company", placeholder: "About the Company", input_html: { rows: '6' }, label_html: { class: "avj-caption1" }
+              = f.input :description, as: :text, label: "About the company", placeholder: "About the Company", input_html: { rows: '6' }, label_html: { class: "truckker-caption1" }
             .col-md-4
-              = f.input :established_in, label: "Year Established", placeholder: "Year Established", label_html: { class: "avj-caption1" }
+              = f.input :established_in, label: "Year Established", placeholder: "Year Established", label_html: { class: "truckker-caption1" }
             .col-md-4
-              = f.input :number_of_employees, required: true, prompt: "Select", label: "# Employees", label_html: { class: "avj-caption1" }
+              = f.input :number_of_employees, required: true, prompt: "Select", label: "# Employees", label_html: { class: "truckker-caption1" }
             .col-md-4
-              = f.input :number_of_offices, as: :integer, label: "# Offices", placeholder: "# Offices", label_html: { class: "avj-caption1" }
+              = f.input :number_of_offices, as: :integer, label: "# Offices", placeholder: "# Offices", label_html: { class: "truckker-caption1" }
             .col-md-12
-              = f.input :website, label: "Website", placeholder: "http://", label_html: { class: "avj-caption1" }
+              = f.input :website, label: "Website", placeholder: "http://", label_html: { class: "truckker-caption1" }
             .col-md-12
-              = f.input :area, label: "Service Areas", placeholder: "Service Areas", label_html: { class: "avj-caption1" }
+              = f.input :area, label: "Service Areas", placeholder: "Service Areas", label_html: { class: "truckker-caption1" }
 
       .row.mb-2
         .col
@@ -91,7 +91,7 @@
           .row
             .col-12
               .form-group
-                label.avj-body1 for="Job_types"
+                label.truckker-body1 for="Job_types"
                   | Special Skills
                 .row
                   - I18n.t('enumerize.technical_skill_tags').each do |index, value|
@@ -103,12 +103,12 @@
                     .col-md-4.col-6
                       .form-check
                         = check_box_tag tag_name, "1", checked, class: "form-check-input"
-                        label.form-check-label.avj-body2
+                        label.form-check-label.truckker-body2
                           = value
 
             .col-12
               .form-group
-                label.avj-body1 for="Job_types"
+                label.truckker-body1 for="Job_types"
                   | Manufacturers
                 .row
                   - I18n.t('enumerize.manufacturer_tags').each do |index, value|
@@ -120,7 +120,7 @@
                     .col-md-4.col-6
                       .form-check
                         = check_box_tag tag_name, "1", checked, class: "form-check-input"
-                        label.form-check-label.avj-body2
+                        label.form-check-label.truckker-body2
                           = value
 
 
@@ -137,7 +137,7 @@
           .row
             .col-12
               .form-group
-                label.avj-body1 for="Job_types"
+                label.truckker-body1 for="Job_types"
                   | System Integration
                 .row
                   - I18n.t('enumerize.system_integration_job_markets').each do |index, value|
@@ -149,12 +149,12 @@
                     .col-6
                       .form-check
                         = check_box_tag tag_name, "1", checked, class: 'form-check-input'
-                        label.form-check-label.avj-body2 for="agreeterms"
+                        label.form-check-label.truckker-body2 for="agreeterms"
                           = value
 
             .col-12
               .form-group
-                label.avj-body1 for="Job_types"
+                label.truckker-body1 for="Job_types"
                   | Live Events, Staging and Rental
                 .row
                   - I18n.t('enumerize.live_events_staging_and_rental_job_markets').each do |index, value|
@@ -166,7 +166,7 @@
                     .col-6
                       .form-check
                         = check_box_tag tag_name, "1", checked, class: 'form-check-input'
-                        label.form-check-label.avj-body2 for="agreeterms"
+                        label.form-check-label.truckker-body2 for="agreeterms"
                           = value
       .row.mb-2
         .col

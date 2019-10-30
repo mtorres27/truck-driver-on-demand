@@ -1,4 +1,7 @@
+# frozen_string_literal: true
+
 class Freelancer::MessagingController < Freelancer::BaseController
+
   before_action :authorize_freelancer
   before_action :set_companies
 
@@ -13,4 +16,5 @@ class Freelancer::MessagingController < Freelancer::BaseController
   def set_companies
     @companies = current_user.companies_for_messaging
   end
+
 end

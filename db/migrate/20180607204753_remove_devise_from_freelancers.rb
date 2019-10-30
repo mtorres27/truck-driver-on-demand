@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class RemoveDeviseFromFreelancers < ActiveRecord::Migration[5.1]
   def up
     add_column :freelancers, :freelancer_id, :integer
@@ -67,4 +69,3 @@ class RemoveDeviseFromFreelancers < ActiveRecord::Migration[5.1]
     add_foreign_key :freelancer_reviews, :freelancers, column: :freelancer_id
   end
 end
-
