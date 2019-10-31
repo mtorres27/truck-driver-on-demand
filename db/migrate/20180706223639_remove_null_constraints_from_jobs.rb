@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class RemoveNullConstraintsFromJobs < ActiveRecord::Migration[5.1]
   def change
     change_column_null :jobs, :job_function, true

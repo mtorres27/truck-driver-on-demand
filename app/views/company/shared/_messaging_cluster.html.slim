@@ -42,7 +42,7 @@
                   .list__info.list__info--with-padding
                     - if message.attachment_url
                       a href=message.attachment_url target="_blank"
-                        - if is_image(message.attachment_url)
+                        - if image?(message.attachment_url)
                           span class="zmdi zmdi-image"
                         - else
                           span class="zmdi zmdi-file-text"

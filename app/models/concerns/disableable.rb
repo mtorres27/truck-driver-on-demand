@@ -1,4 +1,7 @@
+# frozen_string_literal: true
+
 module Disableable
+
   extend ActiveSupport::Concern
 
   def disable!
@@ -15,4 +18,5 @@ module Disableable
     scope :enabled, -> { where(disabled: false) }
     scope :disabled, -> { where(disabled: true) }
   end
+
 end

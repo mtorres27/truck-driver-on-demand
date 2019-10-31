@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Freelancer::RegistrationsController < Devise::RegistrationsController
 
   before_action :configure_permitted_parameters
@@ -11,18 +13,18 @@ class Freelancer::RegistrationsController < Devise::RegistrationsController
   protected
 
   def configure_permitted_parameters
-    devise_parameter_sanitizer.permit(:sign_up, keys: [:first_name, :last_name, :phone_number, :accept_terms_of_service])
+    devise_parameter_sanitizer.permit(:sign_up, keys: %i[first_name last_name phone_number accept_terms_of_service])
   end
 
-  def after_sign_up_path_for(resource)
+  def after_sign_up_path_for(_resource)
     freelancer_registration_steps_path
   end
 
-  def after_sign_in_path_for(resource)
+  def after_sign_in_path_for(_resource)
     freelancer_root_path
   end
 
-  def after_inactive_sign_up_path_for(resource)
+  def after_inactive_sign_up_path_for(_resource)
     cookies.delete(:onboarding)
     confirm_email_path
   end

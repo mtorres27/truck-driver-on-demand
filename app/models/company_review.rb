@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # == Schema Information
 #
 # Table name: company_reviews
@@ -29,19 +31,21 @@
 #
 
 class CompanyReview < ApplicationRecord
-  RATING_ATTRS = [
-    :quality_of_information_provided,
-    :communication,
-    :materials_available_onsite,
-    :promptness_of_payment,
-    :overall_experience
-  ]
+
+  RATING_ATTRS = %i[
+    quality_of_information_provided
+    communication
+    materials_available_onsite
+    promptness_of_payment
+    overall_experience
+  ].freeze
 
   include Reviewable
 
-  belongs_to :freelancer, class_name: 'User', foreign_key: 'freelancer_id'
+  belongs_to :freelancer, class_name: "User", foreign_key: "freelancer_id"
   belongs_to :company, counter_cache: true
   belongs_to :job
 
   audited
+
 end

@@ -1,4 +1,7 @@
+# frozen_string_literal: true
+
 class Company::MessagingController < Company::BaseController
+
   before_action :authorize_company
   before_action :set_freelancers
 
@@ -13,4 +16,5 @@ class Company::MessagingController < Company::BaseController
   def set_freelancers
     @freelancers = current_company.freelancers_for_messaging
   end
+
 end

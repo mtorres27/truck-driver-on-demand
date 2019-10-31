@@ -15,7 +15,7 @@ document.addEventListener("turbolinks:load", function(){
 });
 
 function toggleSearch() {
-    $("#search-form").removeClass("avj-hidden-important");
-    $("#search-subheader").addClass("avj-hidden-important");
-    $("#search-results").addClass("avj-hidden-important");
+    $("#search-form").removeClass("truckker-hidden-important");
+    $("#search-subheader").addClass("truckker-hidden-important");
+    $("#search-results").addClass("truckker-hidden-important");
 }

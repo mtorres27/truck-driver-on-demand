@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Admin::IncompleteRegistrationsController < Admin::BaseController
 
   def index
@@ -12,14 +14,16 @@ class Admin::IncompleteRegistrationsController < Admin::BaseController
       companies = companies.name_or_email_search(@keywords)
     end
 
-    if @sort.blank? || @sort == 'created_at DESC'
-      @registrants = (freelancer_profiles + companies).sort_by { |registrant| registrant.created_at }.reverse
+    if @sort.blank? || @sort == "created_at DESC"
+      @registrants = (freelancer_profiles + companies).sort_by(&:created_at).reverse
     else
-      if ['full_name', 'state', 'country', 'created_at'].include?(@sort)
-        @registrants = (freelancer_profiles + companies).sort_by { |registrant| registrant.try(@sort.to_sym) || "" }
-      else
-        @registrants = (freelancer_profiles + companies).sort_by { |registrant| registrant.user.try(@sort.to_sym) || "" }
-      end
+      @registrants = if %w[full_name state country created_at].include?(@sort)
+                       (freelancer_profiles + companies).sort_by { |registrant| registrant.try(@sort.to_sym) || "" }
+                     else
+                       # rubocop:disable Metrics/LineLength
+                       (freelancer_profiles + companies).sort_by { |registrant| registrant.user.try(@sort.to_sym) || "" }
+                       # rubocop:enable Metrics/LineLength
+                     end
     end
 
     @registrants = Kaminari.paginate_array(@registrants).page(params[:page]).per(10)
@@ -29,9 +33,12 @@ class Admin::IncompleteRegistrationsController < Admin::BaseController
     authorize current_user
     freelancers = FreelancerProfile.incomplete_registrations.map(&:freelancer)
     companies = Company.incomplete_registrations.map(&:owner)
-    @registrants = (freelancers + companies).sort_by { |registrant| registrant.created_at }.reverse
+    @registrants = (freelancers + companies).sort_by(&:created_at).reverse
     create_csv
-    send_data @csv_file, :type => 'text/csv; charset=iso-8859-1; header=present', :disposition => 'attachment; filename=incomplete_registrations.csv'
+
+    send_data @csv_file,
+              type: "text/csv; charset=iso-8859-1; header=present",
+              disposition: "attachment; filename=incomplete_registrations.csv"
   end
 
   private
@@ -44,4 +51,5 @@ class Admin::IncompleteRegistrationsController < Admin::BaseController
       end
     end
   end
+
 end

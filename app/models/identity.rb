@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # == Schema Information
 #
 # Table name: identities
@@ -18,5 +20,7 @@
 #
 
 class Identity < ApplicationRecord
+
   belongs_to :loginable, polymorphic: true
+
 end

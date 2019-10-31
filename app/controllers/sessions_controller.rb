@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class SessionsController < Devise::SessionsController
 
   def new
@@ -12,4 +14,5 @@ class SessionsController < Devise::SessionsController
   def destroy
     super
   end
+
 end

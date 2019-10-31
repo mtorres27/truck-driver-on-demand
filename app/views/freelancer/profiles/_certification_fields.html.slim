@@ -1,9 +1,9 @@
 .row
   .col-md-9.col-12
-    = f.input :name, as: :string, placeholder: "Certificate Name", label: "Certificate Name", label_html: {class: "avj-caption1"}
+    = f.input :name, as: :string, placeholder: "Certificate Name", label: "Certificate Name", label_html: {class: "truckker-caption1"}
   .col-md-3.col-8
     .form-group
-      label.avj-caption1
+      label.truckker-caption1
         | Certificate Image
       - if !f.object.certificate_url&.include?('missing.png') && f.index != 'new_certifications'
         img.mb-1.authorable_attachment--full src=f.object.certificate_url
@@ -15,4 +15,4 @@
         - else
           a.zmdi.zmdi-camera onclick="uploadCertificate()"
         = link_to_remove_association content_tag(:span, "", class: "zmdi zmdi-delete"), f, {onClick: "hide_remove_association(this)"}
-  = f.file_field :certificate, label: false, :accept => 'image/gif,image/jpg,image/jpeg,image/png,document/pdf,application/pdf,application/x-pdf', class: "avj-hidden-important file-input--hidden"
+  = f.file_field :certificate, label: false, :accept => 'image/gif,image/jpg,image/jpeg,image/png,document/pdf,application/pdf,application/x-pdf', class: "truckker-hidden-important file-input--hidden"

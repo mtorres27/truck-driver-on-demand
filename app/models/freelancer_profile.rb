@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # == Schema Information
 #
 # Table name: freelancer_profiles
@@ -53,12 +55,14 @@
 #  index_freelancer_profiles_on_job_markets           (job_markets)
 #  index_freelancer_profiles_on_manufacturer_tags     (manufacturer_tags)
 #  index_freelancer_profiles_on_technical_skill_tags  (technical_skill_tags)
+# rubocop:disable Metrics/LineLength
 #  index_on_freelancer_profiles_loc                   (st_geographyfromtext((((('SRID=4326;POINT('::text || lng) || ' '::text) || lat) || ')'::text)))
 #  index_on_freelancers_loc                           (st_geographyfromtext((((('SRID=4326;POINT('::text || lng) || ' '::text) || lat) || ')'::text)))
+# rubocop:enable Metrics/LineLength
 #
 
-require 'net/http'
-require 'uri'
+require "net/http"
+require "uri"
 
 class FreelancerProfile < ApplicationRecord
 
@@ -94,52 +98,56 @@ class FreelancerProfile < ApplicationRecord
   serialize :job_functions
   serialize :manufacturer_tags
 
-  enumerize :pay_unit_time_preference, in: [
-    :fixed, :hourly, :daily
+  enumerize :pay_unit_time_preference, in: %i[
+    fixed hourly daily
   ]
 
-  enumerize :freelancer_type, in: [
-    :independent, :service_provider
+  enumerize :freelancer_type, in: %i[
+    independent service_provider
   ]
 
-  enumerize :freelancer_team_size, in: [
-    :less_than_five,
-    :six_to_ten,
-    :eleven_to_twenty,
-    :twentyone_to_thirty,
-    :more_than_thirty
+  enumerize :freelancer_team_size, in: %i[
+    less_than_five
+    six_to_ten
+    eleven_to_twenty
+    twentyone_to_thirty
+    more_than_thirty
   ]
 
-  enumerize :header_source, in: [
-    :color,
-    :wallpaper,
-    :default
+  enumerize :header_source, in: %i[
+    color
+    wallpaper
+    default
   ]
 
-  enumerize :country, in: [
-    :at, :au, :be, :ca, :ch, :de, :dk, :es, :fi, :fr, :gb, :hk, :ie, :it, :jp, :lu, :nl, :no, :nz, :pt, :se, :sg, :us
+  enumerize :country, in: %i[
+    at au be ca ch de dk es fi fr gb hk ie it jp lu nl no nz pt se sg us
   ]
 
   pg_search_scope :search, against: {
-      job_markets: "A",
-      technical_skill_tags: "A",
-      manufacturer_tags: "A",
-      job_functions: "A",
-      tagline: "A",
-      bio: "A"
+    job_markets: "A",
+    technical_skill_tags: "A",
+    manufacturer_tags: "A",
+    job_functions: "A",
+    tagline: "A",
+    bio: "A",
   }, using: {
-      tsearch: { prefix: true, any_word: true }
+    tsearch: { prefix: true, any_word: true },
   }
 
   pg_search_scope :name_or_email_search, against: {},
-                  associated_against: { freelancer: [:email, :first_name, :last_name]
-                  }, using: { tsearch: { prefix: true }}
+                                         associated_against: { freelancer: %i[email first_name last_name] },
+                                         using: { tsearch: { prefix: true } }
 
   def check_if_should_do_geocode
-    if saved_changes.include?("address") or saved_changes.include?("city") or (!address.nil? and lat.nil?) or (!city.nil? and lat.nil?)
-      do_geocode
-      update_columns(lat: lat, lng: lng)
+    # rubocop:disable Metrics/LineLength
+    unless saved_changes.include?("address") || saved_changes.include?("city") || (!address.nil? && lat.nil?) || (!city.nil? && lat.nil?)
+      return
     end
+
+    # rubocop:enable Metrics/LineLength
+    do_geocode
+    update_columns(lat: lat, lng: lng)
   end
 
   def registration_completed?
@@ -155,7 +163,7 @@ class FreelancerProfile < ApplicationRecord
   end
 
   def city_state_province
-    "#{city}#{ ", #{state}" unless state.blank?}"
+    "#{city}#{", #{state}" unless state.blank?}"
   end
 
   def type_and_company
@@ -163,16 +171,21 @@ class FreelancerProfile < ApplicationRecord
     if freelancer_type.present?
       str += freelancer_type.humanize
       str += ", #{company_name}" if company_name.present?
+      str
     else
       company_name
     end
   end
 
   def job_types
-    has_system_integration = has_system_integration_job_markets || has_system_integration_job_functions
-    has_live_events_staging_and_rental = has_live_events_staging_and_rental_job_markets || has_live_events_staging_and_rental_job_functions
+    has_system_integration = system_integration_job_markets? || system_integration_job_functions?
+    # rubocop:disable Metrics/LineLength
+    has_live_events_staging_and_rental = live_events_staging_and_rental_job_markets? || live_events_staging_and_rental_job_functions?
+    # rubocop:enable Metrics/LineLength
 
-    return "System Integration & Live Events Staging And Rental" if has_live_events_staging_and_rental && has_system_integration
+    if has_live_events_staging_and_rental && has_system_integration
+      return "System Integration & Live Events Staging And Rental"
+    end
 
     if has_system_integration
       "System Integration"
@@ -183,30 +196,30 @@ class FreelancerProfile < ApplicationRecord
     end
   end
 
-  def has_system_integration_job_markets
+  def system_integration_job_markets?
     I18n.t("enumerize.system_integration_job_markets").each do |key, _|
-      return true if job_markets.present? && job_markets[key] == '1'
+      return true if job_markets.present? && job_markets[key] == "1"
     end
     false
   end
 
-  def has_live_events_staging_and_rental_job_markets
+  def live_events_staging_and_rental_job_markets?
     I18n.t("enumerize.live_events_staging_and_rental_job_markets").each do |key, _|
-      return true if job_markets.present? && job_markets[key] == '1'
+      return true if job_markets.present? && job_markets[key] == "1"
     end
     false
   end
 
-  def has_system_integration_job_functions
+  def system_integration_job_functions?
     I18n.t("enumerize.system_integration_job_functions").each do |key, _|
-      return true if job_functions.present? && job_functions[key] == '1'
+      return true if job_functions.present? && job_functions[key] == "1"
     end
     false
   end
 
-  def has_live_events_staging_and_rental_job_functions
+  def live_events_staging_and_rental_job_functions?
     I18n.t("enumerize.live_events_staging_and_rental_job_functions").each do |key, _|
-      return true if job_functions.present? && job_functions[key] == '1'
+      return true if job_functions.present? && job_functions[key] == "1"
     end
     false
   end
@@ -223,6 +236,8 @@ class FreelancerProfile < ApplicationRecord
 
   def send_welcome_email
     return if freelancer&.confirmed? || !registration_completed? || freelancer&.confirmation_sent_at.present?
+
     freelancer&.send_confirmation_instructions
   end
+
 end

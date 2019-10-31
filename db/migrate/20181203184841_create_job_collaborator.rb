@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CreateJobCollaborator < ActiveRecord::Migration[5.1]
   def change
     create_table :job_collaborators do |t|

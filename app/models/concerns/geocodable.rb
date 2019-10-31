@@ -1,4 +1,7 @@
+# frozen_string_literal: true
+
 module Geocodable
+
   extend ActiveSupport::Concern
   include ERB::Util
 
@@ -21,31 +24,24 @@ module Geocodable
 
   def compile_address
     address = ""
-    if self.address
-      address += self.address + " "
-    end
+    address += self.address + " " if self.address
 
-    if self.class.name != "Job" && self.line2
-      address += self.line2 + " "
-    end
+    address += line2 + " " if self.class.name != "Job" && line2
 
-    if self.class.name != "Job" && self.city
-      address += self.city + " "
-    end
+    address += city + " " if self.class.name != "Job" && city
 
-    if self.class.name != "Job" && self.state
-      address += self.state + " "
-    end
+    address += state + " " if self.class.name != "Job" && state
 
-    if self.country
-      address += I18n.t('enumerize.country.'+ self.country)
-    end
+    address += I18n.t("enumerize.country." + country) if country
 
-    return address
+    address
   end
 
+  # rubocop:disable Metrics/AbcSize
   def do_geocode
+    # rubocop:disable Metrics/LineLength
     url = "https://maps.googleapis.com/maps/api/geocode/json?address=#{url_encode(compile_address)}&key=#{ENV['google_maps_js_api_key']}"
+    # rubocop:enable Metrics/LineLength
     # Make the API request
     begin
       res = JSON.parse(Net::HTTP.get(URI.parse(url)), symbolize_names: true)
@@ -58,20 +54,21 @@ module Geocodable
         puts "Stored: #{lat}, #{lng}" unless Rails.env.test?
         return true
       end
-    rescue Exception => e
+    rescue StandardError => e
       puts e
       logger.error e
       return false
     end
   end
+  # rubocop:enable Metrics/AbcSize
 
   included do
     # This SQL needs to stay exactly in sync with it's related index (index_on_???_loc)
     # otherwise the index won't be used. (don't even add whitespace!)
     # https://github.com/pairshaped/postgis-on-rails-example
-    scope :nearby, -> (lat, lng, distance_in_meters = 2000) {
+    scope :nearby, lambda { |lat, lng, distance_in_meters = 2000|
       where(
-        <<-SQL.squish
+        <<-SQL.squish,
           ST_DWithin(
             ST_GeographyFromText(
               'SRID=4326;POINT(' || #{table_name}.lng || ' ' || #{table_name}.lat || ')'
@@ -88,4 +85,5 @@ module Geocodable
     # geocoding happens.
     # after_save :queue_geocode
   end
+
 end

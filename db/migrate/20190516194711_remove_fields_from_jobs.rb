@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class RemoveFieldsFromJobs < ActiveRecord::Migration[5.1]
   def change
     remove_column :jobs, :scope_of_work, :text

@@ -1,6 +1,8 @@
+# frozen_string_literal: true
+
 class Company::CompanyUsersController < Company::BaseController
 
-  before_action :set_company_user, only: [:edit, :update]
+  before_action :set_company_user, only: %i[edit update]
 
   def edit
     authorize @company_user
@@ -8,16 +10,16 @@ class Company::CompanyUsersController < Company::BaseController
 
   def update
     authorize @company_user
-    params[:company_user] = params[:company_user].except(:password, :password_confirmation) if params[:company_user][:password].blank? || params[:company_user][:password_confirmation].blank?
+    if params[:company_user][:password].blank? || params[:company_user][:password_confirmation].blank?
+      params[:company_user] = params[:company_user].except(:password, :password_confirmation)
+    end
     if @company_user.update(company_user_params)
-      if @company_user == current_user
-        bypass_sign_in(@company_user)
-      end
-      if !params[:company_user][:password].blank?
-        flash[:notice] = "Password successfully updated"
-      else
-        flash[:notice] = "Successfully updated"
-      end
+      bypass_sign_in(@company_user) if @company_user == current_user
+      flash[:notice] = if !params[:company_user][:password].blank?
+                         "Password successfully updated"
+                       else
+                         "Successfully updated"
+                       end
       redirect_to company_profile_path
     else
       flash.now[:error] = @company_user.errors.full_messages.to_sentence
@@ -33,12 +35,13 @@ class Company::CompanyUsersController < Company::BaseController
 
   def company_user_params
     params.require(:company_user).permit(
-        :first_name,
-        :last_name,
-        :email,
-        :phone_number,
-        :password,
-        :password_confirmation
+      :first_name,
+      :last_name,
+      :email,
+      :phone_number,
+      :password,
+      :password_confirmation,
     )
   end
+
 end

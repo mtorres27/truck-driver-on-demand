@@ -1,4 +1,6 @@
-source 'https://rubygems.org'
+# frozen_string_literal: true
+
+source "https://rubygems.org"
 
 ruby "2.6.0"
 
@@ -7,21 +9,20 @@ git_source(:github) do |repo_name|
   "https://github.com/#{repo_name}.git"
 end
 
-
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '~> 5.1.0.rc2'
+gem "rails", "~> 5.1.0.rc2"
 # Use postgres as the database for Active Record
 gem "pg", "~> 0.18"
 # Use Puma as the app server
-gem 'puma', '~> 3.7'
+gem "puma", "~> 3.7"
 # Use SCSS for stylesheets
-gem "sass-rails", github: 'rails/sass-rails'
+gem "sass-rails", github: "rails/sass-rails"
 # Use Bootstrap SASS
 gem "bootstrap-sass"
 # Use FontAwesome
 gem "font-awesome-rails", "~> 4.7.0"
 # Use Uglifier as compressor for JavaScript assets
-gem 'uglifier', '~> 3.2.0'
+gem "uglifier", "~> 3.2.0"
 # Use JQuery
 gem "jquery-rails", "~> 4.3.1"
 # Use JQuery Datatables
@@ -29,11 +30,11 @@ gem "jquery-datatables"
 # Use Chartkick
 gem "chartkick", "~> 3.2.0"
 # Use CoffeeScript for .coffee assets and views
-gem 'coffee-rails', '~> 4.2'
+gem "coffee-rails", "~> 4.2"
 # Turbolinks makes navigating your web application faster. Read more: https://github.com/turbolinks/turbolinks
-gem 'turbolinks', '~> 5'
+gem "turbolinks", "~> 5"
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
-gem 'jbuilder', '~> 2.5'
+gem "jbuilder", "~> 2.5"
 # Use PG Search
 gem "pg_search", "~> 2.0.1"
 # Use Enumerize
@@ -116,30 +117,30 @@ end
 
 group :development do
   gem "annotate"
-  gem "binding_of_caller"
-  gem "rubocop"
-  gem "capistrano", "~> 3.8.1"
-  gem "capistrano-rails", "~> 1.2.3"
-  gem "capistrano-passenger"
-  gem "rails-erd"
   gem "better_errors"
+  gem "binding_of_caller"
+  gem "capistrano", "~> 3.8.1"
+  gem "capistrano-passenger"
+  gem "capistrano-rails", "~> 1.2.3"
+  gem "rails-erd"
+  gem "rubocop"
 end
 
 group :test do
   gem "capybara"
+  gem "cucumber"
   gem "cucumber-rails", require: false
   gem "database_cleaner"
+  gem "launchy"
   gem "rails-controller-testing"
+  gem "rspec_junit_formatter"
   gem "selenium-webdriver"
   gem "shoulda-matchers"
   gem "simplecov"
   gem "timecop"
   gem "vcr"
   gem "webmock"
-  gem "cucumber"
-  gem "rspec_junit_formatter"
-  gem "launchy"
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
-gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
+gem "tzinfo-data", platforms: %i[mingw mswin x64_mingw jruby]

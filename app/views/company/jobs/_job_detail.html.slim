@@ -1,29 +1,29 @@
-.avj-section.avj-section__main
+.truckker-section.truckker-section__main
   .container.container__content
-    .avj-job-item
-      .avj-caption1.avj-text-color-black2.mb-0= "Posted #{@job.created_at}"
-      a.avj-text-color-black href=""
-        .avj-body1.avj-text-emphasize
+    .truckker-job-item
+      .truckker-caption1.truckker-text-color-black2.mb-0= "Posted #{@job.created_at}"
+      a.truckker-text-color-black href=""
+        .truckker-body1.truckker-text-emphasize
           = @job.title
           span.ml-2
             = job_state_label(@job)
-        .avj-body2
+        .truckker-body2
           = @job.summary.html_safe
       .d-flex
-        .zmdi.zmdi-pin.avj-text-color-black2.avj-text-sm.mr-2
-        .avj-caption1.avj-text-color-black2
+        .zmdi.zmdi-pin.truckker-text-color-black2.truckker-text-sm.mr-2
+        .truckker-caption1.truckker-text-color-black2
           = @job.city_state_country
       .d-flex.flex-wrap
-        - if @job.has_system_integration_job_markets
-          .avj-tag System Integration
-        - if @job.has_live_events_staging_and_rental_job_markets
-          .avj-tag Live Events Staging & Rental
+        - if @job.system_integration_job_markets?
+          .truckker-tag System Integration
+        - if @job.live_events_staging_and_rental_job_markets?
+          .truckker-tag Live Events Staging & Rental
         - @job.job_markets&.each do |key, _|
-          .avj-tag= I18n.t("enumerize.system_integration_job_markets").merge(I18n.t("enumerize.live_events_staging_and_rental_job_markets"))[key.to_sym]
+          .truckker-tag= I18n.t("enumerize.system_integration_job_markets").merge(I18n.t("enumerize.live_events_staging_and_rental_job_markets"))[key.to_sym]
         - @job.technical_skill_tags&.each do |key, _|
-          .avj-tag= I18n.t("enumerize.technical_skill_tags.#{key}")
+          .truckker-tag= I18n.t("enumerize.technical_skill_tags.#{key}")
         - @job.manufacturer_tags&.each do |key, _|
-          .avj-tag= I18n.t("enumerize.manufacturer_tags.#{key}")
+          .truckker-tag= I18n.t("enumerize.manufacturer_tags.#{key}")
     ul#myTab.nav.nav-tabs.mb-4 role="tablist"
       - if params[:page].present? || @repliers.count == 0
         li.nav-item

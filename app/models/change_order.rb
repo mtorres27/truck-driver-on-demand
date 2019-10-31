@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # == Schema Information
 #
 # Table name: change_orders
@@ -23,6 +25,7 @@
 #
 
 class ChangeOrder < ApplicationRecord
+
   include AttachmentUploader[:attachment]
 
   belongs_to :company
@@ -31,4 +34,5 @@ class ChangeOrder < ApplicationRecord
   audited
 
   validates :amount, numericality: true, sane_price: true
+
 end

@@ -1,11 +1,11 @@
-.avj-section.avj-section__msg-subhead.d-block.mb-4
+.truckker-section.truckker-section__msg-subhead.d-block.mb-4
   .container
     - if @freelancer.confirmed_at.nil? && @freelancer.confirmation_token.present?
-      .avj-subhead
+      .truckker-subhead
         div
           strong<> Confirmation Link:
           = confirmation_url(@freelancer, confirmation_token: @freelancer.confirmation_token)
-    .avj-subhead
+    .truckker-subhead
       h4.ellipsis.mb-0= @freelancer.full_name
       .d-flex.align-items-center.justify-content-end
         a.btn.btn-primary.btn-sm.mr-2 href=messaging_admin_freelancer_path(@freelancer)

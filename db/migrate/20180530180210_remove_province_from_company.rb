@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class RemoveProvinceFromCompany < ActiveRecord::Migration[5.1]
   def self.up
     remove_column :companies, :province, :string

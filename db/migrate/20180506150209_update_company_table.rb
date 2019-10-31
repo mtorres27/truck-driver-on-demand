@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class UpdateCompanyTable < ActiveRecord::Migration[5.1]
   def change
     change_column :companies, :name, :string, null: true

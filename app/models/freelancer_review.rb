@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # == Schema Information
 #
 # Table name: freelancer_reviews
@@ -29,19 +31,21 @@
 #
 
 class FreelancerReview < ApplicationRecord
-  RATING_ATTRS = [
-    :availability,
-    :communication,
-    :adherence_to_schedule,
-    :skill_and_quality_of_work,
-    :overall_experience
-  ]
+
+  RATING_ATTRS = %i[
+    availability
+    communication
+    adherence_to_schedule
+    skill_and_quality_of_work
+    overall_experience
+  ].freeze
 
   include Reviewable
 
   belongs_to :company
-  belongs_to :freelancer, class_name: 'User', foreign_key: 'freelancer_id'
+  belongs_to :freelancer, class_name: "User", foreign_key: "freelancer_id"
   belongs_to :job
 
   audited
+
 end

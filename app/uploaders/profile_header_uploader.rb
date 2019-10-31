@@ -1,8 +1,11 @@
+# frozen_string_literal: true
+
 require "image_processing/mini_magick"
 
 include ImageProcessing::MiniMagick
 
 class ProfileHeaderUploader < Shrine
+
   plugin :store_dimensions
   plugin :processing
   plugin :default_url
@@ -10,10 +13,8 @@ class ProfileHeaderUploader < Shrine
   plugin :remove_invalid
   plugin :determine_mime_type
 
-  process(:store) do |io, context|
-    if self::image?(io)
-      resize_to_limit!(io.download, 800, 800)
-    end
+  process(:store) do |io, _context|
+    resize_to_limit!(io.download, 800, 800) if image?(io)
   end
 
   Attacher.default_url do
@@ -25,7 +26,9 @@ class ProfileHeaderUploader < Shrine
   end
 
   protected
-    def image?(new_file)
-      new_file.content_type.start_with? 'image'
-    end
+
+  def image?(new_file)
+    new_file.content_type.start_with? "image"
+  end
+
 end

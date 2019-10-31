@@ -1,4 +1,7 @@
+# frozen_string_literal: true
+
 class NotificationsChannel < ApplicationCable::Channel
+
   def subscribed
     stream_from "notifications_channel_#{params['notifications_stream_id']}"
   end
@@ -8,7 +11,7 @@ class NotificationsChannel < ApplicationCable::Channel
   end
 
   def receive(payload)
-    user = User.find(payload['id'])
+    user = User.find(payload["id"])
     unread_notifications = user.notifications.unread
     ActionCable.server.broadcast "notifications_channel_#{payload['id']}", count: unread_notifications.count
   end
@@ -16,6 +19,7 @@ class NotificationsChannel < ApplicationCable::Channel
   private
 
   def render_notifications(notifications)
-    ApplicationController.renderer.render(partial: 'shared/notifications', locals: { notifications: notifications })
+    ApplicationController.renderer.render(partial: "shared/notifications", locals: { notifications: notifications })
   end
+
 end

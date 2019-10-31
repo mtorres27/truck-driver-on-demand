@@ -1,6 +1,9 @@
+# frozen_string_literal: true
+
 class Company::JobsController < Company::BaseController
-  before_action :set_job, except: [:job_countries, :new, :create, :index]
-  before_action :authorize_job, except: [:job_countries, :new, :create, :index]
+
+  before_action :set_job, except: %i[job_countries new create index]
+  before_action :authorize_job, except: %i[job_countries new create index]
 
   def index
     @jobs = current_company.jobs
@@ -26,7 +29,7 @@ class Company::JobsController < Company::BaseController
     @job = current_company.jobs.new(job_params)
 
     if @job.save
-      if @job.state == 'published'
+      if @job.state == "published"
         JobNotificationMailer.notify_job_posting_company(current_company, @job).deliver_later
         get_matches
         @freelancers.each do |freelancer|
@@ -39,17 +42,16 @@ class Company::JobsController < Company::BaseController
     end
   end
 
-  def edit
-  end
+  def edit; end
 
   def update
-    if @job.errors.size > 0
+    unless @job.errors.empty?
       render :edit
       return
     end
 
     if @job.update(job_params)
-      if @job.state == 'published'
+      if @job.state == "published"
         flash[:notice] = "This job has been published."
         JobNotificationMailer.notify_job_posting_company(current_company, @job).deliver_later
         get_matches
@@ -63,7 +65,6 @@ class Company::JobsController < Company::BaseController
       render :edit
     end
   end
-
 
   def destroy
     @job.destroy
@@ -88,9 +89,12 @@ class Company::JobsController < Company::BaseController
       :state,
       :address,
       :state_province,
+      # rubocop:disable Metrics/LineLength
       job_markets: I18n.t("enumerize.system_integration_job_markets").keys + I18n.t("enumerize.live_events_staging_and_rental_job_markets").keys,
+      # rubocop:enable Metrics/LineLength
       technical_skill_tags: I18n.t("enumerize.technical_skill_tags").keys,
       manufacturer_tags: I18n.t("enumerize.manufacturer_tags").keys,
     )
   end
+
 end

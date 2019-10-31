@@ -1,4 +1,7 @@
+# frozen_string_literal: true
+
 module ControllerMacros
+
   def login_freelancer
     before(:each) do
       @request.env["devise.mapping"] = Devise.mappings[:freelancer]
@@ -25,4 +28,5 @@ module ControllerMacros
       sign_in admin
     end
   end
+
 end

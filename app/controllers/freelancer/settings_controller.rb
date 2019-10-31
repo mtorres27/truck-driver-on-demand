@@ -1,4 +1,7 @@
+# frozen_string_literal: true
+
 class Freelancer::SettingsController < Freelancer::BaseController
+
   def index
     authorize current_user
   end
@@ -10,4 +13,5 @@ class Freelancer::SettingsController < Freelancer::BaseController
   def update
     authorize current_user
   end
+
 end

@@ -1,5 +1,7 @@
+# frozen_string_literal: true
+
 class AddCompanyContractPreference < ActiveRecord::Migration[5.1]
   def change
-    add_column :companies, 'contract_preference', :string, default: :no_preference
+    add_column :companies, "contract_preference", :string, default: :no_preference
   end
 end

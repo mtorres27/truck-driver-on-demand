@@ -1,9 +1,11 @@
+# frozen_string_literal: true
+
 Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
 
-   Rails.application.routes.default_url_options[:host] = 'https://truck-driver-on-demand.herokuapp.com'
-  
-  config.secret_key_base = ENV['SECRET_KEY_BASE']
+  Rails.application.routes.default_url_options[:host] = "https://truck-driver-on-demand.herokuapp.com"
+
+  config.secret_key_base = ENV["SECRET_KEY_BASE"]
 
   # Code is not reloaded between requests.
   config.cache_classes = true
@@ -15,17 +17,17 @@ Rails.application.configure do
   config.eager_load = true
 
   # Attempt to read encrypted secrets from `config/secrets.yml.enc`.
-   # Requires an encryption key in `ENV["RAILS_MASTER_KEY"]` or
-   # `config/secrets.yml.key`.
-   config.read_encrypted_secrets = false
-  
+  # Requires an encryption key in `ENV["RAILS_MASTER_KEY"]` or
+  # `config/secrets.yml.key`.
+  config.read_encrypted_secrets = false
+
   # Full error reports are disabled and caching is turned on.
   config.consider_all_requests_local       = false
   config.action_controller.perform_caching = true
 
   # Disable serving static files from the `/public` folder by default since
   # Apache or NGINX already handles this.
-  config.public_file_server.enabled = ENV['RAILS_SERVE_STATIC_FILES'].present?
+  config.public_file_server.enabled = ENV["RAILS_SERVE_STATIC_FILES"].present?
 
   # Compress JavaScripts and CSS.
   config.assets.js_compressor = :uglifier
@@ -42,9 +44,9 @@ Rails.application.configure do
 
   # Mount Action Cable outside main process or domain
   # config.action_cable.mount_path = nil
-  config.web_socket_server_url = 'wss://truck-driver-on-demand.herokuapp.com/cable'
-  config.action_cable.url = 'wss://truck-driver-on-demand.herokuapp.com/cable'
-  config.action_cable.allowed_request_origins = [ 'truck-driver-on-demand.herokuapp.com', 'https://truck-driver-on-demand.herokuapp.com' ]
+  config.web_socket_server_url = "wss://truck-driver-on-demand.herokuapp.com/cable"
+  config.action_cable.url = "wss://truck-driver-on-demand.herokuapp.com/cable"
+  config.action_cable.allowed_request_origins = ["truck-driver-on-demand.herokuapp.com", "https://truck-driver-on-demand.herokuapp.com"]
 
   # Force all access to the app over SSL, use Strict-Transport-Security, and use secure cookies.
   # config.force_ssl = true
@@ -54,7 +56,7 @@ Rails.application.configure do
   config.log_level = :debug
 
   # Prepend all log lines with the following tags.
-  config.log_tags = [ :request_id ]
+  config.log_tags = [:request_id]
 
   # Use a different cache store in production.
   # config.cache_store = :mem_cache_store
@@ -67,18 +69,18 @@ Rails.application.configure do
   # Ignore bad email addresses and do not raise email delivery errors.
   # Set this to true and configure the email server for immediate delivery to raise delivery errors.
   # config.action_mailer.raise_delivery_errors = false
-  
-  config.action_mailer.default_url_options = { host: 'truck-driver-on-demand.herokuapp.com' }
+
+  config.action_mailer.default_url_options = { host: "truck-driver-on-demand.herokuapp.com" }
   config.action_mailer.asset_host = "http://truck-driver-on-demand.herokuapp.com"
   config.action_mailer.delivery_method = :smtp
   config.action_mailer.smtp_settings = {
-      user_name: ENV['sendgrid_username'],
-      password: ENV['sendgrid_password'],
-      domain: 'mg.truck-driver-on-demand.herokuapp.com',
-      address: 'smtp.sendgrid.net',
-      port: 587,
-      authentication: :plain,
-      enable_starttls_auto: true
+    user_name: ENV["sendgrid_username"],
+    password: ENV["sendgrid_password"],
+    domain: "mg.truck-driver-on-demand.herokuapp.com",
+    address: "smtp.sendgrid.net",
+    port: 587,
+    authentication: :plain,
+    enable_starttls_auto: true,
   }
 
   # Enable locale fallbacks for I18n (makes lookups for any locale fall back to
@@ -103,8 +105,8 @@ Rails.application.configure do
 
   # Do not dump schema after migrations.
   config.active_record.dump_schema_after_migration = false
-  
+
   config.action_dispatch.default_headers = {
-      'X-Frame-Options' => 'ALLOWALL'
+    "X-Frame-Options" => "ALLOWALL",
   }
 end

@@ -1,28 +1,28 @@
 = f.simple_fields_for :freelancer_profile do |df|
-  .avj-section.avj-section__main
+  .truckker-section.truckker-section__main
     .container.container__content
       .row
         .col-md-4.col-12
           h2 Account Details
-          .avj-body2 These are not shown on your AV Junction Profile
+          .truckker-body2 These are not shown on your Truckker Profile
         .col-md-8.col-12
           .row
             .col-12
-              = f.input :email, as: :string, required: true, label: "Email Address", placeholder: "Email address", label_html: { class: "avj-caption1" }
+              = f.input :email, as: :string, required: true, label: "Email Address", placeholder: "Email address", label_html: { class: "truckker-caption1" }
             .col-12
-              = f.input :phone_number, required: false, label: "Phone Number", placeholder: "Phone Number", label_html: { class: "avj-caption1" }
+              = f.input :phone_number, required: false, label: "Phone Number", placeholder: "Phone Number", label_html: { class: "truckker-caption1" }
             .col-12
               .row
                 .col-12
-                  = df.input :address, required: true, label: "Address", placeholder: "Address", label_html: { class: "avj-caption1" }
+                  = df.input :address, required: true, label: "Address", placeholder: "Address", label_html: { class: "truckker-caption1" }
                 .col-12
-                  = df.input :line2, required: false, label: "Address Line 2 (Unit #, Apt)", placeholder: "Address Line 2", label_html: { class: "avj-caption1" }
+                  = df.input :line2, required: false, label: "Address Line 2 (Unit #, Apt)", placeholder: "Address Line 2", label_html: { class: "truckker-caption1" }
                 .col-md-6
-                  = df.input :country, required: true, label: "Select Country", prompt: "Select Country", input_html: { class: "js--country-select" }, label_html: { class: "avj-caption1" }
+                  = df.input :country, required: true, label: "Select Country", prompt: "Select Country", input_html: { class: "js--country-select" }, label_html: { class: "truckker-caption1" }
                 .col-md-6
                   .form-group
                     = df.label "State/Province"
-                    select#freelancer_freelancer_profile_attributes_state.js--state-province-select.form-control.avj-body2(name='freelancer[freelancer_profile_attributes][state]')
+                    select#freelancer_freelancer_profile_attributes_state.js--state-province-select.form-control.truckker-body2(name='freelancer[freelancer_profile_attributes][state]')
                       option(value='')
                         | Select
                       = CS.states(:us).each do |index, value|
@@ -42,20 +42,20 @@
                           option.js--ca_option(value="#{index}")
                             = value
                 .col-md-6
-                  = df.input :city, required: true, label: "City", placeholder: "City", label_html: { class: "avj-caption1" }
+                  = df.input :city, required: true, label: "City", placeholder: "City", label_html: { class: "truckker-caption1" }
                 .col-md-6
-                  = df.input :postal_code, required: false, label: "ZIP/Postal Code", placeholder: "ZIP/Postal Code", label_html: { class: "avj-caption1" }
+                  = df.input :postal_code, required: false, label: "ZIP/Postal Code", placeholder: "ZIP/Postal Code", label_html: { class: "truckker-caption1" }
                 .col-12
                   .form-group
-                    label.avj-caption1 for="keywords"
+                    label.truckker-caption1 for="keywords"
                       | Do you have a Valid Drivers license?
                     .form-check
                       = df.radio_button(:valid_driver, true, class: "form-check-input")
-                      label.form-check-label.avj-body2 for="exampleRadios1"
+                      label.form-check-label.truckker-body2 for="exampleRadios1"
                         | Yes
                     .form-check
                       = df.radio_button(:valid_driver, false, class: "form-check-input")
-                      label.form-check-label.avj-body2 for="exampleRadios2"
+                      label.form-check-label.truckker-body2 for="exampleRadios2"
                         | No
 
       .row.mb-2
@@ -68,17 +68,17 @@
         .col-md-8.col-12
           .row
             .col-md-9.col-12
-              = f.input :first_name, required: true, label: "First Name", placeholder: "First Name", label_html: { class: "avj-caption1" }
-              = f.input :last_name, required: true, label: "Last Name", placeholder: "Last Name", label_html: { class: "avj-caption1" }, wrapper_html: { class: "mb-0" }
-              small.avj-caption2 id="emailHelp" class="form-text text-muted"
-                | Only the first initial of your last name is shown on your AV Junction Profile
+              = f.input :first_name, required: true, label: "First Name", placeholder: "First Name", label_html: { class: "truckker-caption1" }
+              = f.input :last_name, required: true, label: "Last Name", placeholder: "Last Name", label_html: { class: "truckker-caption1" }, wrapper_html: { class: "mb-0" }
+              small.truckker-caption2 id="emailHelp" class="form-text text-muted"
+                | Only the first initial of your last name is shown on your Truckker Profile
             .col-md-3.col-8
               .form-group
-                label.avj-caption1
+                label.truckker-caption1
                   | Profile Picture
                 = image_tag(@freelancer.freelancer_profile.avatar_url, id: "freelancer-edit-profile__avatar", class: "mr-2")
                 a.zmdi.zmdi-camera onclick="updateProfilePicture()"
-                = df.file_field :avatar, label: false, :accept => 'image/png,image/gif,image/jpeg', id: "edit-freelancer-profile-avatar", class: "avj-hidden-important file-input--hidden"
+                = df.file_field :avatar, label: false, :accept => 'image/png,image/gif,image/jpeg', id: "edit-freelancer-profile-avatar", class: "truckker-hidden-important file-input--hidden"
 
 
       .row.mb-2
@@ -91,11 +91,11 @@
         .col-md-8.col-12
           .row
             .col-md-12
-              = df.input :tagline, required: true, label: "Describe yourself in one senternce, your 'tagline'", placeholder: "Tagline", label_html: { class: "avj-caption1" }
+              = df.input :tagline, required: true, label: "Describe yourself in one senternce, your 'tagline'", placeholder: "Tagline", label_html: { class: "truckker-caption1" }
             .col-12
-              = df.input :bio, required: true, label: "Bio", placeholder: "Enter a short bio", input_html: { rows: "6" }, label_html: { class: "avj-caption1" }
+              = df.input :bio, required: true, label: "Bio", placeholder: "Enter a short bio", input_html: { rows: "6" }, label_html: { class: "truckker-caption1" }
             .col-12
-              = df.input :company_name, required: false, label: "Are you working with a company?", placeholder: "Company_name", label_html: { class: "avj-caption1" }
+              = df.input :company_name, required: false, label: "Are you working with a company?", placeholder: "Company_name", label_html: { class: "truckker-caption1" }
 
       .row.mb-2
         .col
@@ -107,28 +107,28 @@
         .col-md-8.col-12
           .row
             .col-md-12
-              = df.input :service_areas, required: false, label: "Service Regions", placeholder: "Service Regions", label_html: { class: "avj-caption1" }
+              = df.input :service_areas, required: false, label: "Service Regions", placeholder: "Service Regions", label_html: { class: "truckker-caption1" }
             .col-md-6
-              = df.input :freelancer_type, required: false, label: "Freelancer Type", prompt: "Freelancer Type", label_html: { class: "avj-caption1" }
+              = df.input :freelancer_type, required: false, label: "Freelancer Type", prompt: "Freelancer Type", label_html: { class: "truckker-caption1" }
             .col-md-6
-              = df.input :freelancer_team_size, required: false, label: "Team Size", prompt: "Team Size", label_html: { class: "avj-caption1" }
+              = df.input :freelancer_team_size, required: false, label: "Team Size", prompt: "Team Size", label_html: { class: "truckker-caption1" }
             .col-md-12
-              = df.input :years_of_experience, required: false, label: "Years of Experience", placeholder: "Experience in years", label_html: { class: "avj-caption1" }
+              = df.input :years_of_experience, required: false, label: "Years of Experience", placeholder: "Experience in years", label_html: { class: "truckker-caption1" }
             .col-md-6
-              = df.input :pay_unit_time_preference, required: false, label: "Payment Preference", prompt: "Select", label_html: {class: "avj-caption1"}
+              = df.input :pay_unit_time_preference, required: false, label: "Payment Preference", prompt: "Select", label_html: {class: "truckker-caption1"}
             .col-md-6.js--pay-rate
-              = df.input :pay_rate, required: false, label: "Rate", placeholder: "Enter your rate", label_html: {class: "avj-caption1"}
+              = df.input :pay_rate, required: false, label: "Rate", placeholder: "Enter your rate", label_html: {class: "truckker-caption1"}
             .col-12
               .form-group
-                label.avj-caption1 for="keywords"
+                label.truckker-caption1 for="keywords"
                   | Do you have your own tools?
                 .form-check
                   = df.radio_button(:own_tools, true, class: "form-check-input")
-                  label.form-check-label.avj-body2 for="exampleRadios1"
+                  label.form-check-label.truckker-body2 for="exampleRadios1"
                     | Yes
                 .form-check
                   = df.radio_button(:own_tools, false, class: "form-check-input")
-                  label.form-check-label.avj-body2 for="exampleRadios2"
+                  label.form-check-label.truckker-body2 for="exampleRadios2"
                     | No
 
       .row.mb-2
@@ -145,7 +145,7 @@
           .row
             .col-12
               .form-group
-                label.avj-body1 for="Job_types"
+                label.truckker-body1 for="Job_types"
                   | Special Skills
                 .row
                   - I18n.t('enumerize.technical_skill_tags').each do |index, value|
@@ -157,11 +157,11 @@
                     .col-md-4.col-6
                       .form-check
                         = check_box_tag tag_name, "1", checked, class: "form-check-input"
-                        label.form-check-label.avj-body2= value
+                        label.form-check-label.truckker-body2= value
 
             .col-12
               .form-group
-                label.avj-body1 for="Job_types"
+                label.truckker-body1 for="Job_types"
                   | Manufacturers
                 .row
                   - I18n.t('enumerize.manufacturer_tags').each do |index, value|
@@ -173,7 +173,7 @@
                     .col-md-4.col-6
                       .form-check
                         = check_box_tag tag_name, "1", checked, class: "form-check-input"
-                        label.form-check-label.avj-body2= value
+                        label.form-check-label.truckker-body2= value
 
       .row.mb-2
         .col
@@ -186,7 +186,7 @@
           .row
             .col-12
               .form-group
-                label.avj-body1 for="Job_types"
+                label.truckker-body1 for="Job_types"
                   | System Integration
                 .row
                   - I18n.t('enumerize.system_integration_job_markets').each do |index, value|
@@ -198,11 +198,11 @@
                     .col-md-6
                       .form-check
                         = check_box_tag tag_name, "1", checked, class: 'form-check-input'
-                        label.form-check-label.avj-body2= value
+                        label.form-check-label.truckker-body2= value
 
             .col-12
               .form-group
-                label.avj-body1 for="Job_types"
+                label.truckker-body1 for="Job_types"
                   | Live Events, Staging and Rental
                 .row
                   - I18n.t('enumerize.live_events_staging_and_rental_job_markets').each do |index, value|
@@ -214,7 +214,7 @@
                     .col-md-6
                       .form-check
                         = check_box_tag tag_name, "1", checked, class: 'form-check-input'
-                        label.form-check-label.avj-body2= value
+                        label.form-check-label.truckker-body2= value
 
       .row.mb-4.mt-4
         .col
@@ -265,7 +265,7 @@
       .row
         .col-md-4.col-12
           h2 Proof of Insurance
-          .avj-body2.avj-text-color-black2
+          .truckker-body2.truckker-text-color-black2
             | Proof of Insurance includes; General Liability and Workplace Safety
         .col-md-8.col-12
           div
@@ -281,7 +281,7 @@
       .row
         .col-md-4.col-12
           h2 Secruity Clearances
-          .avj-body2.avj-text-color-black2
+          .truckker-body2.truckker-text-color-black2
             | Clearance types includes; Site Access, Secret (level 1), Top Secret (Level 2) or Enhanced Top Secret (Level 3)
         .col-md-8.col-12
           div

@@ -1,4 +1,7 @@
+# frozen_string_literal: true
+
 class Admin::MessagesController < Admin::BaseController
+
   before_action :authorize_user
   before_action :set_freelancer
   before_action :set_company
@@ -24,4 +27,5 @@ class Admin::MessagesController < Admin::BaseController
   def set_collection
     @messages = @company.messages_for_freelancer(@freelancer)
   end
+
 end

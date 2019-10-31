@@ -22,7 +22,7 @@
               p.freelancer-job__msg-text= message.body
               - if message.attachment_url
                 a.authorable_attachment href=message.attachment_url target="_blank"
-                  - if is_image(message.attachment_url)
+                  - if image?(message.attachment_url)
                     span class="authorable_attachment_icon fa fa-image"
                   - else
                     span class="authorable_attachment_icon fa fa-file-text"

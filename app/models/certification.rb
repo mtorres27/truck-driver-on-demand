@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # == Schema Information
 #
 # Table name: certifications
@@ -17,8 +19,9 @@ require "image_processing/mini_magick"
 include ImageProcessing::MiniMagick
 
 class Certification < ApplicationRecord
+
   include CertificationUploader[:certificate]
-  belongs_to :freelancer, class_name: 'User', foreign_key: 'freelancer_id'
+  belongs_to :freelancer, class_name: "User", foreign_key: "freelancer_id"
 
   extend Enumerize
 
@@ -26,21 +29,10 @@ class Certification < ApplicationRecord
 
   validates :certificate_data, presence: true
 
-  enumerize :cert_type, in: [ :skill, :onsite ]
+  enumerize :cert_type, in: %i[skill onsite]
 
   def generate_thumbnail
-    if self.certificate_data.nil?
-      return
-    end
-
-    return
-
-
-    page_index_path = self.certificate_data + "[0]" # first page in PDF
-    pdf_page = MiniMagick::Image.read( page_index_path ).first # first item in Magick::ImageList
-    filename = "#{id}.pdf"
-    pdf_page.write( "/uploads/images/certifications/#{filename}" )
-
-    update_column(:thumbnail, filename)
+    nil
   end
+
 end

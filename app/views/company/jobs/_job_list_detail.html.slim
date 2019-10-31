@@ -1,14 +1,14 @@
-.avj-job-item
-  .avj-caption1.avj-text-color-black2
+.truckker-job-item
+  .truckker-caption1.truckker-text-color-black2
     = "Posted #{job.created_at}"
     | &nbsp;
     = job_state_label(job)
-  a.avj-text-color-black href=company_job_url(job)
-    .avj-body1.avj-text-emphasize= job.title
-    .avj-body2= job.summary.html_safe
+  a.truckker-text-color-black href=company_job_url(job)
+    .truckker-body1.truckker-text-emphasize= job.title
+    .truckker-body2= job.summary.html_safe
   .d-flex
-    .zmdi.zmdi-pin.avj-text-color-black2.avj-text-sm.mr-2
-    .avj-caption1.avj-text-color-black2= job.city_state_country
+    .zmdi.zmdi-pin.truckker-text-color-black2.truckker-text-sm.mr-2
+    .truckker-caption1.truckker-text-color-black2= job.city_state_country
   .d-flex
     - if job.state == "published"
       - repliers = job.repliers
@@ -19,11 +19,11 @@
     - repliers.last(5).each do |freelancer|
       a.mr-1 href=company_freelancer_messages_path(freelancer)
         - if freelancer.freelancer_profile.avatar_data.present?
-          .avj-avatar
+          .truckker-avatar
             = image_tag(freelancer.freelancer_profile.avatar_url)
         - else
-          .avj-circle_profile__image.freelancer__image= freelancer.name_initials
+          .truckker-circle_profile__image.freelancer__image= freelancer.name_initials
     .d-flex.flex-column.ml-4.justify-content-between
-      = link_to pluralize(repliers.count, "Reply"), company_job_url(job), class: "avj-caption1"
+      = link_to pluralize(repliers.count, "Reply"), company_job_url(job), class: "truckker-caption1"
       - if job.address.present?
-        = link_to pluralize(matches.count, "Match"), company_job_url(job), class: "avj-caption1"
+        = link_to pluralize(matches.count, "Match"), company_job_url(job), class: "truckker-caption1"

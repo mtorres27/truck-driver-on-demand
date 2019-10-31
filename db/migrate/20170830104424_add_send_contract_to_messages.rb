@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AddSendContractToMessages < ActiveRecord::Migration[5.1]
   def change
     add_column :messages, :send_contract, :boolean, default: false

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AddCalculationsFieldsToPayments < ActiveRecord::Migration[5.1]
   def change
     add_column :payments, :company_fees, :decimal, precision: 10, scale: 2, default: 0

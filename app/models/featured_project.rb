@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # == Schema Information
 #
 # Table name: featured_projects
@@ -12,6 +14,8 @@
 #
 
 class FeaturedProject < ApplicationRecord
+
   belongs_to :company
   include FeaturedProjectUploader[:file]
+
 end

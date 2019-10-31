@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CreateCompanyReviews < ActiveRecord::Migration[5.1]
   def change
     create_table :company_reviews do |t|

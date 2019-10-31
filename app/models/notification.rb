@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # == Schema Information
 #
 # Table name: notifications
@@ -21,6 +23,7 @@
 #
 
 class Notification < ApplicationRecord
+
   belongs_to :authorable, polymorphic: true
   belongs_to :receivable, polymorphic: true
 
@@ -30,6 +33,7 @@ class Notification < ApplicationRecord
   scope :unread, -> { where(read_at: nil).reverse }
 
   def mark_as_read
-    self.update_attribute(:read_at, Time.zone.now)
+    update_attribute(:read_at, Time.zone.now)
   end
+
 end

@@ -1,9 +1,9 @@
 - content_for :title, "Edit Profile"
 = simple_form_for(@freelancer, url: freelancer_profile_path) do |f|
   = f.hidden_field :enforce_profile_edit, value: true
-  .avj-section.avj-section__msg-subhead.d-block.mb-4
+  .truckker-section.truckker-section__msg-subhead.d-block.mb-4
     .container
-      .avj-subhead
+      .truckker-subhead
         h4.ellipsis.m-0 Edit Profile
         .d-flex.align-items-center.justify-content-end
           = link_to "Cancel", freelancer_profile_path, class: "btn btn-outline-primary btn-sm mr-2"

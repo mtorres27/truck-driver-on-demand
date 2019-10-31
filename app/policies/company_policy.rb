@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CompanyPolicy < ApplicationPolicy
 
   def index?
@@ -76,6 +78,7 @@ class CompanyPolicy < ApplicationPolicy
 
   def company_owner?
     return false unless company_user?
+
     record.id == user.company.id
   end
 

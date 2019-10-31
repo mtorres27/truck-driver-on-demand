@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # == Schema Information
 #
 # Table name: freelancer_profiles
@@ -53,11 +55,13 @@
 #  index_freelancer_profiles_on_job_markets           (job_markets)
 #  index_freelancer_profiles_on_manufacturer_tags     (manufacturer_tags)
 #  index_freelancer_profiles_on_technical_skill_tags  (technical_skill_tags)
+# rubocop:disable Metrics/LineLength
 #  index_on_freelancer_profiles_loc                   (st_geographyfromtext((((('SRID=4326;POINT('::text || lng) || ' '::text) || lat) || ')'::text)))
 #  index_on_freelancers_loc                           (st_geographyfromtext((((('SRID=4326;POINT('::text || lng) || ' '::text) || lat) || ')'::text)))
+# rubocop:enable Metrics/LineLength
 #
 
-require 'rails_helper'
+require "rails_helper"
 
 describe FreelancerProfile, type: :model do
   describe "hooks" do

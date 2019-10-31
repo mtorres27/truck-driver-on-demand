@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # == Schema Information
 #
 # Table name: job_collaborators
@@ -19,6 +21,8 @@
 #
 
 class JobCollaborator < ApplicationRecord
+
   belongs_to :user
   belongs_to :job
+
 end

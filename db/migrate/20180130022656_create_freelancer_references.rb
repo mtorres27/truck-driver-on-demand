@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CreateFreelancerReferences < ActiveRecord::Migration[5.1]
   def change
     create_table :freelancer_references do |t|

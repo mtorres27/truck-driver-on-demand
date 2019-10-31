@@ -1,7 +1,10 @@
+# frozen_string_literal: true
+
 module ApplicationHelper
 
   def attachment_image_link(attachment)
     return unless attachment
+
     content_tag(:a, href: attachment.url, target: "_blank") do
       if attachment.mime_type&.include?("image")
         image_tag(attachment.url, class: "attachment-image")
@@ -11,30 +14,29 @@ module ApplicationHelper
     end
   end
 
-  def is_image(url)
-    if ['.png', '.gif', '.jpg', '.jpeg', '.svg'].include?(File.extname(url).downcase)
-      return true
+  def image?(url)
+    if [".png", ".gif", ".jpg", ".jpeg", ".svg"].include?(File.extname(url).downcase)
+      true
     else
-      return false
+      false
     end
   end
 
-  def has_seen_onboarding
+  def seen_onboarding?
     if cookies[:onboarding]
-      return true
+      true
     else
-      return false
+      false
     end
   end
 
-  def has_closed_prereg_message
+  def closed_prereg_message?
     if cookies[:prereg_message]
-      return true
+      true
     else
-      return false
+      false
     end
   end
-
 
   def set_has_seen_onboarding
     cookies[:onboarding] = { value: true }
@@ -43,7 +45,6 @@ module ApplicationHelper
   def set_has_closed_prereg_message
     cookies[:prereg_message] = { value: true }
   end
-
 
   def calc_distance_from(freelancer)
     if current_user.nil? || current_user.admin? || (current_user.company_user? && current_user.company.lat.nil?)
@@ -54,17 +55,17 @@ module ApplicationHelper
     @freelancer_profiles = FreelancerProfile.where(freelancer_id: freelancer.id).with_distance(point)
     @freelancer = freelancer
 
-    if @freelancer.freelancer_profile.lat.nil?
-      return "N/A"
-    end
-    return distance_from(@freelancer, @freelancer_profiles)
+    return "N/A" if @freelancer.freelancer_profile.lat.nil?
+
+    distance_from(@freelancer, @freelancer_profiles)
   end
 
   def proper_website_link(url)
-    if url.include?("http://") or url.include?("https://")
-      return url
+    if url.include?("http://") || url.include?("https://")
+      url
     else
-      return "http://"+url
+      "http://" + url
     end
   end
+
 end

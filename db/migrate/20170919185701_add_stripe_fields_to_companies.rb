@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AddStripeFieldsToCompanies < ActiveRecord::Migration[5.1]
   def change
     add_column :companies, :stripe_customer_id, :string, limit: 40

@@ -1,20 +1,20 @@
 - last_message = freelancer.messages_for_company(company).last
-.avj-list-item class="#{"avj-text-emphasize" if freelancer.has_new_messages_from_company(company)}"
+.truckker-list-item class="#{"truckker-text-emphasize" if freelancer.new_messages_from_company?(company)}"
   - is_admin = current_user.is_a?(Admin)
   - path = is_admin ? admin_company_url(company) : freelancer_company_url(company)
   a.mr-4 href=path
     - if company.avatar_data.present?
-      .avj-avatar
+      .truckker-avatar
         = image_tag(company.avatar_url)
     - else
-      .avj-circle_profile__image.company__image= company.company_user.name_initials
+      .truckker-circle_profile__image.company__image= company.company_user.name_initials
   - path = is_admin ? admin_messages_url(company, freelancer) : freelancer_company_messages_url(company)
   a.d-flex.w-100 href=path
     .d-flex.flex-wrap.w-100.mr-4
       .w-50
-        .avj-body1.m-0= "#{company.name} "
+        .truckker-body1.m-0= "#{company.name} "
       .w-50
-        .avj-caption1.text-right= last_message.created_at
+        .truckker-caption1.text-right= last_message.created_at
       .w-100
-        .avj-body2= last_message.body
-    .avj-body1.avj-text-color-primary.zmdi.zmdi-comment-text
+        .truckker-body2= last_message.body
+    .truckker-body1.truckker-text-color-primary.zmdi.zmdi-comment-text

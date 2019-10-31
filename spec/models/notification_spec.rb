@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # == Schema Information
 #
 # Table name: notifications
@@ -20,7 +22,7 @@
 #  index_notifications_on_receivable_type_and_receivable_id  (receivable_type,receivable_id)
 #
 
-require 'rails_helper'
+require "rails_helper"
 
 describe Notification, type: :model do
   describe "validations" do

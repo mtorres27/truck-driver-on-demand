@@ -1,9 +1,9 @@
-.avj-section.avj-section__main
+.truckker-section.truckker-section__main
   .container.container__content
     - if current_user.is_a?(CompanyUser)
       .row.mb-4
         .col-md-8.col
-          .avj-body2
+          .truckker-body2
             | This company account is managed by #{current_user.full_name}
         .col-md-4.col-3.d-flex.justify-content-end.align-items-center
           a.btn.btn-secondary.btn-sm href=edit_company_company_user_path(current_company.company_user)
@@ -11,15 +11,15 @@
     .row.mb-4
       .col-md-2.col-sm-4.col-12
         - if company.avatar_data.nil?
-          .avj-circle_profile__image.company__image= company.owner.name_initials
+          .truckker-circle_profile__image.company__image= company.owner.name_initials
         - else
           img.mb-4 src=company.avatar_url
       .col-md-10.col-sm-8.col-12
         h2= company.name
-        .avj-body1= company.description
+        .truckker-body1= company.description
     .row.mb-4
       .col
-        .avj-body2
+        .truckker-body2
           - if company.address.present?
             = company.address
             br/
@@ -30,43 +30,43 @@
           br/
           = company.postal_code_country
         - if company.website.present?
-          .avj-body2
+          .truckker-body2
             a href="http://#{company.website}" target="_blank"
               = company.website
       .col
         - if company.established_in.present?
-          .avj-body2
+          .truckker-body2
             = "Est. #{company.established_in}"
         - if company.number_of_employees.present?
-          .avj-body2
+          .truckker-body2
             = "#{I18n.t("enumerize.company.number_of_employees.#{company.number_of_employees}")} Employees"
         - if company.number_of_offices.present?
-          .avj-body2
+          .truckker-body2
             = "#{company.number_of_offices} Offices"
         - if company.area.present?
-          .avj-body2
+          .truckker-body2
             = "Servicing #{company.area}"
 
     h2 Areas of Expertise
     - if !company.job_markets_for_job_type("system_integration").empty?
-      .avj-body1
+      .truckker-body1
         | System Integration
       .d-inline-flex.flex-wrap.mb-4
         - company.job_markets_for_job_type("system_integration").each do |value|
-          .avj-tag= value
+          .truckker-tag= value
     - if !company.job_markets_for_job_type("live_events_staging_and_rental").empty?
-      .avj-body1
+      .truckker-body1
         | Live Events Staging & Rental
       .d-inline-flex.flex-wrap.mb-4
         - company.job_markets_for_job_type("live_events_staging_and_rental").each do |value|
-          .avj-tag= value
+          .truckker-tag= value
 
     - if company.technical_skill_tags.present? && company.technical_skill_tags.kind_of?(Hash)
-      .avj-body1
+      .truckker-body1
         | Technical Skills
       .d-inline-flex.flex-wrap.mb-4
         - company.technical_skill_tags.each do |index, value|
-          .avj-tag= I18n.t("enumerize.technical_skill_tags.#{index}")
+          .truckker-tag= I18n.t("enumerize.technical_skill_tags.#{index}")
 
     - if company.featured_projects.length > 0
       h2 Featured Projects
@@ -74,4 +74,4 @@
         - company.featured_projects.each do |project|
           a.col-md-4.col-6 href="#{project.file_url.include?('missing') ? '/assets/' : ''} #{project.file_url}" target="_blank"
             img src="#{project.file_url.include?('missing') ? '/assets/' : ''} #{project.file_url}"
-            .avj-caption1= project.name
+            .truckker-caption1= project.name

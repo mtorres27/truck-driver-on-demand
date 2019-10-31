@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # == Schema Information
 #
 # Table name: companies
@@ -48,15 +50,16 @@
 #  index_companies_on_manufacturer_tags     (manufacturer_tags)
 #  index_companies_on_name                  (name)
 #  index_companies_on_technical_skill_tags  (technical_skill_tags)
+# rubocop:disable Metrics/LineLength
 #  index_on_companies_loc                   (st_geographyfromtext((((('SRID=4326;POINT('::text || lng) || ' '::text) || lat) || ')'::text)))
+# rubocop:enable Metrics/LineLength
 #
 
-require 'rails_helper'
+require "rails_helper"
 
 describe Company, type: :model do
   describe "hooks" do
     describe "after save" do
-
       describe "send_confirmation_email" do
         let(:company) { create(:company) }
         let(:company_params) { { registration_step: "wicked_finish" } }

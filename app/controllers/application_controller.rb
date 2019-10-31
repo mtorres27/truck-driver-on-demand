@@ -1,4 +1,7 @@
+# frozen_string_literal: true
+
 class ApplicationController < ActionController::Base
+
   protect_from_forgery with: :exception
 
   require "erb"
@@ -30,7 +33,7 @@ class ApplicationController < ActionController::Base
     redirect_to new_user_session_path
   end
 
-  def after_inactive_sign_up_path_for(resource)
+  def after_inactive_sign_up_path_for(_resource)
     cookies.delete(:onboarding)
     confirm_email_path
   end
@@ -40,7 +43,9 @@ class ApplicationController < ActionController::Base
   end
 
   def do_geocode(address)
+    # rubocop:disable Metrics/LineLength
     url = "https://maps.googleapis.com/maps/api/geocode/json?address=#{url_encode(address)}&key=#{ENV['google_maps_js_api_key']}"
+    # rubocop:enable Metrics/LineLength
     # Make the API request
     begin
       res = JSON.parse(Net::HTTP.get(URI.parse(url)), symbolize_names: true)
@@ -51,7 +56,7 @@ class ApplicationController < ActionController::Base
 
         return { address: formatted_address, lat: lat, lng: lng }
       end
-    rescue Exception => e
+    rescue StandardError => e
       puts e
       logger.error e
       return false
@@ -76,7 +81,9 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  # rubocop:disable Naming/AccessorMethodName
   def get_matches
+    # rubocop:enable Naming/AccessorMethodName
     @distance = params[:search][:distance] if params[:search].present?
     @freelancers = @job.matches(@distance)
   end
@@ -86,9 +93,11 @@ class ApplicationController < ActionController::Base
   def after_sign_in_path_for(resource)
     return admin_root_path if resource.admin?
     return freelancer_root_path if resource.freelancer?
+
     if resource.company_user?
       if resource.enabled?
         return edit_company_company_user_path(resource) if resource.sign_in_count == 1 && resource.role != "Owner"
+
         return company_root_path
       end
       flash.discard
@@ -97,4 +106,5 @@ class ApplicationController < ActionController::Base
     end
     root_path
   end
+
 end

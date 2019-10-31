@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # == Schema Information
 #
 # Table name: users
@@ -47,10 +49,12 @@
 #  index_users_on_reset_password_token               (reset_password_token) UNIQUE
 #
 
-require 'net/http'
-require 'uri'
+require "net/http"
+require "uri"
 
+# rubocop:disable Metrics/ClassLength
 class Freelancer < User
+
   include PgSearch
 
   audited
@@ -94,47 +98,47 @@ class Freelancer < User
 
   pg_search_scope :search, against: {
     first_name: "A",
-    last_name: "A"
+    last_name: "A",
   }, associated_against: {
-    freelancer_profile: [
-      :job_markets, :technical_skill_tags, :manufacturer_tags, :job_functions, :tagline, :bio
-    ]
+    freelancer_profile: %i[
+      job_markets technical_skill_tags manufacturer_tags job_functions tagline bio
+    ],
   }, using: {
-    tsearch: { prefix: true, any_word: true }
+    tsearch: { prefix: true, any_word: true },
   }
 
   pg_search_scope :name_or_email_search, against: {
     email: "A",
     first_name: "A",
-    last_name: "A"
+    last_name: "A",
   }, using: {
-    tsearch: { prefix: true }
+    tsearch: { prefix: true },
   }
 
   pg_search_scope :admin_search, against: {
-      email: "A",
-      first_name: "A",
-      last_name: "A",
-      phone_number: "A"
+    email: "A",
+    first_name: "A",
+    last_name: "A",
+    phone_number: "A",
   }, associated_against: {
-      freelancer_profile: [
-          :address,
-          :area,
-          :country,
-          :freelancer_type,
-          :state,
-          :service_areas,
-          :city,
-          :company_name,
-          :job_markets,
-          :technical_skill_tags,
-          :manufacturer_tags,
-          :job_functions,
-          :tagline,
-          :bio
-      ]
+    freelancer_profile: %i[
+      address
+      area
+      country
+      freelancer_type
+      state
+      service_areas
+      city
+      company_name
+      job_markets
+      technical_skill_tags
+      manufacturer_tags
+      job_functions
+      tagline
+      bio
+    ],
   }, using: {
-      tsearch: { prefix: true }
+    tsearch: { prefix: true },
   }
 
   delegate :registration_completed?, to: :freelancer_profile, allow_nil: true
@@ -144,12 +148,14 @@ class Freelancer < User
   end
 
   def companies_for_messaging
-    all_messages = messages.to_a + Message.where(receivable_type: 'User', receivable_id: id).to_a
-    all_messages.sort_by { |a| a.created_at }.reverse.map { |msg| msg.authorable.is_a?(Company) ? msg.authorable : msg.receivable }.uniq
+    all_messages = messages.to_a + Message.where(receivable_type: "User", receivable_id: id).to_a
+    # rubocop:disable Metrics/LineLength
+    all_messages.sort_by(&:created_at).reverse.map { |msg| msg.authorable.is_a?(Company) ? msg.authorable : msg.receivable }.uniq
+    # rubocop:enable Metrics/LineLength
   end
 
-  def has_new_messages_from_company(company)
-    notifications.where(authorable: company, read_at: nil).count > 0
+  def new_messages_from_company?(company)
+    notifications.where(authorable: company, read_at: nil).count.positive?
   end
 
   def connections_count
@@ -157,93 +163,88 @@ class Freelancer < User
   end
 
   def rating
-    if freelancer_reviews.count > 0
-      freelancer_reviews.average("(#{FreelancerReview::RATING_ATTRS.map(&:to_s).join('+')}) / #{FreelancerReview::RATING_ATTRS.length}").round
-    else
-      return nil
-    end
+    return unless freelancer_reviews.count.positive
+
+    # rubocop:disable Metrics/LineLength
+    freelancer_reviews.average("(#{FreelancerReview::RATING_ATTRS.map(&:to_s).join('+')}) / #{FreelancerReview::RATING_ATTRS.length}").round
+    # rubocop:enable Metrics/LineLength
   end
 
   def job_markets_for_job_type(job_type)
     all_job_markets = I18n.t("enumerize.#{job_type}_job_markets")
-    return [] unless all_job_markets.kind_of?(Hash)
+    return [] unless all_job_markets.is_a?(Hash)
+
     freelancer_job_markets = []
-    unless freelancer_profile.job_markets.nil?
-      freelancer_profile.job_markets.each do |index, _|
-        if all_job_markets[index.to_sym]
-          freelancer_job_markets << all_job_markets[index.to_sym]
-        end
-      end
+
+    freelancer_profile.job_markets&.each do |index, _|
+      freelancer_job_markets << all_job_markets[index.to_sym] if all_job_markets[index.to_sym]
     end
     freelancer_job_markets
   end
 
   def job_functions_for_job_type(job_type)
     all_job_functions = I18n.t("enumerize.#{job_type}_job_functions")
-    return [] unless all_job_functions.kind_of?(Hash)
+    return [] unless all_job_functions.is_a?(Hash)
+
     freelancer_job_functions = []
-    unless freelancer_profile.job_functions.nil?
-      freelancer_profile.job_functions.each do |index, _|
-        if all_job_functions[index.to_sym]
-          freelancer_job_functions << all_job_functions[index.to_sym]
-        end
-      end
+    freelancer_profile.job_functions&.each do |index, _|
+      freelancer_job_functions << all_job_functions[index.to_sym] if all_job_functions[index.to_sym]
     end
     freelancer_job_functions
   end
 
+  # rubocop:disable Metrics/AbcSize
   def score
     score = 0
-    score += 2 if self.freelancer_profile.avatar_data.present?
-    score += 1 if self.freelancer_profile.address.present?
-    score += 1 if self.freelancer_profile.area.present?
-    score += 1 if self.freelancer_profile.city.present?
-    score += 1 if self.freelancer_profile.state.present?
-    score += 1 if self.freelancer_profile.postal_code.present?
-    score += 1 if self.phone_number.present?
-    score += 1 if self.freelancer_profile.bio.present?
-    score += 1 if self.freelancer_profile.tagline.present?
-    score += 1 if self.freelancer_profile.company_name.present?
-    score += 1 if self.freelancer_profile.valid_driver
-    score += 1 if self.freelancer_profile.available
-    score += 5 if self.certifications.count > 0
-    score += 2 if self.freelancer_affiliations.count > 0
-    score += 2 if self.freelancer_clearances.count > 0
-    score += 1 if self.freelancer_insurances.count > 0
-    score += 1 if self.freelancer_portfolios.count > 0
-    (score.to_f/24)*100
+    score += 2 if freelancer_profile.avatar_data.present?
+    score += 1 if freelancer_profile.address.present?
+    score += 1 if freelancer_profile.area.present?
+    score += 1 if freelancer_profile.city.present?
+    score += 1 if freelancer_profile.state.present?
+    score += 1 if freelancer_profile.postal_code.present?
+    score += 1 if phone_number.present?
+    score += 1 if freelancer_profile.bio.present?
+    score += 1 if freelancer_profile.tagline.present?
+    score += 1 if freelancer_profile.company_name.present?
+    score += 1 if freelancer_profile.valid_driver
+    score += 1 if freelancer_profile.available
+    score += 5 if certifications.count.positive?
+    score += 2 if freelancer_affiliations.count.positive?
+    score += 2 if freelancer_clearances.count.positive?
+    score += 1 if freelancer_insurances.count.positive?
+    score += 1 if freelancer_portfolios.count.positive?
+    (score.to_f / 24) * 100
   end
+  # rubocop:enable Metrics/AbcSize
 
   def self.avg_rating(freelancer)
-    if freelancer.freelancer_reviews.count == 0
-      return nil
-    end
+    return nil if freelancer.freelancer_reviews.count.zero?
 
-    return freelancer.rating
+    freelancer.rating
   end
 
   def reject_certification(attrs)
     exists = attrs["id"].present?
     empty = attrs["name"].blank?
-    !exists and empty
+    !exists && empty
   end
 
   def reject_freelancer_affiliation(attrs)
     exists = attrs["id"].present?
-    empty = attrs["image"].blank? and attrs["name"].blank?
-    !exists and empty
+    (empty = attrs["image"].blank?) && attrs["name"].blank?
+    !exists && empty
   end
 
   def reject_freelancer_clearance(attrs)
     exists = attrs["id"].present?
-    empty = attrs["image"].blank? and attrs["description"].blank?
-    !exists and empty
+    (empty = attrs["image"].blank?) && attrs["description"].blank?
+    !exists && empty
   end
 
   def reject_freelancer_portfolio(attrs)
     exists = attrs["id"].present?
-    empty = attrs["image"].blank? and attrs["description"].blank?
-    !exists and empty
+    (empty = attrs["image"].blank?) && attrs["description"].blank?
+    !exists && empty
   end
 
   def self.do_all_geocodes
@@ -275,4 +276,6 @@ class Freelancer < User
   def registration_step_changed?
     freelancer_profile&.registration_step_changed?
   end
+
 end
+# rubocop:enable Metrics/ClassLength

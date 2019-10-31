@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # == Schema Information
 #
 # Table name: companies
@@ -48,9 +50,12 @@
 #  index_companies_on_manufacturer_tags     (manufacturer_tags)
 #  index_companies_on_name                  (name)
 #  index_companies_on_technical_skill_tags  (technical_skill_tags)
+# rubocop:disable Metrics/LineLength
 #  index_on_companies_loc                   (st_geographyfromtext((((('SRID=4326;POINT('::text || lng) || ' '::text) || lat) || ')'::text)))
+# rubocop:enable Metrics/LineLength
 #
 
+# rubocop:disable Metrics/ClassLength
 class Company < ApplicationRecord
 
   audited
@@ -78,15 +83,15 @@ class Company < ApplicationRecord
                 :enforce_profile_edit, :user_type
 
   validates :phone_number, length: { minimum: 7 }, allow_blank: true
-  validates :name, :country, :city, :website, :area, presence: true, on: :update,  if: :step_job_info?
+  validates :name, :country, :city, :website, :area, presence: true, on: :update, if: :step_job_info?
 
-  enumerize :contract_preference, in: [:prefer_fixed, :prefer_hourly, :prefer_daily]
+  enumerize :contract_preference, in: %i[prefer_fixed prefer_hourly prefer_daily]
 
-  enumerize :number_of_employees, in: [
-    :one_to_ten,
-    :eleven_to_one_hundred,
-    :one_hundred_one_to_one_thousand,
-    :more_than_one_thousand
+  enumerize :number_of_employees, in: %i[
+    one_to_ten
+    eleven_to_one_hundred
+    one_hundred_one_to_one_thousand
+    more_than_one_thousand
   ]
 
   serialize :job_markets
@@ -94,14 +99,14 @@ class Company < ApplicationRecord
   serialize :manufacturer_tags
   serialize :saved_freelancers_ids, Array
 
-  enumerize :country, in: [
-    :at, :au, :be, :ca, :ch, :de, :dk, :es, :fi, :fr, :gb, :hk, :ie, :it, :jp, :lu, :nl, :no, :nz, :pt, :se, :sg, :us
+  enumerize :country, in: %i[
+    at au be ca ch de dk es fi fr gb hk ie it jp lu nl no nz pt se sg us
   ]
 
-  enumerize :header_source, in: [
-    :color,
-    :wallpaper,
-    :default
+  enumerize :header_source, in: %i[
+    color
+    wallpaper
+    default
   ]
 
   accepts_nested_attributes_for :featured_projects, allow_destroy: true, reject_if: :reject_featured_projects
@@ -119,12 +124,13 @@ class Company < ApplicationRecord
   end
 
   def freelancers_for_messaging
-    all_messages = messages.to_a + Message.where(receivable_type: 'Company', receivable_id: id).to_a
-    all_messages.sort_by { |a| a.created_at }.reverse.map { |msg| msg.authorable.is_a?(Freelancer) ? msg.authorable : msg.receivable }.uniq
+    all_messages = messages.to_a + Message.where(receivable_type: "Company", receivable_id: id).to_a
+    all_messages.sort_by(&:created_at).reverse
+                .map { |msg| msg.authorable.is_a?(Freelancer) ? msg.authorable : msg.receivable }.uniq
   end
 
-  def has_new_messages_from_freelancer(freelancer)
-    notifications.where(authorable: freelancer, read_at: nil).count > 0
+  def new_messages_from_freelancer?(freelancer)
+    notifications.where(authorable: freelancer, read_at: nil).count.positive?
   end
 
   def freelancers
@@ -132,19 +138,19 @@ class Company < ApplicationRecord
   end
 
   def hired_freelancers
-    Freelancer.
-        joins(:freelancer_profile, applicants: :job).
-        where(jobs: { company_id: id }).
-        where(applicants: { state: :accepted }).
-        order(first_name: :desc, last_name: :desc)
+    Freelancer
+      .joins(:freelancer_profile, applicants: :job)
+      .where(jobs: { company_id: id })
+      .where(applicants: { state: :accepted })
+      .order(first_name: :desc, last_name: :desc)
   end
 
   def city_state_province
-    "#{city}#{ ", #{state}" unless state.blank?}"
+    "#{city}#{", #{state}" unless state.blank?}"
   end
 
   def postal_code_country
-    "#{"#{postal_code}, " unless postal_code.blank?}#{ I18n.t("enumerize.country.#{country}") }"
+    "#{"#{postal_code}, " unless postal_code.blank?}#{I18n.t("enumerize.country.#{country}")}"
   end
 
   def open_jobs
@@ -160,10 +166,12 @@ class Company < ApplicationRecord
   end
 
   def job_types
-    has_system_integration = has_system_integration_job_markets
-    has_live_events_staging_and_rental = has_live_events_staging_and_rental_job_markets
+    has_system_integration = system_integration_job_markets?
+    has_live_events_staging_and_rental = live_events_staging_and_rental_job_markets?
 
-    return "System Integration & Live Events Staging And Rental" if has_live_events_staging_and_rental && has_system_integration
+    if has_live_events_staging_and_rental && has_system_integration
+      return "System Integration & Live Events Staging And Rental"
+    end
 
     if has_system_integration
       "System Integration"
@@ -174,29 +182,29 @@ class Company < ApplicationRecord
     end
   end
 
-  def has_system_integration_job_markets
+  def system_integration_job_markets?
     I18n.t("enumerize.system_integration_job_markets").each do |key, _|
-      return true if job_markets.present? && job_markets[key] == '1'
+      return true if job_markets.present? && job_markets[key] == "1"
     end
     false
   end
 
-  def has_live_events_staging_and_rental_job_markets
+  def live_events_staging_and_rental_job_markets?
     I18n.t("enumerize.live_events_staging_and_rental_job_markets").each do |key, _|
-      return true if job_markets.present? && job_markets[key] == '1'
+      return true if job_markets.present? && job_markets[key] == "1"
     end
     false
   end
 
   validates_presence_of :name,
-    :address,
-    :city,
-    :postal_code,
-    :area,
-    :country,
-    :description,
-    :established_in,
-    if: :enforce_profile_edit
+                        :address,
+                        :city,
+                        :postal_code,
+                        :area,
+                        :country,
+                        :description,
+                        :established_in,
+                        if: :enforce_profile_edit
 
   pg_search_scope :search, against: {
     name: "A",
@@ -205,72 +213,73 @@ class Company < ApplicationRecord
     technical_skill_tags: "B",
     manufacturer_tags: "B",
     formatted_address: "C",
-    description: "C"
+    description: "C",
   }, associated_against: {
-    company_user: [:email, :first_name, :last_name]
+    company_user: %i[email first_name last_name],
   }, using: {
-    tsearch: { prefix: true }
+    tsearch: { prefix: true },
   }
 
   pg_search_scope :name_or_email_search, against: {
     name: "A",
   }, associated_against: {
-    company_user: [:email]
+    company_user: [:email],
   }, using: {
-    tsearch: { prefix: true }
+    tsearch: { prefix: true },
   }
 
   def rating
-    if company_reviews.count > 0
-      company_reviews.average("(#{CompanyReview::RATING_ATTRS.map(&:to_s).join('+')}) / #{CompanyReview::RATING_ATTRS.length}").round
-    else
-      return nil
-    end
+    return unless company_reviews.count.positive?
+
+    # rubocop:disable Metrics/LineLength
+    company_reviews.average("(#{CompanyReview::RATING_ATTRS.map(&:to_s).join('+')}) / #{CompanyReview::RATING_ATTRS.length}").round
+    # rubocop:enable Metrics/LineLength
   end
 
   def self.avg_rating(company)
-    if company.company_reviews_count == 0
-      return nil
-    end
+    return nil if company.company_reviews_count.zero?
 
-    return company.rating
+    company.rating
   end
 
   after_save :check_if_should_do_geocode
 
   def check_if_should_do_geocode
-    if saved_changes.include?("address") or saved_changes.include?("city") or (!address.nil? and lat.nil?) or (!city.nil? and lat.nil?)
-      do_geocode
-      update_columns(formatted_address: formatted_address, lat: lat, lng: lng)
+    # rubocop:disable Metrics/LineLength
+    unless saved_changes.include?("address") || saved_changes.include?("city") || (!address.nil? && lat.nil?) || (!city.nil? && lat.nil?)
+      return
     end
+
+    # rubocop:enable Metrics/LineLength
+    do_geocode
+    update_columns(formatted_address: formatted_address, lat: lat, lng: lng)
   end
 
   def reject_featured_projects(attrs)
     exists = attrs["id"].present?
-    empty = attrs["file"].blank? and attrs["name"].blank?
-    !exists and empty
+    (empty = attrs["file"].blank?) && attrs["name"].blank?
+    !exists && empty
   end
 
   def reject_company_installs(attrs)
     exists = attrs["id"].present?
-    empty = attrs["year"].blank? and attrs["installs"].blank
-    !exists and empty
+    (empty = attrs["year"].blank?) && attrs["installs"].blank
+    !exists && empty
   end
 
   def job_markets_for_job_type(job_type)
     all_job_markets = I18n.t("enumerize.#{job_type}_job_markets")
-    return [] unless all_job_markets.kind_of?(Hash)
+    return [] unless all_job_markets.is_a?(Hash)
+
     freelancer_job_markets = []
-    job_markets&.each do |index, value|
-      if all_job_markets[index.to_sym]
-        freelancer_job_markets << all_job_markets[index.to_sym]
-      end
+    job_markets&.each do |index, _value|
+      freelancer_job_markets << all_job_markets[index.to_sym] if all_job_markets[index.to_sym]
     end
     freelancer_job_markets
   end
 
   def canada_country?
-    country == 'ca'
+    country == "ca"
   end
 
   def self.do_all_geocodes
@@ -299,7 +308,7 @@ class Company < ApplicationRecord
     self
   end
 
-  def has_saved_freelancer?(freelancer)
+  def saved_freelancer?(freelancer)
     saved_freelancers_ids.include?(freelancer.id)
   end
 
@@ -319,6 +328,7 @@ class Company < ApplicationRecord
 
   def send_confirmation_email
     return if owner&.confirmed? || !registration_completed? || owner&.confirmation_sent_at.present?
+
     owner&.send_confirmation_instructions
     owner&.update_column(:confirmation_sent_at, Time.current)
   end
@@ -343,4 +353,6 @@ class Company < ApplicationRecord
   #     )
   #   } % [lng, lat, distance_in_meters])
   # }
+
 end
+# rubocop:enable Metrics/ClassLength

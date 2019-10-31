@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # == Schema Information
 #
 # Table name: job_invites
@@ -10,6 +12,8 @@
 #
 
 class JobInvite < ApplicationRecord
+
   belongs_to :job
   belongs_to :freelancer
+
 end

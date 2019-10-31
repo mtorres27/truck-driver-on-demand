@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AddLocationFieldsToMessages < ActiveRecord::Migration[5.1]
   def change
     add_column :messages, :lat, :decimal, precision: 9, scale: 6

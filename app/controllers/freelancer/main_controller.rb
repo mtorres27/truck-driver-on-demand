@@ -1,10 +1,12 @@
+# frozen_string_literal: true
+
 class Freelancer::MainController < Freelancer::BaseController
 
   before_action :redirect_to_registration_step, if: :current_freelancer_registering?
 
   def index
     authorize current_user
-    @jobs = Job.where(state: 'published').order('created_at DESC')
+    @jobs = Job.where(state: "published").order("created_at DESC")
   end
 
   private
@@ -14,4 +16,5 @@ class Freelancer::MainController < Freelancer::BaseController
 
     redirect_to freelancer_registration_step_path(current_user.freelancer_profile&.registration_step)
   end
+
 end

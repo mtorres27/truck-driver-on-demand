@@ -34,7 +34,7 @@ document.addEventListener("turbolinks:load", function(){
         }
     }
     else {
-        if ($(".avj-section__chat").length > 0) {
+        if ($(".truckker-section__chat").length > 0) {
             if (window.matchMedia("(max-width: 768px)").matches) {
                 window.scrollTo(0,document.body.scrollHeight);
             }

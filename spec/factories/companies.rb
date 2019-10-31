@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # == Schema Information
 #
 # Table name: companies
@@ -48,17 +50,17 @@
 #  index_companies_on_manufacturer_tags     (manufacturer_tags)
 #  index_companies_on_name                  (name)
 #  index_companies_on_technical_skill_tags  (technical_skill_tags)
+# rubocop:disable Metrics/LineLength
 #  index_on_companies_loc                   (st_geographyfromtext((((('SRID=4326;POINT('::text || lng) || ' '::text) || lat) || ')'::text)))
+# rubocop:enable Metrics/LineLength
 #
-
-include ActionDispatch::TestProcess
 
 FactoryBot.define do
   factory :company do
     name { Faker::Company.unique.name }
-    country { [:es, :fi, :fr, :gb, :pt, :us].sample }
+    country { %i[es fi fr gb pt us].sample }
     city { Faker::Address.city }
-    state { Faker::Address.state}
+    state { Faker::Address.state }
     avatar { fixture_file_upload(Rails.root.join("spec", "fixtures", "image.png"), "image/png") }
     description { Faker::Lorem.sentence }
     established_in { Faker::Number.number(4) }

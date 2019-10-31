@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AddStripeToFreelancers < ActiveRecord::Migration[5.1]
   def change
     add_column :freelancers, :stripe_account_id, :string

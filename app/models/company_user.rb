@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # == Schema Information
 #
 # Table name: users
@@ -52,8 +54,8 @@ class CompanyUser < User
   audited
 
   belongs_to :company
-  has_many :job_collaborators, foreign_key: 'user_id', dependent: :destroy
-  has_many :jobs, foreign_key: 'creator_id'
+  has_many :job_collaborators, foreign_key: "user_id", dependent: :destroy
+  has_many :jobs, foreign_key: "creator_id"
 
   before_validation :initialize_company
   before_create :set_role
@@ -76,7 +78,8 @@ class CompanyUser < User
   end
 
   def notifications
-    Notification.where(receivable_id: id, receivable_type: "User").or(Notification.where(receivable_id: company.id, receivable_type: "Company"))
+    Notification.where(receivable_id: id, receivable_type: "User")
+                .or(Notification.where(receivable_id: company.id, receivable_type: "Company"))
   end
 
   protected
@@ -96,7 +99,7 @@ class CompanyUser < User
   end
 
   def set_role
-    self.role = "Owner" if self.role.blank?
+    self.role = "Owner" if role.blank?
   end
 
 end
