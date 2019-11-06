@@ -3,14 +3,14 @@
 class CompanyMailer < ApplicationMailer
 
   # rubocop:disable Metrics/MethodLength
-  def notice_job_complete_company(company_user, freelancer, job)
+  def notice_job_complete_company(company_user, driver, job)
     @company = company_user.company
-    @freelancer = freelancer
+    @driver = driver
     @job = job
     headers "X-SMTPAPI" => {
       sub: {
         "%company_name%" => [@company.name],
-        "%freelancer_name%" => [@freelancer.first_name_and_initial],
+        "%driver_name%" => [@driver.first_name_and_initial],
         "%job_title%" => [@job.title],
         "%job_id%" => [@job.id],
         "%root_url%" => [root_url],
@@ -27,16 +27,16 @@ class CompanyMailer < ApplicationMailer
     mail(to: company_user.email, subject: "Welcome to Truckker!")
   end
 
-  def notice_message_received(company_user, freelancer, message)
+  def notice_message_received(company_user, driver, message)
     @company = company_user.company
-    @freelancer = freelancer
+    @driver = driver
     @message = message
     headers "X-SMTPAPI" => {
       sub: {
         "%company_name%" => [@company.name],
-        "%freelancer_name%" => [@freelancer.first_name_and_initial],
+        "%driver_name%" => [@driver.first_name_and_initial],
         "%message_body%" => [@message.body],
-        "%freelancer_id%" => [@freelancer.id],
+        "%driver_id%" => [@driver.id],
         "%root_url%" => [root_url],
       },
       filters: {
@@ -48,18 +48,18 @@ class CompanyMailer < ApplicationMailer
         },
       },
     }.to_json
-    mail(to: company_user.email, subject: "Received message from freelancer")
+    mail(to: company_user.email, subject: "Received message from driver")
   end
   # rubocop:enable Metrics/MethodLength
 
-  def notice_message_sent(company, freelancer, message)
+  def notice_message_sent(company, driver, message)
     @company = company
-    @freelancer = freelancer
+    @driver = driver
     @message = message
     headers "X-SMTPAPI" => {
       sub: {
         "%sender_name%" => [@company.name],
-        "%recipient_name%" => [@freelancer.first_name_and_initial],
+        "%recipient_name%" => [@driver.first_name_and_initial],
         "%message_body%" => [@message.body],
       },
       filters: {
@@ -74,14 +74,14 @@ class CompanyMailer < ApplicationMailer
     mail(to: @company.owner.email, subject: "Message Sent")
   end
 
-  def notice_freelancer_review(company_user, freelancer, review)
+  def notice_driver_review(company_user, driver, review)
     @company = company_user.company
-    @freelancer = freelancer
+    @driver = driver
     @review = review
     headers "X-SMTPAPI" => {
       sub: {
         "%company_name%" => [@company.name],
-        "%freelancer_name%" => [@freelancer.first_name_and_initial],
+        "%driver_name%" => [@driver.first_name_and_initial],
         "%root_url%" => [root_url],
       },
       filters: {
@@ -93,7 +93,7 @@ class CompanyMailer < ApplicationMailer
         },
       },
     }.to_json
-    mail(to: company_user.email, subject: "Freelancer has left a review")
+    mail(to: company_user.email, subject: "Driver has left a review")
   end
 
   def notice_added_as_collaborator(company_user, job)

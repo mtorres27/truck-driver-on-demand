@@ -1,0 +1,35 @@
+.truckker-list-item
+  - if current_user.is_a?(CompanyUser)
+    - url = company_driver_url(hash_id(driver))
+  - elsif current_user.is_a?(Admin)
+    - url = admin_driver_url(driver)
+  a.mr-4 href=url
+    - if driver.driver_profile.avatar_data.present?
+      .truckker-avatar
+        = image_tag(driver.driver_profile.avatar_url)
+    - else
+      .truckker-circle_profile__image.driver__image= driver.name_initials
+  a.d-flex.w-100 href=url
+    .d-flex.flex-wrap.w-100.mr-4
+      .w-50.d-flex
+        .truckker-body1.mb-0.mr-2= driver.first_name_and_initial
+        - if driver.driver_profile.verified?
+          span.zmdi.zmdi-check-circle.icon-small
+      .w-50
+        .truckker-caption1.text-right= pluralize(driver.connections_count, "connection")
+      .w-100
+        .truckker-caption1= driver.driver_profile.city_state_province
+      .w-100
+        .truckker-body2= driver.driver_profile.tagline
+    - if current_company.present?
+      .mr-4
+        - if current_company.saved_driver?(driver)
+          = link_to "", delete_driver_company_driver_url(driver), method: :post, class: "truckker-body1 truckker-text-color-primary zmdi zmdi-favorite"
+        - else
+          = link_to "", save_driver_company_driver_url(driver), method: :post, class: "truckker-body1 truckker-text-color-primary zmdi zmdi-favorite-outline"
+      div
+        - messages_url = @job.present? ? company_messages_for_job_url(driver, @job) : company_driver_messages_url(driver)
+        - if current_company.messages_for_driver(driver).count > 0
+          = link_to "", messages_url, class: "truckker-body1 truckker-text-color-primary zmdi zmdi-comment"
+        - else
+          = link_to "", messages_url, class: "truckker-body1 truckker-text-color-primary zmdi zmdi-comment-outline"

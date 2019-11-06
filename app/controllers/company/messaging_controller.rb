@@ -3,7 +3,7 @@
 class Company::MessagingController < Company::BaseController
 
   before_action :authorize_company
-  before_action :set_freelancers
+  before_action :set_drivers
 
   def index; end
 
@@ -13,8 +13,8 @@ class Company::MessagingController < Company::BaseController
     authorize current_company
   end
 
-  def set_freelancers
-    @freelancers = current_company.freelancers_for_messaging
+  def set_drivers
+    @drivers = current_company.drivers_for_messaging
   end
 
 end

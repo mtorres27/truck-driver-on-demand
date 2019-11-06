@@ -1,0 +1,17 @@
+= render partial: "/driver/shared/jobs_sub_nav"
+- content_for :secondary do
+  .action-bar
+    h2.heading-h2.heading-h2--action-bar Job Matches
+    .action-bar__actions
+      = simple_form_for(:search, url: job_matches_driver_jobs_path, html: {method: :get, id: "driver-job-matches__form"}) do |f|
+        .buttons
+          select id="search_distance" name="search[distance]" class="driver-job-matches__distance margin-right"
+            = render partial: "shared/distance_options", locals: { distance: params.dig(:search, :distance) }
+  - if @jobs.total_count == 0
+    h3.heading-h3
+      | There aren't any jobs matching your profile. 
+  .list
+    - @jobs.each do |job|
+      = render partial: "/driver/shared/job_info", locals: { job: job }
+    = paginate @jobs
+    

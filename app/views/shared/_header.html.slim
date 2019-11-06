@@ -17,26 +17,26 @@
             .truckker-nav-desktop-link
               = link_to "Job Posts", company_jobs_path, class: "text-uppercase truckker-text-emphasize"
             .truckker-nav-desktop-link
-              = link_to "Favourites", saved_company_freelancers_path, class: "text-uppercase truckker-text-emphasize"
+              = link_to "Favourites", saved_company_drivers_path, class: "text-uppercase truckker-text-emphasize"
             .truckker-nav-desktop-link
               = link_to "Profile", company_profile_path, class: "text-uppercase truckker-text-emphasize"
           .truckker-nav-kc.mt-1
             a.zmdi.zmdi-graduation-cap.truckker-text-color-primary href="https://www.truckker.com/how-to-guide-av-company" target="_blank"
 
-        - elsif current_user&.is_a?(Freelancer) && current_user&.freelancer_profile&.registration_step == "wicked_finish"
+        - elsif current_user&.is_a?(Driver) && current_user&.driver_profile&.registration_step == "wicked_finish"
           .truckker-nav-desktop
             .truckker-nav-desktop-link
-              = link_to "Job Posts", freelancer_root_path, class: "text-uppercase truckker-text-emphasize"
+              = link_to "Job Posts", driver_root_path, class: "text-uppercase truckker-text-emphasize"
             .truckker-nav-desktop-link
-              = link_to "Messages", freelancer_messaging_index_path, class: "text-uppercase truckker-text-emphasize"
+              = link_to "Messages", driver_messaging_index_path, class: "text-uppercase truckker-text-emphasize"
               .truckker-notification-badge.js--notifications-count.js--notifications data-id="#{current_user.id}"
                 - notification_count = current_user.notifications.unread.count
                 - if notification_count > 0
                   = notification_count
             .truckker-nav-desktop-link
-              = link_to "Profile", freelancer_profile_path, class: "text-uppercase truckker-text-emphasize"
+              = link_to "Profile", driver_profile_path, class: "text-uppercase truckker-text-emphasize"
           .truckker-nav-kc.mt-1
-            a.zmdi.zmdi-graduation-cap.truckker-text-color-primary href="https://www.truckker.com/how-to-guide-av-freelancer" target="_blank"
+            a.zmdi.zmdi-graduation-cap.truckker-text-color-primary href="https://www.truckker.com/how-to-guide-av-driver" target="_blank"
         - elsif current_user&.is_a?(Admin)
           .truckker-nav-desktop
             .truckker-nav-desktop-link

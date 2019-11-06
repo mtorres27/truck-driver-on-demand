@@ -31,33 +31,33 @@
             = pluralize(@repliers.count, "Reply")
         li.nav-item
           a#matches-tab.nav-link.active aria-controls="matches" aria-selected="true" data-toggle="tab" href="#matches" role="tab"
-            = pluralize(@freelancers.total_count, "Match")
+            = pluralize(@drivers.total_count, "Match")
       - else
         li.nav-item
           a#replies-tab.nav-link.active aria-controls="replies" aria-selected="true" data-toggle="tab" href="#replies" role="tab"
             = pluralize(@repliers.count, "Reply")
         li.nav-item
           a#matches-tab.nav-link aria-controls="matches" aria-selected="false" data-toggle="tab" href="#matches" role="tab"
-            = pluralize(@freelancers.total_count, "Match")
+            = pluralize(@drivers.total_count, "Match")
     #myTabContent.tab-content
       - if params[:page].present? || @repliers.count == 0
         #replies.tab-pane.fade.show aria-labelledby="replies-tab" role="tabpanel"
           div
-            - @repliers.each do |freelancer|
-              = render partial: "company/shared/freelancer_info", locals: {freelancer: freelancer}
+            - @repliers.each do |driver|
+              = render partial: "company/shared/driver_info", locals: {driver: driver}
         #matches.tab-pane.fade.show.active aria-labelledby="matches-tab" role="tabpanel"
           div
-            - @freelancers.each do |freelancer|
-              = render partial: "company/shared/freelancer_info", locals: {freelancer: freelancer}
-            = paginate @freelancers
+            - @drivers.each do |driver|
+              = render partial: "company/shared/driver_info", locals: {driver: driver}
+            = paginate @drivers
       - else
         #replies.tab-pane.fade.show.active aria-labelledby="replies-tab" role="tabpanel"
           div
-            - @repliers.each do |freelancer|
-              = render partial: "company/shared/freelancer_info", locals: {freelancer: freelancer}
+            - @repliers.each do |driver|
+              = render partial: "company/shared/driver_info", locals: {driver: driver}
         #matches.tab-pane.fade.show aria-labelledby="matches-tab" role="tabpanel"
           div
-            - @freelancers.each do |freelancer|
-              = render partial: "company/shared/freelancer_info", locals: {freelancer: freelancer}
-            = paginate @freelancers
+            - @drivers.each do |driver|
+              = render partial: "company/shared/driver_info", locals: {driver: driver}
+            = paginate @drivers
 

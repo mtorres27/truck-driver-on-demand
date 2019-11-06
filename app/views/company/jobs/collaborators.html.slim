@@ -6,7 +6,7 @@
     .grid-cell.grid-cell--100
       .list
         - @collaborators.each do |collaborator|
-          .list-item.list-item--freelancer
+          .list-item.list-item--driver
             .list__flex-expand.list__flex-row
               h3.heading-h3.gutter-right= collaborator.user.full_name
               .tags
@@ -28,7 +28,7 @@
       .grid-cell.grid-cell--100
         .list
           - @non_collaborators.each do |collaborator|
-            .list-item.list-item--freelancer
+            .list-item.list-item--driver
               .list__flex-expand.list__flex-row
                 h3.heading-h3= collaborator.full_name
               .buttons

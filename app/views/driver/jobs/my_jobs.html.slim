@@ -1,0 +1,10 @@
+= render partial: "/driver/shared/jobs_sub_nav"
+- content_for :secondary do
+  .action-bar
+    h2.heading-h2.heading-h2--action-bar My Jobs
+  - if @jobs.count == 0
+    h3.heading-h3
+      | You haven't done any work for any AV companies yet. 
+  .list
+    - @jobs.each do |job|
+      = render partial: "/driver/shared/my_job_info", locals: { job: job, type: "job" }

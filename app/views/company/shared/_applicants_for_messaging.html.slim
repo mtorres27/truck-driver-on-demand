@@ -3,22 +3,22 @@
     a href=company_job_applicant_quotes_path(job, applicant)
       .list-item.list-item--applicant class=("list-item--active" if applicant.id == current_applicant_id)
         .list__info
-          - if applicant.freelancer.freelancer_profile.avatar_data.nil?
+          - if applicant.driver.driver_profile.avatar_data.nil?
             .dropdown-avatar
-              .circle_profile__image.freelancer__image= applicant.freelancer.name_initials
+              .circle_profile__image.driver__image= applicant.driver.name_initials
           - else
-            = image_tag(applicant.freelancer.freelancer_profile.avatar_url, size: "40x40")
-          - if verified?(applicant.freelancer)
-            span class="freelancer-verified fa fa-check-circle"
+            = image_tag(applicant.driver.driver_profile.avatar_url, size: "40x40")
+          - if verified?(applicant.driver)
+            span class="driver-verified fa fa-check-circle"
         .list__info.list__info--with-padding.list__info--expand
-          - applicant.freelancer.tap do |freelancer|
+          - applicant.driver.tap do |driver|
             h4.heading-h4.heading-h4--no-margin
-              = freelancer.first_name_and_initial
+              = driver.first_name_and_initial
             h5.heading-h5.heading-h5--no-margin
-              - distance = calc_distance_from(freelancer)
+              - distance = calc_distance_from(driver)
               - if distance == "N/A"
-                = "#{freelancer.freelancer_profile.city}"
+                = "#{driver.driver_profile.city}"
               - else
-                = "#{freelancer.freelancer_profile.city}"
+                = "#{driver.driver_profile.city}"
         .list__info
           = applicant_state_label(applicant)

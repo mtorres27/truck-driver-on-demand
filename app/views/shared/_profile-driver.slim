@@ -1,0 +1,132 @@
+.truckker-section.truckker-section__main
+  .container.container__content
+    - if current_user == @driver
+      .truckker-body2= "Your Profile is #{current_user.driver_profile.profile_score}% complete. Your chances of making a good impression dramatically increase when it's over 80%."
+      .progress.mb-2
+        .progress-bar role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: #{current_user.driver_profile.profile_score}%"
+
+      .truckker-caption1 Below this line is how your profile appears on Truckker
+      .dropdown-divider.mb-4
+
+
+    .row.mb-4
+      .col-md-2.col-3
+        - if @driver.driver_profile.avatar_data.nil?
+          .truckker-circle_profile__image.driver__image= @driver.name_initials
+        - else
+          = image_tag(@driver.driver_profile.avatar_url, class: 'mb-4')
+      .col-md-10.col-9
+        .d-flex
+          h2.mb-0.mr-2= @driver.first_name_and_initial
+          - if @driver.driver_profile.verified?
+            span.zmdi.zmdi-check-circle.align-self-center
+        .truckker-body1= @driver.driver_profile.tagline
+        .truckker-body2= @driver.driver_profile.city_state_province
+        .truckker-body2= "#{@driver.driver_profile.years_of_experience} years of experience"
+        - if @driver.driver_profile.pay_unit_time_preference.present?
+          .truckker-body2= "Payment preference: #{@driver.driver_profile.pay_unit_time_preference}"
+        - if @driver.driver_profile.pay_unit_time_preference != :fixed
+          .truckker-body2= payment_rate(@driver)
+        .truckker-body2= pluralize(@driver.connections_count, "connection")
+        .truckker-body2= @driver.driver_profile.type_and_company
+
+    h2 Bio
+    .truckker-body1= @driver.driver_profile.bio
+
+    h2 Areas of Expertise
+    - system_integration_job_markets = []
+    - I18n.t("enumerize.system_integration_job_markets").each do |key, value|
+      - if @driver.driver_profile.job_markets&.include?(key)
+        - system_integration_job_markets << value
+    - if system_integration_job_markets.count > 0
+      .truckker-body1
+        | System Integration
+      .d-inline-flex.flex-wrap.mb-4
+        - system_integration_job_markets.each do |value|
+          .truckker-tag= value
+    - live_events_staging_and_rental_job_markets = []
+    - I18n.t("enumerize.live_events_staging_and_rental_job_markets").each do |key, value|
+      - if @driver.driver_profile.job_markets&.include?(key)
+        - live_events_staging_and_rental_job_markets << value
+    - if live_events_staging_and_rental_job_markets.count > 0
+      .truckker-body1
+        | Live Events Staging & Rental
+      .d-inline-flex.flex-wrap.mb-4
+        - live_events_staging_and_rental_job_markets.each do |value|
+          .truckker-tag= value
+    - if @driver.driver_profile.technical_skill_tags.present?
+      .truckker-body1
+        | Technical Skills
+      .d-inline-flex.flex-wrap.mb-4
+        - @driver.driver_profile.technical_skill_tags.each do |key, _|
+          .truckker-tag= I18n.t("enumerize.technical_skill_tags.#{key}")
+
+    - if @driver.driver_affiliations.any?
+      h2 Resume
+      .row.mb-4
+      - @driver.driver_affiliations.each do |affiliation|
+        - url = affiliation.image_url.include?("missing.pdf") ? "/assets/certification/placeholder.png" : affiliation.image_url
+        a.col-md-3.col-6.d-flex.flex-column.justify-content-between href=url target="_blank"
+          - if image?(url)
+            - src = url
+          - else
+            - src = "/assets/driver_affiliation/placeholder.png"
+          .truckker-projects
+            img.truckker-fit-img src=src
+          .truckker-caption1= affiliation.name
+
+    - if @driver.driver_portfolios.any?
+      h2 Featured Projects
+      .row.mb-4
+        - @driver.driver_portfolios.each do |portfolio|
+          - url = portfolio.image_url.include?("missing.pdf") ? "/assets/certification/placeholder.png" : portfolio.image_url
+          a.col-md-3.col-6.d-flex.flex-column.justify-content-between href=url target="_blank"
+            - if image?(url)
+              - src = url
+            - else
+              - src = "/assets/certification/placeholder.png"
+            .truckker-projects
+              img.truckker-fit-img src=src
+            .truckker-caption1= portfolio.name
+
+    - if @driver.certifications.any?
+      h2 Certifications
+      .row.mb-4
+        - @driver.certifications.each do |certification|
+          - url = certification.certificate_url.include?("missing.pdf") ? "/assets/certification/placeholder.png" : certification.certificate_url
+          a.col-md-3.col-6.d-flex.flex-column.justify-content-between href=url target="_blank"
+            - if image?(url)
+              - src = url
+            - else
+              - src = "/assets/certification/placeholder.png"
+            .truckker-projects
+              img.truckker-fit-img src=src
+            .truckker-caption1= certification.name
+
+    - if @driver.driver_insurances.any?
+      h2 Insurance
+      .row.mb-4
+        - @driver.driver_insurances.each do |insurance|
+          - url = insurance.image_url.include?("missing.pdf") ? "/assets/certification/placeholder.png" : insurance.image_url
+          a.col-md-3.col-6.d-flex.flex-column.justify-content-between href=url target="_blank"
+            - if image?(url)
+              - src = url
+            - else
+              - src = "/assets/insurance/placeholder.png"
+            .truckker-projects
+              img.truckker-fit-img src=src
+            .truckker-caption1= insurance.name
+
+    - if @driver.driver_clearances.any?
+      h2 Security Clearances
+      .row.mb-4
+        - @driver.driver_clearances.each do |clearance|
+          - url = clearance.image_url.include?("missing.pdf") ? "/assets/certification/placeholder.png" : clearance.image_url
+          a.col-md-3.col-6.d-flex.flex-column.justify-content-between href=url target="_blank"
+            - if image?(url)
+              - src = url
+            - else
+              - src = "/assets/security_clearance/placeholder.png"
+            .truckker-projects
+              img.truckker-fit-img src=src
+            .truckker-caption1= clearance.description

@@ -1,0 +1,12 @@
+.truckker-section.truckker-section__msg-subhead.d-block.mb-4
+  .container
+    .truckker-subhead
+      h4.ellipsis.mb-0= @company.name
+      .d-flex.align-items-center.justify-content-end
+        a.btn-icon-link href="#{driver_company_messages_url(@company)}"
+          - if current_user.messages_for_company(@company).count > 0
+            div class="zmdi zmdi-comment"
+          - else
+            div class="zmdi zmdi-comment-outline"
+
+= render "shared/profile_company", company: @company

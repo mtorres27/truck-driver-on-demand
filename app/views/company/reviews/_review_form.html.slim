@@ -1,9 +1,9 @@
 = simple_form_for(review, url: company_job_review_path(job)) do |f|
   .grid-h
     .grid-cell.grid-cell--100
-      h3.heading-h3= "Please take a few minutes to provide feedback on your experience with #{job.freelancer.first_name_and_initial}"
+      h3.heading-h3= "Please take a few minutes to provide feedback on your experience with #{job.driver.first_name_and_initial}"
       = f.error_notification
-    - FreelancerReview::RATING_ATTRS.each do |attr|
+    - DriverReview::RATING_ATTRS.each do |attr|
       .grid-cell.grid-cell--50
         .review__label
           = attr.to_s.gsub('_', ' ').capitalize

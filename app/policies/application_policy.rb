@@ -13,8 +13,8 @@ class ApplicationPolicy
     user.admin?
   end
 
-  def freelancer?
-    user.freelancer?
+  def driver?
+    user.driver?
   end
 
   def company_user?

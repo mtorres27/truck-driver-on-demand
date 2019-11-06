@@ -1,0 +1,31 @@
+= render "driver/shared/company_search_form"
+
+.
+- content_for :secondary do
+  .result-wrapper
+    .result-header
+      .result-header__text
+        - if params.dig(:search, :keywords).presence || params.dig(:search, :address).presence
+          = "#{@jobs.total_count} jobs found for "
+        - else
+          = "#{@jobs.total_count} jobs found"
+        span class="result-header__text--strong"
+          = params[:search][:keywords]
+        - if params[:search][:address] > ""
+          = " near "
+          span class="result-header__text--strong"
+            = params[:search][:address]
+
+
+      .result-header__distance
+        span class="result-header__distance-text"
+          | distance
+        select id="driver_distance" class="company-driver__distance"
+          = render partial: "shared/distance_options", locals: { distance: params.dig(:search, :distance) }
+
+    .result-drivers
+      - @drivers.each do |driver|
+        .result-row href=driver_companies_job_path(job)
+          = render partial: "company/shared/job_info", locals: { job: compjobany }
+
+      = paginate @jobs

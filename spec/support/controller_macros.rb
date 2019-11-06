@@ -2,12 +2,12 @@
 
 module ControllerMacros
 
-  def login_freelancer
+  def login_driver
     before(:each) do
-      @request.env["devise.mapping"] = Devise.mappings[:freelancer]
-      freelancer = FactoryBot.create(:freelancer)
-      freelancer.confirm
-      sign_in freelancer
+      @request.env["devise.mapping"] = Devise.mappings[:driver]
+      driver = FactoryBot.create(:driver)
+      driver.confirm
+      sign_in driver
     end
   end
 

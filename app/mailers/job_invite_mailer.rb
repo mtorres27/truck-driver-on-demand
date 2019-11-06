@@ -2,12 +2,12 @@
 
 class JobInviteMailer < ApplicationMailer
 
-  def invite_to_quote(freelancer, job)
-    @freelancer = freelancer
+  def invite_to_quote(driver, job)
+    @driver = driver
     @job = job
     headers "X-SMTPAPI" => {
       sub: {
-        "%freelancer_name%" => [@freelancer.first_name_and_initial],
+        "%driver_name%" => [@driver.first_name_and_initial],
         "%job_title%" => [@job.title],
         "%company_name%" => [@job.company.name],
         "%job_id%" => [@job.id],
@@ -22,7 +22,7 @@ class JobInviteMailer < ApplicationMailer
         },
       },
     }.to_json
-    mail(to: @freelancer.email, subject: I18n.t("invitation_to_quote_email_subject"))
+    mail(to: @driver.email, subject: I18n.t("invitation_to_quote_email_subject"))
   end
 
 end

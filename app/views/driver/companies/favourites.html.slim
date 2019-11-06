@@ -1,0 +1,10 @@
+= render partial: "/driver/shared/companies_sub_nav"
+- content_for :secondary do
+  .result-drivers
+    - if @companies.count == 0
+      .result-content
+        | You don't yet have any favourite AV companies.
+    - @companies.each do |company|
+      a.result-row href=driver_company_path(company)
+        = render partial: "/driver/shared/company_info", locals: { company: company }
+

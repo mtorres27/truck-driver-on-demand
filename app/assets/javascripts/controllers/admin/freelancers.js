@@ -1,4 +1,4 @@
-freelancers_table = null;
+drivers_table = null;
 
 document.addEventListener("turbolinks:load", function(){
     $('#search_filter_by_disabled').on('change', function(){

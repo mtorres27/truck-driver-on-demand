@@ -1,4 +1,12 @@
 GIT
+  remote: https://github.com/ctran/annotate_models.git
+  revision: 111640d077836ced23cfffb882c93e40968ab9d9
+  specs:
+    annotate (2.7.5)
+      activerecord (>= 3.2, < 7.0)
+      rake (>= 10.4, < 13.0)
+
+GIT
   remote: https://github.com/rails/sass-rails.git
   revision: 551251bddec4d6b75446cb1c1630ed26e5318f8e
   specs:
@@ -51,9 +59,6 @@ GEM
       public_suffix (>= 2.0.2, < 5.0)
     airbrussh (1.3.4)
       sshkit (>= 1.6.1, != 1.7.0)
-    annotate (3.0.2)
-      activerecord (>= 3.2, < 7.0)
-      rake (>= 10.4, < 13.0)
     arel (8.0.0)
     ast (2.4.0)
     audited (4.5.0)
@@ -455,7 +460,7 @@ PLATFORMS
 
 DEPENDENCIES
   activejob-perform_later (~> 1.0.2)
-  annotate
+  annotate!
   audited (~> 4.5.0)
   avatax
   better_errors

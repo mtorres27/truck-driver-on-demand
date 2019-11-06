@@ -3,7 +3,7 @@
 class Company::MessagesController < Company::BaseController
 
   before_action :authorize_company
-  before_action :set_freelancer
+  before_action :set_driver
 
   def index
     set_collection
@@ -12,7 +12,7 @@ class Company::MessagesController < Company::BaseController
     elsif params[:job_id].present? && @messages.select { |msg| msg.job_id == params[:job_id].to_i }.count.zero?
       @job_or_profile = Job.find(params[:job_id])
     end
-    current_company.notifications.where(authorable: @freelancer).each(&:mark_as_read)
+    current_company.notifications.where(authorable: @driver).each(&:mark_as_read)
   end
 
   private
@@ -21,12 +21,12 @@ class Company::MessagesController < Company::BaseController
     authorize current_company
   end
 
-  def set_freelancer
-    @freelancer = Freelancer.find(params[:freelancer_id])
+  def set_driver
+    @driver = Driver.find(params[:driver_id])
   end
 
   def set_collection
-    @messages = current_company.messages_for_freelancer(@freelancer)
+    @messages = current_company.messages_for_driver(@driver)
   end
 
 end

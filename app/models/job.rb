@@ -4,11 +4,12 @@
 #
 # Table name: jobs
 #
-#  id                   :integer          not null, primary key
-#  company_id           :integer          not null
+#  id                   :bigint           not null, primary key
+#  company_id           :bigint           not null
 #  title                :string
 #  state                :string           default("created"), not null
 #  summary              :text
+#  technical_skill_tags :text
 #  created_at           :datetime         not null
 #  updated_at           :datetime         not null
 #  address              :string
@@ -19,16 +20,6 @@
 #  job_markets          :citext
 #  manufacturer_tags    :citext
 #  state_province       :string
-#  technical_skill_tags :text
-#
-# Indexes
-#
-#  index_jobs_on_company_id         (company_id)
-#  index_jobs_on_manufacturer_tags  (manufacturer_tags)
-#
-# Foreign Keys
-#
-#  fk_rails_...  (company_id => companies.id)
 #
 
 class Job < ApplicationRecord
@@ -39,11 +30,11 @@ class Job < ApplicationRecord
   include EasyPostgis
 
   belongs_to :company
-  has_many :applicants, -> { includes(:freelancer).order(updated_at: :desc) }, dependent: :destroy
+  has_many :applicants, -> { includes(:driver).order(updated_at: :desc) }, dependent: :destroy
   has_many :messages, dependent: :nullify
   has_many :change_orders, -> { order(updated_at: :desc) }, dependent: :destroy
   has_many :attachments, dependent: :destroy
-  has_one :freelancer_review, dependent: :nullify
+  has_one :driver_review, dependent: :nullify
   has_one :company_review, dependent: :nullify
   has_many :job_invites
   has_many :job_collaborators, dependent: :destroy
@@ -85,8 +76,8 @@ class Job < ApplicationRecord
   end
 
   def repliers
-    freelancer_ids = messages.where(receivable_type: "Company").pluck(:authorable_id).uniq
-    Freelancer.where(id: freelancer_ids)
+    driver_ids = messages.where(receivable_type: "Company").pluck(:authorable_id).uniq
+    Driver.where(id: driver_ids)
   end
 
   def city_state_country
@@ -115,18 +106,18 @@ class Job < ApplicationRecord
       live_events_staging_and_rental_job_markets = I18n.t("enumerize.live_events_staging_and_rental_job_markets")
                                                        .keys.map { |val| "%#{val}%" }
       job_markets = system_integration_job_markets + live_events_staging_and_rental_job_markets
-      freelancer_profiles = FreelancerProfile.where(disabled: false)
+      driver_profiles = DriverProfile.where(disabled: false)
                                              .where("job_markets ilike any ( array[?] )", job_markets)
     elsif system_integration_job_markets?
       job_markets = I18n.t("enumerize.system_integration_job_markets").keys.map { |val| "%#{val}%" }
-      freelancer_profiles = FreelancerProfile.where(disabled: false)
+      driver_profiles = DriverProfile.where(disabled: false)
                                              .where("job_markets ilike any ( array[?] )", job_markets)
     elsif live_events_staging_and_rental_job_markets?
       job_markets = I18n.t("enumerize.live_events_staging_and_rental_job_markets").keys.map { |val| "%#{val}%" }
-      freelancer_profiles = FreelancerProfile.where(disabled: false)
+      driver_profiles = DriverProfile.where(disabled: false)
                                              .where("job_markets ilike any ( array[?] )", job_markets)
     else
-      freelancer_profiles = FreelancerProfile.where(disabled: false)
+      driver_profiles = DriverProfile.where(disabled: false)
     end
     address_for_geocode = address
     address_for_geocode += ", #{CS.states(country.to_sym)[state_province.to_sym]}" if state_province.present?
@@ -145,12 +136,12 @@ class Job < ApplicationRecord
     if geocode[:lat] && geocode[:lng]
       point = OpenStruct.new(lat: geocode[:lat], lng: geocode[:lng])
       distance = 160_934 if distance.nil?
-      freelancer_profiles = freelancer_profiles.nearby(geocode[:lat], geocode[:lng], distance)
+      driver_profiles = driver_profiles.nearby(geocode[:lat], geocode[:lng], distance)
                                                .with_distance(point)
                                                .order("verified DESC, profile_score DESC, distance")
-      Freelancer.where(id: freelancer_profiles.map(&:freelancer_id))
+      Driver.where(id: driver_profiles.map(&:driver_id))
     else
-      Freelancer.none
+      Driver.none
     end
   end
   # rubocop:enable Metrics/MethodLength

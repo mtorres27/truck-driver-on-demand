@@ -4,29 +4,29 @@
     .truckker-subhead
       - unless is_admin
         - if current_company
-          - url = company_freelancer_path(hash_id(freelancer))
+          - url = company_driver_path(hash_id(driver))
         - else
-          - url = freelancer_company_path(company)
+          - url = driver_company_path(company)
         a.mr-4 href=url
           - if current_company
-            - if freelancer.freelancer_profile.avatar_data.nil?
-              .truckker-circle_profile__image.freelancer__image= freelancer.name_initials
+            - if driver.driver_profile.avatar_data.nil?
+              .truckker-circle_profile__image.driver__image= driver.name_initials
             - else
               .truckker-avatar
-                = image_tag(freelancer.freelancer_profile.avatar_url)
+                = image_tag(driver.driver_profile.avatar_url)
           - else
             .truckker-avatar
               = image_tag(company.avatar_url)
       div
         - if is_admin
-          h4.mt-4= "Conversation between #{@company.name} & #{@freelancer.full_name}"
+          h4.mt-4= "Conversation between #{@company.name} & #{@driver.full_name}"
         - else
           h4= "Conversation with #{recipient_name}"
 
 - unless is_admin
   .truckker-section.truckker-section__chat-input
     .container.containter__content
-      = simple_form_for(:message, url: path, html: { class: "js--message-form truckker-list-item m-0", data: { id: "#{authorable_type}-#{company.id}-#{freelancer.id}", company: company.id, freelancer: freelancer.id, type: authorable_type } }) do |f|
+      = simple_form_for(:message, url: path, html: { class: "js--message-form truckker-list-item m-0", data: { id: "#{authorable_type}-#{company.id}-#{driver.id}", company: company.id, driver: driver.id, type: authorable_type } }) do |f|
         .d-flex.w-100.align-items-start
           - message_text = nil
           - if @job_or_profile.present?
@@ -36,7 +36,7 @@
                 - message_text += "Your profile matches our hiring needs, would you be interested in discussing further?"
               - else
                 - message_text += "I've noticed you've been matched with the job I just posted Re: #{@job_or_profile.title}. Would you be interested in discussing further?"
-            - elsif current_user.is_a?(Freelancer)
+            - elsif current_user.is_a?(Driver)
               - message_text = "I'm interested in learning more about the job you posted. Re: #{@job_or_profile.title}"
           = f.text_area :body, as: :string, placeholder: "Send a message to #{recipient_name}", label: false, maxlength: 5000, class: "js--message-input form-control truckker-body1 mr-2", value: message_text
           = f.input :attachment, as: :file, label: false, input_html: { class: "js--message-attachment inputfile" }
@@ -52,12 +52,12 @@
 .truckker-section.truckker-section__chat
   .container.container__content
     - if is_admin
-      h2.d-none.d-md-block.mt-4= "Conversation between #{@company.name} & #{@freelancer.full_name}"
+      h2.d-none.d-md-block.mt-4= "Conversation between #{@company.name} & #{@driver.full_name}"
     - else
       h2.d-none.d-md-block.mt-4= "Your conversation history with #{recipient_name}"
     - if @messages.count == 0
       .truckker-body1.js--messages-beginning= "This is the very begining of your message history with #{recipient_name}"
-    .truckker-message-list.js--freelancer-job__message-history
+    .truckker-message-list.js--driver-job__message-history
       - @messages.each do |message|
         - user_is_author = (current_company && message.authorable == current_company) || (message.authorable == current_user) || (is_admin && message.authorable.is_a?(Company))
         = render "shared/message", message: message, user_is_author: user_is_author, is_admin: current_user.is_a?(Admin)

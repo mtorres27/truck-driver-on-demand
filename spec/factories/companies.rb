@@ -4,7 +4,7 @@
 #
 # Table name: companies
 #
-#  id                    :integer          not null, primary key
+#  id                    :bigint           not null, primary key
 #  token                 :string
 #  name                  :string
 #  address               :string
@@ -41,18 +41,7 @@
 #  job_types             :citext
 #  manufacturer_tags     :citext
 #  registration_step     :string
-#  saved_freelancers_ids :citext
-#
-# Indexes
-#
-#  index_companies_on_disabled              (disabled)
-#  index_companies_on_job_markets           (job_markets)
-#  index_companies_on_manufacturer_tags     (manufacturer_tags)
-#  index_companies_on_name                  (name)
-#  index_companies_on_technical_skill_tags  (technical_skill_tags)
-# rubocop:disable Metrics/LineLength
-#  index_on_companies_loc                   (st_geographyfromtext((((('SRID=4326;POINT('::text || lng) || ' '::text) || lat) || ')'::text)))
-# rubocop:enable Metrics/LineLength
+#  saved_drivers_ids     :citext
 #
 
 FactoryBot.define do

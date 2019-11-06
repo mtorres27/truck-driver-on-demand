@@ -1,0 +1,21 @@
+.truckker-section.truckker-section__msg-subhead.d-block.mb-4
+  .container
+    - if @driver.confirmed_at.nil? && @driver.confirmation_token.present?
+      .truckker-subhead
+        div
+          strong<> Confirmation Link:
+          = confirmation_url(@driver, confirmation_token: @driver.confirmation_token)
+    .truckker-subhead
+      h4.ellipsis.mb-0= @driver.full_name
+      .d-flex.align-items-center.justify-content-end
+        a.btn.btn-primary.btn-sm.mr-2 href=messaging_admin_driver_path(@driver)
+          | Messages
+        a.btn.btn-primary.btn-sm.mr-2 href=edit_admin_driver_path(@driver)
+          | Edit
+        - if @driver.driver_profile.verified?
+          a.btn.btn-outline-primary.btn-sm.mr-2 href=unverify_admin_driver_path(@driver)
+            | Unverify
+        - else
+          a.btn.btn-outline-primary.btn-sm.mr-2 href=verify_admin_driver_path(@driver)
+            | Verify
+= render "shared/profile-driver"

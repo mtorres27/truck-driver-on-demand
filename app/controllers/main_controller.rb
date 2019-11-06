@@ -22,7 +22,7 @@ class MainController < ApplicationController
 
   # rubocop:disable Metrics/MethodLength
   # rubocop:disable Metrics/AbcSize
-  def freelance_service_agreement
+  def driver_service_agreement
     @job = Job.joins(:company).where(companies: { disabled: false }).where(id: params[:job])
     @months = %w[January February March April May June July August September October November December]
 
@@ -46,9 +46,9 @@ class MainController < ApplicationController
 
       @job_start_year = @job.starts_on.year
 
-      if @job.freelancer.nil?
+      if @job.driver.nil?
         @job = nil
-      elsif current_user.freelancer? && @job.freelancer.id != current_user.id
+      elsif current_user.driver? && @job.driver.id != current_user.id
         @job = nil
       elsif current_user.company_user? && @job.company.id != current_user.company.id
         @job = nil

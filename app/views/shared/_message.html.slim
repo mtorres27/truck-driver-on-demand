@@ -25,13 +25,13 @@
                 span.zmdi.zmdi-hc-5x.zmdi-file-text.mr-1
                 label Attachment
   - else
-    - if message.authorable.is_a?(Freelancer)
-      - url = is_admin ? admin_freelancer_path(message.authorable) : company_freelancer_path(hash_id(message.authorable))
+    - if message.authorable.is_a?(Driver)
+      - url = is_admin ? admin_driver_path(message.authorable) : company_driver_path(hash_id(message.authorable))
     - else
-      - url = is_admin ? admin_company_path(message.authorable) : freelancer_company_path(message.authorable)
+      - url = is_admin ? admin_company_path(message.authorable) : driver_company_path(message.authorable)
     a.mr-4 href=url
-      - if message.authorable.is_a?(Freelancer) && message.authorable.freelancer_profile.avatar_data.nil?
-        .truckker-circle_profile__image.freelancer__image= message.authorable.name_initials
+      - if message.authorable.is_a?(Driver) && message.authorable.driver_profile.avatar_data.nil?
+        .truckker-circle_profile__image.driver__image= message.authorable.name_initials
       - else
         .truckker-avatar
           = image_tag(message.authorable.user_data.avatar_url)

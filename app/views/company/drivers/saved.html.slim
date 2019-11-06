@@ -1,0 +1,9 @@
+.truckker-section.truckker-section__main
+  .container.container__content
+    h2.d-none.d-md-block
+      | Favourites
+    div
+      - @drivers.each do |driver|
+        = render partial: "company/shared/driver_info", locals: {driver: driver}
+
+        = paginate @drivers

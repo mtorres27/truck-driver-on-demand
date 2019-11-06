@@ -1,0 +1,30 @@
+/ .search-result__job
+/   .search-result__job-created
+/     = "#{time_ago_in_words(job.created_at)} ago"
+
+/   .search-result__job-title
+/     a href=driver_job_path(job)
+/       = job.title
+
+/   .search-result__company
+/     a.search-result__company-name href=driver_company_path(job.company)
+/       = job.company.name
+
+/     .search-result__company-rating
+/       - @stars = company_avg_rating(job.company)
+/       - @stars.each do |star|
+/         i class=star
+
+a.list-item href=driver_job_path(job)
+  .list__date
+    = "#{time_ago_in_words(job.created_at)} ago"
+  .list__title href="#"
+    = job.title
+  .list__author
+    = "#{job.company.name} "
+    span.list__rating
+      - @stars = company_avg_rating(job.company)
+      - @stars.each do |star|
+        i class=star
+  .list__author
+    = "#{job.city_state_country}"

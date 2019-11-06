@@ -3,7 +3,7 @@
 class Admin::MessagesController < Admin::BaseController
 
   before_action :authorize_user
-  before_action :set_freelancer
+  before_action :set_driver
   before_action :set_company
 
   def index
@@ -16,8 +16,8 @@ class Admin::MessagesController < Admin::BaseController
     authorize current_user
   end
 
-  def set_freelancer
-    @freelancer = Freelancer.find(params[:freelancer_id])
+  def set_driver
+    @driver = Driver.find(params[:driver_id])
   end
 
   def set_company
@@ -25,7 +25,7 @@ class Admin::MessagesController < Admin::BaseController
   end
 
   def set_collection
-    @messages = @company.messages_for_freelancer(@freelancer)
+    @messages = @company.messages_for_driver(@driver)
   end
 
 end

@@ -4,11 +4,12 @@
 #
 # Table name: jobs
 #
-#  id                   :integer          not null, primary key
-#  company_id           :integer          not null
+#  id                   :bigint           not null, primary key
+#  company_id           :bigint           not null
 #  title                :string
 #  state                :string           default("created"), not null
 #  summary              :text
+#  technical_skill_tags :text
 #  created_at           :datetime         not null
 #  updated_at           :datetime         not null
 #  address              :string
@@ -19,16 +20,6 @@
 #  job_markets          :citext
 #  manufacturer_tags    :citext
 #  state_province       :string
-#  technical_skill_tags :text
-#
-# Indexes
-#
-#  index_jobs_on_company_id         (company_id)
-#  index_jobs_on_manufacturer_tags  (manufacturer_tags)
-#
-# Foreign Keys
-#
-#  fk_rails_...  (company_id => companies.id)
 #
 
 FactoryBot.define do

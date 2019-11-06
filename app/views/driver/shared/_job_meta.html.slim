@@ -1,0 +1,30 @@
+.job-header
+  .job-header__meta-1
+    = job_state_label(@job)
+  h5.heading-h5 = @job.created_at.strftime('%B %d, %Y')
+  h2.heading-h2 = @job.title
+  a href=driver_company_path(@job.company)
+    h3.heading-h3 = @job.company.name
+    .rating
+      - @stars = company_avg_rating(@job.company)
+      - @stars.each do |star|
+        i class=star
+
+
+/ .driver-job__container
+/     a.driver-job__back-btn.w-inline-block href="javascript:history.back()"
+/       /*my_applications_driver_jobs_path*/
+/       .driver-job__back-arrow 
+/     .driver-job__header.w-clearfix
+
+/       = job_state_label(@job)
+/       .driver-job__created-date
+/         = @job.created_at.strftime('%B %d, %Y')
+/       .driver-job__job-title
+/         = @job.title
+/       a.driver-job__company-name href=driver_company_path(@job.company)
+/         = @job.company.name
+/       .driver-job__rating
+/         - @stars = company_avg_rating(@job.company)
+/         - @stars.each do |star|
+/           i class=star

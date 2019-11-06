@@ -1,0 +1,21 @@
+.truckker-job-item
+  .d-flex.align-items-start
+    .mr-2
+      - url = current_user.present? ? driver_company_path(job.company) : new_driver_registration_path
+      a href=url target="#{'_blank' unless current_user.present?}"
+        - if job.company.avatar_data.nil?
+          .truckker-circle_profile__image.company__image= job.company.company_user.name_initials
+        - else
+          .truckker-avatar= image_tag(job.company.avatar_url)
+    - url = current_user.present? ? driver_job_path(job) : new_driver_registration_path
+    a.w-100.mr-2 href=url target="#{'_blank' unless current_user.present?}"
+      .truckker-caption1.truckker-text-color-black2.mb-0
+        = "Posted #{job.created_at.strftime('%B %d, %Y')} by #{job.company.name}"
+      .truckker-body1.truckker-text-emphasize.mb-0= job.title
+      .truckker-caption1.truckker-text-color-black2= job.city_state_country
+    - if current_user.present?
+      a.btn.btn-primary.btn-sm href=driver_messages_for_job_url(company_id: job.company.id, job_id: job.id)
+        | Message
+  - url = current_user.present? ? driver_job_path(job) : new_driver_registration_path
+  a.truckker-body1.truckker-text-color-black2 href=url target="#{'_blank' unless current_user.present?}"
+    = Truncato.truncate(job.summary, max_length: 280).html_safe

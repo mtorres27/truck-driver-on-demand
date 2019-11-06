@@ -4,7 +4,7 @@
 #
 # Table name: users
 #
-#  id                     :integer          not null, primary key
+#  id                     :bigint           not null, primary key
 #  email                  :string           default(""), not null
 #  encrypted_password     :string           default(""), not null
 #  reset_password_token   :string
@@ -24,14 +24,18 @@
 #  last_name              :string
 #  type                   :string
 #  messages_count         :integer          default(0), not null
-#  company_id             :integer
-#
-# Indexes
-#
-#  index_users_on_company_id            (company_id)
-#  index_users_on_confirmation_token    (confirmation_token) UNIQUE
-#  index_users_on_email                 (email) UNIQUE
-#  index_users_on_reset_password_token  (reset_password_token) UNIQUE
+#  company_id             :bigint
+#  invitation_token       :string
+#  invitation_created_at  :datetime
+#  invitation_sent_at     :datetime
+#  invitation_accepted_at :datetime
+#  invitation_limit       :integer
+#  invited_by_type        :string
+#  invited_by_id          :bigint
+#  invitations_count      :integer          default(0)
+#  phone_number           :string
+#  role                   :string
+#  enabled                :boolean          default(TRUE)
 #
 
 FactoryBot.define do

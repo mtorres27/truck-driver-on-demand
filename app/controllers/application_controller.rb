@@ -85,14 +85,14 @@ class ApplicationController < ActionController::Base
   def get_matches
     # rubocop:enable Naming/AccessorMethodName
     @distance = params[:search][:distance] if params[:search].present?
-    @freelancers = @job.matches(@distance)
+    @drivers = @job.matches(@distance)
   end
 
   protected
 
   def after_sign_in_path_for(resource)
     return admin_root_path if resource.admin?
-    return freelancer_root_path if resource.freelancer?
+    return driver_root_path if resource.driver?
 
     if resource.company_user?
       if resource.enabled?

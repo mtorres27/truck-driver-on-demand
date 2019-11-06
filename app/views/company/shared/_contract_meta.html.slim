@@ -1,10 +1,10 @@
-- if !job.freelancer.nil?
+- if !job.driver.nil?
   h3.heading-h3
-    | Freelancer
+    | Driver
     p
       - nspace = current_user.admin? ? "admin" : "company"
-      a href="/#{nspace}/freelancers/#{current_user.admin? ? job.freelancer.id : hash_id(job.freelancer)}"
-        = job.freelancer.first_name_and_initial
+      a href="/#{nspace}/drivers/#{current_user.admin? ? job.driver.id : hash_id(job.driver)}"
+        = job.driver.first_name_and_initial
 
 
 

@@ -1,0 +1,20 @@
+- last_message = company.messages_for_driver(driver).last
+.truckker-list-item class="#{"truckker-text-emphasize" if company.new_messages_from_driver?(driver)}"
+  - is_admin = current_user.is_a?(Admin)
+  - path = is_admin ? admin_driver_url(driver) : company_driver_url(hash_id(driver))
+  a.mr-4 href=path
+    - if driver.driver_profile.avatar_data.present?
+      .truckker-avatar
+        = image_tag(driver.driver_profile.avatar_url)
+    - else
+      .truckker-circle_profile__image.driver__image= driver.name_initials
+  - path = is_admin ? admin_messages_url(company, driver) : company_driver_messages_url(driver)
+  a.d-flex.w-100 href=path
+    .d-flex.flex-wrap.w-100.mr-4
+      .w-50
+        .truckker-body1.m-0= "#{driver.first_name_and_initial} "
+      .w-50
+        .truckker-caption1.text-right= last_message.created_at
+      .w-100
+        .truckker-body2= last_message.body
+    .truckker-body1.truckker-text-color-primary.zmdi.zmdi-comment-text

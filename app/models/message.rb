@@ -4,11 +4,11 @@
 #
 # Table name: messages
 #
-#  id              :integer          not null, primary key
-#  authorable_type :string
-#  authorable_id   :integer          not null
-#  receivable_type :string
-#  receivable_id   :integer          not null
+#  id              :bigint           not null, primary key
+#  authorable_type :string           not null
+#  authorable_id   :bigint           not null
+#  receivable_type :string           not null
+#  receivable_id   :bigint           not null
 #  body            :text
 #  attachment_data :text
 #  created_at      :datetime         not null
@@ -16,17 +16,7 @@
 #  checkin         :boolean          default(FALSE)
 #  send_contract   :boolean          default(FALSE)
 #  unread          :boolean          default(TRUE)
-#  job_id          :integer
-#
-# Indexes
-#
-#  index_messages_on_authorable_type_and_authorable_id  (authorable_type,authorable_id)
-#  index_messages_on_job_id                             (job_id)
-#  index_messages_on_receivable_type_and_receivable_id  (receivable_type,receivable_id)
-#
-# Foreign Keys
-#
-#  fk_rails_...  (job_id => jobs.id)
+#  job_id          :bigint
 #
 
 class Message < ApplicationRecord
@@ -59,33 +49,33 @@ class Message < ApplicationRecord
                           body: "You have a new message",
                           authorable: authorable,
                           receivable: receivable,
-                          url: Rails.application.routes.url_helpers.freelancer_company_messages_url(authorable))
-      FreelancerMailer.notice_message_received(authorable, receivable, self).deliver_later
-    elsif authorable.is_a?(Freelancer)
+                          url: Rails.application.routes.url_helpers.driver_company_messages_url(authorable))
+      DriverMailer.notice_message_received(authorable, receivable, self).deliver_later
+    elsif authorable.is_a?(Driver)
       Notification.create(title: authorable.first_name_and_initial,
                           body: "You have a new message",
                           authorable: authorable,
                           receivable: receivable,
-                          url: Rails.application.routes.url_helpers.company_freelancer_messages_url(authorable))
+                          url: Rails.application.routes.url_helpers.company_driver_messages_url(authorable))
       CompanyMailer.notice_message_received(receivable.company_user, authorable, self).deliver_later
     end
   end
 
-  def self.messages_for(company, freelancer)
-    company_messages = company.messages.where(receivable_id: freelancer.id)
-    freelancer_messages = freelancer.messages.where(receivable_id: company.id)
-    (company_messages + freelancer_messages).sort_by(&:created_at)
+  def self.messages_for(company, driver)
+    company_messages = company.messages.where(receivable_id: driver.id)
+    driver_messages = driver.messages.where(receivable_id: company.id)
+    (company_messages + driver_messages).sort_by(&:created_at)
   end
 
   def self.connections(load_dates = false)
     connections = []
     Company.find_each do |company|
-      company.freelancers_for_messaging.each do |freelancer|
-        next if freelancer.nil?
+      company.drivers_for_messaging.each do |driver|
+        next if driver.nil?
 
-        first_message = messages_for(company, freelancer).first if load_dates
+        first_message = messages_for(company, driver).first if load_dates
         connections << { company_id: company.id, company_name: company.name,
-                         freelancer_id: freelancer.id, freelancer_name: freelancer.full_name,
+                         driver_id: driver.id, driver_name: driver.full_name,
                          date_conected: first_message&.created_at }
       end
     end

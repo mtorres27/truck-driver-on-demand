@@ -116,7 +116,7 @@ group :development, :test do
 end
 
 group :development do
-  gem "annotate"
+  gem 'annotate', git: 'https://github.com/ctran/annotate_models.git'
   gem "better_errors"
   gem "binding_of_caller"
   gem "capistrano", "~> 3.8.1"

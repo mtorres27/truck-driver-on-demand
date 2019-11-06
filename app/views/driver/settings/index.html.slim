@@ -1,0 +1,9 @@
+= render partial: "/driver/shared/profile_sub_nav"
+
+- content_for :secondary do
+  .result-wrapper
+    .result-header
+      .result-header__text
+        | Settings
+
+    = link_to 'EDIT', edit_driver_profile_settings_path

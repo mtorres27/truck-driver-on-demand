@@ -4,8 +4,8 @@
 #
 # Table name: certifications
 #
-#  id               :integer          not null, primary key
-#  freelancer_id    :integer
+#  id               :bigint           not null, primary key
+#  driver_id        :integer
 #  certificate      :text
 #  name             :text
 #  created_at       :datetime         not null

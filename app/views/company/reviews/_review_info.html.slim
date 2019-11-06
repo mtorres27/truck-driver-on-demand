@@ -3,7 +3,7 @@
     h3.heading-h3
       | Thank you for your feedback
 
-  - FreelancerReview::RATING_ATTRS.each do |attr|
+  - DriverReview::RATING_ATTRS.each do |attr|
     .grid-cell.grid-cell--25
       .review__label
         = "#{attr.to_s.gsub('_', ' ')} : #{review.send(attr)}".capitalize
