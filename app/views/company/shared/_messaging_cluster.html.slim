@@ -3,32 +3,32 @@
     .applicant-messages__messages
       - if @applicants.where({state: "accepted"}).length == 0
         - if current_user.company_user?
-          = render partial: "company/shared/new_message", locals: { f: f, n: @applicant.freelancer.first_name_and_initial, type: "quote" }
+          = render partial: "company/shared/new_message", locals: { f: f, n: @applicant.driver.first_name_and_initial, type: "quote" }
       - else
         .new-message--wrapper
           .new-message_amount
-            .new-message__freelancer-selected
-              .new-message__freelancer-selected__avatar
-                - if @job.freelancer.freelancer_profile.avatar_data.nil?
+            .new-message__driver-selected
+              .new-message__driver-selected__avatar
+                - if @job.driver.driver_profile.avatar_data.nil?
                   .homepage__avatar
-                    .circle_profile__image.freelancer__image= @job.freelancer.name_initials
+                    .circle_profile__image.driver__image= @job.driver.name_initials
                 - else
-                  = image_tag(@job.freelancer.freelancer_profile.avatar_url, size: "75x75")
+                  = image_tag(@job.driver.driver_profile.avatar_url, size: "75x75")
       .applicant-messages__messages--inner class=("applicant-messages__messages--inner--inactive" if @applicant_accepted == true)
         - @messages.each_with_index do |message|
           .list-item.list-item--message class=(".list-item.list-item--message.list-item--message-has-quote")
             .list__info
-              - if message.authorable.is_a?(Freelancer)
-                - if message.authorable.freelancer_profile.avatar_data.nil?
+              - if message.authorable.is_a?(Driver)
+                - if message.authorable.driver_profile.avatar_data.nil?
                   .dropdown-avatar
-                    .circle_profile__image.freelancer__image= message.authorable.name_initials
+                    .circle_profile__image.driver__image= message.authorable.name_initials
                 - else
-                  = image_tag(message.authorable.freelancer_profile.avatar_url, size: "35x35")
+                  = image_tag(message.authorable.driver_profile.avatar_url, size: "35x35")
               - else
                 = image_tag(message.authorable.user_data.avatar_url, size: "35x35")
             .list__info.list__info--expand.list__info--with-padding
               .list-bar.list-bar--left
-                - if message.authorable.is_a?(Freelancer)
+                - if message.authorable.is_a?(Driver)
                   h4.heading-h4.heading-h4--no-margin #{message.authorable.first_name_and_initial}
                 - else
                   h4.heading-h4.heading-h4--no-margin #{message.authorable.full_name}

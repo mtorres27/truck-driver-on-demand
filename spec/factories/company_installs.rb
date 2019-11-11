@@ -4,7 +4,7 @@
 #
 # Table name: company_installs
 #
-#  id         :integer          not null, primary key
+#  id         :bigint           not null, primary key
 #  company_id :integer
 #  year       :integer
 #  installs   :integer

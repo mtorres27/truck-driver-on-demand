@@ -3,12 +3,12 @@
 class JobNotificationMailer < ApplicationMailer
 
   # rubocop:disable Metrics/MethodLength
-  def notify_job_posting(freelancer, job)
-    @freelancer = freelancer
+  def notify_job_posting(driver, job)
+    @driver = driver
     @job = job
     headers "X-SMTPAPI" => {
       sub: {
-        "%freelancer_name%" => [@freelancer.first_name_and_initial],
+        "%driver_name%" => [@driver.first_name_and_initial],
         "%job_title%" => [@job.title],
         "%job_summary%" => [@job.summary],
         "%job_location%" => ["#{@job.address}, #{@job.state_province}"],
@@ -25,7 +25,7 @@ class JobNotificationMailer < ApplicationMailer
         },
       },
     }.to_json
-    mail(to: @freelancer.email, subject: I18n.t("job_posted_in_the_area_email_subject"))
+    mail(to: @driver.email, subject: I18n.t("job_posted_in_the_area_email_subject"))
   end
   # rubocop:enable Metrics/MethodLength
 

@@ -4,7 +4,7 @@
 #
 # Table name: companies
 #
-#  id                    :integer          not null, primary key
+#  id                    :bigint           not null, primary key
 #  token                 :string
 #  name                  :string
 #  address               :string
@@ -41,18 +41,7 @@
 #  job_types             :citext
 #  manufacturer_tags     :citext
 #  registration_step     :string
-#  saved_freelancers_ids :citext
-#
-# Indexes
-#
-#  index_companies_on_disabled              (disabled)
-#  index_companies_on_job_markets           (job_markets)
-#  index_companies_on_manufacturer_tags     (manufacturer_tags)
-#  index_companies_on_name                  (name)
-#  index_companies_on_technical_skill_tags  (technical_skill_tags)
-# rubocop:disable Metrics/LineLength
-#  index_on_companies_loc                   (st_geographyfromtext((((('SRID=4326;POINT('::text || lng) || ' '::text) || lat) || ')'::text)))
-# rubocop:enable Metrics/LineLength
+#  saved_drivers_ids     :citext
 #
 
 # rubocop:disable Metrics/ClassLength
@@ -70,11 +59,11 @@ class Company < ApplicationRecord
   has_many :jobs, -> { order(updated_at: :desc) }, dependent: :destroy
   has_many :applicants, dependent: :destroy
   has_many :messages, -> { order(created_at: :desc) }, as: :authorable
-  has_many :freelancer_reviews, dependent: :nullify
+  has_many :driver_reviews, dependent: :nullify
   has_many :company_reviews, dependent: :destroy
   has_many :featured_projects, dependent: :destroy
   has_many :favourites
-  has_many :favourite_freelancers, through: :favourites, source: :freelancer
+  has_many :favourite_drivers, through: :favourites, source: :driver
   has_many :company_installs, dependent: :destroy
   has_many :notifications, as: :receivable, dependent: :destroy
   has_one :company_user, dependent: :destroy
@@ -97,7 +86,7 @@ class Company < ApplicationRecord
   serialize :job_markets
   serialize :technical_skill_tags
   serialize :manufacturer_tags
-  serialize :saved_freelancers_ids, Array
+  serialize :saved_drivers_ids, Array
 
   enumerize :country, in: %i[
     at au be ca ch de dk es fi fr gb hk ie it jp lu nl no nz pt se sg us
@@ -119,27 +108,27 @@ class Company < ApplicationRecord
   before_create :set_default_step
   after_save :send_confirmation_email
 
-  def messages_for_freelancer(freelancer)
-    Message.messages_for(self, freelancer)
+  def messages_for_driver(driver)
+    Message.messages_for(self, driver)
   end
 
-  def freelancers_for_messaging
+  def drivers_for_messaging
     all_messages = messages.to_a + Message.where(receivable_type: "Company", receivable_id: id).to_a
     all_messages.sort_by(&:created_at).reverse
-                .map { |msg| msg.authorable.is_a?(Freelancer) ? msg.authorable : msg.receivable }.uniq
+                .map { |msg| msg.authorable.is_a?(Driver) ? msg.authorable : msg.receivable }.uniq
   end
 
-  def new_messages_from_freelancer?(freelancer)
-    notifications.where(authorable: freelancer, read_at: nil).count.positive?
+  def new_messages_from_driver?(driver)
+    notifications.where(authorable: driver, read_at: nil).count.positive?
   end
 
-  def freelancers
-    Freelancer.where(id: saved_freelancers_ids)
+  def drivers
+    Driver.where(id: saved_drivers_ids)
   end
 
-  def hired_freelancers
-    Freelancer
-      .joins(:freelancer_profile, applicants: :job)
+  def hired_drivers
+    Driver
+      .joins(:driver_profile, applicants: :job)
       .where(jobs: { company_id: id })
       .where(applicants: { state: :accepted })
       .order(first_name: :desc, last_name: :desc)
@@ -271,11 +260,11 @@ class Company < ApplicationRecord
     all_job_markets = I18n.t("enumerize.#{job_type}_job_markets")
     return [] unless all_job_markets.is_a?(Hash)
 
-    freelancer_job_markets = []
+    driver_job_markets = []
     job_markets&.each do |index, _value|
-      freelancer_job_markets << all_job_markets[index.to_sym] if all_job_markets[index.to_sym]
+      driver_job_markets << all_job_markets[index.to_sym] if all_job_markets[index.to_sym]
     end
-    freelancer_job_markets
+    driver_job_markets
   end
 
   def canada_country?
@@ -308,8 +297,8 @@ class Company < ApplicationRecord
     self
   end
 
-  def saved_freelancer?(freelancer)
-    saved_freelancers_ids.include?(freelancer.id)
+  def saved_driver?(driver)
+    saved_drivers_ids.include?(driver.id)
   end
 
   def owner

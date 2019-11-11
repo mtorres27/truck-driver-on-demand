@@ -1,0 +1,14 @@
+.truckker-section.truckker-section__main
+  .container.container__content
+    h2 Search Jobs
+
+    = render "driver/shared/company_search_form"
+
+    - if controller_name == 'main' || (controller_name == 'public_pages' && params[:search].blank?)
+      h2 Job Feed
+    - else
+      h2= "Found #{ pluralize(@jobs.total_count, 'job posting') } matching your criteria"
+    - @jobs.each do |job|
+      = render "driver/jobs/job_item", job: job
+    - unless controller_name == 'main'
+      = paginate @jobs

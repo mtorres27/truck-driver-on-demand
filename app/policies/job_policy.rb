@@ -3,7 +3,7 @@
 class JobPolicy < ApplicationPolicy
 
   def index?
-    company_user? || freelancer? || admin?
+    company_user? || driver? || admin?
   end
 
   def new?
@@ -11,7 +11,7 @@ class JobPolicy < ApplicationPolicy
   end
 
   def create?
-    (company_user? && company_owner?) || freelancer?
+    (company_user? && company_owner?) || driver?
   end
 
   def skip?
@@ -23,7 +23,7 @@ class JobPolicy < ApplicationPolicy
   end
 
   def show?
-    (company_user? && company_owner?) || (freelancer? && job_published?) || admin?
+    (company_user? && company_owner?) || (driver? && job_published?) || admin?
   end
 
   def edit?
@@ -55,11 +55,11 @@ class JobPolicy < ApplicationPolicy
   end
 
   def print?
-    (company_user? && company_owner?) || freelancer?
+    (company_user? && company_owner?) || driver?
   end
 
   def accept?
-    (company_user? && company_owner?) || freelancer?
+    (company_user? && company_owner?) || driver?
   end
 
   def decline?
@@ -67,18 +67,18 @@ class JobPolicy < ApplicationPolicy
   end
 
   def request_payout?
-    freelancer?
+    driver?
   end
 
   def apply?
-    freelancer?
+    driver?
   end
 
   def my_application?
-    freelancer?
+    driver?
   end
 
-  def freelancer_matches?
+  def driver_matches?
     (company_user? && company_owner? || admin?) && record.state == "published"
   end
 
@@ -124,8 +124,8 @@ class JobPolicy < ApplicationPolicy
     record.company&.id == user.company&.id
   end
 
-  def freelancer_hired?
-    record.freelancer&.id == user.id
+  def driver_hired?
+    record.driver&.id == user.id
   end
 
   def job_published?

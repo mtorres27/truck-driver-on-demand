@@ -3,8 +3,8 @@
     h2
       | Messages
     div
-      - @freelancers.each do |freelancer|
-        - if freelancer.present?
-          = render partial: "freelancer_messaging_info", locals: {freelancer: freelancer, company: current_company}
+      - @drivers.each do |driver|
+        - if driver.present?
+          = render partial: "driver_messaging_info", locals: {driver: driver, company: current_company}
 
 

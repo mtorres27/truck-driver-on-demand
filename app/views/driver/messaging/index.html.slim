@@ -1,0 +1,7 @@
+.truckker-section.truckker-section__main
+  .container.container__content
+    h2
+      | Messages
+    div
+      - @companies.each do |company|
+        = render partial: "company_messaging_info", locals: {company: company, driver: current_user}

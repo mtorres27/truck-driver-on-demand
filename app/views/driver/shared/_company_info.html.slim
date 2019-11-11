@@ -1,0 +1,21 @@
+a.list-item.list-item--driver href="/driver/companies/#{company.id}"
+
+  .list__img
+    .list__img-overlay
+      = image_tag(company.avatar_url, size: "75x75")
+
+  .list__group
+    .list__title
+      = company.name
+    .list__city
+      - if params.dig(:search, :address) == nil
+        = "#{company.area}"
+      - elsif params.dig(:search, :address) == ''
+        = "#{company.area}"
+      - else
+        = "#{company.area}, #{distance_from(company, @company_datas)} miles away".company-info__rating
+
+    .list__rating
+      - @stars = company_avg_rating(company)
+      - @stars.each do |star|
+        i class=star

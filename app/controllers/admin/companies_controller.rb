@@ -40,7 +40,7 @@ class Admin::CompaniesController < Admin::BaseController
   end
 
   def messaging
-    @freelancers = @company.freelancers_for_messaging
+    @drivers = @company.drivers_for_messaging
   end
 
   def show

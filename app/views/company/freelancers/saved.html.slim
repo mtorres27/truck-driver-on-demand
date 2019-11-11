@@ -1,9 +1,0 @@
-.truckker-section.truckker-section__main
-  .container.container__content
-    h2.d-none.d-md-block
-      | Favourites
-    div
-      - @freelancers.each do |freelancer|
-        = render partial: "company/shared/freelancer_info", locals: {freelancer: freelancer}
-
-        = paginate @freelancers

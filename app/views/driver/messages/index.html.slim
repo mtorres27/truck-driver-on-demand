@@ -1,0 +1,2 @@
+- content_for :secondary do
+  = render partial: "shared/messages_index", locals: { recipient_name: @company.name, path: driver_company_messages_path(@company), company: @company, driver: current_user, authorable_type: "Driver" }

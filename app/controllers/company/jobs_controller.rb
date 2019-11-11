@@ -15,10 +15,10 @@ class Company::JobsController < Company::BaseController
       get_matches
       @repliers = @job.repliers
     else
-      @freelancers = Freelancer.none
-      @repliers = Freelancer.none
+      @drivers = Driver.none
+      @repliers = Driver.none
     end
-    @freelancers = @freelancers.page(params[:page]).per(10)
+    @drivers = @drivers.page(params[:page]).per(10)
   end
 
   def new
@@ -32,8 +32,8 @@ class Company::JobsController < Company::BaseController
       if @job.state == "published"
         JobNotificationMailer.notify_job_posting_company(current_company, @job).deliver_later
         get_matches
-        @freelancers.each do |freelancer|
-          JobNotificationMailer.notify_job_posting(freelancer, @job).deliver_later
+        @drivers.each do |driver|
+          JobNotificationMailer.notify_job_posting(driver, @job).deliver_later
         end
       end
       redirect_to company_jobs_path
@@ -55,8 +55,8 @@ class Company::JobsController < Company::BaseController
         flash[:notice] = "This job has been published."
         JobNotificationMailer.notify_job_posting_company(current_company, @job).deliver_later
         get_matches
-        @freelancers.each do |freelancer|
-          JobNotificationMailer.notify_job_posting(freelancer, @job).deliver_later
+        @drivers.each do |driver|
+          JobNotificationMailer.notify_job_posting(driver, @job).deliver_later
         end
       end
 

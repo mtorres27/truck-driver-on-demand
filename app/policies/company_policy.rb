@@ -7,7 +7,7 @@ class CompanyPolicy < ApplicationPolicy
   end
 
   def show?
-    (company_user? && company_owner?) || freelancer? || admin?
+    (company_user? && company_owner?) || driver? || admin?
   end
 
   def new?
@@ -66,11 +66,11 @@ class CompanyPolicy < ApplicationPolicy
     company_user? && company_owner?
   end
 
-  def save_freelancer?
+  def save_driver?
     company_user? && company_owner?
   end
 
-  def delete_freelancer?
+  def delete_driver?
     company_user? && company_owner?
   end
 

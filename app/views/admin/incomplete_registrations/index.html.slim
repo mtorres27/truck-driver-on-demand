@@ -51,23 +51,23 @@
 
         tbody
           - @registrants.each do |registrant|
-            - if registrant.class == FreelancerProfile
+            - if registrant.class == DriverProfile
               tr
-                td= link_to registrant.freelancer.full_name, admin_freelancer_path(registrant.freelancer)
+                td= link_to registrant.driver.full_name, admin_driver_path(registrant.driver)
                 td Professional
-                td= mail_to registrant.freelancer.email
+                td= mail_to registrant.driver.email
                 td= "(##{I18n.t("registration_step_numbers.#{registrant.registration_step}")})#{registrant.registration_step}"
                 td= registrant.state
                 td= registrant.country.try(:upcase)
                 td= registrant.created_at.strftime('%b %-d, %Y')
-                td= !registrant.freelancer.confirmed_at.nil?
+                td= !registrant.driver.confirmed_at.nil?
                 td= registrant.disabled
                 td.text-right
-                  = link_to 'Edit', edit_admin_freelancer_path(registrant.freelancer)
+                  = link_to 'Edit', edit_admin_driver_path(registrant.driver)
                   '  |
-                  = link_to 'Enable', enable_admin_freelancer_path(registrant.freelancer)
+                  = link_to 'Enable', enable_admin_driver_path(registrant.driver)
                   '  |
-                  = link_to 'Delete', admin_freelancer_path(registrant.freelancer), data: {confirm: "Are you sure?"}, method: :delete
+                  = link_to 'Delete', admin_driver_path(registrant.driver), data: {confirm: "Are you sure?"}, method: :delete
             - elsif registrant.class == Company
               tr
                 td= link_to registrant.name, admin_company_path(registrant)

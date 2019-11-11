@@ -11,8 +11,8 @@
 #  attachment_data        :text
 #  created_at             :datetime         not null
 #  updated_at             :datetime         not null
-#  author_type            :string           default("freelancer")
-#  accepted_by_freelancer :boolean          default(FALSE)
+#  author_type            :string           default("driver")
+#  accepted_by_driver :boolean          default(FALSE)
 #  paid_by_company        :boolean          default(FALSE)
 #  paid_at                :datetime
 #  platform_fees_amount   :decimal(10, 2)

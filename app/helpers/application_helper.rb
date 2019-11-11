@@ -46,18 +46,18 @@ module ApplicationHelper
     cookies[:prereg_message] = { value: true }
   end
 
-  def calc_distance_from(freelancer)
+  def calc_distance_from(driver)
     if current_user.nil? || current_user.admin? || (current_user.company_user? && current_user.company.lat.nil?)
       return "N/A"
     end
 
     point = OpenStruct.new(lat: current_company.lat, lng: current_company.lng)
-    @freelancer_profiles = FreelancerProfile.where(freelancer_id: freelancer.id).with_distance(point)
-    @freelancer = freelancer
+    @driver_profiles = DriverProfile.where(driver_id: driver.id).with_distance(point)
+    @driver = driver
 
-    return "N/A" if @freelancer.freelancer_profile.lat.nil?
+    return "N/A" if @driver.driver_profile.lat.nil?
 
-    distance_from(@freelancer, @freelancer_profiles)
+    distance_from(@driver, @driver_profiles)
   end
 
   def proper_website_link(url)

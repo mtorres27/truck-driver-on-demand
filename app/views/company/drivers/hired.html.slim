@@ -1,0 +1,17 @@
+h1.heading-h1 My Drivers
+
+.tab-bar
+  a.tab-bar__item href="/company/drivers/saved" class=("tab-bar__item--active" if request.path == "/company/drivers/saved")
+    | Saved
+  a.tab-bar__item href="/company/drivers/hired" class=("tab-bar__item--active" if request.path == "/company/drivers/hired")
+    | Hired
+
+- content_for :secondary do
+  .action-bar
+    h2.heading-h2.heading-h2--action-bar Hired
+
+  .list
+    - @drivers.each do |driver|
+      = render partial: "company/shared/driver_info", locals: { driver: driver }
+
+    = paginate @drivers

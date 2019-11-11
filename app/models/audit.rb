@@ -4,7 +4,7 @@
 #
 # Table name: audits
 #
-#  id              :integer          not null, primary key
+#  id              :bigint           not null, primary key
 #  auditable_id    :integer
 #  auditable_type  :string
 #  associated_id   :integer
@@ -19,14 +19,6 @@
 #  remote_address  :string
 #  request_uuid    :string
 #  created_at      :datetime
-#
-# Indexes
-#
-#  associated_index              (associated_id,associated_type)
-#  auditable_index               (auditable_id,auditable_type)
-#  index_audits_on_created_at    (created_at)
-#  index_audits_on_request_uuid  (request_uuid)
-#  user_index                    (user_id,user_type)
 #
 
 class Audit < Audited::Audit

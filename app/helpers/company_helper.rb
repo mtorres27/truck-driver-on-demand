@@ -44,7 +44,7 @@ module CompanyHelper
 
   def showing_company?(_path)
     # rubocop:disable Metrics/LineLength
-    request.path.include?(freelancer_companies_path) && !request.path.include?("av_companies") && !request.path.include?("favourites")
+    request.path.include?(driver_companies_path) && !request.path.include?("av_companies") && !request.path.include?("favourites")
     # rubocop:enable Metrics/LineLength
   end
 

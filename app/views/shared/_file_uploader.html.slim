@@ -25,17 +25,17 @@
 
 / .uploader
 /   .uploader__image
-/     .freelancer-profile__image.float-left
+/     .driver-profile__image.float-left
 /       - if !f.object.certificate_url.include?('missing.pdf')
 /         - url = image?(f.object.certificate_url) ? f.object.certificate_url : "/assets/certification/placeholder.png"
 /         a.authorable_attachment--full href=f.object.certificate_url target="_blank"
 /           img src=url
-/         .freelancer-profile__image-upload onclick="uploadCertificate(#{f.index})"
+/         .driver-profile__image-upload onclick="uploadCertificate(#{f.index})"
 /           span class="zmdi zmdi-upload" 
 /       - else
 /         .authorable_attachment--full
 /           img src=""
-/         .freelancer-profile__image-upload onclick="uploadCertificate()"
+/         .driver-profile__image-upload onclick="uploadCertificate()"
 /           span class="zmdi zmdi-upload" 
     
 /   .profile__meta__info

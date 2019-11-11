@@ -2,8 +2,8 @@
 
 class Admin::JobsController < Admin::BaseController
 
-  before_action :set_job, only: %i[show edit update destroy freelancer_matches mark_as_expired unmark_as_expired]
-  before_action :authorize_job, only: %i[show edit update destroy freelancer_matches mark_as_expired unmark_as_expired]
+  before_action :set_job, only: %i[show edit update destroy driver_matches mark_as_expired unmark_as_expired]
+  before_action :authorize_job, only: %i[show edit update destroy driver_matches mark_as_expired unmark_as_expired]
 
   def index
     authorize current_user
@@ -18,10 +18,10 @@ class Admin::JobsController < Admin::BaseController
       get_matches
       @repliers = @job.repliers
     else
-      @freelancers = Freelancer.none
-      @repliers = Freelancer.none
+      @drivers = Driver.none
+      @repliers = Driver.none
     end
-    @freelancers = @freelancers.page(params[:page]).per(10)
+    @drivers = @drivers.page(params[:page]).per(10)
   end
 
   def edit
@@ -34,13 +34,13 @@ class Admin::JobsController < Admin::BaseController
       if params.dig(:job, :state) == "published"
         flash[:notice] = "This job has been published."
         get_matches
-        @freelancers.each do |freelancer|
+        @drivers.each do |driver|
           Notification.create(title: @job.title,
                               body: "New job in your area",
                               authorable: @job.company,
-                              receivable: freelancer,
-                              url: freelancer_job_url(@job))
-          JobNotificationMailer.notify_job_posting(freelancer, @job).deliver_later
+                              receivable: driver,
+                              url: driver_job_url(@job))
+          JobNotificationMailer.notify_job_posting(driver, @job).deliver_later
         end
       end
       redirect_to admin_job_path(@job), notice: "Job updated."
@@ -54,7 +54,7 @@ class Admin::JobsController < Admin::BaseController
     redirect_to admin_jobs_path, notice: "Jobs removed."
   end
 
-  def freelancer_matches
+  def driver_matches
     get_matches
   end
 
@@ -94,7 +94,7 @@ class Admin::JobsController < Admin::BaseController
       :ends_on,
       :duration,
       :pay_type,
-      :freelancer_type,
+      :driver_type,
       :invite_only,
       :scope_is_public,
       :budget_is_public,

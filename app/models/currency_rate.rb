@@ -4,7 +4,7 @@
 #
 # Table name: currency_rates
 #
-#  id         :integer          not null, primary key
+#  id         :bigint           not null, primary key
 #  currency   :string
 #  country    :string
 #  rate       :decimal(10, 2)   not null

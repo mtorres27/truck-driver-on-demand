@@ -3,7 +3,7 @@
     .truckker-nav-mobile
       - if current_user&.is_a?(CompanyUser) && current_company&.registration_step == "wicked_finish"
         a.truckker-nav-mobile-link href=company_root_url
-          - if controller_name == 'main' || (controller_name == 'freelancers' && action_name != 'saved')
+          - if controller_name == 'main' || (controller_name == 'drivers' && action_name != 'saved')
             .truckker-body1.m-0.truckker-text-color-secondary.zmdi.zmdi-search
             .truckker-caption2.m-0.truckker-text-color-secondary Search
           - else
@@ -33,8 +33,8 @@
           - else
             .truckker-body1.m-0.zmdi.zmdi-folder-outline
             .truckker-caption2.m-0 Job Posts
-        a.truckker-nav-mobile-link href=saved_company_freelancers_url
-          - if controller_name == 'freelancers' && action_name == 'saved'
+        a.truckker-nav-mobile-link href=saved_company_drivers_url
+          - if controller_name == 'drivers' && action_name == 'saved'
             .truckker-body1.m-0.zmdi.zmdi-favorite-outline.truckker-text-color-secondary
             .truckker-caption2.m-0.truckker-text-color-secondary Favourites
           - else
@@ -47,15 +47,15 @@
           - else
             .truckker-body1.m-0.zmdi.zmdi-account-o
             .truckker-caption2.m-0 Profile
-      - elsif current_user&.is_a?(Freelancer) && current_user&.freelancer_profile&.registration_step == "wicked_finish"
-        a.truckker-nav-mobile-link href=freelancer_root_url
+      - elsif current_user&.is_a?(Driver) && current_user&.driver_profile&.registration_step == "wicked_finish"
+        a.truckker-nav-mobile-link href=driver_root_url
           - if controller_name == 'main' || controller_name == 'jobs'
             .truckker-body1.m-0.zmdi.zmdi-folder-outline.truckker-text-color-secondary
             .truckker-caption2.m-0.truckker-text-color-secondary Job Posts
           - else
             .truckker-body1.m-0.zmdi.zmdi-folder-outline
             .truckker-caption2.m-0 Job Posts
-        a.truckker-nav-mobile-link href=freelancer_messaging_index_url
+        a.truckker-nav-mobile-link href=driver_messaging_index_url
           - if controller_name == 'messages' || controller_name == 'messaging'
             .d-flex
               .truckker-body1.m-0.zmdi.zmdi-comment-outline.truckker-text-color-secondary
@@ -72,7 +72,7 @@
                 - if notification_count > 0
                   = notification_count
             .truckker-caption2.m-0 Messages
-        a.truckker-nav-mobile-link href=freelancer_profile_url
+        a.truckker-nav-mobile-link href=driver_profile_url
           - if controller_name == 'profiles'
             .truckker-body1.m-0.zmdi.zmdi-account-o.truckker-text-color-secondary
             .truckker-caption2.m-0.truckker-text-color-secondary Profile

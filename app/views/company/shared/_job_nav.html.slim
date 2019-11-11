@@ -7,11 +7,11 @@
 
   h5.heading-h5 #{job.created_at}
   h2.heading-h2 #{job.title}
-  - if job.freelancer
+  - if job.driver
     h4.heading-h4
       | Awarded to
-      - path = current_user.admin? ? admin_freelancer_path(job.freelancer) : company_freelancer_path(hash_id(job.freelancer))
-      a<> href=path #{job.freelancer.first_name_and_initial}
+      - path = current_user.admin? ? admin_driver_path(job.driver) : company_driver_path(hash_id(job.driver))
+      a<> href=path #{job.driver.first_name_and_initial}
 
 
 
@@ -21,13 +21,13 @@
     .tab-bar__item--active
       Job Details
   - else
-    .tab-bar__item class=("tab-bar__item--active" if (controller.controller_name == "jobs" && request.path != freelancer_matches_company_job_path && request.path != collaborators_company_job_path(job) && request.path != freelancer_matches_admin_job_path))
+    .tab-bar__item class=("tab-bar__item--active" if (controller.controller_name == "jobs" && request.path != driver_matches_company_job_path && request.path != collaborators_company_job_path(job) && request.path != driver_matches_admin_job_path))
       - path = current_user.admin? ? admin_job_path(job) : company_job_path(job)
       a href=path
         | Job Details
     - if job.state == 'published'
-      .tab-bar__item class=("tab-bar__item--active" if (controller.controller_name == "jobs" && (request.path == freelancer_matches_company_job_path || request.path == freelancer_matches_admin_job_path)))
-        - path = current_user.admin? ? freelancer_matches_admin_job_path(job) : freelancer_matches_company_job_path(job)
+      .tab-bar__item class=("tab-bar__item--active" if (controller.controller_name == "jobs" && (request.path == driver_matches_company_job_path || request.path == driver_matches_admin_job_path)))
+        - path = current_user.admin? ? driver_matches_admin_job_path(job) : driver_matches_company_job_path(job)
         a href=path
           | Matches
     .tab-bar__item class=("tab-bar__item--active" if request.path.index(/applicant/)) class=("tab-bar__item--inactive" if job.applicants_count == 0 )

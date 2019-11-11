@@ -1,0 +1,30 @@
+- if @applicant
+  .driver-job__detail-cont
+    .driver-job__quote-cont
+      = render partial: "driver/shared/new_quote", locals: { n: @applicant.company.name, type: "quote" }
+      .driver-job__message-history
+        - @messages.each_with_index do |message|
+          .driver-job__quote-msg class=(".driver-job_quote-msg.driver-job__quote-msg-has-quote")
+            - if message.authorable.is_a?(Driver)
+              - if message.authorable.driver_profile.avatar_data.nil?
+                .dropdown-avatar
+                  .circle_profile__image.driver__image= message.authorable.name_initials
+              - else
+                .common__user-avatar style="background-image: url(#{message.authorable.user_data.avatar_url})"
+            - else
+              .common__user-avatar style="background-image: url(#{message.authorable.user_data.avatar_url})"
+            .driver-job__msg-cont.w-clearfix
+              - if message.authorable.is_a?(Driver)
+                .driver-job__msg-user-name= message.authorable.first_name_and_initial
+              - else
+                .driver-job__msg-user-name= message.authorable.full_name
+              .driver-job__msg-created-at= "#{time_ago_in_words(message.created_at)} ago"
+              p.driver-job__msg-text= message.body
+              - if message.attachment_url
+                a.authorable_attachment href=message.attachment_url target="_blank"
+                  - if image?(message.attachment_url)
+                    span class="authorable_attachment_icon fa fa-image"
+                  - else
+                    span class="authorable_attachment_icon fa fa-file-text"
+                  .authorable_attachment__filename
+                    = eval(message.attachment_data)[:metadata][:filename]

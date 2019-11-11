@@ -4,24 +4,24 @@ class Admin::NewRegistrantsController < Admin::BaseController
 
   def index
     authorize current_user
-    freelancer_profiles = FreelancerProfile.new_registrants
+    driver_profiles = DriverProfile.new_registrants
     companies = Company.new_registrants
     @keywords = params.dig(:search, :keywords).presence
     @sort = params.dig(:search, :sort).presence
 
     if @keywords.present?
-      freelancer_profiles = freelancer_profiles.name_or_email_search(@keywords)
+      driver_profiles = driver_profiles.name_or_email_search(@keywords)
       companies = companies.name_or_email_search(@keywords)
     end
 
     if @sort.blank? || @sort == "created_at DESC"
-      @new_registrants = (freelancer_profiles + companies).sort_by(&:created_at).reverse
+      @new_registrants = (driver_profiles + companies).sort_by(&:created_at).reverse
     else
       @new_registrants = if %w[full_name state country created_at registration_step].include?(@sort)
-                           (freelancer_profiles + companies).sort_by { |registrant| registrant.try(@sort.to_sym) || "" }
+                           (driver_profiles + companies).sort_by { |registrant| registrant.try(@sort.to_sym) || "" }
                          else
                            # rubocop:disable Metrics/LineLength
-                           (freelancer_profiles + companies).sort_by { |registrant| registrant.user.try(@sort.to_sym) || "" }
+                           (driver_profiles + companies).sort_by { |registrant| registrant.user.try(@sort.to_sym) || "" }
                            # rubocop:enable Metrics/LineLength
                          end
     end
@@ -31,9 +31,9 @@ class Admin::NewRegistrantsController < Admin::BaseController
 
   def download_csv
     authorize current_user
-    freelancers = FreelancerProfile.new_registrants.map(&:freelancer)
+    drivers = DriverProfile.new_registrants.map(&:driver)
     companies = Company.new_registrants.map(&:owner)
-    @registrants = (freelancers + companies).sort_by(&:created_at).reverse
+    @registrants = (drivers + companies).sort_by(&:created_at).reverse
     create_csv
     # rubocop:disable Metrics/LineLength
     send_data @csv_file, type: "text/csv; charset=iso-8859-1; header=present", disposition: "attachment; filename=new_registrants.csv"

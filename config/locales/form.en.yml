@@ -21,7 +21,7 @@ en:
         project: "Project Reference"
         title: "Job Title"
         summary: "Job Summary"
-        freelancer_type: "Freelancer Type"
+        driver_type: "Driver Type"
         budget_is_public: "The budget for this job is public."
         contract_price: "Job Work Order Price"
         require_checkin: "Require checkin upon arrival at job site"

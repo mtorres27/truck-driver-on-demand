@@ -1,0 +1,66 @@
+= simple_form_for(:message, url: driver_job_quotes_path(@job, @applicant), class: "driver-job__quote-form") do |f|
+  .w-form.driver-job__quote-form
+    .attachment.common__text-field-group
+      label.common__field-label for="name-4"
+        = "Send a message to #{n}"
+      = f.text_area :body, as: :string, placeholder: "Enter your message", label: false, maxlength: 5000, class: "w-input"
+
+    .attachment.common__text-field-group
+      = f.input :attachment, as: :file, label: false
+
+    .new-message__counter
+      .attachment.common__text-field-group
+        label.common__field-label for="message_counter_type"  Choose a payment type
+        = f.select :counter_type, [["Fixed Rate", "fixed"], ["Hourly Rate", "hourly"], ["Daily Rate", "daily"]], {}, {class: "common__select-field w-select"}
+      
+      .new-message__counter--fixed
+        .common__text-field-group
+          label.common__field-label for="message_counter"  Suggested price
+          = f.input :counter, as: :string, maxlength: 256, placeholder: "Enter your suggested price", label: false, class: "w-input--important"
+    
+      .new-message__counter--hourly
+        .common__text-field-group.width-30
+          label.common__field-label Rate
+          = f.input :counter_hourly_rate, as: :integer, maxlength: 256, placeholder: "$/hr", label: false, class: "w-input--important"
+        .common__text-field-group.width-30
+          label.common__field-label  Time
+          = f.input :counter_number_of_hours, as: :integer, maxlength: 256, placeholder: "hrs", label: false, class: "w-input--important"
+        .common__text-field-group.width-30
+          label.common__field-label for="name-4" price
+          input.w-input--important data-name=("Name 3") maxlength="256" name="name-3" placeholder="$$" type="text" id="hourly-counter-price" disabled=true
+
+      .new-message__counter--daily
+        .common__text-field-group.width-30
+          label.common__field-label Rate
+          = f.input :counter_daily_rate, as: :integer, placeholder: "$/day", label: false, class: "w-input--important"
+        .common__text-field-group.width-30
+          label.common__field-label Time
+          = f.input :counter_number_of_days, as: :integer, placeholder: "days", label: false, class: "w-input--important"
+        .common__text-field-group.width-30
+          label.common__field-label for="name-4" price
+          input.w-input--important data-name=("Name 3") maxlength="256" name="name-4" placeholder="$$" type="text" id="daily-counter-price" disabled=true
+    
+    .common__form-action-cont.w-clearfix
+      div#new-message__validation-errors
+      a.btn.btn--primary onclick="submitForm();"
+        div#new-message__submit
+          | Send
+
+
+javascript:
+  var submitForm = function() {
+    // validate here
+    var validated = true;
+    $("#new-message__validation-errors").html("");
+
+    if ($("#message_body").val() == "") {  
+      validated = false;
+    }
+
+    if (validated) {
+      $(".simple_form").submit();
+    } else {
+      $("#new-message__validation-errors").html("The message field cannot be empty.")
+    }
+  };
+

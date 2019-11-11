@@ -4,8 +4,8 @@
 #
 # Table name: certifications
 #
-#  id               :integer          not null, primary key
-#  freelancer_id    :integer
+#  id               :bigint           not null, primary key
+#  driver_id        :integer
 #  certificate      :text
 #  name             :text
 #  created_at       :datetime         not null
@@ -21,7 +21,7 @@ include ImageProcessing::MiniMagick
 class Certification < ApplicationRecord
 
   include CertificationUploader[:certificate]
-  belongs_to :freelancer, class_name: "User", foreign_key: "freelancer_id"
+  belongs_to :driver, class_name: "User", foreign_key: "driver_id"
 
   extend Enumerize
 

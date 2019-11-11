@@ -1,0 +1,11 @@
+= render partial: "/driver/shared/job_meta"
+= render partial: "driver/shared/job_shared_nav", locals: { job: @job }
+
+- content_for :secondary do
+  .action-bar
+    h2.heading-h2.heading-h2--action-bar Add a review
+  - if current_user.admin? || (current_user.driver? && @job.driver&.id == current_user.id)
+    - if @review.new_record?
+      = render partial: "review_form", locals: {review: @review, job: @job}
+    - else
+      = render partial: "review_info", locals: {review: @review}

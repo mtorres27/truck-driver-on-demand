@@ -1,0 +1,9 @@
+= render partial: "/driver/shared/job_meta"
+= render partial: "/driver/shared/job_shared_nav", locals: { job: @job }
+
+- content_for :secondary do
+  .action-bar
+    h2.heading-h2 Application
+  = render partial: "driver/shared/messaging_cluster", locals: { applicant_accepted: @applicant_accepted, applicants: @applicants, job: @job, current_applicant_id: @current_applicant_id,  }
+
+    

@@ -10,9 +10,9 @@ Rails.application.routes.draw do
                              controllers: { registrations: "company/registrations", sessions: "sessions" },
                              skip: %i[devise passwords confirmations]
 
-  devise_for :freelancers, path: "freelancer",
+  devise_for :drivers, path: "driver",
                            path_names: { sign_up: "register" },
-                           controllers: { registrations: "freelancer/registrations", sessions: "sessions" },
+                           controllers: { registrations: "driver/registrations", sessions: "sessions" },
                            skip: %i[devise passwords confirmations]
 
   devise_scope :company_user do
@@ -20,7 +20,7 @@ Rails.application.routes.draw do
     match "timeout"           => "sessions#timeout",              via: :get
   end
 
-  devise_scope :freelancer do
+  devise_scope :driver do
     match "active"            => "sessions#active",               via: :get
     match "timeout"           => "sessions#timeout",              via: :get
   end
@@ -32,15 +32,15 @@ Rails.application.routes.draw do
 
   root "main#index"
 
-  get "freelance-service-agreement", to: "main#freelance_service_agreement"
+  get "driver-service-agreement", to: "main#driver_service_agreement"
   get "confirm_email", to: "main#confirm_email"
   get "job_country_currency", to: "main#job_countries", as: "job_country_currency"
 
   match "/public_jobs" => "public_pages#public_jobs",   via: :get
 
-  namespace :freelancer do
+  namespace :driver do
     root "main#index"
-    resource :freelancer, only: [:show] do
+    resource :driver, only: [:show] do
       collection do
         post :request_verification
       end
@@ -85,18 +85,18 @@ Rails.application.routes.draw do
       end
     end
 
-    resources :freelancers, only: %i[show index] do
+    resources :drivers, only: %i[show index] do
       get :saved, on: :collection
       get :hired, on: :collection
       post :add_favourites, on: :collection
-      post :save_freelancer, on: :member
-      post :delete_freelancer, on: :member
+      post :save_driver, on: :member
+      post :delete_driver, on: :member
       resources :messages, only: %i[index create]
     end
 
     resources :company_users, only: %i[edit update]
 
-    get "freelancers/:id/invite_to_quote", to: "freelancers#invite_to_quote"
+    get "drivers/:id/invite_to_quote", to: "drivers#invite_to_quote"
 
     resources :applicants
     resources :messaging, only: [:index]
@@ -106,13 +106,13 @@ Rails.application.routes.draw do
     resources :jobs
 
     get "jobs/:id/publish", to: "jobs#publish"
-    get "freelancers/:freelancer_id/messages(/job/:job_id)", to: "messages#index", as: "messages_for_job"
+    get "drivers/:driver_id/messages(/job/:job_id)", to: "messages#index", as: "messages_for_job"
   end
 
   namespace :admin do
     root "main#index"
 
-    resources :freelancers, except: %i[new create] do
+    resources :drivers, except: %i[new create] do
       get :disable, on: :member
       get :enable, on: :member
       get :verify, on: :member
@@ -120,7 +120,7 @@ Rails.application.routes.draw do
       get :messaging, on: :member
     end
 
-    resource :freelancer do
+    resource :driver do
       get :download_csv
     end
 
@@ -136,7 +136,7 @@ Rails.application.routes.draw do
     end
 
     resources :jobs, except: %i[new create] do
-      get :freelancer_matches, on: :member
+      get :driver_matches, on: :member
       get :mark_as_expired, on: :member
       get :unmark_as_expired, on: :member
     end
@@ -153,7 +153,7 @@ Rails.application.routes.draw do
 
     resources :connections, only: [:index]
 
-    get "companies/:company_id/messages/freelancer/:freelancer_id", to: "messages#index", as: "messages"
+    get "companies/:company_id/messages/driver/:driver_id", to: "messages#index", as: "messages"
   end
 
   get "*any", via: :all, to: "errors#not_found"

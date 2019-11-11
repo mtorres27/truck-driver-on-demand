@@ -1,0 +1,20 @@
+- last_message = driver.messages_for_company(company).last
+.truckker-list-item class="#{"truckker-text-emphasize" if driver.new_messages_from_company?(company)}"
+  - is_admin = current_user.is_a?(Admin)
+  - path = is_admin ? admin_company_url(company) : driver_company_url(company)
+  a.mr-4 href=path
+    - if company.avatar_data.present?
+      .truckker-avatar
+        = image_tag(company.avatar_url)
+    - else
+      .truckker-circle_profile__image.company__image= company.company_user.name_initials
+  - path = is_admin ? admin_messages_url(company, driver) : driver_company_messages_url(company)
+  a.d-flex.w-100 href=path
+    .d-flex.flex-wrap.w-100.mr-4
+      .w-50
+        .truckker-body1.m-0= "#{company.name} "
+      .w-50
+        .truckker-caption1.text-right= last_message.created_at
+      .w-100
+        .truckker-body2= last_message.body
+    .truckker-body1.truckker-text-color-primary.zmdi.zmdi-comment-text

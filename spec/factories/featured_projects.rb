@@ -4,7 +4,7 @@
 #
 # Table name: featured_projects
 #
-#  id         :integer          not null, primary key
+#  id         :bigint           not null, primary key
 #  company_id :integer
 #  name       :string
 #  file       :string

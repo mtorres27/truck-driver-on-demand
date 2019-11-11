@@ -88,7 +88,7 @@ function uploadAddendum (index) {
     ref.on('change', function() {
         var imgPath = $(this)[0].value;
         var extn = imgPath.substring(imgPath.lastIndexOf('.') + 1).toLowerCase();
-        var image_holder = $(this).parent().parent().find(".freelancer-profile__image").find(".authorable_attachment--full").find("img");
+        var image_holder = $(this).parent().parent().find(".driver-profile__image").find(".authorable_attachment--full").find("img");
         if (extn == "gif" || extn == "png" || extn == "jpg" || extn == "jpeg") {
             if (typeof (FileReader) != "undefined") {
                 var reader = new FileReader();

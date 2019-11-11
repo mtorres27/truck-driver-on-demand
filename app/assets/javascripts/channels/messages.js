@@ -25,7 +25,7 @@ document.addEventListener("turbolinks:load", function(){
                         console.log("received");
                         // Called when there's incoming data on the websocket for this channel
                         $(".js--messages-beginning").hide();
-                        $(".js--freelancer-job__message-history").append(data.message);
+                        $(".js--driver-job__message-history").append(data.message);
                         if (window.matchMedia("(max-width: 768px)").matches) {
                             window.scrollTo(0,document.body.scrollHeight);
                         }

@@ -1,0 +1,15 @@
+.truckker-section.truckker-section__msg-subhead.d-block.mb-4
+  .container
+    .truckker-subhead
+      h4.ellipsis.mb-0= "Messages for #{@driver.full_name}"
+      .d-flex.align-items-center.justify-content-end
+        a.btn.btn-primary.btn-sm.mr-2 href=admin_driver_path(@driver)
+          | Back
+.truckker-section.truckker-section__main
+  .container.container__content
+    div
+      - @companies.each do |company|
+        - if company.present?
+          = render partial: "driver/messaging/company_messaging_info", locals: {company: company, driver: @driver}
+
+

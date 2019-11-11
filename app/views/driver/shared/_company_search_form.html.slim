@@ -1,0 +1,13 @@
+= simple_form_for :search, url: (current_user.present? ? driver_jobs_path : public_jobs_path), method: :get, html: { id: "company_search_form", class:"row mb-4" } do |f|
+  .col-12
+    = f.input :keywords, required: false, placeholder: "Enter Keywords to Search", input_html: { value: @keywords }, label_html: { class: "truckker-caption1" }, wrapper_html: { class: "mb-0" }
+    small.truckker-caption2 id="keywordshelp" class="form-text text-muted"
+      | Try using AV Installer or Crestron Programmer
+  .col-sm-6
+    = f.input :address, required: false, label: "Location", placeholder: "Enter the City", input_html: { value: @address }, label_html: { class: "truckker-caption1" }, wrapper_html: { class: "mb-0" }
+    small.truckker-caption2 id="emailHelp" class="form-text text-muted"
+      | Get better local results when you add a city
+  .col-sm-6
+    = f.input :country, required: false, label: "Province", collection: I18n.t('enumerize.province').map { |i, v| [i, v] }, label_method: :second, value_method: :first, prompt: "Select Province", selected: @country, label_html: { class: "truckker-caption1" }, wrapper_html: { class: "mb-0" }
+  .col-12
+    = f.submit "Search jobs", class: "btn btn-primary"

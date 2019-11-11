@@ -1,0 +1,299 @@
+= f.simple_fields_for :driver_profile do |df|
+  .truckker-section.truckker-section__main
+    .container.container__content
+      .row
+        .col-md-4.col-12
+          h2 Account Details
+          .truckker-body2 These are not shown on your Truckker Profile
+        .col-md-8.col-12
+          .row
+            .col-12
+              = f.input :email, as: :string, required: true, label: "Email Address", placeholder: "Email address", label_html: { class: "truckker-caption1" }
+            .col-12
+              = f.input :phone_number, required: false, label: "Phone Number", placeholder: "Phone Number", label_html: { class: "truckker-caption1" }
+            .col-12
+              .row
+                .col-12
+                  = df.input :address, required: true, label: "Address", placeholder: "Address", label_html: { class: "truckker-caption1" }
+                .col-12
+                  = df.input :line2, required: false, label: "Address Line 2 (Unit #, Apt)", placeholder: "Address Line 2", label_html: { class: "truckker-caption1" }
+                .col-md-6
+                  = df.input :country, required: true, label: "Select Country", prompt: "Select Country", input_html: { class: "js--country-select" }, label_html: { class: "truckker-caption1" }
+                .col-md-6
+                  .form-group
+                    = df.label "State/Province"
+                    select#driver_driver_profile_attributes_state.js--state-province-select.form-control.truckker-body2(name='driver[driver_profile_attributes][state]')
+                      option(value='')
+                        | Select
+                      = CS.states(:us).each do |index, value|
+                        - selected = (@driver.driver_profile.state.present? && @driver.driver_profile.state == index.to_s)
+                        - if selected
+                          option.js--us_option(value="#{index}" selected)
+                            = value
+                        - else
+                          option.js--us_option(value="#{index}")
+                            = value
+                      = CS.states(:ca).each do |index, value|
+                        - selected = (@driver.driver_profile.state.present? and @driver.driver_profile.state == index.to_s)
+                        - if selected
+                          option.js--ca_option(value="#{index}" selected)
+                            = value
+                        - else
+                          option.js--ca_option(value="#{index}")
+                            = value
+                .col-md-6
+                  = df.input :city, required: true, label: "City", placeholder: "City", label_html: { class: "truckker-caption1" }
+                .col-md-6
+                  = df.input :postal_code, required: false, label: "ZIP/Postal Code", placeholder: "ZIP/Postal Code", label_html: { class: "truckker-caption1" }
+                .col-12
+                  .form-group
+                    label.truckker-caption1 for="keywords"
+                      | Do you have a Valid Drivers license?
+                    .form-check
+                      = df.radio_button(:valid_driver, true, class: "form-check-input")
+                      label.form-check-label.truckker-body2 for="exampleRadios1"
+                        | Yes
+                    .form-check
+                      = df.radio_button(:valid_driver, false, class: "form-check-input")
+                      label.form-check-label.truckker-body2 for="exampleRadios2"
+                        | No
+
+      .row.mb-2
+        .col
+          .dropdown-divider
+
+      .row
+        .col-md-4.col-12
+          h2 A profile pic says a 1000 words.
+        .col-md-8.col-12
+          .row
+            .col-md-9.col-12
+              = f.input :first_name, required: true, label: "First Name", placeholder: "First Name", label_html: { class: "truckker-caption1" }
+              = f.input :last_name, required: true, label: "Last Name", placeholder: "Last Name", label_html: { class: "truckker-caption1" }, wrapper_html: { class: "mb-0" }
+              small.truckker-caption2 id="emailHelp" class="form-text text-muted"
+                | Only the first initial of your last name is shown on your Truckker Profile
+            .col-md-3.col-8
+              .form-group
+                label.truckker-caption1
+                  | Profile Picture
+                = image_tag(@driver.driver_profile.avatar_url, id: "driver-edit-profile__avatar", class: "mr-2")
+                a.zmdi.zmdi-camera onclick="updateProfilePicture()"
+                = df.file_field :avatar, label: false, :accept => 'image/png,image/gif,image/jpeg', id: "edit-driver-profile-avatar", class: "truckker-hidden-important file-input--hidden"
+
+
+      .row.mb-2
+        .col
+          .dropdown-divider
+
+      .row
+        .col-md-4.col-12
+          h2 Tell us about yourself, your skills and experience. Companies can't just hire a pretty face.
+        .col-md-8.col-12
+          .row
+            .col-md-12
+              = df.input :tagline, required: true, label: "Describe yourself in one senternce, your 'tagline'", placeholder: "Tagline", label_html: { class: "truckker-caption1" }
+            .col-12
+              = df.input :bio, required: true, label: "Bio", placeholder: "Enter a short bio", input_html: { rows: "6" }, label_html: { class: "truckker-caption1" }
+            .col-12
+              = df.input :company_name, required: false, label: "Are you working with a company?", placeholder: "Company_name", label_html: { class: "truckker-caption1" }
+
+      .row.mb-2
+        .col
+          .dropdown-divider
+
+      .row
+        .col-md-4.col-12
+          h2 Details on how you operate your business will help cut through the clutter.
+        .col-md-8.col-12
+          .row
+            .col-md-12
+              = df.input :service_areas, required: false, label: "Service Regions", placeholder: "Service Regions", label_html: { class: "truckker-caption1" }
+            .col-md-6
+              = df.input :driver_type, required: false, label: "Driver Type", prompt: "Driver Type", label_html: { class: "truckker-caption1" }
+            .col-md-6
+              = df.input :driver_team_size, required: false, label: "Team Size", prompt: "Team Size", label_html: { class: "truckker-caption1" }
+            .col-md-12
+              = df.input :years_of_experience, required: false, label: "Years of Experience", placeholder: "Experience in years", label_html: { class: "truckker-caption1" }
+            .col-md-6
+              = df.input :pay_unit_time_preference, required: false, label: "Payment Preference", prompt: "Select", label_html: {class: "truckker-caption1"}
+            .col-md-6.js--pay-rate
+              = df.input :pay_rate, required: false, label: "Rate", placeholder: "Enter your rate", label_html: {class: "truckker-caption1"}
+            .col-12
+              .form-group
+                label.truckker-caption1 for="keywords"
+                  | Do you have your own tools?
+                .form-check
+                  = df.radio_button(:own_tools, true, class: "form-check-input")
+                  label.form-check-label.truckker-body2 for="exampleRadios1"
+                    | Yes
+                .form-check
+                  = df.radio_button(:own_tools, false, class: "form-check-input")
+                  label.form-check-label.truckker-body2 for="exampleRadios2"
+                    | No
+
+      .row.mb-2
+        .col
+          .dropdown-divider
+
+      .row
+        .col-md-4.col-12
+          h2
+            | You've got skills!
+            br/
+            | Check all that apply.
+        .col-md-8.col-12
+          .row
+            .col-12
+              .form-group
+                label.truckker-body1 for="Job_types"
+                  | Special Skills
+                .row
+                  - I18n.t('enumerize.technical_skill_tags').each do |index, value|
+                    - tag_name = "driver[driver_profile_attributes][technical_skill_tags][#{index.to_s}]"
+                    - if @driver.driver_profile.technical_skill_tags.present? && @driver.driver_profile.technical_skill_tags.include?(index.to_s)
+                      - checked = true
+                    - else
+                      - checked = false
+                    .col-md-4.col-6
+                      .form-check
+                        = check_box_tag tag_name, "1", checked, class: "form-check-input"
+                        label.form-check-label.truckker-body2= value
+
+            .col-12
+              .form-group
+                label.truckker-body1 for="Job_types"
+                  | Manufacturers
+                .row
+                  - I18n.t('enumerize.manufacturer_tags').each do |index, value|
+                    - tag_name = "driver[driver_profile_attributes][manufacturer_tags][#{index.to_s}]"
+                    - if @driver.driver_profile.manufacturer_tags.present? && @driver.driver_profile.manufacturer_tags.include?(index.to_s)
+                      - checked = true
+                    - else
+                      - checked = false
+                    .col-md-4.col-6
+                      .form-check
+                        = check_box_tag tag_name, "1", checked, class: "form-check-input"
+                        label.form-check-label.truckker-body2= value
+
+      .row.mb-2
+        .col
+          .dropdown-divider
+
+      .row
+        .col-md-4.col-12
+          h2 Select the types of work you are interested in
+        .col-md-8.col-12
+          .row
+            .col-12
+              .form-group
+                label.truckker-body1 for="Job_types"
+                  | System Integration
+                .row
+                  - I18n.t('enumerize.system_integration_job_markets').each do |index, value|
+                    - tag_name = "driver[driver_profile_attributes][job_markets][#{index.to_s}]"
+                    - if @driver.driver_profile.job_markets.present? && @driver.driver_profile.job_markets.include?(index.to_s)
+                      - checked = true
+                    - else
+                      - checked = false
+                    .col-md-6
+                      .form-check
+                        = check_box_tag tag_name, "1", checked, class: 'form-check-input'
+                        label.form-check-label.truckker-body2= value
+
+            .col-12
+              .form-group
+                label.truckker-body1 for="Job_types"
+                  | Live Events, Staging and Rental
+                .row
+                  - I18n.t('enumerize.live_events_staging_and_rental_job_markets').each do |index, value|
+                    - tag_name = "driver[driver_profile_attributes][job_markets][#{index.to_s}]"
+                    - if @driver.driver_profile.job_markets.present? && @driver.driver_profile.job_markets.include?(index.to_s)
+                      - checked = true
+                    - else
+                      - checked = false
+                    .col-md-6
+                      .form-check
+                        = check_box_tag tag_name, "1", checked, class: 'form-check-input'
+                        label.form-check-label.truckker-body2= value
+
+      .row.mb-4.mt-4
+        .col
+          .dropdown-divider
+
+      .row
+        .col-md-4.col-12
+          h2 Upload your resume
+        .col-md-8.col-12
+          div
+            = f.simple_fields_for :driver_affiliations do |affiliation_form|
+              = render "/driver/profiles/driver_affiliation_fields", f: affiliation_form
+            .row.col.add-new-affiliation
+              = link_to_add_association 'Add Resume', f, :driver_affiliations, partial: '/driver/profiles/driver_affiliation_fields', class: "btn btn-outline-primary"
+
+      .row.mb-2
+        .col
+          .dropdown-divider
+
+      .row
+        .col-md-4.col-12
+          h2 A portfolio of successful projects gives you credibility with companies
+        .col-md-8.col-12
+          div
+            = f.simple_fields_for :driver_portfolios do |portfolio_form|
+              = render "/driver/profiles/driver_portfolio_fields", f: portfolio_form
+            .row.col.add-new-portfolio
+              = link_to_add_association 'Add Project', f, :driver_portfolios, partial: '/driver/profiles/driver_portfolio_fields', class: "btn btn-outline-primary"
+
+      .row.mb-4.mt-4
+        .col
+          .dropdown-divider
+
+      .row
+        .col-md-4.col-12
+          h2 A virtual wall for all the certificates you've earned.
+        .col-md-8.col-12
+          div
+            = f.simple_fields_for :certifications do |certification_form|
+              = render "/driver/profiles/certification_fields", f: certification_form
+            .row.col.add-new-certificate
+              = link_to_add_association 'Add Certificate', f, :certifications, partial: '/driver/profiles/certification_fields', class: "btn btn-outline-primary"
+
+      .row.mb-4.mt-4
+        .col
+          .dropdown-divider
+
+      .row
+        .col-md-4.col-12
+          h2 Proof of Insurance
+          .truckker-body2.truckker-text-color-black2
+            | Proof of Insurance includes; General Liability and Workplace Safety
+        .col-md-8.col-12
+          div
+            = f.simple_fields_for :driver_insurances do |insurance_form|
+              = render "/driver/profiles/driver_insurance_fields", f: insurance_form
+            .row.col.add-new-insurance
+              = link_to_add_association 'Add Insurance', f, :driver_insurances, partial: '/driver/profiles/driver_insurance_fields', class: "btn btn-outline-primary"
+
+      .row.mb-4.mt-4
+        .col
+          .dropdown-divider
+
+      .row
+        .col-md-4.col-12
+          h2 Secruity Clearances
+          .truckker-body2.truckker-text-color-black2
+            | Clearance types includes; Site Access, Secret (level 1), Top Secret (Level 2) or Enhanced Top Secret (Level 3)
+        .col-md-8.col-12
+          div
+            = f.simple_fields_for :driver_clearances do |clearance_form|
+              = render "/driver/profiles/driver_clearance_fields", f: clearance_form
+            .row.col.add-new-clearance
+              = link_to_add_association 'Add Secruity Clearance', f, :driver_clearances, partial: '/driver/profiles/driver_clearance_fields', class: "btn btn-outline-primary"
+
+      .row.mb-4.mt-4
+        .col
+          .dropdown-divider
+      .row
+        .col-12.d-flex.align-items-center.justify-content-end
+          = link_to "Cancel", driver_profile_path, class: "btn btn-outline-primary mr-4"
+          = f.button :submit, "Update Profile", class: "btn btn-primary"

@@ -8,8 +8,8 @@
 .truckker-section.truckker-section__main
   .container.container__content
     div
-      - @freelancers.each do |freelancer|
-        - if freelancer.present?
-          = render partial: "company/messaging/freelancer_messaging_info", locals: {freelancer: freelancer, company: @company}
+      - @drivers.each do |driver|
+        - if driver.present?
+          = render partial: "company/messaging/driver_messaging_info", locals: {driver: driver, company: @company}
 
 
