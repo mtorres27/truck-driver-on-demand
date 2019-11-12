@@ -55,8 +55,11 @@ class Driver::RegistrationStepsController < Driver::BaseController
       :province,
       :city,
       :service_areas,
-      :transmission_and_speed,
+      :vehicle_type,
+      :truck_type,
+      :trailer_type,
       :freight_type,
+      :transmission_and_speed,
       :other_skills,
     )
   end

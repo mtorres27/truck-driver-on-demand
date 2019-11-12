@@ -26,7 +26,7 @@
 #  driver_id              :integer
 #  requested_verification :boolean          default(FALSE)
 #  license_class          :string
-#  county                 :string
+#  province               :string
 #  transmission_and_speed :citext
 #  freight_type           :citext
 #  other_skills           :citext
@@ -59,7 +59,7 @@ class DriverProfile < ApplicationRecord
 
   accepts_nested_attributes_for :driver
 
-  validates :county, :city, :province, presence: true, on: :update, if: :step_expertise?
+  validates :city, :province, presence: true, on: :update, if: :step_expertise?
   validates :address, :city, :province, presence: true, if: :enforce_profile_edit
 
   serialize :additional_skills

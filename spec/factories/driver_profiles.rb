@@ -26,7 +26,7 @@
 #  driver_id              :integer
 #  requested_verification :boolean          default(FALSE)
 #  license_class          :string
-#  county                 :string
+#  province               :string
 #  transmission_and_speed :citext
 #  freight_type           :citext
 #  other_skills           :citext
