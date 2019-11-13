@@ -107,12 +107,15 @@ gem "city-state"
 gem "trix"
 # Use Truncato
 gem "truncato"
+# Use twilio for SMS
+gem 'twilio-ruby', '~> 5.29.0'
 
 group :development, :test do
   gem "factory_bot_rails"
   gem "faker"
   gem "pry-byebug"
   gem "rspec-rails"
+  gem 'dotenv-rails'
 end
 
 group :development do

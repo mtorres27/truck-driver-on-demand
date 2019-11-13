@@ -102,7 +102,7 @@ class DriverProfile < ApplicationRecord
 
   def send_welcome_email
     return if driver&.confirmed? || !registration_completed? || driver&.confirmation_sent_at.present?
-
+    
     driver&.send_confirmation_instructions
   end
 
