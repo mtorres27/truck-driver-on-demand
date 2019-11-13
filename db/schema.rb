@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20191107172235) do
+ActiveRecord::Schema.define(version: 20191112195029) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -226,7 +226,6 @@ ActiveRecord::Schema.define(version: 20191107172235) do
     t.integer "driver_id"
     t.boolean "requested_verification", default: false
     t.string "license_class"
-    t.string "county"
     t.string "province"
     t.citext "transmission_and_speed"
     t.citext "freight_type"
