@@ -247,7 +247,22 @@ class Driver < User
     end
   end
 
+  def send_confirmation_instructions
+    super
+    send_confirmation_sms
+  end
+
   private
+
+  def send_confirmation_sms
+    confirmation_url = "#{Rails.application.routes.url_helpers.root_url }users/confirmation?confirmation_token=#{confirmation_token}"
+    client = Twilio::REST::Client.new ENV['twilio_account_sid'], ENV['twilio_auth_token']
+    client.messages.create(
+      from: ENV['twilio_number'],
+      to: phone_number,
+      body: "#{confirmation_url} Hello from Truckker! Thanks for signing up with us. Navigate to the link above to start using the platform."
+    )
+  end
 
   def initialize_driver_profile
     self.driver_profile ||= build_driver_profile
