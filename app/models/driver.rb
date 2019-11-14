@@ -255,7 +255,7 @@ class Driver < User
   private
 
   def send_confirmation_sms
-    confirmation_url = "#{Rails.application.routes.url_helpers.root_url }users/confirmation?confirmation_token=#{confirmation_token}"
+    confirmation_url = "#{ENV['host_url']}users/confirmation?confirmation_token=#{confirmation_token}"
     client = Twilio::REST::Client.new ENV['twilio_account_sid'], ENV['twilio_auth_token']
     client.messages.create(
       from: ENV['twilio_number'],
