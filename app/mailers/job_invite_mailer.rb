@@ -11,7 +11,7 @@ class JobInviteMailer < ApplicationMailer
         "%job_title%" => [@job.title],
         "%company_name%" => [@job.company.name],
         "%job_id%" => [@job.id],
-        "%root_url%" => [root_url],
+        "%root_url%" => [ENV['host_url']],
       },
       filters: {
         templates: {

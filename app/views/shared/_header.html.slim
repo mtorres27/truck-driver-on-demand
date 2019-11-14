@@ -1,7 +1,7 @@
 .truckker-section.truckker-section__head
   .container
     .truckker-header
-      a.truckker-head-logo href=root_url
+      a.truckker-head-logo href=ENV['host_url']
         = image_tag "avjlogo-2-0.png"
       .d-flex.justify-content-end.align-items-center
         - if current_user&.is_a?(CompanyUser) && current_company&.registration_step == "wicked_finish"
