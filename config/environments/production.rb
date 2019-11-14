@@ -3,7 +3,7 @@
 Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
 
-  Rails.application.routes.default_url_options[:host] = "https://truck-driver-on-demand.herokuapp.com"
+  Rails.application.routes.default_url_options[:host] = ENV["host_url"]
 
   config.secret_key_base = ENV["SECRET_KEY_BASE"]
 
@@ -44,9 +44,9 @@ Rails.application.configure do
 
   # Mount Action Cable outside main process or domain
   # config.action_cable.mount_path = nil
-  config.web_socket_server_url = "wss://truck-driver-on-demand.herokuapp.com/cable"
-  config.action_cable.url = "wss://truck-driver-on-demand.herokuapp.com/cable"
-  config.action_cable.allowed_request_origins = ["truck-driver-on-demand.herokuapp.com", "https://truck-driver-on-demand.herokuapp.com"]
+  config.web_socket_server_url = "wss://#{ENV["host_name"]}/cable"
+  config.action_cable.url = "wss://#{ENV["host_name"]}/cable"
+  config.action_cable.allowed_request_origins = ["#{ENV["host_name"]}", "https://#{ENV["host_name"]}"]
 
   # Force all access to the app over SSL, use Strict-Transport-Security, and use secure cookies.
   # config.force_ssl = true
@@ -70,13 +70,13 @@ Rails.application.configure do
   # Set this to true and configure the email server for immediate delivery to raise delivery errors.
   # config.action_mailer.raise_delivery_errors = false
 
-  config.action_mailer.default_url_options = { host: "truck-driver-on-demand.herokuapp.com" }
-  config.action_mailer.asset_host = "http://truck-driver-on-demand.herokuapp.com"
+  config.action_mailer.default_url_options = { host: "#{ENV["host_name"]}" }
+  config.action_mailer.asset_host = ENV["host_url"]
   config.action_mailer.delivery_method = :smtp
   config.action_mailer.smtp_settings = {
     user_name: ENV["sendgrid_username"],
     password: ENV["sendgrid_password"],
-    domain: "mg.truck-driver-on-demand.herokuapp.com",
+    domain: "mg.#{ENV["host_name"]}",
     address: "smtp.sendgrid.net",
     port: 587,
     authentication: :plain,
