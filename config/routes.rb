@@ -12,7 +12,7 @@ Rails.application.routes.draw do
 
   devise_for :drivers, path: "driver",
                            path_names: { sign_up: "register" },
-                           controllers: { registrations: "driver/registrations", sessions: "sessions" },
+                           controllers: { registrations: "driver/registrations", sessions: "driver/sessions" },
                            skip: %i[devise passwords confirmations]
 
   devise_scope :company_user do
@@ -21,8 +21,10 @@ Rails.application.routes.draw do
   end
 
   devise_scope :driver do
-    match "active"            => "sessions#active",               via: :get
-    match "timeout"           => "sessions#timeout",              via: :get
+    match "active"                        => "sessions#active",                   via: :get
+    match "timeout"                       => "sessions#timeout",                  via: :get
+    match "phone_login"                   => "driver/sessions#phone_login",       via: :post
+    match "send_login_code/:phone_number" => "driver/sessions#send_login_code",   via: :post
   end
 
   devise_scope :admin do
