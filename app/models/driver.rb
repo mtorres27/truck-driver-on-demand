@@ -252,6 +252,20 @@ class Driver < User
     send_confirmation_sms
   end
 
+  def send_login_code
+    if self.update(login_code: rand(000000..999900).to_s.rjust(6, "0"))
+      client = Twilio::REST::Client.new ENV['twilio_account_sid'], ENV['twilio_auth_token']
+      client.messages.create(
+        from: ENV['twilio_number'],
+        to: phone_number,
+        body: "Here's your confirmation code #{login_code}"
+      )
+      true
+    else
+      false
+    end
+  end
+
   private
 
   def send_confirmation_sms
