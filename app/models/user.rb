@@ -36,6 +36,8 @@
 #  phone_number           :string
 #  role                   :string
 #  enabled                :boolean          default(TRUE)
+#  login_code             :string
+#  city                   :string
 #
 
 class User < ApplicationRecord
@@ -46,6 +48,7 @@ class User < ApplicationRecord
   has_many :notifications, as: :receivable, dependent: :destroy
 
   validates :email, uniqueness: { case_sensitive: false }
+  validates :phone_number, uniqueness: true
   validates :first_name, :last_name, :phone_number, presence: true
 
   def full_name

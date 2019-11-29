@@ -48,12 +48,6 @@ Rails.application.routes.draw do
       end
     end
 
-    resources :registration_steps, only: %i[show update index] do
-      member do
-        post :previous
-      end
-    end
-
     resources :companies, only: %i[index show] do
       get :favourites, on: :collection
       post :add_favourites, on: :collection

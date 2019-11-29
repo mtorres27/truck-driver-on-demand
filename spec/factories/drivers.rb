@@ -36,6 +36,8 @@
 #  phone_number           :string
 #  role                   :string
 #  enabled                :boolean          default(TRUE)
+#  login_code             :string
+#  city                   :string
 #
 
 FactoryBot.define do
