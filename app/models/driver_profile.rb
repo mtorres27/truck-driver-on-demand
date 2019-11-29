@@ -59,7 +59,6 @@ class DriverProfile < ApplicationRecord
 
   accepts_nested_attributes_for :driver
 
-  validates :city, :province, presence: true, on: :update, if: :step_expertise?
   validates :address, :city, :province, presence: true, if: :enforce_profile_edit
 
   serialize :additional_skills
@@ -74,16 +73,16 @@ class DriverProfile < ApplicationRecord
   enumerize :license_class, in: I18n.t("enumerize.license_class").keys
   enumerize :province, in: I18n.t("enumerize.province").keys
 
-  def step_expertise?
-    registration_step == "expertise"
-  end
-
   def user
     driver
   end
 
   def city_province
-    "#{city}#{", #{province}" unless province.blank?}"
+    "#{user.city}#{", #{province}" unless province.blank?}"
+  end
+
+  def registration_completed?
+    registration_step == "wicked_finish"
   end
 
   private
@@ -93,7 +92,7 @@ class DriverProfile < ApplicationRecord
   end
 
   def set_default_step
-    self.registration_step ||= "personal"
+    self.registration_step ||= "confirm_phone"
   end
 
   def send_welcome_email

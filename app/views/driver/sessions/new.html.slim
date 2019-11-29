@@ -4,58 +4,33 @@
       - if flash[:notice]
         = flash[:notice]
       - else
-        | Hey there, login to get started
-    .card
-      .card-header
-        ul.nav.nav-tabs.card-header-tabs
-          li.nav-item
-            a.nav-link.active#js--phone-login-nav
-              | Login with phone number
-          li.nav-item
-            a.nav-link#js--email-login-nav
-              | Login with email
-      .card-body
-        .js--phone-login
-          = simple_form_for(resource, as: 'user', url: phone_login_path) do |f|
-            = f.error_notification
-            .row.js--phone-field
-              .col-md-8
-                = f.input :phone_number, as: :string, label: "Phone Number", placeholder: "Enter your phone number", label_html: { class: "truckker-caption1" }
-            .row.mb-4.js--enter-login-code-button
-              .col-md-8
-                .d-flex.align-items-center
-                  .btn.btn-primary.mr-4#js--enter-login-code-button Login to Truckker
-            .row.js--login-code-field
-              .col-md-8
-                p We just sent an SMS with a confirmation code to your cellphone.
-                = f.input :login_code, label: "Confirmation Code", placeholder: "Enter 6 digit code", label_html: { class: "truckker-caption1" }
-            .row.mb-4.js--phone-login-submit-button
-              .col-md-8
-                .d-flex.align-items-center
-                  = f.button :submit, "Login to Truckker", class:"btn btn-primary mr-4"
-        .js--email-login
-          = simple_form_for(resource, as: 'user', url: session_path('user')) do |f|
-            = f.error_notification
-            .row.js--email-field
-              .col-md-8
-                = f.input :email, as: :string, label: "Email Address", autofocus: true, placeholder: "Enter your email address", label_html: { class: "truckker-caption1" }
-            .row.mb-4.js--enter-password-button
-              .col-md-8
-                .d-flex.align-items-center
-                  .btn.btn-primary.mr-4#js--enter-password-button Login to Truckker
-            .row.js--password-field
-              .col-md-8
-                = f.input :password, label: "Password", placeholder: "Enter your password", label_html: { class: "truckker-caption1" }
-            .row.mb-4.js--email-login-submit-button
-              .col-md-8
-                .d-flex.align-items-center
-                  = f.button :submit, "Login to Truckker", class:"btn btn-primary mr-4"
-                  - if devise_mapping.recoverable? && controller_name != 'passwords' && controller_name != 'registrations'
-                    a.truckker-body2 href=new_user_password_path(resource_name)
-                      | Forgot your password
-          .row
-            .col-md-8
-              .truckker-body2
-                | Haven't got an account? &nbsp;
-                a.span href=new_driver_registration_path
-                  | Register Here.
+        | Sign in with email or phone number
+    
+    .js--email-or-phone-fields
+      = text_field_tag "email_or_phone", nil, placeholder: "Email or phone number", class: "form-control"
+      = button_tag "Next", class: "btn btn-primary mt-4", id: "js--login-check-email-or-phone"
+    
+    = simple_form_for(resource, as: 'user', url: phone_login_path) do |f|
+      = f.error_notification
+      .js--phone-field
+        = f.hidden_field :phone_number
+      .js--login-code-field
+        = f.input :login_code, label: false, placeholder: "Enter 6 digit code", label_html: { class: "truckker-caption1" }
+      .row.mb-4.js--phone-login-submit-button
+        .col-md-8
+          .d-flex.align-items-center
+            = f.button :submit, "Login to Truckker", class:"btn btn-primary mr-4"
+            a#js--resend-code.truckker-body2 Resend code
+    = simple_form_for(resource, as: 'user', url: session_path('user')) do |f|
+      = f.error_notification
+      .js--email-field
+        = f.hidden_field :email
+      .js--password-field
+        = f.input :password, label: false, placeholder: "Enter your password", label_html: { class: "truckker-caption1" }
+      .row.mb-4.js--email-login-submit-button
+        .col-md-8
+          .d-flex.align-items-center
+            = f.button :submit, "Login to Truckker", class:"btn btn-primary mr-4"
+            - if devise_mapping.recoverable? && controller_name != 'passwords' && controller_name != 'registrations'
+              a.truckker-body2 href=new_user_password_path(resource_name)
+                | Forgot your password

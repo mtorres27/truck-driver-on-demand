@@ -79,6 +79,7 @@ class Driver < User
   validates_acceptance_of :accept_code_of_conduct
 
   before_validation :initialize_driver
+  after_create :confirm_driver
 
   accepts_nested_attributes_for :driver_profile
   accepts_nested_attributes_for :certifications, allow_destroy: true, reject_if: :reject_certification
@@ -86,6 +87,8 @@ class Driver < User
   accepts_nested_attributes_for :driver_clearances, reject_if: :all_blank, allow_destroy: true
   accepts_nested_attributes_for :driver_portfolios, reject_if: :all_blank, allow_destroy: true
   accepts_nested_attributes_for :driver_insurances, reject_if: :all_blank, allow_destroy: true
+
+  delegate :registration_completed?, to: :driver_profile, allow_nil: true
 
   pg_search_scope :search, against: {
     first_name: "A",
@@ -282,9 +285,12 @@ class Driver < User
     )
   end
 
+  def confirm_driver
+    self.confirm unless self.confirmed_at.present?
+  end
+
   def initialize_driver
     self.driver_profile ||= build_driver_profile
-    self.confirm unless self.confirmed_at.present?
   end
 
   def step_job_info?

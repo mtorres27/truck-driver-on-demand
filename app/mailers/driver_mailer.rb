@@ -2,6 +2,25 @@
 
 class DriverMailer < ApplicationMailer
 
+  def send_confirmation_code(driver, confirmation_code)
+    @driver = driver
+    headers "X-SMTPAPI" => {
+      sub: {
+        "%driver_name%" => [@driver.first_name_and_initial],
+        "%confirmation_code%" => [confirmation_code]
+      },
+      filters: {
+        templates: {
+          settings: {
+            enable: 1,
+            template_id: "e37bd9b0-4e27-4a04-aff1-734e278402c0",
+          },
+        },
+      },
+    }.to_json
+    mail(to: @driver.email, subject: "Here's your truckker confirmation code")
+  end
+
   def request_profile_verification(driver)
     @driver = driver
     headers "X-SMTPAPI" => {

@@ -3,18 +3,26 @@ $(document).on("turbolinks:load", function () {
   $(".js--email-login-submit-button").addClass("d-none");
   $(".js--phone-login-submit-button").addClass("d-none");
   $(".js--login-code-field").addClass("d-none");
-  $(".js--email-login").addClass("d-none");
-  $("#js--enter-password-button").on('click', function() {
-    showPasswordInput();
-  });
-  $("#js--enter-login-code-button").on('click', function() {
+  $(".js--phone-field").addClass("d-none");
+  $(".js--email-field").addClass("d-none");
+
+  $("#js--login-check-email-or-phone").on("click", function(){
+    if ($("#email_or_phone").val().includes("@")) {
+      showEmailLogin();
+      $("#user_email").val($("#email_or_phone").val());
+      showPasswordInput();
+    } else {
+      sendConfirmationCode($("#email_or_phone").val());
+      showPhoneLogin();
+      $("#user_phone_number").val($("#email_or_phone").val());
+      showConfirmationCodeInput();
+    }
+  })
+
+  $("#js--resend-code").on("click", function() {
     sendConfirmationCode($("#user_phone_number").val());
-  });
-  $("#js--phone-login-nav").on('click', function() {
-    showPhoneLogin();
-  });
-  $("#js--email-login-nav").on('click', function() {
-    showEmailLogin();
+    phone = $("#email_or_phone").val();
+    $(".js--message").html("New confirmation code sent to " + phone.replace(phone.substring(0,7), "********") + ".");
   });
 });
 
@@ -33,17 +41,16 @@ function showConfirmationCodeInput() {
 }
 
 function showPhoneLogin() {
+  phone = $("#email_or_phone").val()
+  $(".js--message").html("Enter the code sent to " + phone.replace(phone.substring(0,7), "********") + ".");
   $(".js--phone-login").removeClass("d-none");
-  $("#js--email-login-nav").removeClass("active");
-  $(".js--email-login").addClass("d-none");
-  $(".js--phone-login-nav").addClass("active");
+  $(".js--email-or-phone-fields").addClass("d-none");
 }
 
 function showEmailLogin() {
+  $(".js--message").html("Enter your truckker password");
   $(".js--email-login").removeClass("d-none");
-  $("#js--phone-login-nav").removeClass("active");
-  $(".js--phone-login").addClass("d-none");
-  $(".js--email-login-nav").addClass("active");
+  $(".js--email-or-phone-fields").addClass("d-none");
 }
 
 function sendConfirmationCode(phoneNumber) {

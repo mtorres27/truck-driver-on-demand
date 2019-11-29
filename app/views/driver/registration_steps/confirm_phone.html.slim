@@ -1,0 +1,11 @@
+.truckker-section.truckker-section__main
+  .container.container__content
+    h2 Thanks for signing up with Truckker
+    p We've texted you a confirmation code to complete your registration.
+    = simple_form_for(current_user, url: wizard_path) do |f|
+      .row
+        .col-lg-6.col-md-6.col-sm-12
+          = f.input :login_code, as: :string, label: "Enter the confirmation code", required: true, placeholder: "6 digit confirmation code", input_html: {value: nil}
+      .row
+        .col-6
+          = f.button :submit, "Continue", class: "btn btn-primary w-100"

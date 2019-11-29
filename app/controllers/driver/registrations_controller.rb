@@ -2,13 +2,13 @@
 
 class Driver::RegistrationsController < Devise::RegistrationsController
 
-  layout 'clean'
+  # layout 'clean'
 
   before_action :configure_permitted_parameters
 
   def create
     super do |resource|
-      sign_out resource if resource.valid?
+      sign_in resource if resource.valid?
     end
   end
 
@@ -19,7 +19,7 @@ class Driver::RegistrationsController < Devise::RegistrationsController
   end
 
   def after_sign_up_path_for(_resource)
-    new_driver_session_path
+    driver_registration_steps_path
   end
 
   def after_sign_in_path_for(_resource)
