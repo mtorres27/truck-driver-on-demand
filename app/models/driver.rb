@@ -36,6 +36,8 @@
 #  phone_number           :string
 #  role                   :string
 #  enabled                :boolean          default(TRUE)
+#  login_code             :string
+#  city                   :string
 #
 
 require "net/http"
@@ -76,7 +78,7 @@ class Driver < User
   validates_acceptance_of :accept_privacy_policy
   validates_acceptance_of :accept_code_of_conduct
 
-  before_validation :initialize_driver_profile
+  before_validation :initialize_driver
 
   accepts_nested_attributes_for :driver_profile
   accepts_nested_attributes_for :certifications, allow_destroy: true, reject_if: :reject_certification
@@ -129,8 +131,6 @@ class Driver < User
   }, using: {
     tsearch: { prefix: true },
   }
-
-  delegate :registration_completed?, to: :driver_profile, allow_nil: true
 
   def messages_for_company(company)
     Message.messages_for(company, self)
@@ -253,7 +253,7 @@ class Driver < User
   end
 
   def send_login_code
-    if self.update(login_code: rand(000000..999900).to_s.rjust(6, "0"))
+    if generate_login_code
       client = Twilio::REST::Client.new ENV['twilio_account_sid'], ENV['twilio_auth_token']
       client.messages.create(
         from: ENV['twilio_number'],
@@ -264,6 +264,10 @@ class Driver < User
     else
       false
     end
+  end
+
+  def generate_login_code
+    self.update(login_code: rand(000000..999900).to_s.rjust(6, "0"))
   end
 
   private
@@ -278,8 +282,9 @@ class Driver < User
     )
   end
 
-  def initialize_driver_profile
+  def initialize_driver
     self.driver_profile ||= build_driver_profile
+    self.confirm unless self.confirmed_at.present?
   end
 
   def step_job_info?
@@ -287,10 +292,6 @@ class Driver < User
   end
 
   protected
-
-  def confirmation_required?
-    registration_completed?
-  end
 
   def registration_step_changed?
     driver_profile&.registration_step_changed?

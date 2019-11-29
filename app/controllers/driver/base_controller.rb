@@ -18,8 +18,4 @@ class Driver::BaseController < ApplicationController
     redirect_to root_path unless current_user&.driver?
   end
 
-  def current_driver_registering?
-    !current_user&.driver_profile&.registration_completed?
-  end
-
 end

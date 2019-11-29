@@ -50,7 +50,7 @@ class DriverProfile < ApplicationRecord
   scope :new_registrants, -> { where(disabled: true, registration_step: "wicked_finish") }
   scope :incomplete_registrations, -> { where.not(registration_step: "wicked_finish") }
 
-  after_save :send_welcome_email, if: :registration_step_changed?
+  after_create :send_welcome_email
   before_save :set_profile_score
   before_create :set_default_step
 
@@ -73,10 +73,6 @@ class DriverProfile < ApplicationRecord
   enumerize :driver_type, in: I18n.t("enumerize.driver_type").keys
   enumerize :license_class, in: I18n.t("enumerize.license_class").keys
   enumerize :province, in: I18n.t("enumerize.province").keys
-
-  def registration_completed?
-    registration_step == "wicked_finish"
-  end
 
   def step_expertise?
     registration_step == "expertise"
@@ -101,7 +97,7 @@ class DriverProfile < ApplicationRecord
   end
 
   def send_welcome_email
-    return if driver&.confirmed? || !registration_completed? || driver&.confirmation_sent_at.present?
+    return if driver&.confirmed? || driver&.confirmation_sent_at.present?
     
     driver&.send_confirmation_instructions
   end

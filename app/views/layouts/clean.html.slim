@@ -1,0 +1,42 @@
+doctype 5
+html
+  head
+    meta charset="utf-8"
+    meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    meta name="turbolinks-cache-control" content="no-cache"
+    link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous"
+    link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:regular,italic,600,700" media="all"
+    link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons|Material+Icons+Outlined"
+    link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/material-design-iconic-font/2.2.0/css/material-design-iconic-font.min.css"
+    = yield(:head)
+    = csrf_meta_tags
+    = stylesheet_link_tag "application", media: "all", "data-turbolinks-track": "reload"
+    = javascript_include_tag "application", "data-turbolinks-track": "reload"
+    = javascript_include_tag "//cdnjs.cloudflare.com/ajax/libs/moment.js/2.8.4/moment.min.js", "data-turbolinks-track": "reload"
+    = javascript_include_tag "//cdn.datatables.net/plug-ins/1.10.16/sorting/datetime-moment.js", "data-turbolinks-track": "reload"
+    - if content_for?(:title)
+      title= yield(:title)
+    - else
+      title= "Truckker"
+
+    javascript:
+      !function(f,b,e,v,n,t,s)
+      {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+      n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+      if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+      n.queue=[];t=b.createElement(e);t.async=!0;
+      t.src=v;s=b.getElementsByTagName(e)[0];
+      s.parentNode.insertBefore(t,s)}(window,document,'script',
+      'https://connect.facebook.net/en_US/fbevents.js');
+      fbq('init', '372487999888650');
+      fbq('track', 'PageView');
+    noscript
+      img height="1", width="1", src="https://www.facebook.com/tr?id=372487999888650&ev=PageView&noscript=1"
+
+
+  body(class = "#{controller.controller_name}-#{controller.action_name}")
+    = render "shared/flash"
+    = yield
+    - if content_for(:secondary)
+      .container
+        .frame= yield :secondary
