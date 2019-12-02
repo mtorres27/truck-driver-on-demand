@@ -109,6 +109,8 @@ gem "trix"
 gem "truncato"
 # Use twilio for SMS
 gem 'twilio-ruby', '~> 5.29.0'
+# Use rack-cors for CORS
+gem 'rack-cors'
 
 group :development, :test do
   gem "factory_bot_rails"
