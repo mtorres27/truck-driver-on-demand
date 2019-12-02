@@ -14,8 +14,9 @@
           = f.input :email, as: :string, label: false, required: true, placeholder: "Email"
         .col-md-6
           = f.input :password, required: true, label: false, placeholder: "Password"
-        .col-md-6
-          = f.input :password_confirmation, label: false, required: true, placeholder: "Confirm Password"
+        - if resource.class == CompanyUser
+          .col-md-6
+            = f.input :password_confirmation, label: false, required: true, placeholder: "Confirm Password"
         .col-md-6
           = f.input :phone_number, required: true, label: false, placeholder: "Phone"
         .col-md-6

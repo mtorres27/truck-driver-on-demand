@@ -7,6 +7,7 @@ class Driver::RegistrationsController < Devise::RegistrationsController
   before_action :configure_permitted_parameters
 
   def create
+    params["driver"]["password_confirmation"] = params["driver"]["password"]
     super do |resource|
       sign_in resource if resource.valid?
     end
