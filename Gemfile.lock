@@ -109,7 +109,7 @@ GEM
       activemodel (>= 4.0.0)
       activesupport (>= 4.0.0)
       mime-types (>= 1.16)
-    chartkick (3.2.1)
+    chartkick (3.3.0)
     childprocess (2.0.0)
       rake (< 13.0)
     choice (0.2.0)
@@ -483,7 +483,7 @@ DEPENDENCIES
   capistrano-rails (~> 1.2.3)
   capybara
   carrierwave (~> 1.0.0)
-  chartkick (~> 3.2.0)
+  chartkick (~> 3.3.0)
   city-state
   cocoon (~> 1.2.10)
   coderay (~> 1.1.1)
