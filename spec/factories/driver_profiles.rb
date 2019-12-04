@@ -33,6 +33,10 @@
 #  vehicle_type           :citext
 #  truck_type             :citext
 #  trailer_type           :citext
+#  address_line1          :string
+#  address_line2          :string
+#  background_check_data  :text
+#  completed_profile      :boolean          default(FALSE)
 #
 
 FactoryBot.define do

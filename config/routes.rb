@@ -48,7 +48,10 @@ Rails.application.routes.draw do
       end
     end
 
-    resources :onboarding_process, only: %i[index]
+    resources :onboarding_process, only: %i[index] do
+      get :complete_profile, on: :collection
+      put :complete_profile_update, on: :collection
+    end
 
     resources :registration_steps, only: %i[show update index]
 
