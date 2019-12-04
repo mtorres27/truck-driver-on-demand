@@ -48,6 +48,8 @@ Rails.application.routes.draw do
       end
     end
 
+    resources :onboarding_process, only: %i[index]
+
     resources :registration_steps, only: %i[show update index]
 
     resources :companies, only: %i[index show] do
