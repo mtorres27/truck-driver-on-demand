@@ -9,7 +9,6 @@
 #  avatar_data            :text
 #  tagline                :string
 #  bio                    :text
-#  years_of_experience    :integer          default(0), not null
 #  profile_views          :integer          default(0), not null
 #  available              :boolean          default(TRUE), not null
 #  disabled               :boolean          default(TRUE), not null
@@ -37,6 +36,9 @@
 #  address_line2          :string
 #  background_check_data  :text
 #  completed_profile      :boolean          default(FALSE)
+#  years_of_experience    :string
+#  business_name          :string
+#  hst_number             :string
 #
 
 require "net/http"
@@ -65,7 +67,8 @@ class DriverProfile < ApplicationRecord
 
   accepts_nested_attributes_for :driver
 
-  validates :avatar_data, :address_line1, :city, :postal_code, presence: true, if: :complete_profile_form
+  validates :avatar_data, :address_line1, :city, :postal_code, :years_of_experience, :driver_type, :hst_number, presence: true, if: :complete_profile_form
+  validates :business_name, presence: true, if: :independent_contractor?
 
   serialize :additional_skills
   serialize :trailer_type
@@ -77,6 +80,7 @@ class DriverProfile < ApplicationRecord
 
   enumerize :driver_type, in: I18n.t("enumerize.driver_type").keys
   enumerize :license_class, in: I18n.t("enumerize.license_class").keys
+  enumerize :years_of_experience, in: I18n.t("enumerize.years_of_experience").keys
   enumerize :province, in: I18n.t("enumerize.province").keys
 
   def user
@@ -89,6 +93,10 @@ class DriverProfile < ApplicationRecord
 
   def registration_completed?
     registration_step == "wicked_finish"
+  end
+
+  def independent_contractor?
+    driver_type == 'independent_contractor'
   end
 
   private
