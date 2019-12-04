@@ -9,7 +9,6 @@
 #  avatar_data            :text
 #  tagline                :string
 #  bio                    :text
-#  years_of_experience    :integer          default(0), not null
 #  profile_views          :integer          default(0), not null
 #  available              :boolean          default(TRUE), not null
 #  disabled               :boolean          default(TRUE), not null
@@ -37,6 +36,9 @@
 #  address_line2          :string
 #  background_check_data  :text
 #  completed_profile      :boolean          default(FALSE)
+#  years_of_experience    :string
+#  business_name          :string
+#  hst_number             :string
 #
 
 require "rails_helper"

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20191204165934) do
+ActiveRecord::Schema.define(version: 20191204184352) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -209,7 +209,6 @@ ActiveRecord::Schema.define(version: 20191204165934) do
     t.text "avatar_data"
     t.string "tagline"
     t.text "bio"
-    t.integer "years_of_experience", default: 0, null: false
     t.integer "profile_views", default: 0, null: false
     t.boolean "available", default: true, null: false
     t.boolean "disabled", default: true, null: false
@@ -237,6 +236,9 @@ ActiveRecord::Schema.define(version: 20191204165934) do
     t.string "address_line2"
     t.text "background_check_data"
     t.boolean "completed_profile", default: false
+    t.string "years_of_experience"
+    t.string "business_name"
+    t.string "hst_number"
     t.index ["available"], name: "index_driver_profiles_on_available"
     t.index ["disabled"], name: "index_driver_profiles_on_disabled"
     t.index ["driver_id"], name: "index_driver_profiles_on_driver_id"
