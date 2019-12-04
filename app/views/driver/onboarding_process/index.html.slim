@@ -2,12 +2,13 @@
   .container.container__content
     .row.mb-4
       .col
-        h3.font-weight-bold= "Hi #{current_user.first_name}!"
+        h3.font-weight-bold= "Hi #{@driver.first_name}!"
         h2 Setup your profile
         p Setup your profile so you can start driving
     .row.mb-4
       .col
-        = render "shared/card_link", title: "Get Started", subtitle: "Complete your profile", url: "#"
+        - unless @driver.completed_profile
+          = render "shared/card_link", title: "Get Started", subtitle: "Complete your profile", url: complete_profile_driver_onboarding_process_index_url
         = render "shared/card_link", title: "Get Started", subtitle: "Upload Driver's License", url: "#"
         = render "shared/card_link", title: "Get Started", subtitle: "Upload CVOR Abstract", url: "#"
         = render "shared/card_link", title: "Get Started", subtitle: "Upload Driver Abstract", url: "#"
@@ -21,6 +22,8 @@
         = render "shared/card_link", title: "Get Started", subtitle: "Test - Dangerous Goods", url: "#"
         = render "shared/card_link", title: "Get Started", subtitle: "Test - Hours of Work", url: "#"
         = render "shared/card_link", title: "Get Started", subtitle: "Test - Safe Driving", url: "#"
+        = render "shared/card_link", title: "Get Started", subtitle: "Test - Pre Trip", url: "#"
+        = render "shared/card_link", title: "Get Started", subtitle: "Test - WHMIS Awareness", url: "#"
         p or
         = render "shared/card_link", title: "Bypass Tests", subtitle: "Have you registered with TPI Personnell Inc. in the last 5 years and taken all screening tests?", url: "#"
     .row.mb-4
@@ -28,5 +31,5 @@
         h3.font-weight-bold Completed Steps
     .row.mb-4
       .col
-        = render "shared/disabled_card_link", title: "Get Started", subtitle: "Test - Pre Trip"
-        = render "shared/disabled_card_link", title: "Get Started", subtitle: "Test - WHMIS Awareness"
+        - if @driver.completed_profile
+          = render "shared/disabled_card_link", title: "Get Started", subtitle: "Complete your profile"

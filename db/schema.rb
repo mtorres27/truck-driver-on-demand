@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20191129010519) do
+ActiveRecord::Schema.define(version: 20191204165934) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -233,6 +233,10 @@ ActiveRecord::Schema.define(version: 20191129010519) do
     t.citext "vehicle_type"
     t.citext "truck_type"
     t.citext "trailer_type"
+    t.string "address_line1"
+    t.string "address_line2"
+    t.text "background_check_data"
+    t.boolean "completed_profile", default: false
     t.index ["available"], name: "index_driver_profiles_on_available"
     t.index ["disabled"], name: "index_driver_profiles_on_disabled"
     t.index ["driver_id"], name: "index_driver_profiles_on_driver_id"

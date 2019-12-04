@@ -1,0 +1,108 @@
+= simple_form_for @driver, url: complete_profile_update_driver_onboarding_process_index_path, method: :put do |f|
+  = f.hidden_field :complete_profile_form, value: true
+  .truckker-section.truckker-section__head
+    .container
+      .truckker-header
+        a[href=driver_onboarding_process_index_url]
+          = fa_icon 'arrow-left'
+        h2.mt-3 Your Profile
+        .d-flex.justify-content-end.align-items-center
+          = f.submit 'Save', class: 'btn btn-primary mt-2 mb-2'
+
+  .truckker-section.truckker-section__main
+    .container.container__content
+      .row.mb-4
+        .col
+          h3.font-weight-bold Add Profile Photo
+      .row.mb-4
+        .col.text-center
+          - if @driver.driver_profile.avatar_data.nil?
+            = image_tag('avatar/missing.jpg', class: 'mb-4 truckker-circle_profile__image', id: 'driver-profile__avatar')
+          - else
+            = image_tag(@driver.driver_profile.avatar_url, class: 'mb-4 truckker-circle_profile__image', id: 'driver-profile__avatar')
+      .row.mb-2
+        .col
+          p
+            | Photo requirements:
+            br
+            | - Capture your whole face and shoulders
+            br
+            | - Take sunglasses off
+            br
+            | - Make sure you're well lit
+          - if @driver.driver_profile.errors.include?('avatar_data')
+            label.text-danger You must provide a profile picture
+      .row.mb-4
+        .col.text-center
+          .btn.btn-primary.w-100.mb-2[onclick="uploadProfilePicture()"] Take photo with my phone
+          .btn.btn-outline-secondary.w-100[onclick="uploadProfilePicture()"] Upload photo
+      .row.mb-2
+        .col
+          h3.font-weight-bold Home Address
+      .row.mb-4
+        .col
+          = f.simple_fields_for :driver_profile do |df|
+            = df.input :address_line1, as: :string, required: true, label: false, placeholder: "Enter your home address"
+            = df.input :address_line2, as: :string, required: false, label: false, placeholder: "Enter your unit or apt number"
+            = df.input :city, as: :string, required: true, label: false, placeholder: "Enter your city"
+            = df.input :postal_code, as: :string, required: true, label: false, placeholder: "Enter your postal code"
+            = df.file_field :avatar, label: false, :accept => 'image/png,image/gif,image/jpeg', id: "upload-driver-profile-avatar", class: "truckker-hidden-important file-input--hidden"
+            = df.file_field :background_check, label: false, :accept => 'image/png,image/gif,image/jpeg,application/pdf', id: "upload-driver-profile-background-check", class: "truckker-hidden-important file-input--hidden"
+      .row.mb-2
+        .col
+          h3.font-weight-bold Background check (optional)
+          p Some carriers require background checks to be completed. If you have one available, you can upload it or take a photo of it.
+      .row.mb-4
+        .col.text-center
+          img#driver-profile__background-check
+      .row.mb-4
+        .col.text-center
+          .btn.btn-primary.w-100.mb-2[onclick="uploadBackgroundCheck()"] Take photo with my phone
+          .btn.btn-outline-secondary.w-100[onclick="uploadBackgroundCheck()"] Upload photo
+
+javascript:
+  var uploadProfilePicture = function() {
+    $("#upload-driver-profile-avatar").click();
+    $("#upload-driver-profile-avatar").on('change', function() {
+      var imgPath = $(this)[0].value;
+      var extn = imgPath.substring(imgPath.lastIndexOf('.') + 1).toLowerCase();
+      var image_holder = $("#driver-profile__avatar");
+
+      if (extn == "gif" || extn == "png" || extn == "jpg" || extn == "jpeg" || extn == "pdf") {
+        if (typeof (FileReader) != "undefined") {
+          var reader = new FileReader();
+          reader.onload = function (e) {
+            image_holder.attr('src', e.target.result)
+          };
+
+          reader.readAsDataURL($(this)[0].files[0]);
+        }
+      } else {
+        alert("Only images or PDFs can be selected.");
+      }
+    });
+  }
+
+  var uploadBackgroundCheck = function() {
+    $("#upload-driver-profile-background-check").click();
+    $("#upload-driver-profile-background-check").on('change', function() {
+      var imgPath = $(this)[0].value;
+      var extn = imgPath.substring(imgPath.lastIndexOf('.') + 1).toLowerCase();
+      var image_holder = $("#driver-profile__background-check");
+
+      if (extn == "gif" || extn == "png" || extn == "jpg" || extn == "jpeg") {
+        if (typeof (FileReader) != "undefined") {
+          var reader = new FileReader();
+          reader.onload = function (e) {
+            image_holder.attr('src', e.target.result)
+          };
+
+          reader.readAsDataURL($(this)[0].files[0]);
+        }
+      } else if (extn == "pdf") {
+        image_holder.attr('src', "/assets/adendum/placeholder.png")
+      } else {
+        alert("Only images or PDFs can be selected.");
+      }
+    });
+  }

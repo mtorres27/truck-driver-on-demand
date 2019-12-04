@@ -33,6 +33,10 @@
 #  vehicle_type           :citext
 #  truck_type             :citext
 #  trailer_type           :citext
+#  address_line1          :string
+#  address_line2          :string
+#  background_check_data  :text
+#  completed_profile      :boolean          default(FALSE)
 #
 
 require "net/http"
@@ -42,6 +46,7 @@ class DriverProfile < ApplicationRecord
 
   extend Enumerize
   include AvatarUploader[:avatar]
+  include BackgroundCheckUploader[:background_check]
   include Disableable
   include PgSearch
 
@@ -55,11 +60,12 @@ class DriverProfile < ApplicationRecord
   before_create :set_default_step
 
   delegate :enforce_profile_edit, to: :driver, allow_nil: true
+  delegate :complete_profile_form, to: :driver, allow_nil: true
   delegate :full_name, to: :driver
 
   accepts_nested_attributes_for :driver
 
-  validates :address, :city, :province, presence: true, if: :enforce_profile_edit
+  validates :avatar_data, :address_line1, :city, :postal_code, presence: true, if: :complete_profile_form
 
   serialize :additional_skills
   serialize :trailer_type

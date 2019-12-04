@@ -67,7 +67,7 @@ class Driver < User
   has_many :favourite_companies, through: :company_favourites, source: :company
 
   attr_accessor :accept_terms_of_service, :accept_privacy_policy,
-                :accept_code_of_conduct, :enforce_profile_edit, :user_type
+                :accept_code_of_conduct, :enforce_profile_edit, :user_type, :complete_profile_form
 
   validates :email, presence: true, if: :enforce_profile_edit
   validates :phone_number, length: { minimum: 7 }, allow_blank: true
@@ -89,6 +89,7 @@ class Driver < User
   accepts_nested_attributes_for :driver_insurances, reject_if: :all_blank, allow_destroy: true
 
   delegate :registration_completed?, to: :driver_profile, allow_nil: true
+  delegate :completed_profile, to: :driver_profile, allow_nil: true
 
   pg_search_scope :search, against: {
     first_name: "A",

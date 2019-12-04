@@ -82,6 +82,14 @@ class DriverPolicy < ApplicationPolicy
     driver? && driver_owner?
   end
 
+  def complete_profile?
+    driver?
+  end
+
+  def complete_profile_update?
+    driver?
+  end
+
   private
 
   def driver_owner?
