@@ -12,7 +12,8 @@
         = render "shared/card_link", title: "Get Started", subtitle: "Upload Driver's License", url: "#"
         - unless @driver.cvor_abstract_uploaded
           = render "shared/card_link", title: "Get Started", subtitle: "Upload CVOR Abstract", url: cvor_abstract_driver_onboarding_process_index_url
-        = render "shared/card_link", title: "Get Started", subtitle: "Upload Driver Abstract", url: "#"
+        - unless @driver.driver_abstract_uploaded
+          = render "shared/card_link", title: "Get Started", subtitle: "Upload Driver Abstract", url: driver_abstract_driver_onboarding_process_index_url
         = render "shared/card_link", title: "Get Started", subtitle: "Add Work History", url: "#"
     .row.mb-4
       .col
@@ -36,4 +37,5 @@
           = render "shared/disabled_card_link", title: "Get Started", subtitle: "Complete your profile"
         - if @driver.cvor_abstract_uploaded
           = render "shared/disabled_card_link", title: "Get Started", subtitle: "Upload CVOR Abstract"
-          
+        - if @driver.driver_abstract_uploaded
+          = render "shared/disabled_card_link", title: "Get Started", subtitle: "Upload Driver Abstract"

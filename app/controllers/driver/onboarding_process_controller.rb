@@ -33,6 +33,18 @@ class Driver::OnboardingProcessController < Driver::BaseController
     end
   end
 
+  def driver_abstract; end
+
+  def upload_driver_abstract
+    if @driver.update(driver_abstract_params)
+      @driver.driver_profile.update!(driver_abstract_uploaded: true)
+      flash[:notice] = 'Driver Abstract uploaded'
+      redirect_to driver_onboarding_process_index_path
+    else
+      render :driver_abstract
+    end
+  end
+
   private
 
   def set_driver
@@ -70,6 +82,17 @@ class Driver::OnboardingProcessController < Driver::BaseController
       driver_profile_attributes: [
         :id,
         :cvor_abstract
+      ],
+    )
+  end
+
+  def driver_abstract_params
+    params.require(:driver).permit(
+      :id,
+      :driver_abstract_form,
+      driver_profile_attributes: [
+        :id,
+        :driver_abstract
       ],
     )
   end

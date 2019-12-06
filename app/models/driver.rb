@@ -68,7 +68,7 @@ class Driver < User
 
   attr_accessor :accept_terms_of_service, :accept_privacy_policy,
                 :accept_code_of_conduct, :enforce_profile_edit, :user_type, 
-                :complete_profile_form, :cvor_abstract_form
+                :complete_profile_form, :cvor_abstract_form, :driver_abstract_form
 
   validates :email, presence: true, if: :enforce_profile_edit
   validates :phone_number, length: { minimum: 7 }, allow_blank: true
@@ -92,6 +92,7 @@ class Driver < User
   delegate :registration_completed?, to: :driver_profile, allow_nil: true
   delegate :completed_profile, to: :driver_profile, allow_nil: true
   delegate :cvor_abstract_uploaded, to: :driver_profile, allow_nil: true
+  delegate :driver_abstract_uploaded, to: :driver_profile, allow_nil: true
 
   pg_search_scope :search, against: {
     first_name: "A",

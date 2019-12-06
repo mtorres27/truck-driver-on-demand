@@ -53,6 +53,8 @@ Rails.application.routes.draw do
       put :complete_profile_update, on: :collection
       get :cvor_abstract, on: :collection
       put :upload_cvor_abstract, on: :collection
+      get :driver_abstract, on: :collection
+      put :upload_driver_abstract, on: :collection
     end
 
     resources :registration_steps, only: %i[show update index]
