@@ -51,6 +51,8 @@ Rails.application.routes.draw do
     resources :onboarding_process, only: %i[index] do
       get :complete_profile, on: :collection
       put :complete_profile_update, on: :collection
+      get :cvor_abstract, on: :collection
+      put :upload_cvor_abstract, on: :collection
     end
 
     resources :registration_steps, only: %i[show update index]

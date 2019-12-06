@@ -39,6 +39,8 @@
 #  years_of_experience    :string
 #  business_name          :string
 #  hst_number             :string
+#  cvor_abstract_data     :text
+#  cvor_abstract_uploaded :boolean          default(FALSE)
 #
 
 FactoryBot.define do

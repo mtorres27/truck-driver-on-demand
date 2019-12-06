@@ -39,6 +39,8 @@
 #  years_of_experience    :string
 #  business_name          :string
 #  hst_number             :string
+#  cvor_abstract_data     :text
+#  cvor_abstract_uploaded :boolean          default(FALSE)
 #
 
 require "net/http"
@@ -49,6 +51,7 @@ class DriverProfile < ApplicationRecord
   extend Enumerize
   include AvatarUploader[:avatar]
   include BackgroundCheckUploader[:background_check]
+  include CVORAbstractUploader[:cvor_abstract]
   include Disableable
   include PgSearch
 
@@ -63,11 +66,13 @@ class DriverProfile < ApplicationRecord
 
   delegate :enforce_profile_edit, to: :driver, allow_nil: true
   delegate :complete_profile_form, to: :driver, allow_nil: true
+  delegate :cvor_abstract_form, to: :driver, allow_nil: true
   delegate :full_name, to: :driver
 
   accepts_nested_attributes_for :driver
 
   validates :avatar_data, :address_line1, :city, :postal_code, :years_of_experience, :driver_type, :hst_number, presence: true, if: :complete_profile_form
+  validates :cvor_abstract_data, presence: true, if: :cvor_abstract_form
   validates :business_name, presence: true, if: :independent_contractor?
 
   serialize :additional_skills

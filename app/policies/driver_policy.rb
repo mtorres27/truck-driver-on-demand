@@ -90,6 +90,14 @@ class DriverPolicy < ApplicationPolicy
     driver?
   end
 
+  def cvor_abstract?
+    driver?
+  end
+
+  def upload_cvor_abstract?
+    driver?
+  end
+
   private
 
   def driver_owner?

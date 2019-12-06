@@ -21,6 +21,18 @@ class Driver::OnboardingProcessController < Driver::BaseController
     end
   end
 
+  def cvor_abstract; end
+
+  def upload_cvor_abstract
+    if @driver.update(cvor_abstract_params)
+      @driver.driver_profile.update!(cvor_abstract_uploaded: true)
+      flash[:notice] = 'CVOR Abstract uploaded'
+      redirect_to driver_onboarding_process_index_path
+    else
+      render :cvor_abstract
+    end
+  end
+
   private
 
   def set_driver
@@ -47,6 +59,17 @@ class Driver::OnboardingProcessController < Driver::BaseController
         :hst_number,
         :avatar,
         :background_check,
+      ],
+    )
+  end
+
+  def cvor_abstract_params
+    params.require(:driver).permit(
+      :id,
+      :cvor_abstract_form,
+      driver_profile_attributes: [
+        :id,
+        :cvor_abstract
       ],
     )
   end
