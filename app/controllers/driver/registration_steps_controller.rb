@@ -31,11 +31,10 @@ class Driver::RegistrationStepsController < Driver::BaseController
   def update
     if current_user.login_code == params[:driver][:login_code]
       current_driver_profile.registration_step = next_step
-      render_wizard current_driver_profile
     else
       flash[:error] = "Wrong code. Please try again."
-      render_wizard current_driver_profile
     end
+    render_wizard current_driver_profile
   end
 
   private

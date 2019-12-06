@@ -20,9 +20,8 @@ class Admin::IncompleteRegistrationsController < Admin::BaseController
       @registrants = if %w[full_name state country created_at].include?(@sort)
                        (driver_profiles + companies).sort_by { |registrant| registrant.try(@sort.to_sym) || "" }
                      else
-                       # rubocop:disable Metrics/LineLength
                        (driver_profiles + companies).sort_by { |registrant| registrant.user.try(@sort.to_sym) || "" }
-                       # rubocop:enable Metrics/LineLength
+
                      end
     end
 

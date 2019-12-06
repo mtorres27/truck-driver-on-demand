@@ -1,0 +1,54 @@
+= simple_form_for @driver, url: upload_cvor_abstract_driver_onboarding_process_index_path, method: :put do |f|
+  = f.simple_fields_for :driver_profile do |df|
+    = f.hidden_field :cvor_abstract_form, value: true
+    = df.file_field :cvor_abstract, label: false, :accept => 'image/png,image/gif,image/jpeg,application/pdf', id: "upload-driver-profile-cvor-abstract", class: "truckker-hidden-important file-input--hidden"
+    .truckker-section.truckker-section__head
+      .container
+        .truckker-header
+          a[href=driver_onboarding_process_index_url]
+            = fa_icon 'arrow-left'
+          h2.mt-3 Upload CVOR
+          .d-flex.justify-content-end.align-items-center
+            = f.submit 'Save', class: 'btn btn-primary mt-2 mb-2'
+
+    .truckker-section.truckker-section__main
+      .container.container__content
+        .row.mb-4
+          .col
+            h3.font-weight-bold Add CVOR Abstract
+        .row.mb-4
+          .col.text-center
+            = image_tag('cvor_abstract/placeholder.png', class: 'mb-4 w-75', id: 'driver-profile__cvor-abstract')
+        .row.mb-2
+          .col
+            - if @driver.driver_profile.errors.include?('cvor_abstract_data')
+              label.text-danger You must provide a CVOR Abstract
+        .row.mb-4
+          .col.text-center
+            .btn.btn-primary.w-100.mb-2[onclick="uploadCVORAbstract()"] Take photo with my phone
+            .btn.btn-outline-secondary.w-100[onclick="uploadCVORAbstract()"] Upload file
+
+javascript:
+  var uploadCVORAbstract = function() {
+    $("#upload-driver-profile-cvor-abstract").click();
+    $("#upload-driver-profile-cvor-abstract").on('change', function() {
+      var imgPath = $(this)[0].value;
+      var extn = imgPath.substring(imgPath.lastIndexOf('.') + 1).toLowerCase();
+      var image_holder = $("#driver-profile__cvor-abstract");
+
+      if (extn == "gif" || extn == "png" || extn == "jpg" || extn == "jpeg") {
+        if (typeof (FileReader) != "undefined") {
+          var reader = new FileReader();
+          reader.onload = function (e) {
+            image_holder.attr('src', e.target.result)
+          };
+
+          reader.readAsDataURL($(this)[0].files[0]);
+        }
+      } else if (extn == "pdf") {
+        image_holder.attr('src', "/assets/adendum/placeholder.png")
+      } else {
+        alert("Only images or PDFs can be selected.");
+      }
+    });
+  }

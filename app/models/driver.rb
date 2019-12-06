@@ -67,7 +67,8 @@ class Driver < User
   has_many :favourite_companies, through: :company_favourites, source: :company
 
   attr_accessor :accept_terms_of_service, :accept_privacy_policy,
-                :accept_code_of_conduct, :enforce_profile_edit, :user_type, :complete_profile_form
+                :accept_code_of_conduct, :enforce_profile_edit, :user_type,
+                :complete_profile_form, :cvor_abstract_form, :driver_abstract_form
 
   validates :email, presence: true, if: :enforce_profile_edit
   validates :phone_number, length: { minimum: 7 }, allow_blank: true
@@ -90,6 +91,8 @@ class Driver < User
 
   delegate :registration_completed?, to: :driver_profile, allow_nil: true
   delegate :completed_profile, to: :driver_profile, allow_nil: true
+  delegate :cvor_abstract_uploaded, to: :driver_profile, allow_nil: true
+  delegate :driver_abstract_uploaded, to: :driver_profile, allow_nil: true
 
   pg_search_scope :search, against: {
     first_name: "A",
@@ -186,7 +189,6 @@ class Driver < User
     driver_job_functions
   end
 
-  # rubocop:disable Metrics/AbcSize
   def score
     # score = 0
     # score += 2 if driver_profile.avatar_data.present?
@@ -209,7 +211,6 @@ class Driver < User
     # (score.to_f / 24) * 100
     0
   end
-  # rubocop:enable Metrics/AbcSize
 
   def self.avg_rating(driver)
     return nil if driver.driver_reviews.count.zero?
@@ -258,11 +259,11 @@ class Driver < User
 
   def send_login_code
     if generate_login_code
-      client = Twilio::REST::Client.new ENV['twilio_account_sid'], ENV['twilio_auth_token']
+      client = Twilio::REST::Client.new ENV["twilio_account_sid"], ENV["twilio_auth_token"]
       client.messages.create(
-        from: ENV['twilio_number'],
+        from: ENV["twilio_number"],
         to: phone_number,
-        body: "Here's your confirmation code #{login_code}"
+        body: "Here's your confirmation code #{login_code}",
       )
       true
     else
@@ -271,23 +272,25 @@ class Driver < User
   end
 
   def generate_login_code
-    self.update(login_code: rand(000000..999900).to_s.rjust(6, "0"))
+    update(login_code: rand(0o00000..999900).to_s.rjust(6, "0"))
   end
 
   private
 
   def send_confirmation_sms
     confirmation_url = "#{ENV['host_url']}users/confirmation?confirmation_token=#{confirmation_token}"
-    client = Twilio::REST::Client.new ENV['twilio_account_sid'], ENV['twilio_auth_token']
+    client = Twilio::REST::Client.new ENV["twilio_account_sid"], ENV["twilio_auth_token"]
     client.messages.create(
-      from: ENV['twilio_number'],
+      from: ENV["twilio_number"],
       to: phone_number,
-      body: "#{confirmation_url} Hello from Truckker! Thanks for signing up with us. Navigate to the link above to start using the platform."
+      # rubocop:disable Metrics/LineLength
+      body: "#{confirmation_url} Hello from Truckker! Thanks for signing up with us. Navigate to the link above to start using the platform.",
+      # rubocop:enable Metrics/LineLength
     )
   end
 
   def confirm_driver
-    self.confirm unless self.confirmed_at.present?
+    confirm unless confirmed_at.present?
   end
 
   def initialize_driver
