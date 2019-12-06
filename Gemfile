@@ -108,20 +108,20 @@ gem "trix"
 # Use Truncato
 gem "truncato"
 # Use twilio for SMS
-gem 'twilio-ruby', '~> 5.29.0'
+gem "twilio-ruby", "~> 5.29.0"
 # Use rack-cors for CORS
-gem 'rack-cors'
+gem "rack-cors"
 
 group :development, :test do
+  gem "dotenv-rails"
   gem "factory_bot_rails"
   gem "faker"
   gem "pry-byebug"
   gem "rspec-rails"
-  gem 'dotenv-rails'
 end
 
 group :development do
-  gem 'annotate', git: 'https://github.com/ctran/annotate_models.git'
+  gem "annotate", git: "https://github.com/ctran/annotate_models.git"
   gem "better_errors"
   gem "binding_of_caller"
   gem "capistrano", "~> 3.8.1"

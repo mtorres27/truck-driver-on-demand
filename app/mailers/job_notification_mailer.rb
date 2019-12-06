@@ -14,7 +14,7 @@ class JobNotificationMailer < ApplicationMailer
         "%job_location%" => ["#{@job.address}, #{@job.state_province}"],
         "%company_name%" => [@job.company.name],
         "%job_id%" => [@job.id],
-        "%root_url%" => [ENV['host_url']],
+        "%root_url%" => [ENV["host_url"]],
       },
       filters: {
         templates: {
@@ -35,7 +35,7 @@ class JobNotificationMailer < ApplicationMailer
       sub: {
         "%user_name%" => [company.company_user.first_name_and_initial],
         "%job_id%" => [@job.id],
-        "%root_url%" => [ENV['host_url']],
+        "%root_url%" => [ENV["host_url"]],
       },
       filters: {
         templates: {

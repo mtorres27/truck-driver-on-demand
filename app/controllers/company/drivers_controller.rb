@@ -26,9 +26,7 @@ class Company::DriversController < Company::BaseController
       job_markets = I18n.t("enumerize.#{@job_type}_job_markets").keys.map { |val| "%#{val}%" }
       @driver_profiles = @driver_profiles.where("job_markets ilike any ( array[?] )", job_markets)
     end
-    if @job_function.present?
-      @driver_profiles = @driver_profiles.where("job_functions like ?", "%#{@job_function}%")
-    end
+    @driver_profiles = @driver_profiles.where("job_functions like ?", "%#{@job_function}%") if @job_function.present?
 
     if @address.present?
       @address_for_geocode = @address + ", " + @country.upcase
@@ -123,14 +121,12 @@ class Company::DriversController < Company::BaseController
     @favourite = !current_company.drivers.where(id: id).empty?
     if params.dig(:toggle_favourite) == "true"
       if @favourite == false
-        # rubocop:disable Metrics/LineLength
         current_company.update_attribute(:saved_drivers_ids, current_company.saved_drivers_ids + [@driver.id])
-        # rubocop:enable Metrics/LineLength
+
         @favourite = true
       else
-        # rubocop:disable Metrics/LineLength
         current_company.update_attribute(:saved_drivers_ids, current_company.saved_drivers_ids - [@driver.id])
-        # rubocop:enable Metrics/LineLength
+
         @favourite = false
       end
     end

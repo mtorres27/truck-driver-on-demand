@@ -75,7 +75,8 @@ class DriverProfile < ApplicationRecord
 
   accepts_nested_attributes_for :driver
 
-  validates :avatar_data, :address_line1, :city, :postal_code, :years_of_experience, :driver_type, :hst_number, presence: true, if: :complete_profile_form
+  validates :avatar_data, :address_line1, :city, :postal_code, :years_of_experience,
+            :driver_type, :hst_number, presence: true, if: :complete_profile_form
   validates :cvor_abstract_data, presence: true, if: :cvor_abstract_form
   validates :driver_abstract_data, presence: true, if: :driver_abstract_form
   validates :business_name, presence: true, if: :independent_contractor?
@@ -106,7 +107,7 @@ class DriverProfile < ApplicationRecord
   end
 
   def independent_contractor?
-    driver_type == 'independent_contractor'
+    driver_type == "independent_contractor"
   end
 
   private
@@ -121,7 +122,7 @@ class DriverProfile < ApplicationRecord
 
   def send_welcome_email
     return if driver&.confirmed? || driver&.confirmation_sent_at.present?
-    
+
     driver&.send_confirmation_instructions
   end
 

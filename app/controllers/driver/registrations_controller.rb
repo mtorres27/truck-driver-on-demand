@@ -18,7 +18,8 @@ class Driver::RegistrationsController < Devise::RegistrationsController
   protected
 
   def configure_permitted_parameters
-    devise_parameter_sanitizer.permit(:sign_up, keys: %i[first_name last_name phone_number city accept_terms_of_service])
+    devise_parameter_sanitizer.permit(:sign_up,
+                                      keys: %i[first_name last_name phone_number city accept_terms_of_service])
   end
 
   def after_sign_up_path_for(_resource)
@@ -35,9 +36,9 @@ class Driver::RegistrationsController < Devise::RegistrationsController
   end
 
   def cors_set_access_control_headers
-    headers['Access-Control-Allow-Origin'] = '*'
-    headers['Access-Control-Allow-Methods'] = 'POST, GET, OPTIONS'
-    headers['Access-Control-Max-Age'] = "1728000"
+    headers["Access-Control-Allow-Origin"] = "*"
+    headers["Access-Control-Allow-Methods"] = "POST, GET, OPTIONS"
+    headers["Access-Control-Max-Age"] = "1728000"
   end
 
 end

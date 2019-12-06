@@ -83,7 +83,7 @@ class MyDeviseMailer < Devise::Mailer
       sub: {
         "%email%" => [@email],
         "%new_email%" => [@new_email],
-        "%root_url%" => [ENV['host_url']],
+        "%root_url%" => [ENV["host_url"]],
       },
       filters: {
         templates: {
@@ -104,7 +104,7 @@ class MyDeviseMailer < Devise::Mailer
     headers "X-SMTPAPI" => {
       sub: {
         "%resource_email%" => [@resource.email],
-        "%root_url%" => [ENV['host_url']],
+        "%root_url%" => [ENV["host_url"]],
       },
       filters: {
         templates: {

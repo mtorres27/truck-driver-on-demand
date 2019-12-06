@@ -71,9 +71,7 @@ module DriverHelper
   def distance_from(driver, driver_profiles_with_distances)
     return unless driver_profiles_with_distances.present?
 
-    # rubocop:disable Metrics/LineLength
     (((driver_profiles_with_distances.where(driver_id: driver.id).first.distance / 1609.344) * 10.0) / 10.0).round(2)
-    # rubocop:enable Metrics/LineLength
   end
 
   def hash_id(driver)

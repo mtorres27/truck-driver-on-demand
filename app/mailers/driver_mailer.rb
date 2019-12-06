@@ -7,7 +7,7 @@ class DriverMailer < ApplicationMailer
     headers "X-SMTPAPI" => {
       sub: {
         "%driver_name%" => [@driver.first_name_and_initial],
-        "%confirmation_code%" => [confirmation_code]
+        "%confirmation_code%" => [confirmation_code],
       },
       filters: {
         templates: {
@@ -28,7 +28,7 @@ class DriverMailer < ApplicationMailer
         "%driver_name%" => [@driver.first_name_and_initial],
         "%driver_email%" => [@driver.email],
         "%driver_id%" => [@driver.id],
-        "%root_url%" => [ENV['host_url']],
+        "%root_url%" => [ENV["host_url"]],
       },
       filters: {
         templates: {
@@ -47,7 +47,7 @@ class DriverMailer < ApplicationMailer
     headers "X-SMTPAPI" => {
       sub: {
         "%driver_name%" => [@driver.first_name_and_initial],
-        "%root_url%" => [ENV['host_url']],
+        "%root_url%" => [ENV["host_url"]],
       },
       filters: {
         templates: {
@@ -72,7 +72,7 @@ class DriverMailer < ApplicationMailer
         "%driver_name%" => [@driver.first_name_and_initial],
         "%job_title%" => [@job.title],
         "%job_id%" => [@job.id],
-        "%root_url%" => [ENV['host_url']],
+        "%root_url%" => [ENV["host_url"]],
       },
       filters: {
         templates: {
@@ -98,7 +98,7 @@ class DriverMailer < ApplicationMailer
         "%driver_name%" => [@driver.first_name_and_initial],
         "%message_body%" => [@message.body],
         "%company_id%" => [@company.id],
-        "%root_url%" => [ENV['host_url']],
+        "%root_url%" => [ENV["host_url"]],
       },
       filters: {
         templates: {
@@ -121,7 +121,7 @@ class DriverMailer < ApplicationMailer
       sub: {
         "%company_name%" => [@company.name],
         "%driver_name%" => [@driver.first_name_and_initial],
-        "%root_url%" => [ENV['host_url']],
+        "%root_url%" => [ENV["host_url"]],
       },
       filters: {
         templates: {
@@ -144,7 +144,7 @@ class DriverMailer < ApplicationMailer
         "%driver_name%" => [@driver.first_name_and_initial],
         "%company_name%" => [@company.name],
         "%job_title%" => [@job.title],
-        "%root_url%" => [ENV['host_url']],
+        "%root_url%" => [ENV["host_url"]],
       },
       filters: {
         templates: {

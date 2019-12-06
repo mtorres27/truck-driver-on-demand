@@ -13,7 +13,7 @@ class CompanyMailer < ApplicationMailer
         "%driver_name%" => [@driver.first_name_and_initial],
         "%job_title%" => [@job.title],
         "%job_id%" => [@job.id],
-        "%root_url%" => [ENV['host_url']],
+        "%root_url%" => [ENV["host_url"]],
       },
       filters: {
         templates: {
@@ -37,7 +37,7 @@ class CompanyMailer < ApplicationMailer
         "%driver_name%" => [@driver.first_name_and_initial],
         "%message_body%" => [@message.body],
         "%driver_id%" => [@driver.id],
-        "%root_url%" => [ENV['host_url']],
+        "%root_url%" => [ENV["host_url"]],
       },
       filters: {
         templates: {
@@ -82,7 +82,7 @@ class CompanyMailer < ApplicationMailer
       sub: {
         "%company_name%" => [@company.name],
         "%driver_name%" => [@driver.first_name_and_initial],
-        "%root_url%" => [ENV['host_url']],
+        "%root_url%" => [ENV["host_url"]],
       },
       filters: {
         templates: {
@@ -104,7 +104,7 @@ class CompanyMailer < ApplicationMailer
         "%company_user_name%" => [@company_user.first_name_and_initial],
         "%job_title%" => [@job.title],
         "%job_id%" => [@job.id],
-        "%root_url%" => [ENV['host_url']],
+        "%root_url%" => [ENV["host_url"]],
       },
       filters: {
         templates: {
@@ -129,7 +129,7 @@ class CompanyMailer < ApplicationMailer
         "%company_user_name%" => [@company_user.first_name_and_initial],
         "%company_user_id%" => [@company_user.id],
         "%password%" => [@password],
-        "%root_url%" => [ENV['host_url']],
+        "%root_url%" => [ENV["host_url"]],
       },
       filters: {
         templates: {

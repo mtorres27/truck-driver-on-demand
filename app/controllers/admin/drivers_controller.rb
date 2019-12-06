@@ -20,10 +20,10 @@ class Admin::DriversController < Admin::BaseController
     @sort = params.dig(:search, :sort).presence
 
     @drivers = if @keywords
-                     Driver.admin_search(@keywords)
-                   else
-                     Driver.all
-                   end
+                 Driver.admin_search(@keywords)
+               else
+                 Driver.all
+               end
 
     driver_profiles = DriverProfile.where(driver_id: @drivers.pluck(:id))
 
@@ -54,18 +54,18 @@ class Admin::DriversController < Admin::BaseController
     @driver_ids = @drivers.pluck(:id)
 
     @drivers = if @sort.blank?
-                     Driver.includes(:driver_profile)
-                               .where(id: @driver_ids).order("driver_profiles.created_at DESC")
-                   elsif %w[first_name email].include?(@sort)
-                     Driver.where(id: @driver_ids).order(@sort)
-                   else
-                     Driver.includes(:driver_profile)
-                               .where(id: @driver_ids).order("driver_profiles.#{@sort}")
-                   end
+                 Driver.includes(:driver_profile)
+                       .where(id: @driver_ids).order("driver_profiles.created_at DESC")
+               elsif %w[first_name email].include?(@sort)
+                 Driver.where(id: @driver_ids).order(@sort)
+               else
+                 Driver.includes(:driver_profile)
+                       .where(id: @driver_ids).order("driver_profiles.#{@sort}")
+               end
 
     if @filter_by_disabled.present? && @filter_by_disabled != "nil"
       @drivers = @drivers.joins(:driver_profile)
-                                 .where(driver_profiles: { disabled: @filter_by_disabled })
+                         .where(driver_profiles: { disabled: @filter_by_disabled })
     end
 
     @drivers = @drivers.page(params[:page]).per(10)
@@ -133,9 +133,8 @@ class Admin::DriversController < Admin::BaseController
   def create_csv
     @csv_file = CSV.generate({}) do |csv|
       unless @driver_profiles.first.nil?
-        # rubocop:disable Metrics/LineLength
         csv << @driver_profiles.first.driver.attributes.keys + @driver_profiles.first.attributes.keys + ["job_types"]
-        # rubocop:enable Metrics/LineLength
+
       end
       @driver_profiles.each do |f|
         csv << f.driver.attributes.values + f.attributes.values + [f.job_types]

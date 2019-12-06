@@ -4,10 +4,10 @@ class Driver::ProfilesController < Driver::BaseController
 
   def show
     @driver = if params[:id]
-                    Driver.find(params[:id])
-                  else
-                    current_user
-                  end
+                Driver.find(params[:id])
+              else
+                current_user
+              end
     authorize @driver
   end
 

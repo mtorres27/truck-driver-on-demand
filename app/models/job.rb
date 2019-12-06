@@ -107,15 +107,15 @@ class Job < ApplicationRecord
                                                        .keys.map { |val| "%#{val}%" }
       job_markets = system_integration_job_markets + live_events_staging_and_rental_job_markets
       driver_profiles = DriverProfile.where(disabled: false)
-                                             .where("job_markets ilike any ( array[?] )", job_markets)
+                                     .where("job_markets ilike any ( array[?] )", job_markets)
     elsif system_integration_job_markets?
       job_markets = I18n.t("enumerize.system_integration_job_markets").keys.map { |val| "%#{val}%" }
       driver_profiles = DriverProfile.where(disabled: false)
-                                             .where("job_markets ilike any ( array[?] )", job_markets)
+                                     .where("job_markets ilike any ( array[?] )", job_markets)
     elsif live_events_staging_and_rental_job_markets?
       job_markets = I18n.t("enumerize.live_events_staging_and_rental_job_markets").keys.map { |val| "%#{val}%" }
       driver_profiles = DriverProfile.where(disabled: false)
-                                             .where("job_markets ilike any ( array[?] )", job_markets)
+                                     .where("job_markets ilike any ( array[?] )", job_markets)
     else
       driver_profiles = DriverProfile.where(disabled: false)
     end
@@ -137,8 +137,8 @@ class Job < ApplicationRecord
       point = OpenStruct.new(lat: geocode[:lat], lng: geocode[:lng])
       distance = 160_934 if distance.nil?
       driver_profiles = driver_profiles.nearby(geocode[:lat], geocode[:lng], distance)
-                                               .with_distance(point)
-                                               .order("verified DESC, profile_score DESC, distance")
+                                       .with_distance(point)
+                                       .order("verified DESC, profile_score DESC, distance")
       Driver.where(id: driver_profiles.map(&:driver_id))
     else
       Driver.none
