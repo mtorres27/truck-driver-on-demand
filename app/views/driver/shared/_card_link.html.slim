@@ -1,0 +1,9 @@
+a.card.no-style.mb-2[href="#{url}"]
+  .card-body
+    .row.align-items-center
+      .col-10
+        .text-secondary= completed ? 'Completed' : 'Get Started'
+        br
+        strong= title
+      .col-2
+        = fa_icon "#{completed ? 'check-square' : 'caret-right'}", class: "pull-right align-middle text-primary"

@@ -18,7 +18,15 @@
             h3.font-weight-bold Add CVOR Abstract
         .row.mb-4
           .col.text-center
-            = image_tag('cvor_abstract/placeholder.png', class: 'mb-4 w-75', id: 'driver-profile__cvor-abstract')
+            - if @driver.driver_profile.cvor_abstract_data.nil?
+              = image_tag('cvor_abstract/placeholder.png', class: 'mb-4 w-75', id: 'driver-profile__cvor-abstract')
+            - else
+              - url = @driver.driver_profile.cvor_abstract_url
+              - if image?(url)
+                = image_tag(url, class: 'mb-4 w-75', id: 'driver-profile__cvor-abstract')
+              - else
+                = image_tag("/assets/adendum/placeholder.png", class: 'mb-4 w-75', id: 'driver-profile__cvor-abstract')
+            
         .row.mb-2
           .col
             - if @driver.driver_profile.errors.include?('cvor_abstract_data')
