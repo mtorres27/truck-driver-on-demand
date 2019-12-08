@@ -60,8 +60,8 @@
         .row.mb-4
           .col
             = df.input :driver_type, required: true, label: false, as: :radio_buttons, item_wrapper_tag: :div, input_html: { class: 'mr-1' }
-            = df.input :business_name, required: true, label: false, disabled: true, placeholder: "Business Name (not shown publicly)"
-            = df.input :hst_number, required: true, label: false, placeholder: "HST number (not shown publicly)"
+            = df.input :business_name, required: true, label: false, placeholder: "Business Name (not shown publicly)", input_html: { class: 'd-none' }
+            = df.input :hst_number, required: true, label: false, placeholder: "HST number (not shown publicly)", input_html: { class: 'd-none' }
         .row.mb-2
           .col
             h3.font-weight-bold Background check (optional)

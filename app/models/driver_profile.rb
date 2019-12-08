@@ -76,10 +76,10 @@ class DriverProfile < ApplicationRecord
   accepts_nested_attributes_for :driver
 
   validates :avatar_data, :address_line1, :city, :postal_code, :years_of_experience,
-            :driver_type, :hst_number, presence: true, if: :complete_profile_form
+            :driver_type, presence: true, if: :complete_profile_form
   validates :cvor_abstract_data, presence: true, if: :cvor_abstract_form
   validates :driver_abstract_data, presence: true, if: :driver_abstract_form
-  validates :business_name, presence: true, if: :independent_contractor?
+  validates :business_name, :hst_number, presence: true, if: :independent_contractor?
 
   serialize :additional_skills
   serialize :trailer_type
