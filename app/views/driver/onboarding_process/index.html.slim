@@ -8,7 +8,7 @@
     .row.mb-4
       .col
         = render "driver/shared/card_link", completed: @driver.completed_profile, title: "Add Personal Info", url: complete_profile_driver_onboarding_process_index_url
-        = render "driver/shared/card_link", completed: false, title: "Upload Driver's License", url: "#"
+        = render "driver/shared/card_link", completed: @driver.drivers_license_uploaded, title: "Upload Driver's License", url: drivers_license_driver_onboarding_process_index_url
         = render "driver/shared/card_link", completed: @driver.cvor_abstract_uploaded, title: "Upload CVOR Abstract", url: cvor_abstract_driver_onboarding_process_index_url
         = render "driver/shared/card_link", completed: @driver.driver_abstract_uploaded, title: "Upload Driver Abstract", url: driver_abstract_driver_onboarding_process_index_url
         = render "driver/shared/card_link", completed: false, title: "Upload Resume", url: "#"

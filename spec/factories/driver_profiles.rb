@@ -24,7 +24,6 @@
 #  registration_step        :string
 #  driver_id                :integer
 #  requested_verification   :boolean          default(FALSE)
-#  license_class            :string
 #  province                 :string
 #  transmission_and_speed   :citext
 #  freight_type             :citext
@@ -44,6 +43,7 @@
 #  driver_abstract_data     :text
 #  driver_abstract_uploaded :boolean          default(FALSE)
 #  driving_school           :string
+#  drivers_license_uploaded :boolean          default(FALSE)
 #
 
 FactoryBot.define do

@@ -106,6 +106,14 @@ class DriverPolicy < ApplicationPolicy
     driver?
   end
 
+  def drivers_license?
+    driver?
+  end
+
+  def upload_drivers_license?
+    driver?
+  end
+
   private
 
   def driver_owner?

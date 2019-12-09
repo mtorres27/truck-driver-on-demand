@@ -45,6 +45,20 @@ class Driver::OnboardingProcessController < Driver::BaseController
     end
   end
 
+  def drivers_license
+    @driver.driver_profile.build_drivers_license if @driver.driver_profile.drivers_license.nil?
+  end
+
+  def upload_drivers_license
+    if @driver.update(drivers_license_params)
+      @driver.driver_profile.update!(drivers_license_uploaded: true)
+      flash[:notice] = "Drivers License uploaded"
+      redirect_to driver_onboarding_process_index_path
+    else
+      render :drivers_license
+    end
+  end
+
   private
 
   def set_driver
@@ -94,6 +108,23 @@ class Driver::OnboardingProcessController < Driver::BaseController
       driver_profile_attributes: %i[
         id
         driver_abstract
+      ],
+    )
+  end
+
+  def drivers_license_params
+    params.require(:driver).permit(
+      :id,
+      :driver_abstract_form,
+      driver_profile_attributes: [
+        :id,
+        drivers_license_attributes: %i[
+          id
+          license
+          license_number
+          exp_date
+          license_class
+        ]
       ],
     )
   end
