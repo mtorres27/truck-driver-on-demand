@@ -24,7 +24,6 @@
 #  registration_step        :string
 #  driver_id                :integer
 #  requested_verification   :boolean          default(FALSE)
-#  license_class            :string
 #  province                 :string
 #  transmission_and_speed   :citext
 #  freight_type             :citext
@@ -44,6 +43,7 @@
 #  driver_abstract_data     :text
 #  driver_abstract_uploaded :boolean          default(FALSE)
 #  driving_school           :string
+#  drivers_license_uploaded :boolean          default(FALSE)
 #
 
 require "net/http"
@@ -60,6 +60,7 @@ class DriverProfile < ApplicationRecord
   include PgSearch
 
   belongs_to :driver, required: false
+  has_one :drivers_license, required: false, dependent: :destroy
 
   scope :new_registrants, -> { where(disabled: true, registration_step: "wicked_finish") }
   scope :incomplete_registrations, -> { where.not(registration_step: "wicked_finish") }
@@ -75,6 +76,7 @@ class DriverProfile < ApplicationRecord
   delegate :full_name, to: :driver
 
   accepts_nested_attributes_for :driver
+  accepts_nested_attributes_for :drivers_license
 
   validates :avatar_data, :address_line1, :city, :postal_code, :years_of_experience,
             :driver_type, :driving_school, presence: true, if: :complete_profile_form
@@ -91,7 +93,6 @@ class DriverProfile < ApplicationRecord
   serialize :other_skills
 
   enumerize :driver_type, in: I18n.t("enumerize.driver_type").keys
-  enumerize :license_class, in: I18n.t("enumerize.license_class").keys
   enumerize :years_of_experience, in: I18n.t("enumerize.years_of_experience").keys
   enumerize :driving_school, in: I18n.t("enumerize.driving_school").keys
   enumerize :province, in: I18n.t("enumerize.province").keys

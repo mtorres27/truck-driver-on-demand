@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20191209135202) do
+ActiveRecord::Schema.define(version: 20191209143925) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -224,7 +224,6 @@ ActiveRecord::Schema.define(version: 20191209135202) do
     t.string "registration_step"
     t.integer "driver_id"
     t.boolean "requested_verification", default: false
-    t.string "license_class"
     t.string "province"
     t.citext "transmission_and_speed"
     t.citext "freight_type"
@@ -244,6 +243,7 @@ ActiveRecord::Schema.define(version: 20191209135202) do
     t.text "driver_abstract_data"
     t.boolean "driver_abstract_uploaded", default: false
     t.string "driving_school"
+    t.boolean "drivers_license_uploaded", default: false
     t.index ["available"], name: "index_driver_profiles_on_available"
     t.index ["disabled"], name: "index_driver_profiles_on_disabled"
     t.index ["driver_id"], name: "index_driver_profiles_on_driver_id"
@@ -264,6 +264,17 @@ ActiveRecord::Schema.define(version: 20191209135202) do
     t.index ["company_id"], name: "index_driver_reviews_on_company_id"
     t.index ["driver_id"], name: "index_driver_reviews_on_driver_id"
     t.index ["job_id"], name: "index_driver_reviews_on_job_id"
+  end
+
+  create_table "drivers_licenses", force: :cascade do |t|
+    t.bigint "driver_profile_id", null: false
+    t.text "license_data"
+    t.string "license_number"
+    t.date "exp_date"
+    t.string "license_class"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["driver_profile_id"], name: "index_drivers_licenses_on_driver_profile_id"
   end
 
   create_table "favourites", force: :cascade do |t|
@@ -447,6 +458,7 @@ ActiveRecord::Schema.define(version: 20191209135202) do
   add_foreign_key "driver_reviews", "companies"
   add_foreign_key "driver_reviews", "jobs"
   add_foreign_key "driver_reviews", "users", column: "driver_id"
+  add_foreign_key "drivers_licenses", "driver_profiles"
   add_foreign_key "job_collaborators", "jobs"
   add_foreign_key "job_collaborators", "users"
   add_foreign_key "jobs", "companies"

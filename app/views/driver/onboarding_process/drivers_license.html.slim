@@ -1,0 +1,61 @@
+= simple_form_for @driver, url: upload_drivers_license_driver_onboarding_process_index_path, method: :put do |f|
+  = f.simple_fields_for :driver_profile do |df|
+    = df.simple_fields_for :drivers_license do |lf|
+      = f.hidden_field :drivers_license_form, value: true
+      = lf.file_field :license, label: false, :accept => 'image/png,image/gif,image/jpeg', id: "upload-driver-profile-license", class: "truckker-hidden-important file-input--hidden"
+      .truckker-section.truckker-section__head
+        .container
+          .truckker-header
+            a[href=driver_onboarding_process_index_url]
+              = fa_icon 'arrow-left'
+            h2.mt-3 Upload Driver's License
+            .d-flex.justify-content-end.align-items-center
+              = f.submit 'Save', class: 'btn btn-primary mt-2 mb-2'
+
+      .truckker-section.truckker-section__main
+        .container.container__content
+          .row.mb-4
+            .col
+              h3.font-weight-bold Add Driver's License
+          .row.mb-4
+            .col.text-center
+              - if @driver.driver_profile.drivers_license.license_data.nil?
+                = image_tag('drivers_license/placeholder.png', class: 'mb-4 w-75', id: 'driver-profile__license')
+              - else
+                = image_tag(@driver.driver_profile.drivers_license.license_url, class: 'mb-4 w-75', id: 'driver-profile__license')
+          .row.mb-2
+            .col
+              - if @driver.driver_profile.drivers_license.errors.include?('license_data')
+                label.text-danger You must provide a photo of your driver's license
+          .row.mb-4
+            .col.text-center
+              .btn.btn-primary.w-100.mb-2[onclick="uploadDriversLicense()"] Take photo with my phone
+              .btn.btn-outline-secondary.w-100[onclick="uploadDriversLicense()"] Upload photo
+          .row.mb-4
+            .col
+              = lf.input :license_number, required: true, label: "Driver's License Number", placeholder: "XXXXX-XXXXX-XXXXX"
+              = lf.input :exp_date, as: :date, required: true, label: "Expiration Date", placeholder: "YYYY/MM/DD"
+              = lf.input :license_class, required: true, label: "License Class", include_blank: "Select"
+
+javascript:
+  var uploadDriversLicense = function() {
+    $("#upload-driver-profile-license").click();
+    $("#upload-driver-profile-license").on('change', function() {
+      var imgPath = $(this)[0].value;
+      var extn = imgPath.substring(imgPath.lastIndexOf('.') + 1).toLowerCase();
+      var image_holder = $("#driver-profile__license");
+
+      if (extn == "gif" || extn == "png" || extn == "jpg" || extn == "jpeg") {
+        if (typeof (FileReader) != "undefined") {
+          var reader = new FileReader();
+          reader.onload = function (e) {
+            image_holder.attr('src', e.target.result)
+          };
+
+          reader.readAsDataURL($(this)[0].files[0]);
+        }
+      } else {
+        alert("Only images can be selected.");
+      }
+    });
+  }

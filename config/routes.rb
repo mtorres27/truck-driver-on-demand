@@ -55,6 +55,8 @@ Rails.application.routes.draw do
       put :upload_cvor_abstract, on: :collection
       get :driver_abstract, on: :collection
       put :upload_driver_abstract, on: :collection
+      get :drivers_license, on: :collection
+      put :upload_drivers_license, on: :collection
     end
 
     resources :registration_steps, only: %i[show update index]
