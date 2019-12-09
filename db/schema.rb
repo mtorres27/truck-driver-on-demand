@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20191206002122) do
+ActiveRecord::Schema.define(version: 20191209135202) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -243,6 +243,7 @@ ActiveRecord::Schema.define(version: 20191206002122) do
     t.boolean "cvor_abstract_uploaded", default: false
     t.text "driver_abstract_data"
     t.boolean "driver_abstract_uploaded", default: false
+    t.string "driving_school"
     t.index ["available"], name: "index_driver_profiles_on_available"
     t.index ["disabled"], name: "index_driver_profiles_on_disabled"
     t.index ["driver_id"], name: "index_driver_profiles_on_driver_id"

@@ -43,6 +43,7 @@
 #  cvor_abstract_uploaded   :boolean          default(FALSE)
 #  driver_abstract_data     :text
 #  driver_abstract_uploaded :boolean          default(FALSE)
+#  driving_school           :string
 #
 
 require "net/http"
@@ -76,7 +77,7 @@ class DriverProfile < ApplicationRecord
   accepts_nested_attributes_for :driver
 
   validates :avatar_data, :address_line1, :city, :postal_code, :years_of_experience,
-            :driver_type, presence: true, if: :complete_profile_form
+            :driver_type, :driving_school, presence: true, if: :complete_profile_form
   validates :cvor_abstract_data, presence: true, if: :cvor_abstract_form
   validates :driver_abstract_data, presence: true, if: :driver_abstract_form
   validates :business_name, :hst_number, presence: true, if: :independent_contractor?
@@ -92,6 +93,7 @@ class DriverProfile < ApplicationRecord
   enumerize :driver_type, in: I18n.t("enumerize.driver_type").keys
   enumerize :license_class, in: I18n.t("enumerize.license_class").keys
   enumerize :years_of_experience, in: I18n.t("enumerize.years_of_experience").keys
+  enumerize :driving_school, in: I18n.t("enumerize.driving_school").keys
   enumerize :province, in: I18n.t("enumerize.province").keys
 
   def user

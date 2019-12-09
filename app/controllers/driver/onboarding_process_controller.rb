@@ -62,6 +62,7 @@ class Driver::OnboardingProcessController < Driver::BaseController
       driver_profile_attributes: %i[
         id
         years_of_experience
+        driving_school
         address_line1
         address_line2
         city

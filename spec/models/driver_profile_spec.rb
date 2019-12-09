@@ -43,6 +43,7 @@
 #  cvor_abstract_uploaded   :boolean          default(FALSE)
 #  driver_abstract_data     :text
 #  driver_abstract_uploaded :boolean          default(FALSE)
+#  driving_school           :string
 #
 
 require "rails_helper"
