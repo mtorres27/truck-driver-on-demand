@@ -44,6 +44,8 @@
 #  driver_abstract_uploaded :boolean          default(FALSE)
 #  driving_school           :string
 #  drivers_license_uploaded :boolean          default(FALSE)
+#  resume_data              :text
+#  resume_uploaded          :boolean          default(FALSE)
 #
 
 require "net/http"
@@ -56,6 +58,7 @@ class DriverProfile < ApplicationRecord
   include BackgroundCheckUploader[:background_check]
   include CVORAbstractUploader[:cvor_abstract]
   include DriverAbstractUploader[:driver_abstract]
+  include ResumeUploader[:resume]
   include Disableable
   include PgSearch
 
@@ -73,6 +76,7 @@ class DriverProfile < ApplicationRecord
   delegate :complete_profile_form, to: :driver, allow_nil: true
   delegate :cvor_abstract_form, to: :driver, allow_nil: true
   delegate :driver_abstract_form, to: :driver, allow_nil: true
+  delegate :resume_form, to: :driver, allow_nil: true
   delegate :full_name, to: :driver
 
   accepts_nested_attributes_for :driver
@@ -82,6 +86,7 @@ class DriverProfile < ApplicationRecord
             :driver_type, :driving_school, presence: true, if: :complete_profile_form
   validates :cvor_abstract_data, presence: true, if: :cvor_abstract_form
   validates :driver_abstract_data, presence: true, if: :driver_abstract_form
+  validates :resume_data, presence: true, if: :resume_form
   validates :business_name, :hst_number, presence: true, if: :independent_contractor?
 
   serialize :additional_skills

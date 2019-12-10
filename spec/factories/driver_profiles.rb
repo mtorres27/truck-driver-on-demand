@@ -44,6 +44,8 @@
 #  driver_abstract_uploaded :boolean          default(FALSE)
 #  driving_school           :string
 #  drivers_license_uploaded :boolean          default(FALSE)
+#  resume_data              :text
+#  resume_uploaded          :boolean          default(FALSE)
 #
 
 FactoryBot.define do

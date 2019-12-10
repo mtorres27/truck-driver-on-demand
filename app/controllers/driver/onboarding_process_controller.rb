@@ -45,6 +45,18 @@ class Driver::OnboardingProcessController < Driver::BaseController
     end
   end
 
+  def resume; end
+
+  def upload_resume
+    if @driver.update(resume_params)
+      @driver.driver_profile.update!(resume_uploaded: true)
+      flash[:notice] = "Resume uploaded"
+      redirect_to driver_onboarding_process_index_path
+    else
+      render :resume
+    end
+  end
+
   def drivers_license
     @driver.driver_profile.build_drivers_license if @driver.driver_profile.drivers_license.nil?
   end
@@ -108,6 +120,17 @@ class Driver::OnboardingProcessController < Driver::BaseController
       driver_profile_attributes: %i[
         id
         driver_abstract
+      ],
+    )
+  end
+
+  def resume_params
+    params.require(:driver).permit(
+      :id,
+      :resume_form,
+      driver_profile_attributes: %i[
+        id
+        resume
       ],
     )
   end
