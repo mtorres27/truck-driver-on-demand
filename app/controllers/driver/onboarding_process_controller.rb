@@ -2,7 +2,7 @@
 
 class Driver::OnboardingProcessController < Driver::BaseController
 
-  layout "clean", only: [:complete_profile]
+  layout "clean", except: [:index]
 
   before_action :set_driver
   before_action :authorize_driver
