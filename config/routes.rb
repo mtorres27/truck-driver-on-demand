@@ -61,6 +61,8 @@ Rails.application.routes.draw do
       put :upload_drivers_license, on: :collection
     end
 
+    resources :employment_terms, only: %i[index]
+
     resources :registration_steps, only: %i[show update index]
 
     resources :companies, only: %i[index show] do
