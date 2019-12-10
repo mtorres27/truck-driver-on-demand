@@ -114,6 +114,14 @@ class DriverPolicy < ApplicationPolicy
     driver?
   end
 
+  def resume?
+    driver?
+  end
+
+  def upload_resume?
+    driver?
+  end
+
   private
 
   def driver_owner?
