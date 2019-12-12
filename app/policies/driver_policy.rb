@@ -122,6 +122,14 @@ class DriverPolicy < ApplicationPolicy
     driver?
   end
 
+  def wsib?
+    driver?
+  end
+
+  def accept_wsib?
+    driver?
+  end
+
   private
 
   def driver_owner?

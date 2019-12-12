@@ -96,6 +96,7 @@ class Driver < User
   delegate :driver_abstract_uploaded, to: :driver_profile, allow_nil: true
   delegate :drivers_license_uploaded, to: :driver_profile, allow_nil: true
   delegate :resume_uploaded, to: :driver_profile, allow_nil: true
+  delegate :accept_wsib, to: :driver_profile, allow_nil: true
 
   pg_search_scope :search, against: {
     first_name: "A",
