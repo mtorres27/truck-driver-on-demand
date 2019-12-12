@@ -46,6 +46,7 @@
 #  drivers_license_uploaded :boolean          default(FALSE)
 #  resume_data              :text
 #  resume_uploaded          :boolean          default(FALSE)
+#  accept_wsib              :boolean          default(FALSE)
 #
 
 require "net/http"

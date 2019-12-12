@@ -14,7 +14,7 @@
     .row.mb-4
       .col
         = render "driver/shared/card_link", completed: false, title: "Health and Safety Handbook", url: "#"
-        = render "driver/shared/card_link", completed: false, title: "WSIB", url: "#"
+        = render "driver/shared/card_link", completed: @driver.accept_wsib, title: "WSIB", url: wsib_driver_employment_terms_url
         = render "driver/shared/card_link", completed: false, title: "Excess Hours", url: "#"
         = render "driver/shared/card_link", completed: false, title: "Terms and Conditions", url: "#"
         = render "driver/shared/card_link", completed: false, title: "Previously Registered", url: "#"

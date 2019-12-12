@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20191210011057) do
+ActiveRecord::Schema.define(version: 20191212213643) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -246,6 +246,7 @@ ActiveRecord::Schema.define(version: 20191210011057) do
     t.boolean "drivers_license_uploaded", default: false
     t.text "resume_data"
     t.boolean "resume_uploaded", default: false
+    t.boolean "accept_wsib", default: false
     t.index ["available"], name: "index_driver_profiles_on_available"
     t.index ["disabled"], name: "index_driver_profiles_on_disabled"
     t.index ["driver_id"], name: "index_driver_profiles_on_driver_id"

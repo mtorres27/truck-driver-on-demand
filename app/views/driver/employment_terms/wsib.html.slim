@@ -1,0 +1,58 @@
+= simple_form_for @driver, url: accept_wsib_driver_employment_terms_path, method: :put do |f|
+  = f.simple_fields_for :driver_profile do |df|
+    .truckker-section.truckker-section__head
+      .container
+        .truckker-header
+          a[href=driver_employment_terms_url]
+            = fa_icon 'arrow-left'
+          h2.mt-3 WSIB
+          .d-flex.justify-content-end.align-items-center
+            = f.submit 'Save', class: 'btn btn-primary mt-2 mb-2 js--accept-terms-submit-button'
+
+    .truckker-section.truckker-section__main
+      .container.container__content
+        .row.mb-4
+          .col
+            h3.font-weight-bold Review WSIB Legislation Act
+        .row.mb-4
+          .col
+            p 
+              | While no one anticipates getting injured when working, it can happen and you should be aware of your obligations and rights under the &nbsp;
+              strong WSIB Legislation Act.
+            p ALL injuries, no matter how small, MUST BE REPORTED to Truckker immediately, even when no medical attention is required. If recovery time is needed, the early report to Truckker will ensure you receive your compensation early. If medical treatment is required, filling a report now can be helpful later and should complications arise, well after your injury. 
+            p For Truckker to have an effective Health and Safety Policy, it is essential that all workers meet their obligations for safe work methods and practices. Just as management must fulfill their responsibilities, workers are required to meet their responsibilities as outlined below.
+            p 
+              strong All workers will comply with the requirements of the Occupational Health and Safety Act
+              | &nbsp;- in particular, Section 28, which defines workers’ responsibilities.
+            p 
+              | Workers are required to report the following occurrences to their supervisors as soon as possible:
+              br
+              | a) Injuries or occupational illnesses (rashes, burns, etc.)
+              br
+              | b) Fires, explosions, spills or property/product damage.
+              br
+              | c) Incidents (near-misses) which may in the future cause a. or b.
+              br
+              | d) Hazards which may affect the safety of yourself or someone else.
+              br
+              | e) The absence of, or defect in any equipment or protective devices that you may feel endangers yourself or another worker.
+            p 
+              strong Perform job assignments using procedures as outlined.
+              | &nbsp;If you are unsure as to the safe or correct way to do the job, ask your Supervisor.
+            p
+              strong Use protective equipment as required by the company.
+              | &nbsp;You must wear safety footwear at all times and at all locations. Where other safety equipment is required by the company, you must use this as well.
+            p
+              strong Do not operate equipment that you have not been properly trained on
+              | &nbsp;even when authorized by your Supervisor to use.
+            p Obey all posted signs
+            p No worker shall engage in any prank, contest, feat of strength, unnecessary or rough and boisterous conduct.
+            p Use equipment as it is designed, and for the purpose only for which it is designed.
+            p 
+              strong Avoid lifting wherever possible.
+              | &nbsp;Back injuries represent a large portion of injuries that can occur. If you must lift, use your legs by bending at the knees. Do not try to turn while lifting- turn using your feet. Plan your lift to avoid obstructions, etc. Hold the load into your body. Put objects down by reversing the lifting process.
+            p Failure to comply with the above noted responsibilities may result in discontinuing of services provided. It is our purpose in establishing these responsibilities for safe and responsible worker behavior to provide a standard that all workers can understand and abide by.
+            p I confirm that I have received, read and understand this document, and have read and understood the TRUCKKER HEALTH & SAFETY POLICY HANDBOOK.
+        .row.mb-4
+          .col
+            = df.input :accept_wsib, label: 'I have read and acknowledge the WSIB Legislation Act', input_html: { class: 'mr-2 js--accept-terms-checkbox' }

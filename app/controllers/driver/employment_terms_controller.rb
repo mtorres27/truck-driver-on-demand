@@ -9,6 +9,16 @@ class Driver::EmploymentTermsController < Driver::BaseController
 
   def index; end
 
+  def wsib; end
+
+  def accept_wsib
+    if @driver.update(wsib_params)
+      redirect_to driver_employment_terms_path
+    else
+      render :wsib
+    end
+  end
+
   private
 
   def set_driver
@@ -17,6 +27,16 @@ class Driver::EmploymentTermsController < Driver::BaseController
 
   def authorize_driver
     authorize @driver
+  end
+
+  def wsib_params
+    params.require(:driver).permit(
+      :id,
+      driver_profile_attributes: %i[
+        id
+        accept_wsib
+      ],
+    )
   end
 
 end
