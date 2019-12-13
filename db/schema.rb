@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20191212235440) do
+ActiveRecord::Schema.define(version: 20191213152228) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -250,6 +250,7 @@ ActiveRecord::Schema.define(version: 20191212235440) do
     t.boolean "accept_health_and_safety", default: false
     t.boolean "accept_excess_hours", default: false
     t.boolean "accept_terms_and_conditions", default: false
+    t.boolean "previously_registered_with_tpi"
     t.index ["available"], name: "index_driver_profiles_on_available"
     t.index ["disabled"], name: "index_driver_profiles_on_disabled"
     t.index ["driver_id"], name: "index_driver_profiles_on_driver_id"

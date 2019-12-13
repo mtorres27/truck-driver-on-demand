@@ -154,6 +154,14 @@ class DriverPolicy < ApplicationPolicy
     driver?
   end
 
+  def previously_registered?
+    driver?
+  end
+
+  def previously_registered_answer?
+    driver?
+  end
+
   private
 
   def driver_owner?

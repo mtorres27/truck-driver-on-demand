@@ -1,0 +1,12 @@
+a.card.no-style.mb-2[href="#{url}"]
+  .card-body
+    .row.align-items-center
+      .col-10
+        .text-secondary= subtitle
+        br
+        strong= title
+      .col-2
+        - if completed.nil?
+          = fa_icon "minus-square", class: "pull-right align-middle text-warning"
+        - else
+          = fa_icon "#{completed ? 'check-square' : 'caret-right'}", class: "pull-right align-middle text-primary"

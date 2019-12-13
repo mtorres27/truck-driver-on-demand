@@ -1,0 +1,22 @@
+= simple_form_for @driver, url: previously_registered_answer_driver_employment_terms_path, method: :put do |f|
+  = f.simple_fields_for :driver_profile do |df|
+    .truckker-section.truckker-section__head
+      .container
+        .truckker-header
+          a[href=driver_employment_terms_url]
+            = fa_icon 'arrow-left'
+          h2.mt-3 Previously Registered
+          .d-flex.justify-content-end.align-items-center
+            = f.submit 'Save', class: 'btn btn-primary mt-2 mb-2 js--accept-terms-submit-button'
+
+    .truckker-section.truckker-section__main
+      .container.container__content
+        .row.mb-4
+          .col
+            h3.font-weight-bold Previously Registered with TPI
+        .row.mb-4
+          .col
+            p In the last 5 years, have you registered to work with TPI Personnel, Truckker’s parent company?
+        .row.mb-4
+          .col
+            = df.input :previously_registered_with_tpi, as: :radio_buttons, input_html: { class: 'js--accept-terms-checkbox mr-2 ml-4' }, label: false

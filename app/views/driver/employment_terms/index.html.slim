@@ -17,4 +17,4 @@
         = render "driver/shared/card_link", completed: @driver.accept_wsib, title: "WSIB", url: wsib_driver_employment_terms_url
         = render "driver/shared/card_link", completed: @driver.accept_excess_hours, title: "Excess Hours", url: excess_hours_driver_employment_terms_url
         = render "driver/shared/card_link", completed: @driver.accept_terms_and_conditions, title: "Terms and Conditions", url: terms_and_conditions_driver_employment_terms_url
-        = render "driver/shared/card_link", completed: false, title: "Previously Registered", url: "#"
+        = render "driver/shared/card_link", completed: !@driver.previously_registered_with_tpi.nil?, title: "Previously Registered", url: previously_registered_driver_employment_terms_url

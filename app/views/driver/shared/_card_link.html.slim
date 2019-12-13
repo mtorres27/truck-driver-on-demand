@@ -1,9 +1,2 @@
-a.card.no-style.mb-2[href="#{url}"]
-  .card-body
-    .row.align-items-center
-      .col-10
-        .text-secondary= completed ? 'Completed' : 'Get Started'
-        br
-        strong= title
-      .col-2
-        = fa_icon "#{completed ? 'check-square' : 'caret-right'}", class: "pull-right align-middle text-primary"
+- subtitle = completed ? 'Completed' : 'Get Started'
+= render "driver/shared/card_link_with_subtitle", completed: completed, subtitle: subtitle, title: title, url: url
