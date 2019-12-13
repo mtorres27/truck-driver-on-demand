@@ -1,0 +1,45 @@
+= simple_form_for @driver, url: accept_terms_and_conditions_driver_employment_terms_path, method: :put do |f|
+  = f.simple_fields_for :driver_profile do |df|
+    .truckker-section.truckker-section__head
+      .container
+        .truckker-header
+          a[href=driver_employment_terms_url]
+            = fa_icon 'arrow-left'
+          h2.mt-3 Terms and Conditions
+          .d-flex.justify-content-end.align-items-center
+            = f.submit 'Save', class: 'btn btn-primary mt-2 mb-2 js--accept-terms-submit-button'
+
+    .truckker-section.truckker-section__main
+      .container.container__content
+        .row.mb-4
+          .col
+            h3.font-weight-bold Review Terms and Conditions of Employment
+        .row.mb-4
+          .col
+            p 
+              strong I give TRUCKKER permission
+              | &nbsp;to send all written communication of temporary assignment details through email notifications.
+            p
+              strong I understand that my length of service or assignments is considered temporary. 
+              | &nbsp;As an Assignment Worker, my assignment may be terminated at any time, without notice, or pay in lieu of notice. In the event that my employment is terminated, I will be paid in accordance with, but limited to the Employment Standards Act, 2000.
+            p
+              strong I acknowledge that the working relationship begins
+              | &nbsp;when TRUCKKER assigns me to perform and begin work, and I agree in writing. Any internal working assessment, testing, internal orientation, interviews, resume submission, and training are not to be construed as the commencement of a working relationship. 
+            p
+              strong I grant TRUCKKER permission to send me all written communication via email.
+              | &nbsp;I further acknowledge and confirm that it is my preferred method of communication venue by providing my email address above. Note: If email is not available, I understand all communication will be documented and taken as fact by TRUCKKER. 
+            p
+              strong I understand that I am employed by TRUCKKER
+              | &nbsp;and not the carrier for which I am working, and that all assignments are deemed temporary and can end without notice. There are no guarantees.  
+            p
+              | I acknowledge that all information provided on this form and any other information supplied to be accurate and true.&nbsp;
+              strong I grant TRUCKKER the permission to verify all statements
+              | &nbsp;and call any employer for reference information. To this end, I understand that failure to provide accurate information may result in termination with cause. 
+            p I understand that I am obligated to advise TRUCKKER that I will be working elsewhere within a reasonable time. 
+            p I acknowledge and agree that the time the assignment was offered, I was orally provided with TRUCKKER’s contact information as well as the name of the client I was being assigned to, their contact information, as well as my wage rate, benefits (if applicable), hours of work, pay period, estimated term of the assignment (if applicable), and a general description of the work. This information will be provided in writing as soon as practical. If I don’t receive this information within a reasonable time, I must contact the TRUCKKER Representative to request a copy of this information. 
+            p
+              strong I acknowledge and agree that my employment is for a set term specified
+              | &nbsp;and that accordingly, at the end of the term, my employment will automatically end and I will not be entitled to any notice of termination nor pay in lieu of such notice, nor any severance pay, pursuant to contract, statute (including but not limited to the Employment Standards Act, 2000), and the common law. 
+        .row.mb-4
+          .col
+            = df.input :accept_terms_and_conditions, label: 'I have read and agree to the Truckker Terms and Conditions of employment', input_html: { class: 'mr-2 js--accept-terms-checkbox' }

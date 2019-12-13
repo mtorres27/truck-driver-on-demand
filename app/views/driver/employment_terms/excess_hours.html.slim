@@ -1,0 +1,24 @@
+= simple_form_for @driver, url: accept_excess_hours_driver_employment_terms_path, method: :put do |f|
+  = f.simple_fields_for :driver_profile do |df|
+    .truckker-section.truckker-section__head
+      .container
+        .truckker-header
+          a[href=driver_employment_terms_url]
+            = fa_icon 'arrow-left'
+          h2.mt-3 Excess Hours
+          .d-flex.justify-content-end.align-items-center
+            = f.submit 'Save', class: 'btn btn-primary mt-2 mb-2 js--accept-terms-submit-button'
+
+    .truckker-section.truckker-section__main
+      .container.container__content
+        .row.mb-4
+          .col
+            h3.font-weight-bold Review Excess Hours Agreement
+        .row.mb-4
+          .col
+            p I acknowledge that I have read the most recent version of the Ministry of Labour information sheet entitled: INFORMATION FOR EMPLOYEES ABOUT HOURS OF WORK AND OVERTIME PAY, [link:  https://www.ontario.ca/document/your-guide-employment-standards-act-0/mandatory-poster-and-information-sheets-employers#hours-of-work)] published by the Director of Employment Standards. 
+            p I also acknowledge that I am able to withdraw from this agreement by giving two weeks’ notice to TRUCKKER, and that they can also withdraw from this agreement by giving me two weeks’ notice. I have been given sufficient time to review all pertaining documentation.
+            p I may be asked to work 8 hours per day to maximum of 12 hours per day AND/OR 48 hours per week to a maximum of 70 hours per week.
+        .row.mb-4
+          .col
+            = df.input :accept_excess_hours, label: 'I understand and agree', input_html: { class: 'mr-2 js--accept-terms-checkbox' }

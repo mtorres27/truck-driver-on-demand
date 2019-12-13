@@ -13,8 +13,8 @@
         h3.font-weight-bold Review Employment Terms
     .row.mb-4
       .col
-        = render "driver/shared/card_link", completed: false, title: "Health and Safety Handbook", url: "#"
+        = render "driver/shared/card_link", completed: @driver.accept_health_and_safety, title: "Health and Safety Handbook", url: health_and_safety_driver_employment_terms_url
         = render "driver/shared/card_link", completed: @driver.accept_wsib, title: "WSIB", url: wsib_driver_employment_terms_url
-        = render "driver/shared/card_link", completed: false, title: "Excess Hours", url: "#"
-        = render "driver/shared/card_link", completed: false, title: "Terms and Conditions", url: "#"
+        = render "driver/shared/card_link", completed: @driver.accept_excess_hours, title: "Excess Hours", url: excess_hours_driver_employment_terms_url
+        = render "driver/shared/card_link", completed: @driver.accept_terms_and_conditions, title: "Terms and Conditions", url: terms_and_conditions_driver_employment_terms_url
         = render "driver/shared/card_link", completed: false, title: "Previously Registered", url: "#"
