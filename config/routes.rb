@@ -62,8 +62,14 @@ Rails.application.routes.draw do
     end
 
     resources :employment_terms, only: %i[index] do
+      get :health_and_safety, on: :collection
+      put :accept_health_and_safety, on: :collection
       get :wsib, on: :collection
       put :accept_wsib, on: :collection
+      get :excess_hours, on: :collection
+      put :accept_excess_hours, on: :collection
+      get :terms_and_conditions, on: :collection
+      put :accept_terms_and_conditions, on: :collection
     end
 
     resources :registration_steps, only: %i[show update index]

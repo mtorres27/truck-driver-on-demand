@@ -122,11 +122,35 @@ class DriverPolicy < ApplicationPolicy
     driver?
   end
 
+  def health_and_safety?
+    driver?
+  end
+
+  def accept_health_and_safety?
+    driver?
+  end
+
   def wsib?
     driver?
   end
 
   def accept_wsib?
+    driver?
+  end
+
+  def excess_hours?
+    driver?
+  end
+
+  def accept_excess_hours?
+    driver?
+  end
+
+  def terms_and_conditions?
+    driver?
+  end
+
+  def accept_terms_and_conditions?
     driver?
   end
 
