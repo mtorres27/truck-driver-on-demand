@@ -100,6 +100,7 @@ class Driver < User
   delegate :accept_wsib, to: :driver_profile, allow_nil: true
   delegate :accept_excess_hours, to: :driver_profile, allow_nil: true
   delegate :accept_terms_and_conditions, to: :driver_profile, allow_nil: true
+  delegate :previously_registered_with_tpi, to: :driver_profile, allow_nil: true
 
   pg_search_scope :search, against: {
     first_name: "A",
@@ -165,35 +166,23 @@ class Driver < User
     companies_for_messaging.count
   end
 
-  def rating
-    return unless driver_reviews.count.positive
 
-    # rubocop:disable Metrics/LineLength
-    driver_reviews.average("(#{DriverReview::RATING_ATTRS.map(&:to_s).join('+')}) / #{DriverReview::RATING_ATTRS.length}").round
-    # rubocop:enable Metrics/LineLength
+  def completed_employment_terms
+    driver_profile.accept_wsib && driver_profile.accept_health_and_safety && driver_profile.accept_excess_hours && driver_profile.accept_terms_and_conditions && !driver_profile.previously_registered_with_tpi.nil?
   end
 
-  def job_markets_for_job_type(job_type)
-    all_job_markets = I18n.t("enumerize.#{job_type}_job_markets")
-    return [] unless all_job_markets.is_a?(Hash)
-
-    driver_job_markets = []
-
-    driver_profile.job_markets&.each do |index, _|
-      driver_job_markets << all_job_markets[index.to_sym] if all_job_markets[index.to_sym]
-    end
-    driver_job_markets
+  def completed_employment_terms_amount
+    amount = 0
+    amount += 1 if driver_profile.accept_wsib
+    amount += 1 if driver_profile.accept_health_and_safety
+    amount += 1 if driver_profile.accept_excess_hours
+    amount += 1 if driver_profile.accept_terms_and_conditions
+    amount += 1 unless driver_profile.previously_registered_with_tpi.nil?
+    amount
   end
 
-  def job_functions_for_job_type(job_type)
-    all_job_functions = I18n.t("enumerize.#{job_type}_job_functions")
-    return [] unless all_job_functions.is_a?(Hash)
-
-    driver_job_functions = []
-    driver_profile.job_functions&.each do |index, _|
-      driver_job_functions << all_job_functions[index.to_sym] if all_job_functions[index.to_sym]
-    end
-    driver_job_functions
+  def completed_onboarding
+    completed_profile && drivers_license_uploaded && cvor_abstract_uploaded && driver_abstract_uploaded && resume_uploaded && completed_employment_terms
   end
 
   def score

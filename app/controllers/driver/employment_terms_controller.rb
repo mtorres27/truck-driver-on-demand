@@ -49,6 +49,16 @@ class Driver::EmploymentTermsController < Driver::BaseController
     end
   end
 
+  def previously_registered; end
+
+  def previously_registered_answer
+    if @driver.update(previously_registered_params)
+      redirect_to driver_employment_terms_path
+    else
+      render :previously_registered
+    end
+  end
+
   private
 
   def set_driver
@@ -95,6 +105,16 @@ class Driver::EmploymentTermsController < Driver::BaseController
       driver_profile_attributes: %i[
         id
         accept_terms_and_conditions
+      ],
+    )
+  end
+
+  def previously_registered_params
+    params.require(:driver).permit(
+      :id,
+      driver_profile_attributes: %i[
+        id
+        previously_registered_with_tpi
       ],
     )
   end

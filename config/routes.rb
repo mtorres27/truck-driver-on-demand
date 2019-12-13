@@ -70,6 +70,8 @@ Rails.application.routes.draw do
       put :accept_excess_hours, on: :collection
       get :terms_and_conditions, on: :collection
       put :accept_terms_and_conditions, on: :collection
+      get :previously_registered, on: :collection
+      put :previously_registered_answer, on: :collection
     end
 
     resources :registration_steps, only: %i[show update index]
