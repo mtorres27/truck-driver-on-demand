@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20191213152228) do
+ActiveRecord::Schema.define(version: 20191227162658) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -273,6 +273,12 @@ ActiveRecord::Schema.define(version: 20191213152228) do
     t.index ["job_id"], name: "index_driver_reviews_on_job_id"
   end
 
+  create_table "driver_tests", force: :cascade do |t|
+    t.string "name", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "drivers_licenses", force: :cascade do |t|
     t.bigint "driver_profile_id", null: false
     t.text "license_data"
@@ -410,6 +416,15 @@ ActiveRecord::Schema.define(version: 20191213152228) do
     t.string "proj4text", limit: 2048
   end
 
+  create_table "test_questions", force: :cascade do |t|
+    t.bigint "driver_test_id", null: false
+    t.string "question", null: false
+    t.jsonb "options", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["driver_test_id"], name: "index_test_questions_on_driver_test_id"
+  end
+
   create_table "users", force: :cascade do |t|
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false
@@ -470,4 +485,5 @@ ActiveRecord::Schema.define(version: 20191213152228) do
   add_foreign_key "job_collaborators", "users"
   add_foreign_key "jobs", "companies"
   add_foreign_key "messages", "jobs"
+  add_foreign_key "test_questions", "driver_tests"
 end
