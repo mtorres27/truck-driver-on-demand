@@ -6,3 +6,21 @@
 #
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
+
+admin                       = Admin.new
+admin.first_name            = 'Tamer'
+admin.last_name             = 'Ibrahim'
+admin.phone_number          = '1234567890'
+admin.email                 = 'tamer@truckker.com'
+admin.password              = 'password'
+admin.password_confirmation = 'password'
+admin.save!
+
+driver = Driver.new
+driver.first_name               = 'Truck'
+driver.last_name                = 'Driver'
+driver.phone_number             = '1234567891'
+driver.email                    = 'driver@truckker.com'
+driver.password                 = 'password'
+driver.password_confirmation    = 'password'
+driver.save!
