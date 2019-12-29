@@ -1,0 +1,25 @@
+.truckker-section.truckker-section__head
+  .container
+    .truckker-header
+      h2.mt-3= "Test - #{@test_results.driver_test.name}"
+      .d-flex.justify-content-end.align-items-center
+        = link_to 'Done', driver_onboarding_process_index_path, class: 'btn btn-primary mt-2 mb-2'
+.truckker-section.truckker-section__main
+  .container.container__content
+    .row.mb-4
+      .col
+        - if @incorrect_answers.count > 0
+          h4.font-weight-bold= "You answered #{@incorrect_answers.count} questions incorrectly."
+          p Please review the correct answers, then select DONE.
+        - else
+          h4.font-weight-bold= "You answered all the questions correctly."
+          p Click DONE to continue with your onboarding process.
+    - @incorrect_answers.keys.each do |question_id|
+      - question = TestQuestion.find(question_id)
+      .row.mb-4
+        .col
+          p= question.question
+          - question.options.each_with_index do |option, index|
+            - if option['index'] == question.answer
+              = radio_button_tag "driver_test_answers[questions][#{ question.id }]", index + 1, true, { class: 'mr-2', disabled: true }
+              = label_tag option["text"]

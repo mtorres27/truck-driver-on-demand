@@ -13,10 +13,11 @@
 #  updated_at     :datetime         not null
 #
 
-class TestQuestion < ApplicationRecord
-
-  belongs_to :driver_test
-
-  validates :question, :options, :answer, presence: true
-
+FactoryBot.define do
+  factory :test_question do
+    question { "Some question" }
+    options { [{ text: "Option 1", index: 1 }, { text: "Option 2", index: 2 }] }
+    answer { 1 }
+    driver_test
+  end
 end

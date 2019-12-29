@@ -10,12 +10,8 @@
 #  updated_at :datetime         not null
 #
 
-class DriverTest < ApplicationRecord
-
-  default_scope { order(created_at: :asc) }
-
-  has_many :test_questions, dependent: :destroy
-
-  validates :name, presence: true
-
+FactoryBot.define do
+  factory :driver_test do
+    name { Faker::Name.unique.name }
+  end
 end

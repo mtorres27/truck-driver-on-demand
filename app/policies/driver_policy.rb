@@ -62,10 +62,6 @@ class DriverPolicy < ApplicationPolicy
     admin?
   end
 
-  def av_companies?
-    driver? && driver_owner?
-  end
-
   def add_favourites?
     driver? && driver_owner?
   end
@@ -159,6 +155,10 @@ class DriverPolicy < ApplicationPolicy
   end
 
   def previously_registered_answer?
+    driver?
+  end
+
+  def answer?
     driver?
   end
 

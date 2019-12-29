@@ -74,12 +74,17 @@ Rails.application.routes.draw do
       put :previously_registered_answer, on: :collection
     end
 
+    resources :driver_tests, only: %i[show] do
+      post :answer, on: :member
+    end
+
+    resources :driver_test_results, only: %i[show]
+
     resources :registration_steps, only: %i[show update index]
 
     resources :companies, only: %i[index show] do
       get :favourites, on: :collection
       post :add_favourites, on: :collection
-      get :av_companies, on: :collection
       resources :messages, only: %i[index create]
     end
 

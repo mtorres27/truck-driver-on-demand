@@ -1,0 +1,25 @@
+= simple_form_for :driver_test_answers, url: answer_driver_driver_test_path(@test), method: :post do |f|
+  .truckker-section.truckker-section__head
+    .container
+      .truckker-header
+        a[href=driver_onboarding_process_index_url]
+          = fa_icon 'arrow-left'
+        h2.mt-3= "Test - #{@test.name}"
+        .d-flex.justify-content-end.align-items-center
+          = f.submit 'Save', class: 'btn btn-primary mt-2 mb-2'
+  .truckker-section.truckker-section__main
+    .container.container__content
+      .row.mb-4
+        .col
+          h4.font-weight-bold= "Complete the #{@test.name}"
+          p Please choose one answer for each of the following questions:
+          - if flash[:error].present?
+            p.text-danger= flash[:error]
+      - @test.test_questions.each do |question|
+        .row.mb-4
+          .col
+            p= question.question
+            - question.options.each_with_index do |option, index|
+              = radio_button_tag "driver_test_answers[questions][#{ question.id }]", index + 1, (params[:driver_test_answers][:questions][question.id.to_s].to_i == index + 1 if params[:driver_test_answers].present?) , { class: 'mr-2' }
+              = label_tag option["text"]
+              br

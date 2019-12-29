@@ -3,7 +3,7 @@
 class Driver::EmploymentTermsController < Driver::BaseController
 
   layout "clean"
-  
+
   before_action :set_driver
   before_action :authorize_driver
 

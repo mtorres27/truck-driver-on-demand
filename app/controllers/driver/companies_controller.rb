@@ -92,29 +92,6 @@ class Driver::CompaniesController < Driver::BaseController
     end
   end
 
-  def av_companies
-    authorize current_user
-
-    @locations = []
-    @companies = []
-
-    if params[:location] && params[:location] != ""
-      current_user.applicants.where(state: "accepted").where(city: params[:location]).each do |job|
-        @locations << job.company.area
-        @companies << job.company
-      end
-    else
-
-      current_user.applicants.where(state: "accepted").each do |job|
-        @locations << job.company.area
-        @companies << job.company
-      end
-    end
-
-    @locations = @locations.uniq
-    @companies = @companies.uniq
-  end
-
   def show_job
     @job = Job.find(params[:id])
     authorize @job, :show?
