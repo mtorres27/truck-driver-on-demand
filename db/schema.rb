@@ -17,6 +17,32 @@ ActiveRecord::Schema.define(version: 20191230153401) do
   enable_extension "postgis"
   enable_extension "citext"
 
+  create_table "active_admin_comments", force: :cascade do |t|
+    t.string "namespace"
+    t.text "body"
+    t.string "resource_type"
+    t.bigint "resource_id"
+    t.string "author_type"
+    t.bigint "author_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["author_type", "author_id"], name: "index_active_admin_comments_on_author_type_and_author_id"
+    t.index ["namespace"], name: "index_active_admin_comments_on_namespace"
+    t.index ["resource_type", "resource_id"], name: "index_active_admin_comments_on_resource_type_and_resource_id"
+  end
+
+  create_table "admin_users", force: :cascade do |t|
+    t.string "email", default: "", null: false
+    t.string "encrypted_password", default: "", null: false
+    t.string "reset_password_token"
+    t.datetime "reset_password_sent_at"
+    t.datetime "remember_created_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["email"], name: "index_admin_users_on_email", unique: true
+    t.index ["reset_password_token"], name: "index_admin_users_on_reset_password_token", unique: true
+  end
+
   create_table "applicants", force: :cascade do |t|
     t.bigint "company_id", null: false
     t.bigint "job_id", null: false
@@ -420,21 +446,11 @@ ActiveRecord::Schema.define(version: 20191230153401) do
     t.index ["slug"], name: "index_pages_on_slug"
   end
 
-  # create_table "spatial_ref_sys", primary_key: "srid", id: :integer, default: nil, force: :cascade do |t|
-  #   t.string "auth_name", limit: 256
-  #   t.integer "auth_srid"
-  #   t.string "srtext", limit: 2048
-  #   t.string "proj4text", limit: 2048
-  # end
-
-  create_table "test_questions", force: :cascade do |t|
-    t.bigint "driver_test_id", null: false
-    t.string "question", null: false
-    t.jsonb "options", null: false
-    t.integer "answer", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["driver_test_id"], name: "index_test_questions_on_driver_test_id"
+  create_table "spatial_ref_sys", primary_key: "srid", id: :integer, default: nil, force: :cascade do |t|
+    t.string "auth_name", limit: 256
+    t.integer "auth_srid"
+    t.string "srtext", limit: 2048
+    t.string "proj4text", limit: 2048
   end
 
   create_table "users", force: :cascade do |t|

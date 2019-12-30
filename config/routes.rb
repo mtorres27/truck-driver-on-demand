@@ -9,14 +9,14 @@ Rails.application.routes.draw do
   devise_for :users, skip: [:registrations], controllers: { sessions: "sessions" }
 
   devise_for :company_users, path: "company",
-                             path_names: { sign_up: "register" },
-                             controllers: { registrations: "company/registrations", sessions: "sessions" },
-                             skip: %i[devise passwords confirmations]
+                            path_names: { sign_up: "register" },
+                            controllers: { registrations: "company/registrations", sessions: "sessions" },
+                            skip: %i[devise passwords confirmations]
 
   devise_for :drivers, path: "driver",
-                           path_names: { sign_up: "register" },
-                           controllers: { registrations: "driver/registrations", sessions: "driver/sessions" },
-                           skip: %i[devise passwords confirmations]
+                          path_names: { sign_up: "register" },
+                          controllers: { registrations: "driver/registrations", sessions: "driver/sessions" },
+                          skip: %i[devise passwords confirmations]
 
   devise_scope :company_user do
     match "active"            => "sessions#active",               via: :get

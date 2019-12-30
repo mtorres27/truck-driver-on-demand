@@ -1,6 +1,6 @@
-ActiveAdmin.register Admin do
+ActiveAdmin.register Driver do
   permit_params :email, :password, :password_confirmation
-
+  includes :driver_profile
   menu parent: 'Users'
 
   index do
