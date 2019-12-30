@@ -1,4 +1,4 @@
-- is_admin = current_user.is_a?(Admin)
+- is_admin = current_user.is_a?(AdminUser)
 .truckker-section.truckker-section__msg-subhead
   .container
     .truckker-subhead
@@ -60,4 +60,4 @@
     .truckker-message-list.js--driver-job__message-history
       - @messages.each do |message|
         - user_is_author = (current_company && message.authorable == current_company) || (message.authorable == current_user) || (is_admin && message.authorable.is_a?(Company))
-        = render "shared/message", message: message, user_is_author: user_is_author, is_admin: current_user.is_a?(Admin)
+        = render "shared/message", message: message, user_is_author: user_is_author, is_admin: current_user.is_a?(AdminUser)

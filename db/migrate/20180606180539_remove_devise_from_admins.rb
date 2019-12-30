@@ -2,11 +2,11 @@
 
 class RemoveDeviseFromAdmins < ActiveRecord::Migration[5.1]
   def self.up
-    drop_table :admins
+    drop_table :admin_users
   end
 
   def self.down
-    create_table :admins do |t|
+    create_table :admin_users do |t|
       t.citext :email
       t.string :encrypted_password
       t.string :reset_password_token
@@ -19,11 +19,11 @@ class RemoveDeviseFromAdmins < ActiveRecord::Migration[5.1]
       t.inet :last_sign_in_ip
     end
 
-    add_index :admins, :email,                unique: true
-    add_index :admins, :reset_password_token, unique: true
+    add_index :admin_users, :email,                unique: true
+    add_index :admin_users, :reset_password_token, unique: true
 
-    change_column :admins, :email, :citext, null: false
-    change_column :admins, :encrypted_password, :string, null: false, default: ""
-    change_column :admins, :sign_in_count, :integer, null: false
+    change_column :admin_users, :email, :citext, null: false
+    change_column :admin_users, :encrypted_password, :string, null: false, default: ""
+    change_column :admin_users, :sign_in_count, :integer, null: false
   end
 end

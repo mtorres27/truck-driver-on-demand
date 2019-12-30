@@ -7,19 +7,22 @@
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
 
-admin                       = Admin.new
-admin.first_name            = 'Tamer'
-admin.last_name             = 'Ibrahim'
-admin.phone_number          = '1234567890'
-admin.email                 = 'tamer@truckker.com'
-admin.password              = 'password'
-admin.password_confirmation = 'password'
-admin.save!
+AdminUser.create({
+  first_name: 'Tamer',
+  last_name: "Ibrahim",
+  phone_number: "1234567890",
+  email: "tamer@truckker.com",
+  password: 'password',
+  password_confirmation: 'password',
+})
 
-driver = Driver.new
-driver.first_name               = 'Truck'
-driver.last_name                = 'Driver'
-driver.phone_number             = '1234567891'
-driver.email                    = 'driver@truckker.com'
-driver.password                 = 'password'
-driver.password_confirmation    = 'password'
+10.times do |x|
+  Driver.create({
+    first_name: 'Truck',
+    last_name: "Driver #{x}",
+    phone_number: "1234567891#{x}",
+    email: "driver#{x}@truckker.com",
+    password: 'password',
+    password_confirmation: 'password',
+  })
+end

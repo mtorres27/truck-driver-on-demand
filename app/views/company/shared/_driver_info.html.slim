@@ -1,7 +1,7 @@
 .truckker-list-item
   - if current_user.is_a?(CompanyUser)
     - url = company_driver_url(hash_id(driver))
-  - elsif current_user.is_a?(Admin)
+  - elsif current_user.is_a?(AdminUser)
     - url = admin_driver_url(driver)
   a.mr-4 href=url
     - if driver.driver_profile.avatar_data.present?

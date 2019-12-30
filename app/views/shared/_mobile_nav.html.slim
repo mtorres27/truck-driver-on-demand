@@ -79,5 +79,5 @@
           - else
             .truckker-body1.m-0.zmdi.zmdi-account-o
             .truckker-caption2.m-0 Profile
-      - elsif current_user&.is_a?(Admin)
+      - elsif current_user&.is_a?(AdminUser)
         = link_to content_tag(:div, "#{content_tag(:div, "", class: "truckker-body1 m-0 zmdi zmdi-account-o")}#{content_tag(:div, "Log Out", class: "truckker-caption2 m-0")}".html_safe, class: "truckker-nav-mobile-link"), destroy_user_session_path, method: :delete
