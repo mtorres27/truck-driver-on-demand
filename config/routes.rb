@@ -1,8 +1,9 @@
 # frozen_string_literal: true
 
 Rails.application.routes.draw do
-  devise_for :admin_users, ActiveAdmin::Devise.config
+  devise_for :admin, {class_name: 'User'}.merge(ActiveAdmin::Devise.config)#ActiveAdmin::Devise.config
   ActiveAdmin.routes(self)
+
   mount ActionCable.server => "/cable"
 
   devise_for :users, skip: [:registrations], controllers: { sessions: "sessions" }
@@ -140,52 +141,52 @@ Rails.application.routes.draw do
     get "drivers/:driver_id/messages(/job/:job_id)", to: "messages#index", as: "messages_for_job"
   end
 
-  namespace :admin do
-    root "main#index"
+#   namespace :admin do
+#     root "main#index"
 
-    resources :drivers, except: %i[new create] do
-      get :disable, on: :member
-      get :enable, on: :member
-      get :verify, on: :member
-      get :unverify, on: :member
-      get :messaging, on: :member
-    end
+#     resources :drivers, except: %i[new create] do
+#       get :disable, on: :member
+#       get :enable, on: :member
+#       get :verify, on: :member
+#       get :unverify, on: :member
+#       get :messaging, on: :member
+#     end
 
-    resource :driver do
-      get :download_csv
-    end
+#     resource :driver do
+#       get :download_csv
+#     end
 
-    resources :companies, except: %i[new create] do
-      get :disable, on: :member
-      get :enable, on: :member
-      get :jobs
-      get :messaging, on: :member
-    end
+#     resources :companies, except: %i[new create] do
+#       get :disable, on: :member
+#       get :enable, on: :member
+#       get :jobs
+#       get :messaging, on: :member
+#     end
 
-    resource :company do
-      get :download_csv
-    end
+#     resource :company do
+#       get :download_csv
+#     end
 
-    resources :jobs, except: %i[new create] do
-      get :driver_matches, on: :member
-      get :mark_as_expired, on: :member
-      get :unmark_as_expired, on: :member
-    end
+#     resources :jobs, except: %i[new create] do
+#       get :driver_matches, on: :member
+#       get :mark_as_expired, on: :member
+#       get :unmark_as_expired, on: :member
+#     end
 
-    resources :new_registrants, only: [:index]
-    resource :new_registrant, only: [:download_csv] do
-      get :download_csv
-    end
+#     resources :new_registrants, only: [:index]
+#     resource :new_registrant, only: [:download_csv] do
+#       get :download_csv
+#     end
 
-    resources :incomplete_registrations, only: [:index]
-    resource :incomplete_registration, only: [:download_csv] do
-      get :download_csv
-    end
+#     resources :incomplete_registrations, only: [:index]
+#     resource :incomplete_registration, only: [:download_csv] do
+#       get :download_csv
+#     end
 
-    resources :connections, only: [:index]
+#     resources :connections, only: [:index]
 
-    get "companies/:company_id/messages/driver/:driver_id", to: "messages#index", as: "messages"
-  end
+#     get "companies/:company_id/messages/driver/:driver_id", to: "messages#index", as: "messages"
+#   end
 
   get "*any", via: :all, to: "errors#not_found"
   get "*any", via: :all, to: "errors#unauthorized"

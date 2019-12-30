@@ -23,4 +23,3 @@ driver.phone_number             = '1234567891'
 driver.email                    = 'driver@truckker.com'
 driver.password                 = 'password'
 driver.password_confirmation    = 'password'
-driver.save!AdminUser.create!(email: 'admin@example.com', password: 'password', password_confirmation: 'password') if Rails.env.development?
