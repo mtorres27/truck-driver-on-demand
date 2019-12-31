@@ -47,6 +47,7 @@ require "uri"
 class Driver < User
 
   include PgSearch
+  include AASM
 
   audited
 
@@ -143,6 +144,36 @@ class Driver < User
   }, using: {
     tsearch: { prefix: true },
   }
+
+  aasm do
+    state :new, initial: true
+    state :onboarding
+    state :needs_info
+    state :processing
+    state :verified
+    state :rejected
+
+    event :onboard do
+      transitions from: [:new], to: :onboarding
+    end
+
+    event :missing_info do
+      transitions from: [:processing], to: :needs_info
+    end
+
+    event :process do
+      transitions from: [:onboarding, :needs_info], to: :processing
+    end
+
+    event :verify do
+      transitions from: [:processing], to: :verified
+    end
+
+    event :reject do
+      transitions from: [:new, :onboarding, :processing, :needs_info, :verified], to: :rejected
+    end
+  end
+
 
   def messages_for_company(company)
     Message.messages_for(company, self)

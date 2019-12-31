@@ -113,6 +113,8 @@ gem "twilio-ruby", "~> 5.29.0"
 gem "rack-cors"
 # Admin
 gem 'activeadmin'
+# State Machine
+gem 'aasm'
 
 group :development, :test do
   gem "dotenv-rails"
