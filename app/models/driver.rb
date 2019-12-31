@@ -65,6 +65,7 @@ class Driver < User
   has_many :favourite_jobs, through: :job_favourites, source: :job
   has_many :company_favourites
   has_many :favourite_companies, through: :company_favourites, source: :company
+  has_many :driver_test_results, dependent: :destroy
 
   attr_accessor :accept_terms_of_service, :accept_privacy_policy,
                 :accept_code_of_conduct, :enforce_profile_edit, :user_type,
@@ -105,10 +106,6 @@ class Driver < User
   pg_search_scope :search, against: {
     first_name: "A",
     last_name: "A",
-  }, associated_against: {
-    driver_profile: %i[
-      job_markets technical_skill_tags manufacturer_tags job_functions tagline bio
-    ],
   }, using: {
     tsearch: { prefix: true, any_word: true },
   }
@@ -166,9 +163,10 @@ class Driver < User
     companies_for_messaging.count
   end
 
-
   def completed_employment_terms
+    # rubocop:disable Metrics/LineLength
     driver_profile.accept_wsib && driver_profile.accept_health_and_safety && driver_profile.accept_excess_hours && driver_profile.accept_terms_and_conditions && !driver_profile.previously_registered_with_tpi.nil?
+    # rubocop:enable Metrics/LineLength
   end
 
   def completed_employment_terms_amount
@@ -182,7 +180,9 @@ class Driver < User
   end
 
   def completed_onboarding
+    # rubocop:disable Metrics/LineLength
     completed_profile && drivers_license_uploaded && cvor_abstract_uploaded && driver_abstract_uploaded && resume_uploaded && completed_employment_terms
+    # rubocop:enable Metrics/LineLength
   end
 
   def score

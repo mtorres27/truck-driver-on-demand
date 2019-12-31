@@ -18,21 +18,18 @@
         = render "driver/shared/card_link", completed: @driver.driver_abstract_uploaded, title: "Upload Driver Abstract", url: driver_abstract_driver_onboarding_process_index_url
         = render "driver/shared/card_link", completed: @driver.resume_uploaded, title: "Upload Resume", url: resume_driver_onboarding_process_index_url
         = render "driver/shared/card_link_with_subtitle", subtitle: "Completed #{@driver.completed_employment_terms_amount}/5", completed: @driver.completed_employment_terms, title: "Review Employment Terms", url: driver_employment_terms_url
-    .row.mb-4
-      .col
-        h4.font-weight-bold Driver pre-tests
-        p You must complete the following tests to drive with Truckker
-    .row.mb-4
-      .col
-        - if @driver.previously_registered_with_tpi
-          = render "driver/shared/card_link_with_subtitle", subtitle: 'Not Required', completed: nil, title: "Test - Dangerous Goods", url: "#"
-          = render "driver/shared/card_link_with_subtitle", subtitle: 'Not Required', completed: nil, title: "Test - Hours of Work", url: "#"
-          = render "driver/shared/card_link_with_subtitle", subtitle: 'Not Required', completed: nil, title: "Test - Safe Driving", url: "#"
-          = render "driver/shared/card_link_with_subtitle", subtitle: 'Not Required', completed: nil, title: "Test - Pre-Trip", url: "#"
-          = render "driver/shared/card_link_with_subtitle", subtitle: 'Not Required', completed: nil, title: "Test - WHMIS Awareness", url: "#"
-        - else
-          = render "driver/shared/card_link", completed: false, title: "Test - Dangerous Goods", url: "#"
-          = render "driver/shared/card_link", completed: false, title: "Test - Hours of Work", url: "#"
-          = render "driver/shared/card_link", completed: false, title: "Test - Safe Driving", url: "#"
-          = render "driver/shared/card_link", completed: false, title: "Test - Pre-Trip", url: "#"
-          = render "driver/shared/card_link", completed: false, title: "Test - WHMIS Awareness", url: "#"
+    - if DriverTest.count > 0
+      .row.mb-4
+        .col
+          h4.font-weight-bold Driver pre-tests
+          p You must complete the following tests to drive with Truckker
+      .row.mb-4
+        .col
+          - DriverTest.find_each do |test|
+            - if @driver.previously_registered_with_tpi
+              = render "driver/shared/card_link_with_subtitle", subtitle: 'Not Required', completed: nil, title: "Test - #{test.name}", url: "#"
+            - else
+              - if @driver.driver_test_results.where(driver_test_id: test.id).count > 0
+                = render "driver/shared/card_link", completed: true, title: "Test - #{test.name}", url: driver_driver_test_result_path(@driver.driver_test_results.where(driver_test_id: test.id).first)
+              - else
+                = render "driver/shared/card_link", completed: false, title: "Test - #{test.name}", url: driver_driver_test_url(test)

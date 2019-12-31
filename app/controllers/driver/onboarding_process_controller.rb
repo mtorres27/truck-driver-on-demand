@@ -147,7 +147,7 @@ class Driver::OnboardingProcessController < Driver::BaseController
           license_number
           exp_date
           license_class
-        ]
+        ],
       ],
     )
   end

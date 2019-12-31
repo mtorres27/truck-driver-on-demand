@@ -52,9 +52,9 @@ FactoryBot.define do
     state { Faker::Address.state }
     avatar { fixture_file_upload(Rails.root.join("spec", "fixtures", "image.png"), "image/png") }
     description { Faker::Lorem.sentence }
-    established_in { Faker::Number.number(4) }
+    established_in { Faker::Number.number(digits: 4) }
     number_of_employees { "eleven_to_one_hundred" }
-    number_of_offices { Faker::Number.number(1) }
+    number_of_offices { Faker::Number.number(digits: 1) }
     website { Faker::Lorem.word }
     area { "USA" }
 
