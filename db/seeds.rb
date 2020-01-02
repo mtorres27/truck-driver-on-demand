@@ -8,10 +8,10 @@
 #   Character.create(name: 'Luke', movie: movies.first)
 
 AdminUser.create({
-  first_name: 'Tamer',
-  last_name: "Ibrahim",
+  first_name: 'Admin',
+  last_name: "User",
   phone_number: "1234567890",
-  email: "tamer@truckker.com",
+  email: "admin@truckker.com",
   password: 'password',
   password_confirmation: 'password',
 })
