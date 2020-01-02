@@ -42,8 +42,8 @@
 
 class User < ApplicationRecord
 
-  devise :database_authenticatable, :registerable,
-         :recoverable, :rememberable, :trackable, :validatable, :confirmable
+  devise  :database_authenticatable, :registerable,
+          :recoverable, :rememberable, :trackable, :validatable, :confirmable
 
   has_many :notifications, as: :receivable, dependent: :destroy
 
@@ -64,7 +64,7 @@ class User < ApplicationRecord
   end
 
   def admin?
-    is_a?(Admin)
+    is_a?(AdminUser)
   end
 
   def driver?

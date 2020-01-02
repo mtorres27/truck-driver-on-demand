@@ -37,7 +37,7 @@
               = link_to "Profile", driver_profile_path, class: "text-uppercase truckker-text-emphasize"
           .truckker-nav-kc.mt-1
             a.zmdi.zmdi-graduation-cap.truckker-text-color-primary href="https://www.truckker.com/how-to-guide-av-driver" target="_blank"
-        - elsif current_user&.is_a?(Admin)
+        - elsif current_user&.is_a?(AdminUser)
           .truckker-nav-desktop
             .truckker-nav-desktop-link
               = link_to "Log Out", destroy_user_session_path, method: :delete, class: "text-uppercase truckker-text-emphasize"

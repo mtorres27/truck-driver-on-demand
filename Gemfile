@@ -111,6 +111,10 @@ gem "truncato"
 gem "twilio-ruby", "~> 5.29.0"
 # Use rack-cors for CORS
 gem "rack-cors"
+# Admin
+gem 'activeadmin'
+# State Machine
+gem 'aasm'
 
 group :development, :test do
   gem "dotenv-rails"

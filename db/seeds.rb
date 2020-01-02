@@ -6,3 +6,23 @@
 #
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
+
+AdminUser.create({
+  first_name: 'Admin',
+  last_name: "User",
+  phone_number: "1234567890",
+  email: "admin@truckker.com",
+  password: 'password',
+  password_confirmation: 'password',
+})
+
+10.times do |x|
+  Driver.create({
+    first_name: 'Truck',
+    last_name: "Driver #{x}",
+    phone_number: "1234567891#{x}",
+    email: "driver#{x}@truckker.com",
+    password: 'password',
+    password_confirmation: 'password',
+  })
+end

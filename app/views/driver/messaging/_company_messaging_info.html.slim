@@ -1,6 +1,6 @@
 - last_message = driver.messages_for_company(company).last
 .truckker-list-item class="#{"truckker-text-emphasize" if driver.new_messages_from_company?(company)}"
-  - is_admin = current_user.is_a?(Admin)
+  - is_admin = current_user.is_a?(AdminUser)
   - path = is_admin ? admin_company_url(company) : driver_company_url(company)
   a.mr-4 href=path
     - if company.avatar_data.present?

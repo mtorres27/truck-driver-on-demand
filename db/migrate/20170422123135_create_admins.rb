@@ -2,7 +2,7 @@
 
 class CreateAdmins < ActiveRecord::Migration[5.1]
   def change
-    create_table :admins do |t|
+    create_table :admin_users do |t|
       t.string :token
       t.citext :email, null: false
       t.string :name, null: false

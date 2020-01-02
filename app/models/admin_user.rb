@@ -40,7 +40,7 @@
 #  city                   :string
 #
 
-class Admin < User
+class AdminUser < User
 
   after_create :confirm
 

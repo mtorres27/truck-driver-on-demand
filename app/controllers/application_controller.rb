@@ -107,4 +107,16 @@ class ApplicationController < ActionController::Base
     root_path
   end
 
+  def access_denied(exception)
+    redirect_to root_path, alert: exception.message
+  end
+
+  def authenticate_active_admin_user!
+    authenticate_user!
+    unless current_user.admin?
+      flash[:alert] = "Unauthorized Access!"
+      redirect_to root_path
+    end
+  end
+
 end
