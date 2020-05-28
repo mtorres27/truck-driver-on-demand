@@ -62,7 +62,7 @@ gem "avatax"
 # Use Taxjar-Ruby
 gem "taxjar-ruby", require: "taxjar"
 # Use Kaminari
-gem "kaminari", "~> 1.0.1"
+gem "kaminari", "~> 1.2.1"
 # Use TheRubyRacer
 gem "therubyracer", platforms: :ruby
 # Use Coderay
