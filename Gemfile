@@ -80,7 +80,7 @@ gem "hashids"
 # Use Carrierwave
 gem "carrierwave", "~> 1.0.0"
 # Use Shrine
-gem "shrine", "~> 2.6.1"
+gem "shrine", "~> 3.3.0"
 # Use Image Processing
 gem "image_processing", "~> 0.4.1"
 # Use FastImage
