@@ -68,7 +68,7 @@ gem "therubyracer", platforms: :ruby
 # Use Coderay
 gem "coderay", "~> 1.1.1"
 # Use RedCarpet
-gem "redcarpet", "~> 3.4.0"
+gem "redcarpet", "~> 3.5.1"
 # Use Wickerd PDF
 gem "wicked_pdf", "~> 1.1.0"
 # Use wkhtmltopdf-binary
