@@ -78,7 +78,7 @@ gem "wicked"
 # Use hashids
 gem "hashids"
 # Use Carrierwave
-gem "carrierwave", "~> 1.0.0"
+gem "carrierwave", "~> 1.3.2"
 # Use Shrine
 gem "shrine", "~> 2.6.1"
 # Use Image Processing
