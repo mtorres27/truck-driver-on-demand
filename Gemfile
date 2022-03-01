@@ -82,7 +82,7 @@ gem "carrierwave", "~> 1.0.0"
 # Use Shrine
 gem "shrine", "~> 2.6.1"
 # Use Image Processing
-gem "image_processing", "~> 0.4.1"
+gem "image_processing", "~> 1.12.2"
 # Use FastImage
 gem "fastimage", "~> 2.1.0" # TODO: Do we use this gem?
 # Use MiniMagick
